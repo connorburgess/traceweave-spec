@@ -4,6 +4,10 @@ Status: proposed delivery plan, 2026-11-18. The existing 0.1.0-draft.1 scaffold 
 
 Start with [use cases](docs/use-cases.md), then [implementation patterns](docs/implementation-patterns.md) and the [source register](docs/sources.md). These planning documents do not change normative wire formats.
 
+## Pilot languages
+
+Go (Looptender) and Rust (TalkQTE) are the initial pilot targets, selected because they are actively developed applications available for evaluation. TypeScript/JavaScript is the next planned code profile. Shared evidence formats stay language-independent; transformations, safety conditions and build-pipeline tests are profile-specific. Python research tooling does not select Python as the marked language. See the [feasibility investigation](research/02-carrier-feasibility.md).
+
 ## Core tracks
 
 Embedded marking and detection are a first-class research track alongside extracted fingerprint matching. Provenance verification supports both. A baseline matcher is useful for comparison, but does not satisfy the embedding use case. No marking method is standardized yet.
@@ -24,7 +28,7 @@ Order: M0 → M1 → parallel M2 and M2E experiments → M3 → M5. Both experim
 
 ## Next work, in order
 
-1. **TW-01: Choose the first deployment.** Use UC-1, UC-2 and UC-6 in the use-case guide. Inventory intended languages and artifact types using authorized local repositories; publish only a synthetic inventory. Proposed starting scope: source files in one language, local comparison, no remote resolver. Acceptance: a short decision record names the language, supported syntax, artifact boundary, excluded generated/vendor files, and search unit. Language selection remains open until that inventory.
+1. **TW-01: Choose the first deployment.** Use UC-1, UC-2 and UC-6 in the use-case guide. Inventory intended languages and artifact types using authorized local repositories; publish only a synthetic inventory. Proposed starting scope: source files in one language, local comparison, no remote resolver. Acceptance: a short decision record names the language, supported syntax, artifact boundary, excluded generated/vendor files, and search unit. Go and Rust are selected as pilot languages; exact source subsets and eligible regions remain to be measured.
 2. **TW-02: Specify extraction completely.** Define encoding, parser/grammar revision, failure handling, token channels, hash bytes, k/window parameters, rightmost-minimum ties, duplicates and byte coordinates. Acceptance: hand-checkable vectors for empty, short, Unicode, malformed, repeated and equal-minimum inputs. Parameters begin as experimental choices, not accuracy promises.
 3. **TW-03: Define catalogue and report contracts.** Add schemas with profile/config binding and artifact digests. Separate comparison from exact/signature/trust/time results. Acceptance: schemas, valid examples, rejection fixtures and version notes move together.
 4. **TW-04: Build the smallest end-to-end reference.** Implement extract → catalogue → compare → localized report using the existing Python tooling where practical. Acceptance: a documented offline synthetic walkthrough is reproducible, with no private material in the checkout.
@@ -48,4 +52,4 @@ These are local backlog IDs, not published GitHub issues. M0 is the planning pac
 
 Use one reviewable change per decision or capability. Explain the use case, source support, normative delta, fixtures, measured result and known failures. Update [conformance](spec/conformance.md) whenever supported behavior changes. Run the repository validator and tests. Keep source revisions and implementation dependencies reproducible. Record disagreements as decisions with alternatives and revisit conditions.
 
-Open choices: first language; representative authorized corpus; operational false-alarm budget; supported trust/key distribution model; and the second implementation/reviewer. None prevents completing this plan, and none should be guessed into a stable standard.
+Open choices: safe subsets within Go and Rust; representative authorized corpus; operational false-alarm budget; supported trust/key distribution model; and the second implementation/reviewer. None prevents completing this plan, and none should be guessed into a stable standard.

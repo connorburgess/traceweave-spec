@@ -2,6 +2,8 @@
 
 Status: experimental; extraction algorithm and thresholds are not yet standardized.
 
+Go and Rust are the initial pilot languages, with TypeScript/JavaScript planned next. Each needs its own extraction and embedding profile; the following extraction baseline does not itself embed a mark. See the [feasibility investigation](../research/02-carrier-feasibility.md).
+
 Start with a local catalogue of overlapping token regions and source spans. Use separate literal-preserving and scope-aware identifier-normalized channels. Do not erase every identifier and literal in the sole representation: this can collapse unrelated code into the same features.
 
 Before registering a profile, specify language and grammar revision, tokenizer rules, scope resolution, encodings, parser error behavior, comments/docstrings, significant whitespace, macro/generated code, token serialization, hash parameters, window sizes, minimum-selection tie-breaking, and coordinate units. Tree-sitter by itself does not provide complete semantic scope resolution.

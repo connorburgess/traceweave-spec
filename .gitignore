@@ -9,3 +9,7 @@ __pycache__/
 !.env.example
 *.key
 *.pem
+
+# Imported research inputs stay local; publish reviewed conclusions instead.
+research/gemini/
+research/perplexity/
