@@ -16,11 +16,13 @@ The prompts require primary sources, implementation availability, known failures
 
 ## Research checkpoint — 2026-11-18
 
+[Initial discovery synthesis and next experiments](discovery-checkpoint.md): all four initial lanes reviewed, plus universal-signal architecture.
+
 - [Embedding review](01-code-embedding-review.md) and [synthetic Go/Rust feasibility checks](02-carrier-feasibility.md).
 - [Attack report comparison](02-robustness-attacks-comparison.md).
 - [Universal signal architecture comparison](05-universal-signal-architecture-comparison.md).
 
-Current direction: shared evidence interfaces, medium-specific embedding, Go/Rust first and TypeScript/JavaScript next. Fingerprints supplement embedded marks. No carrier, payload capacity or robustness guarantee is standardized. Detection calibration and provenance verification remain open research lanes.
+Current direction: shared evidence interfaces and medium-specific embedding, with initial experimentation in Go and Rust and planned expansion to multiple media types. Fingerprints supplement embedded marks. No carrier, payload capacity or robustness guarantee is standardized. Initial discovery reports have been compared; detection calibration and provenance interoperability remain unvalidated.
 
 Next: define safe source subsets, measure eligible sites and clean recovery, then compare carriers under ordinary edits, deliberate normalization, partial copying and transplantation. Evaluate combined evidence without converting similarity or signature validity into ownership claims. These reviews do not change normative wire formats.
 
@@ -29,7 +31,7 @@ Next: define safe source subsets, measure eligible sites and clean recovery, the
 
 - [Detection report comparison](03-detection-evaluation-comparison.md): statistical corrections and calibration choices still to evaluate.
 - [Go/Rust lane plans and reconciliation](lanes/README.md): bounded synthetic carrier experiments, not production marking guarantees.
-- [Initial provenance review](04-provenance-verification-initial-review.md): local exact-byte verification, commitment and timestamp corrections; second report pending.
+- [Provenance report comparison](04-provenance-verification-comparison.md): exact-byte verification, commitment, artifact-role and timestamp corrections.
 - Google launchers: [detection](prompts/03-detection-evaluation-google-launcher.md) and [provenance](prompts/04-provenance-verification-google-launcher.md).
 
 The language-planning supervision task is complete. No embedder, calibrated detector or real signing interoperability harness is implemented by these documents.

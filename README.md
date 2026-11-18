@@ -1,6 +1,6 @@
-# Traceweave
+# Traceweave: Embedded Content Marks and Cryptographic Provenance
 
-An open specification for transformation-resilient content fingerprinting, cryptographic provenance, and evidence of reuse across code, text, images, and audio.
+An experimental open specification for embedded marks, content fingerprints, and verifiable provenance records. Initial experimentation uses Go and Rust source code, with planned expansion to multiple media types, including text, images, and audio. Transformation resilience is evaluated separately for each content profile.
 
 **Status: experimental design draft, 0.1.0-draft.1.** Transformation resilience is a goal to measure per content profile, not a universal guarantee. This repository currently contains a proposed evidence format and validation tools. It does not yet contain a fingerprint detector, signing client, resolver, or production agent skill.
 
