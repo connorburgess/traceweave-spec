@@ -8,6 +8,12 @@ Traceweave separates three questions: which exact artifact a record describes, w
 
 The specification and algorithms are public. Owners can keep their keys, reference catalogues, and investigation records private. The default design works locally and does not require publishing an identity, fingerprint vector, or signing event.
 
+## Start with the use cases
+
+A central planned workflow embeds a mark into content before distribution, then checks later content for that mark. A complementary workflow extracts fingerprints from existing content to find candidate matching fragments without modifying it. Both feed reviewable evidence; signatures and timestamps provide separate provenance checks. These workflows are not implemented yet.
+
+Read the [use cases](docs/use-cases.md), [delivery roadmap](ROADMAP.md), [implementation patterns and example matrix](docs/implementation-patterns.md), and [source register](docs/sources.md).
+
 ## Read the draft
 
 | Document | Purpose |
