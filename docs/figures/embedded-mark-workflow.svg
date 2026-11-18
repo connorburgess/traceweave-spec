@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 310" role="img" aria-labelledby="title description">
+  <title id="title">Proposed embedded-mark workflow</title>
+  <desc id="description">A: Original content and a mark enter embedding, producing marked content to validate before sharing. B: Candidate content enters detection with profile-required verification material, producing evidence for review.</desc>
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; }
+    .box { fill: #f5f7f9; stroke: #263442; stroke-width: 1; }
+    .line { fill: none; stroke: #263442; stroke-width: 1.2; }
+    .label { fill: #18232e; font-size: 13px; text-anchor: middle; }
+    .section { fill: #526171; font-size: 11px; letter-spacing: 1.3px; }
+    .sub { fill: #526171; font-size: 11px; text-anchor: middle; }
+  </style>
+  <rect width="680" height="310" fill="#ffffff"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10" fill="#263442"/></marker>
+  </defs>
+  <text class="section" x="10" y="23">A · PREPARE FOR DISTRIBUTION</text>
+  <g class="box">
+    <rect x="10" y="70" width="180" height="52"/>
+    <rect x="250" y="70" width="180" height="52"/>
+    <rect x="490" y="70" width="180" height="52"/>
+  </g>
+  <g class="label">
+    <text x="100" y="101">Original content</text>
+    <text x="340" y="101">Embed mark</text>
+    <text x="580" y="101">Marked content</text>
+  </g>
+  <g class="line" marker-end="url(#arrow)">
+    <path d="M190 96H248"/><path d="M430 96H488"/><path d="M340 45V68"/>
+  </g>
+  <text class="sub" x="340" y="38">Mark + embedding configuration</text>
+  <text class="sub" x="580" y="142">Validate quality before sharing</text>
+  <text class="section" x="10" y="186">B · EXAMINE POSSIBLE REUSE</text>
+  <g class="box">
+    <rect x="10" y="231" width="180" height="52"/>
+    <rect x="250" y="231" width="180" height="52"/>
+    <rect x="490" y="231" width="180" height="52"/>
+  </g>
+  <g class="label">
+    <text x="100" y="262">Candidate content</text>
+    <text x="340" y="262">Detect mark</text>
+    <text x="580" y="262">Evidence for review</text>
+  </g>
+  <g class="line" marker-end="url(#arrow)">
+    <path d="M190 257H248"/><path d="M430 257H488"/><path d="M340 206V229"/>
+  </g>
+  <text class="sub" x="340" y="199">Profile-required verification material</text>
+</svg>

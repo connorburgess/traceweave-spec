@@ -12,6 +12,10 @@ The specification and algorithms are public. Owners can keep their keys, referen
 
 A central planned workflow embeds a mark into content before distribution, then checks later content for that mark. A complementary workflow extracts fingerprints from existing content to find candidate matching fragments without modifying it. Both feed reviewable evidence; signatures and timestamps provide separate provenance checks. These workflows are not implemented yet.
 
+![Two-stage embedded-mark workflow: prepare marked content for distribution, then examine candidate content for evidence of the mark.](docs/figures/embedded-mark-workflow.svg)
+
+*Figure 1. Proposed embedded-mark workflow. Detection may return insufficient evidence. Extracted fingerprint matching and provenance verification are separate supporting processes; detecting a mark does not establish ownership.*
+
 Read the [use cases](docs/use-cases.md), [delivery roadmap](ROADMAP.md), [implementation patterns and example matrix](docs/implementation-patterns.md), and [source register](docs/sources.md).
 
 ## Read the draft
