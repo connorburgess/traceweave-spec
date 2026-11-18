@@ -1,0 +1,25 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "artifact.txt",
+      "digest": {
+        "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/connorburgess/traceweave-spec/blob/main/spec/core.md#evidence-0.1.0-draft.1",
+  "predicate": {
+    "specVersion": "0.1.0-draft.1",
+    "contentKind": "text",
+    "profile": {
+      "id": "exact-bytes-fixture",
+      "version": "0.1.0",
+      "configSha256": "2d280e6ab24ce0756892df737929c91ae51d6daddb3c67af15e9faf7ede3a2a6"
+    },
+    "catalogueCommitment": {
+      "scheme": "sha256-salted-catalogue-v1",
+      "sha256": "f4df04ab00454b3a4b1bc25d80009a8a3e82f9d5d4f4eeed08c6cbbd9891c4a9"
+    }
+  }
+}

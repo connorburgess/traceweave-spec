@@ -1,0 +1,18 @@
+{
+  "profile": {
+    "id": "exact-bytes-fixture",
+    "version": "0.1.0",
+    "configSha256": "2d280e6ab24ce0756892df737929c91ae51d6daddb3c67af15e9faf7ede3a2a6"
+  },
+  "references": [
+    {
+      "artifactSha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+      "byteRange": {
+        "start": 0,
+        "endExclusive": 3
+      },
+      "representation": "exact-byte-sha256",
+      "value": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+    }
+  ]
+}

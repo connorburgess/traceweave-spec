@@ -1,0 +1,17 @@
+[
+  {
+    "type": "http://example.com/HelloWorld",
+    "body": "hello world",
+    "expectedUtf8": "DSSEv1 29 http://example.com/HelloWorld 11 hello world"
+  },
+  {
+    "type": "x",
+    "body": "\u00e9",
+    "expectedUtf8": "DSSEv1 1 x 2 \u00e9"
+  },
+  {
+    "type": "",
+    "body": "",
+    "expectedUtf8": "DSSEv1 0  0 "
+  }
+]

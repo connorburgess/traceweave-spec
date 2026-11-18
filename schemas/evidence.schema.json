@@ -1,0 +1,72 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "specVersion",
+    "contentKind",
+    "profile",
+    "catalogueCommitment"
+  ],
+  "properties": {
+    "specVersion": {
+      "const": "0.1.0-draft.1"
+    },
+    "contentKind": {
+      "enum": [
+        "code",
+        "text",
+        "image",
+        "audio",
+        "binary",
+        "other"
+      ]
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "configSha256"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "catalogueCommitment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scheme",
+        "sha256"
+      ],
+      "properties": {
+        "scheme": {
+          "const": "sha256-salted-catalogue-v1"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "recordedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/connorburgess/traceweave-spec/blob/main/schemas/evidence.schema.json",
+  "title": "Traceweave draft evidence predicate"
+}
