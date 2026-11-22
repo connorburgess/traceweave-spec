@@ -1,0 +1,10 @@
+# Local environment and downloads: re-created by fetch_wheels.py and fetch_sources.py.
+# Model files never live here: fetch_weights.py stores them under $TRACEWEAVE_EVAL_DIR/models
+# and refuses any location inside a git work tree.
+.venv/
+wheelhouse/
+third_party/
+# Run outputs. Smoke runs are never results. A measured run's outputs are copied into
+# results/ deliberately, in a commit that descends from the frozen-protocol commit.
+out/
+__pycache__/

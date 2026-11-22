@@ -1,0 +1,78 @@
+{
+  "comment": "Model files for protocol e-img-m-1. Licences: research/lanes/12-image-mark-licences.md. Stored outside any git work tree under $TRACEWEAVE_EVAL_DIR (default ~/traceweave-eval/models). publisherCheck is the only digest the publisher provides; sha256 is computed by fetch_weights.py --pin after the size and publisherCheck match, then committed. A null sha256 means not yet pinned; the harness refuses to load such a file.",
+  "files": [
+    {
+      "id": "trustmark-Q-config",
+      "path": "trustmark/Q/trustmark_Q.yaml",
+      "url": "https://cai-watermark.adobe.net/watermarking/trustmark-models/trustmark_Q.yaml",
+      "size": 2009,
+      "publisherCheck": {
+        "kind": "md5",
+        "value": "fe40df84a7feeebfceb7a7678d7e6ec6",
+        "source": "adobe/trustmark@4c60b9fd python/trustmark/trustmark.py line 43"
+      },
+      "sha256": "43f37103f92efa8bd6b1c5902bb537cc12a981dc699fca19d9bb7de8c62d03d9"
+    },
+    {
+      "id": "trustmark-Q-encoder",
+      "path": "trustmark/Q/encoder_Q.ckpt",
+      "url": "https://cai-watermark.adobe.net/watermarking/trustmark-models/encoder_Q.ckpt",
+      "size": 17302074,
+      "publisherCheck": {
+        "kind": "md5",
+        "value": "700328b8754db934b2f6cb5e5185d81f",
+        "source": "adobe/trustmark@4c60b9fd python/trustmark/trustmark.py line 45"
+      },
+      "sha256": "dc382c3f6b4fd568b27d6fbb763d6ffc2d2587126d84afe9d5ee95b4c5d99826"
+    },
+    {
+      "id": "trustmark-Q-decoder",
+      "path": "trustmark/Q/decoder_Q.ckpt",
+      "url": "https://cai-watermark.adobe.net/watermarking/trustmark-models/decoder_Q.ckpt",
+      "size": 47652460,
+      "publisherCheck": {
+        "kind": "md5",
+        "value": "4ced90e9cfe13e3295ad082887fe9187",
+        "source": "adobe/trustmark@4c60b9fd python/trustmark/trustmark.py line 44"
+      },
+      "sha256": "e3d9cea5406a26590735719f8f15cb10802b11852ae69047eaf4cf17214df781"
+    },
+    {
+      "id": "trustmark-Q-remover-config",
+      "path": "trustmark/Q/trustmark_rm_Q.yaml",
+      "url": "https://cai-watermark.adobe.net/watermarking/trustmark-models/trustmark_rm_Q.yaml",
+      "size": 1658,
+      "publisherCheck": {
+        "kind": "md5",
+        "value": "8476bcd4092abf302272868f3b4c2e38",
+        "source": "adobe/trustmark@4c60b9fd python/trustmark/trustmark.py line 46"
+      },
+      "sha256": "d8ae92c8ad0135a5d085c295be8560fbb67af9b8f5ab46bbf25f4a1038a8626f"
+    },
+    {
+      "id": "trustmark-Q-remover",
+      "path": "trustmark/Q/trustmark_rm_Q.ckpt",
+      "url": "https://cai-watermark.adobe.net/watermarking/trustmark-models/trustmark_rm_Q.ckpt",
+      "size": 77081406,
+      "publisherCheck": {
+        "kind": "md5",
+        "value": "760337a5596e665aed2ab5c49aa5284f",
+        "source": "adobe/trustmark@4c60b9fd python/trustmark/trustmark.py line 47"
+      },
+      "sha256": "cb23dc28b69104ae551286f63da6e965d269f715a87748e3ae7fe0d790f7dc9a"
+    },
+    {
+      "id": "pixelseal",
+      "path": "pixelseal/checkpoint.pth",
+      "url": "https://dl.fbaipublicfiles.com/videoseal/pixelseal/checkpoint.pth",
+      "size": 1237429197,
+      "publisherCheck": {
+        "kind": "s3-multipart-etag",
+        "value": "2a6bd4d67f6c182201975a96b1a5a9bb-148",
+        "partSize": 8388608,
+        "source": "HTTP ETag of the url, 2026-11-23 (S3 version 5XttukeFUuyDc4Uv97Jwy1PldRddPzG3)"
+      },
+      "sha256": "0c5665cff20eb6ce1b5aaa7d91c19dafb418bfee32d02dd3344e4ed60d9d75bd"
+    }
+  ]
+}

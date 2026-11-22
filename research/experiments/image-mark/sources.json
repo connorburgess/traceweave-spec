@@ -1,0 +1,525 @@
+{
+ "comment": "Upstream source files imported by the harness, taken from the pinned commit's archive (codeload.github.com). fetch_sources.py extracts exactly these paths into third_party/<name>/ and checks each SHA-256 and git blob id. Licences: research/lanes/12-image-mark-licences.md.",
+ "sources": [
+  {
+   "name": "trustmark",
+   "repo": "adobe/trustmark",
+   "commit": "4c60b9fdb4125fca3001f0803e6890a6b55371ac",
+   "archive": "https://codeload.github.com/adobe/trustmark/tar.gz/4c60b9fdb4125fca3001f0803e6890a6b55371ac",
+   "files": [
+    {
+     "path": "LICENSE",
+     "size": 1218,
+     "sha256": "58d47a5cdfaaceda98925d845e8207d90336c62347a2383f95962b667b1cdaf5",
+     "gitBlob": "aa449b5deb115e74c2b86309791e64ce19b3be7a"
+    },
+    {
+     "path": "python/trustmark/KBNet/arch_util.py",
+     "size": 7585,
+     "sha256": "c1cb647f1f2a741ba6fa5877faf837babb3e7c8e94b9ff33972c66dbff90c8cc",
+     "gitBlob": "e3cc6f90fe76e982eadf7dba9a421430e75e13f3"
+    },
+    {
+     "path": "python/trustmark/KBNet/kb_utils.py",
+     "size": 4320,
+     "sha256": "6ba7123e38796139eac76108358a5fdbd040b4d16e8449971e089f9948c486c2",
+     "gitBlob": "7decc0d868ea3ea56b948cbc0191f5a86e35caa3"
+    },
+    {
+     "path": "python/trustmark/KBNet/kbnet.py",
+     "size": 6395,
+     "sha256": "8a775e49bf9a75afc09a2adaffb9465e4e25c3af7a497585bcd1f37c796da2d4",
+     "gitBlob": "102f4aa38adaa74a2a4a78cdbdf84ba6685e3d1a"
+    },
+    {
+     "path": "python/trustmark/KBNet/kbnet_l_arch.py",
+     "size": 10266,
+     "sha256": "52bf22c94d134bc0fdb7584ccd96b15e5721f1fab3faa7bcac780099f5a576fa",
+     "gitBlob": "882cd1f9b20a98d75bdc5952107ff11b4c944406"
+    },
+    {
+     "path": "python/trustmark/KBNet/kbnet_s_arch.py",
+     "size": 11171,
+     "sha256": "4a5d68987a8c764c2d01f620816a8762fff52186e0abd8822fd88653653a7a4d",
+     "gitBlob": "1598329720b9333dd5d21814be7140f704acd5d2"
+    },
+    {
+     "path": "python/trustmark/__init__.py",
+     "size": 163,
+     "sha256": "c3f04845e355c62e1ebf41ec796b93b35b3c16ecc6fe68efb0d0b7efad33c590",
+     "gitBlob": "49f03a2a25b54ebc194ecb17f5d9331cd3093ea9"
+    },
+    {
+     "path": "python/trustmark/bbox_detector/anchor_utils.py",
+     "size": 12058,
+     "sha256": "fdb59794afd0c5ff31ff0eb3d351343f00ad1f9f2a26271eaabb699ff8c70317",
+     "gitBlob": "6e62074afdb90ef9d28feb6ed5646c228a6324db"
+    },
+    {
+     "path": "python/trustmark/bbox_detector/det_utils.py",
+     "size": 22325,
+     "sha256": "1d90f2a1b8bdfd33aea9dc18549c4dad519b5938ef449599d496f7bdd706a924",
+     "gitBlob": "90ceb7a4ee248e09ab2efbe69adf8ea9915ac907"
+    },
+    {
+     "path": "python/trustmark/bbox_detector/faster_rcnn.py",
+     "size": 14317,
+     "sha256": "401e9899f1da6563c6e8a1f6225d0aa42f6fbeadad6723dda20c092b6adb1465",
+     "gitBlob": "9bd7664d61b9bfcbd41fe22e1cf8018dedd31874"
+    },
+    {
+     "path": "python/trustmark/bbox_detector/generalized_rcnn.py",
+     "size": 5031,
+     "sha256": "ca515776b8f4eec6691f07cf9246345362a256082cfefe2a4bdf561825c72e19",
+     "gitBlob": "8b04b5ecc0202c3abf91b7022f575e44270f98ae"
+    },
+    {
+     "path": "python/trustmark/bbox_detector/image_list.py",
+     "size": 981,
+     "sha256": "0346b372939fb5ac22c1615178008cd33fac22c9f008f0788cd95a992ded057c",
+     "gitBlob": "5574e955ae1d43466e56df07e4dd7abe48647693"
+    },
+    {
+     "path": "python/trustmark/bbox_detector/roi_heads.py",
+     "size": 29683,
+     "sha256": "da9d4687baa915f717ff5526feded5779b14f6d2c8c0b8db942a376413b2536b",
+     "gitBlob": "7bb084a05b4bc647acc38c955d648e71562f5316"
+    },
+    {
+     "path": "python/trustmark/bbox_detector/rpn.py",
+     "size": 15950,
+     "sha256": "9d93293fb7cfcd0dcfe80bca0bd394b4c329fd8c9d4000ee3371288fac853cc1",
+     "gitBlob": "8e1004f885dc34d6a70f68e2d0507076d8ce5702"
+    },
+    {
+     "path": "python/trustmark/bbox_detector/transform.py",
+     "size": 12379,
+     "sha256": "74c96c8eb9ebc46139a6895168825c804b1789a5df66a7a06dbed38b958eb19f",
+     "gitBlob": "01274213cd973e8470a629dcd01efeba474f9ea3"
+    },
+    {
+     "path": "python/trustmark/bchecc.py",
+     "size": 13010,
+     "sha256": "727bcbc2372c1d5bcbb7f88eb70ff0c468135d3521cf5a509af8f3518aa7d00e",
+     "gitBlob": "f9730b5a33203d8940aa962559187568c3996e5e"
+    },
+    {
+     "path": "python/trustmark/datalayer.py",
+     "size": 9642,
+     "sha256": "95fa67ae24e38aec15a3da9d14c80d51a6afd14eb00725d7f40fe2b281ebe2de",
+     "gitBlob": "f856ddf7123caf6fc6c15f0e153852a8cc4bcc97"
+    },
+    {
+     "path": "python/trustmark/denoise.py",
+     "size": 11541,
+     "sha256": "a77b6f9c400afe54c2d930370079e98c1bd64378142c894dcfe0c5f4704cb7ab",
+     "gitBlob": "dc75ddb54d478f55f5e69de7d099b62fb9e9c9b0"
+    },
+    {
+     "path": "python/trustmark/model.py",
+     "size": 6249,
+     "sha256": "bf7fc5875cbeb852288dfec38d96a7ca82c20fb6c7395336ca2ca9f0b20ab4b4",
+     "gitBlob": "13133cf4b101d11feb2eddb04751d4304109dc63"
+    },
+    {
+     "path": "python/trustmark/trustmark.py",
+     "size": 23608,
+     "sha256": "1016f4f6f842743b2d5710c52ef38441ec3dd6b4658aae5bc05e27b17406c288",
+     "gitBlob": "52468e0288b0d983aee424e29bbf728bfd6ab071"
+    },
+    {
+     "path": "python/trustmark/unet.py",
+     "size": 17628,
+     "sha256": "0c2892abedd9d21af9ce1d0eb0227ccb30eb24cd48762fee2312e9acc6301a1b",
+     "gitBlob": "cde22e0ff84dcf3f4d42112368ba5186630c4662"
+    },
+    {
+     "path": "python/trustmark/yolo_wo_decoder_multibox.py",
+     "size": 4180,
+     "sha256": "a7f3e346f2fb9059804898777f809e18a64fd7d4e18b6a04cdbc7a04a2ade123",
+     "gitBlob": "5c8fdfc002d5091a1273cfec3b137c40538093cc"
+    }
+   ]
+  },
+  {
+   "name": "videoseal",
+   "repo": "facebookresearch/videoseal",
+   "commit": "f12875a9b5e711e0c6e2dc3a22aca18231ce4a1a",
+   "archive": "https://codeload.github.com/facebookresearch/videoseal/tar.gz/f12875a9b5e711e0c6e2dc3a22aca18231ce4a1a",
+   "files": [
+    {
+     "path": "LICENSE",
+     "size": 1087,
+     "sha256": "cf9b17822d1fcd4ff32ccbe14183386fb3adf6f2ff92dc184130823f7fc28173",
+     "gitBlob": "a45a376fb0fcd4a3de06b6c096e62028929a2dcb"
+    },
+    {
+     "path": "configs/attenuation.yaml",
+     "size": 179,
+     "sha256": "3b8d415dee0f0a13b4d69ce6ffd872b42563ceaa6243c47f233a4a2a24cb6140",
+     "gitBlob": "76d25e2c609b1dfc577abfd63990aa5e8efc9f0f"
+    },
+    {
+     "path": "videoseal/__init__.py",
+     "size": 557,
+     "sha256": "901f64da74c162b9a98795e886e4181634f8b93bf7d218d621faa1a19d4a5418",
+     "gitBlob": "95d8e7e5ffde3c9d43629b4f7d9749ecb473eb53"
+    },
+    {
+     "path": "videoseal/augmentation/__init__.py",
+     "size": 5669,
+     "sha256": "f05d73c66b57b215797017b079341083597fcd94bddf3fa594dcbc0c77605ab5",
+     "gitBlob": "f8d1720c69f5afe960a108f2fe79db953446d9d5"
+    },
+    {
+     "path": "videoseal/augmentation/augmenter.py",
+     "size": 8708,
+     "sha256": "8f378ab28b2a55d04314758e20efd14bdb3a0863e833d80015d9b631b72e8557",
+     "gitBlob": "72b3763dae3ef9978671b23345e8f865248c1c16"
+    },
+    {
+     "path": "videoseal/augmentation/doaugs.py",
+     "size": 9536,
+     "sha256": "70859819cfa7a1480e40cc92b77ecb77670a7c958db8c38c54699b393b5c24ff",
+     "gitBlob": "20fc0c74dc6500212d28df0424eb544f31183f09"
+    },
+    {
+     "path": "videoseal/augmentation/geometric.py",
+     "size": 9688,
+     "sha256": "fd6d14d9fd43d373851a952267cf8b174cdcc2e693ea7f24e83b3b65d0e4379a",
+     "gitBlob": "3889786b5e0fe337945d8afc7e366ac980f10f7e"
+    },
+    {
+     "path": "videoseal/augmentation/masks.py",
+     "size": 19141,
+     "sha256": "e4a2785dd8bf85c3dbecda4364706f2c9008178929398b127ee5c464ecb8ea41",
+     "gitBlob": "92e1dcee50b8e1c81b5beebd5174f1bc61bdc98a"
+    },
+    {
+     "path": "videoseal/augmentation/sequential.py",
+     "size": 1105,
+     "sha256": "3a08ff8487be3a13f92fae0bff631bab630f6572211d91bffc84722f185a0ff2",
+     "gitBlob": "e0b5856277175bdf1f849fdc9c0fccbef1472db6"
+    },
+    {
+     "path": "videoseal/augmentation/valuemetric.py",
+     "size": 9555,
+     "sha256": "f5f69ffc3c4fabe90b86a1dd1fecc65ffc15a10cee5c0c0665783ff7c18cb95b",
+     "gitBlob": "cdb9ed8408157e524f547bc467b2158e102c3716"
+    },
+    {
+     "path": "videoseal/augmentation/video.py",
+     "size": 28242,
+     "sha256": "216035cea2b4e472060d0b068c2f4bf229ce8ae073a59642bb1e84927b05e9c4",
+     "gitBlob": "4838062ac6a240d18556b70fcb3f18f0a38de446"
+    },
+    {
+     "path": "videoseal/cards/pixelseal.yaml",
+     "size": 940,
+     "sha256": "96c4a448f7d81810780e5bde5a51b039db544b7ec2baf65a605302c1b17362c9",
+     "gitBlob": "9f4036c18cd09d2171d76b0bace2d8c60225ab18"
+    },
+    {
+     "path": "videoseal/data/__init__.py",
+     "size": 196,
+     "sha256": "47656f3244eaa3bfa6701231fcb84e1d0dcbe8e9700d044fd6cc96a3222f3270",
+     "gitBlob": "f5200343907af3f7f5895480715ff55ff58bf0c8"
+    },
+    {
+     "path": "videoseal/data/datasets.py",
+     "size": 23867,
+     "sha256": "e684a0e25439f9e5a5a1528f5c79dac9360e9856412444302999dbedaef7a9d5",
+     "gitBlob": "5c34909aff845e5874df292c8111a1be2070b596"
+    },
+    {
+     "path": "videoseal/data/loader.py",
+     "size": 8544,
+     "sha256": "61c680c53503d14b5571697002522568bb154188c8d418a6fc3dedc0bd118d04",
+     "gitBlob": "879a7e381d7e2adf5b4a50f90e3802d6f230e738"
+    },
+    {
+     "path": "videoseal/data/transforms.py",
+     "size": 4770,
+     "sha256": "7aa60e7f0b6c0e39cd1fcaa96a4cea3d321abfd6d777dca8d0b07af4c5f8e128",
+     "gitBlob": "d8419282a6638e53bcb2da7dd54218c576433909"
+    },
+    {
+     "path": "videoseal/evals/__init__.py",
+     "size": 196,
+     "sha256": "47656f3244eaa3bfa6701231fcb84e1d0dcbe8e9700d044fd6cc96a3222f3270",
+     "gitBlob": "f5200343907af3f7f5895480715ff55ff58bf0c8"
+    },
+    {
+     "path": "videoseal/evals/flops.py",
+     "size": 9158,
+     "sha256": "f1979b62559486443e7618ae7b275f5985c0c97a27540ef332465e44556ddbf7",
+     "gitBlob": "a39b876ff88b03400edd94adc3835a3bac1807ca"
+    },
+    {
+     "path": "videoseal/evals/full.py",
+     "size": 18730,
+     "sha256": "69a72e67b1fce26574d1d6bb478fed9fb4d81214c020c513b5f722e24c1bfe18",
+     "gitBlob": "a69b83b3deb25b887416b63c6d8f13888fdcb7f2"
+    },
+    {
+     "path": "videoseal/evals/metrics.py",
+     "size": 18811,
+     "sha256": "afd0a703988757da96b49e7c8a5bf4805d19cc4fc66252832c197c474664789d",
+     "gitBlob": "76f098ca9b5866f6a7e611ab28eced139618c46e"
+    },
+    {
+     "path": "videoseal/evals/speed.py",
+     "size": 14614,
+     "sha256": "baf3d044f55fc1d40d1e9229bcdd366ad89b0783835803820c98a712b08b7677",
+     "gitBlob": "eab1b077cbc9141541d4acdd5d66a198ce200fb6"
+    },
+    {
+     "path": "videoseal/evals/step_size_eval.py",
+     "size": 10549,
+     "sha256": "aec06d5cc84cac70111f14711783a23cf6997ad8ba2a341c120a2d49a422264e",
+     "gitBlob": "4a80a7f98e5a2d5de9a1aaa79a8c342e7266e680"
+    },
+    {
+     "path": "videoseal/losses/__init__.py",
+     "size": 195,
+     "sha256": "f3a5d65e55e4a7bd26f6d3440e4168c240b38824124253152e705edd6324e9db",
+     "gitBlob": "e905ae0ee5c3cc21dcfac3e674b1d33c64773a2e"
+    },
+    {
+     "path": "videoseal/losses/dists.py",
+     "size": 5627,
+     "sha256": "a78fb7c422eeb4ac954d2f9ccb08447d1b0120481c96e297af31e6987672cb03",
+     "gitBlob": "988ebfb99e545f003030c58e80f8e2d76a9483bd"
+    },
+    {
+     "path": "videoseal/losses/focal.py",
+     "size": 5122,
+     "sha256": "3c7bc3aa6a11bcd268c8b31742a4be247b10044b61616747dcd95b808da12146",
+     "gitBlob": "cad588b40ba1ffa18bebb058872a3350798a12cb"
+    },
+    {
+     "path": "videoseal/losses/jndloss.py",
+     "size": 911,
+     "sha256": "47dfdbc3a759f494dd3a16d291de702d1ff19b022055a6a8d7dd0edc4e2fe505",
+     "gitBlob": "996a834eacb5475e2ed27a631667ecf6255a6383"
+    },
+    {
+     "path": "videoseal/losses/perceptual.py",
+     "size": 4737,
+     "sha256": "5f27de00c636ba1f2bd8da3fd272893de5ec1d32f32a7ceafdc50365bb5704cc",
+     "gitBlob": "56240b75c3df66ffdd59157c68eb87495c0a4272"
+    },
+    {
+     "path": "videoseal/losses/ssim.py",
+     "size": 12141,
+     "sha256": "2448a1e8c262a375334bcc73d99a1a0a929a165172a53c499e36e331405592ac",
+     "gitBlob": "6c53f26fe0ac41a31abadfb292231208380b4f3a"
+    },
+    {
+     "path": "videoseal/losses/videosealloss.py",
+     "size": 9038,
+     "sha256": "f49c2f32c1b8d33393a655e01f3be1542f861077efb1a5f0ac89d378d7f93833",
+     "gitBlob": "2b39360b1023fef9604adac3bef9671e2bd7daf9"
+    },
+    {
+     "path": "videoseal/losses/watson_fft.py",
+     "size": 10381,
+     "sha256": "76722dddfdc85dccee4edcefcb121f87666250cf3301d9524a23fe18f69fe3b4",
+     "gitBlob": "b0c5b1fb6c9ba7b8a939cec26e71d62e8b7fbfea"
+    },
+    {
+     "path": "videoseal/losses/watson_vgg.py",
+     "size": 6516,
+     "sha256": "579db5ba9a08b51fa572c364b7d4abc26f32c49fe9b7e3e88af50d539db72af8",
+     "gitBlob": "bbe367b113b8430a2f26c65ca7ef40553354ffb5"
+    },
+    {
+     "path": "videoseal/losses/yuvloss.py",
+     "size": 741,
+     "sha256": "cfcf484747a3f739c627912b2f968a67c7508894c4f71650c4ba0edb440fdc85",
+     "gitBlob": "3150a085cc4e3d79acafcf692e3eec467432154a"
+    },
+    {
+     "path": "videoseal/models/__init__.py",
+     "size": 476,
+     "sha256": "1db8034c7a25180de77a6aa67ea75e3e03022d99b432beb7517f67cc2b88f482",
+     "gitBlob": "0f5e632568e5de9cace015eb13de49474a7f832c"
+    },
+    {
+     "path": "videoseal/models/baselines.py",
+     "size": 13963,
+     "sha256": "74832cefbe9a64ea71beb06885166a4a28fc19704a35b992efc3251df360fe52",
+     "gitBlob": "3259cc2d4d4b835ba309b6739897f8d5636fa4be"
+    },
+    {
+     "path": "videoseal/models/blender.py",
+     "size": 4275,
+     "sha256": "4ff6fcecf1c5eadd760e47d6ba5a8fe18a5ac4408b5ae03f307b6319d38aa131",
+     "gitBlob": "d3e65d20cd577576a2e7ede0425228d5d184fb84"
+    },
+    {
+     "path": "videoseal/models/embedder.py",
+     "size": 8648,
+     "sha256": "e2ab6152eae2f637667b4a82d28eb4eddfffc1ab7c598bc99cbe83a44f61ca3c",
+     "gitBlob": "c3879734602a15d5a5de373369eea4894667b8ff"
+    },
+    {
+     "path": "videoseal/models/extractor.py",
+     "size": 6866,
+     "sha256": "f6dde600b0bcb7c7d5cff23318c601c87203238dfe621aa3f8af5be7c97838c6",
+     "gitBlob": "7080fb21ba81477c55c2a82ab983e0e582e03999"
+    },
+    {
+     "path": "videoseal/models/videoseal.py",
+     "size": 20117,
+     "sha256": "1d7bee3d8e18c2594c28a4f72784482e47f143f08b96cfbf370b796763c5450c",
+     "gitBlob": "dd7377ea0d723177affd0a2bc5186d563bd42eaf"
+    },
+    {
+     "path": "videoseal/models/wam.py",
+     "size": 12619,
+     "sha256": "64ccfb9470c20ecd64e6279c8051287304f16325424d7b0753f8ec22ba041250",
+     "gitBlob": "1050be9246a837dcd5366c1a1c4dffd2d762eff0"
+    },
+    {
+     "path": "videoseal/modules/__init__.py",
+     "size": 350,
+     "sha256": "53277523c789ecd9923201be0df686f85a67dfbf23168b4abecbe0d8ae96233a",
+     "gitBlob": "0ce39bbbb6637934316341fe3b8007a559bfa775"
+    },
+    {
+     "path": "videoseal/modules/common.py",
+     "size": 10975,
+     "sha256": "9be1e4468dd1d3bde9eca4694a4569a9e56de794e83ee69471cdf6ae0555a30b",
+     "gitBlob": "a433907fb9140f6c54198817259c62621aaf072e"
+    },
+    {
+     "path": "videoseal/modules/convnext.py",
+     "size": 7029,
+     "sha256": "2bf1a4db20fe1674a2840f4250e951a40df15720c2a1530ad662b8a4873e85d7",
+     "gitBlob": "190035a876593374e3aaedb3f2805bca34e02301"
+    },
+    {
+     "path": "videoseal/modules/discriminator.py",
+     "size": 8311,
+     "sha256": "6c821183014115e3ad950036bed198d624fc6fb7caac5e52e9da80c9016daf68",
+     "gitBlob": "8abdd4a9f78ff8193c31f5afd0399c708903801e"
+    },
+    {
+     "path": "videoseal/modules/dvmark.py",
+     "size": 4002,
+     "sha256": "a880ce8fad0ab7309f0d470dc0d3577d7b5d6b71eceae1dd9a77bbe86ce5b93e",
+     "gitBlob": "9046b5be085372b6ea89ccc8a0bb340b6474a8fe"
+    },
+    {
+     "path": "videoseal/modules/hidden.py",
+     "size": 3655,
+     "sha256": "ebe85613ab9eeaa54756ee94954687b7cf818c038ac6e7c6cbd7653a12542853",
+     "gitBlob": "bca5cc47b22ca7927485b2b0b84d66b190827f73"
+    },
+    {
+     "path": "videoseal/modules/jnd.py",
+     "size": 4378,
+     "sha256": "d191740929757db7310c002b9afe4ca1eff5723dfd8647dcf7e723b0a417aa58",
+     "gitBlob": "b7cb4b40a9606a8a50b4e7d17c86e231445a87ae"
+    },
+    {
+     "path": "videoseal/modules/msg_processor.py",
+     "size": 5344,
+     "sha256": "e92579c61129a2893dbdb832a9551e01d084100a1af2ff13a7655aac70b658d6",
+     "gitBlob": "93aa330c5b24073cd4629ce54352defb4d858b5d"
+    },
+    {
+     "path": "videoseal/modules/pixel_decoder.py",
+     "size": 2847,
+     "sha256": "b9227311ef4465c8943defd30557ddce1378655733a28a9f2b4ed99db6c091f0",
+     "gitBlob": "324ecf61b643b00c0db7dbbe04e8e3091c7fe42d"
+    },
+    {
+     "path": "videoseal/modules/unet.py",
+     "size": 10684,
+     "sha256": "0d563e094d0f4656a978af20181a79b2e097d73c8c314fff27a6cf7e01f825fd",
+     "gitBlob": "4054d830b25e72e486a9bdd1eb709318119e5e9a"
+    },
+    {
+     "path": "videoseal/modules/vae.py",
+     "size": 13269,
+     "sha256": "366afb3e4e49f3f4f0f85729504ea3d72530f78086ce4d68f373b9fdf54d1a5f",
+     "gitBlob": "5b82ba8f557a590e5b0070259a174c78f3d3a218"
+    },
+    {
+     "path": "videoseal/modules/vit.py",
+     "size": 18980,
+     "sha256": "a7a51fc79b85cbf69e301a2bde305bc41ff761992be7ae4080525366b8fb5e61",
+     "gitBlob": "4c69cc9b3116c1768542c21e733bcd3c62fc3d58"
+    },
+    {
+     "path": "videoseal/tests/__init__.py",
+     "size": 196,
+     "sha256": "47656f3244eaa3bfa6701231fcb84e1d0dcbe8e9700d044fd6cc96a3222f3270",
+     "gitBlob": "f5200343907af3f7f5895480715ff55ff58bf0c8"
+    },
+    {
+     "path": "videoseal/tests/test_videoseal_temporal.py",
+     "size": 17708,
+     "sha256": "3e69860f991eca28d989874d1beaaedcf549c5d6a2188ba97f89b185d8bd7941",
+     "gitBlob": "39c9534e8001f437375bd0c307ea6a0c059d74ef"
+    },
+    {
+     "path": "videoseal/utils/__init__.py",
+     "size": 2596,
+     "sha256": "b88ca838d8b12c3fd7a4ceaa5065a6ba99b417cac82e3912bcc79ee54bed64d3",
+     "gitBlob": "422dc9f4def1668b373afc6ff0aff6ec65fb88b1"
+    },
+    {
+     "path": "videoseal/utils/cfg.py",
+     "size": 12412,
+     "sha256": "a93916e2248213bf3fc939eaa1fef5c24049a0fe31fdedab429a91eea131f111",
+     "gitBlob": "aa397a6e26ea8a1c506f090e7ba273366ed2b3e2"
+    },
+    {
+     "path": "videoseal/utils/data.py",
+     "size": 4137,
+     "sha256": "1211a756ddf0fc8531aa23e40c54bbc9497640ccfb2c6e01a0563f0d97b8189f",
+     "gitBlob": "23feaecb0f2c49aeb207357561a8d8ec13347a84"
+    },
+    {
+     "path": "videoseal/utils/display.py",
+     "size": 5942,
+     "sha256": "ff829cbc32ceeb64c3f80d527db27d66071af849883a8a52aa5ca1fa6a690110",
+     "gitBlob": "86dc4d9282ed84f06ab08a8b49f491fc748847fe"
+    },
+    {
+     "path": "videoseal/utils/dist.py",
+     "size": 8414,
+     "sha256": "0356568df1a11091939ff7fae4d5561307ee45e99820d7d25e2de920eb44cdbc",
+     "gitBlob": "6cb23c734ce3c78dea654a449bd30dfc450c3be1"
+    },
+    {
+     "path": "videoseal/utils/image.py",
+     "size": 4186,
+     "sha256": "007a6011e9391a0b18f61acea55a49e83667baf350c35f526251793a6f952b94",
+     "gitBlob": "0a2ed9676d2ff35d8b24b0b1f403db864e4f25ed"
+    },
+    {
+     "path": "videoseal/utils/logger.py",
+     "size": 6310,
+     "sha256": "af1ae3fa686170d4c672595e9e38dc26c9878863a1ed1e73c193d283766f86af",
+     "gitBlob": "15b3ed9b8d8aadd488cc8569ac45bfbc0838d0f4"
+    },
+    {
+     "path": "videoseal/utils/optim.py",
+     "size": 8379,
+     "sha256": "1c0971037ee327d67334c186c390e40dfbfd3a54a4aef4525a7fefb77e89d8e4",
+     "gitBlob": "40d3b672ef28de69fd288bb69bb33f46fcdc7e78"
+    },
+    {
+     "path": "videoseal/utils/tensorboard.py",
+     "size": 1846,
+     "sha256": "434a0de724ef4d06eb98f51720080179009dfc75d851a28eb739d9207748fa47",
+     "gitBlob": "e8256f13653007b9eeb6d6b38262b46bbde9562e"
+    }
+   ]
+  }
+ ]
+}
