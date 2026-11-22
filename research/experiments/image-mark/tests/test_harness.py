@@ -1,4 +1,4 @@
-"""Unit tests for the e-img-m-1 harness. Run: .venv/bin/python -I -m unittest discover -s tests -t .
+"""Unit tests for the e-img-m-2 harness. Run: .venv/bin/python -I -m unittest discover -s tests -t .
 
 Only smoke seeds (3,000,000-3,000,002) and the e-img-f-2 golden seeds are generated here; no seed
 in the experiment range (2,000,000-2,000,099 and 2,000,102-2,000,201) is touched.
@@ -28,10 +28,12 @@ SMOKE = 3_000_000
 
 class Payload(unittest.TestCase):
     def test_k_values(self):
+        self.assertEqual(payload.k_for(61), 49)
+        self.assertEqual(payload.tail(61, 49), Fraction(sum(__import__("math").comb(61, i) for i in range(49, 62)), 2**61))
         self.assertEqual(payload.k_for(100), 74)
         self.assertEqual(payload.k_for(256), 167)
         self.assertEqual(payload.k_for(32), 30)
-        for n in (32, 100, 256):
+        for n in (32, 61, 100, 256):
             k = payload.k_for(n)
             self.assertLessEqual(payload.tail(n, k), Fraction(1, 10**6))
             self.assertGreater(payload.tail(n, k - 1), Fraction(1, 10**6))
@@ -79,6 +81,24 @@ class Search(unittest.TestCase):
 
 
 class Environment(unittest.TestCase):
+    def test_runtime_pins(self):
+        from twmark import schemes  # noqa: F401
+
+        self.assertEqual(env.runtime()["deviations"], [])
+
+    def test_compare_classifies_w3(self):
+        import json
+
+        with tempfile.TemporaryDirectory() as d:
+            for r, q in (("a", b"1\n"), ("b", b"2\n")):
+                os.makedirs(os.path.join(d, r))
+                open(os.path.join(d, r, "entries.jsonl"), "wb").write(b"e\n")
+                open(os.path.join(d, r, "queries.jsonl"), "wb").write(q)
+                json.dump({"resultsSha256": r, "runtime": {"torchThreads": 4}}, open(os.path.join(d, r, "summary.json"), "w"))
+            self.assertEqual(run_mark.compare(os.path.join(d, "a"), os.path.join(d, "b")), 5)
+            json.dump({"resultsSha256": "b", "runtime": {"torchThreads": 8}}, open(os.path.join(d, "b", "summary.json"), "w"))
+            self.assertEqual(run_mark.compare(os.path.join(d, "a"), os.path.join(d, "b")), 1)
+
     def test_generator_goldens(self):
         self.assertEqual(env.generator_goldens()["matched"], 3)
 
@@ -187,9 +207,13 @@ class Models(unittest.TestCase):
 
     def test_trustmark_round_trip_and_raw_bits_match_upstream(self):
         tm = self.schemes.TrustMarkQ()
+        self.assertEqual((tm.n, tm.n_raw), (61, 100))
         for key in ("A", "B"):
-            ok, data, ver = tm.bch(tm.payload(key, "m1"))
+            tx = tm.transmitted(key, "m1")
+            ok, data, ver = tm.bch(tx)
             self.assertEqual((ok, ver, data), (True, 1, "".join(map(str, tm.data(key, "m1")))))
+            self.assertTrue(np.array_equal(tm.tested(tx), tm.payload(key, "m1")))  # positions 0-60 are the data
+            self.assertEqual("".join(map(str, tx[-4:])), "0001")  # fixed version bits: why they are not tested
         m1 = tm.embed(self.rgb, "A", "m1")
         self.assertTrue(np.array_equal(m1, tm.embed(self.rgb, "A", "m1")))  # deterministic in process
         from PIL import Image
@@ -197,8 +221,11 @@ class Models(unittest.TestCase):
         raw = tm.raw_bits(m1)
         up = tm.tm.decode(Image.fromarray(m1, "RGB"), MODE="binary")
         self.assertEqual(tm.bch(raw), (bool(up[1]), str(up[0]), int(up[2])))
-        self.assertGreaterEqual(payload.agreement(raw, tm.payload("A", "m1")), payload.k_for(100))
+        self.assertGreaterEqual(payload.agreement(tm.tested(raw), tm.payload("A", "m1")), payload.k_for(61))
         self.assertEqual(tm.remove(m1).shape, m1.shape)
+        bits, how = tm.forge_bits(raw)  # keyless forgery input: what the public decoder reveals
+        self.assertEqual((bits.size, how), (61, "bch"))
+        self.assertTrue(np.array_equal(bits, tm.payload("A", "m1")))
 
     def test_pixelseal_round_trip_without_stub_use(self):
         ps = self.schemes.PixelSeal()  # installs the stubs; any use would raise StubUsed
@@ -206,7 +233,9 @@ class Models(unittest.TestCase):
         m1 = ps.embed(self.rgb, "A", "m1")
         self.assertEqual(m1.shape, self.rgb.shape)
         self.assertTrue(np.array_equal(m1, ps.embed(self.rgb, "A", "m1")))
-        self.assertGreaterEqual(payload.agreement(ps.raw_bits(m1), ps.payload("A", "m1")), payload.k_for(256))
+        raw = ps.raw_bits(m1)
+        self.assertGreaterEqual(payload.agreement(ps.tested(raw), ps.payload("A", "m1")), payload.k_for(256))
+        self.assertEqual(ps.forge_bits(raw)[0].size, 256)
         self.assertIsInstance(sys.modules["av"], env._Stub)
 
     def test_dwtdct_runs(self):

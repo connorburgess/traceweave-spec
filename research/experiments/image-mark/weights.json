@@ -1,5 +1,5 @@
 {
-  "comment": "Model files for protocol e-img-m-1. Licences: research/lanes/12-image-mark-licences.md. Stored outside any git work tree under $TRACEWEAVE_EVAL_DIR (default ~/traceweave-eval/models). publisherCheck is the only digest the publisher provides; sha256 is computed by fetch_weights.py --pin after the size and publisherCheck match, then committed. A null sha256 means not yet pinned; the harness refuses to load such a file.",
+  "comment": "Model files for protocol e-img-m-2 (first pinned under e-img-m-1). Licences: research/lanes/12-image-mark-licences.md. Stored outside any git work tree under $TRACEWEAVE_EVAL_DIR (default ~/traceweave-eval/models). publisherCheck is the only digest the publisher provides; sha256 is computed by fetch_weights.py --pin after the size and publisherCheck match, then committed. A null sha256 means not yet pinned; the harness refuses to load such a file.",
   "files": [
     {
       "id": "trustmark-Q-config",

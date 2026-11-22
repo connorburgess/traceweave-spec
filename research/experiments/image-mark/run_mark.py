@@ -1,4 +1,4 @@
-"""Runner for protocol e-img-m-1 (research/drafts/image-mark-protocol.md).
+"""Runner for protocol e-img-m-2 (research/drafts/image-mark-protocol.md).
 
   python -I run_mark.py smoke --out out/smoke-1 [--require-network-denied] [--schemes tm,ps,dw]
   python -I run_mark.py full --frozen-commit <40-hex> --require-network-denied --out out/full-1
@@ -37,12 +37,12 @@ CLEAN_PASS = 95  # P1, out of 100 (protocol §6)
 
 POSITIVE = ("clean",) + attacks.EDITS + attacks.REMOVALS
 QUERY_KEYS = {"id", "scheme", "condition", "kind", "source", "host", "key", "sha256", "byteLength", "decode",
-              "rawBits", "agreeTrue", "agreeMaxOther", "agreeMaxOtherEntry", "accepted", "outcome", "entry",
+              "rawBits", "agreeTrue", "agree100True", "forgedFrom", "agreeMaxOther", "agreeMaxOtherEntry", "accepted", "outcome", "entry",
               "bch", "psnrVsMarked"}
 KINDS = {"positive", "forgery", "overwrite-original", "overwrite-new", "wrong-key", "unmarked-cover", "unmarked-host"}
 OUTCOMES = {"match", "no-match", "ambiguous", "abstain-undecodable", "abstain-unsupported-mode", "abstain-too-small"}
 ENTRY_KEYS = {"id", "scheme", "seed", "width", "height", "coverPixelSha256", "markedPixelSha256", "markedSha256",
-              "markedByteLength", "payload", "data", "quality", "belowFloor", "payloadRoundTrip"}
+              "markedByteLength", "payload", "transmitted", "quality", "belowFloor", "payloadRoundTrip"}
 PSNR_FLOOR = 38.0
 
 
@@ -86,7 +86,8 @@ def search(raw: np.ndarray, matrix: np.ndarray, ids: list[str], k: int, true_id:
     return out
 
 
-def validate_query(q: dict, k: int, n: int) -> list[str]:
+def validate_query(q: dict, k: int, n: int, n_raw: int | None = None) -> list[str]:
+    n_raw = n_raw or n
     e = []
     extra = set(q) - QUERY_KEYS
     if extra:
@@ -101,7 +102,7 @@ def validate_query(q: dict, k: int, n: int) -> list[str]:
     if q.get("outcome", "").startswith("abstain"):
         return e
     raw = q.get("rawBits", "")
-    if len(raw) * 4 != n:
+    if len(raw) * 4 != n_raw:
         e.append(f"{q.get('id')}: rawBits length")
     acc = q.get("accepted")
     if not isinstance(acc, list) or any(m < k or m > n for _, m in acc):
@@ -121,7 +122,7 @@ def validate_entry(r: dict, n: int) -> list[str]:
     for f in ("id", "scheme", "seed", "markedSha256", "payload", "quality", "payloadRoundTrip"):
         if f not in r:
             e.append(f"{r.get('id')}: missing {f}")
-    if len(r.get("payload", "")) * 4 != n:
+    if len(r.get("payload", "")) != n or set(r.get("payload", "")) - {"0", "1"}:
         e.append(f"{r.get('id')}: payload length")
     return e
 
@@ -135,7 +136,7 @@ def run_scheme(name: str, mode: str, images: dict, deadline: float, log) -> tupl
 
     t0 = time.time()
     s = schemes.SCHEMES[name]()
-    n = s.n
+    n, n_raw = s.n, s.n_raw
     k = payload.k_for(n)
     plan = SEEDS[mode]
     seeds = list(plan["marked"])
@@ -160,26 +161,30 @@ def run_scheme(name: str, mode: str, images: dict, deadline: float, log) -> tupl
         marked = attacks.decode(mb)  # the published artifact is the PNG; use its decoded pixels
         marked_cache[eid] = (marked, mb)
         q = attacks.quality(cover, marked)
-        rt = True
+        rt = all(s.payload(key, eid).size == n for key in ("A", "B"))
         if tm_bch is not None:
             for key in ("A", "B"):
-                ok, data, ver = tm_bch(s.payload(key, eid))
+                tx = s.transmitted(key, eid)
+                ok, data, ver = tm_bch(tx)
                 rt = rt and ok and ver == 1 and data == "".join(map(str, s.data(key, eid)))
+                rt = rt and np.array_equal(s.tested(tx), s.payload(key, eid))
         rec = {
             "id": eid, "scheme": name, "seed": seed, "width": int(cover.shape[1]), "height": int(cover.shape[0]),
             "coverPixelSha256": images["px"][seed], "markedPixelSha256": generator.pixel_sha256(marked),
-            "markedSha256": sha(mb), "markedByteLength": len(mb), "payload": payload.bits_hex(A[ids.index(eid)]),
+            "markedSha256": sha(mb), "markedByteLength": len(mb), "payload": "".join(map(str, A[ids.index(eid)])),
             "quality": q, "belowFloor": (q["psnr"] is not None and q["psnr"] < PSNR_FLOOR), "payloadRoundTrip": rt,
         }
         if tm_bch is not None:
-            rec["data"] = "".join(map(str, s.data("A", eid)))
+            rec["transmitted"] = payload.bits_hex(s.transmitted("A", eid))
         entries.append(rec)
     log(f"  {name}: embedded {len(ids)} in {time.time() - t0:.1f}s")
 
-    def query(qid, condition, kind, data: bytes, key, true_id, source, host=None, ref=None) -> np.ndarray | None:
+    def query(qid, condition, kind, data: bytes, key, true_id, source, host=None, ref=None, extra=None) -> np.ndarray | None:
         check_time()
         rec: dict = {"id": qid, "scheme": name, "condition": condition, "kind": kind, "source": source, "host": host,
                      "key": key, "sha256": sha(data), "byteLength": len(data)}
+        if extra:
+            rec.update(extra)
         try:
             rgb = attacks.decode(data)
             if getattr(s, "min_pixels", 0) and rgb.shape[0] * rgb.shape[1] < s.min_pixels:
@@ -192,8 +197,10 @@ def run_scheme(name: str, mode: str, images: dict, deadline: float, log) -> tupl
         rec["decode"] = {"status": "ok", "width": int(rgb.shape[1]), "height": int(rgb.shape[0])}
         raw = s.raw_bits(rgb)
         rec["rawBits"] = payload.bits_hex(raw)
-        rec.update(search(raw, A if key == "A" else B, ids, k, true_id))
+        rec.update(search(s.tested(raw), A if key == "A" else B, ids, k, true_id))
         if tm_bch is not None:
+            if true_id is not None:  # report-only: agreement on all 100 transmitted bits
+                rec["agree100True"] = payload.agreement(raw, s.transmitted(key, true_id))
             ok, data_bits, ver = tm_bch(raw)
             rec["bch"] = {"valid": ok, "version": ver,
                           "dataEqualsTrue": (ok and true_id is not None and data_bits == "".join(map(str, s.data(key, true_id))))}
@@ -218,15 +225,20 @@ def run_scheme(name: str, mode: str, images: dict, deadline: float, log) -> tupl
         query(f"{name}:{eid}:rotate5", "rotate5", "positive", attacks.rotate5(marked), "A", eid, eid, ref=marked)
         forged = attacks.png(attacks.transplant(marked, cover, images[host_seed]))
         query(f"{name}:{eid}:transplant", "transplant", "forgery", forged, "A", eid, eid, host=f"h{host_seed}")
+        if raw_clean is not None:  # keyless forgery: decode M, re-embed what was read into H
+            fbits, how = s.forge_bits(raw_clean)
+            re_b = attacks.png(s.embed_bits(images[host_seed], fbits))
+            query(f"{name}:{eid}:reembed", "reembed", "forgery", re_b, "A", eid, eid, host=f"h{host_seed}",
+                  extra={"forgedFrom": how})
         over = attacks.png(s.embed(marked, "B", eid))
         query(f"{name}:{eid}:overwrite:A", "overwrite", "overwrite-original", over, "A", eid, eid, ref=marked)
         query(f"{name}:{eid}:overwrite:B", "overwrite", "overwrite-new", over, "B", eid, eid, ref=marked)
         if raw_clean is not None:  # wrong key: the clean decode searched against key B payloads
             rec = dict(next(q for q in queries if q["id"] == f"{name}:{eid}:clean"))
             rec.update({"id": f"{name}:{eid}:wrongkey", "condition": "wrongkey", "kind": "wrong-key", "key": "B"})
-            for f in ("entry", "agreeTrue", "agreeMaxOther", "agreeMaxOtherEntry", "bch", "psnrVsMarked"):
+            for f in ("entry", "agreeTrue", "agree100True", "agreeMaxOther", "agreeMaxOtherEntry", "bch", "psnrVsMarked"):
                 rec.pop(f, None)
-            rec.update(search(raw_clean, B, ids, k, None))
+            rec.update(search(s.tested(raw_clean), B, ids, k, None))
             if tm_bch is not None:
                 ok, _, ver = tm_bch(raw_clean)
                 rec["bch"] = {"valid": ok, "version": ver, "dataEqualsTrue": False}
@@ -238,7 +250,7 @@ def run_scheme(name: str, mode: str, images: dict, deadline: float, log) -> tupl
         hs = seed + plan["host_offset"]
         query(f"{name}:h{hs}:host", "host", "unmarked-host", images["coverPng"][hs], "A", None, f"h{hs}")
     log(f"  {name}: {len(queries)} queries in {time.time() - t0:.1f}s")
-    return entries, queries, {"n": n, "k": k, "tail": str(payload.tail(n, k)), "tailFloat": float(payload.tail(n, k)),
+    return entries, queries, {"n": n, "nRaw": n_raw, "testedPositions": f"0-{n - 1} of {n_raw}", "k": k, "tail": str(payload.tail(n, k)), "tailFloat": float(payload.tail(n, k)),
                               "entries": len(ids)}, round(time.time() - t0, 1)
 
 
@@ -278,6 +290,10 @@ def metrics(name: str, entries: list, queries: list, info: dict) -> dict:
             row["correctMatch"] = count(qs, lambda q: q["outcome"] == "match" and q.get("entry") == q["source"])
             row["wrongEntryAccepted"] = count(qs, lambda q: any(e != q["source"] for e, _ in q.get("accepted") or []))
             row["agreeTrueHistogram"] = _hist(q.get("agreeTrue") for q in qs)
+            if name == "tm":
+                row["agree100TrueHistogram"] = _hist(q.get("agree100True") for q in qs)
+            if c == "reembed":
+                row["forgedFromBch"] = count(qs, lambda q: q.get("forgedFrom") == "bch")
         row["agreeMaxOtherHistogram"] = _hist(q.get("agreeMaxOther") for q in qs)
         if name == "tm":
             row["bchValid"] = count(qs, lambda q: (q.get("bch") or {}).get("valid") is True)
@@ -314,6 +330,9 @@ def verdict(name: str, m: dict, n_entries: int) -> dict:
            "P2unmarkedAccepted": {"count": p2, "comparisons": (c["cover"]["denominator"] + c["host"]["denominator"]) * n_entries, "passAtMost": 0, "pass": p2 == 0},
            "P3wrongKeyAccepted": {"count": p3, "comparisons": c["wrongkey"]["denominator"] * n_entries, "passAtMost": 0, "pass": p3 == 0},
            "P4cleanWrongEntryAccepted": {"count": p4, "comparisons": c["clean"]["denominator"] * (n_entries - 1), "passAtMost": 0, "pass": p4 == 0}}
+    for key in ("P2unmarkedAccepted", "P3wrongKeyAccepted", "P4cleanWrongEntryAccepted"):
+        out[key]["role"] = ("implementation check: close to guaranteed by construction with HMAC payloads; it "
+                            "does not measure a false-accept rate or show forgery resistance (protocol §6)")
     out["met"] = all(v["pass"] for v in out.values() if isinstance(v, dict))
     return out
 
@@ -354,7 +373,11 @@ def run(mode: str, out_dir: str, schemes_sel: list[str], require_denied: bool, f
         werr = [str(e)]
     summary["weights"] = {"sha256": env.weights_record(), "dir": "$TRACEWEAVE_EVAL_DIR/models", "errors": werr}
     summary["generatorGoldens"] = env.generator_goldens()
-    inputs_ok = not src_err and not werr and not envc["deviations"] and summary["generatorGoldens"]["matched"] == 3
+    from twmark import schemes  # noqa: F401  (applies the torch and OpenCV thread pins)
+
+    summary["runtime"] = env.runtime()
+    inputs_ok = (not src_err and not werr and not envc["deviations"] and summary["generatorGoldens"]["matched"] == 3
+                 and not summary["runtime"]["deviations"])
     refuse = []
     if mode == "full":
         if recorded is None or recorded != computed:
@@ -364,7 +387,7 @@ def run(mode: str, out_dir: str, schemes_sel: list[str], require_denied: bool, f
     if require_denied and not denied:
         refuse.append("network probe not denied")
     if not inputs_ok:
-        refuse.append("inputs (sources, weights, environment or generator goldens)")
+        refuse.append("inputs (sources, weights, environment, runtime pins or generator goldens)")
     summary["refused"] = refuse
     if refuse:
         json.dump(summary, open(os.path.join(out_dir, "summary.json"), "w"), indent=1, sort_keys=True)
@@ -400,7 +423,7 @@ def run(mode: str, out_dir: str, schemes_sel: list[str], require_denied: bool, f
     errors = []
     for name, (e, q, info) in per.items():
         errors += [x for r in e for x in validate_entry(r, info["n"])]
-        errors += [x for r in q for x in validate_query(r, info["k"], info["n"])]
+        errors += [x for r in q for x in validate_query(r, info["k"], info["n"], info["nRaw"])]
     ent_b = b"".join(env.canonical_bytes(r) + b"\n" for r in all_entries)
     qry_b = b"".join(env.canonical_bytes(r) + b"\n" for r in all_queries)
     open(os.path.join(out_dir, "entries.jsonl"), "wb").write(ent_b)
@@ -420,11 +443,8 @@ def run(mode: str, out_dir: str, schemes_sel: list[str], require_denied: bool, f
     summary["schemeSeconds"] = timing  # timing stays outside `results` and resultsSha256
     summary["peakRssMiB"] = round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 2**20, 1)
     summary["crossHost"] = "not-tested"
-    import torch
-
     summary["imports"] = env.imported_from_third_party()
-    summary["torch"] = {"version": torch.__version__, "threads": torch.get_num_threads(), "device": "cpu",
-                        "deterministicAlgorithms": torch.are_deterministic_algorithms_enabled()}
+    summary["runtimeAfterRun"] = env.runtime()
     validity = {
         "W1inputs": inputs_ok,
         "W2offline": denied if (mode == "full" or require_denied) else None,
@@ -444,7 +464,20 @@ def run(mode: str, out_dir: str, schemes_sel: list[str], require_denied: bool, f
     return 0
 
 
+INPUT_FIELDS = (("environment",), ("runtime",), ("weights", "sha256"), ("sources",), ("generatorGoldens",),
+                ("protocolDigest",), ("codeIdentity", "head"))
+
+
+def _field(d: dict, path: tuple):
+    for p in path:
+        d = d.get(p) if isinstance(d, dict) else None
+    return d
+
+
 def compare(a: str, b: str) -> int:
+    """W3 (protocol §6). Exit 0: identical. Exit 5: outputs differ although every recorded input is
+    equal (thread and library settings included): the pair is INVALID and is rerun on the pinned
+    host under the §6 rerun rule. Exit 1: outputs differ and some recorded input differs: negative."""
     same = True
     for f in ("entries.jsonl", "queries.jsonl"):
         x, y = open(os.path.join(a, f), "rb").read(), open(os.path.join(b, f), "rb").read()
@@ -453,7 +486,15 @@ def compare(a: str, b: str) -> int:
     sa, sb = (json.load(open(os.path.join(d, "summary.json"))) for d in (a, b))
     eq = sa.get("resultsSha256") == sb.get("resultsSha256") and sa.get("results") == sb.get("results")
     print("resultsSha256 and results", "equal" if eq else "DIFFERENT")
-    return 0 if (same and eq) else 1
+    if same and eq:
+        print("W3: identical")
+        return 0
+    diff_inputs = [".".join(p) for p in INPUT_FIELDS if _field(sa, p) != _field(sb, p)]
+    if not diff_inputs:
+        print("W3: INVALID (outputs differ, recorded inputs equal); rerun the pair on the pinned host (§6)")
+        return 5
+    print("W3: NEGATIVE (outputs differ; inputs differ: " + ", ".join(diff_inputs) + ")")
+    return 1
 
 
 def main(argv: list[str]) -> int:

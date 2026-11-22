@@ -1,1 +1,1 @@
-"""Harness for protocol e-img-m-1 (research/drafts/image-mark-protocol.md)."""
+"""Harness for protocol e-img-m-2 (research/drafts/image-mark-protocol.md)."""

@@ -1,4 +1,4 @@
-# Hash-locked runtime environment for research/experiments/image-mark (protocol e-img-m-1).
+# Hash-locked runtime environment for research/experiments/image-mark (protocol e-img-m-2).
 # Platform-locked: one file per package, for CPython 3.14 on macOS arm64 (cp314, abi3 or pure-Python
 # wheels). Resolved with uv pip compile on 2026-11-23. NumPy and Pillow are the versions the e-img-f-2
 # generator was frozen with. Licences: research/lanes/12-image-mark-licences.md.

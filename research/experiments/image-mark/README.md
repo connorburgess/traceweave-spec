@@ -1,13 +1,13 @@
-# Image embedded-mark study: harness for protocol `e-img-m-1`
+# Image embedded-mark study: harness for protocol `e-img-m-2`
 
-Protocol: [image-mark-protocol.md](../../drafts/image-mark-protocol.md), version `e-img-m-1`.
-Protocol digest (SHA-256, self-excluding): `bdae7d60e72eb6388cc542fb81cf2599456355325c8fcf6697c649c90cf196a4`
+Protocol: [image-mark-protocol.md](../../drafts/image-mark-protocol.md), version `e-img-m-2` (supersedes `e-img-m-1`, retired unrun 2026-11-23 after its non-author review).
+Protocol digest (SHA-256, self-excluding): `cba3667307941766f19b2ff9141e89c154b1f9b53a01e11391135ffe8ab64110`
 
 Use case: [image-mark-use-case.md](../../drafts/image-mark-use-case.md) (proposed UC-7). Licences: [lane 12](../../lanes/12-image-mark-licences.md). This is research code. Nothing here is normative, and **no measured run has been made**. The measured run starts only after a non-author has reviewed the frozen protocol.
 
 ## What it does
 
-It marks seeded synthetic images with TrustMark-Q and PixelSeal, and with `dwtDct` as a negative control. It then applies 12 edits, 5 removal attempts, a residual transplant and an overwrite, and tests each candidate's raw decoded bits against key-derived expected payloads (k of n, protocol §5). Everything runs on CPU and offline.
+It marks seeded synthetic images with TrustMark-Q and PixelSeal, and with `dwtDct` as a negative control. It then applies 12 edits, 5 removal attempts, a residual transplant, a keyless re-embedding forgery and an overwrite. It tests each candidate's raw decoded bits against key-derived expected payloads, on the bit positions that are direct keyed-hash output only (TrustMark: 49 of its 61 data bits; PixelSeal: 167 of 256; protocol §4–§5). Everything runs on CPU and offline.
 
 | File | Role |
 | --- | --- |
@@ -51,11 +51,11 @@ python3 -I fetch_weights.py --verify       # exit 0; never touches the network
 
 ## Running the measured experiment
 
-This happens only after the non-author review. Follow protocol §9 exactly: use a dedicated work tree at the frozen commit, keep the network denied, run `full` twice, run `compare`, then commit the results under `results/e-img-m-1/` in a commit that descends from both the frozen commit and the review commit.
+This happens only after the non-author review. Follow protocol §9 exactly: use a dedicated work tree at the frozen commit, keep the network denied, run `full` twice, run `compare`, then commit the results under `results/e-img-m-2/` in a commit that descends from both the frozen commit and the review commit.
 
 ```sh
 /usr/bin/sandbox-exec -p '(version 1)(allow default)(deny network*)' \
     .venv/bin/python -I run_mark.py full --frozen-commit <40-hex> --require-network-denied --out out/full-1
 ```
 
-Exit status: 0 completed; 2 refused (digest, identity, inputs or probe); 3 aborted at 4 h; 4 a validity condition failed.
+Exit status: 0 completed; 2 refused (digest, identity, inputs, runtime pins or probe); 3 aborted at 4 h; 4 a validity condition failed. `compare`: 0 identical; 5 invalid pair (outputs differ, recorded inputs equal: rerun under protocol §6); 1 negative.

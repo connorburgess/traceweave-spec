@@ -3,7 +3,8 @@
 Payload bits for (key, scheme, entry) are the first n bits, most significant bit first, of
 HMAC-SHA256(key, "e-img-m-1|<scheme>|<entry id>"). The two study keys are fixed, public test values,
 so anyone can recompute every expected payload from this file; they exercise the statistic, not
-key secrecy. A deployment would use a secret random key per creator (use case UC-7).
+key secrecy. The label "e-img-m-1" in the key strings and the HMAC message is the payload-derivation
+id; protocol e-img-m-2 keeps it unchanged, so keys and payloads are the same. A deployment would use a secret random key per creator (use case UC-7).
 
 Decision: with raw bits r and expected bits e (both n long), the statistic is the agreement count
 m = #{i : r_i = e_i}. Accept iff m >= k(n), where k(n) is the smallest k with

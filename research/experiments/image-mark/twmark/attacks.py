@@ -1,4 +1,4 @@
-"""Query construction for e-img-m-1 (protocol §7): edits, removal, forgery, and decoding.
+"""Query construction for e-img-m-2 (protocol §7): edits, removal, forgery, and decoding.
 
 The 12 edits are imported unchanged from the frozen e-img-f-2 harness (twimg.transforms). Every
 query is a file's bytes; the harness decodes those bytes like any candidate. Every random draw comes

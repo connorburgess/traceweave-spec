@@ -1,4 +1,4 @@
-"""Paths, import set-up, environment and identity checks for e-img-m-1.
+"""Paths, import set-up, environment and identity checks for e-img-m-2.
 
 Importing this module:
   * puts third_party/trustmark/python and third_party/videoseal on sys.path, and the frozen e-img-f-2
@@ -26,7 +26,7 @@ REPO_REL = "research/experiments/image-mark"
 THIRD = os.path.join(HERE, "third_party")
 FINGERPRINT = os.path.normpath(os.path.join(HERE, "..", "image-fingerprint"))
 PROTOCOL = os.path.normpath(os.path.join(HERE, "..", "..", "drafts", "image-mark-protocol.md"))
-PROTOCOL_VERSION = "e-img-m-1"
+PROTOCOL_VERSION = "e-img-m-2"
 FROZEN_PATHS = (
     "research/experiments/image-mark",
     "research/drafts/image-mark-protocol.md",
@@ -44,7 +44,13 @@ for var, val in (
     ("TORCH_HOME", os.path.join(os.environ.get("TMPDIR", "/tmp"), "e-img-m-1-torch-home-unused")),
     ("CUDA_VISIBLE_DEVICES", ""),
     ("PYTORCH_ENABLE_MPS_FALLBACK", "0"),
+    # Thread pins (protocol §6 W3 and §10): every pool torch or NumPy may use is fixed.
     ("OMP_NUM_THREADS", "4"),
+    ("MKL_NUM_THREADS", "4"),
+    ("OPENBLAS_NUM_THREADS", "4"),
+    ("VECLIB_MAXIMUM_THREADS", "4"),
+    ("NUMEXPR_NUM_THREADS", "4"),
+    ("OPENCV_FOR_THREADS_NUM", "1"),
 ):
     os.environ[var] = val
 
@@ -207,6 +213,39 @@ def check_environment() -> dict:
         "pinnedDistributions": len(pins),
         "deviations": dev,
     }
+
+
+THREAD_ENV = ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS", "VECLIB_MAXIMUM_THREADS",
+              "NUMEXPR_NUM_THREADS", "OPENCV_FOR_THREADS_NUM")
+PINNED_RUNTIME = {"torchThreads": 4, "torchInteropThreads": 1, "opencvThreads": 1, "deterministicAlgorithms": True}
+
+
+def runtime() -> dict:
+    """The thread and library settings in force (W3 inputs). `deviations` lists any that differ from
+    PINNED_RUNTIME or from the thread environment set above."""
+    import platform
+
+    import cv2
+    import numpy
+    import torch
+
+    rec = {
+        "torch": torch.__version__,
+        "torchThreads": torch.get_num_threads(),
+        "torchInteropThreads": torch.get_num_interop_threads(),
+        "deterministicAlgorithms": torch.are_deterministic_algorithms_enabled(),
+        "mkldnnEnabled": bool(torch.backends.mkldnn.enabled),
+        "opencv": cv2.__version__,
+        "opencvThreads": cv2.getNumThreads(),
+        "numpy": numpy.__version__,
+        "threadEnv": {k: os.environ.get(k) for k in THREAD_ENV},
+        "cpu": platform.processor(),
+        "macOS": platform.mac_ver()[0],
+    }
+    dev = [f"{k}: {rec[k]} != {v}" for k, v in PINNED_RUNTIME.items() if rec[k] != v]
+    dev += [f"{k} unset" for k, v in rec["threadEnv"].items() if v is None]
+    rec["deviations"] = dev
+    return rec
 
 
 def generator_goldens() -> dict:
