@@ -55,7 +55,7 @@ Owner column: **S** = spec repository; **I** = implementation repository (`trace
 
 | ID | Type | Verifiable criterion | Status / evidence | Owner |
 | --- | --- | --- | --- | --- |
-| M0.1 | E | The capability list is exactly: UC-1…UC-6 and walkthroughs W-1, W-2 from `docs/use-cases.md`, plus one row per `##` heading of `docs/implementation-patterns.md` except "Example matrix" (13 rows today). A non-author recounts it from those documents. Each row needs a verification plan, merged into `docs/`, whose pass/fail is a command exit code or a count, with no judgment words. Met when every recounted row has such a plan | open: verification plans merged into `docs/` in `b13cb68` ([use cases](docs/use-cases.md#capability-index-and-recount), [patterns](docs/implementation-patterns.md)). **Ready for the non-author recount**; not marked met. The non-author recount in the [adoption check](research/reviews/roadmap-v2-review.md#adoption-check) found 8 of 13 plans decidable and 5 not (UC-6, W-1, H-1, H-3, H-5); those five were rewritten with explicit Pass and Fail lines and need a second recount | S |
+| M0.1 | E | The capability list is exactly: UC-1…UC-6 and walkthroughs W-1, W-2 from `docs/use-cases.md`, plus one row per `##` heading of `docs/implementation-patterns.md` except "Example matrix" (13 rows today). A non-author recounts it from those documents. Each row needs a verification plan, merged into `docs/`, whose pass/fail is a command exit code or a count, with no judgment words. Met when every recounted row has such a plan | met: verification plans merged into `docs/` in `b13cb68` and `215145b`; the non-author recounts in the [adoption check](research/reviews/roadmap-v2-review.md#adoption-check) found 8 of 13 decidable, then 13/13 after the rewrite, recorded in `3a640b3` | S |
 | M0.2 | E | Five discovery lanes are reviewed against both provider reports | met: [discovery-checkpoint.md](research/discovery-checkpoint.md) | S |
 | M0.3 | E | Example matrix: each row names its use case and expected assertion | met: [example matrix](docs/implementation-patterns.md#example-matrix) | S |
 | M0.4 | E | `validate` exits 0 with 6 tests | met: [validate.py](tools/validate.py), rerun 2026-11-22 | S |
@@ -99,7 +99,7 @@ Owner column: **S** = spec repository; **I** = implementation repository (`trace
 | SYN.4 | Signal transplant is not decoded as same-context evidence | negative-result measured; evidence committed in `4d0288f`: same-context transfers decode, [fragment-policy-checkpoint.md](research/fragment-policy-checkpoint.md) |
 | SYN.5 | Safe eligible sites in the 4-repository census, narrow patterns | inconclusive: no eligible site established; 5 Go singletons unassessed, [census](research/public-census-checkpoint.md), committed in `95fb157` |
 
-**Counted gates for the next candidate C:**
+**Counted gates for the next candidate C:** (H-1 relies on detection-output schema fixtures; the gate that creates them is to be named when a carrier is selected.)
 
 | ID | Type | Verifiable criterion | Status | Owner |
 | --- | --- | --- | --- | --- |
@@ -160,10 +160,10 @@ Counted on 2026-11-22 from the status columns above.
 
 | Gates | Total | Met | Negative-result | Open |
 | --- | --- | --- | --- | --- |
-| Core M0–M5 | 47 | 5 (M0.2, M0.3, M0.4, M4.1, M4.2) | 0 | 42 |
+| Core M0–M5 | 47 | 6 (M0.1, M0.2, M0.3, M0.4, M4.1, M4.2) | 0 | 41 |
 | Later profiles, EXT and RC | 26 | 0 | 0 | 26 |
 
-M0.1 is ready for the non-author recount and is counted open. The SYN records are research records and are not counted. Evidence for M4.1 and M4.2 is committed in `0bc4e23`.
+M0.1 is met on the second non-author recount (`3a640b3`). The SYN records are research records and are not counted. Evidence for M4.1 and M4.2 is committed in `0bc4e23`.
 
 ## Later profiles and sequence
 

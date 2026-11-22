@@ -17,12 +17,12 @@ Updated 2026-11-22. This queue operationalizes the [roadmap](../ROADMAP.md) by g
 | --- | --- | --- |
 | I1 (feeds M1.4, M1.6) | Token-fingerprint extractors for Go and Rust source in the implementation repository (`<implementation repo>`), hand-written lexers in both | Extractors exist on local branches there (`i0-i1-rust`, `impl-go`, `xcheck`); not merged to its `main`. Differential test between the two extractors in progress. M1.4 stays open until its criterion is met |
 | I2 (feeds M2.1–M2.5, M2.7–M2.11) | Catalogue, matcher, localized-report CLI and offline walkthrough | Next. Needs M1.3 schemas and M2.6 matching vectors from the spec side; the [draft contracts](drafts/catalogue-report-contract.md) and [matching vectors](drafts/matching-vectors/README.md) are the starting point |
-| M0.1 | Non-author recount of the 13 capabilities and their verification plans | Ready: plans are merged into [use cases](../docs/use-cases.md) and [implementation patterns](../docs/implementation-patterns.md). Not marked met until someone other than the author recounts |
+| M0.1 | Non-author recount of the 13 capabilities and their verification plans | Met: second recount 13/13, commit `3a640b3` |
 | M1.1–M1.3, M1.5 | Profile document, vectors, schemas and requirement map in this repository | Open. The [extraction contract](drafts/extraction-contract.md) and [vectors](drafts/extraction-vectors/README.md) are drafts; promoting them needs the owner |
 | M2E.0, M2E.1 | Select a carrier or omit embedding | Open. [Lane 06](lanes/06-evidence-review.md) found no ready candidate; see the [lane 06–08 checkpoint](research-06-08-checkpoint.md). No new carrier experiment without a candidate read in primary form that plausibly meets the bar |
 | M3.0 | False-alarm budget and unit | Open, owner |
 
-Closed with evidence: M0.2, M0.3, M0.4, M4.1 and M4.2 (see the roadmap for the evidence). Everything else in the gate tables is open.
+Closed with evidence: M0.1, M0.2, M0.3, M0.4, M4.1 and M4.2 (see the roadmap for the evidence). Everything else in the gate tables is open.
 
 ## Completed evidence (progress records)
 
