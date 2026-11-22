@@ -2,7 +2,7 @@
 
 An experimental open specification for embedded marks, content fingerprints, and verifiable provenance records. Initial experimentation uses Go and Rust source code, with planned expansion to multiple media types, including text, images, and audio. Transformation resilience is evaluated separately for each content profile.
 
-**Status: experimental design draft, 0.1.0-draft.1.** Transformation resilience is a goal to measure per content profile, not a universal guarantee. This repository currently contains a proposed evidence format and validation tools. It does not yet contain a fingerprint detector, signing client, resolver, or production agent skill.
+**Status: experimental design draft, 0.1.0-draft.1.** Transformation resilience is a goal to measure per content profile, not a universal guarantee. This repository contains a proposed evidence format, validation tools, and [synthetic carrier and signing interoperability experiments](research/experiment-checkpoint.md). It does not yet provide a production embedder, fingerprint detector, signing client, resolver, or agent skill.
 
 Traceweave separates three questions: which exact artifact a record describes, whether another artifact contains similar material, and what evidence supports that relationship. Cryptographic verification authenticates a record; it does not make a similarity claim true or establish ownership, infringement, or model training.
 

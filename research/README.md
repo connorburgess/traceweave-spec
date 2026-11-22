@@ -22,7 +22,7 @@ The prompts require primary sources, implementation availability, known failures
 - [Attack report comparison](02-robustness-attacks-comparison.md).
 - [Universal signal architecture comparison](05-universal-signal-architecture-comparison.md).
 
-Current direction: shared evidence interfaces and medium-specific embedding, with initial experimentation in Go and Rust and planned expansion to multiple media types. Fingerprints supplement embedded marks. No carrier, payload capacity or robustness guarantee is standardized. Initial discovery reports have been compared; detection calibration and provenance interoperability remain unvalidated.
+Current direction: shared evidence interfaces and medium-specific embedding, with initial experimentation in Go and Rust and planned expansion to multiple media types. Fingerprints supplement embedded marks. No carrier, payload capacity or robustness guarantee is standardized. Initial discovery reports have been compared; detection calibration remains unvalidated; subsequent synthetic provenance interoperability is recorded below.
 
 Next: define safe source subsets, measure eligible sites and clean recovery, then compare carriers under ordinary edits, deliberate normalization, partial copying and transplantation. Evaluate combined evidence without converting similarity or signature validity into ownership claims. These reviews do not change normative wire formats.
 
@@ -34,4 +34,16 @@ Next: define safe source subsets, measure eligible sites and clean recovery, the
 - [Provenance report comparison](04-provenance-verification-comparison.md): exact-byte verification, commitment, artifact-role and timestamp corrections.
 - Google launchers: [detection](prompts/03-detection-evaluation-google-launcher.md) and [provenance](prompts/04-provenance-verification-google-launcher.md).
 
-The language-planning supervision task is complete. No embedder, calibrated detector or real signing interoperability harness is implemented by these documents.
+The language-planning task is complete. The subsequent [synthetic experiment checkpoint](experiment-checkpoint.md) records executed carrier and signing interoperability harnesses. No production embedder or calibrated detector is provided.
+
+## Active work
+
+Follow the [research work queue](work-queue.md) for assignments, acceptance gates and next decisions.
+
+[Fragment recovery and signing-policy checkpoint](fragment-policy-checkpoint.md) records the reviewed follow-up experiments. The [public-code census protocol](public-census-plan.md) defines the next bounded investigation.
+
+[Public-code eligibility checkpoint](public-census-checkpoint.md): four pinned repositories scanned; current narrow patterns remain experimental controls.
+
+## Follow-up deep research — 2026-11-22
+
+[Prompt pack and NotebookLM workflow](prompts/README.md): practical carriers first, then fragment/transplant recovery and concrete cross-media architecture. Each includes an independent full brief, a top-left research query and a center-chat synthesis instruction.

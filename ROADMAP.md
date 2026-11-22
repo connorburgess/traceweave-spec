@@ -1,12 +1,12 @@
 # Traceweave roadmap
 
-Status: proposed delivery plan, 2026-11-18. The existing 0.1.0-draft.1 scaffold validates record shapes and synthetic vectors. It does not detect reuse or verify signatures yet.
+Status: active research roadmap, updated 2026-11-21. The 0.1.0-draft.1 scaffold validates record shapes and synthetic vectors. Separate experimental harnesses now recover synthetic carrier states and cross-verify Go/Rust signatures; production reuse detection remains unimplemented. See the [measured checkpoint](research/experiment-checkpoint.md) and [active work queue](research/work-queue.md).
 
 Start with [use cases](docs/use-cases.md), then [implementation patterns](docs/implementation-patterns.md) and the [source register](docs/sources.md). These planning documents do not change normative wire formats.
 
 ## Pilot languages
 
-Go (Looptender) and Rust (TalkQTE) are the initial pilot targets, selected because they are actively developed applications available for evaluation. TypeScript/JavaScript is the next planned code profile. Shared evidence formats stay language-independent; transformations, safety conditions and build-pipeline tests are profile-specific. Python research tooling does not select Python as the marked language. See the [feasibility investigation](research/02-carrier-feasibility.md).
+Initial experimentation uses synthetic Go and Rust source code, with planned expansion to multiple media types. TypeScript/JavaScript is a later code-profile candidate. Private applications are outside the current experimental scope. Shared evidence formats stay language-independent; transformations, safety conditions and build-pipeline tests are profile-specific. Python research tooling does not select Python as the marked language. See the [feasibility investigation](research/02-carrier-feasibility.md).
 
 ## Core tracks
 
@@ -37,7 +37,7 @@ Order: M0 → M1 → parallel M2 and M2E experiments → M3 → M5. Both experim
 7. **TW-08: Research and prototype embedding/detection.** Begin alongside TW-02. Compare candidate marking methods against the intended language and transformations; record primary sources before choosing a method. Specify mark payload/identity, any key and randomness handling, embedding capacity, detector access assumptions, output localization, and transplant limitations. Acceptance: M2E fixtures plus quality/performance checks; separate mark-only, fingerprint-only and combined evaluation at the same false-alarm budget. No callbacks, planted defects or hidden telemetry.
 8. **TW-07: Review the release claims.** Map each README claim to a fixture, benchmark or external review. Acceptance: unmeasured claims remain goals and incompatible changes receive new identifiers.
 
-These are local backlog IDs, not published GitHub issues. M0 is the planning package; TW-01 onward are future implementation work.
+These are local backlog IDs, not published GitHub issues. M0 and initial discovery are complete. TW-06 and TW-08 have bounded synthetic implementation evidence; their broader milestone gates are not complete. The active work queue below the research index records current assignments and remaining acceptance criteria.
 
 ## Later, with separate gates
 
