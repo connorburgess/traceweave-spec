@@ -1,12 +1,14 @@
 # Draft catalogue and comparison-report contract: token-fingerprint baseline
 
-Status: **draft for review, revision draft-2 with amendments A1 (extraction record) and A2 (normalized-stream exclusions), 2026-11-22.** Roadmap item TW-03. Gates: [roadmap](../../ROADMAP.md) M1.3 (catalogue and report schemas) and M2.6 (hand-derived matching vectors). This contract also fixes what I2 in the [implementation plan](../../docs/implementation-repo-plan.md#milestones) must reproduce for M2.4 and M2.5. It builds on the reviewed [extraction contract](extraction-contract.md) and changes nothing in it.
+Status: **draft for review, revision draft-2 with amendments A1 (extraction record), A2 (normalized-stream exclusions) and A3 (declared channel lists), 2026-11-22.** Roadmap item TW-03. Gates: [roadmap](../../ROADMAP.md) M1.3 (catalogue and report schemas) and M2.6 (hand-derived matching vectors). This contract also fixes what I2 in the [implementation plan](../../docs/implementation-repo-plan.md#milestones) must reproduce for M2.4 and M2.5. It builds on the reviewed [extraction contract](extraction-contract.md) and changes nothing in it.
 
 This revision resolves the [clean-room review](../reviews/catalogue-report-contract-review.md) Part 1 findings 1–10 and guesses G1–G6, plus the non-blocking additions of its confirmation pass (G7, invariance, cap and suppression-order vectors). Every disposition is in [§13](#13-review-dispositions). Draft-2 changes formats: catalogue `traceweave-catalogue-draft-2`, comparison `traceweave-seed-merge-draft-2`, report `traceweave-report-draft-2`. Draft-1 identifiers are no longer accepted.
 
 **Amendment A1** (§2a, §3.8) fixes the single canonical extraction record `traceweave-extraction-record-draft-1`, which the extraction contract §9 and its Q10 leave to TW-03. It also brings `input-too-large` catalogue entries into line with Q10 (null input digest and length). **No existing catalogue or report byte changed.** All 59 earlier vectors are byte-identical, and catalogue, comparison and report identifiers stay at draft-2. The details and the one rule change are in §13, A1.
 
 **Amendment A2** follows extraction OD-23 (normalized-stream exclusions): per-channel token counts n_C (§2, §3.6, §3.8) and an optional `tokenIndices` in the record's normalized channel (§2a), present only for profiles that declare exclusions. Go and Rust declare none, so **no Go/Rust record, catalogue or report byte changed**. Details are in §13, A2.
+
+**Amendment A3** (§2b) replaces the hard-coded pair `exact`, `normalized` with **the profile's declared, ordered channel list** in records, catalogues, comparison modes and reports, as the [text-profile review](../reviews/extraction-profile-text-review.md) §4 recommends (no renaming). Go, Rust and TypeScript declare exactly `["exact","normalized"]`, so **no existing record, catalogue, report, digest or vector changed** (only the three schemas were extended). A synthetic TEST-ONLY three-channel profile pins the rule. Details are in §13, A3.
 
 This is research material, not a normative change. It does not modify [core](../../spec/core.md), [attestations](../../spec/attestations.md), [conformance](../../spec/conformance.md), `schemas/`, `profiles/` or `test-vectors/`. "MUST" describes what this draft proposes for an implementation claiming to follow it. The draft schemas and vectors are in [matching-vectors/](matching-vectors/README.md). Nothing here is a registered algorithm. No parameter is tuned or calibrated.
 
@@ -63,7 +65,7 @@ There is no `contract` key: the configuration's `contract` is bound through `con
 - **Error** (`status` `"error"`): `{"status":"error","error":{"code":…,"offset":…}}`. `offset` is an integer, except `null` for `unsupported-config`; it is 0 for `input-too-large` (extraction §2, error offsets). `code` is from the profile's closed list (extraction §4.8/§5.9) or `unsupported-config`.
 - **`ok` or `insufficient-tokens`**: `status`, `tokenCount`, `tokens`, `channels`.
   - Each token is `class`, `text`, `span`, then `inserted` (the literal `true`) **only** for Go inserted semicolons. `inserted` is never `false`.
-  - `channels` is `exact` then `normalized`. The exact channel is `kgrams`, `windowSelections`, `partialWindow`, `fingerprints`. The normalized channel is `tokenIndices` (**only** when the profile declares `normalizedExclusions`, extraction OD-23), then `values`, `kgrams`, `windowSelections`, `partialWindow`, `fingerprints`.
+  - `channels` holds the profile's channel list in order (§2b); for Go, Rust and TypeScript that is `exact` then `normalized`. The exact channel is `kgrams`, `windowSelections`, `partialWindow`, `fingerprints`. Every other channel (here `normalized`) is `tokenIndices` (**only** when the profile declares exclusions for that channel, extraction OD-23), then `values`, `kgrams`, `windowSelections`, `partialWindow`, `fingerprints`.
   - `values` lists the normalized values of the **kept** tokens only, in stream order. `tokenIndices` lists the ascending indices of the kept tokens in `tokens`. A profile without exclusions MUST NOT emit `tokenIndices`; for Go and Rust it is always absent and `values` has one entry per token. Normalized k-gram positions, `windowSelections` and fingerprint positions index the normalized stream; spans stay original bytes.
   - Each k-gram and fingerprint is `position`, `hash`, `span`.
   - k-gram lists, `windowSelections` and `values` are **always present** in the canonical record (empty arrays for `insufficient-tokens`). Extraction §9 calls them optional "in production output"; an implementation MAY offer other outputs, but only this record is canonical.
@@ -88,6 +90,19 @@ Records differ from catalogues and report bodies (sorted keys, no final LF, §3.
 **Record streams and the CLI.** A sequence of records concatenated in input order is a valid JSON Lines stream, because each record is one line. That framing, the CLI's argument syntax, exit statuses and any `--pretty`/`--result-only` options are **not normative** (conformance: CLI names are optional interfaces). What is normative is (a) the bytes of each record and (b) the catalogue (§3), which is the persisted, committed artifact.
 
 **Not in the record.** The configuration bytes themselves (bound by `configSha256`), the input bytes, file names, timestamps and implementation identity. A record carries the token text, so it is as private as the source (it is source text).
+
+## 2b. Declared channel lists (amendment A3)
+
+**Rule.** Every profile declares an ordered, non-empty list of channel names (`[a-z]+`, at most 8), its **channel list**. The first channel is always `exact` (the token's original bytes); each other channel is named by the profile and defines one value per token. The extraction configuration's `channels` MUST equal the profile's list (that is how the list is bound into `configSha256`). Everything downstream is defined over that list:
+
+- **Record (§2a):** `channels` holds one block per listed channel, in list order. `exact` has no `values`; every other channel has `values` (and `tokenIndices` first if the profile declares exclusions for that channel, extraction OD-23).
+- **Catalogue (§3):** each `ok`/`insufficient-tokens` entry holds one channel per listed channel; the keys equal `extractionConfig.channels`. The §3.6 counting rules apply per channel, with n_C = `tokenCount` unless the profile declares exclusions for that channel.
+- **Comparison (§4, §5):** `modes` MUST equal the channel list of a profile the implementation supports, so it is validated before any catalogue is read; after the catalogues pass, `modes` MUST equal the compared catalogues' `extractionConfig.channels`, otherwise `mode-mismatch` (§5.1 step 8). Each mode runs on the channel of the same name (§5.3).
+- **Report (§6):** `comparison.modes` echoes the list in order; each compared pair's `modes` and `suppression.distinctHashes` have exactly one key per mode.
+
+**Declared lists:** `go-tokens`, `rust2024-tokens` and `ts-tokens`/`tsx-tokens` declare `["exact","normalized"]`. Their bytes are unchanged by A3. `text-plain`/`text-markdown` would declare `["exact","folded","skeleton"]` (§13, A3, for what the text profile must still say). The synthetic **TEST-ONLY** profile `go-tokens-three-channel-test`/`draft-1` declares `["exact","normalized","classes"]`: Go lexing, where `classes` gives every token the value `""`, so only the class sequence counts ([config-three-channel-test.json](matching-vectors/config-three-channel-test.json)). It is accepted only for vectors flagged `testOnlyProfile` and is never a supported comparison profile.
+
+**Not allowed:** a subset of a profile's channels as `modes` (e.g. `["exact"]`), or a reordered list. Both stay rejected at the configuration step, exactly as before A3 (`comparison-config-negative.json` is unchanged; six further negatives are in `comparison-config-negative-channels.json`). Comparing a subset is OD-C27.
 
 ## 3. Catalogue record (`traceweave-catalogue-draft-2`)
 
@@ -201,7 +216,7 @@ Validation, in order. Any failure is `unsupported-comparison-config`:
 1. UTF-8 with exactly one line break, which is a final LF, and no CR.
 2. Strict JSON. Duplicate keys are rejected during parsing, and non-integer numbers and constants are rejected.
 3. A top-level object with exactly these seven keys in this order.
-4. `comparison` is `traceweave-seed-merge-draft-2`, and `modes` is exactly `["exact","normalized"]`.
+4. `comparison` is `traceweave-seed-merge-draft-2`, and `modes` equals the channel list of a profile the implementation supports (§2b). For every shipped vector outside the TEST-ONLY ones, that is exactly `["exact","normalized"]`.
 5. `minRegionDistinctHashes`, `mergeGap`, `maxSeedsPerMode` and `maxRegionsPerMode` are integers in 1 … 2³² − 1, written in decimal with no sign, leading zero or exponent.
 6. `suppressionCatalogueSha256` is `"none"` or 64 lowercase hexadecimal digits.
 7. Re-serialization reproduces the bytes.
@@ -240,6 +255,8 @@ The first failure produces a rejected body (§6.4):
 
 Steps 6 and 7 each run for both sides before the next step starts. A suppression profile mismatch is therefore reported ahead of a candidate configuration mismatch (`go-suppression-order-profile-before-config`), and within a step the candidate comes first (`go-suppression-order-candidate-config-first`, `go-suppression-order-candidate-validity-first`). A bound but malformed suppression catalogue is reported at step 5 (`go-suppression-order-malformed-bound`).
 
+8. `modes` differs from the reference catalogue's `extractionConfig.channels` (both catalogues share it after step 7): `mode-mismatch`, class `mismatch`, side `comparison-config` (A3; `tc-mode-mismatch-three-on-two`, `tc-mode-mismatch-two-on-three`).
+
 No fallback, re-extraction or cross-configuration comparison is attempted.
 
 ### 5.2 Common hashes (suppression)
@@ -257,7 +274,7 @@ Every reference artifact is paired with every candidate artifact, ordered by (re
 1. Reference status `error`: the pair is `not-compared`, `reference-extraction-error`.
 2. Candidate status `error`: `not-compared`, `candidate-extraction-error`.
 3. Either side `insufficient-tokens`: `not-compared`, `insufficient-tokens` (abstention).
-4. Otherwise `compared`, with §5.4–§5.9 run for mode `exact` on the exact channel and mode `normalized` on the normalized channel.
+4. Otherwise `compared`, with §5.4–§5.9 run once per mode, in `modes` order, each on the channel of the same name (§2b).
 
 ### 5.4 Seeds and the seed limit
 
@@ -374,7 +391,7 @@ A report document is `{"body": …, "provenance": …}`.
 | Level | Class | Codes |
 | --- | --- | --- |
 | Report | `unsupported-input` | `unsupported-comparison-config` (side `comparison-config`); `malformed-catalogue`, `unsupported-catalogue`, `unsupported-profile` (side `reference`, `candidate` or `suppression`) |
-| Report | `mismatch` | `profile-mismatch`, `config-mismatch` (side `candidate` or `suppression`); `suppression-catalogue-mismatch` (side `suppression`) |
+| Report | `mismatch` | `profile-mismatch`, `config-mismatch` (side `candidate` or `suppression`); `suppression-catalogue-mismatch` (side `suppression`); `mode-mismatch` (side `comparison-config`, A3) |
 | Pair | `unsupported-input` | `reference-extraction-error`, `candidate-extraction-error` |
 | Pair | `abstain` | `insufficient-tokens` |
 | Mode | `match` | `match` |
@@ -506,6 +523,14 @@ Draft-1 said `match` here. The rule changed (§5.6), not the arithmetic.
 | OD-C24 | k-gram lists, window selections and normalized values always present in the canonical record | One canonical form; a compact production output may exist but is not compared |
 | OD-C25 | `input-too-large` catalogue entries carry `null` digest and length (A1) | Required by extraction Q10; no existing vector changes. Bumping the catalogue identifier would change all 124 catalogue digests and every body digest for a rule no previous vector exercised, so it is not bumped; the owner may decide otherwise |
 
+**Amendment A3, decided in draft, pending owner confirmation:**
+
+| ID | Decision | Reason |
+| --- | --- | --- |
+| OD-C26 | Channels are the profile's declared ordered list, `exact` first; records, catalogues, modes and reports follow it; `mode-mismatch` when `modes` ≠ the catalogues' list | Text-profile review §4 (no renaming); Go/Rust/TS bytes unchanged |
+| OD-C27 | `modes` must equal a full declared list; subsets are not allowed in draft-2 | Allowing `["exact"]` would make an existing negative configuration valid and change `comparison-config-negative.json`. A subset (e.g. `["folded"]`) needs a new comparison identifier, which the owner may choose later |
+| OD-C28 | The comparison identifier stays `traceweave-seed-merge-draft-2` | Every existing configuration keeps its meaning and bytes; the change only admits lists of other profiles, which no draft-2 configuration could name before |
+
 **Still open:**
 - **OD-C17, parameter tuning** (TW-05). Each choice is a new configuration digest.
 - **OD-C18, gap-tolerant region formation** (OD-C3 (b)/(c)) as a future comparison id. It needs its own tie rule and vectors.
@@ -522,12 +547,13 @@ All checks are in [check_matching.py](matching-vectors/check_matching.py) unless
 | §3.6: consumer order and rules, including duplicate keys first and the k = 1 empty span | Rule self-test, 24 cases: 23 single-defect catalogues plus one valid k = 1 catalogue, with no extraction records. Vectors `go-malformed-catalogue`, `go-duplicate-key-catalogue`, `go-unsupported-catalogue`, `go-unsupported-profile` |
 | Extraction inputs | Hashes and selections are recomputed from tokens. Tokens are checked by `extraction-vectors/check_vectors.py`; the new inputs were also compared with go/scanner, proc-macro2 and rustc (README) |
 | §4 | Shipped bytes and digest; 22 negatives; `go-unsupported-comparison-config` |
-| §5 | Independent recomputation must equal every body. Two or more vectors are required per recognized situation: merge join at the gap and split at gap + 1; span overlap without a shared position; match over ambiguous; ambiguous over weaker; below-minimum over common-only; repeated hash in a region; mixed common region; truncation; seed limit; an ambiguous region listed while its partner is truncated. Wrong-implementation self-test: 24 variants (the reviewer's 13, 5 of my own, and the confirmation pass's 6) must each change at least one body. An invariance-group check covers adding an unrelated reference file |
+| §5 | Independent recomputation must equal every body. Two or more vectors are required per recognized situation: merge join at the gap and split at gap + 1; span overlap without a shared position; match over ambiguous; ambiguous over weaker; below-minimum over common-only; repeated hash in a region; mixed common region; truncation; seed limit; an ambiguous region listed while its partner is truncated. Wrong-implementation self-test: 27 variants (the reviewer's 13, 5 of my own, the confirmation pass's 6, and 3 for channel lists: modes hard-coded to exact/normalized, a mode mismatch intersected instead of rejected, modes echoed sorted) must each change at least one body. An invariance-group check covers adding an unrelated reference file |
 | §6 | Schema interpreter and keyword audit; `bodySha256`; report rule layer for order, cap, counts, ambiguity and outcome; corruptions for outcome, class, side, rank, origin, ownership, signature, float and reduced fraction; provenance note, source text in the name, and provenance config digest |
 | M1.3 | Required-field self-test: every single-field deletion in a catalogue, 3 compared bodies, 4 rejected bodies and the report document |
 | M2.5 | A `large-host` vector with complete containment and partial Jaccard |
-| §2a record bytes | `records.json`: 16 records (ok, Unicode, CR, U+000B, insufficient, empty, lexical error, encoding error, input-too-large ×2, at-limit ok, unsupported-config ×2, Rust ok with quotes and backslashes, Rust error), each derived from an extraction vector and compared with the checker's own record writer; strict parse, schema and canonical round trip. Record corruption self-test, 41 cases, including an unnamed configuration, a wrong configuration file and a wrong configuration digest |
+| §2a record bytes | `records.json`: 16 records (ok, Unicode, CR, U+000B, insufficient, empty, lexical error, encoding error, input-too-large ×2, at-limit ok, unsupported-config ×2, Rust ok with quotes and backslashes, Rust error), each derived from an extraction vector and compared with the checker's own record writer; strict parse, schema and canonical round trip. Record corruption self-test, 48 cases (A3 adds: channels out of order, `classes` missing, `classes` without values, `values` in `exact`, an extra channel on a Go record, non-empty `classes` values, re-derivation undeclared), including an unnamed configuration, a wrong configuration file and a wrong configuration digest |
 | §3.8 catalogue from records | Two catalogues built from records equal the `matching.json` catalogues; a TEST-ONLY exclusion-profile catalogue equals one rebuilt from `exclusion-rule.json`; three refused builds |
+| A3 channel lists (§2b) | 8 re-derived TEST-ONLY records checked against an independent re-derivation from the Go tokens; a three-channel catalogue from records; 5 `tc-*` matching vectors (rename: exact no match, normalized and classes match; classes-only match; per-mode suppression; two `mode-mismatch`); 6 channel-list negatives; catalogue rules (missing channel, wrong `classes` count, config list ≠ profile list, extra channel on Go); report corruptions (mode dropped, modes reordered, suppression key missing, extra mode, flag dropped) |
 | A2 normalized exclusions (§2, §2a, §3.6, §3.8) | Five records from `exclusion-rule.json` (`rec-excl-*`, TEST-ONLY profile `go-tokens-exclusion-test`); the checker recomputes the normalized stream from the declared exclusions. Record corruptions: `tokenIndices` on Go, omitted, after `values`, `values` including excluded tokens, exclusions ignored, normalized positions from exact. Catalogue rules: Go normalized `kgramCount` ≠ exact (rejected), exclusion profile with an empty normalized `ok` channel (accepted), normalized above exact (rejected), test-only profile unsupported for comparison |
 | Hand derivation | Codes, counts, seeds, ambiguity flags, excerpt bounds and byte shifts, with a `derivation` label per mode. A corruption that relabels a computed-then-reviewed mode as `hand` is rejected |
 
@@ -554,6 +580,7 @@ All checks are in [check_matching.py](matching-vectors/check_matching.py) unless
 | Part 3 item 1 (M2.9 index) | §1 and §7: no index or rank field. The candidate set is identified by `inputs.candidateCatalogueSha256`, and canonical id ordering makes input order irrelevant. Recording how candidates were generated (exhaustive, or a digest of the selected id set) is left to M2.9's own record; the body records only the resulting catalogue digest |
 | Part 3 item 2 (M2.7 origin links) | §1, §5.5 region key and §7: origin links live in a separate record that references `bodySha256` and the region key |
 | Parts 2 and 3, other items | Outside this lane's files (use-case plans, roadmap) |
+| **A3** declared channel lists (coordinator, from the text-profile review §4, commit c6e8f2a) | §2b; §2a, §4 step 4, §5.1 step 8, §5.3 rule 4, §6.4. Schemas: channel and mode objects keyed by the declared list (`exact` required, other keys by `additionalProperties`), `extractionConfig.contract` enum gains `traceweave-text-winnow-draft-1`, channel lists are arrays, new code `mode-mismatch`. New: TEST-ONLY profile `go-tokens-three-channel-test` ([config](matching-vectors/config-three-channel-test.json)), 8 re-derived records, 1 catalogue from records, 5 matching vectors (`tc-*`), 6 channel-list negatives. Unchanged (checked byte for byte against the previous files): every existing record, catalogue, report body and digest, `comparison-config.json`, `comparison-config-negative.json`, `example-report.json`, `extraction-go.json`, `extraction-rust.json`. **What the shared extraction contract must say** (not edited here): §10 step 6 becomes "`channels` equals the profile's declared channel list; `exact` is first", §6–§8 run per listed channel with the channel name in the hash input (already so in §7), and §9 lists "per listed channel". **What the text profile must say:** it declares `["exact","folded","skeleton"]`; its records use the §2a shape (token `class` `word`, `tokenCount`, no per-token `folded`/`skeleton`, which are the channels' `values`); `text-markdown`'s `masked` needs a declared place in the record (proposed: after `tokens`, before `channels`), which A3 does not yet define; the catalogue profile list and error codes (`invalid-utf8`, `nul`, `input-too-large`) are added when a text profile is implemented |
 | **A2** extraction OD-23 normalized-stream exclusions (commit c81be10) | §2 per-channel n_C; §2a normalized channel order (`tokenIndices` only with exclusions, then `values`, `kgrams`, `windowSelections`, `partialWindow`, `fingerprints`), `values` for kept tokens only; §3.6 normalized `kgramCount` rule; §3.8 per-channel `kgramCount`; `record.schema.json` (optional `tokenIndices`) and `catalogue.schema.json` (empty normalized channel allowed for `ok`, enforced per profile). §2a citation fixed: the `input-too-large` offset of 0 comes from extraction §2. Unchanged: every Go/Rust record, catalogue and report byte (checked against the previous files) |
 | **A1** extraction record (coordinator, from the M1.4 cross-check REPORT and extraction Q10) | §2a, §3.8, OD-C21–C25. Changed: §3.2, §3.3 rule 1 and §3.6 for `input-too-large` entries (null digest and length instead of `byteLength > maxInputBytes`); `catalogue.schema.json` gains a `tooLargeArtifact` variant; `report.schema.json` allows a `null` artifact digest. New: `record.schema.json`, `records.json`, vector `go-input-too-large`. Unchanged: every byte of the 59 earlier vectors (catalogues, bodies, digests) and every identifier. Measured against the current CLIs: both emit `result` bytes identical to all 16 record vectors; after the OD-C21 envelope change (Rust: `contract` → `recordVersion` first, `inputBytes` → `inputLength`; Go: add `recordVersion` first) both equal all 16 records byte for byte |
 | Confirmation pass G7 | §6.2 defines `artifactCount`. Vector `go-suppression-artifact-count` (ok, insufficient-tokens and error entries) |

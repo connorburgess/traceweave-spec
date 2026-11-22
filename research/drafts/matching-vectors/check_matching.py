@@ -59,7 +59,17 @@ PROFILES = {
 # never as a supported catalogue profile for comparison.
 PROFILES[("go-tokens-exclusion-test", "draft-1")] = dict(PROFILES[("go-tokens", "draft-1")], exclusions=(("punct", ";"),),
                                                          testOnly=True)
+for _p in PROFILES.values():
+    _p.setdefault("channels", ("exact", "normalized"))   # contract §2b: Go, Rust (and TypeScript) declare exactly these
+# TEST-ONLY three-channel profile (contract §2b): Go lexing, channels exact, normalized and classes, where classes
+# keeps only the class of each token (value ""). It exists to pin the channel-list rule.
+PROFILES[("go-tokens-three-channel-test", "draft-1")] = dict(PROFILES[("go-tokens", "draft-1")],
+                                                             channels=("exact", "normalized", "classes"), testOnly=True)
 ALLOW_TEST_PROFILES = [False]
+
+
+def channel_lists():
+    return [list(p["channels"]) for p in PROFILES.values() if not p.get("testOnly") or ALLOW_TEST_PROFILES[0]]
 
 
 def supported(pid, ver):
@@ -155,8 +165,10 @@ def audit_schema(node, where="#"):
     if isinstance(node, dict):
         unknown = set(node) - SUPPORTED_KEYWORDS
         need(not unknown, f"schema {where}: unsupported keyword(s) {sorted(unknown)}")
-        if "additionalProperties" in node:
-            need(node["additionalProperties"] is False, f"schema {where}: only additionalProperties false is supported")
+        if isinstance(node.get("additionalProperties"), dict):
+            audit_schema(node["additionalProperties"], f"{where}/additionalProperties")
+        elif "additionalProperties" in node:
+            need(node["additionalProperties"] is False, f"schema {where}: additionalProperties is false or a schema")
         if "$ref" in node:
             need(set(node) == {"$ref"} and node["$ref"].startswith("#/$defs/"), f"schema {where}: unsupported $ref form")
         for key in ("properties", "$defs"):
@@ -200,6 +212,8 @@ def schema_errors(schema, inst, root, path="$"):
         for k, v in inst.items():
             if k in props:
                 errs += schema_errors(props[k], v, root, f"{path}.{k}")
+            elif isinstance(schema.get("additionalProperties"), dict):
+                errs += schema_errors(schema["additionalProperties"], v, root, f"{path}.{k}")
             elif schema.get("additionalProperties") is False:
                 errs.append(f"{path}: unknown field {k!r}")
     if type(inst) is list:
@@ -233,6 +247,8 @@ def kgram_hash(cfg, channel, window_tokens, lit):
     for t in window_tokens:
         cls, text = t["class"], t["text"]
         if channel == "normalized" and (cls == "ident" or cls in lit or (cls == "lifetime" and text not in ("'static", "'_"))):
+            text = ""
+        elif channel not in ("exact", "normalized"):   # TEST-ONLY "classes": class only
             text = ""
         for s in (cls, text):
             b = s.encode("utf-8")
@@ -272,8 +288,10 @@ def recompute_record(rec, cfg, prof):
         need(0 <= s <= e <= len(data), f"{rec['id']}: token span outside input")
         if not t.get("inserted"):
             need(data[s:e] == t["text"].encode("utf-8"), f"{rec['id']}: token text != input[span]")
+    need(tuple(cfg["channels"]) == tuple(prof["channels"]), f"{rec['id']}: configuration channels differ from the profile's")
+    need(list(res["channels"]) == list(cfg["channels"]), f"{rec['id']}: channels not in the configuration's order")
     out = {}
-    for ch in CHANNELS:
+    for ch in cfg["channels"]:
         # Extraction OD-23: the normalized stream omits tokens matching the profile's exclusions; positions index
         # the channel's own stream, spans stay original bytes, n_C = stream length.
         idx = [i for i, t in enumerate(toks) if ch == "exact" or not any(
@@ -297,6 +315,36 @@ def recompute_record(rec, cfg, prof):
              f"{rec['id']}: recorded {ch} fingerprints differ from recomputation")
         out[ch] = {"fingerprints": fps, "kgramCount": m, "partialWindow": partial}
     return data, out
+
+
+def derive_result(result, cfg, prof):
+    """The full result of a token stream under (cfg, prof): every channel block recomputed from the tokens."""
+    if result["status"] == "error":
+        return result
+    toks, k = result["tokens"], cfg["k"]
+    chans = {}
+    for ch in cfg["channels"]:
+        idx = [i for i, t in enumerate(toks) if ch != "normalized" or not any(
+            t["class"] == c and (x is None or t["text"] == x) for c, x in prof["exclusions"])]
+        stream = [toks[i] for i in idx]
+        m = max(0, len(stream) - k + 1)
+        hashes = [kgram_hash(cfg, ch, stream[i:i + k], prof["literals"]) for i in range(m)]
+        spans = [[stream[i]["span"][0], stream[i + k - 1]["span"][1]] for i in range(m)]
+        picks, partial = winnow(hashes, cfg["window"])
+        block = {}
+        if ch == "normalized" and prof["exclusions"]:
+            block["tokenIndices"] = idx
+        if ch != "exact":
+            block["values"] = ["" if ch != "normalized" else
+                               ("" if (t["class"] == "ident" or t["class"] in prof["literals"] or
+                                       (t["class"] == "lifetime" and t["text"] not in ("'static", "'_"))) else t["text"])
+                               for t in stream]
+        block.update({"kgrams": [{"position": i, "hash": hashes[i], "span": spans[i]} for i in range(m)],
+                      "windowSelections": picks, "partialWindow": partial,
+                      "fingerprints": [{"position": q, "hash": hashes[q], "span": spans[q]} for q in sorted(set(picks))]})
+        chans[ch] = block
+    return {"status": "ok" if len(toks) >= k else "insufficient-tokens", "tokenCount": len(toks), "tokens": toks,
+            "channels": chans}
 
 
 def parse_extraction_config(raw: bytes):
@@ -377,7 +425,7 @@ def comparison_config(raw: bytes):
         return None
     if type(obj) is not dict or list(obj) != CC_KEYS:
         return None
-    if obj["comparison"] != COMPARISON_ID or not same(obj["modes"], ["exact", "normalized"]):
+    if obj["comparison"] != COMPARISON_ID or not any(same(obj["modes"], cl) for cl in channel_lists()):
         return None
     for key in ("minRegionDistinctHashes", "mergeGap", "maxSeedsPerMode", "maxRegionsPerMode"):
         if type(obj[key]) is not int or not 1 <= obj[key] <= U32:
@@ -385,9 +433,10 @@ def comparison_config(raw: bytes):
     supp = obj["suppressionCatalogueSha256"]
     if type(supp) is not str or not (supp == "none" or re.fullmatch(r"[0-9a-f]{64}", supp)):
         return None
-    rebuilt = ('{"comparison":"%s","modes":["exact","normalized"],"minRegionDistinctHashes":%d,"mergeGap":%d,'
+    rebuilt = ('{"comparison":"%s","modes":[%s],"minRegionDistinctHashes":%d,"mergeGap":%d,'
                '"maxSeedsPerMode":%d,"maxRegionsPerMode":%d,"suppressionCatalogueSha256":"%s"}\n'
-               % (obj["comparison"], obj["minRegionDistinctHashes"], obj["mergeGap"], obj["maxSeedsPerMode"],
+               % (obj["comparison"], ",".join('"%s"' % m for m in obj["modes"]), obj["minRegionDistinctHashes"],
+                  obj["mergeGap"], obj["maxSeedsPerMode"],
                   obj["maxRegionsPerMode"], supp))
     return obj if rebuilt.encode() == raw else None
 
@@ -428,6 +477,9 @@ def catalogue_semantic_errors(cat, prof):
     k, w, cap = cfg["k"], cfg["window"], cfg["maxInputBytes"]
     if (cat["profile"]["id"], cat["profile"]["version"]) != (cfg["profile"], cfg["profileVersion"]):
         errs.append("profile triple differs from extractionConfig")
+    if tuple(cfg["channels"]) != tuple(prof["channels"]):
+        errs.append("extractionConfig.channels is not the profile's declared channel list")
+        return errs
     if cat["profile"]["configSha256"] != sha(ex_config_bytes(cfg)):
         errs.append("configSha256 is not the digest of the extractionConfig canonical bytes")
     ids = [a["id"].encode() for a in cat["artifacts"]]
@@ -453,11 +505,14 @@ def catalogue_semantic_errors(cat, prof):
         tc = a["tokenCount"]
         if (a["status"] == "ok") != (tc >= k):
             errs.append(f"{a['id']}: status inconsistent with tokenCount")
-        for ch in CHANNELS:
+        if list(a["channels"]) != list(cfg["channels"]) and set(a["channels"]) != set(cfg["channels"]):
+            errs.append(f"{a['id']}: channel keys differ from extractionConfig.channels")
+            continue
+        for ch in cfg["channels"]:
             c = a["channels"][ch]
             m = c["kgramCount"]
             exact_m = max(0, tc - k + 1)
-            if ch == "exact" or not prof["exclusions"]:
+            if ch != "normalized" or not prof["exclusions"]:
                 if m != exact_m:   # n_C = tokenCount
                     errs.append(f"{a['id']}/{ch}: kgramCount != max(0, tokenCount-k+1)")
             elif m > exact_m:      # profile with exclusions: n_N <= tokenCount, so 0 <= kgramCount <= exact's
@@ -529,14 +584,21 @@ def compare(ref_raw, cand_raw, cc_raw, cat_schema, supp_raw=None, variant=None):
         if cats[side]["profile"]["configSha256"] != ref["profile"]["configSha256"]:
             return rejected("mismatch", "config-mismatch", side)
 
-    common = {ch: frozenset() for ch in CHANNELS}
+    modes = list(cc["modes"])
+    if variant == "channels-hardcoded":
+        modes = ["exact", "normalized"]
+    elif variant == "mode-mismatch-ignored":
+        modes = [m for m in modes if m in ref["extractionConfig"]["channels"]]
+    elif modes != ref["extractionConfig"]["channels"]:
+        return rejected("mismatch", "mode-mismatch", "comparison-config")
+    common = {ch: frozenset() for ch in modes}
     suppression = {"status": "none"}
     if "suppression" in cats and variant != "suppression-ignored":
         sup = cats["suppression"]
         common = {ch: frozenset(f["hash"] for a in sup["artifacts"] if a["status"] == "ok"
-                                for f in a["channels"][ch]["fingerprints"]) for ch in CHANNELS}
+                                for f in a["channels"][ch]["fingerprints"]) for ch in modes}
     if variant == "draft1-document-frequency":
-        for ch in CHANNELS:
+        for ch in modes:
             df = {}
             for a in ref["artifacts"]:
                 if a["status"] == "ok":
@@ -548,7 +610,7 @@ def compare(ref_raw, cand_raw, cc_raw, cat_schema, supp_raw=None, variant=None):
         count = sum(a["status"] == "ok" for a in sup["artifacts"]) if variant == "artifact-count-ok-only" else len(sup["artifacts"])
         suppression = {"artifactCount": count, "status": "supplied",
                        "distinctHashes": {ch: len({f["hash"] for a in sup["artifacts"] if a["status"] == "ok"
-                                                   for f in a["channels"][ch]["fingerprints"]}) for ch in CHANNELS}}
+                                                   for f in a["channels"][ch]["fingerprints"]}) for ch in modes}}
 
     pairs = []
     for ra in ref["artifacts"]:
@@ -564,13 +626,14 @@ def compare(ref_raw, cand_raw, cc_raw, cat_schema, supp_raw=None, variant=None):
             else:
                 p["status"] = "compared"
                 p["modes"] = {ch: compare_mode(ra["channels"][ch]["fingerprints"], ca["channels"][ch]["fingerprints"],
-                                               common[ch], cc, variant) for ch in CHANNELS}
+                                               common[ch], cc, variant) for ch in modes}
             pairs.append(p)
     body.update({"status": "compared", "profile": dict(ref["profile"]),
                  "referenceArtifactCount": len(ref["artifacts"]), "candidateArtifactCount": len(cand["artifacts"]),
                  "comparison": {"comparison": cc["comparison"], "maxRegionsPerMode": cc["maxRegionsPerMode"],
                                 "maxSeedsPerMode": cc["maxSeedsPerMode"], "mergeGap": cc["mergeGap"],
-                                "minRegionDistinctHashes": cc["minRegionDistinctHashes"], "modes": list(cc["modes"]),
+                                "minRegionDistinctHashes": cc["minRegionDistinctHashes"],
+                                "modes": sorted(cc["modes"]) if variant == "modes-echo-sorted" else list(cc["modes"]),
                                 "parameterStatus": "experimental",
                                 "suppressionCatalogueSha256": cc["suppressionCatalogueSha256"]},
                  "suppression": suppression, "pairs": pairs})
@@ -708,6 +771,9 @@ VARIANTS = [
     ("binding-after-validation", "C(d): suppression binding checked after catalogue validation"),
     ("suppression-before-candidate", "C(e): suppression profile/config checks run before the candidate's"),
     ("artifact-count-ok-only", "C(f): suppression.artifactCount counts ok entries only"),
+    ("channels-hardcoded", "L1: modes fixed to exact and normalized whatever the configuration says"),
+    ("mode-mismatch-ignored", "L2: modes not equal to the catalogue channels are intersected instead of rejected"),
+    ("modes-echo-sorted", "L3: comparison.modes echoed in sorted order instead of the configured order"),
 ]
 
 
@@ -725,6 +791,10 @@ def report_semantic_check(body, what):
     cc = body["comparison"]
     need((body["suppression"]["status"] == "none") == (cc["suppressionCatalogueSha256"] == "none"),
          f"{what}: suppression block inconsistent with the configuration")
+    need(set(body["suppression"].get("distinctHashes", {m: 0 for m in cc["modes"]})) == set(cc["modes"]),
+         f"{what}: suppression.distinctHashes keys differ from comparison.modes")
+    need(all(set(p["modes"]) == set(cc["modes"]) for p in body["pairs"] if p["status"] == "compared"),
+         f"{what}: pair mode keys differ from comparison.modes")
     keys = [(p["reference"]["id"].encode(), p["candidate"]["id"].encode()) for p in body["pairs"]]
     need(keys == sorted(keys) and len(set(keys)) == len(keys), f"{what}: pairs not ordered by (reference id, candidate id)")
     need(len(keys) == body["referenceArtifactCount"] * body["candidateArtifactCount"],
@@ -869,6 +939,7 @@ class Context:
         self.cat_schema = strict_loads((HERE / "catalogue.schema.json").read_bytes())
         self.rep_schema = strict_loads((HERE / "report.schema.json").read_bytes())
         self.rec_schema = strict_loads((HERE / "record.schema.json").read_bytes())
+        self.records = {r["id"]: r for r in strict_loads((HERE / "records.json").read_bytes())["records"]}
         audit_schema(self.cat_schema)
         audit_schema(self.rep_schema)
         audit_schema(self.rec_schema)
@@ -895,7 +966,21 @@ def vector_inputs(v, doc, ctx, stats=None):
         texts[side] = {}
         kinds = [k for k in ("canonical", "bytesBase64") if k in entry]
         need(len(kinds) == 1, f"{side}: exactly one of canonical / bytesBase64")
-        if "synthetic" in entry:
+        if "fromRecords" in entry:
+            # Catalogue built from canonical records (contract §3.8); records.json is checked separately.
+            fr = entry["fromRecords"]
+            items = []
+            for a in fr["artifacts"]:
+                rv = ctx.records[a["record"]]
+                items.append((a["id"], rv["expectedRecordText"].encode("utf-8")))
+                texts[side][a["id"]] = base64.b64decode(rv["inputBase64"], validate=True)
+            raw = catalogue_from_records((HERE / fr["extractionConfigFile"]).read_bytes(), items, ctx.rec_schema)
+            need("canonical" in entry and canon_bytes(entry["canonical"]) == raw,
+                 f"{side} catalogue differs from the one built from its records")
+            schema_check(ctx.cat_schema, entry["canonical"], f"{side} catalogue")
+            if stats is not None:
+                stats["fromRecords"] = stats.get("fromRecords", 0) + 1
+        elif "synthetic" in entry:
             need("artifacts" not in entry and "canonical" in entry and type(entry["synthetic"]) is str,
                  f"{side}: a synthetic catalogue has a note and a canonical object and no artifact sources")
             schema_check(ctx.cat_schema, entry["canonical"], f"{side} synthetic catalogue")
@@ -1005,18 +1090,23 @@ def check_all(doc, ctx, negatives, example):
     stats = dict.fromkeys(("catalogues", "fabricated", "synthetic", "pairs", "regions", "reportable", "rejected"), 0)
     need(comparison_config((HERE / doc["comparisonConfigFile"]).read_bytes()) is not None, "shipped comparison config invalid")
     need(sha((HERE / doc["comparisonConfigFile"]).read_bytes()) == doc["comparisonConfigSha256"], "comparison config digest")
-    for n in negatives:
+    for n in negatives + strict_loads((HERE / "comparison-config-negative-channels.json").read_bytes()):
         need(comparison_config(base64.b64decode(n["bytesBase64"])) is None, f"negative comparison config {n['id']} accepted")
     ids = set()
     for v in doc["vectors"]:
         need(v["id"] not in ids, f"duplicate vector id {v['id']}")
         ids.add(v["id"])
+        ALLOW_TEST_PROFILES[0] = bool(v.get("testOnlyProfile"))
         try:
             check_vector(v, doc, ctx, stats)
         except CheckError as exc:
             raise CheckError(f"{v['id']}: {exc}") from None
         except (KeyError, TypeError, ValueError, IndexError, AttributeError) as exc:
             raise CheckError(f"{v['id']}: malformed vector ({exc!r})") from None
+        finally:
+            ALLOW_TEST_PROFILES[0] = False
+    for v in doc["vectors"]:
+        need(bool(v.get("testOnlyProfile")) == ("test-only-profile" in v["tags"]), f"{v['id']}: testOnlyProfile flag and tag disagree")
     tags = {t for v in doc["vectors"] for t in v["tags"]}
     need(not set(doc["requiredTags"]) - tags, f"missing required cases {sorted(set(doc['requiredTags']) - tags)}")
     groups = {}
@@ -1156,6 +1246,16 @@ def corruptions(doc, negatives, example):
     yield make("invariance-broken", "go-invariance-plus-unrelated",
                setp(lambda v: v["expectedReport"]["body"]["pairs"][0]["modes"]["normalized"], "outcome",
                     {"class": "no-match", "code": "common-only"}))
+    yield make("three-channel-mode-dropped", "tc-classes-only", lambda v: v["expectedReport"]["body"]["pairs"][0]["modes"].pop("classes"))
+    yield make("three-channel-modes-echo-reordered", "tc-rename",
+               setp(lambda v: v["expectedReport"]["body"]["comparison"], "modes", ["exact", "classes", "normalized"]))
+    yield make("suppression-hashes-mode-missing", "tc-format-suppressed",
+               lambda v: v["expectedReport"]["body"]["suppression"]["distinctHashes"].pop("classes"))
+    yield make("extra-mode-in-pair", "go-identical", lambda v: v["expectedReport"]["body"]["pairs"][0]["modes"].__setitem__(
+        "classes", copy.deepcopy(v["expectedReport"]["body"]["pairs"][0]["modes"]["exact"])))
+    yield make("mode-mismatch-compared", "tc-mode-mismatch-two-on-three",
+               setp(lambda v: v["expectedReport"]["body"]["rejection"], "code", "config-mismatch"))
+    yield make("test-only-flag-dropped", "tc-rename", lambda v: v.pop("testOnlyProfile"), do_refresh=False)
     yield make("wrong-rejection-code", "go-config-mismatch", setp(lambda v: v["expectedReport"]["body"]["rejection"], "code", "profile-mismatch"))
     yield make("wrong-rejection-side", "go-suppression-config-mismatch", setp(lambda v: v["expectedReport"]["body"]["rejection"], "side", "candidate"))
     yield make("insufficient-pair-compared", "go-insufficient-tokens",
@@ -1281,6 +1381,27 @@ def catalogue_rule_self_test(doc, ctx):
                     "malformed-catalogue"))
     finally:
         ALLOW_TEST_PROFILES[0] = False
+    ALLOW_TEST_PROFILES[0] = True
+    try:
+        tc = next(c for c in rdoc["cataloguesFromRecords"] if c["id"] == "cat-three-channel-test")
+        tbase = strict_loads(catalogue_from_records((HERE / tc["extractionConfigFile"]).read_bytes(),
+                                                    [(a["id"], recs[a["record"]]) for a in tc["artifacts"]], ctx.rec_schema))
+        out.append(("three-channel-catalogue-accepted", catalogue_rejection(canon_bytes(tbase), ctx.cat_schema)[1] is None, "accepted"))
+        for name, fn in (
+                ("three-channel-entry-missing-classes", lambda c: next(a for a in c["artifacts"] if a["status"] == "ok")["channels"].pop("classes")),
+                ("three-channel-classes-kgramcount", lambda c: next(a for a in c["artifacts"] if a["status"] == "ok")["channels"]["classes"].__setitem__(
+                    "kgramCount", 1)),
+                ("config-channels-not-profile-list", lambda c: (c["extractionConfig"].__setitem__("channels", ["exact", "normalized"]),
+                                                               c["profile"].__setitem__("configSha256", sha(ex_config_bytes(c["extractionConfig"])))))):
+            bad = copy.deepcopy(tbase)
+            fn(bad)
+            out.append((name, catalogue_rejection(canon_bytes(bad), ctx.cat_schema)[1] == "malformed-catalogue", "malformed-catalogue"))
+    finally:
+        ALLOW_TEST_PROFILES[0] = False
+    gextra = copy.deepcopy(base)
+    gextra["artifacts"][okidx]["channels"]["classes"] = copy.deepcopy(gextra["artifacts"][okidx]["channels"]["normalized"])
+    out.append(("go-entry-with-extra-channel", catalogue_rejection(canon_bytes(gextra), ctx.cat_schema)[1] == "malformed-catalogue",
+                "malformed-catalogue"))
     out.append(("test-only-profile-unsupported-for-comparison",
                 catalogue_rejection(canon_bytes(ebase), ctx.cat_schema)[1] == "unsupported-profile", "unsupported-profile"))
     pretty = json.dumps(base, sort_keys=True, indent=1).encode()
@@ -1319,6 +1440,15 @@ def required_field_self_test(doc, ctx, example):
         for path, parent, key in list(walk(inst, [])):
             value = parent.pop(key)
             errs = schema_errors(target, inst, schema)
+            if not errs and name == "catalogue":
+                # Channel keys other than exact are fixed by extractionConfig.channels (contract §2b, §3.6), not the schema.
+                errs = [catalogue_rejection(canon_bytes(inst), ctx.cat_schema)[1]] if catalogue_rejection(
+                    canon_bytes(inst), ctx.cat_schema)[1] else []
+            elif not errs and name in ("compared body", "rejected body", "report document"):
+                try:
+                    report_semantic_check(inst["body"] if name == "report document" else inst, name)   # mode keys follow comparison.modes (contract §2b, §6.2)
+                except CheckError as exc:
+                    errs = [str(exc)]
             parent[key] = value
             is_optional = bool(path) and (path[-1], key) in optional
             if is_optional == bool(errs):
@@ -1334,6 +1464,7 @@ def wrong_implementation_self_test(doc, ctx):
     for name, desc in VARIANTS:
         catching = []
         for v in doc["vectors"]:
+            ALLOW_TEST_PROFILES[0] = bool(v.get("testOnlyProfile"))
             cc_raw, raws, _ = vector_inputs(v, doc, ctx)
             exp = v["expectedReport"]
             if name == "trailing-lf":
@@ -1346,6 +1477,7 @@ def wrong_implementation_self_test(doc, ctx):
                 got = compare(raws["reference"], raws["candidate"], cc_raw, ctx.cat_schema, raws.get("suppression"), variant=name)
             finally:
                 CATALOGUE_VARIANT[0] = None
+                ALLOW_TEST_PROFILES[0] = False
             if got != exp["body"]:
                 catching.append(v["id"])
         results.append((name, desc, catching))
@@ -1437,9 +1569,8 @@ def write_record(r):
             need(set(t) == set(o), "token keys")
             toks.append(rec_obj(o, ["class", "text", "span"], optional=["inserted"]))
         chans = res["channels"]
-        need(set(chans) == {"exact", "normalized"}, "channel names")
-        cs = rec_obj({"exact": chan(chans["exact"], False), "normalized": chan(chans["normalized"], True)},
-                     ["exact", "normalized"])
+        need(list(chans)[:1] == ["exact"], "the exact channel comes first")
+        cs = rec_obj({ch: chan(c, ch != "exact") for ch, c in chans.items()}, list(chans))
         result = rec_obj({"status": rec_val(res["status"]), "tokenCount": rec_val(res["tokenCount"]),
                           "tokens": "[" + ",".join(toks) + "]", "channels": cs},
                          ["status", "tokenCount", "tokens", "channels"])
@@ -1479,13 +1610,17 @@ def check_record_bytes(rb, rec_schema):
     if res["status"] != "error":
         need(res["tokenCount"] == len(res["tokens"]), "tokenCount != number of tokens")
         prof = PROFILES.get((r["profile"], r["profileVersion"]))
-        norm = res["channels"]["normalized"]
         if prof is not None:
-            need(("tokenIndices" in norm) == bool(prof["exclusions"]),
-                 "tokenIndices present exactly when the profile declares exclusions (extraction OD-23)")
-        kept = norm.get("tokenIndices", list(range(len(res["tokens"]))))
-        need(kept == sorted(set(kept)) and all(0 <= i < len(res["tokens"]) for i in kept), "tokenIndices ascending and in range")
-        need(len(norm["values"]) == len(kept), "normalized values list the kept tokens only")
+            need(list(res["channels"]) == list(prof["channels"]), "channels are not the profile's declared list, in order")
+        for ch, c in res["channels"].items():
+            if ch == "exact":
+                continue
+            if prof is not None:
+                need(("tokenIndices" in c) == bool(ch == "normalized" and prof["exclusions"]),
+                     "tokenIndices present exactly when the profile declares exclusions for the channel (extraction OD-23)")
+            kept = c.get("tokenIndices", list(range(len(res["tokens"]))))
+            need(kept == sorted(set(kept)) and all(0 <= i < len(res["tokens"]) for i in kept), "tokenIndices ascending and in range")
+            need(len(c["values"]) == len(kept), f"{ch} values list the kept tokens only")
         need((res["status"] == "ok") == bool(res["channels"]["exact"]["kgrams"]), "status inconsistent with k-grams")
     return r
 
@@ -1511,7 +1646,7 @@ def catalogue_from_records(cfg_raw, items, rec_schema):
                                                    for f in res["channels"][ch]["fingerprints"]],
                                   # n_C: tokenCount, or the number of kept tokens (tokenIndices) for normalized
                                   "kgramCount": max(0, len(res["channels"][ch].get("tokenIndices", res["tokens"])) - cfg["k"] + 1),
-                                  "partialWindow": res["channels"][ch]["partialWindow"]} for ch in CHANNELS}
+                                  "partialWindow": res["channels"][ch]["partialWindow"]} for ch in cfg["channels"]}
         entries.append(e)
     return canon_bytes({"artifacts": sorted(entries, key=lambda e: e["id"].encode()), "catalogueVersion": CATALOGUE_VERSION,
                         "extractionConfig": {k: cfg[k] for k in EX_KEYS},
@@ -1538,6 +1673,14 @@ def check_records(rdoc, mdoc, ctx):
             # Every record names its configuration explicitly (contract §2a, records.json rule).
             need(("configFile" in v) != ("configBase64" in v), "exactly one of configFile / configBase64 is required")
             named = (HERE / v["configFile"]).read_bytes() if "configFile" in v else base64.b64decode(v["configBase64"], validate=True)
+            if v.get("rederivedFromTokens"):
+                # TEST-ONLY channel-list records: the source vector supplies the Go token stream; every channel block
+                # is recomputed here under the named configuration (contract §2b).
+                ncfg = parse_extraction_config(named)
+                nprof = PROFILES.get((ncfg["profile"], ncfg["profileVersion"]))
+                need(nprof is not None and nprof.get("testOnly") and nprof["lang"] == "go" and fname.endswith(("go.json", "go-classes.json")),
+                     "only a TEST-ONLY Go-lexing profile may re-derive a Go token stream")
+                result, cfg_raw = derive_result(result, ncfg, nprof), named
             need(named == cfg_raw, "the named configuration is not the source vector's configuration")
             need(re.fullmatch(r"[0-9a-f]{64}", v.get("configSha256", "")) and v["configSha256"] == sha(named),
                  "configSha256 missing or not the digest of the named configuration bytes")
@@ -1566,6 +1709,8 @@ def check_records(rdoc, mdoc, ctx):
             if "sameAs" in c:
                 vid, side = c["sameAs"].split("#", 1)[1].split("/")
                 need(sha(cb) == mvec[vid][side]["sha256"], f"{c['id']}: differs from the catalogue in {c['sameAs']}")
+            elif any(next(r for r in rdoc["records"] if r["id"] == a["record"]).get("rederivedFromTokens") for a in c["artifacts"]):
+                pass    # re-derived records were each checked against derive_result() above; no extraction vector holds them
             else:   # rebuild from the extraction vectors behind the records
                 src = {"artifacts": [{"id": a["id"], "source": next(r["source"] for r in rdoc["records"] if r["id"] == a["record"])}
                                      for a in c["artifacts"]]}
@@ -1658,6 +1803,20 @@ def record_corruptions(rdoc):
     c = next(x for x in d["cataloguesFromRecords"] if x["id"] == "cat-exclusion-test")
     c["expectedCatalogueSha256"] = "0" * 64
     yield "exclusion-catalogue-digest-wrong", d
+    yield "three-channel-order-swapped", edit("rec-3ch-format-a", reparse(lambda r: r["result"].__setitem__("channels", {
+        "exact": r["result"]["channels"]["exact"], "classes": r["result"]["channels"]["classes"],
+        "normalized": r["result"]["channels"]["normalized"]})))
+    yield "three-channel-classes-missing", edit("rec-3ch-format-a", reparse(lambda r: r["result"]["channels"].pop("classes")))
+    yield "classes-without-values", edit("rec-3ch-format-a", reparse(lambda r: r["result"]["channels"]["classes"].pop("values")))
+    yield "values-in-exact", edit("rec-3ch-format-a", reparse(lambda r: r["result"]["channels"]["exact"].__setitem__(
+        "values", r["result"]["channels"]["normalized"]["values"])))
+    yield "extra-channel-on-go", edit("rec-go-ok", reparse(lambda r: r["result"]["channels"].__setitem__(
+        "classes", copy.deepcopy(r["result"]["channels"]["normalized"]))))
+    yield "classes-values-not-empty", edit("rec-3ch-format-a", reparse(lambda r: r["result"]["channels"]["classes"].__setitem__(
+        "values", r["result"]["channels"]["normalized"]["values"])))
+    d = copy.deepcopy(rdoc)
+    next(r for r in d["records"] if r["id"] == "rec-3ch-format-a").pop("rederivedFromTokens")
+    yield "rederivation-undeclared", d
     d = copy.deepcopy(rdoc)
     d["records"][0].pop("configFile")
     yield "config-not-named", d
@@ -1694,7 +1853,7 @@ def main(argv):
     print(f"PASS {path.name}: vectors={len(doc['vectors'])} catalogues-rebuilt={stats['catalogues']} "
           f"synthetic-catalogues={stats['synthetic']} fabricated-catalogues={stats['fabricated']} pairs={stats['pairs']} "
           f"regions={stats['regions']} reportable={stats['reportable']} rejected-reports={stats['rejected']} "
-          f"comparison-config-negatives={len(negatives)}/{len(negatives)} rejected; example-report.json valid")
+          f"comparison-config-negatives={len(negatives)}/{len(negatives)} + channel-list negatives 6/6 rejected; example-report.json valid")
     print("  rule situations (vectors each, minimum 2): " + ", ".join(f"{k}={n}" for k, n in stats["situations"].items()))
     missed = []
     results = []
@@ -1733,7 +1892,7 @@ def main(argv):
         rdoc = strict_loads((HERE / "records.json").read_bytes())
         rs = check_records(rdoc, doc, ctx)
         print(f"PASS records.json: records={rs['records']} (null input fields: {rs['nullInput']}) "
-              f"catalogues-from-records={rs["catalogues"]} (2 equal to matching.json catalogues, 1 to a rebuild from extraction vectors) build-rejections={rs['rejections']}")
+              f"catalogues-from-records={rs["catalogues"]} (2 equal to matching.json catalogues, 1 to a rebuild from extraction vectors, 1 from re-derived records) build-rejections={rs['rejections']}")
     except CheckError as exc:
         print(f"FAIL records.json: {exc}")
         return 1

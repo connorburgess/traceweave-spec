@@ -25,6 +25,7 @@
   "match-over-ambiguous",
   "merge-boundary",
   "mixed-common-region",
+  "mode-mismatch",
   "no-overlap",
   "non-ascii",
   "output-cap",
@@ -40,6 +41,7 @@
   "suppression-artifact-count",
   "suppression-catalogue-mismatch",
   "suppression-order",
+  "three-channel",
   "tie",
   "trivia-pair",
   "unsupported-catalogue",
@@ -46729,6 +46731,2607 @@
      "suppression": {
       "status": "none"
      }
+    }
+   }
+  },
+  {
+   "id": "tc-rename",
+   "tags": [
+    "three-channel",
+    "test-only-profile"
+   ],
+   "description": "go-rename-a/b under the TEST-ONLY three-channel profile: exact does not match; normalized and classes match completely on diagonal 0.",
+   "testOnlyProfile": true,
+   "derivation": "hand",
+   "comparisonConfig": {
+    "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiLCJjbGFzc2VzIl0sIm1pblJlZ2lvbkRpc3RpbmN0SGFzaGVzIjoyLCJtZXJnZUdhcCI6NCwibWF4U2VlZHNQZXJNb2RlIjoxMDAwMDAsIm1heFJlZ2lvbnNQZXJNb2RlIjoxMDAwLCJzdXBwcmVzc2lvbkNhdGFsb2d1ZVNoYTI1NiI6Im5vbmUifQo="
+   },
+   "reference": {
+    "fromRecords": {
+     "extractionConfigFile": "config-three-channel-test.json",
+     "artifacts": [
+      {
+       "id": "a.go",
+       "record": "rec-3ch-rename-a"
+      }
+     ]
+    },
+    "sha256": "04cbff680a493804c1f43a97ba25e1c6865cb5a770e4aa53cc00e7987579c6ff",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 40,
+       "channels": {
+        "classes": {
+         "fingerprints": [
+          {
+           "hash": "1531db600ab37a78",
+           "position": 2,
+           "span": [
+            8,
+            17
+           ]
+          },
+          {
+           "hash": "81e392ed7bf2855e",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "6c449a5b5f4a2bd1",
+           "position": 8,
+           "span": [
+            19,
+            35
+           ]
+          }
+         ],
+         "kgramCount": 12,
+         "partialWindow": false
+        },
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "02de796bc854f018",
+           "position": 2,
+           "span": [
+            8,
+            17
+           ]
+          },
+          {
+           "hash": "164b32c08286c22a",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "439a3b0bcf42ed6d",
+           "position": 6,
+           "span": [
+            14,
+            31
+           ]
+          },
+          {
+           "hash": "18d55eca67b48dde",
+           "position": 10,
+           "span": [
+            25,
+            39
+           ]
+          }
+         ],
+         "kgramCount": 12,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "5f61b7c519035189",
+           "position": 3,
+           "span": [
+            9,
+            18
+           ]
+          },
+          {
+           "hash": "19d537584fa284bb",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "0f39223287f62ea9",
+           "position": 7,
+           "span": [
+            17,
+            33
+           ]
+          },
+          {
+           "hash": "2ac2bde6370bd09c",
+           "position": 8,
+           "span": [
+            19,
+            35
+           ]
+          }
+         ],
+         "kgramCount": 12,
+         "partialWindow": false
+        }
+       },
+       "id": "a.go",
+       "sha256": "cca3c276657b738fcc5043029be8188ec921edb79fde89b12e2d0c285ccfa717",
+       "status": "ok",
+       "tokenCount": 16
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "channels": [
+       "exact",
+       "normalized",
+       "classes"
+      ],
+      "contract": "traceweave-token-winnow-draft-1",
+      "hash": "sha256-first8-u64be",
+      "k": 5,
+      "maxInputBytes": 1048576,
+      "profile": "go-tokens-three-channel-test",
+      "profileVersion": "draft-1",
+      "window": 4
+     },
+     "profile": {
+      "configSha256": "5ed0e945786bdb22092cdf80ca293aab3819a986187155243b745c71e7f46678",
+      "id": "go-tokens-three-channel-test",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "fromRecords": {
+     "extractionConfigFile": "config-three-channel-test.json",
+     "artifacts": [
+      {
+       "id": "b.go",
+       "record": "rec-3ch-rename-b"
+      }
+     ]
+    },
+    "sha256": "0ac9a55bd8494a3fcdd18770121c20593bc25747e7104f62eed42adeafc37e7c",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 40,
+       "channels": {
+        "classes": {
+         "fingerprints": [
+          {
+           "hash": "1531db600ab37a78",
+           "position": 2,
+           "span": [
+            8,
+            17
+           ]
+          },
+          {
+           "hash": "81e392ed7bf2855e",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "6c449a5b5f4a2bd1",
+           "position": 8,
+           "span": [
+            19,
+            35
+           ]
+          }
+         ],
+         "kgramCount": 12,
+         "partialWindow": false
+        },
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "21c28b5e298e525f",
+           "position": 1,
+           "span": [
+            5,
+            13
+           ]
+          },
+          {
+           "hash": "80e39911f2de5ce8",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "439a3b0bcf42ed6d",
+           "position": 6,
+           "span": [
+            14,
+            31
+           ]
+          },
+          {
+           "hash": "509b823a19b50e3b",
+           "position": 7,
+           "span": [
+            17,
+            33
+           ]
+          },
+          {
+           "hash": "6a073262ad2e08d3",
+           "position": 10,
+           "span": [
+            25,
+            39
+           ]
+          }
+         ],
+         "kgramCount": 12,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "5f61b7c519035189",
+           "position": 3,
+           "span": [
+            9,
+            18
+           ]
+          },
+          {
+           "hash": "19d537584fa284bb",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "0f39223287f62ea9",
+           "position": 7,
+           "span": [
+            17,
+            33
+           ]
+          },
+          {
+           "hash": "2ac2bde6370bd09c",
+           "position": 8,
+           "span": [
+            19,
+            35
+           ]
+          }
+         ],
+         "kgramCount": 12,
+         "partialWindow": false
+        }
+       },
+       "id": "b.go",
+       "sha256": "90443261423efc77765d029820f51b47973232214a8df0576ff873697bf160a2",
+       "status": "ok",
+       "tokenCount": 16
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "channels": [
+       "exact",
+       "normalized",
+       "classes"
+      ],
+      "contract": "traceweave-token-winnow-draft-1",
+      "hash": "sha256-first8-u64be",
+      "k": 5,
+      "maxInputBytes": 1048576,
+      "profile": "go-tokens-three-channel-test",
+      "profileVersion": "draft-1",
+      "window": 4
+     },
+     "profile": {
+      "configSha256": "5ed0e945786bdb22092cdf80ca293aab3819a986187155243b745c71e7f46678",
+      "id": "go-tokens-three-channel-test",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "compared",
+    "pairs": [
+     {
+      "reference": "a.go",
+      "candidate": "b.go",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "no-shared-fingerprints",
+         "below-minimum-evidence",
+         "common-only"
+        ],
+        "reportable": 0,
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "derivation": "hand"
+       },
+       "classes": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "derivation": "hand"
+       }
+      }
+     }
+    ]
+   },
+   "expectedReport": {
+    "bodySha256": "c5096f0328de735d855df39d3e4daa4036f0fd15e3fb244e26a222964fa42a2e",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "0ac9a55bd8494a3fcdd18770121c20593bc25747e7104f62eed42adeafc37e7c",
+      "comparisonConfigSha256": "b5745ea6bc591a8fa42b3797a7147028f71700964f340d49f80aac648399b122",
+      "referenceCatalogueSha256": "04cbff680a493804c1f43a97ba25e1c6865cb5a770e4aa53cc00e7987579c6ff",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "candidateArtifactCount": 1,
+     "comparison": {
+      "comparison": "traceweave-seed-merge-draft-2",
+      "modes": [
+       "exact",
+       "normalized",
+       "classes"
+      ],
+      "minRegionDistinctHashes": 2,
+      "mergeGap": 4,
+      "maxSeedsPerMode": 100000,
+      "maxRegionsPerMode": 1000,
+      "suppressionCatalogueSha256": "none",
+      "parameterStatus": "experimental"
+     },
+     "pairs": [
+      {
+       "candidate": {
+        "id": "b.go",
+        "sha256": "90443261423efc77765d029820f51b47973232214a8df0576ff873697bf160a2"
+       },
+       "reference": {
+        "id": "a.go",
+        "sha256": "cca3c276657b738fcc5043029be8188ec921edb79fde89b12e2d0c285ccfa717"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 5,
+           "numerator": 1
+          },
+          "referenceInCandidate": {
+           "denominator": 4,
+           "numerator": 1
+          }
+         },
+         "seedCount": 1,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 8,
+           "numerator": 1
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "below-minimum-evidence"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            14,
+            31
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 1,
+           "referenceSpan": [
+            14,
+            31
+           ],
+           "seeds": [
+            [
+             6,
+             6
+            ]
+           ],
+           "status": "below-minimum-evidence"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 1,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 4,
+           "numerator": 4
+          },
+          "referenceInCandidate": {
+           "denominator": 4,
+           "numerator": 4
+          }
+         },
+         "seedCount": 4,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 4,
+           "numerator": 4
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            9,
+            35
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 4,
+           "referenceSpan": [
+            9,
+            35
+           ],
+           "seeds": [
+            [
+             3,
+             3
+            ],
+            [
+             4,
+             4
+            ],
+            [
+             7,
+             7
+            ],
+            [
+             8,
+             8
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        },
+        "classes": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 3
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "seedCount": 3,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            8,
+            35
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 3,
+           "referenceSpan": [
+            8,
+            35
+           ],
+           "seeds": [
+            [
+             2,
+             2
+            ],
+            [
+             4,
+             4
+            ],
+            [
+             8,
+             8
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      }
+     ],
+     "profile": {
+      "configSha256": "5ed0e945786bdb22092cdf80ca293aab3819a986187155243b745c71e7f46678",
+      "id": "go-tokens-three-channel-test",
+      "version": "draft-1"
+     },
+     "referenceArtifactCount": 1,
+     "status": "compared",
+     "suppression": {
+      "status": "none"
+     }
+    }
+   }
+  },
+  {
+   "id": "tc-classes-only",
+   "tags": [
+    "three-channel",
+    "test-only-profile"
+   ],
+   "description": "Same class sequence, different keywords and operators: only the third channel matches. Normalized shares at most one k-gram (\"\" ( \"\" ) ;).",
+   "testOnlyProfile": true,
+   "derivation": "hand",
+   "comparisonConfig": {
+    "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiLCJjbGFzc2VzIl0sIm1pblJlZ2lvbkRpc3RpbmN0SGFzaGVzIjoyLCJtZXJnZUdhcCI6NCwibWF4U2VlZHNQZXJNb2RlIjoxMDAwMDAsIm1heFJlZ2lvbnNQZXJNb2RlIjoxMDAwLCJzdXBwcmVzc2lvbkNhdGFsb2d1ZVNoYTI1NiI6Im5vbmUifQo="
+   },
+   "reference": {
+    "fromRecords": {
+     "extractionConfigFile": "config-three-channel-test.json",
+     "artifacts": [
+      {
+       "id": "a.go",
+       "record": "rec-3ch-classes-a"
+      }
+     ]
+    },
+    "sha256": "4d2849bc83206e77903af13b4d468bf74409417529e7483d1604754e01dd4b69",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 26,
+       "channels": {
+        "classes": {
+         "fingerprints": [
+          {
+           "hash": "607b6a9f7b434c25",
+           "position": 2,
+           "span": [
+            9,
+            15
+           ]
+          },
+          {
+           "hash": "6036703655e827b0",
+           "position": 4,
+           "span": [
+            12,
+            21
+           ]
+          },
+          {
+           "hash": "0811dfa1a228e04a",
+           "position": 5,
+           "span": [
+            13,
+            21
+           ]
+          }
+         ],
+         "kgramCount": 9,
+         "partialWindow": false
+        },
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "4a6b411daa1d6683",
+           "position": 2,
+           "span": [
+            9,
+            15
+           ]
+          },
+          {
+           "hash": "7878cd551f5362b3",
+           "position": 4,
+           "span": [
+            12,
+            21
+           ]
+          },
+          {
+           "hash": "146ef2ec7646238e",
+           "position": 8,
+           "span": [
+            16,
+            25
+           ]
+          }
+         ],
+         "kgramCount": 9,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "020ebcff7ff4a0ce",
+           "position": 0,
+           "span": [
+            0,
+            13
+           ]
+          },
+          {
+           "hash": "0cf7c03271c3f7f2",
+           "position": 4,
+           "span": [
+            12,
+            21
+           ]
+          },
+          {
+           "hash": "5114991b3c482848",
+           "position": 7,
+           "span": [
+            15,
+            25
+           ]
+          }
+         ],
+         "kgramCount": 9,
+         "partialWindow": false
+        }
+       },
+       "id": "a.go",
+       "sha256": "56319f16a9e28da0347ee2dfd7563ed591251670e66462ec45fc24b37b06f7c9",
+       "status": "ok",
+       "tokenCount": 13
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "channels": [
+       "exact",
+       "normalized",
+       "classes"
+      ],
+      "contract": "traceweave-token-winnow-draft-1",
+      "hash": "sha256-first8-u64be",
+      "k": 5,
+      "maxInputBytes": 1048576,
+      "profile": "go-tokens-three-channel-test",
+      "profileVersion": "draft-1",
+      "window": 4
+     },
+     "profile": {
+      "configSha256": "5ed0e945786bdb22092cdf80ca293aab3819a986187155243b745c71e7f46678",
+      "id": "go-tokens-three-channel-test",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "fromRecords": {
+     "extractionConfigFile": "config-three-channel-test.json",
+     "artifacts": [
+      {
+       "id": "b.go",
+       "record": "rec-3ch-classes-b"
+      }
+     ]
+    },
+    "sha256": "b1c062cae6785c51a5d00150d0d642d83ea38e0dd66e2c871b39a12e03aaf8ee",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 28,
+       "channels": {
+        "classes": {
+         "fingerprints": [
+          {
+           "hash": "607b6a9f7b434c25",
+           "position": 2,
+           "span": [
+            8,
+            14
+           ]
+          },
+          {
+           "hash": "6036703655e827b0",
+           "position": 4,
+           "span": [
+            11,
+            23
+           ]
+          },
+          {
+           "hash": "0811dfa1a228e04a",
+           "position": 5,
+           "span": [
+            12,
+            23
+           ]
+          }
+         ],
+         "kgramCount": 9,
+         "partialWindow": false
+        },
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "6c1aef597177d1bd",
+           "position": 0,
+           "span": [
+            0,
+            12
+           ]
+          },
+          {
+           "hash": "ac570359fd585ab2",
+           "position": 3,
+           "span": [
+            10,
+            14
+           ]
+          },
+          {
+           "hash": "564871d1de41474b",
+           "position": 6,
+           "span": [
+            13,
+            25
+           ]
+          },
+          {
+           "hash": "45e98cab7611c93c",
+           "position": 8,
+           "span": [
+            15,
+            27
+           ]
+          }
+         ],
+         "kgramCount": 9,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "57ff9c4dd4808912",
+           "position": 0,
+           "span": [
+            0,
+            12
+           ]
+          },
+          {
+           "hash": "08f4825c1abb9259",
+           "position": 4,
+           "span": [
+            11,
+            23
+           ]
+          },
+          {
+           "hash": "32f66c66c16b33ff",
+           "position": 8,
+           "span": [
+            15,
+            27
+           ]
+          }
+         ],
+         "kgramCount": 9,
+         "partialWindow": false
+        }
+       },
+       "id": "b.go",
+       "sha256": "74011bf8449a44fe5b6b22a677dbc891cc437cdd4dccab21d5521a27755b69a2",
+       "status": "ok",
+       "tokenCount": 13
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "channels": [
+       "exact",
+       "normalized",
+       "classes"
+      ],
+      "contract": "traceweave-token-winnow-draft-1",
+      "hash": "sha256-first8-u64be",
+      "k": 5,
+      "maxInputBytes": 1048576,
+      "profile": "go-tokens-three-channel-test",
+      "profileVersion": "draft-1",
+      "window": 4
+     },
+     "profile": {
+      "configSha256": "5ed0e945786bdb22092cdf80ca293aab3819a986187155243b745c71e7f46678",
+      "id": "go-tokens-three-channel-test",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "compared",
+    "pairs": [
+     {
+      "reference": "a.go",
+      "candidate": "b.go",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "no-shared-fingerprints",
+         "below-minimum-evidence",
+         "common-only"
+        ],
+        "reportable": 0,
+        "derivation": "hand"
+       },
+       "classes": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "derivation": "hand"
+       }
+      }
+     }
+    ]
+   },
+   "expectedReport": {
+    "bodySha256": "0e6dbdbf25cd687743d5bb4707cf3f81fab8e3181edce7bc95b8e56925f35f52",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "b1c062cae6785c51a5d00150d0d642d83ea38e0dd66e2c871b39a12e03aaf8ee",
+      "comparisonConfigSha256": "b5745ea6bc591a8fa42b3797a7147028f71700964f340d49f80aac648399b122",
+      "referenceCatalogueSha256": "4d2849bc83206e77903af13b4d468bf74409417529e7483d1604754e01dd4b69",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "candidateArtifactCount": 1,
+     "comparison": {
+      "comparison": "traceweave-seed-merge-draft-2",
+      "modes": [
+       "exact",
+       "normalized",
+       "classes"
+      ],
+      "minRegionDistinctHashes": 2,
+      "mergeGap": 4,
+      "maxSeedsPerMode": 100000,
+      "maxRegionsPerMode": 1000,
+      "suppressionCatalogueSha256": "none",
+      "parameterStatus": "experimental"
+     },
+     "pairs": [
+      {
+       "candidate": {
+        "id": "b.go",
+        "sha256": "74011bf8449a44fe5b6b22a677dbc891cc437cdd4dccab21d5521a27755b69a2"
+       },
+       "reference": {
+        "id": "a.go",
+        "sha256": "56319f16a9e28da0347ee2dfd7563ed591251670e66462ec45fc24b37b06f7c9"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 4,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 7,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 6,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "classes": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 3
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "seedCount": 3,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            8,
+            23
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 3,
+           "referenceSpan": [
+            9,
+            21
+           ],
+           "seeds": [
+            [
+             2,
+             2
+            ],
+            [
+             4,
+             4
+            ],
+            [
+             5,
+             5
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      }
+     ],
+     "profile": {
+      "configSha256": "5ed0e945786bdb22092cdf80ca293aab3819a986187155243b745c71e7f46678",
+      "id": "go-tokens-three-channel-test",
+      "version": "draft-1"
+     },
+     "referenceArtifactCount": 1,
+     "status": "compared",
+     "suppression": {
+      "status": "none"
+     }
+    }
+   }
+  },
+  {
+   "id": "tc-format-suppressed",
+   "tags": [
+    "three-channel",
+    "test-only-profile",
+    "suppression"
+   ],
+   "description": "go-format-a/b with a three-channel suppression catalogue holding go-format-a itself: every hash in every mode is common, so each mode is common-only, and suppression.distinctHashes has one key per mode.",
+   "testOnlyProfile": true,
+   "derivation": "hand",
+   "comparisonConfig": {
+    "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiLCJjbGFzc2VzIl0sIm1pblJlZ2lvbkRpc3RpbmN0SGFzaGVzIjoyLCJtZXJnZUdhcCI6NCwibWF4U2VlZHNQZXJNb2RlIjoxMDAwMDAsIm1heFJlZ2lvbnNQZXJNb2RlIjoxMDAwLCJzdXBwcmVzc2lvbkNhdGFsb2d1ZVNoYTI1NiI6Ijk2NzA3Y2Q5MmE1OWY5NTAwZDM2NGQxYWZlYWI4MTFmODg2YjY5ZGU2N2MwZjcxNGM4ZWI5MTIwYTAxNWVmYWQifQo="
+   },
+   "reference": {
+    "fromRecords": {
+     "extractionConfigFile": "config-three-channel-test.json",
+     "artifacts": [
+      {
+       "id": "a.go",
+       "record": "rec-3ch-format-a"
+      }
+     ]
+    },
+    "sha256": "c4dc101de7a790b38ada0b88067853637f1310c26adab11b19b0753f82d7fb4c",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 41,
+       "channels": {
+        "classes": {
+         "fingerprints": [
+          {
+           "hash": "1531db600ab37a78",
+           "position": 2,
+           "span": [
+            8,
+            17
+           ]
+          },
+          {
+           "hash": "81e392ed7bf2855e",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "6c449a5b5f4a2bd1",
+           "position": 8,
+           "span": [
+            19,
+            36
+           ]
+          },
+          {
+           "hash": "574e82ae577c728f",
+           "position": 12,
+           "span": [
+            35,
+            40
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        },
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "02de796bc854f018",
+           "position": 2,
+           "span": [
+            8,
+            17
+           ]
+          },
+          {
+           "hash": "164b32c08286c22a",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "439a3b0bcf42ed6d",
+           "position": 6,
+           "span": [
+            14,
+            32
+           ]
+          },
+          {
+           "hash": "5566f00ca0407574",
+           "position": 9,
+           "span": [
+            23,
+            38
+           ]
+          },
+          {
+           "hash": "07955075063af0e0",
+           "position": 11,
+           "span": [
+            33,
+            40
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "5f61b7c519035189",
+           "position": 3,
+           "span": [
+            9,
+            18
+           ]
+          },
+          {
+           "hash": "19d537584fa284bb",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "0f39223287f62ea9",
+           "position": 7,
+           "span": [
+            17,
+            34
+           ]
+          },
+          {
+           "hash": "2ac2bde6370bd09c",
+           "position": 8,
+           "span": [
+            19,
+            36
+           ]
+          },
+          {
+           "hash": "574b6fc33a663bd3",
+           "position": 10,
+           "span": [
+            26,
+            38
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        }
+       },
+       "id": "a.go",
+       "sha256": "66b27e4b006c89b0f66411d35fd02d6159cdfae0eb1ea64093679757f7bdb57e",
+       "status": "ok",
+       "tokenCount": 17
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "channels": [
+       "exact",
+       "normalized",
+       "classes"
+      ],
+      "contract": "traceweave-token-winnow-draft-1",
+      "hash": "sha256-first8-u64be",
+      "k": 5,
+      "maxInputBytes": 1048576,
+      "profile": "go-tokens-three-channel-test",
+      "profileVersion": "draft-1",
+      "window": 4
+     },
+     "profile": {
+      "configSha256": "5ed0e945786bdb22092cdf80ca293aab3819a986187155243b745c71e7f46678",
+      "id": "go-tokens-three-channel-test",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "fromRecords": {
+     "extractionConfigFile": "config-three-channel-test.json",
+     "artifacts": [
+      {
+       "id": "b.go",
+       "record": "rec-3ch-format-b"
+      }
+     ]
+    },
+    "sha256": "39e9459f01d15dc2b7823f277ee5e27bcb370c0042d38a16142fe769f2fdbb65",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 68,
+       "channels": {
+        "classes": {
+         "fingerprints": [
+          {
+           "hash": "1531db600ab37a78",
+           "position": 2,
+           "span": [
+            21,
+            29
+           ]
+          },
+          {
+           "hash": "81e392ed7bf2855e",
+           "position": 4,
+           "span": [
+            23,
+            33
+           ]
+          },
+          {
+           "hash": "6c449a5b5f4a2bd1",
+           "position": 8,
+           "span": [
+            30,
+            53
+           ]
+          },
+          {
+           "hash": "574e82ae577c728f",
+           "position": 12,
+           "span": [
+            52,
+            68
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        },
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "02de796bc854f018",
+           "position": 2,
+           "span": [
+            21,
+            29
+           ]
+          },
+          {
+           "hash": "164b32c08286c22a",
+           "position": 4,
+           "span": [
+            23,
+            33
+           ]
+          },
+          {
+           "hash": "439a3b0bcf42ed6d",
+           "position": 6,
+           "span": [
+            26,
+            50
+           ]
+          },
+          {
+           "hash": "5566f00ca0407574",
+           "position": 9,
+           "span": [
+            33,
+            54
+           ]
+          },
+          {
+           "hash": "07955075063af0e0",
+           "position": 11,
+           "span": [
+            51,
+            68
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "5f61b7c519035189",
+           "position": 3,
+           "span": [
+            22,
+            30
+           ]
+          },
+          {
+           "hash": "19d537584fa284bb",
+           "position": 4,
+           "span": [
+            23,
+            33
+           ]
+          },
+          {
+           "hash": "0f39223287f62ea9",
+           "position": 7,
+           "span": [
+            29,
+            52
+           ]
+          },
+          {
+           "hash": "2ac2bde6370bd09c",
+           "position": 8,
+           "span": [
+            30,
+            53
+           ]
+          },
+          {
+           "hash": "574b6fc33a663bd3",
+           "position": 10,
+           "span": [
+            44,
+            54
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        }
+       },
+       "id": "b.go",
+       "sha256": "2040f8a6a89ffb19cf8679237c132caf505b0184bbce7dffdf7c988162e3df96",
+       "status": "ok",
+       "tokenCount": 17
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "channels": [
+       "exact",
+       "normalized",
+       "classes"
+      ],
+      "contract": "traceweave-token-winnow-draft-1",
+      "hash": "sha256-first8-u64be",
+      "k": 5,
+      "maxInputBytes": 1048576,
+      "profile": "go-tokens-three-channel-test",
+      "profileVersion": "draft-1",
+      "window": 4
+     },
+     "profile": {
+      "configSha256": "5ed0e945786bdb22092cdf80ca293aab3819a986187155243b745c71e7f46678",
+      "id": "go-tokens-three-channel-test",
+      "version": "draft-1"
+     }
+    }
+   },
+   "suppression": {
+    "fromRecords": {
+     "extractionConfigFile": "config-three-channel-test.json",
+     "artifacts": [
+      {
+       "id": "s.go",
+       "record": "rec-3ch-format-a"
+      }
+     ]
+    },
+    "sha256": "96707cd92a59f9500d364d1afeab811f886b69de67c0f714c8eb9120a015efad",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 41,
+       "channels": {
+        "classes": {
+         "fingerprints": [
+          {
+           "hash": "1531db600ab37a78",
+           "position": 2,
+           "span": [
+            8,
+            17
+           ]
+          },
+          {
+           "hash": "81e392ed7bf2855e",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "6c449a5b5f4a2bd1",
+           "position": 8,
+           "span": [
+            19,
+            36
+           ]
+          },
+          {
+           "hash": "574e82ae577c728f",
+           "position": 12,
+           "span": [
+            35,
+            40
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        },
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "02de796bc854f018",
+           "position": 2,
+           "span": [
+            8,
+            17
+           ]
+          },
+          {
+           "hash": "164b32c08286c22a",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "439a3b0bcf42ed6d",
+           "position": 6,
+           "span": [
+            14,
+            32
+           ]
+          },
+          {
+           "hash": "5566f00ca0407574",
+           "position": 9,
+           "span": [
+            23,
+            38
+           ]
+          },
+          {
+           "hash": "07955075063af0e0",
+           "position": 11,
+           "span": [
+            33,
+            40
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "5f61b7c519035189",
+           "position": 3,
+           "span": [
+            9,
+            18
+           ]
+          },
+          {
+           "hash": "19d537584fa284bb",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "0f39223287f62ea9",
+           "position": 7,
+           "span": [
+            17,
+            34
+           ]
+          },
+          {
+           "hash": "2ac2bde6370bd09c",
+           "position": 8,
+           "span": [
+            19,
+            36
+           ]
+          },
+          {
+           "hash": "574b6fc33a663bd3",
+           "position": 10,
+           "span": [
+            26,
+            38
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        }
+       },
+       "id": "s.go",
+       "sha256": "66b27e4b006c89b0f66411d35fd02d6159cdfae0eb1ea64093679757f7bdb57e",
+       "status": "ok",
+       "tokenCount": 17
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "channels": [
+       "exact",
+       "normalized",
+       "classes"
+      ],
+      "contract": "traceweave-token-winnow-draft-1",
+      "hash": "sha256-first8-u64be",
+      "k": 5,
+      "maxInputBytes": 1048576,
+      "profile": "go-tokens-three-channel-test",
+      "profileVersion": "draft-1",
+      "window": 4
+     },
+     "profile": {
+      "configSha256": "5ed0e945786bdb22092cdf80ca293aab3819a986187155243b745c71e7f46678",
+      "id": "go-tokens-three-channel-test",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "compared",
+    "pairs": [
+     {
+      "reference": "a.go",
+      "candidate": "b.go",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "common-only"
+        ],
+        "reportable": 0,
+        "regions": 1,
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "common-only"
+        ],
+        "reportable": 0,
+        "regions": 1,
+        "derivation": "hand"
+       },
+       "classes": {
+        "codeIn": [
+         "common-only"
+        ],
+        "reportable": 0,
+        "regions": 1,
+        "derivation": "hand"
+       }
+      }
+     }
+    ]
+   },
+   "expectedReport": {
+    "bodySha256": "5fb9b926c6212f060261111352d342fa1d57556a706018bfeca1f232a3e65d9d",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "39e9459f01d15dc2b7823f277ee5e27bcb370c0042d38a16142fe769f2fdbb65",
+      "comparisonConfigSha256": "06b3eed4b94ebaed1c2f33ca97a80f05e42b8875ec3b3de77f6f7e4ba027f9c8",
+      "referenceCatalogueSha256": "c4dc101de7a790b38ada0b88067853637f1310c26adab11b19b0753f82d7fb4c",
+      "suppressionCatalogueSha256": "96707cd92a59f9500d364d1afeab811f886b69de67c0f714c8eb9120a015efad"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "candidateArtifactCount": 1,
+     "comparison": {
+      "comparison": "traceweave-seed-merge-draft-2",
+      "modes": [
+       "exact",
+       "normalized",
+       "classes"
+      ],
+      "minRegionDistinctHashes": 2,
+      "mergeGap": 4,
+      "maxSeedsPerMode": 100000,
+      "maxRegionsPerMode": 1000,
+      "suppressionCatalogueSha256": "96707cd92a59f9500d364d1afeab811f886b69de67c0f714c8eb9120a015efad",
+      "parameterStatus": "experimental"
+     },
+     "pairs": [
+      {
+       "candidate": {
+        "id": "b.go",
+        "sha256": "2040f8a6a89ffb19cf8679237c132caf505b0184bbce7dffdf7c988162e3df96"
+       },
+       "reference": {
+        "id": "a.go",
+        "sha256": "66b27e4b006c89b0f66411d35fd02d6159cdfae0eb1ea64093679757f7bdb57e"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 5,
+           "numerator": 5
+          },
+          "referenceInCandidate": {
+           "denominator": 5,
+           "numerator": 5
+          }
+         },
+         "seedCount": 5,
+         "sharedCommonDistinctHashes": 5,
+         "similarity": {
+          "jaccard": {
+           "denominator": 5,
+           "numerator": 5
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "common-only"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            21,
+            68
+           ],
+           "distinctCommonHashes": 5,
+           "distinctHashes": 5,
+           "referenceSpan": [
+            8,
+            40
+           ],
+           "seeds": [
+            [
+             2,
+             2
+            ],
+            [
+             4,
+             4
+            ],
+            [
+             6,
+             6
+            ],
+            [
+             9,
+             9
+            ],
+            [
+             11,
+             11
+            ]
+           ],
+           "status": "common-only"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 1,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 5,
+           "numerator": 5
+          },
+          "referenceInCandidate": {
+           "denominator": 5,
+           "numerator": 5
+          }
+         },
+         "seedCount": 5,
+         "sharedCommonDistinctHashes": 5,
+         "similarity": {
+          "jaccard": {
+           "denominator": 5,
+           "numerator": 5
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "common-only"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            22,
+            54
+           ],
+           "distinctCommonHashes": 5,
+           "distinctHashes": 5,
+           "referenceSpan": [
+            9,
+            38
+           ],
+           "seeds": [
+            [
+             3,
+             3
+            ],
+            [
+             4,
+             4
+            ],
+            [
+             7,
+             7
+            ],
+            [
+             8,
+             8
+            ],
+            [
+             10,
+             10
+            ]
+           ],
+           "status": "common-only"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 1,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "classes": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 4,
+           "numerator": 4
+          },
+          "referenceInCandidate": {
+           "denominator": 4,
+           "numerator": 4
+          }
+         },
+         "seedCount": 4,
+         "sharedCommonDistinctHashes": 4,
+         "similarity": {
+          "jaccard": {
+           "denominator": 4,
+           "numerator": 4
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "common-only"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            21,
+            68
+           ],
+           "distinctCommonHashes": 4,
+           "distinctHashes": 4,
+           "referenceSpan": [
+            8,
+            40
+           ],
+           "seeds": [
+            [
+             2,
+             2
+            ],
+            [
+             4,
+             4
+            ],
+            [
+             8,
+             8
+            ],
+            [
+             12,
+             12
+            ]
+           ],
+           "status": "common-only"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 1,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      }
+     ],
+     "profile": {
+      "configSha256": "5ed0e945786bdb22092cdf80ca293aab3819a986187155243b745c71e7f46678",
+      "id": "go-tokens-three-channel-test",
+      "version": "draft-1"
+     },
+     "referenceArtifactCount": 1,
+     "status": "compared",
+     "suppression": {
+      "artifactCount": 1,
+      "distinctHashes": {
+       "exact": 5,
+       "normalized": 5,
+       "classes": 4
+      },
+      "status": "supplied"
+     }
+    }
+   }
+  },
+  {
+   "id": "tc-mode-mismatch-three-on-two",
+   "tags": [
+    "three-channel",
+    "test-only-profile",
+    "mode-mismatch"
+   ],
+   "description": "Three-channel modes with two-channel Go catalogues: rejected with mode-mismatch.",
+   "testOnlyProfile": true,
+   "derivation": "hand",
+   "comparisonConfig": {
+    "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiLCJjbGFzc2VzIl0sIm1pblJlZ2lvbkRpc3RpbmN0SGFzaGVzIjoyLCJtZXJnZUdhcCI6NCwibWF4U2VlZHNQZXJNb2RlIjoxMDAwMDAsIm1heFJlZ2lvbnNQZXJNb2RlIjoxMDAwLCJzdXBwcmVzc2lvbkNhdGFsb2d1ZVNoYTI1NiI6Im5vbmUifQo="
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "a.go",
+      "source": "../extraction-vectors/go.json#go-format-a"
+     }
+    ],
+    "sha256": "74ea0ef4fcdc6fc942306eb87882d7dfac2c48211e4b4a1a1d77c1caa0d2f164",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 41,
+       "id": "a.go",
+       "sha256": "66b27e4b006c89b0f66411d35fd02d6159cdfae0eb1ea64093679757f7bdb57e",
+       "status": "ok",
+       "tokenCount": 17,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "67961df97caa2439",
+           "position": 1,
+           "span": [
+            5,
+            13
+           ]
+          },
+          {
+           "hash": "0dada62e34aa91f9",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "20ac96beed28cc03",
+           "position": 5,
+           "span": [
+            12,
+            24
+           ]
+          },
+          {
+           "hash": "232b8fa7b06e08de",
+           "position": 8,
+           "span": [
+            19,
+            36
+           ]
+          },
+          {
+           "hash": "08c771e25647f35f",
+           "position": 12,
+           "span": [
+            35,
+            40
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "22641673c2f08ccb",
+           "position": 2,
+           "span": [
+            8,
+            17
+           ]
+          },
+          {
+           "hash": "1b78a516202f7860",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "80b8029a7bc9895d",
+           "position": 7,
+           "span": [
+            17,
+            34
+           ]
+          },
+          {
+           "hash": "2349273c2f66e02d",
+           "position": 9,
+           "span": [
+            23,
+            38
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "b.go",
+      "source": "../extraction-vectors/go.json#go-format-b"
+     }
+    ],
+    "sha256": "f0c4a0be2d16d289643e590873e9e3cb58a8c4a40279b146b4fa726db3bde899",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 68,
+       "id": "b.go",
+       "sha256": "2040f8a6a89ffb19cf8679237c132caf505b0184bbce7dffdf7c988162e3df96",
+       "status": "ok",
+       "tokenCount": 17,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "67961df97caa2439",
+           "position": 1,
+           "span": [
+            18,
+            25
+           ]
+          },
+          {
+           "hash": "0dada62e34aa91f9",
+           "position": 4,
+           "span": [
+            23,
+            33
+           ]
+          },
+          {
+           "hash": "20ac96beed28cc03",
+           "position": 5,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "232b8fa7b06e08de",
+           "position": 8,
+           "span": [
+            30,
+            53
+           ]
+          },
+          {
+           "hash": "08c771e25647f35f",
+           "position": 12,
+           "span": [
+            52,
+            68
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "22641673c2f08ccb",
+           "position": 2,
+           "span": [
+            21,
+            29
+           ]
+          },
+          {
+           "hash": "1b78a516202f7860",
+           "position": 4,
+           "span": [
+            23,
+            33
+           ]
+          },
+          {
+           "hash": "80b8029a7bc9895d",
+           "position": 7,
+           "span": [
+            29,
+            52
+           ]
+          },
+          {
+           "hash": "2349273c2f66e02d",
+           "position": 9,
+           "span": [
+            33,
+            54
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "rejected",
+    "rejectionCode": "mode-mismatch",
+    "rejectionSide": "comparison-config"
+   },
+   "expectedReport": {
+    "bodySha256": "d469996706122581dc61c10b70388e7b3e239ceeab38071e163a2cb8d00124b1",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "f0c4a0be2d16d289643e590873e9e3cb58a8c4a40279b146b4fa726db3bde899",
+      "comparisonConfigSha256": "b5745ea6bc591a8fa42b3797a7147028f71700964f340d49f80aac648399b122",
+      "referenceCatalogueSha256": "74ea0ef4fcdc6fc942306eb87882d7dfac2c48211e4b4a1a1d77c1caa0d2f164",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "rejection": {
+      "class": "mismatch",
+      "code": "mode-mismatch",
+      "side": "comparison-config"
+     },
+     "status": "rejected"
+    }
+   }
+  },
+  {
+   "id": "tc-mode-mismatch-two-on-three",
+   "tags": [
+    "three-channel",
+    "test-only-profile",
+    "mode-mismatch"
+   ],
+   "description": "The shipped two-channel modes with three-channel catalogues: rejected with mode-mismatch.",
+   "testOnlyProfile": true,
+   "derivation": "hand",
+   "comparisonConfig": {
+    "file": "comparison-config.json"
+   },
+   "reference": {
+    "fromRecords": {
+     "extractionConfigFile": "config-three-channel-test.json",
+     "artifacts": [
+      {
+       "id": "a.go",
+       "record": "rec-3ch-format-a"
+      }
+     ]
+    },
+    "sha256": "c4dc101de7a790b38ada0b88067853637f1310c26adab11b19b0753f82d7fb4c",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 41,
+       "channels": {
+        "classes": {
+         "fingerprints": [
+          {
+           "hash": "1531db600ab37a78",
+           "position": 2,
+           "span": [
+            8,
+            17
+           ]
+          },
+          {
+           "hash": "81e392ed7bf2855e",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "6c449a5b5f4a2bd1",
+           "position": 8,
+           "span": [
+            19,
+            36
+           ]
+          },
+          {
+           "hash": "574e82ae577c728f",
+           "position": 12,
+           "span": [
+            35,
+            40
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        },
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "02de796bc854f018",
+           "position": 2,
+           "span": [
+            8,
+            17
+           ]
+          },
+          {
+           "hash": "164b32c08286c22a",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "439a3b0bcf42ed6d",
+           "position": 6,
+           "span": [
+            14,
+            32
+           ]
+          },
+          {
+           "hash": "5566f00ca0407574",
+           "position": 9,
+           "span": [
+            23,
+            38
+           ]
+          },
+          {
+           "hash": "07955075063af0e0",
+           "position": 11,
+           "span": [
+            33,
+            40
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "5f61b7c519035189",
+           "position": 3,
+           "span": [
+            9,
+            18
+           ]
+          },
+          {
+           "hash": "19d537584fa284bb",
+           "position": 4,
+           "span": [
+            10,
+            22
+           ]
+          },
+          {
+           "hash": "0f39223287f62ea9",
+           "position": 7,
+           "span": [
+            17,
+            34
+           ]
+          },
+          {
+           "hash": "2ac2bde6370bd09c",
+           "position": 8,
+           "span": [
+            19,
+            36
+           ]
+          },
+          {
+           "hash": "574b6fc33a663bd3",
+           "position": 10,
+           "span": [
+            26,
+            38
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        }
+       },
+       "id": "a.go",
+       "sha256": "66b27e4b006c89b0f66411d35fd02d6159cdfae0eb1ea64093679757f7bdb57e",
+       "status": "ok",
+       "tokenCount": 17
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "channels": [
+       "exact",
+       "normalized",
+       "classes"
+      ],
+      "contract": "traceweave-token-winnow-draft-1",
+      "hash": "sha256-first8-u64be",
+      "k": 5,
+      "maxInputBytes": 1048576,
+      "profile": "go-tokens-three-channel-test",
+      "profileVersion": "draft-1",
+      "window": 4
+     },
+     "profile": {
+      "configSha256": "5ed0e945786bdb22092cdf80ca293aab3819a986187155243b745c71e7f46678",
+      "id": "go-tokens-three-channel-test",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "fromRecords": {
+     "extractionConfigFile": "config-three-channel-test.json",
+     "artifacts": [
+      {
+       "id": "b.go",
+       "record": "rec-3ch-format-b"
+      }
+     ]
+    },
+    "sha256": "39e9459f01d15dc2b7823f277ee5e27bcb370c0042d38a16142fe769f2fdbb65",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 68,
+       "channels": {
+        "classes": {
+         "fingerprints": [
+          {
+           "hash": "1531db600ab37a78",
+           "position": 2,
+           "span": [
+            21,
+            29
+           ]
+          },
+          {
+           "hash": "81e392ed7bf2855e",
+           "position": 4,
+           "span": [
+            23,
+            33
+           ]
+          },
+          {
+           "hash": "6c449a5b5f4a2bd1",
+           "position": 8,
+           "span": [
+            30,
+            53
+           ]
+          },
+          {
+           "hash": "574e82ae577c728f",
+           "position": 12,
+           "span": [
+            52,
+            68
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        },
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "02de796bc854f018",
+           "position": 2,
+           "span": [
+            21,
+            29
+           ]
+          },
+          {
+           "hash": "164b32c08286c22a",
+           "position": 4,
+           "span": [
+            23,
+            33
+           ]
+          },
+          {
+           "hash": "439a3b0bcf42ed6d",
+           "position": 6,
+           "span": [
+            26,
+            50
+           ]
+          },
+          {
+           "hash": "5566f00ca0407574",
+           "position": 9,
+           "span": [
+            33,
+            54
+           ]
+          },
+          {
+           "hash": "07955075063af0e0",
+           "position": 11,
+           "span": [
+            51,
+            68
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "5f61b7c519035189",
+           "position": 3,
+           "span": [
+            22,
+            30
+           ]
+          },
+          {
+           "hash": "19d537584fa284bb",
+           "position": 4,
+           "span": [
+            23,
+            33
+           ]
+          },
+          {
+           "hash": "0f39223287f62ea9",
+           "position": 7,
+           "span": [
+            29,
+            52
+           ]
+          },
+          {
+           "hash": "2ac2bde6370bd09c",
+           "position": 8,
+           "span": [
+            30,
+            53
+           ]
+          },
+          {
+           "hash": "574b6fc33a663bd3",
+           "position": 10,
+           "span": [
+            44,
+            54
+           ]
+          }
+         ],
+         "kgramCount": 13,
+         "partialWindow": false
+        }
+       },
+       "id": "b.go",
+       "sha256": "2040f8a6a89ffb19cf8679237c132caf505b0184bbce7dffdf7c988162e3df96",
+       "status": "ok",
+       "tokenCount": 17
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "channels": [
+       "exact",
+       "normalized",
+       "classes"
+      ],
+      "contract": "traceweave-token-winnow-draft-1",
+      "hash": "sha256-first8-u64be",
+      "k": 5,
+      "maxInputBytes": 1048576,
+      "profile": "go-tokens-three-channel-test",
+      "profileVersion": "draft-1",
+      "window": 4
+     },
+     "profile": {
+      "configSha256": "5ed0e945786bdb22092cdf80ca293aab3819a986187155243b745c71e7f46678",
+      "id": "go-tokens-three-channel-test",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "rejected",
+    "rejectionCode": "mode-mismatch",
+    "rejectionSide": "comparison-config"
+   },
+   "expectedReport": {
+    "bodySha256": "8610aa7f2d4a399f4a1f4ea5d24ecfa3bede9682c022185ea9e9d6b4111f6a36",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "39e9459f01d15dc2b7823f277ee5e27bcb370c0042d38a16142fe769f2fdbb65",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceCatalogueSha256": "c4dc101de7a790b38ada0b88067853637f1310c26adab11b19b0753f82d7fb4c",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "rejection": {
+      "class": "mismatch",
+      "code": "mode-mismatch",
+      "side": "comparison-config"
+     },
+     "status": "rejected"
     }
    }
   }

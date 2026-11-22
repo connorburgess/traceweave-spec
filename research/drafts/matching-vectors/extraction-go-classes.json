@@ -1,0 +1,727 @@
+{
+ "contract": "traceweave-token-winnow-draft-1",
+ "profile": "go-tokens",
+ "profileVersion": "draft-1",
+ "configFile": "../extraction-vectors/config-go.json",
+ "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+ "k": 5,
+ "window": 4,
+ "requiredCoverage": false,
+ "lexingCheck": "New synthetic inputs for the matching vectors. Token streams are produced by build_vectors.py and validated by ../extraction-vectors/check_vectors.py; see README.md.",
+ "vectors": [
+  {
+   "id": "mv-go-classes-a",
+   "tags": [
+    "classes"
+   ],
+   "description": "return/break/++ shape.",
+   "inputBase64": "cmV0dXJuIHggKyBmKDEpCmJyZWFrCngrKwo=",
+   "inputText": "return x + f(1)\nbreak\nx++\n",
+   "result": {
+    "status": "ok",
+    "tokenCount": 13,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "return",
+      "span": [
+       0,
+       6
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "x",
+      "span": [
+       7,
+       8
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "+",
+      "span": [
+       9,
+       10
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "f",
+      "span": [
+       11,
+       12
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       12,
+       13
+      ]
+     },
+     {
+      "class": "int",
+      "text": "1",
+      "span": [
+       13,
+       14
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       14,
+       15
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       15,
+       15
+      ],
+      "inserted": true
+     },
+     {
+      "class": "keyword",
+      "text": "break",
+      "span": [
+       16,
+       21
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       21,
+       21
+      ],
+      "inserted": true
+     },
+     {
+      "class": "ident",
+      "text": "x",
+      "span": [
+       22,
+       23
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "++",
+      "span": [
+       23,
+       25
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       25,
+       25
+      ],
+      "inserted": true
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "a0241e2eaee19e55",
+        "span": [
+         0,
+         13
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "0bd4ccbe6d91d72d",
+        "span": [
+         7,
+         14
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "464bbbc5c5924154",
+        "span": [
+         9,
+         15
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "6b83406c44a4d76e",
+        "span": [
+         11,
+         15
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "187eb9e357cbf8d0",
+        "span": [
+         12,
+         21
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "cd5d111daed78e50",
+        "span": [
+         13,
+         21
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "368c90f7aaac0ea9",
+        "span": [
+         14,
+         23
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "a24452373ce50227",
+        "span": [
+         15,
+         25
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "cb19e12bd288acb2",
+        "span": [
+         16,
+         25
+        ]
+       }
+      ],
+      "windowSelections": [
+       1,
+       1,
+       4,
+       4,
+       4,
+       6
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 1,
+        "hash": "0bd4ccbe6d91d72d",
+        "span": [
+         7,
+         14
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "187eb9e357cbf8d0",
+        "span": [
+         12,
+         21
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "368c90f7aaac0ea9",
+        "span": [
+         14,
+         23
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "return",
+       "",
+       "+",
+       "",
+       "(",
+       "",
+       ")",
+       ";",
+       "break",
+       ";",
+       "",
+       "++",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "e165dd1284545ed8",
+        "span": [
+         0,
+         13
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "2c1866446e7c27ad",
+        "span": [
+         7,
+         14
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "76c0be64a4ce5f04",
+        "span": [
+         9,
+         15
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "80784308f5651fbe",
+        "span": [
+         11,
+         15
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "4414599baa528178",
+        "span": [
+         12,
+         21
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "0376a6863145edd6",
+        "span": [
+         13,
+         21
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "308bd6ae344c15fc",
+        "span": [
+         14,
+         23
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "c0ad93bab255cf3c",
+        "span": [
+         15,
+         25
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "b217f24326a7116e",
+        "span": [
+         16,
+         25
+        ]
+       }
+      ],
+      "windowSelections": [
+       1,
+       1,
+       5,
+       5,
+       5,
+       5
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 1,
+        "hash": "2c1866446e7c27ad",
+        "span": [
+         7,
+         14
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "0376a6863145edd6",
+        "span": [
+         13,
+         21
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "mv-go-classes-b",
+   "tags": [
+    "classes"
+   ],
+   "description": "Same classes as mv-go-classes-a with other keywords and operators.",
+   "inputBase64": "ZGVmZXIgeSAtIGcoMikKY29udGludWUKeS0tCg==",
+   "inputText": "defer y - g(2)\ncontinue\ny--\n",
+   "result": {
+    "status": "ok",
+    "tokenCount": 13,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "defer",
+      "span": [
+       0,
+       5
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "y",
+      "span": [
+       6,
+       7
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "-",
+      "span": [
+       8,
+       9
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "g",
+      "span": [
+       10,
+       11
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       11,
+       12
+      ]
+     },
+     {
+      "class": "int",
+      "text": "2",
+      "span": [
+       12,
+       13
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       13,
+       14
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       14,
+       14
+      ],
+      "inserted": true
+     },
+     {
+      "class": "keyword",
+      "text": "continue",
+      "span": [
+       15,
+       23
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       23,
+       23
+      ],
+      "inserted": true
+     },
+     {
+      "class": "ident",
+      "text": "y",
+      "span": [
+       24,
+       25
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "--",
+      "span": [
+       25,
+       27
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       27,
+       27
+      ],
+      "inserted": true
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "13429d78a5570870",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "8b922a546862865d",
+        "span": [
+         6,
+         13
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "fdeff6c85227a9df",
+        "span": [
+         8,
+         14
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "4b7579d6ecb2f340",
+        "span": [
+         10,
+         14
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "cac4b5c81afeb706",
+        "span": [
+         11,
+         23
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "75dd9cc77f59514f",
+        "span": [
+         12,
+         23
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "38df58d3ee4f2cd4",
+        "span": [
+         13,
+         25
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "aa6bb12584575b2f",
+        "span": [
+         14,
+         27
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "eec5bc8fe7367711",
+        "span": [
+         15,
+         27
+        ]
+       }
+      ],
+      "windowSelections": [
+       0,
+       3,
+       3,
+       6,
+       6,
+       6
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 0,
+        "hash": "13429d78a5570870",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "4b7579d6ecb2f340",
+        "span": [
+         10,
+         14
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "38df58d3ee4f2cd4",
+        "span": [
+         13,
+         25
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "defer",
+       "",
+       "-",
+       "",
+       "(",
+       "",
+       ")",
+       ";",
+       "continue",
+       ";",
+       "",
+       "--",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "172fd18a332ab7e1",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "06fc69925dfe68b1",
+        "span": [
+         6,
+         13
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "a0de7dd3be063c8b",
+        "span": [
+         8,
+         14
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "80784308f5651fbe",
+        "span": [
+         10,
+         14
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "79109f1659ab929e",
+        "span": [
+         11,
+         23
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "a23d140078e49ae0",
+        "span": [
+         12,
+         23
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "8683ea6063bf2394",
+        "span": [
+         13,
+         25
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "018ae8924fb4ffdf",
+        "span": [
+         14,
+         27
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "157d212353c174d6",
+        "span": [
+         15,
+         27
+        ]
+       }
+      ],
+      "windowSelections": [
+       1,
+       1,
+       4,
+       4,
+       7,
+       7
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 1,
+        "hash": "06fc69925dfe68b1",
+        "span": [
+         6,
+         13
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "79109f1659ab929e",
+        "span": [
+         11,
+         23
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "018ae8924fb4ffdf",
+        "span": [
+         14,
+         27
+        ]
+       }
+      ]
+     }
+    }
+   }
+  }
+ ]
+}

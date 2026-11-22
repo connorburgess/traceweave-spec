@@ -32,7 +32,15 @@ CATALOGUE_VERSION = "traceweave-catalogue-draft-2"
 REPORT_VERSION = "traceweave-report-draft-2"
 COMPARISON_ID = "traceweave-seed-merge-draft-2"
 CHANNELS = ("exact", "normalized")
-SUPPORTED_PROFILES = {("go-tokens", "draft-1"), ("rust2024-tokens", "draft-1")}
+SUPPORTED_PROFILES = {("go-tokens", "draft-1"), ("rust2024-tokens", "draft-1"),
+                      ("go-tokens-three-channel-test", "draft-1")}   # last: TEST-ONLY, flagged in vectors
+# Declared channel lists (contract §2b). Comparison `modes` must equal one of them.
+CHANNEL_LISTS = {"go-tokens": ["exact", "normalized"], "rust2024-tokens": ["exact", "normalized"],
+                 "go-tokens-three-channel-test": ["exact", "normalized", "classes"]}
+CH3 = ["exact", "normalized", "classes"]
+TEST_CONTEXT = [True]   # the builder accepts the TEST-ONLY list except when writing negatives
+CONFIG_3CH = (b'{"contract":"traceweave-token-winnow-draft-1","profile":"go-tokens-three-channel-test","profileVersion":"draft-1",'
+              b'"channels":["exact","normalized","classes"],"k":5,"window":4,"hash":"sha256-first8-u64be","maxInputBytes":1048576}\n')
 
 # ------------------------------------------------------------------ mini lexers
 # Only the constructs used by the new synthetic inputs. Their output is validated
@@ -135,11 +143,16 @@ def norm_value(lang, cls, text):
     return text
 
 
+def channel_value(ch, lang, cls, text):
+    """exact: the text; normalized: §6; classes (TEST-ONLY third channel): the empty string, so only classes count."""
+    return text if ch == "exact" else norm_value(lang, cls, text) if ch == "normalized" else ""
+
+
 def channels_for(tokens, cfg, lang):
     k, w = cfg["k"], cfg["window"]
     out = {}
-    for ch in CHANNELS:
-        values = [t["text"] if ch == "exact" else norm_value(lang, t["class"], t["text"]) for t in tokens]
+    for ch in cfg["channels"]:
+        values = [channel_value(ch, lang, t["class"], t["text"]) for t in tokens]
         kg = []
         for i in range(max(0, len(tokens) - k + 1)):
             buf = bytearray(lp(DOMAIN) + lp(cfg["profile"].encode()) + lp(cfg["profileVersion"].encode())
@@ -161,7 +174,7 @@ def channels_for(tokens, cfg, lang):
                         best = p
                 picks.append(best)
             partial = m < w
-        c = {"values": values} if ch == "normalized" else {}
+        c = {"values": values} if ch != "exact" else {}
         c.update({"kgrams": kg, "windowSelections": picks, "partialWindow": partial,
                   "fingerprints": [dict(kg[p]) for p in sorted(set(picks))]})
         out[ch] = c
@@ -334,6 +347,32 @@ NEW_GO = [
     ("mv-go-shadow-b", ["shadowing"], "Inner block shadows x instead; same normalized token stream as shadow-a.", GO_SHADOW_B),
     ("mv-go-periodic6", ["repeated-hash"], "x++ six times (periodic hashes).", GO_PERIODIC6),
 ]
+# Inputs for the TEST-ONLY three-channel profile (contract §2b): same class sequence, different keywords and
+# operators, non-periodic, 13 tokens (9 k-grams > 2w - 1, so at least two distinct fingerprints).
+NEW_GO_CLASSES = [
+    ("mv-go-classes-a", ["classes"], "return/break/++ shape.", "return x + f(1)\nbreak\nx++\n"),
+    ("mv-go-classes-b", ["classes"], "Same classes as mv-go-classes-a with other keywords and operators.",
+     "defer y - g(2)\ncontinue\ny--\n"),
+]
+NG_ = "../extraction-vectors/go.json"
+REC3 = {  # TEST-ONLY three-channel records: id -> Go token source (contract §2b)
+    "rec-3ch-format-a": f"{NG_}#go-format-a", "rec-3ch-format-b": f"{NG_}#go-format-b",
+    "rec-3ch-rename-a": f"{NG_}#go-rename-a", "rec-3ch-rename-b": f"{NG_}#go-rename-b",
+    "rec-3ch-classes-a": "extraction-go-classes.json#mv-go-classes-a",
+    "rec-3ch-classes-b": "extraction-go-classes.json#mv-go-classes-b",
+    "rec-3ch-insufficient": f"{NG_}#go-short", "rec-3ch-lexical-error": f"{NG_}#go-err-unterminated-string",
+}
+
+
+def rederive(result, cfg):
+    """Result of the same Go token stream under another channel list (TEST-ONLY three-channel profile)."""
+    if result["status"] == "error":
+        return result
+    toks = result["tokens"]
+    return {"status": "ok" if len(toks) >= cfg["k"] else "insufficient-tokens", "tokenCount": len(toks),
+            "tokens": toks, "channels": channels_for(toks, cfg, "go")}
+
+
 NEW_RUST = [
     ("mv-rust-sum", ["function"], "Original Rust function.", RUST_SUM),
     ("mv-rust-host", ["large-host"], "Rust host file containing RUST_SUM verbatim after unrelated items.", RUST_HOST),
@@ -369,7 +408,7 @@ def catalogue_entry(aid, rec):
     e["channels"] = {ch: {"fingerprints": [{"hash": f["hash"], "position": f["position"], "span": list(f["span"])}
                                            for f in res["channels"][ch]["fingerprints"]],
                           "kgramCount": len(res["channels"][ch]["kgrams"]),
-                          "partialWindow": res["channels"][ch]["partialWindow"]} for ch in CHANNELS}
+                          "partialWindow": res["channels"][ch]["partialWindow"]} for ch in res["channels"]}
     return e
 
 
@@ -400,10 +439,11 @@ def synthetic_catalogue(cfg_raw, cfg, aid, m, fps):
 
 # ------------------------------------------------------------------ comparison (contract §4–§5)
 
-def comparison_config_bytes(min_hashes=2, gap=4, max_seeds=100000, max_regions=1000, supp="none"):
-    return ('{"comparison":"%s","modes":["exact","normalized"],"minRegionDistinctHashes":%d,"mergeGap":%d,'
+def comparison_config_bytes(min_hashes=2, gap=4, max_seeds=100000, max_regions=1000, supp="none",
+                            modes=("exact", "normalized")):
+    return ('{"comparison":"%s","modes":[%s],"minRegionDistinctHashes":%d,"mergeGap":%d,'
             '"maxSeedsPerMode":%d,"maxRegionsPerMode":%d,"suppressionCatalogueSha256":"%s"}\n'
-            % (COMPARISON_ID, min_hashes, gap, max_seeds, max_regions, supp)).encode()
+            % (COMPARISON_ID, ",".join('"%s"' % m for m in modes), min_hashes, gap, max_seeds, max_regions, supp)).encode()
 
 
 COMPARISON_CONFIG = comparison_config_bytes()
@@ -423,13 +463,14 @@ def parse_comparison_config(raw: bytes):
         obj = json.loads(text, object_pairs_hook=pairs, parse_float=lambda s: (_ for _ in ()).throw(ValueError()),
                          parse_constant=lambda s: (_ for _ in ()).throw(ValueError()))
         assert type(obj) is dict and list(obj) == CC_KEYS
-        assert obj["comparison"] == COMPARISON_ID and obj["modes"] == ["exact", "normalized"]
+        assert obj["comparison"] == COMPARISON_ID and obj["modes"] in list(CHANNEL_LISTS.values())
+        assert TEST_CONTEXT[0] or obj["modes"] != CH3
         for key in ("minRegionDistinctHashes", "mergeGap", "maxSeedsPerMode", "maxRegionsPerMode"):
             assert type(obj[key]) is int and 1 <= obj[key] <= 2**32 - 1
         s = obj["suppressionCatalogueSha256"]
         assert type(s) is str and (s == "none" or re.fullmatch(r"[0-9a-f]{64}", s))
         assert comparison_config_bytes(obj["minRegionDistinctHashes"], obj["mergeGap"], obj["maxSeedsPerMode"],
-                                       obj["maxRegionsPerMode"], s) == raw
+                                       obj["maxRegionsPerMode"], s, obj["modes"]) == raw
         return obj
     except (AssertionError, ValueError, UnicodeDecodeError, KeyError, TypeError):
         return None
@@ -555,15 +596,18 @@ def compare(ref_raw, cand_raw, cc_raw, supp_raw=None):
     for side in others:
         if cats[side]["profile"]["configSha256"] != R["profile"]["configSha256"]:
             return reject("mismatch", "config-mismatch", side)
+    modes = cc["modes"]
+    if modes != R["extractionConfig"]["channels"]:
+        return reject("mismatch", "mode-mismatch", "comparison-config")
     C = cats["candidate"]
-    common = {ch: set() for ch in CHANNELS}
+    common = {ch: set() for ch in modes}
     if "suppression" in cats:
         for a in cats["suppression"]["artifacts"]:
             if a["status"] == "ok":
-                for ch in CHANNELS:
+                for ch in modes:
                     common[ch] |= {f["hash"] for f in a["channels"][ch]["fingerprints"]}
         suppression = {"artifactCount": len(cats["suppression"]["artifacts"]),
-                       "distinctHashes": {ch: len(common[ch]) for ch in CHANNELS}, "status": "supplied"}
+                       "distinctHashes": {ch: len(common[ch]) for ch in modes}, "status": "supplied"}
     else:
         suppression = {"status": "none"}
     pairs = []
@@ -579,7 +623,7 @@ def compare(ref_raw, cand_raw, cc_raw, supp_raw=None):
                 p.update({"outcome": {"class": "abstain", "code": "insufficient-tokens"}, "status": "not-compared"})
             else:
                 p.update({"modes": {ch: mode_result(ra["channels"][ch]["fingerprints"], ca["channels"][ch]["fingerprints"],
-                                                    common[ch], cc) for ch in CHANNELS}, "status": "compared"})
+                                                    common[ch], cc) for ch in modes}, "status": "compared"})
             pairs.append(p)
     body.update({"candidateArtifactCount": len(C["artifacts"]),
                  "comparison": {k: cc[k] for k in CC_KEYS} | {"parameterStatus": "experimental"},
@@ -695,11 +739,14 @@ def main():
 
     ext_file("extraction-go.json", "config-go.json", go_cfg_raw, go_cfg, "go", NEW_GO)
     ext_file("extraction-rust.json", "config-rust.json", rust_cfg_raw, rust_cfg, "rust", NEW_RUST)
+    ext_file("extraction-go-classes.json", "config-go.json", go_cfg_raw, go_cfg, "go", NEW_GO_CLASSES)
+    (HERE / "config-three-channel-test.json").write_bytes(CONFIG_3CH)
+    cfg3 = json.loads(CONFIG_3CH)
 
     sources = {}
     for f in ["extraction-go.json", "extraction-rust.json", "../extraction-vectors/go.json",
               "../extraction-vectors/rust.json", "../extraction-vectors/limits-go.json",
-              "../extraction-vectors/exclusion-rule.json"]:
+              "../extraction-vectors/exclusion-rule.json", "extraction-go-classes.json"]:
         d, raw, cfg = load_extraction(HERE / f)
         for v in d["vectors"]:
             sources[f"{f}#{v['id']}"] = (v, raw, cfg)
@@ -732,6 +779,21 @@ def main():
     ]
     for _, raw, _ in negatives:
         assert parse_comparison_config(raw) is None, raw
+    TEST_CONTEXT[0] = False
+    chneg = [
+        ("modes-three-reordered", comparison_config_bytes(modes=["exact", "classes", "normalized"]), "not a declared channel list (order)"),
+        ("modes-duplicate", comparison_config_bytes(modes=["exact", "exact"]), "duplicate mode"),
+        ("modes-unknown-channel", comparison_config_bytes(modes=["exact", "folded"]), "no implemented profile declares this list"),
+        ("modes-text-list-unimplemented", comparison_config_bytes(modes=["exact", "folded", "skeleton"]),
+         "the text profiles' list; rejected here because no text profile is implemented by this checker"),
+        ("modes-test-list-outside-tests", comparison_config_bytes(modes=CH3),
+         "the TEST-ONLY three-channel list; accepted only for vectors flagged testOnlyProfile"),
+        ("modes-empty", comparison_config_bytes(modes=[]), "empty modes"),
+    ]
+    assert all(parse_comparison_config(b) is None for _, b, _ in chneg)
+    TEST_CONTEXT[0] = True
+    (HERE / "comparison-config-negative-channels.json").write_text(json.dumps(
+        [{"id": i, "reason": r, "bytesBase64": base64.b64encode(b).decode()} for i, b, r in chneg], indent=1) + "\n")
     (HERE / "comparison-config-negative.json").write_text(json.dumps(
         [{"id": i, "reason": r, "bytesBase64": base64.b64encode(b).decode()} for i, b, r in negatives], indent=1) + "\n")
 
@@ -1102,6 +1164,37 @@ def main():
             pair("tiny.go", "prec.go", status="not-compared", code="candidate-extraction-error")]},
         cc=None)
 
+    # --- channel lists (contract §2b; TEST-ONLY three-channel profile; hand-derived before computation) ----
+    def r3(*items):
+        return ("records3", list(items))
+    CC3 = comparison_config_bytes(modes=CH3)
+    vec("tc-rename", ["three-channel", "test-only-profile"],
+        "go-rename-a/b under the TEST-ONLY three-channel profile: exact does not match; normalized and classes match "
+        "completely on diagonal 0.",
+        r3(("a.go", "rec-3ch-rename-a")), r3(("b.go", "rec-3ch-rename-b")),
+        {"status": "compared", "pairs": [pair("a.go", "b.go", {"exact": ex(codeIn=NOMATCH, reportable=0),
+                                                              "normalized": exhaust(), "classes": exhaust()})]}, cc=CC3)
+    vec("tc-classes-only", ["three-channel", "test-only-profile"],
+        "Same class sequence, different keywords and operators: only the third channel matches. Normalized shares at most "
+        "one k-gram (\"\" ( \"\" ) ;).",
+        r3(("a.go", "rec-3ch-classes-a")), r3(("b.go", "rec-3ch-classes-b")),
+        {"status": "compared", "pairs": [pair("a.go", "b.go", {
+            "exact": ex(codeIn=["no-shared-fingerprints"], regions=0),
+            "normalized": ex(codeIn=NOMATCH, reportable=0), "classes": exhaust()})]}, cc=CC3)
+    vec("tc-format-suppressed", ["three-channel", "test-only-profile", "suppression"],
+        "go-format-a/b with a three-channel suppression catalogue holding go-format-a itself: every hash in every mode is "
+        "common, so each mode is common-only, and suppression.distinctHashes has one key per mode.",
+        r3(("a.go", "rec-3ch-format-a")), r3(("b.go", "rec-3ch-format-b")),
+        {"status": "compared", "pairs": [pair("a.go", "b.go", {ch: ex(codeIn=["common-only"], reportable=0, regions=1)
+                                                              for ch in CH3})]},
+        supp=r3(("s.go", "rec-3ch-format-a")), cc="suppress-supplied-3ch")
+    vec("tc-mode-mismatch-three-on-two", ["three-channel", "test-only-profile", "mode-mismatch"],
+        "Three-channel modes with two-channel Go catalogues: rejected with mode-mismatch.",
+        [("a.go", f"{NG}#go-format-a")], [("b.go", f"{NG}#go-format-b")], rej("mode-mismatch", "comparison-config"), cc=CC3)
+    vec("tc-mode-mismatch-two-on-three", ["three-channel", "test-only-profile", "mode-mismatch"],
+        "The shipped two-channel modes with three-channel catalogues: rejected with mode-mismatch.",
+        r3(("a.go", "rec-3ch-format-a")), r3(("b.go", "rec-3ch-format-b")), rej("mode-mismatch", "comparison-config"))
+
     cc_cache = {}
     out = []
     for v in V:
@@ -1110,6 +1203,18 @@ def main():
             if arts is None:
                 continue
             texts[side] = {}
+            if isinstance(arts, tuple) and arts[0] == "records3":
+                items = arts[1]
+                cb = catalogue_from_records(CONFIG_3CH, [(a, record_bytes(CONFIG_3CH, base64.b64decode(sources[REC3[r]][0]["inputBase64"]),
+                                                                          rederive(sources[REC3[r]][0]["result"], cfg3)))
+                                                         for a, r in items])
+                for a, r in items:
+                    texts[side][a] = base64.b64decode(sources[REC3[r]][0]["inputBase64"]).decode("utf-8", "replace")
+                cats[side] = {"fromRecords": {"extractionConfigFile": "config-three-channel-test.json",
+                                              "artifacts": [{"id": a, "record": r} for a, r in items]},
+                              "sha256": sha(cb), "canonical": json.loads(cb)}
+                bytes_[side] = cb
+                continue
             if isinstance(arts, tuple) and arts[0] == "synthetic":
                 _, aid, m, fps = arts
                 cat = synthetic_catalogue(go_cfg_raw, go_cfg, aid, m, fps)
@@ -1161,6 +1266,8 @@ def main():
         elif v["cc"] == "suppress-other":
             cc_raw = comparison_config_bytes(supp=sha(canonical(build_catalogue(
                 go_cfg_raw, go_cfg, [catalogue_entry(a, sources[s][0]) for a, s in BOILER]))))
+        elif v["cc"] == "suppress-supplied-3ch":
+            cc_raw = comparison_config_bytes(supp=sha(bytes_["suppression"]), modes=CH3)
         elif v["cc"] == "suppress-supplied":
             cc_raw = comparison_config_bytes(supp=sha(bytes_["suppression"]))
         elif v["cc"] is None:
@@ -1170,7 +1277,8 @@ def main():
         body = compare(bytes_["reference"], bytes_["candidate"], cc_raw, bytes_.get("suppression"))
         check_hand(v["id"], v["hand"], body, texts)
         derivs = {e["derivation"] for p in v["hand"].get("pairs", []) for e in p.get("modes", {}).values()}
-        rec = {"id": v["id"], "tags": v["tags"], "description": v["description"],
+        test3 = "three-channel" in v["tags"]
+        rec = {"id": v["id"], "tags": v["tags"], "description": v["description"], **({"testOnlyProfile": True} if test3 else {}),
                "derivation": "hand" if derivs <= {HAND} else "mixed",
                "comparisonConfig": ({"file": "comparison-config.json"} if cc_raw == COMPARISON_CONFIG
                                     else {"bytesBase64": base64.b64encode(cc_raw).decode()}),
@@ -1192,7 +1300,8 @@ def main():
                                    "suppression-catalogue-mismatch", "independent-same-task", "shadowing",
                                    "pair-precedence", "match-over-ambiguous", "ambiguous-over-weaker",
                                    "below-over-common", "mixed-common-region", "invariance", "ambiguity-before-cap",
-                                   "suppression-artifact-count", "suppression-order", "input-too-large"}),
+                                   "suppression-artifact-count", "suppression-order", "input-too-large",
+                                   "three-channel", "mode-mismatch"}),
            "vectors": out}
     (HERE / "matching.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
     build_records(sources, out)
@@ -1257,8 +1366,7 @@ def record_bytes(cfg_raw, data, result):
                 o["inserted"] = True
             toks.append(o)
         r = {"status": result["status"], "tokenCount": result["tokenCount"], "tokens": toks,
-             "channels": {"exact": chan(result["channels"]["exact"], False),
-                          "normalized": chan(result["channels"]["normalized"], True)}}
+             "channels": {ch: chan(c, ch != "exact") for ch, c in result["channels"].items()}}
     rec["result"] = r
     return (json.dumps(rec, separators=(",", ":"), ensure_ascii=False) + "\n").encode("utf-8")
 
@@ -1282,7 +1390,7 @@ def catalogue_from_records(cfg_raw, items):
             e["channels"] = {ch: {"fingerprints": [{"hash": f["hash"], "position": f["position"], "span": f["span"]}
                                                    for f in res["channels"][ch]["fingerprints"]],
                                   "kgramCount": max(0, len(res["channels"][ch].get("tokenIndices", res["tokens"])) - cfg["k"] + 1),
-                                  "partialWindow": res["channels"][ch]["partialWindow"]} for ch in CHANNELS}
+                                  "partialWindow": res["channels"][ch]["partialWindow"]} for ch in cfg["channels"]}
         entries.append(e)
     return canonical(build_catalogue(cfg_raw, cfg, entries))
 
@@ -1321,6 +1429,19 @@ def build_records(sources, matching_out):
     go_cfg_raw = (EXV / "config-go.json").read_bytes()
     UC_INPUT = b"x := 1\n"
     records, by_id = [], {}
+    cfg3 = json.loads(CONFIG_3CH)
+    for rid, src in REC3.items():
+        rec, _, _ = sources[src]
+        data = base64.b64decode(rec["inputBase64"])
+        rb = record_bytes(CONFIG_3CH, data, rederive(rec["result"], cfg3))
+        by_id[rid] = (rb, CONFIG_3CH)
+        records.append({"id": rid, "tags": ["three-channel", "test-only-profile"],
+                        "description": "TEST-ONLY three-channel profile go-tokens-three-channel-test (contract §2b): the token "
+                                       "stream of the source vector, re-derived under channels exact, normalized, classes.",
+                        "source": src, "rederivedFromTokens": True, "derivation": "hand",
+                        "configFile": "config-three-channel-test.json", "configSha256": sha(CONFIG_3CH),
+                        "inputBase64": rec["inputBase64"], "expectedRecordSha256": sha(rb),
+                        "expectedRecordText": rb.decode("utf-8")})
     for rid, tags, src, desc in specs:
         if "config-negative.json" in src:
             n = negs[src.split("#")[1]]
@@ -1373,6 +1494,15 @@ def build_records(sources, matching_out):
         ("build-wrong-config-bytes", "config-go-limit16.json", [("a.go", "rec-go-ok")],
          "the record's configSha256 is not the digest of the configuration supplied to the builder"),
     ]
+    cb = catalogue_from_records(CONFIG_3CH, [(a, by_id[r][0]) for a, r in
+                                             (("a.go", "rec-3ch-format-a"), ("bad.go", "rec-3ch-lexical-error"),
+                                              ("short.go", "rec-3ch-insufficient"))])
+    cats.append({"id": "cat-three-channel-test", "testOnlyProfile": True,
+                 "extractionConfigFile": "config-three-channel-test.json",
+                 "artifacts": [{"id": a, "record": r} for a, r in (("a.go", "rec-3ch-format-a"), ("bad.go", "rec-3ch-lexical-error"),
+                                                                    ("short.go", "rec-3ch-insufficient"))],
+                 "expectedCatalogueSha256": sha(cb),
+                 "note": "TEST-ONLY three-channel profile: every entry has channels exact, normalized, classes."})
     rej = []
     for rid, cfgname, items, reason in rejections:
         try:

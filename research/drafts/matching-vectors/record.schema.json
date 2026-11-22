@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/connorburgess/traceweave-spec/blob/main/research/drafts/matching-vectors/record.schema.json",
   "title": "Traceweave draft extraction record (traceweave-extraction-record-draft-1)",
-  "description": "Draft research schema, not a file in schemas/. One canonical record per extraction (catalogue-report-contract.md section 2a). Structure only: key order, string escaping, the final LF and value consistency are enforced by check_matching.py. Lexical error codes are checked against the profile's closed list there; the enum here is the union of both profiles. The normalized channel carries tokenIndices only for profiles that declare normalizedExclusions (extraction OD-23); its presence per profile is enforced by check_matching.py.",
+  "description": "Draft research schema, not a file in schemas/. One canonical record per extraction (catalogue-report-contract.md section 2a). Structure only: key order, string escaping, the final LF and value consistency are enforced by check_matching.py. Lexical error codes are checked against the profile's closed list there; the enum here is the union of both profiles. The normalized channel carries tokenIndices only for profiles that declare normalizedExclusions (extraction OD-23); its presence per profile is enforced by check_matching.py. channels holds the profile's declared channel list in order (contract section 2b): exact without values, every other channel with values.",
   "oneOf": [
     {
       "$ref": "#/$defs/examined"
@@ -188,18 +188,16 @@
         },
         "channels": {
           "type": "object",
-          "additionalProperties": false,
           "required": [
-            "exact",
-            "normalized"
+            "exact"
           ],
           "properties": {
             "exact": {
               "$ref": "#/$defs/channel"
-            },
-            "normalized": {
-              "$ref": "#/$defs/normalizedChannel"
             }
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/normalizedChannel"
           }
         }
       }
