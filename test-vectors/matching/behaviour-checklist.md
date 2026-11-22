@@ -1,6 +1,6 @@
 # Behavioural conformance checklist (amendment A6)
 
-Status: draft, 2026-11-22, amended by A7. Companion to [spec/catalogue-report.md](../../spec/catalogue-report.md) §6.8 (rules B1–B13; B10 as refined by A8). Item numbers are stable: A7 rewords items 36, 37, 43 and 46 and appends items 47–58; A8 rewords item 55 and appends items 59–60; A9 rewords items 42, 46 and 47 and appends item 61; A10 appends items 62–64; A11 appends item 65. These behaviours cannot be pinned by vectors. Each item is one command with an observable outcome: an exit status, files present or absent, file modes, or output bytes. Both implementations should script every item. The I2 probe `xcheck/probes/i2_behaviour.py` on `merge-i2` is the current executable record.
+Status: draft, 2026-11-22, amended by A7. Companion to [spec/catalogue-report.md](../../spec/catalogue-report.md) §6.8 (rules B1–B13; B10 as refined by A8). Item numbers are stable: A7 rewords items 36, 37, 43 and 46 and appends items 47–58; A8 rewords item 55 and appends items 59–60; A9 rewords items 42, 46 and 47 and appends item 61; A10 appends items 62–64; A11 appends item 65; A12 appends item 66. These behaviours cannot be pinned by vectors. Each item is one command with an observable outcome: an exit status, files present or absent, file modes, or output bytes. Both implementations should script every item. The I2 probe `xcheck/probes/i2_behaviour.py` on `merge-i2` is the current executable record.
 
 ## Operations
 
@@ -146,4 +146,12 @@ In each item, the "edit" changes one compiled source file so that the `go-identi
 
     A document whose commit and body disagree (`A` with B's body, or `B` with A's body) fails the item. Repeat with the change made to the working tree or the index instead of the ref.
 
-**Item count: 65.** Items 16–24 are nine marker items.
+### Private read-only export (A12: B10 point 5)
+
+66. **Export edited between verification and compilation.** Run the documented verifying build step in a clean clone at commit `A`. After the step has verified its private export and before compilation finishes, edit one compiled file **in the export** so that the `go-identical` body changes, as the building user would be able to. Use a hook or wrapper that pauses the step. Restoring permissions first is part of the attempt, because the export is read-only. The outcome is one of:
+    - the build refuses to stamp, so `DOC` gives exit 2 and no document;
+    - the edit was impossible (permission denied), and the stamped `DOC` names `A` with a body equal to `bodySha256`.
+
+    A document naming `A` with the edited body fails the item. An edit that is reverted before the post-compile re-verification, by a writer the operating system does not record, is out of scope (B10).
+
+**Item count: 66.** Items 16–24 are nine marker items.
