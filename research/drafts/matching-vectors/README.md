@@ -13,6 +13,7 @@ Status: draft for review, 2026-11-22. These vectors accompany the [catalogue and
 | `comparison-config-negative.json` | 22 configurations that MUST be rejected |
 | `extraction-go.json`, `extraction-rust.json` | 17 new synthetic inputs (15 Go, 2 Rust) in the [extraction vector](../extraction-vectors/README.md) format, with the shipped 1 MiB configurations |
 | `matching.json` | 76 matching vectors |
+| `behaviour-checklist.md` | A6: 46 numbered behavioural conformance items (working-tree markers, override scope, exit statuses, location values, stdout, provenance, atomic writes), each an observable command outcome, for implementations to script |
 | `comparison-config-bounds.json` | A5: 4 configurations above the seed and region bounds (MUST be rejected) and 4 at or just below them (MUST be accepted) |
 | `config-three-channel-test.json`, `extraction-go-classes.json` | Amendment A3: the TEST-ONLY three-channel profile's configuration, and two Go inputs with equal class sequences |
 | `comparison-config-negative-channels.json` | 5 channel-list configurations that MUST be rejected (A3; the text list was removed in A4 when `text-plain` was registered) |
@@ -29,6 +30,7 @@ Each entry in `matching.json` has:
   - **source-backed**: `artifacts` (catalogue `id` plus `source`, a reference to an extraction record that holds the input bytes and tokens) and `canonical`, the catalogue object;
   - **fabricated**: `artifacts` plus `bytesBase64` and a `fabricated` note, for the nine deliberately invalid catalogues (pretty-printed, wrong version, unsupported profile, duplicate key);
   - **synthetic**: `canonical` and a `synthetic` note, with no source bytes. These are winnowing-shaped catalogues for exact boundary and precedence cases. They must pass the contract §3.6 rules;
+  - **`configOverride`** (optional; A6, Go lane C7). It is allowed only on a **source-backed canonical** side (one with `artifacts` and `canonical`, not synthetic, fabricated or `fromRecords`) whose artifacts are all extraction **errors**, so no fingerprint depends on the configuration. It is an object whose keys are a non-empty subset of `k`, `window`, `maxInputBytes`, each an integer within the extraction bounds (k ≤ 16, window ≤ 128, maxInputBytes ≤ 8,388,608). The catalogue is the one built from the listed sources with those values replacing the source configuration's, re-serialized in extraction §10 canonical form, and `profile.configSha256` is recomputed. Anything else (a string value, another key, an empty object, a value out of bounds, use on another kind of side) is a vector error, and `check_matching.py` rejects it. Used by `k1-extraction-bounds-at-bound`;
 - `handExpectations`;
 - `expectedReport`: `body` and `bodySha256`.
 
@@ -106,8 +108,8 @@ python3 -I research/drafts/matching-vectors/build_vectors.py   # regenerates eve
 ```
 PASS matching.json: vectors=76 catalogues-rebuilt=112 synthetic-catalogues=30 fabricated-catalogues=15 pairs=71 regions=171 reportable=96 rejected-reports=27 comparison-config-negatives=22/22 + channel-list and bound negatives 9/9 rejected, bound positives accepted; example-report.json valid
   rule situations (vectors each, minimum 2): match-over-ambiguous=2, match-over-weaker=2, ambiguous-over-weaker=2, below-over-common=3, region-repeats-hash=4, mixed-common-region=2, merge-split-at-gap-plus-one=2, merge-join-at-gap=21, span-overlap-without-shared-position=3, truncated=4, seed-limit=2, ambiguity-before-cap=2
-PASS corruption self-test: rejected 62/62
-PASS catalogue rule self-test (no extraction records used): 39/39 as stated
+PASS corruption self-test: rejected 68/68
+PASS catalogue rule self-test (no extraction records used): 42/42 as stated
 PASS required-field self-test: 706/706 single-field deletions handled (required fields rejected, optional provenance field accepted)
 PASS wrong-implementation self-test: rejected 33/33
 PASS records-text-plain.json (text lane, external): 60/60 records valid, 1023 k-gram hashes recomputed from recorded values
@@ -125,7 +127,7 @@ PASS record corruption self-test: rejected 55/55
 
 It then **recognizes rule situations from the bodies themselves**, not from tags, and requires each in at least two vectors.
 
-**Corruption self-test** (62 corruptions, all rejected; A5 adds the K3 and K4 rejections relabelled, an at-bound override moved out of bounds, and the at-limits vector relabelled rejected; A4 adds the `text-plain` skeleton match dropped and the folded mode dropped; A3 adds: a mode dropped from a pair, modes echo reordered, a suppression `distinctHashes` key missing, an extra mode on a Go pair, a mode mismatch relabelled, the test-only flag dropped; digests are refreshed so only the targeted layer is wrong):
+**Corruption self-test** (68 corruptions, all rejected; A6 adds six malformed `configOverride` uses (a string value, an extra `hash` key, an unknown key, k 17, an empty object, use on a synthetic side); A5 adds the K3 and K4 rejections relabelled, an at-bound override moved out of bounds, and the at-limits vector relabelled rejected; A4 adds the `text-plain` skeleton match dropped and the folded mode dropped; A3 adds: a mode dropped from a pair, modes echo reordered, a suppression `distinctHashes` key missing, an extra mode on a Go pair, a mode mismatch relabelled, the test-only flag dropped; digests are refreshed so only the targeted layer is wrong):
 - spans and regions: wrong span; reordered regions or pairs; missing or extra region; missing pair; removed seed;
 - outcomes: wrong outcome code or class; exact match claimed for the rename pair; ambiguity cleared, or set on span overlap; region status downgraded; insufficient-tokens pair given an outcome; pair precedence swapped; wrong rejection code or side;
 - counts: distinct count inflated; common count cleared; containment numerator wrong; fraction reduced; float similarity; truncated count wrong; region beyond the cap; seed limit not applied; seed count wrong;
@@ -143,7 +145,7 @@ Two corrupted files were also written to `$TMPDIR` and passed to the CLI. Both f
 
 **Record checks.** The checker has its own record writer (fixed key order, ECMAScript escaping). For every record it requires strict JSON, the record schema, byte equality with its own canonical re-serialization, and byte equality with the record it derives from the source vector (whose hashes it recomputes from tokens). It rebuilds the two catalogues from record bytes alone and runs the three refused builds. **Configuration rule.** The checker requires exactly one of `configFile`/`configBase64`, requires those bytes to equal the source vector's configuration, and requires `configSha256` to equal their digest and the record's `configSha256`. **Record corruption self-test** (55 cases, all rejected): A5 adds three wrong builders (one that re-derives hashes, one that skips the `tokenCount` check, one that builds only Go and Rust); A4 adds a wrong record in the text catalogue, and three in-memory corruptions of the text lane's records (a skeleton value changed, channels reordered, an error code outside the text list); A3 channels out of declared order; `classes` missing; `classes` without values; `values` in `exact`; an extra channel on a Go record; non-empty `classes` values; re-derivation undeclared; `tokenIndices` on a Go record; `tokenIndices` omitted, or after `values`, on an exclusion record; `values` including excluded tokens; exclusions ignored; normalized positions taken from the exact channel; wrong exclusion-catalogue digest; configuration not named; wrong configuration file; wrong configuration digest; `inputBytes` field name; extra `contract` key; missing `recordVersion`; envelope or result keys reordered; JCS-sorted keys; no final LF; CRLF; insignificant whitespace; non-ASCII escaped; uppercase hex escape; raw control character; unnecessary `\u0061` escape; non-null input digest, profile or offset for unsupported-config; non-null length for input-too-large; null offset for a lexical error; k-grams, window selections or values omitted; `inserted:false`; wrong or float `tokenCount`; duplicate key; wrong input digest; changed fingerprint hash; wrong record digest; wrong catalogue-from-records digest; a refused build made valid; input-too-large coverage dropped.
 
-**Catalogue rule self-test** (39 cases, A5 adds window 129, k 2³²−1 and a text contract on a Go catalogue; no extraction records, as a consumer has). It covers:
+**Catalogue rule self-test** (42 cases, A6 adds report documents at depth 65 (rejected at step 1) and 64 (passes step 1) and a lone surrogate in a report body; A5 adds window 129, k 2³²−1 and a text contract on a Go catalogue; no extraction records, as a consumer has). It covers:
 - ordering and identity: unsorted artifacts; duplicate id or digest;
 - forbidden fields: source-text and token-list fields;
 - binding: config digest; profile triple;

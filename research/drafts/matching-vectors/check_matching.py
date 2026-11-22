@@ -1041,6 +1041,9 @@ def vector_inputs(v, doc, ctx, stats=None):
         texts[side] = {}
         kinds = [k for k in ("canonical", "bytesBase64") if k in entry]
         need(len(kinds) == 1, f"{side}: exactly one of canonical / bytesBase64")
+        need("configOverride" not in entry or ("artifacts" in entry and "canonical" in entry
+                                               and not {"synthetic", "fromRecords", "fabricated"} & set(entry)),
+             f"{side}: configOverride is allowed only on canonical source-backed sides")
         if "fromRecords" in entry:
             # Catalogue built from canonical records (contract §3.8); records.json is checked separately.
             fr = entry["fromRecords"]
@@ -1069,7 +1072,15 @@ def vector_inputs(v, doc, ctx, stats=None):
                 texts[side][a["id"]] = data
             built = build_catalogue(entry, ctx.sources)
             if "configOverride" in entry:
-                # K1 at-bound vectors: an error-only catalogue whose extractionConfig is changed within the bounds.
+                # Vector field (README "configOverride"): optional, only on source-backed sides of error-only catalogues;
+                # keys a non-empty subset of k, window, maxInputBytes; integer values within the extraction bounds;
+                # applied to the source configuration and re-serialized in extraction §10 form. Anything else is a vector error.
+                ov = entry["configOverride"]
+                need(type(ov) is dict and ov and set(ov) <= {"k", "window", "maxInputBytes"},
+                     "configOverride keys must be a non-empty subset of k, window, maxInputBytes")
+                need(all(type(x) is int and 1 <= x <= {"k": 16, "window": 128, "maxInputBytes": 8388608}[key] for key, x in ov.items()),
+                     "configOverride values must be integers within the extraction bounds")
+                need("canonical" in entry, "configOverride only on canonical source-backed sides")
                 need(all(a["status"] == "error" for a in built["artifacts"]), "configOverride only for error-only catalogues")
                 built["extractionConfig"].update(entry["configOverride"])
                 built["profile"]["configSha256"] = sha(ex_config_bytes(built["extractionConfig"]))
@@ -1224,6 +1235,10 @@ def check_all(doc, ctx, negatives, example):
                 c, j = m["containment"]["referenceInCandidate"], m["similarity"]["jaccard"]
                 diverge |= c["numerator"] == c["denominator"] > 0 and j["numerator"] < j["denominator"]
     need(diverge, "no large-host vector shows complete containment with partial similarity")
+    try:
+        strict_document((HERE / "example-report.json").read_bytes())   # step-1 rules apply to report documents (A6)
+    except (ValueError, UnicodeDecodeError, IndexError) as exc:
+        raise CheckError(f"example-report.json fails the step-1 rules: {exc}") from None
     schema_check(ctx.rep_schema, example, "example-report.json")
     need(example["provenance"]["bodySha256"] == sha(canon_bytes(example["body"])), "example provenance.bodySha256")
     need(example["provenance"]["comparisonConfigSha256"] == example["body"]["inputs"]["comparisonConfigSha256"],
@@ -1347,6 +1362,13 @@ def corruptions(doc, negatives, example):
                     {"class": "no-match", "code": "below-minimum-evidence"}))
     yield make("text-folded-mode-dropped", "text-plain-three-modes",
                lambda v: v["expectedReport"]["body"]["pairs"][4]["modes"].pop("folded"))
+    for nm, ov in (("override-string-value", {"k": "16", "window": 128}), ("override-extra-hash-key", {"k": 16, "window": 128, "hash": "x"}),
+                   ("override-unknown-key", {"k": 16, "foo": 1}), ("override-k-17", {"k": 17, "window": 128}),
+                   ("override-empty", {})):
+        yield make(f"configOverride-{nm}", "k1-extraction-bounds-at-bound",
+                   (lambda o: lambda v: v["reference"].__setitem__("configOverride", o))(ov), do_refresh=False)
+    yield make("configOverride-on-synthetic-side", "rv-gap-equal",
+               lambda v: v["reference"].__setitem__("configOverride", {"k": 16}), do_refresh=False)
     yield make("k3-relabelled-unsupported", "k3-lone-surrogate",
                setp(lambda v: v["expectedReport"]["body"]["rejection"], "code", "unsupported-catalogue"))
     yield make("k4-depth-64-relabelled-malformed", "k4-depth-64",
@@ -1512,6 +1534,18 @@ def catalogue_rule_self_test(doc, ctx):
                 "malformed-catalogue"))
     out.append(("test-only-profile-unsupported-for-comparison",
                 catalogue_rejection(canon_bytes(ebase), ctx.cat_schema)[1] == "unsupported-profile", "unsupported-profile"))
+    # A6: the step-1 rules (depth 64, strict JSON, scalar values) apply to report documents and bodies too.
+    def doc_step1(raw):
+        try:
+            strict_document(raw)
+            return None
+        except (ValueError, UnicodeDecodeError, IndexError) as exc:
+            return str(exc)
+    deep65 = b'{"body":' + b"[" * 64 + b"]" * 64 + b',"provenance":{}}'
+    deep64 = b'{"body":' + b"[" * 63 + b"]" * 63 + b',"provenance":{}}'
+    out.append(("report-document-depth-65", doc_step1(deep65) is not None, "rejected at step 1"))
+    out.append(("report-document-depth-64-passes-step-1", doc_step1(deep64) is None, "passes step 1 (then fails the schema)"))
+    out.append(("report-body-lone-surrogate", doc_step1(b'{"reportVersion":"\\udc00"}') is not None, "rejected at step 1"))
     pretty = json.dumps(base, sort_keys=True, indent=1).encode()
     out.append(("non-canonical-bytes", catalogue_rejection(pretty, ctx.cat_schema)[1] == "malformed-catalogue", "pretty-printed"))
     dup = canon_bytes(base)[:-1] + b',"catalogueVersion":"traceweave-catalogue-draft-9"}'
