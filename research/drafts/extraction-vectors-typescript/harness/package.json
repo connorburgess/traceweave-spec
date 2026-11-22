@@ -1,0 +1,8 @@
+{
+  "name": "traceweave-ts-profile-crosscheck",
+  "private": true,
+  "description": "Cross-check of the draft ts-tokens/tsx-tokens vectors against the TypeScript scanner and parser",
+  "dependencies": {
+    "typescript": "6.0.3"
+  }
+}

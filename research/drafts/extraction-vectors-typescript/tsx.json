@@ -1,0 +1,10802 @@
+{
+ "contract": "traceweave-token-winnow-draft-1",
+ "profile": "tsx-tokens",
+ "profileVersion": "draft-1",
+ "configFile": "config-tsx.json",
+ "configSha256": "6a7f8184ff2ab1d1eb5a75b5b87739acaf47b499fc7916e08c32da59c6f76ab5",
+ "k": 5,
+ "window": 4,
+ "lexingCheck": "Token streams are hand-derived (harness/vector_sources.py); check_vectors.py re-lexes every input with tslex.py and harness/crosscheck.js compares them with the TypeScript 6.0.3 parser and scanner.",
+ "vectors": [
+  {
+   "id": "tsx-element",
+   "derivation": "hand",
+   "tags": [
+    "jsx"
+   ],
+   "description": "Element with a string attribute, text and an expression container.",
+   "inputBase64": "Y29uc3QgYSA9IDxkaXYgY2xhc3NOYW1lPSJ4Ij5IZWxsbywge25hbWV9ITwvZGl2PjsK",
+   "inputText": "const a = <div className=\"x\">Hello, {name}!</div>;\n",
+   "pairedRejection": "tsx-err-unclosed-element",
+   "result": {
+    "status": "ok",
+    "tokenCount": 19,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       0,
+       5
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       6,
+       7
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       8,
+       9
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       10,
+       11
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "div",
+      "span": [
+       11,
+       14
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "className",
+      "span": [
+       15,
+       24
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       24,
+       25
+      ]
+     },
+     {
+      "class": "jsx-string",
+      "text": "\"x\"",
+      "span": [
+       25,
+       28
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       28,
+       29
+      ]
+     },
+     {
+      "class": "jsx-text",
+      "text": "Hello,",
+      "span": [
+       29,
+       35
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       36,
+       37
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "name",
+      "span": [
+       37,
+       41
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       41,
+       42
+      ]
+     },
+     {
+      "class": "jsx-text",
+      "text": "!",
+      "span": [
+       42,
+       43
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       43,
+       44
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       44,
+       45
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "div",
+      "span": [
+       45,
+       48
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       48,
+       49
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       49,
+       50
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "0d1255a4793e9797",
+        "span": [
+         0,
+         14
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "37c1a29058d005cd",
+        "span": [
+         6,
+         24
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "d2e7de9b0c8b19d3",
+        "span": [
+         8,
+         25
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "4ace583ace3cfd02",
+        "span": [
+         10,
+         28
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "a40b2f1b53e8aafb",
+        "span": [
+         11,
+         29
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "847d92dc10a9902c",
+        "span": [
+         15,
+         35
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "e883ea1c451b0ffd",
+        "span": [
+         24,
+         37
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "a561fd65e0ef19b2",
+        "span": [
+         25,
+         41
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "1b1c58bc16c2d6b7",
+        "span": [
+         28,
+         42
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "2d4e2d7faccadc90",
+        "span": [
+         29,
+         43
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "e86316f06862ed77",
+        "span": [
+         36,
+         44
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "a94748c0f2808fe3",
+        "span": [
+         37,
+         45
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "d4e07031e33572fe",
+        "span": [
+         41,
+         48
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "2bbfc812b85f30df",
+        "span": [
+         42,
+         49
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "d21886dcd8b27e29",
+        "span": [
+         43,
+         50
+        ]
+       }
+      ],
+      "windowSelections": [
+       0,
+       1,
+       3,
+       3,
+       5,
+       8,
+       8,
+       8,
+       8,
+       9,
+       13,
+       13
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 0,
+        "hash": "0d1255a4793e9797",
+        "span": [
+         0,
+         14
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "37c1a29058d005cd",
+        "span": [
+         6,
+         24
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "4ace583ace3cfd02",
+        "span": [
+         10,
+         28
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "847d92dc10a9902c",
+        "span": [
+         15,
+         35
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "1b1c58bc16c2d6b7",
+        "span": [
+         28,
+         42
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "2d4e2d7faccadc90",
+        "span": [
+         29,
+         43
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "2bbfc812b85f30df",
+        "span": [
+         42,
+         49
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "const",
+       "",
+       "=",
+       "<",
+       "",
+       "",
+       "=",
+       "",
+       ">",
+       "",
+       "{",
+       "",
+       "}",
+       "",
+       "<",
+       "/",
+       "",
+       ">",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "d9caa9e9e1aa86fc",
+        "span": [
+         0,
+         14
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "9bab6f7741e4e6c7",
+        "span": [
+         6,
+         24
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "694eee2c66af0000",
+        "span": [
+         8,
+         25
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "bdb143a79eb6027d",
+        "span": [
+         10,
+         28
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "e6efd4f5dfe97f3c",
+        "span": [
+         11,
+         29
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "f3526c2627d0b955",
+        "span": [
+         15,
+         35
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "8f98afe75887cc03",
+        "span": [
+         24,
+         37
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "140c3714ab97d6bd",
+        "span": [
+         25,
+         41
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "c1bd90c013d852e8",
+        "span": [
+         28,
+         42
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "2c866b6b98e78453",
+        "span": [
+         29,
+         43
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "16dfd6d39d2cf505",
+        "span": [
+         36,
+         44
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "ba932b6e7fe47a2a",
+        "span": [
+         37,
+         45
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "5987fab6f45e297e",
+        "span": [
+         41,
+         48
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "c0031ebdba40e165",
+        "span": [
+         42,
+         49
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "fe89dbe1dc53f4cf",
+        "span": [
+         43,
+         50
+        ]
+       }
+      ],
+      "windowSelections": [
+       2,
+       2,
+       2,
+       6,
+       7,
+       7,
+       7,
+       7,
+       10,
+       10,
+       10,
+       12
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 2,
+        "hash": "694eee2c66af0000",
+        "span": [
+         8,
+         25
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "8f98afe75887cc03",
+        "span": [
+         24,
+         37
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "140c3714ab97d6bd",
+        "span": [
+         25,
+         41
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "16dfd6d39d2cf505",
+        "span": [
+         36,
+         44
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "5987fab6f45e297e",
+        "span": [
+         41,
+         48
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "tsx-text-comment-keywords",
+   "derivation": "hand",
+   "tags": [
+    "jsx",
+    "keywords"
+   ],
+   "description": "JSX text holding '//' and reserved words is one jsx-text token per run.",
+   "inputBase64": "Y29uc3QgcCA9IDxwPmlmIC8vIG5vdCBhIGNvbW1lbnQge3h9IHdoaWxlPC9wPjsK",
+   "inputText": "const p = <p>if // not a comment {x} while</p>;\n",
+   "pairedRejection": "tsx-err-text-gt",
+   "result": {
+    "status": "ok",
+    "tokenCount": 16,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       0,
+       5
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "p",
+      "span": [
+       6,
+       7
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       8,
+       9
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       10,
+       11
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "p",
+      "span": [
+       11,
+       12
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       12,
+       13
+      ]
+     },
+     {
+      "class": "jsx-text",
+      "text": "if // not a comment",
+      "span": [
+       13,
+       32
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       33,
+       34
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "x",
+      "span": [
+       34,
+       35
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       35,
+       36
+      ]
+     },
+     {
+      "class": "jsx-text",
+      "text": "while",
+      "span": [
+       37,
+       42
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       42,
+       43
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       43,
+       44
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "p",
+      "span": [
+       44,
+       45
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       45,
+       46
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       46,
+       47
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "414559b2f54514c2",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "a9925eafb124660e",
+        "span": [
+         6,
+         13
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "d3be92d5b5fafc3c",
+        "span": [
+         8,
+         32
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "2fd544469cd44b80",
+        "span": [
+         10,
+         34
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "730ded0445fa7595",
+        "span": [
+         11,
+         35
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "3412a2d2caaeab5b",
+        "span": [
+         12,
+         36
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "4d2dc83a5e8fec5a",
+        "span": [
+         13,
+         42
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "b1a14c28c5e37cbe",
+        "span": [
+         33,
+         43
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "dd06f8739282683a",
+        "span": [
+         34,
+         44
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "c90ededf3d444414",
+        "span": [
+         35,
+         45
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "1beeaedee15a35d2",
+        "span": [
+         37,
+         46
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "558c79cdf3e7ef1f",
+        "span": [
+         42,
+         47
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       3,
+       3,
+       3,
+       5,
+       5,
+       6,
+       10,
+       10
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "2fd544469cd44b80",
+        "span": [
+         10,
+         34
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "3412a2d2caaeab5b",
+        "span": [
+         12,
+         36
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "4d2dc83a5e8fec5a",
+        "span": [
+         13,
+         42
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "1beeaedee15a35d2",
+        "span": [
+         37,
+         46
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "const",
+       "",
+       "=",
+       "<",
+       "",
+       ">",
+       "",
+       "{",
+       "",
+       "}",
+       "",
+       "<",
+       "/",
+       "",
+       ">",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "d9caa9e9e1aa86fc",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "28524108e43a5509",
+        "span": [
+         6,
+         13
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "444a7b385160145a",
+        "span": [
+         8,
+         32
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "e10bebd66999fe52",
+        "span": [
+         10,
+         34
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "1ba0bf501ec5b631",
+        "span": [
+         11,
+         35
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "c1bd90c013d852e8",
+        "span": [
+         12,
+         36
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "2c866b6b98e78453",
+        "span": [
+         13,
+         42
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "16dfd6d39d2cf505",
+        "span": [
+         33,
+         43
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "ba932b6e7fe47a2a",
+        "span": [
+         34,
+         44
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "5987fab6f45e297e",
+        "span": [
+         35,
+         45
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "c0031ebdba40e165",
+        "span": [
+         37,
+         46
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "fe89dbe1dc53f4cf",
+        "span": [
+         42,
+         47
+        ]
+       }
+      ],
+      "windowSelections": [
+       1,
+       4,
+       4,
+       4,
+       7,
+       7,
+       7,
+       7,
+       9
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 1,
+        "hash": "28524108e43a5509",
+        "span": [
+         6,
+         13
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "1ba0bf501ec5b631",
+        "span": [
+         11,
+         35
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "16dfd6d39d2cf505",
+        "span": [
+         33,
+         43
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "5987fab6f45e297e",
+        "span": [
+         35,
+         45
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "tsx-attr-keyword-names",
+   "derivation": "hand",
+   "tags": [
+    "jsx",
+    "keywords"
+   ],
+   "description": "Names inside a tag are ident, including 'class', 'for' and 'data-x'.",
+   "inputBase64": "Y29uc3QgbCA9IDxsYWJlbCBjbGFzcz0iYSIgZm9yPXtpZH0gZGF0YS14PSd5JyAvPjsK",
+   "inputText": "const l = <label class=\"a\" for={id} data-x='y' />;\n",
+   "pairedRejection": "tsx-err-unterminated-attr",
+   "result": {
+    "status": "ok",
+    "tokenCount": 19,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       0,
+       5
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "l",
+      "span": [
+       6,
+       7
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       8,
+       9
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       10,
+       11
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "label",
+      "span": [
+       11,
+       16
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "class",
+      "span": [
+       17,
+       22
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       22,
+       23
+      ]
+     },
+     {
+      "class": "jsx-string",
+      "text": "\"a\"",
+      "span": [
+       23,
+       26
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "for",
+      "span": [
+       27,
+       30
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       30,
+       31
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       31,
+       32
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "id",
+      "span": [
+       32,
+       34
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       34,
+       35
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "data-x",
+      "span": [
+       36,
+       42
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       42,
+       43
+      ]
+     },
+     {
+      "class": "jsx-string",
+      "text": "'y'",
+      "span": [
+       43,
+       46
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       47,
+       48
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       48,
+       49
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       49,
+       50
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "2b446f9b1cdde9b9",
+        "span": [
+         0,
+         16
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "e60b4f600eed4b3c",
+        "span": [
+         6,
+         22
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "552970047d67ed3a",
+        "span": [
+         8,
+         23
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "2d8eb8b15c2a3bb1",
+        "span": [
+         10,
+         26
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "93d3fe7f838db2c7",
+        "span": [
+         11,
+         30
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "165e4d5ac38036cd",
+        "span": [
+         17,
+         31
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "a49c9402757bcec8",
+        "span": [
+         22,
+         32
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "84f95fefb94c632d",
+        "span": [
+         23,
+         34
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "a16195b9f9be7d90",
+        "span": [
+         27,
+         35
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "6f9afdbcae22256e",
+        "span": [
+         30,
+         42
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "197b821fa7f615a1",
+        "span": [
+         31,
+         43
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "94d687cb66fa1c77",
+        "span": [
+         32,
+         46
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "4dd7886732540e26",
+        "span": [
+         34,
+         48
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "3402828490554716",
+        "span": [
+         36,
+         49
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "9a54868b44dbd25e",
+        "span": [
+         42,
+         50
+        ]
+       }
+      ],
+      "windowSelections": [
+       0,
+       3,
+       5,
+       5,
+       5,
+       5,
+       9,
+       10,
+       10,
+       10,
+       10,
+       13
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 0,
+        "hash": "2b446f9b1cdde9b9",
+        "span": [
+         0,
+         16
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "2d8eb8b15c2a3bb1",
+        "span": [
+         10,
+         26
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "165e4d5ac38036cd",
+        "span": [
+         17,
+         31
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "6f9afdbcae22256e",
+        "span": [
+         30,
+         42
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "197b821fa7f615a1",
+        "span": [
+         31,
+         43
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "3402828490554716",
+        "span": [
+         36,
+         49
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "const",
+       "",
+       "=",
+       "<",
+       "",
+       "",
+       "=",
+       "",
+       "",
+       "=",
+       "{",
+       "",
+       "}",
+       "",
+       "=",
+       "",
+       "/",
+       ">",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "d9caa9e9e1aa86fc",
+        "span": [
+         0,
+         16
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "9bab6f7741e4e6c7",
+        "span": [
+         6,
+         22
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "694eee2c66af0000",
+        "span": [
+         8,
+         23
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "bdb143a79eb6027d",
+        "span": [
+         10,
+         26
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "9a16025e2954a38c",
+        "span": [
+         11,
+         30
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "683f134551193964",
+        "span": [
+         17,
+         31
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "4eda15153b9c6cdb",
+        "span": [
+         22,
+         32
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "448bb9d6647aecb7",
+        "span": [
+         23,
+         34
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "9cc674afb4e24912",
+        "span": [
+         27,
+         35
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "79c03c2ebaa37945",
+        "span": [
+         30,
+         42
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "2b14145feeb89eec",
+        "span": [
+         31,
+         43
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "d4b5b03c24fadce3",
+        "span": [
+         32,
+         46
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "14d2b4f6a93b4ede",
+        "span": [
+         34,
+         48
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "7d1f5631be15a663",
+        "span": [
+         36,
+         49
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "316bad4cf5229e33",
+        "span": [
+         42,
+         50
+        ]
+       }
+      ],
+      "windowSelections": [
+       2,
+       2,
+       5,
+       6,
+       7,
+       7,
+       7,
+       10,
+       10,
+       12,
+       12,
+       12
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 2,
+        "hash": "694eee2c66af0000",
+        "span": [
+         8,
+         23
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "683f134551193964",
+        "span": [
+         17,
+         31
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "4eda15153b9c6cdb",
+        "span": [
+         22,
+         32
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "448bb9d6647aecb7",
+        "span": [
+         23,
+         34
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "2b14145feeb89eec",
+        "span": [
+         31,
+         43
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "14d2b4f6a93b4ede",
+        "span": [
+         34,
+         48
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "tsx-fragment-nested",
+   "derivation": "hand",
+   "tags": [
+    "jsx"
+   ],
+   "description": "Fragments, member and namespaced names, JSX in a conditional.",
+   "inputBase64": "Y29uc3QgZiA9IDw+PEEuQiB4Onk9IjEiLz48Qz57YyA/IDxELz4gOiA8RS8+fTwvQz48Lz47Cg==",
+   "inputText": "const f = <><A.B x:y=\"1\"/><C>{c ? <D/> : <E/>}</C></>;\n",
+   "pairedRejection": "tsx-err-stray-close",
+   "result": {
+    "status": "ok",
+    "tokenCount": 40,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       0,
+       5
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "f",
+      "span": [
+       6,
+       7
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       8,
+       9
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       10,
+       11
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       11,
+       12
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       12,
+       13
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "A",
+      "span": [
+       13,
+       14
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ".",
+      "span": [
+       14,
+       15
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "B",
+      "span": [
+       15,
+       16
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "x",
+      "span": [
+       17,
+       18
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       18,
+       19
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "y",
+      "span": [
+       19,
+       20
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       20,
+       21
+      ]
+     },
+     {
+      "class": "jsx-string",
+      "text": "\"1\"",
+      "span": [
+       21,
+       24
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       24,
+       25
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       25,
+       26
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       26,
+       27
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "C",
+      "span": [
+       27,
+       28
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       28,
+       29
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       29,
+       30
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "c",
+      "span": [
+       30,
+       31
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "?",
+      "span": [
+       32,
+       33
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       34,
+       35
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "D",
+      "span": [
+       35,
+       36
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       36,
+       37
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       37,
+       38
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       39,
+       40
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       41,
+       42
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "E",
+      "span": [
+       42,
+       43
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       43,
+       44
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       44,
+       45
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       45,
+       46
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       46,
+       47
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       47,
+       48
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "C",
+      "span": [
+       48,
+       49
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       49,
+       50
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       50,
+       51
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       51,
+       52
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       52,
+       53
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       53,
+       54
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "569f0381e28ff8d6",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "21e435ebdfb34666",
+        "span": [
+         6,
+         13
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "df7b774c749d61b3",
+        "span": [
+         8,
+         14
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "9a803ad1cfdeed1c",
+        "span": [
+         10,
+         15
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "b607fb8bf1723ead",
+        "span": [
+         11,
+         16
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "9461cf08fef9bc9b",
+        "span": [
+         12,
+         18
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "b355a4c303e529a2",
+        "span": [
+         13,
+         19
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "9ca43041994e68e8",
+        "span": [
+         14,
+         20
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "e1a2e8c3fb60bd2e",
+        "span": [
+         15,
+         21
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "0ff8a8064ce00f2c",
+        "span": [
+         17,
+         24
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "be28703a2d7bb152",
+        "span": [
+         18,
+         25
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "f368c9ed2f58314c",
+        "span": [
+         19,
+         26
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "9c8ee5e01da01e0d",
+        "span": [
+         20,
+         27
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "7ea1a1528b4edd36",
+        "span": [
+         21,
+         28
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "f2cca10836f8cea8",
+        "span": [
+         24,
+         29
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "b4e88a1f16c87e3d",
+        "span": [
+         25,
+         30
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "5a08ca2aca596aaa",
+        "span": [
+         26,
+         31
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "b7b0eb081361c5e3",
+        "span": [
+         27,
+         33
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "d4696af7dcb65241",
+        "span": [
+         28,
+         35
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "937441011f3942c0",
+        "span": [
+         29,
+         36
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "de123cb48eb14ad1",
+        "span": [
+         30,
+         37
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "e655924e1aa5cfcc",
+        "span": [
+         32,
+         38
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "7e40270ee40f98d2",
+        "span": [
+         34,
+         40
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "b8770742fa8c6dea",
+        "span": [
+         35,
+         42
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "8cca7242f99d3984",
+        "span": [
+         36,
+         43
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "ae521f1b47396549",
+        "span": [
+         37,
+         44
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "8a8f3da146370ce8",
+        "span": [
+         39,
+         45
+        ]
+       },
+       {
+        "position": 27,
+        "hash": "e580acebc4e330ab",
+        "span": [
+         41,
+         46
+        ]
+       },
+       {
+        "position": 28,
+        "hash": "5a1f0293e80a5cf3",
+        "span": [
+         42,
+         47
+        ]
+       },
+       {
+        "position": 29,
+        "hash": "acc2b3322e6574d2",
+        "span": [
+         43,
+         48
+        ]
+       },
+       {
+        "position": 30,
+        "hash": "37226caa2d0eacab",
+        "span": [
+         44,
+         49
+        ]
+       },
+       {
+        "position": 31,
+        "hash": "3e4e4c8c845da766",
+        "span": [
+         45,
+         50
+        ]
+       },
+       {
+        "position": 32,
+        "hash": "77d0a87e986ddf99",
+        "span": [
+         46,
+         51
+        ]
+       },
+       {
+        "position": 33,
+        "hash": "e786319648b8deb9",
+        "span": [
+         47,
+         52
+        ]
+       },
+       {
+        "position": 34,
+        "hash": "96458f8f7b3a6660",
+        "span": [
+         48,
+         53
+        ]
+       },
+       {
+        "position": 35,
+        "hash": "26772dedc570c86d",
+        "span": [
+         49,
+         54
+        ]
+       }
+      ],
+      "windowSelections": [
+       1,
+       1,
+       5,
+       5,
+       5,
+       5,
+       9,
+       9,
+       9,
+       9,
+       13,
+       13,
+       13,
+       16,
+       16,
+       16,
+       16,
+       19,
+       19,
+       22,
+       22,
+       22,
+       22,
+       26,
+       26,
+       28,
+       28,
+       30,
+       30,
+       30,
+       30,
+       31,
+       35
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 1,
+        "hash": "21e435ebdfb34666",
+        "span": [
+         6,
+         13
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "9461cf08fef9bc9b",
+        "span": [
+         12,
+         18
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "0ff8a8064ce00f2c",
+        "span": [
+         17,
+         24
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "7ea1a1528b4edd36",
+        "span": [
+         21,
+         28
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "5a08ca2aca596aaa",
+        "span": [
+         26,
+         31
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "937441011f3942c0",
+        "span": [
+         29,
+         36
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "7e40270ee40f98d2",
+        "span": [
+         34,
+         40
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "8a8f3da146370ce8",
+        "span": [
+         39,
+         45
+        ]
+       },
+       {
+        "position": 28,
+        "hash": "5a1f0293e80a5cf3",
+        "span": [
+         42,
+         47
+        ]
+       },
+       {
+        "position": 30,
+        "hash": "37226caa2d0eacab",
+        "span": [
+         44,
+         49
+        ]
+       },
+       {
+        "position": 31,
+        "hash": "3e4e4c8c845da766",
+        "span": [
+         45,
+         50
+        ]
+       },
+       {
+        "position": 35,
+        "hash": "26772dedc570c86d",
+        "span": [
+         49,
+         54
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "const",
+       "",
+       "=",
+       "<",
+       ">",
+       "<",
+       "",
+       ".",
+       "",
+       "",
+       ":",
+       "",
+       "=",
+       "",
+       "/",
+       ">",
+       "<",
+       "",
+       ">",
+       "{",
+       "",
+       "?",
+       "<",
+       "",
+       "/",
+       ">",
+       ":",
+       "<",
+       "",
+       "/",
+       ">",
+       "}",
+       "<",
+       "/",
+       "",
+       ">",
+       "<",
+       "/",
+       ">",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "ce36d49ef91df0c5",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "d70477de81fa625b",
+        "span": [
+         6,
+         13
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "663687ccf21b74a1",
+        "span": [
+         8,
+         14
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "ac128edb07648997",
+        "span": [
+         10,
+         15
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "dd0cf390fbbb3307",
+        "span": [
+         11,
+         16
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "b5ca2e9de99c9080",
+        "span": [
+         12,
+         18
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "c62a36705e5c378e",
+        "span": [
+         13,
+         19
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "60adec5b1cac588c",
+        "span": [
+         14,
+         20
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "3ab69832605e8820",
+        "span": [
+         15,
+         21
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "e727a4600974bd65",
+        "span": [
+         17,
+         24
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "4b8fd36867ba9bba",
+        "span": [
+         18,
+         25
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "7d1f5631be15a663",
+        "span": [
+         19,
+         26
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "b4b7fab9be65eb91",
+        "span": [
+         20,
+         27
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "a693885d8d20843f",
+        "span": [
+         21,
+         28
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "2f89eb8b1122fb9f",
+        "span": [
+         24,
+         29
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "7506078d70d94855",
+        "span": [
+         25,
+         30
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "77dac1440632f0bf",
+        "span": [
+         26,
+         31
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "49adc06492a8155f",
+        "span": [
+         27,
+         33
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "607cc7bf0de240e7",
+        "span": [
+         28,
+         35
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "a42dbf9b2302caaa",
+        "span": [
+         29,
+         36
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "8b5ce4ba4214e987",
+        "span": [
+         30,
+         37
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "952e6f89392fad0f",
+        "span": [
+         32,
+         38
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "9fb202d8b488bd81",
+        "span": [
+         34,
+         40
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "2b09d9f56cb6fc85",
+        "span": [
+         35,
+         42
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "77d8a6dfba46328f",
+        "span": [
+         36,
+         43
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "c26e002f1615b8e2",
+        "span": [
+         37,
+         44
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "6df10c61372c33e5",
+        "span": [
+         39,
+         45
+        ]
+       },
+       {
+        "position": 27,
+        "hash": "902efb1f722effdc",
+        "span": [
+         41,
+         46
+        ]
+       },
+       {
+        "position": 28,
+        "hash": "953b4ae2962d783b",
+        "span": [
+         42,
+         47
+        ]
+       },
+       {
+        "position": 29,
+        "hash": "a1fe234d0abd3268",
+        "span": [
+         43,
+         48
+        ]
+       },
+       {
+        "position": 30,
+        "hash": "2b3426630426be63",
+        "span": [
+         44,
+         49
+        ]
+       },
+       {
+        "position": 31,
+        "hash": "fb83976c36cb1ea0",
+        "span": [
+         45,
+         50
+        ]
+       },
+       {
+        "position": 32,
+        "hash": "65f5cd82b9384dc4",
+        "span": [
+         46,
+         51
+        ]
+       },
+       {
+        "position": 33,
+        "hash": "505b99c30f5b07da",
+        "span": [
+         47,
+         52
+        ]
+       },
+       {
+        "position": 34,
+        "hash": "3ae0347eb41dfecd",
+        "span": [
+         48,
+         53
+        ]
+       },
+       {
+        "position": 35,
+        "hash": "8b4cb5b49ed39f18",
+        "span": [
+         49,
+         54
+        ]
+       }
+      ],
+      "windowSelections": [
+       2,
+       2,
+       2,
+       3,
+       7,
+       8,
+       8,
+       8,
+       8,
+       10,
+       10,
+       14,
+       14,
+       14,
+       14,
+       17,
+       17,
+       17,
+       18,
+       20,
+       23,
+       23,
+       23,
+       23,
+       26,
+       26,
+       26,
+       30,
+       30,
+       30,
+       30,
+       34,
+       34
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 2,
+        "hash": "663687ccf21b74a1",
+        "span": [
+         8,
+         14
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "ac128edb07648997",
+        "span": [
+         10,
+         15
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "60adec5b1cac588c",
+        "span": [
+         14,
+         20
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "3ab69832605e8820",
+        "span": [
+         15,
+         21
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "4b8fd36867ba9bba",
+        "span": [
+         18,
+         25
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "2f89eb8b1122fb9f",
+        "span": [
+         24,
+         29
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "49adc06492a8155f",
+        "span": [
+         27,
+         33
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "607cc7bf0de240e7",
+        "span": [
+         28,
+         35
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "8b5ce4ba4214e987",
+        "span": [
+         30,
+         37
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "2b09d9f56cb6fc85",
+        "span": [
+         35,
+         42
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "6df10c61372c33e5",
+        "span": [
+         39,
+         45
+        ]
+       },
+       {
+        "position": 30,
+        "hash": "2b3426630426be63",
+        "span": [
+         44,
+         49
+        ]
+       },
+       {
+        "position": 34,
+        "hash": "3ae0347eb41dfecd",
+        "span": [
+         48,
+         53
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "tsx-comparison-vs-jsx",
+   "derivation": "hand",
+   "tags": [
+    "jsx",
+    "generics"
+   ],
+   "description": "'<' after an expression end is an operator or type-argument opener; after '&&' it opens JSX.",
+   "inputBase64": "aWYgKGEgPCBiICYmIGMgPiBkKSBmPFQ+KHgpOwpjb25zdCBlID0gb2sgJiYgPHNwYW4+e2EgPCBifTwvc3Bhbj47Cg==",
+   "inputText": "if (a < b && c > d) f<T>(x);\nconst e = ok && <span>{a < b}</span>;\n",
+   "pairedRejection": "tsx-err-ts-type-assertion",
+   "result": {
+    "status": "ok",
+    "tokenCount": 36,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "if",
+      "span": [
+       0,
+       2
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       3,
+       4
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       4,
+       5
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       6,
+       7
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "b",
+      "span": [
+       8,
+       9
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "&&",
+      "span": [
+       10,
+       12
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "c",
+      "span": [
+       13,
+       14
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       15,
+       16
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "d",
+      "span": [
+       17,
+       18
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       18,
+       19
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "f",
+      "span": [
+       20,
+       21
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       21,
+       22
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "T",
+      "span": [
+       22,
+       23
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       23,
+       24
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       24,
+       25
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "x",
+      "span": [
+       25,
+       26
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       26,
+       27
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       27,
+       28
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       29,
+       34
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "e",
+      "span": [
+       35,
+       36
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       37,
+       38
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "ok",
+      "span": [
+       39,
+       41
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "&&",
+      "span": [
+       42,
+       44
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       45,
+       46
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "span",
+      "span": [
+       46,
+       50
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       50,
+       51
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       51,
+       52
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       52,
+       53
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       54,
+       55
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "b",
+      "span": [
+       56,
+       57
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       57,
+       58
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       58,
+       59
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       59,
+       60
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "span",
+      "span": [
+       60,
+       64
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       64,
+       65
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       65,
+       66
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "b6e2091122c66ef0",
+        "span": [
+         0,
+         9
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "ff34f887552efe22",
+        "span": [
+         3,
+         12
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "9dc181a963b64b1b",
+        "span": [
+         4,
+         14
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "1bd7befc8da64b2f",
+        "span": [
+         6,
+         16
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "90209aed5af0802b",
+        "span": [
+         8,
+         18
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "9ecdc7b071a9db3f",
+        "span": [
+         10,
+         19
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "1fc3c682236e73ea",
+        "span": [
+         13,
+         21
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "46a3b523590c16e4",
+        "span": [
+         15,
+         22
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "59ac854d72b5826e",
+        "span": [
+         17,
+         23
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "5c63f73935b8de80",
+        "span": [
+         18,
+         24
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "622141f4c17eb5d4",
+        "span": [
+         20,
+         25
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "7d7bfbae828e2672",
+        "span": [
+         21,
+         26
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "291e98f760a6af57",
+        "span": [
+         22,
+         27
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "4436dbf1baa358e2",
+        "span": [
+         23,
+         28
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "11cafc501cfb6f79",
+        "span": [
+         24,
+         34
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "375ae4408886c008",
+        "span": [
+         25,
+         36
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "c906540facebfac0",
+        "span": [
+         26,
+         38
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "c5df583cc14ef763",
+        "span": [
+         27,
+         41
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "38d2b33a29ac6396",
+        "span": [
+         29,
+         44
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "3eed05408a89160e",
+        "span": [
+         35,
+         46
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "74b9d9cdfe28336b",
+        "span": [
+         37,
+         50
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "c2d25c49be5eb700",
+        "span": [
+         39,
+         51
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "2b111e61dcdd5994",
+        "span": [
+         42,
+         52
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "d8f2a31b7a42ae26",
+        "span": [
+         45,
+         53
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "419351b635c358b3",
+        "span": [
+         46,
+         55
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "1fb0134e5de2b16b",
+        "span": [
+         50,
+         57
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "1d70f4fa614317f6",
+        "span": [
+         51,
+         58
+        ]
+       },
+       {
+        "position": 27,
+        "hash": "b451b578fb41da02",
+        "span": [
+         52,
+         59
+        ]
+       },
+       {
+        "position": 28,
+        "hash": "14651729b5ad81d9",
+        "span": [
+         54,
+         60
+        ]
+       },
+       {
+        "position": 29,
+        "hash": "fb67f2b6b7a0bccb",
+        "span": [
+         56,
+         64
+        ]
+       },
+       {
+        "position": 30,
+        "hash": "ab31159336cf416f",
+        "span": [
+         57,
+         65
+        ]
+       },
+       {
+        "position": 31,
+        "hash": "2da9799be98bc816",
+        "span": [
+         58,
+         66
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       3,
+       3,
+       3,
+       6,
+       6,
+       6,
+       7,
+       8,
+       12,
+       12,
+       14,
+       14,
+       14,
+       14,
+       15,
+       18,
+       18,
+       18,
+       22,
+       22,
+       22,
+       25,
+       26,
+       26,
+       28,
+       28,
+       28,
+       28
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "1bd7befc8da64b2f",
+        "span": [
+         6,
+         16
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "1fc3c682236e73ea",
+        "span": [
+         13,
+         21
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "46a3b523590c16e4",
+        "span": [
+         15,
+         22
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "59ac854d72b5826e",
+        "span": [
+         17,
+         23
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "291e98f760a6af57",
+        "span": [
+         22,
+         27
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "11cafc501cfb6f79",
+        "span": [
+         24,
+         34
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "375ae4408886c008",
+        "span": [
+         25,
+         36
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "38d2b33a29ac6396",
+        "span": [
+         29,
+         44
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "2b111e61dcdd5994",
+        "span": [
+         42,
+         52
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "1fb0134e5de2b16b",
+        "span": [
+         50,
+         57
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "1d70f4fa614317f6",
+        "span": [
+         51,
+         58
+        ]
+       },
+       {
+        "position": 28,
+        "hash": "14651729b5ad81d9",
+        "span": [
+         54,
+         60
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "if",
+       "(",
+       "",
+       "<",
+       "",
+       "&&",
+       "",
+       ">",
+       "",
+       ")",
+       "",
+       "<",
+       "",
+       ">",
+       "(",
+       "",
+       ")",
+       ";",
+       "const",
+       "",
+       "=",
+       "",
+       "&&",
+       "<",
+       "",
+       ">",
+       "{",
+       "",
+       "<",
+       "",
+       "}",
+       "<",
+       "/",
+       "",
+       ">",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "f2e7c7d1549685ea",
+        "span": [
+         0,
+         9
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "6a57816a20bd2617",
+        "span": [
+         3,
+         12
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "36b781bed28855ff",
+        "span": [
+         4,
+         14
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "ba8afad77e9ac556",
+        "span": [
+         6,
+         16
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "fa662f191962529a",
+        "span": [
+         8,
+         18
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "b10dc5a313a039f5",
+        "span": [
+         10,
+         19
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "bfcebe68786bd64a",
+        "span": [
+         13,
+         21
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "88c1d1f5bfc1ed1c",
+        "span": [
+         15,
+         22
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "2ea4a04a99ee41c3",
+        "span": [
+         17,
+         23
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "a00caa6dd9b2a18e",
+        "span": [
+         18,
+         24
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "317f8bb15ef5409e",
+        "span": [
+         20,
+         25
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "b01fb2f317fef976",
+        "span": [
+         21,
+         26
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "44b8de17f28d403e",
+        "span": [
+         22,
+         27
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "99169227f64fdc6d",
+        "span": [
+         23,
+         28
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "29d34650ea28de0d",
+        "span": [
+         24,
+         34
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "b331d666413d9531",
+        "span": [
+         25,
+         36
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "9ef326f32a258b8b",
+        "span": [
+         26,
+         38
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "9a181c5835271e02",
+        "span": [
+         27,
+         41
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "2b908a73d7da0d61",
+        "span": [
+         29,
+         44
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "d1f3caa9b4dc5d2c",
+        "span": [
+         35,
+         46
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "2c1ff8eb03973e5b",
+        "span": [
+         37,
+         50
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "e1622c8f0dd78f93",
+        "span": [
+         39,
+         51
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "57bc93e9b16a9bf9",
+        "span": [
+         42,
+         52
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "77dac1440632f0bf",
+        "span": [
+         45,
+         53
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "7c2f0cd26111d07e",
+        "span": [
+         46,
+         55
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "bf629bb48221ae99",
+        "span": [
+         50,
+         57
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "d308c7ab1111fe81",
+        "span": [
+         51,
+         58
+        ]
+       },
+       {
+        "position": 27,
+        "hash": "f9b4d6695b3986c8",
+        "span": [
+         52,
+         59
+        ]
+       },
+       {
+        "position": 28,
+        "hash": "cc39a6783d932f70",
+        "span": [
+         54,
+         60
+        ]
+       },
+       {
+        "position": 29,
+        "hash": "bd8f90511d6ee9a3",
+        "span": [
+         56,
+         64
+        ]
+       },
+       {
+        "position": 30,
+        "hash": "fb83976c36cb1ea0",
+        "span": [
+         57,
+         65
+        ]
+       },
+       {
+        "position": 31,
+        "hash": "fe89dbe1dc53f4cf",
+        "span": [
+         58,
+         66
+        ]
+       }
+      ],
+      "windowSelections": [
+       2,
+       2,
+       2,
+       5,
+       7,
+       8,
+       8,
+       8,
+       8,
+       10,
+       10,
+       14,
+       14,
+       14,
+       14,
+       18,
+       18,
+       18,
+       18,
+       20,
+       20,
+       22,
+       22,
+       23,
+       24,
+       25,
+       29,
+       29,
+       29
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 2,
+        "hash": "36b781bed28855ff",
+        "span": [
+         4,
+         14
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "b10dc5a313a039f5",
+        "span": [
+         10,
+         19
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "88c1d1f5bfc1ed1c",
+        "span": [
+         15,
+         22
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "2ea4a04a99ee41c3",
+        "span": [
+         17,
+         23
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "317f8bb15ef5409e",
+        "span": [
+         20,
+         25
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "29d34650ea28de0d",
+        "span": [
+         24,
+         34
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "2b908a73d7da0d61",
+        "span": [
+         29,
+         44
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "2c1ff8eb03973e5b",
+        "span": [
+         37,
+         50
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "57bc93e9b16a9bf9",
+        "span": [
+         42,
+         52
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "77dac1440632f0bf",
+        "span": [
+         45,
+         53
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "7c2f0cd26111d07e",
+        "span": [
+         46,
+         55
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "bf629bb48221ae99",
+        "span": [
+         50,
+         57
+        ]
+       },
+       {
+        "position": 29,
+        "hash": "bd8f90511d6ee9a3",
+        "span": [
+         56,
+         64
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "tsx-generic-arrow",
+   "derivation": "hand",
+   "tags": [
+    "jsx",
+    "generics"
+   ],
+   "description": "'<T,>' and '<T extends X>' are generic arrows, not JSX.",
+   "inputBase64": "Y29uc3QgaWQgPSA8VCw+KHg6IFQpID0+IHg7CmNvbnN0IGcgPSA8VCBleHRlbmRzIG9iamVjdD4oeDogVCkgPT4geDsK",
+   "inputText": "const id = <T,>(x: T) => x;\nconst g = <T extends object>(x: T) => x;\n",
+   "pairedRejection": "tsx-err-generic-type-position",
+   "result": {
+    "status": "ok",
+    "tokenCount": 31,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       0,
+       5
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "id",
+      "span": [
+       6,
+       8
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       9,
+       10
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       11,
+       12
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "T",
+      "span": [
+       12,
+       13
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       13,
+       14
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       14,
+       15
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       15,
+       16
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "x",
+      "span": [
+       16,
+       17
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       17,
+       18
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "T",
+      "span": [
+       19,
+       20
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       20,
+       21
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=>",
+      "span": [
+       22,
+       24
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "x",
+      "span": [
+       25,
+       26
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       26,
+       27
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       28,
+       33
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "g",
+      "span": [
+       34,
+       35
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       36,
+       37
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       38,
+       39
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "T",
+      "span": [
+       39,
+       40
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "extends",
+      "span": [
+       41,
+       48
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "object",
+      "span": [
+       49,
+       55
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       55,
+       56
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       56,
+       57
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "x",
+      "span": [
+       57,
+       58
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       58,
+       59
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "T",
+      "span": [
+       60,
+       61
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       61,
+       62
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=>",
+      "span": [
+       63,
+       65
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "x",
+      "span": [
+       66,
+       67
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       67,
+       68
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "6b404c1fd397e1ce",
+        "span": [
+         0,
+         13
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "12458b58ce1fc494",
+        "span": [
+         6,
+         14
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "bf8a0540b36459b8",
+        "span": [
+         9,
+         15
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "f6ec8cabe9d78f3d",
+        "span": [
+         11,
+         16
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "c8e0add5e9a1916e",
+        "span": [
+         12,
+         17
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "52657147fd299bd1",
+        "span": [
+         13,
+         18
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "50763b840e1d3e7e",
+        "span": [
+         14,
+         20
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "292f0b0a3450ed69",
+        "span": [
+         15,
+         21
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "2b5d060744abc307",
+        "span": [
+         16,
+         24
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "1e26ed9060061295",
+        "span": [
+         17,
+         26
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "560f08a3be8913a8",
+        "span": [
+         19,
+         27
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "b379939f0213edd9",
+        "span": [
+         20,
+         33
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "6632127173811325",
+        "span": [
+         22,
+         35
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "80640cbb4a39fae0",
+        "span": [
+         25,
+         37
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "77cd843093f4c702",
+        "span": [
+         26,
+         39
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "5e14d17e5080fd1c",
+        "span": [
+         28,
+         40
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "cb6261459cb7d655",
+        "span": [
+         34,
+         48
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "fbaef76ef9c49bdc",
+        "span": [
+         36,
+         55
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "b8310521c2da643b",
+        "span": [
+         38,
+         56
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "0df93a68cb084e9e",
+        "span": [
+         39,
+         57
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "a169bc33fb284c14",
+        "span": [
+         41,
+         58
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "bcfee1506918d9de",
+        "span": [
+         49,
+         59
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "50763b840e1d3e7e",
+        "span": [
+         55,
+         61
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "292f0b0a3450ed69",
+        "span": [
+         56,
+         62
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "2b5d060744abc307",
+        "span": [
+         57,
+         65
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "1e26ed9060061295",
+        "span": [
+         58,
+         67
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "560f08a3be8913a8",
+        "span": [
+         60,
+         68
+        ]
+       }
+      ],
+      "windowSelections": [
+       1,
+       1,
+       5,
+       6,
+       7,
+       7,
+       9,
+       9,
+       9,
+       9,
+       10,
+       12,
+       15,
+       15,
+       15,
+       15,
+       19,
+       19,
+       19,
+       19,
+       23,
+       23,
+       25,
+       25
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 1,
+        "hash": "12458b58ce1fc494",
+        "span": [
+         6,
+         14
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "52657147fd299bd1",
+        "span": [
+         13,
+         18
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "50763b840e1d3e7e",
+        "span": [
+         14,
+         20
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "292f0b0a3450ed69",
+        "span": [
+         15,
+         21
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "1e26ed9060061295",
+        "span": [
+         17,
+         26
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "560f08a3be8913a8",
+        "span": [
+         19,
+         27
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "6632127173811325",
+        "span": [
+         22,
+         35
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "5e14d17e5080fd1c",
+        "span": [
+         28,
+         40
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "0df93a68cb084e9e",
+        "span": [
+         39,
+         57
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "292f0b0a3450ed69",
+        "span": [
+         56,
+         62
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "1e26ed9060061295",
+        "span": [
+         58,
+         67
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "const",
+       "",
+       "=",
+       "<",
+       "",
+       ",",
+       ">",
+       "(",
+       "",
+       ":",
+       "",
+       ")",
+       "=>",
+       "",
+       ";",
+       "const",
+       "",
+       "=",
+       "<",
+       "",
+       "extends",
+       "",
+       ">",
+       "(",
+       "",
+       ":",
+       "",
+       ")",
+       "=>",
+       "",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "d9caa9e9e1aa86fc",
+        "span": [
+         0,
+         13
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "46b7f8c4fe45c631",
+        "span": [
+         6,
+         14
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "ca8bec32bb9de3e8",
+        "span": [
+         9,
+         15
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "9f51cf3e611c2a53",
+        "span": [
+         11,
+         16
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "2dfd2755a95b0e18",
+        "span": [
+         12,
+         17
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "b0d5940d5a6996ae",
+        "span": [
+         13,
+         18
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "029ca80e1ac7584d",
+        "span": [
+         14,
+         20
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "2bef741fd18afc87",
+        "span": [
+         15,
+         21
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "066d1b60f84c6612",
+        "span": [
+         16,
+         24
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "22ba7cd53340af20",
+        "span": [
+         17,
+         26
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "5ca0c7a7983b20a6",
+        "span": [
+         19,
+         27
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "abb21747a8ad233e",
+        "span": [
+         20,
+         33
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "80e09a3ed7b14cf8",
+        "span": [
+         22,
+         35
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "847a232ddd6d735b",
+        "span": [
+         25,
+         37
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "2a03f9fe3e29f944",
+        "span": [
+         26,
+         39
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "d9caa9e9e1aa86fc",
+        "span": [
+         28,
+         40
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "e414cd5b464f5593",
+        "span": [
+         34,
+         48
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "c9ae7b9bc4ed77ab",
+        "span": [
+         36,
+         55
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "4a055b427051bd67",
+        "span": [
+         38,
+         56
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "d7ae1fca7bbae945",
+        "span": [
+         39,
+         57
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "ac20cc614760de27",
+        "span": [
+         41,
+         58
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "af13b0b43637a37a",
+        "span": [
+         49,
+         59
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "029ca80e1ac7584d",
+        "span": [
+         55,
+         61
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "2bef741fd18afc87",
+        "span": [
+         56,
+         62
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "066d1b60f84c6612",
+        "span": [
+         57,
+         65
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "22ba7cd53340af20",
+        "span": [
+         58,
+         67
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "5ca0c7a7983b20a6",
+        "span": [
+         60,
+         68
+        ]
+       }
+      ],
+      "windowSelections": [
+       1,
+       4,
+       4,
+       6,
+       6,
+       6,
+       6,
+       8,
+       8,
+       9,
+       10,
+       14,
+       14,
+       14,
+       14,
+       18,
+       18,
+       18,
+       18,
+       22,
+       22,
+       22,
+       22,
+       24
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 1,
+        "hash": "46b7f8c4fe45c631",
+        "span": [
+         6,
+         14
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "2dfd2755a95b0e18",
+        "span": [
+         12,
+         17
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "029ca80e1ac7584d",
+        "span": [
+         14,
+         20
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "066d1b60f84c6612",
+        "span": [
+         16,
+         24
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "22ba7cd53340af20",
+        "span": [
+         17,
+         26
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "5ca0c7a7983b20a6",
+        "span": [
+         19,
+         27
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "2a03f9fe3e29f944",
+        "span": [
+         26,
+         39
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "4a055b427051bd67",
+        "span": [
+         38,
+         56
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "029ca80e1ac7584d",
+        "span": [
+         55,
+         61
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "066d1b60f84c6612",
+        "span": [
+         57,
+         65
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "tsx-generic-arrow-const",
+   "derivation": "hand",
+   "tags": [
+    "jsx",
+    "generics"
+   ],
+   "description": "'<const T,>' is a generic arrow.",
+   "inputBase64": "Y29uc3QgaCA9IDxjb25zdCBULD4oeDogVCkgPT4geDsK",
+   "inputText": "const h = <const T,>(x: T) => x;\n",
+   "pairedRejection": "tsx-err-generic-type-position",
+   "result": {
+    "status": "ok",
+    "tokenCount": 16,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       0,
+       5
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "h",
+      "span": [
+       6,
+       7
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       8,
+       9
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       10,
+       11
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       11,
+       16
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "T",
+      "span": [
+       17,
+       18
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       18,
+       19
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       19,
+       20
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       20,
+       21
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "x",
+      "span": [
+       21,
+       22
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       22,
+       23
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "T",
+      "span": [
+       24,
+       25
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       25,
+       26
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=>",
+      "span": [
+       27,
+       29
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "x",
+      "span": [
+       30,
+       31
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       31,
+       32
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "03c12cfe7883b573",
+        "span": [
+         0,
+         16
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "08a3ecb8afae2884",
+        "span": [
+         6,
+         18
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "f47c7531d24df7cf",
+        "span": [
+         8,
+         19
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "83f8f993995e95e5",
+        "span": [
+         10,
+         20
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "5ba45cc07cbe0384",
+        "span": [
+         11,
+         21
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "c8e0add5e9a1916e",
+        "span": [
+         17,
+         22
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "52657147fd299bd1",
+        "span": [
+         18,
+         23
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "50763b840e1d3e7e",
+        "span": [
+         19,
+         25
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "292f0b0a3450ed69",
+        "span": [
+         20,
+         26
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "2b5d060744abc307",
+        "span": [
+         21,
+         29
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "1e26ed9060061295",
+        "span": [
+         22,
+         31
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "560f08a3be8913a8",
+        "span": [
+         24,
+         32
+        ]
+       }
+      ],
+      "windowSelections": [
+       0,
+       1,
+       4,
+       6,
+       7,
+       8,
+       8,
+       10,
+       10
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 0,
+        "hash": "03c12cfe7883b573",
+        "span": [
+         0,
+         16
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "08a3ecb8afae2884",
+        "span": [
+         6,
+         18
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "5ba45cc07cbe0384",
+        "span": [
+         11,
+         21
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "52657147fd299bd1",
+        "span": [
+         18,
+         23
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "50763b840e1d3e7e",
+        "span": [
+         19,
+         25
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "292f0b0a3450ed69",
+        "span": [
+         20,
+         26
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "1e26ed9060061295",
+        "span": [
+         22,
+         31
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "const",
+       "",
+       "=",
+       "<",
+       "const",
+       "",
+       ",",
+       ">",
+       "(",
+       "",
+       ":",
+       "",
+       ")",
+       "=>",
+       "",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "e6c9d651277c3747",
+        "span": [
+         0,
+         16
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "e96b2479f8d077aa",
+        "span": [
+         6,
+         18
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "09234727221aba2c",
+        "span": [
+         8,
+         19
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "1126d8ab36bd1cf3",
+        "span": [
+         10,
+         20
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "fe550e8a06f0fcd0",
+        "span": [
+         11,
+         21
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "2dfd2755a95b0e18",
+        "span": [
+         17,
+         22
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "b0d5940d5a6996ae",
+        "span": [
+         18,
+         23
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "029ca80e1ac7584d",
+        "span": [
+         19,
+         25
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "2bef741fd18afc87",
+        "span": [
+         20,
+         26
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "066d1b60f84c6612",
+        "span": [
+         21,
+         29
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "22ba7cd53340af20",
+        "span": [
+         22,
+         31
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "5ca0c7a7983b20a6",
+        "span": [
+         24,
+         32
+        ]
+       }
+      ],
+      "windowSelections": [
+       2,
+       2,
+       2,
+       3,
+       7,
+       7,
+       7,
+       7,
+       9
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 2,
+        "hash": "09234727221aba2c",
+        "span": [
+         8,
+         19
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "1126d8ab36bd1cf3",
+        "span": [
+         10,
+         20
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "029ca80e1ac7584d",
+        "span": [
+         19,
+         25
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "066d1b60f84c6612",
+        "span": [
+         21,
+         29
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "tsx-extends-attribute",
+   "derivation": "hand",
+   "tags": [
+    "jsx",
+    "generics"
+   ],
+   "description": "'<T extends=' is JSX with an attribute named 'extends'.",
+   "inputBase64": "Y29uc3QgaiA9IDxUIGV4dGVuZHM9IngiPnQ8L1Q+Owo=",
+   "inputText": "const j = <T extends=\"x\">t</T>;\n",
+   "pairedRejection": "tsx-err-self-closing",
+   "result": {
+    "status": "ok",
+    "tokenCount": 15,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       0,
+       5
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "j",
+      "span": [
+       6,
+       7
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       8,
+       9
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       10,
+       11
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "T",
+      "span": [
+       11,
+       12
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "extends",
+      "span": [
+       13,
+       20
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       20,
+       21
+      ]
+     },
+     {
+      "class": "jsx-string",
+      "text": "\"x\"",
+      "span": [
+       21,
+       24
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       24,
+       25
+      ]
+     },
+     {
+      "class": "jsx-text",
+      "text": "t",
+      "span": [
+       25,
+       26
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       26,
+       27
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       27,
+       28
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "T",
+      "span": [
+       28,
+       29
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       29,
+       30
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       30,
+       31
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "25f9d1d6aaf49a3a",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "c62a733d697ee78d",
+        "span": [
+         6,
+         20
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "eb278a13a3064ee4",
+        "span": [
+         8,
+         21
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "517990805ebb51bb",
+        "span": [
+         10,
+         24
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "64a11b6c99736d5f",
+        "span": [
+         11,
+         25
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "d565b8ffdbd43b0e",
+        "span": [
+         13,
+         26
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "8568c09d19aa38ae",
+        "span": [
+         20,
+         27
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "42fae9a0960fb698",
+        "span": [
+         21,
+         28
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "dc331f640ca768fd",
+        "span": [
+         24,
+         29
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "5c1d0ebd9d89f90e",
+        "span": [
+         25,
+         30
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "22663d57abcff6e8",
+        "span": [
+         26,
+         31
+        ]
+       }
+      ],
+      "windowSelections": [
+       0,
+       3,
+       3,
+       3,
+       7,
+       7,
+       7,
+       10
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 0,
+        "hash": "25f9d1d6aaf49a3a",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "517990805ebb51bb",
+        "span": [
+         10,
+         24
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "42fae9a0960fb698",
+        "span": [
+         21,
+         28
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "22663d57abcff6e8",
+        "span": [
+         26,
+         31
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "const",
+       "",
+       "=",
+       "<",
+       "",
+       "",
+       "=",
+       "",
+       ">",
+       "",
+       "<",
+       "/",
+       "",
+       ">",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "d9caa9e9e1aa86fc",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "9bab6f7741e4e6c7",
+        "span": [
+         6,
+         20
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "694eee2c66af0000",
+        "span": [
+         8,
+         21
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "bdb143a79eb6027d",
+        "span": [
+         10,
+         24
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "e6efd4f5dfe97f3c",
+        "span": [
+         11,
+         25
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "f3526c2627d0b955",
+        "span": [
+         13,
+         26
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "b2e596924ef40b6f",
+        "span": [
+         20,
+         27
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "72b1bca686afa676",
+        "span": [
+         21,
+         28
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "7b8e4c341839d962",
+        "span": [
+         24,
+         29
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "c0031ebdba40e165",
+        "span": [
+         25,
+         30
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "fe89dbe1dc53f4cf",
+        "span": [
+         26,
+         31
+        ]
+       }
+      ],
+      "windowSelections": [
+       2,
+       2,
+       2,
+       6,
+       7,
+       7,
+       7,
+       7
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 2,
+        "hash": "694eee2c66af0000",
+        "span": [
+         8,
+         21
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "b2e596924ef40b6f",
+        "span": [
+         20,
+         27
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "72b1bca686afa676",
+        "span": [
+         21,
+         28
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "tsx-text-whitespace",
+   "derivation": "hand",
+   "tags": [
+    "jsx"
+   ],
+   "description": "White-space-only JSX text is trivia; other text is trimmed at both ends but keeps inner spaces.",
+   "inputBase64": "Y29uc3QgdSA9ICgKICA8dWw+CiAgICA8bGk+IGEgIGIgPC9saT4KICAgIHtsaXN0fQogIDwvdWw+Cik7Cg==",
+   "inputText": "const u = (\n  <ul>\n    <li> a  b </li>\n    {list}\n  </ul>\n);\n",
+   "pairedRejection": "tsx-err-brace-in-text",
+   "result": {
+    "status": "ok",
+    "tokenCount": 24,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       0,
+       5
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "u",
+      "span": [
+       6,
+       7
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       8,
+       9
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       10,
+       11
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       14,
+       15
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "ul",
+      "span": [
+       15,
+       17
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       17,
+       18
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       23,
+       24
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "li",
+      "span": [
+       24,
+       26
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       26,
+       27
+      ]
+     },
+     {
+      "class": "jsx-text",
+      "text": "a  b",
+      "span": [
+       28,
+       32
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       33,
+       34
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       34,
+       35
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "li",
+      "span": [
+       35,
+       37
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       37,
+       38
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       43,
+       44
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "list",
+      "span": [
+       44,
+       48
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       48,
+       49
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       52,
+       53
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       53,
+       54
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "ul",
+      "span": [
+       54,
+       56
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       56,
+       57
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       58,
+       59
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       59,
+       60
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "a786f62102df9f91",
+        "span": [
+         0,
+         15
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "7592c6dd49555159",
+        "span": [
+         6,
+         17
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "b9a561cde7ee2925",
+        "span": [
+         8,
+         18
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "366a903333a9b02e",
+        "span": [
+         10,
+         24
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "345ab4afb50c0b8f",
+        "span": [
+         14,
+         26
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "edf7b1397a1b30b3",
+        "span": [
+         15,
+         27
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "370e5e08cbfb3bf0",
+        "span": [
+         17,
+         32
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "5116286d70b36260",
+        "span": [
+         23,
+         34
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "e3960c415159d79d",
+        "span": [
+         24,
+         35
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "5f9586ccb067c86b",
+        "span": [
+         26,
+         37
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "08cd429b7df621e4",
+        "span": [
+         28,
+         38
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "7d65e3f10a563d33",
+        "span": [
+         33,
+         44
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "25460e49560a0c80",
+        "span": [
+         34,
+         48
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "7487943324a1a4bb",
+        "span": [
+         35,
+         49
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "346d3268141163ce",
+        "span": [
+         37,
+         53
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "5888b348fc5e5ae0",
+        "span": [
+         43,
+         54
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "ddb32e02dfbf8d3c",
+        "span": [
+         44,
+         56
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "9ee80e5d74cb6319",
+        "span": [
+         48,
+         57
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "492437343c42c4db",
+        "span": [
+         52,
+         59
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "ef896493bbff3055",
+        "span": [
+         53,
+         60
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       4,
+       4,
+       4,
+       4,
+       6,
+       6,
+       10,
+       10,
+       10,
+       10,
+       12,
+       12,
+       14,
+       14,
+       18,
+       18
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "366a903333a9b02e",
+        "span": [
+         10,
+         24
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "345ab4afb50c0b8f",
+        "span": [
+         14,
+         26
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "370e5e08cbfb3bf0",
+        "span": [
+         17,
+         32
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "08cd429b7df621e4",
+        "span": [
+         28,
+         38
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "25460e49560a0c80",
+        "span": [
+         34,
+         48
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "346d3268141163ce",
+        "span": [
+         37,
+         53
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "492437343c42c4db",
+        "span": [
+         52,
+         59
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "const",
+       "",
+       "=",
+       "(",
+       "<",
+       "",
+       ">",
+       "<",
+       "",
+       ">",
+       "",
+       "<",
+       "/",
+       "",
+       ">",
+       "{",
+       "",
+       "}",
+       "<",
+       "/",
+       "",
+       ">",
+       ")",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "b09f55ce60e7f7a8",
+        "span": [
+         0,
+         15
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "62c0eede60cd62d2",
+        "span": [
+         6,
+         17
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "7de951182482bb0c",
+        "span": [
+         8,
+         18
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "4a8ead056a693e87",
+        "span": [
+         10,
+         24
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "48d886ccaa59acbe",
+        "span": [
+         14,
+         26
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "083b5acca7e7e922",
+        "span": [
+         15,
+         27
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "73c870d1dee57c33",
+        "span": [
+         17,
+         32
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "14a6d8adf9912f23",
+        "span": [
+         23,
+         34
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "f62c72c1bf559f76",
+        "span": [
+         24,
+         35
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "7b8e4c341839d962",
+        "span": [
+         26,
+         37
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "c0031ebdba40e165",
+        "span": [
+         28,
+         38
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "9c78f65e68d30400",
+        "span": [
+         33,
+         44
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "a37cfad1b1309c37",
+        "span": [
+         34,
+         48
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "74fb539f5523deef",
+        "span": [
+         35,
+         49
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "43809ed934019d88",
+        "span": [
+         37,
+         53
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "f1fc08d533f07cac",
+        "span": [
+         43,
+         54
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "bd8f90511d6ee9a3",
+        "span": [
+         44,
+         56
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "fb83976c36cb1ea0",
+        "span": [
+         48,
+         57
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "4ca4754ab2666afe",
+        "span": [
+         52,
+         59
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "7de21455126f0033",
+        "span": [
+         53,
+         60
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       4,
+       5,
+       5,
+       5,
+       5,
+       7,
+       7,
+       9,
+       9,
+       13,
+       14,
+       14,
+       14,
+       14,
+       18,
+       18
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "4a8ead056a693e87",
+        "span": [
+         10,
+         24
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "48d886ccaa59acbe",
+        "span": [
+         14,
+         26
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "083b5acca7e7e922",
+        "span": [
+         15,
+         27
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "14a6d8adf9912f23",
+        "span": [
+         23,
+         34
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "7b8e4c341839d962",
+        "span": [
+         26,
+         37
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "74fb539f5523deef",
+        "span": [
+         35,
+         49
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "43809ed934019d88",
+        "span": [
+         37,
+         53
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "4ca4754ab2666afe",
+        "span": [
+         52,
+         59
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "tsx-attr-element-value",
+   "derivation": "hand",
+   "tags": [
+    "jsx"
+   ],
+   "description": "An element directly after '=' is an attribute value.",
+   "inputBase64": "Y29uc3QgdiA9IDxBIGI9PGMvPiAvPjsK",
+   "inputText": "const v = <A b=<c/> />;\n",
+   "pairedRejection": "tsx-err-self-closing",
+   "result": {
+    "status": "ok",
+    "tokenCount": 14,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       0,
+       5
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "v",
+      "span": [
+       6,
+       7
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       8,
+       9
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       10,
+       11
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "A",
+      "span": [
+       11,
+       12
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "b",
+      "span": [
+       13,
+       14
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       14,
+       15
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       15,
+       16
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "c",
+      "span": [
+       16,
+       17
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       17,
+       18
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       18,
+       19
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       20,
+       21
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       21,
+       22
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       22,
+       23
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "7af5f1fd26bb1798",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "f42b6707dbe928b9",
+        "span": [
+         6,
+         14
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "989ba13d22e6a142",
+        "span": [
+         8,
+         15
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "6b23e2751c472e68",
+        "span": [
+         10,
+         16
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "7a812cfaa4e532d1",
+        "span": [
+         11,
+         17
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "bfd5f422eb447222",
+        "span": [
+         13,
+         18
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "7b50c220eb73de76",
+        "span": [
+         14,
+         19
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "7fad55a8e996b238",
+        "span": [
+         15,
+         21
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "f8d880c8262bf230",
+        "span": [
+         16,
+         22
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "91af87f2b2e35458",
+        "span": [
+         17,
+         23
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       3,
+       3,
+       3,
+       4,
+       6,
+       6
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "6b23e2751c472e68",
+        "span": [
+         10,
+         16
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "7a812cfaa4e532d1",
+        "span": [
+         11,
+         17
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "7b50c220eb73de76",
+        "span": [
+         14,
+         19
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "const",
+       "",
+       "=",
+       "<",
+       "",
+       "",
+       "=",
+       "<",
+       "",
+       "/",
+       ">",
+       "/",
+       ">",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "d9caa9e9e1aa86fc",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "9bab6f7741e4e6c7",
+        "span": [
+         6,
+         14
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "694eee2c66af0000",
+        "span": [
+         8,
+         15
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "41bccf10d1320035",
+        "span": [
+         10,
+         16
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "192165bf4f8419c5",
+        "span": [
+         11,
+         17
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "744bc04c956644ef",
+        "span": [
+         13,
+         18
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "ac5df1b52f2eba87",
+        "span": [
+         14,
+         19
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "6d27d971201f8a77",
+        "span": [
+         15,
+         21
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "3b5de5e9f7dd4045",
+        "span": [
+         16,
+         22
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "a9c2d4a22cc36dc8",
+        "span": [
+         17,
+         23
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       4,
+       4,
+       4,
+       4,
+       8,
+       8
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "41bccf10d1320035",
+        "span": [
+         10,
+         16
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "192165bf4f8419c5",
+        "span": [
+         11,
+         17
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "3b5de5e9f7dd4045",
+        "span": [
+         16,
+         22
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "tsx-regex-in-container",
+   "derivation": "hand",
+   "tags": [
+    "jsx",
+    "regex"
+   ],
+   "description": "An expression container starts in regex position.",
+   "inputBase64": "Y29uc3QgdyA9IDxhPnsveC8udGVzdChzKSA/IDEgOiAyfTwvYT47Cg==",
+   "inputText": "const w = <a>{/x/.test(s) ? 1 : 2}</a>;\n",
+   "pairedRejection": "ts-err-unterminated-regex",
+   "result": {
+    "status": "ok",
+    "tokenCount": 23,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       0,
+       5
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "w",
+      "span": [
+       6,
+       7
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       8,
+       9
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       10,
+       11
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       11,
+       12
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       12,
+       13
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       13,
+       14
+      ]
+     },
+     {
+      "class": "regex",
+      "text": "/x/",
+      "span": [
+       14,
+       17
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ".",
+      "span": [
+       17,
+       18
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "test",
+      "span": [
+       18,
+       22
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       22,
+       23
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "s",
+      "span": [
+       23,
+       24
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       24,
+       25
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "?",
+      "span": [
+       26,
+       27
+      ]
+     },
+     {
+      "class": "number",
+      "text": "1",
+      "span": [
+       28,
+       29
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       30,
+       31
+      ]
+     },
+     {
+      "class": "number",
+      "text": "2",
+      "span": [
+       32,
+       33
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       33,
+       34
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       34,
+       35
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       35,
+       36
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       36,
+       37
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       37,
+       38
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       38,
+       39
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "d0b4a268f715a0f9",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "e76fa6960c72317c",
+        "span": [
+         6,
+         13
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "6e79511883ece36d",
+        "span": [
+         8,
+         14
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "62f9267cc60a65e6",
+        "span": [
+         10,
+         17
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "938934df86962d7b",
+        "span": [
+         11,
+         18
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "794b22e577476ca3",
+        "span": [
+         12,
+         22
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "eca61ed5271600b4",
+        "span": [
+         13,
+         23
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "f4684a8483b9bae1",
+        "span": [
+         14,
+         24
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "e8ddb5d9419b4d60",
+        "span": [
+         17,
+         25
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "4c4c9ca039b72e76",
+        "span": [
+         18,
+         27
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "9710efc6adaf5bf9",
+        "span": [
+         22,
+         29
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "f5b16cd853b6e6f4",
+        "span": [
+         23,
+         31
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "fd721e6d5bd49364",
+        "span": [
+         24,
+         33
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "e40a631baaf5e5a8",
+        "span": [
+         26,
+         34
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "eb6e312bd36165fa",
+        "span": [
+         28,
+         35
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "f5d955bf6a8cb1ca",
+        "span": [
+         30,
+         36
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "a235285f2c26cc47",
+        "span": [
+         32,
+         37
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "0347e639e324b86e",
+        "span": [
+         33,
+         38
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "f01fba16f2d223c0",
+        "span": [
+         34,
+         39
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       3,
+       3,
+       3,
+       5,
+       5,
+       9,
+       9,
+       9,
+       9,
+       10,
+       13,
+       13,
+       16,
+       17,
+       17
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "62f9267cc60a65e6",
+        "span": [
+         10,
+         17
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "794b22e577476ca3",
+        "span": [
+         12,
+         22
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "4c4c9ca039b72e76",
+        "span": [
+         18,
+         27
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "9710efc6adaf5bf9",
+        "span": [
+         22,
+         29
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "e40a631baaf5e5a8",
+        "span": [
+         26,
+         34
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "a235285f2c26cc47",
+        "span": [
+         32,
+         37
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "0347e639e324b86e",
+        "span": [
+         33,
+         38
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "const",
+       "",
+       "=",
+       "<",
+       "",
+       ">",
+       "{",
+       "",
+       ".",
+       "",
+       "(",
+       "",
+       ")",
+       "?",
+       "",
+       ":",
+       "",
+       "}",
+       "<",
+       "/",
+       "",
+       ">",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "d9caa9e9e1aa86fc",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "28524108e43a5509",
+        "span": [
+         6,
+         13
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "da65d17653bfe073",
+        "span": [
+         8,
+         14
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "7347abf3905a6b5c",
+        "span": [
+         10,
+         17
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "b4d34002b1ae73e5",
+        "span": [
+         11,
+         18
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "59354ebbfaa5bbcc",
+        "span": [
+         12,
+         22
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "712615711e78ee85",
+        "span": [
+         13,
+         23
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "b2685281282c1261",
+        "span": [
+         14,
+         24
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "2bedb7296b2472fa",
+        "span": [
+         17,
+         25
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "1fa2dbb9abbbadd9",
+        "span": [
+         18,
+         27
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "fe067084cef9ad6e",
+        "span": [
+         22,
+         29
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "6dc3eea2beab24ba",
+        "span": [
+         23,
+         31
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "a6e91485bf792809",
+        "span": [
+         24,
+         33
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "118c27e10efbd922",
+        "span": [
+         26,
+         34
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "f99d9b97f89d1ce5",
+        "span": [
+         28,
+         35
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "cadc766e0ee3c0b2",
+        "span": [
+         30,
+         36
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "8f31144000515a97",
+        "span": [
+         32,
+         37
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "fb83976c36cb1ea0",
+        "span": [
+         33,
+         38
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "fe89dbe1dc53f4cf",
+        "span": [
+         34,
+         39
+        ]
+       }
+      ],
+      "windowSelections": [
+       1,
+       1,
+       5,
+       5,
+       5,
+       8,
+       9,
+       9,
+       9,
+       9,
+       13,
+       13,
+       13,
+       13,
+       16,
+       16
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 1,
+        "hash": "28524108e43a5509",
+        "span": [
+         6,
+         13
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "59354ebbfaa5bbcc",
+        "span": [
+         12,
+         22
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "2bedb7296b2472fa",
+        "span": [
+         17,
+         25
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "1fa2dbb9abbbadd9",
+        "span": [
+         18,
+         27
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "118c27e10efbd922",
+        "span": [
+         26,
+         34
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "8f31144000515a97",
+        "span": [
+         32,
+         37
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "tsx-template-in-jsx",
+   "derivation": "hand",
+   "tags": [
+    "jsx",
+    "template"
+   ],
+   "description": "Templates inside attribute and child containers.",
+   "inputBase64": "Y29uc3QgdCA9IDxhIHRpdGxlPXtgdCR7eH1gfT57YCR7eX1gfTwvYT47Cg==",
+   "inputText": "const t = <a title={`t${x}`}>{`${y}`}</a>;\n",
+   "pairedRejection": "ts-err-unterminated-template",
+   "result": {
+    "status": "ok",
+    "tokenCount": 23,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       0,
+       5
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "t",
+      "span": [
+       6,
+       7
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       8,
+       9
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       10,
+       11
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       11,
+       12
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "title",
+      "span": [
+       13,
+       18
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       18,
+       19
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       19,
+       20
+      ]
+     },
+     {
+      "class": "template-head",
+      "text": "`t${",
+      "span": [
+       20,
+       24
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "x",
+      "span": [
+       24,
+       25
+      ]
+     },
+     {
+      "class": "template-tail",
+      "text": "}`",
+      "span": [
+       25,
+       27
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       27,
+       28
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       28,
+       29
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       29,
+       30
+      ]
+     },
+     {
+      "class": "template-head",
+      "text": "`${",
+      "span": [
+       30,
+       33
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "y",
+      "span": [
+       33,
+       34
+      ]
+     },
+     {
+      "class": "template-tail",
+      "text": "}`",
+      "span": [
+       34,
+       36
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       36,
+       37
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       37,
+       38
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       38,
+       39
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       39,
+       40
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       40,
+       41
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       41,
+       42
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "a93185762b656925",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "bf7dd74e675090e9",
+        "span": [
+         6,
+         18
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "2487e933eb3bb520",
+        "span": [
+         8,
+         19
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "ce75fd0aa3da91d4",
+        "span": [
+         10,
+         20
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "e0d310cf730c80ec",
+        "span": [
+         11,
+         24
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "f9fcf2f02e22976e",
+        "span": [
+         13,
+         25
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "ae03666762607dd5",
+        "span": [
+         18,
+         27
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "342c0d195f2a2148",
+        "span": [
+         19,
+         28
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "bd182a87a16a9045",
+        "span": [
+         20,
+         29
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "bc172a5436e12385",
+        "span": [
+         24,
+         30
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "e7f0b985adf67ac6",
+        "span": [
+         25,
+         33
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "ca8b200209c756de",
+        "span": [
+         27,
+         34
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "d5ec0db0f4a1d57e",
+        "span": [
+         28,
+         36
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "42fb01ddd4a76226",
+        "span": [
+         29,
+         37
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "6c78a13945dd301c",
+        "span": [
+         30,
+         38
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "e014962ba5fa3dd0",
+        "span": [
+         33,
+         39
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "0f4b48639264e97c",
+        "span": [
+         34,
+         40
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "0347e639e324b86e",
+        "span": [
+         36,
+         41
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "f01fba16f2d223c0",
+        "span": [
+         37,
+         42
+        ]
+       }
+      ],
+      "windowSelections": [
+       2,
+       2,
+       2,
+       6,
+       7,
+       7,
+       7,
+       7,
+       9,
+       9,
+       13,
+       13,
+       13,
+       16,
+       17,
+       17
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 2,
+        "hash": "2487e933eb3bb520",
+        "span": [
+         8,
+         19
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "ae03666762607dd5",
+        "span": [
+         18,
+         27
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "342c0d195f2a2148",
+        "span": [
+         19,
+         28
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "bc172a5436e12385",
+        "span": [
+         24,
+         30
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "42fb01ddd4a76226",
+        "span": [
+         29,
+         37
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "0f4b48639264e97c",
+        "span": [
+         34,
+         40
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "0347e639e324b86e",
+        "span": [
+         36,
+         41
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "const",
+       "",
+       "=",
+       "<",
+       "",
+       "",
+       "=",
+       "{",
+       "",
+       "",
+       "",
+       "}",
+       ">",
+       "{",
+       "",
+       "",
+       "",
+       "}",
+       "<",
+       "/",
+       "",
+       ">",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "d9caa9e9e1aa86fc",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "9bab6f7741e4e6c7",
+        "span": [
+         6,
+         18
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "694eee2c66af0000",
+        "span": [
+         8,
+         19
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "1e93de0cde4a519f",
+        "span": [
+         10,
+         20
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "194fc16813d8a4e3",
+        "span": [
+         11,
+         24
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "5d08fa86a635b7df",
+        "span": [
+         13,
+         25
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "f0d51e5cbdf2c518",
+        "span": [
+         18,
+         27
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "454192a076fb040d",
+        "span": [
+         19,
+         28
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "9a4b1ed691bbc853",
+        "span": [
+         20,
+         29
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "d9880e783a62b8df",
+        "span": [
+         24,
+         30
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "1bda19047a7f3d67",
+        "span": [
+         25,
+         33
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "13f8d73868628fa2",
+        "span": [
+         27,
+         34
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "560f95e569e05ce4",
+        "span": [
+         28,
+         36
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "454192a076fb040d",
+        "span": [
+         29,
+         37
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "3d2f6bf5b4031804",
+        "span": [
+         30,
+         38
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "f73fe329a1e003ef",
+        "span": [
+         33,
+         39
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "2e407dea095786d3",
+        "span": [
+         34,
+         40
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "fb83976c36cb1ea0",
+        "span": [
+         36,
+         41
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "fe89dbe1dc53f4cf",
+        "span": [
+         37,
+         42
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       4,
+       4,
+       4,
+       4,
+       7,
+       7,
+       10,
+       11,
+       11,
+       11,
+       11,
+       14,
+       16,
+       16,
+       16
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "1e93de0cde4a519f",
+        "span": [
+         10,
+         20
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "194fc16813d8a4e3",
+        "span": [
+         11,
+         24
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "454192a076fb040d",
+        "span": [
+         19,
+         28
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "1bda19047a7f3d67",
+        "span": [
+         25,
+         33
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "13f8d73868628fa2",
+        "span": [
+         27,
+         34
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "3d2f6bf5b4031804",
+        "span": [
+         30,
+         38
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "2e407dea095786d3",
+        "span": [
+         34,
+         40
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "tsx-plain-js",
+   "derivation": "hand",
+   "tags": [
+    "regex",
+    "division"
+   ],
+   "description": "Plain JavaScript lexes the same under tsx-tokens.",
+   "inputBase64": "dmFyIHIgPSBhIC8gYiAvIGMsIHMgPSAvPS9nOwppZiAocikgL3gvLmV4ZWMocyk7Cg==",
+   "inputText": "var r = a / b / c, s = /=/g;\nif (r) /x/.exec(s);\n",
+   "pairedRejection": "ts-err-regex-class",
+   "result": {
+    "status": "ok",
+    "tokenCount": 24,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "var",
+      "span": [
+       0,
+       3
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "r",
+      "span": [
+       4,
+       5
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       6,
+       7
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       8,
+       9
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       10,
+       11
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "b",
+      "span": [
+       12,
+       13
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       14,
+       15
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "c",
+      "span": [
+       16,
+       17
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       17,
+       18
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "s",
+      "span": [
+       19,
+       20
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       21,
+       22
+      ]
+     },
+     {
+      "class": "regex",
+      "text": "/=/g",
+      "span": [
+       23,
+       27
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       27,
+       28
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "if",
+      "span": [
+       29,
+       31
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       32,
+       33
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "r",
+      "span": [
+       33,
+       34
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       34,
+       35
+      ]
+     },
+     {
+      "class": "regex",
+      "text": "/x/",
+      "span": [
+       36,
+       39
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ".",
+      "span": [
+       39,
+       40
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "exec",
+      "span": [
+       40,
+       44
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       44,
+       45
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "s",
+      "span": [
+       45,
+       46
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       46,
+       47
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       47,
+       48
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "8787142a2f8c7adb",
+        "span": [
+         0,
+         11
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "77d80ad504ca0131",
+        "span": [
+         4,
+         13
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "c927faf1946d817b",
+        "span": [
+         6,
+         15
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "f3479fccac37be16",
+        "span": [
+         8,
+         17
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "0368388a4e45bc17",
+        "span": [
+         10,
+         18
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "89f848eab4af5e90",
+        "span": [
+         12,
+         20
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "e70f1ce6943f5fcf",
+        "span": [
+         14,
+         22
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "52d0a35ae42bed75",
+        "span": [
+         16,
+         27
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "0b0eab922c64e5a8",
+        "span": [
+         17,
+         28
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "bea1542662cc276b",
+        "span": [
+         19,
+         31
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "6617f27f02ce7ba9",
+        "span": [
+         21,
+         33
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "1884c30bc0c4b3e3",
+        "span": [
+         23,
+         34
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "ab420f57c8b5761f",
+        "span": [
+         27,
+         35
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "eaf6abd40f10739c",
+        "span": [
+         29,
+         39
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "4fb999cbce7b54c4",
+        "span": [
+         32,
+         40
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "c4028277a4744b47",
+        "span": [
+         33,
+         44
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "aa18dcdd0508e0d7",
+        "span": [
+         34,
+         45
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "5e998cdd92d7d76e",
+        "span": [
+         36,
+         46
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "c1275ffc1a7ddbc0",
+        "span": [
+         39,
+         47
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "0aa13250a0e83214",
+        "span": [
+         40,
+         48
+        ]
+       }
+      ],
+      "windowSelections": [
+       1,
+       4,
+       4,
+       4,
+       4,
+       8,
+       8,
+       8,
+       8,
+       11,
+       11,
+       11,
+       14,
+       14,
+       14,
+       17,
+       19
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 1,
+        "hash": "77d80ad504ca0131",
+        "span": [
+         4,
+         13
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "0368388a4e45bc17",
+        "span": [
+         10,
+         18
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "0b0eab922c64e5a8",
+        "span": [
+         17,
+         28
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "1884c30bc0c4b3e3",
+        "span": [
+         23,
+         34
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "4fb999cbce7b54c4",
+        "span": [
+         32,
+         40
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "5e998cdd92d7d76e",
+        "span": [
+         36,
+         46
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "0aa13250a0e83214",
+        "span": [
+         40,
+         48
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "var",
+       "",
+       "=",
+       "",
+       "/",
+       "",
+       "/",
+       "",
+       ",",
+       "",
+       "=",
+       "",
+       ";",
+       "if",
+       "(",
+       "",
+       ")",
+       "",
+       ".",
+       "",
+       "(",
+       "",
+       ")",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "373167ad61ba0acf",
+        "span": [
+         0,
+         11
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "c4b06d62a6937edc",
+        "span": [
+         4,
+         13
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "e14f211d76bbb078",
+        "span": [
+         6,
+         15
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "3cb78289f7437c85",
+        "span": [
+         8,
+         17
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "4df802405a4ecdb0",
+        "span": [
+         10,
+         18
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "9d44d34549c96d0d",
+        "span": [
+         12,
+         20
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "cbd3429c2dfb7789",
+        "span": [
+         14,
+         22
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "684a9e65df1c7959",
+        "span": [
+         16,
+         27
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "c2e5c92b65fd53c0",
+        "span": [
+         17,
+         28
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "713519c043f634eb",
+        "span": [
+         19,
+         31
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "ae28cb5812de487b",
+        "span": [
+         21,
+         33
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "1049bfde602b5401",
+        "span": [
+         23,
+         34
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "87043a7c8f8dde77",
+        "span": [
+         27,
+         35
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "eea074c24b8372e4",
+        "span": [
+         29,
+         39
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "d85f96ea99b813f7",
+        "span": [
+         32,
+         40
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "026e715242345e1a",
+        "span": [
+         33,
+         44
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "aa7d33a8904986fc",
+        "span": [
+         34,
+         45
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "b2685281282c1261",
+        "span": [
+         36,
+         46
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "2bedb7296b2472fa",
+        "span": [
+         39,
+         47
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "e79d098e58fdab84",
+        "span": [
+         40,
+         48
+        ]
+       }
+      ],
+      "windowSelections": [
+       0,
+       3,
+       3,
+       3,
+       4,
+       7,
+       7,
+       7,
+       11,
+       11,
+       11,
+       11,
+       15,
+       15,
+       15,
+       15,
+       18
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 0,
+        "hash": "373167ad61ba0acf",
+        "span": [
+         0,
+         11
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "3cb78289f7437c85",
+        "span": [
+         8,
+         17
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "4df802405a4ecdb0",
+        "span": [
+         10,
+         18
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "684a9e65df1c7959",
+        "span": [
+         16,
+         27
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "1049bfde602b5401",
+        "span": [
+         23,
+         34
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "026e715242345e1a",
+        "span": [
+         33,
+         44
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "2bedb7296b2472fa",
+        "span": [
+         39,
+         47
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "tsx-format-a",
+   "derivation": "hand",
+   "tags": [
+    "format-pair",
+    "jsx"
+   ],
+   "description": "JSX layout pair, one line.",
+   "inputBase64": "Y29uc3QgZWwgPSA8QnV0dG9uIGtpbmQ9InByaW1hcnkiIG9uQ2xpY2s9e2dvfT5TYXZlPC9CdXR0b24+Owo=",
+   "inputText": "const el = <Button kind=\"primary\" onClick={go}>Save</Button>;\n",
+   "pairedRejection": "tsx-err-unclosed-element",
+   "result": {
+    "status": "ok",
+    "tokenCount": 20,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       0,
+       5
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "el",
+      "span": [
+       6,
+       8
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       9,
+       10
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       11,
+       12
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "Button",
+      "span": [
+       12,
+       18
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "kind",
+      "span": [
+       19,
+       23
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       23,
+       24
+      ]
+     },
+     {
+      "class": "jsx-string",
+      "text": "\"primary\"",
+      "span": [
+       24,
+       33
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "onClick",
+      "span": [
+       34,
+       41
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       41,
+       42
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       42,
+       43
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "go",
+      "span": [
+       43,
+       45
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       45,
+       46
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       46,
+       47
+      ]
+     },
+     {
+      "class": "jsx-text",
+      "text": "Save",
+      "span": [
+       47,
+       51
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       51,
+       52
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       52,
+       53
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "Button",
+      "span": [
+       53,
+       59
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       59,
+       60
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       60,
+       61
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "3bb9e10923eb3ce3",
+        "span": [
+         0,
+         18
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "7829772a5554e0d1",
+        "span": [
+         6,
+         23
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "5f1717bc10cb4aeb",
+        "span": [
+         9,
+         24
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "051f1f86fca394eb",
+        "span": [
+         11,
+         33
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "09780b33df75f3d5",
+        "span": [
+         12,
+         41
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "b2a8a4234c279633",
+        "span": [
+         19,
+         42
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "4597bc49420c96fd",
+        "span": [
+         23,
+         43
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "156fbb7750c01ccc",
+        "span": [
+         24,
+         45
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "1844503b2686095d",
+        "span": [
+         34,
+         46
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "8208881c08794cc9",
+        "span": [
+         41,
+         47
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "03fae0c69ec6b8dd",
+        "span": [
+         42,
+         51
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "0b30fad63791b539",
+        "span": [
+         43,
+         52
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "18b398c528ca29fd",
+        "span": [
+         45,
+         53
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "2b9e22caacb7694a",
+        "span": [
+         46,
+         59
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "bdd0b56400a5c751",
+        "span": [
+         47,
+         60
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "e57e7f1d59734c48",
+        "span": [
+         51,
+         61
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       3,
+       3,
+       3,
+       4,
+       7,
+       7,
+       10,
+       10,
+       10,
+       10,
+       11,
+       12
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "051f1f86fca394eb",
+        "span": [
+         11,
+         33
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "09780b33df75f3d5",
+        "span": [
+         12,
+         41
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "156fbb7750c01ccc",
+        "span": [
+         24,
+         45
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "03fae0c69ec6b8dd",
+        "span": [
+         42,
+         51
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "0b30fad63791b539",
+        "span": [
+         43,
+         52
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "18b398c528ca29fd",
+        "span": [
+         45,
+         53
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "const",
+       "",
+       "=",
+       "<",
+       "",
+       "",
+       "=",
+       "",
+       "",
+       "=",
+       "{",
+       "",
+       "}",
+       ">",
+       "",
+       "<",
+       "/",
+       "",
+       ">",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "d9caa9e9e1aa86fc",
+        "span": [
+         0,
+         18
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "9bab6f7741e4e6c7",
+        "span": [
+         6,
+         23
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "694eee2c66af0000",
+        "span": [
+         9,
+         24
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "bdb143a79eb6027d",
+        "span": [
+         11,
+         33
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "9a16025e2954a38c",
+        "span": [
+         12,
+         41
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "683f134551193964",
+        "span": [
+         19,
+         42
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "4eda15153b9c6cdb",
+        "span": [
+         23,
+         43
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "448bb9d6647aecb7",
+        "span": [
+         24,
+         45
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "9cc674afb4e24912",
+        "span": [
+         34,
+         46
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "5a0b8bc0a0f240a7",
+        "span": [
+         41,
+         47
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "6715ed87df2e56b6",
+        "span": [
+         42,
+         51
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "a62045ee74f96996",
+        "span": [
+         43,
+         52
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "7eead0ef2921d82a",
+        "span": [
+         45,
+         53
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "7b8e4c341839d962",
+        "span": [
+         46,
+         59
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "c0031ebdba40e165",
+        "span": [
+         47,
+         60
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "fe89dbe1dc53f4cf",
+        "span": [
+         51,
+         61
+        ]
+       }
+      ],
+      "windowSelections": [
+       2,
+       2,
+       5,
+       6,
+       7,
+       7,
+       7,
+       7,
+       9,
+       9,
+       10,
+       13,
+       13
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 2,
+        "hash": "694eee2c66af0000",
+        "span": [
+         9,
+         24
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "683f134551193964",
+        "span": [
+         19,
+         42
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "4eda15153b9c6cdb",
+        "span": [
+         23,
+         43
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "448bb9d6647aecb7",
+        "span": [
+         24,
+         45
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "5a0b8bc0a0f240a7",
+        "span": [
+         41,
+         47
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "6715ed87df2e56b6",
+        "span": [
+         42,
+         51
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "7b8e4c341839d962",
+        "span": [
+         46,
+         59
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "tsx-format-b",
+   "derivation": "hand",
+   "tags": [
+    "format-pair",
+    "jsx"
+   ],
+   "description": "JSX layout pair, one attribute per line and indented text.",
+   "inputBase64": "Y29uc3QgZWwgPQogIDxCdXR0b24KICAgIGtpbmQ9InByaW1hcnkiCiAgICBvbkNsaWNrPXsgZ28gfQogID4KICAgIFNhdmUKICA8L0J1dHRvbj47Cg==",
+   "inputText": "const el =\n  <Button\n    kind=\"primary\"\n    onClick={ go }\n  >\n    Save\n  </Button>;\n",
+   "pairedRejection": "tsx-err-unclosed-element",
+   "result": {
+    "status": "ok",
+    "tokenCount": 20,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       0,
+       5
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "el",
+      "span": [
+       6,
+       8
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       9,
+       10
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       13,
+       14
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "Button",
+      "span": [
+       14,
+       20
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "kind",
+      "span": [
+       25,
+       29
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       29,
+       30
+      ]
+     },
+     {
+      "class": "jsx-string",
+      "text": "\"primary\"",
+      "span": [
+       30,
+       39
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "onClick",
+      "span": [
+       44,
+       51
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       51,
+       52
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       52,
+       53
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "go",
+      "span": [
+       54,
+       56
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       57,
+       58
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       61,
+       62
+      ]
+     },
+     {
+      "class": "jsx-text",
+      "text": "Save",
+      "span": [
+       67,
+       71
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       74,
+       75
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       75,
+       76
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "Button",
+      "span": [
+       76,
+       82
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       82,
+       83
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       83,
+       84
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "3bb9e10923eb3ce3",
+        "span": [
+         0,
+         20
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "7829772a5554e0d1",
+        "span": [
+         6,
+         29
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "5f1717bc10cb4aeb",
+        "span": [
+         9,
+         30
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "051f1f86fca394eb",
+        "span": [
+         13,
+         39
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "09780b33df75f3d5",
+        "span": [
+         14,
+         51
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "b2a8a4234c279633",
+        "span": [
+         25,
+         52
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "4597bc49420c96fd",
+        "span": [
+         29,
+         53
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "156fbb7750c01ccc",
+        "span": [
+         30,
+         56
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "1844503b2686095d",
+        "span": [
+         44,
+         58
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "8208881c08794cc9",
+        "span": [
+         51,
+         62
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "03fae0c69ec6b8dd",
+        "span": [
+         52,
+         71
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "0b30fad63791b539",
+        "span": [
+         54,
+         75
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "18b398c528ca29fd",
+        "span": [
+         57,
+         76
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "2b9e22caacb7694a",
+        "span": [
+         61,
+         82
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "bdd0b56400a5c751",
+        "span": [
+         67,
+         83
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "e57e7f1d59734c48",
+        "span": [
+         74,
+         84
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       3,
+       3,
+       3,
+       4,
+       7,
+       7,
+       10,
+       10,
+       10,
+       10,
+       11,
+       12
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "051f1f86fca394eb",
+        "span": [
+         13,
+         39
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "09780b33df75f3d5",
+        "span": [
+         14,
+         51
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "156fbb7750c01ccc",
+        "span": [
+         30,
+         56
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "03fae0c69ec6b8dd",
+        "span": [
+         52,
+         71
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "0b30fad63791b539",
+        "span": [
+         54,
+         75
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "18b398c528ca29fd",
+        "span": [
+         57,
+         76
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "const",
+       "",
+       "=",
+       "<",
+       "",
+       "",
+       "=",
+       "",
+       "",
+       "=",
+       "{",
+       "",
+       "}",
+       ">",
+       "",
+       "<",
+       "/",
+       "",
+       ">",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "d9caa9e9e1aa86fc",
+        "span": [
+         0,
+         20
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "9bab6f7741e4e6c7",
+        "span": [
+         6,
+         29
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "694eee2c66af0000",
+        "span": [
+         9,
+         30
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "bdb143a79eb6027d",
+        "span": [
+         13,
+         39
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "9a16025e2954a38c",
+        "span": [
+         14,
+         51
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "683f134551193964",
+        "span": [
+         25,
+         52
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "4eda15153b9c6cdb",
+        "span": [
+         29,
+         53
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "448bb9d6647aecb7",
+        "span": [
+         30,
+         56
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "9cc674afb4e24912",
+        "span": [
+         44,
+         58
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "5a0b8bc0a0f240a7",
+        "span": [
+         51,
+         62
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "6715ed87df2e56b6",
+        "span": [
+         52,
+         71
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "a62045ee74f96996",
+        "span": [
+         54,
+         75
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "7eead0ef2921d82a",
+        "span": [
+         57,
+         76
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "7b8e4c341839d962",
+        "span": [
+         61,
+         82
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "c0031ebdba40e165",
+        "span": [
+         67,
+         83
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "fe89dbe1dc53f4cf",
+        "span": [
+         74,
+         84
+        ]
+       }
+      ],
+      "windowSelections": [
+       2,
+       2,
+       5,
+       6,
+       7,
+       7,
+       7,
+       7,
+       9,
+       9,
+       10,
+       13,
+       13
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 2,
+        "hash": "694eee2c66af0000",
+        "span": [
+         9,
+         30
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "683f134551193964",
+        "span": [
+         25,
+         52
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "4eda15153b9c6cdb",
+        "span": [
+         29,
+         53
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "448bb9d6647aecb7",
+        "span": [
+         30,
+         56
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "5a0b8bc0a0f240a7",
+        "span": [
+         51,
+         62
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "6715ed87df2e56b6",
+        "span": [
+         52,
+         71
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "7b8e4c341839d962",
+        "span": [
+         61,
+         82
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "tsx-comment-container",
+   "derivation": "hand",
+   "tags": [
+    "jsx",
+    "comments"
+   ],
+   "description": "A comment-only container yields '{' '}'.",
+   "inputBase64": "Y29uc3QgYyA9IDxhPnsvKiBub3RlICovfTwvYT47Cg==",
+   "inputText": "const c = <a>{/* note */}</a>;\n",
+   "pairedRejection": "tsx-err-brace-in-text",
+   "result": {
+    "status": "ok",
+    "tokenCount": 13,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "const",
+      "span": [
+       0,
+       5
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "c",
+      "span": [
+       6,
+       7
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       8,
+       9
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       10,
+       11
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       11,
+       12
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       12,
+       13
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       13,
+       14
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       24,
+       25
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       25,
+       26
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "/",
+      "span": [
+       26,
+       27
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       27,
+       28
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       28,
+       29
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       29,
+       30
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "521696ddc75edd2d",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "39bcf04e640aee39",
+        "span": [
+         6,
+         13
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "6e79511883ece36d",
+        "span": [
+         8,
+         14
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "36b3d5dda098bfb3",
+        "span": [
+         10,
+         25
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "9e2d17087483a4d0",
+        "span": [
+         11,
+         26
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "dfbf7d1d87c16e64",
+        "span": [
+         12,
+         27
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "de3ee7e31706d9b0",
+        "span": [
+         13,
+         28
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "0347e639e324b86e",
+        "span": [
+         24,
+         29
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "f01fba16f2d223c0",
+        "span": [
+         25,
+         30
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       3,
+       3,
+       3,
+       7,
+       7
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "36b3d5dda098bfb3",
+        "span": [
+         10,
+         25
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "0347e639e324b86e",
+        "span": [
+         24,
+         29
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "const",
+       "",
+       "=",
+       "<",
+       "",
+       ">",
+       "{",
+       "}",
+       "<",
+       "/",
+       "",
+       ">",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "d9caa9e9e1aa86fc",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "28524108e43a5509",
+        "span": [
+         6,
+         13
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "da65d17653bfe073",
+        "span": [
+         8,
+         14
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "e15262e22dee4f17",
+        "span": [
+         10,
+         25
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "a90b23d6049792cb",
+        "span": [
+         11,
+         26
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "6f0da87d0b0de0e5",
+        "span": [
+         12,
+         27
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "adabceaf0a1542ea",
+        "span": [
+         13,
+         28
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "fb83976c36cb1ea0",
+        "span": [
+         24,
+         29
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "fe89dbe1dc53f4cf",
+        "span": [
+         25,
+         30
+        ]
+       }
+      ],
+      "windowSelections": [
+       1,
+       1,
+       5,
+       5,
+       5,
+       5
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 1,
+        "hash": "28524108e43a5509",
+        "span": [
+         6,
+         13
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "6f0da87d0b0de0e5",
+        "span": [
+         12,
+         27
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "tsx-err-generic-type-position",
+   "derivation": "hand",
+   "tags": [
+    "error",
+    "jsx",
+    "generics",
+    "limitation"
+   ],
+   "description": "Known limitation: a generic function type after '=' opens JSX; '>' in JSX text is then illegal.",
+   "inputBase64": "dHlwZSBGID0gPFQ+KHg6IFQpID0+IFQ7Cg==",
+   "inputText": "type F = <T>(x: T) => T;\n",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "illegal-character",
+     "offset": 20
+    }
+   }
+  },
+  {
+   "id": "tsx-err-ts-type-assertion",
+   "derivation": "hand",
+   "tags": [
+    "error",
+    "jsx"
+   ],
+   "description": "The ts-type-assertion input under tsx-tokens: '<T>' opens an element that never closes.",
+   "inputBase64": "bGV0IGEgPSA8VD5iOwo=",
+   "inputText": "let a = <T>b;\n",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "unbalanced-delimiter",
+     "offset": 8
+    }
+   }
+  },
+  {
+   "id": "tsx-err-text-gt",
+   "derivation": "hand",
+   "tags": [
+    "error",
+    "jsx"
+   ],
+   "description": "'>' is not allowed in JSX text.",
+   "inputBase64": "Y29uc3QgZyA9IDxhPjEgPiAwPC9hPjsK",
+   "inputText": "const g = <a>1 > 0</a>;\n",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "illegal-character",
+     "offset": 15
+    }
+   }
+  },
+  {
+   "id": "tsx-err-brace-in-text",
+   "derivation": "hand",
+   "tags": [
+    "error",
+    "jsx"
+   ],
+   "description": "'}' is not allowed in JSX text.",
+   "inputBase64": "Y29uc3QgbiA9IDxhPn08L2E+Owo=",
+   "inputText": "const n = <a>}</a>;\n",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "illegal-character",
+     "offset": 13
+    }
+   }
+  },
+  {
+   "id": "tsx-err-unclosed-element",
+   "derivation": "hand",
+   "tags": [
+    "error",
+    "jsx",
+    "delimiters"
+   ],
+   "description": "End of input inside an element.",
+   "inputBase64": "Y29uc3QgaCA9IDxkaXY+PHNwYW4+PC9zcGFuPgo=",
+   "inputText": "const h = <div><span></span>\n",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "unbalanced-delimiter",
+     "offset": 10
+    }
+   }
+  },
+  {
+   "id": "tsx-err-stray-close",
+   "derivation": "hand",
+   "tags": [
+    "error",
+    "jsx",
+    "delimiters"
+   ],
+   "description": "A closing tag with no open element.",
+   "inputBase64": "eCA9IDwvZGl2PjsK",
+   "inputText": "x = </div>;\n",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "unbalanced-delimiter",
+     "offset": 4
+    }
+   }
+  },
+  {
+   "id": "tsx-err-unterminated-attr",
+   "derivation": "hand",
+   "tags": [
+    "error",
+    "jsx"
+   ],
+   "description": "Unterminated JSX attribute string.",
+   "inputBase64": "Y29uc3QgayA9IDxhIGI9Ing+Owo=",
+   "inputText": "const k = <a b=\"x>;\n",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "unterminated-literal",
+     "offset": 15
+    }
+   }
+  },
+  {
+   "id": "tsx-err-html-comment",
+   "derivation": "hand",
+   "tags": [
+    "error",
+    "jsx",
+    "html-comment"
+   ],
+   "description": "'<!--' in expression position opens JSX; '!' is illegal.",
+   "inputBase64": "PCEtLSBvbGQgLS0+Cg==",
+   "inputText": "<!-- old -->\n",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "illegal-character",
+     "offset": 1
+    }
+   }
+  },
+  {
+   "id": "tsx-err-self-closing",
+   "derivation": "hand",
+   "tags": [
+    "error",
+    "jsx"
+   ],
+   "description": "Only '>' may follow '/' in an opening tag.",
+   "inputBase64": "Y29uc3QgbSA9IDxhIC8gYj47Cg==",
+   "inputText": "const m = <a / b>;\n",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "illegal-character",
+     "offset": 15
+    }
+   }
+  }
+ ]
+}

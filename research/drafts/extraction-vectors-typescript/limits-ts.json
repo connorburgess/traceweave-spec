@@ -1,0 +1,217 @@
+{
+ "contract": "traceweave-token-winnow-draft-1",
+ "profile": "ts-tokens",
+ "profileVersion": "draft-1",
+ "configFile": "config-ts-limit16.json",
+ "configSha256": "b4f9f6347726610ec242c970f1e53f26184ddced5a3bc928f66e65a44bf1373d",
+ "k": 5,
+ "window": 4,
+ "lexingCheck": "Token streams are hand-derived (harness/vector_sources.py); check_vectors.py re-lexes every input with tslex.py and harness/crosscheck.js compares them with the TypeScript 6.0.3 parser and scanner.",
+ "vectors": [
+  {
+   "id": "ts-limit-exact",
+   "derivation": "hand",
+   "tags": [
+    "limit"
+   ],
+   "description": "Exactly maxInputBytes=16 bytes: accepted.",
+   "inputBase64": "bGV0IGFiID0gYiArIGM7Cg==",
+   "inputText": "let ab = b + c;\n",
+   "pairedRejection": "ts-limit-over",
+   "result": {
+    "status": "ok",
+    "tokenCount": 7,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "let",
+      "span": [
+       0,
+       3
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "ab",
+      "span": [
+       4,
+       6
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       7,
+       8
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "b",
+      "span": [
+       9,
+       10
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "+",
+      "span": [
+       11,
+       12
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "c",
+      "span": [
+       13,
+       14
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       14,
+       15
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "c9f5721c70bb1b1b",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "f0aed5c141ffb263",
+        "span": [
+         4,
+         14
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "66bf4e503fd627bc",
+        "span": [
+         7,
+         15
+        ]
+       }
+      ],
+      "windowSelections": [
+       2
+      ],
+      "partialWindow": true,
+      "fingerprints": [
+       {
+        "position": 2,
+        "hash": "66bf4e503fd627bc",
+        "span": [
+         7,
+         15
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "let",
+       "",
+       "=",
+       "",
+       "+",
+       "",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "d22aa61d1611ec99",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "56b910302d696753",
+        "span": [
+         4,
+         14
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "5f249664f7ca35b4",
+        "span": [
+         7,
+         15
+        ]
+       }
+      ],
+      "windowSelections": [
+       1
+      ],
+      "partialWindow": true,
+      "fingerprints": [
+       {
+        "position": 1,
+        "hash": "56b910302d696753",
+        "span": [
+         4,
+         14
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "ts-limit-over",
+   "derivation": "hand",
+   "tags": [
+    "limit",
+    "error"
+   ],
+   "description": "17 bytes: input-too-large at offset 0.",
+   "inputBase64": "bGV0IGFiYyA9IGIgKyBjOwo=",
+   "inputText": "let abc = b + c;\n",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "input-too-large",
+     "offset": 0
+    }
+   }
+  },
+  {
+   "id": "ts-limit-over-bom",
+   "derivation": "hand",
+   "tags": [
+    "limit",
+    "error",
+    "precedence"
+   ],
+   "description": "Over the limit and a BOM: size is checked first.",
+   "inputBase64": "77u/bGV0IGEgPSBiICsgYzsK",
+   "inputText": "﻿let a = b + c;\n",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "input-too-large",
+     "offset": 0
+    }
+   }
+  }
+ ]
+}
