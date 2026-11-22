@@ -11,7 +11,7 @@ Commands:
   apply-tree [--categories a,b]  rewrite text files in the working tree
   scan [REV ...] [--tree]        scan every blob, path, commit message and author/
                                  committer header reachable from REV and not from
-                                 --base, also after ROT13 and base64 decoding
+                                 --base, also after ROT13, reversal, base64 and hex decoding
   rewrite --branch NAME [--source REV] [--base REV] [--map-out FILE]
                                  replay --base..--source into a new branch
   map --branch NAME --idmap FILE --out FILE [--cite FILE ...]
@@ -120,14 +120,14 @@ def scrub_blob(rules, path, data, categories=None):
     return new.encode("utf-8"), counts
 
 
-def variants(text):
-    """The text, its ROT13 decoding, and all printable base64 payloads found inside it (joined, and ROT13-decoded)."""
-    yield "plain", text
-    yield "rot13", codecs.decode(text, "rot13")
+HEX_TOKEN = re.compile(r"(?:[0-9a-fA-F]{2}){12,}")
+
+
+def printable_payloads(tokens, decode):
     payloads = []
-    for token in set(BASE64_TOKEN.findall(text)):
+    for token in tokens:
         try:
-            decoded = base64.b64decode(token + "=" * (-len(token) % 4), validate=True)
+            decoded = decode(token)
         except (binascii.Error, ValueError):
             continue
         try:
@@ -136,10 +136,26 @@ def variants(text):
             continue
         if payload and sum(ch.isprintable() or ch in "\n\t" for ch in payload) / len(payload) > 0.95:
             payloads.append(payload)
-    if payloads:
-        joined = "\n".join(payloads)
-        yield "base64", joined
-        yield "base64+rot13", codecs.decode(joined, "rot13")
+    return payloads
+
+
+def variants(text):
+    """The text, its ROT13 decoding, its reversal (also ROT13-decoded), and the printable payloads of
+    base64 and hex tokens found inside it (joined per kind, plain and ROT13-decoded)."""
+    yield "plain", text
+    yield "rot13", codecs.decode(text, "rot13")
+    reverse = text[::-1]
+    yield "reversed", reverse
+    yield "reversed+rot13", codecs.decode(reverse, "rot13")
+    base64_payloads = printable_payloads(
+        set(BASE64_TOKEN.findall(text)), lambda t: base64.b64decode(t + "=" * (-len(t) % 4), validate=True))
+    hex_payloads = printable_payloads(set(HEX_TOKEN.findall(text)), binascii.unhexlify)
+    for kind, payloads in (("base64", base64_payloads), ("hex", hex_payloads)):
+        if payloads:
+            joined = "\n".join(payloads)
+            yield kind, joined
+            yield kind + "+rot13", codecs.decode(joined, "rot13")
+            yield kind + "+reversed", joined[::-1]
 
 
 def residuals(rules, path, text):
@@ -268,7 +284,7 @@ def run_scan(rules, args):
             total += sum(files.values())
         return 1 if total else 0
     n_commits, n_objects, hits = scan_range(rules, args.revs or ["HEAD"], args.base)
-    print(f"scanned {n_commits} commits and {n_objects} objects not reachable from {args.base} (plain, ROT13 and base64 decodings)")
+    print(f"scanned {n_commits} commits and {n_objects} objects not reachable from {args.base} (plain, ROT13, reversed, base64 and hex decodings)")
     total = 0
     for category in categories_of(rules):
         per = {kind: sum(hits[kind].get(category, {}).values()) for kind in hits}
@@ -374,6 +390,10 @@ def write_map(rules, args):
     rows = [line.split("\t") for line in open(args.idmap).read().splitlines() if line]
     idmap = {o: n for o, n, _ in rows}
     status = {o: s for o, _, s in rows}
+    for o in status:
+        if status[o] == "dropped":
+            touched = git("diff-tree", "--no-commit-id", "--name-only", "-r", "--root", o).decode().split()
+            status[o] = "dropped (tool)" if TOOL_PATH in touched else "dropped (empty)"
     commits = [o for o, _, _ in rows]
     counts = json.loads(open(args.counts).read()) if args.counts else {}
     n_commits, n_objects, hits = scan_range(rules, [args.branch], args.base)
@@ -416,7 +436,9 @@ def write_map(rules, args):
     L.append("")
     L.append("## Dropped file versions and commits")
     L.append("")
-    L.append(f"Every version of `{TOOL_PATH}` that held the rules was removed from every rewritten tree: {args.dropped_versions} versions. A commit whose tree became equal to its parent's tree was dropped, and its old id maps to the id of its nearest surviving ancestor (listed below as `dropped`).")
+    tool_dropped = [o for o in commits if status[o].startswith("dropped") and "tool" in status[o]]
+    other_dropped = [o for o in commits if status[o].startswith("dropped") and "tool" not in status[o]]
+    L.append(f"Every version of `{TOOL_PATH}` that held the rules was removed from every rewritten tree: {args.dropped_versions} versions. A commit whose tree became equal to its parent's tree was dropped, and its old id maps to the id of its nearest surviving ancestor. {len(tool_dropped) + len(other_dropped)} source commits were dropped: {len(tool_dropped)} changed the rewrite tool (their tool versions are among those removed), and {len(other_dropped)} were scrub commits (removing or paraphrasing text) whose changes the rewrite already applies to every earlier version, so they became empty. The state column marks each as `dropped (tool)` or `dropped (empty)`.")
     L.append("")
     L.append("## Verification of the commits listed here")
     L.append("")

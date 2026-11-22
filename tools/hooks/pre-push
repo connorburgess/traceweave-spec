@@ -1,28 +1,53 @@
 #!/bin/sh
 # Git pre-push hook. Install with: install -m 755 tools/hooks/pre-push .git/hooks/pre-push
 #
-# Refuses to push any ref whose history contains a rule-bearing version of the
-# history-rewrite tool. The blob ids come from the private rules file (outside
-# every working tree), never from this repository. Fails closed when that file
-# cannot be read.
+# Fails closed. Before any ref is pushed it requires:
+#   1. the private rules file is readable (TRACEWEAVE_SCRUB_RULES, or
+#      $TRACEWEAVE_EVAL_DIR/private/public-history-rules.json, default under ~/traceweave-eval)
+#      and the scanner tools/public_history_scrub.py exists in this checkout;
+#   2. every pushed branch descends from each tip listed under "public_floor" in the rules file
+#      (the public tips already published), so pushes are fast-forwards of the public history;
+#   3. no rule-bearing version of the rewrite tool (blob ids from the rules file) is in the pushed range;
+#   4. the full scanner, all categories and the plain, ROT13, reversed, base64 and hex decodings, finds
+#      nothing in the pushed range (blobs, paths, messages, author and committer headers).
+# Nothing here is a rule: the rules and ids come from the private file at run time.
 rules="${TRACEWEAVE_SCRUB_RULES:-${TRACEWEAVE_EVAL_DIR:-$HOME/traceweave-eval}/private/public-history-rules.json}"
-if [ ! -r "$rules" ]; then
-  echo "pre-push: cannot read the private rules file; refusing to push" >&2
+top=$(git rev-parse --show-toplevel 2>/dev/null)
+tool="$top/tools/public_history_scrub.py"
+if [ ! -r "$rules" ] || [ -z "$top" ] || [ ! -r "$tool" ]; then
+  echo "pre-push: cannot read the private rules file or the scanner; refusing to push" >&2
   exit 1
 fi
-list=$(mktemp "${TMPDIR:-/tmp}/prepush.XXXXXX") || exit 1
-trap 'rm -f "$list"' EXIT
-python3 -c 'import json,sys; print("\n".join(json.load(open(sys.argv[1])).get("drop_tool_blobs", [])))' "$rules" > "$list" || exit 1
+work=$(mktemp -d "${TMPDIR:-/tmp}/prepush.XXXXXX") || exit 1
+trap 'rm -rf "$work"' EXIT
+python3 - "$rules" "$work" <<'PY' || exit 1
+import json, sys
+data = json.load(open(sys.argv[1]))
+open(sys.argv[2] + "/blobs", "w").write("\n".join(data.get("drop_tool_blobs", [])) + "\n")
+open(sys.argv[2] + "/floor", "w").write("\n".join(data.get("public_floor", [])) + "\n")
+PY
 zero=0000000000000000000000000000000000000000
 while read -r local_ref local_sha remote_ref remote_sha; do
   [ "$local_sha" = "$zero" ] && continue
-  if [ "$remote_sha" = "$zero" ]; then
-    objects=$(git rev-list --objects "$local_sha")
-  else
-    objects=$(git rev-list --objects "$local_sha" "^$remote_sha")
-  fi
-  if printf '%s\n' "$objects" | awk '{print $1}' | grep -F -x -q -f "$list"; then
+  case "$local_ref" in refs/heads/*) ;; *) continue ;; esac
+  # 2. descends from every published public tip
+  while read -r floor; do
+    [ -z "$floor" ] && continue
+    if ! git merge-base --is-ancestor "$floor" "$local_sha" 2>/dev/null; then
+      echo "pre-push: $local_ref is not a descendant of the published public tip $floor; refusing to push" >&2
+      exit 1
+    fi
+  done < "$work/floor"
+  if [ "$remote_sha" = "$zero" ]; then base=origin/main; else base="$remote_sha"; fi
+  # 3. rule-bearing tool versions
+  if git rev-list --objects "$local_sha" "^$base" | awk '{print $1}' | grep -F -x -q -f "$work/blobs"; then
     echo "pre-push: $local_ref contains a rule-bearing version of the rewrite tool; refusing to push" >&2
+    exit 1
+  fi
+  # 4. full scan
+  if ! python3 "$tool" scan "$local_sha" --base "$base" > "$work/scan.txt" 2>&1; then
+    echo "pre-push: the scanner found removed material in $local_ref (details withheld); refusing to push" >&2
+    grep -E "hits \(" "$work/scan.txt" | grep -v ": 0 hits" >&2
     exit 1
   fi
 done
