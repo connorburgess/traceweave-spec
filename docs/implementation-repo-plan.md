@@ -1,11 +1,21 @@
-# Draft plan: Traceweave implementation repository
+# Traceweave implementation repository plan
 
-Status: **draft for owner review. Nothing has been created.** Revised after the [independent review](../reviews/roadmap-v2-review.md). No repository, remote, directory or package exists yet. Companion: [roadmap v2 draft](../../ROADMAP.md), whose gate IDs (M1.4, M2.1, …) are referenced below.
+Status: **adopted 2026-11-22 with the decisions recorded below.** Revised after the [independent review](../research/reviews/roadmap-v2-review.md). The implementation repository exists locally only, at `<implementation repo>`, with no remote. Companion: the [roadmap](../ROADMAP.md), whose gate IDs (M1.4, M2.1, …) are referenced below.
+
+## Decisions recorded
+
+1. **Name:** `traceweave`, local path `<implementation repo>`. The specification stays in `traceweave-spec`. The CLI binary is `traceweave`.
+2. **Languages:** Rust is the main CLI (option A below). Go is the second implementation.
+3. **Lexers:** both implementations use hand-written lexers written to the profile's token classes. Neither depends on `rustc_lexer`, `go/scanner` or tree-sitter for extraction, so the profile cannot become whatever one library's token kinds are. Those libraries may serve as test oracles only.
+
+**Remaining with the owner:** creating the GitHub repository and choosing its visibility, the Go module path, and pushing a spec commit that can be pinned. The pin recorded in `spec.lock` is provisional until then. See [Needs the owner](#needs-the-owner).
+
+**State on 2026-11-22.** I0 scaffold and the I1 extractors exist in the implementation repository on local branches (`i0-i1-rust`, `impl-go`, `xcheck`), not on its `main`. A differential test between the two extractors is in progress. I2 is next. No gate in the roadmap changes status because of this: M1.4 needs vectors committed in this repository first, and the extraction vectors are still drafts.
 
 ## Name and location
 
-- **Proposed:** `traceweave` at `<implementation repo>`. The specification stays in `traceweave-spec`. The CLI binary is `traceweave`.
-- **Alternative:** `traceweave-ref`. Choose this if the owner expects several implementations and wants the name to say this one is not the only one. The cost is a longer CLI name, or a binary name that differs from the repository name.
+- **Decided:** `traceweave` at `<implementation repo>`. The CLI binary is `traceweave`.
+- **Considered and not chosen:** `traceweave-ref`, which would say that this implementation is not the only one, at the cost of a binary name that differs from the repository name.
 
 ## Scope and non-goals
 
@@ -53,34 +63,32 @@ Why this over a git submodule:
 | Drift or tampering | Strict check against upstream bytes fails | Detached HEAD and local edits are easy to miss |
 | Cost | Small duplication plus a pin script | None; built-in git support |
 
-**Licensing of vendored files.** JSON schemas, vectors and examples are Apache-2.0 ([LICENSE.md](../../LICENSE.md)). **Only non-Markdown files are vendored.** Spec and profile Markdown (CC BY 4.0) is pinned by digest and read from the pinned commit at check time, not copied. If Markdown is ever vendored, its CC BY 4.0 notice and attribution are kept beside it.
+**Licensing of vendored files.** JSON schemas, vectors and examples are Apache-2.0 ([LICENSE.md](../LICENSE.md)). **Only non-Markdown files are vendored.** Spec and profile Markdown (CC BY 4.0) is pinned by digest and read from the pinned commit at check time, not copied. If Markdown is ever vendored, its CC BY 4.0 notice and attribution are kept beside it.
 
 ## Language
 
 Constraints:
 
 - The owner prefers Go and Rust over Python.
-- [conformance.md](../../spec/conformance.md) requires two implementations for a stable profile. It requires two implementations, not two languages, but two languages give more independence.
+- [conformance.md](../spec/conformance.md) requires two implementations for a stable profile. It requires two implementations, not two languages, but two languages give more independence.
 - Python stays in the spec repository's validator and research harnesses only.
 
 | Option | Strengths | Costs and risks |
 | --- | --- | --- |
-| **A (recommended): Rust primary CLI + Go second implementation** | `rustc_lexer` (pinned `ra_ap_rustc_lexer`) is the compiler's own Rust lexer. Byte spans are natural. Builds a single static binary. Mature tree-sitter bindings (core in C) for TS later. Go's stdlib `go/scanner` is the reference Go lexer. Go DSSE comes from the DSSE maintainers' `go-securesystemslib` | Two toolchains. The Go side needs a Rust-source lexer written to the spec, which is the costliest item. The `ra_ap_*` API changes, so pin exactly. **Risk:** the profile could drift into "whatever `rustc_lexer` emits". M1.1 must define token classes independently, and the Go lexer must match the spec, not rustc |
+| **A (decided): Rust primary CLI + Go second implementation** | Byte spans are natural. Builds a single static binary. Go DSSE comes from the DSSE maintainers' `go-securesystemslib` | Two toolchains. Both sides need a hand-written lexer for both source languages, which is the costliest item. **Risk:** two hand-written lexers can share a misreading of the profile. M1.1 must define token classes independently of any library, and the vectors, not the lexers, are the reference |
 | B: Go primary + Rust second | Faster to write; continuity with the Go harnesses | Rust-source lexing in Go is still hand-written or uses cgo tree-sitter. The primary binary is weaker on Rust-source fidelity |
 | C: one language, two independent implementations | One toolchain | Same-language implementations share libraries and idioms, so less independence, and the second still needs a second lexer. Satisfies conformance.md in form only |
 
 Parser and lexer choice for the token profile:
 
-- **Use lexers, not parsers.** The M1 profile is token-level. `syn` parses items and needs `proc-macro2` span locations for byte ranges. `go/parser` adds an AST the profile does not need. Parsers come in only for STRUCT.1.
-- **Independence over uniformity.** If both implementations use tree-sitter, they share grammar bugs. Preferred pairs:
-  - Go source: `go/scanner` (Go) vs `tree-sitter-go` (pinned) or a spec-written lexer (Rust).
-  - Rust source: `rustc_lexer` (Rust) vs a spec-written lexer (Go).
-- **Tree-sitter errors.** ERROR and MISSING nodes become explicit refusals, never silent repair ([fragment checkpoint](../fragment-policy-checkpoint.md)).
-- **Reuse measured pins as starting points.** These are `go-securesystemslib v0.11.1`, `wsc-dsse =0.12.1`, `ed25519-compact =2.3.0` and `sha2 =0.10.9` ([signing-interop results](../lanes/signing-interop-results.md)). Recheck current security notes before adopting them (TW-06). Native duplicate-key and key-hint handling differs between them, so each implementation needs its own strict parser (M4.4).
+- **Use lexers, not parsers.** The M1 profile is token-level. `syn` and `go/parser` produce ASTs the profile does not need. Parsers come in only for STRUCT.1.
+- **Hand-written lexers in both implementations (decided).** Each implementation lexes both Go and Rust source with its own code. They share no lexer library and no grammar, so one library's bugs cannot reach both. `go/scanner` and `rustc_lexer` may be used as differential-test oracles, never as part of the extractor.
+- **Errors.** Lexing errors and unsupported input become explicit refusals, never silent repair ([fragment checkpoint](../research/fragment-policy-checkpoint.md)).
+- **Reuse measured pins as starting points.** These are `go-securesystemslib v0.11.1`, `wsc-dsse =0.12.1`, `ed25519-compact =2.3.0` and `sha2 =0.10.9` ([signing-interop results](../research/lanes/signing-interop-results.md)). Recheck current security notes before adopting them (TW-06). Native duplicate-key and key-hint handling differs between them, so each implementation needs its own strict parser (M4.4).
 
 ## Licence
 
-- Apache-2.0 for code, configuration, fixtures and vendored JSON. This matches [LICENSE.md](../../LICENSE.md) and [LICENSES/](../../LICENSES/Apache-2.0.txt).
+- Apache-2.0 for code, configuration, fixtures and vendored JSON. This matches [LICENSE.md](../LICENSE.md) and [LICENSES/](../LICENSES/Apache-2.0.txt).
 - Prose docs can be CC BY 4.0, as in the spec repository, or the repository can be Apache-2.0 only.
 - Keep `LICENSES/` with the original instruments.
 - `NOTICE` is optional (the spec repository has none). If present, it names the pinned spec commit.
@@ -113,7 +121,7 @@ traceweave/
 
 ## Milestones
 
-The commands below are proposed names; none exists yet. `scripts/offline CMD` runs `CMD` with the network denied: `sandbox-exec` with `(deny network*)` on macOS, `unshare -rn` or `bwrap --unshare-net` on Linux. It first runs a network probe that must fail, and aborts if the probe succeeds.
+The commands below are the planned names. The implementation repository's current scripts (`scripts/check` and the conformance runner) cover only part of them. `scripts/offline CMD` runs `CMD` with the network denied: `sandbox-exec` with `(deny network*)` on macOS, `unshare -rn` or `bwrap --unshare-net` on Linux. It first runs a network probe that must fail, and aborts if the probe succeeds.
 
 **I0 prerequisites:**
 - a pushed spec commit to pin;
@@ -147,9 +155,10 @@ Nothing is moved. The checkpoints cite exact paths and result files, and moving 
 
 ## Needs the owner
 
-1. **Repository creation.** Create the GitHub repository and choose its name and visibility. Push a spec commit that can be pinned; the current spec working tree has much uncommitted research. Decide whether `traceweave-spec` becomes public.
-2. **Language.** Confirm option A, or choose B or C.
-3. **Licence.** Apache-2.0 only, or the Apache-2.0/CC BY 4.0 split.
-4. **Hosted CI.** Whether it may be enabled. Until then, checks run locally.
-5. **Independent implementers.** Whether a stable profile (RC.2) needs a second implementer who is a different person. Two languages by one author check that the spec is precise, not that it is read independently.
-6. **Thresholds.** The M3.0 false-alarm budget and the M2E.1(c) payload minimum.
+1. **Repository creation.** Create the GitHub repository and choose its visibility. Choose the Go module path. Push a spec commit that can be pinned; the pin in `spec.lock` stays provisional until then. Decide whether `traceweave-spec` becomes public.
+2. **Licence.** Apache-2.0 only, or the Apache-2.0/CC BY 4.0 split.
+3. **Hosted CI.** Whether it may be enabled. Until then, checks run locally.
+4. **Independent implementers.** Whether a stable profile (RC.2) needs a second implementer who is a different person. Two languages by one author check that the spec is precise, not that it is read independently.
+5. **Thresholds.** The M3.0 false-alarm budget and the M2E.1(c) payload minimum.
+
+Decided and no longer open: the name, Rust as the main CLI with Go as the second implementation, and hand-written lexers in both.

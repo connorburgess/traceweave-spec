@@ -2,7 +2,7 @@
 
 > Adoption note: the draft reviewed here was adopted as [ROADMAP.md](../../ROADMAP.md) and the plan as [docs/implementation-repo-plan.md](../../docs/implementation-repo-plan.md). The `R:n` and `P:n` line references point to the drafts as committed in `6f75d55` (`research/drafts/roadmap-v2.md`, `research/drafts/implementation-repo-plan.md`).
 
-Reviewed 2026-11-22 against the working tree (including uncommitted files). Scope: [roadmap-v2.md](../../ROADMAP.md) (R) and [implementation-repo-plan.md](../drafts/implementation-repo-plan.md) (P). I did not write either draft and did not rely on their self-reported checks.
+Reviewed 2026-11-22 against the working tree (including uncommitted files). Scope: [roadmap-v2.md](../../ROADMAP.md) (R) and [implementation-repo-plan.md](../../docs/implementation-repo-plan.md) (P). I did not write either draft and did not rely on their self-reported checks.
 
 ## What I reran
 
