@@ -147,3 +147,44 @@ git status --porcelain --untracked-files=all                         # nothing
 **Log in the results commit:** every command, with its stdout and exit code (all 0). From each `summary.json`: `codeIdentity.ok: true` with `frozenCommit` = HEAD = `6f39e50f…`; empty `statusAfterVectorCheck` and `statusAfterRun`; `networkDenied.denied: true` with the EPERM probe text; `vectorChecks` 7/7; the validity map; equal `resultsSha256`; `elapsedSeconds` ≤ 3,600. The results commit must pass `git merge-base --is-ancestor $FROZEN HEAD`.
 
 **Verdict: the run may start.** No blocking items remain. The abort-limit reading and the C2→V4 wording are handled as stated above.
+
+## Results recheck: e-img-f-2
+
+Non-author recheck (IMGF.4) of results commit `0c7523c`, done 2026-11-22. I did not rerun `full` and did not touch the run worktree beyond reading it.
+
+**Method.** I exported the commit with `git archive 0c7523c` and ran my own script (`$TMPDIR/rscript/recheck.py`, `python3 -I`). It reads `catalogue.json` and `queries.jsonl` and recomputes every count from the stored hashes:
+- Hamming distance from each query's 8 dihedral hashes to every enrolled `orig` hash, taking the minimum;
+- the thresholds PDQ ≤ 31 and ISCC ≤ 7;
+- the outcome (match, ambiguous or no-match), the correct or wrong entry, and the full within-threshold list.
+
+It then compares all of these with the recorded fields. Limit: the hashes themselves were not recomputed, since that would require generating seeds 0–199. They rest on V2 (run-to-run byte identity) and V4.
+
+**Counts: every RESULTS.md figure reproduces exactly, with 0 recomputed-vs-recorded mismatches over 1,300 queries × 2 extractors.**
+- Records: 100 catalogue entries; 1,300 queries (1,200 positive, 100 negative). Enrollment: PDQ 98/100 (2 `low-quality`); ISCC 100/100.
+- Negatives with any entry within threshold: 0/100 for each extractor. PDQ negatives: 99 no-match and 1 abstention; ISCC negatives: 100 no-match.
+- **PDQ correct/no-match/abstained:** crop50 0/90/10; crop75 0/96/4; crop90 2/96/2; jpeg30 98/1/1; flip, jpeg50, jpeg75, jpeg90, png, resize25 and resize50 each 98/0/2; screenshot 0/100/0.
+- **ISCC correct/no-match:** crop50 0/100; crop75 5/95; crop90 69/31; the other 9 edits 100/0, screenshot included.
+- No ambiguous outcome; wrong top matches and queries with any wrong entry within threshold are 0/1,200 for each extractor; every `withinThreshold` list has the recorded length.
+
+**Run evidence: all verified.**
+- **Byte identity:** `catalogue.json` and `queries.jsonl` are byte-identical between `full-1` and `full-2`. `resultsSha256`, recomputed as SHA-256 of canonical `{catalogueSha256, queriesSha256}`, equals the recorded `f4808162…c546` in both runs.
+- **Committed files = run outputs:** all 6 committed record and summary files equal the worktree's `out/` files (`cmp`). The worktree is still at `6f39e50f…`, with an empty status.
+- **Both summaries:**
+  - `codeIdentity.ok: true` (HEAD = frozenCommit = `6f39e50f…`, empty porcelain, diff exit 0, version `e-img-f-2`);
+  - `statusAfterVectorCheck` and `statusAfterRun` empty;
+  - `networkDenied` true, "bind refused errno 1; loopback connect refused errno 1 (EPERM)";
+  - protocol digest recorded = computed = `44a67a14…`; `environmentDeviations` empty;
+  - `vectorChecks` 7/7 k/k; V4 1,400 compared with 0 mismatches; V5 0 catalogue errors and 0 query errors;
+  - `elapsedSeconds` 856.4 and 841.4, both ≤ 3,600.
+- **Transcript and commit:** the unit tests, both `full` runs and `compare` all exit 0 under `sandbox-exec` deny-network. Results commit `0c7523c` descends from `6f39e50` and adds only the 8 files under `results/e-img-f-2/`. The frozen paths are unchanged.
+- **RESULTS.md:** it carries the weak-by-construction paragraph, the V4-is-not-independent caveat, the X1 statement (external, unreplicated, not our measurement) and the synthetic crop/screenshot disclaimer. It claims nothing beyond the protocol and marks no gate itself.
+
+**Gate status.** Cite this recheck commit when updating the roadmap.
+- **IMGF.2: met.** Evidence: commits `6f39e50` and `0c7523c`. PDQ exact: port = vendored reference 30/30 on the vectors and 1,400/1,400 in each run (V4). Tolerance: C++ within 10 bits 8/8; Python within 16 bits 12/12 and 18/18; published quality equal 8/8 (C++) and 12/12 (README). ISCC core: 3/3.
+- **IMGF.3: met on every clause except one.** Satisfied: frozen at `6f39e50`; digest in the protocol and the README; non-author review `835f6c0` is an ancestor of `0c7523c`; the result descends from the frozen commit; identity checks were logged; the decision record is in place.
+  - **Remaining clause:** "package install … needs owner approval". No committed owner record exists: ROADMAP.md L157, L189 and L273 still list the IMGF install as owner-gated, and protocol §14 cites only the coordinator brief. Recording that approval, with its date, closes IMGF.3.
+- **IMGF.4: met with this recheck.**
+  - (a) V1 k/k; (b) two byte-identical runs; (c) 0 invalid.
+  - Network denial was in force, with the probe refused first. Counts have denominators and no pass line; cross-host is recorded as not tested; X1 is cited as external.
+  - "A non-author rechecks the counts" is satisfied by this section.
+- **Not affected:** IMGF.5 (independent implementation and C++ build) stays open. IMGF.6 stays owner-gated.
