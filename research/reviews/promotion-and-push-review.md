@@ -110,3 +110,29 @@ The workflow has `contents: read`, `persist-credentials: false` and no `secrets.
 - After B1 (tool and rules dropped from all public commits) and B2 (map committed on the source branch), regenerate the public branch. Re-run the scan with ROT13 decoding, plus the determinism check. Then push the new tip as `origin roadmap-v2`.
 
 Everything else is ready.
+
+## Public branch verification 2
+
+Checked 2026-11-23: `roadmap-v2-public` at `dec460e` (97 commits over `origin/main` `8d5e6a7`). It was generated from `roadmap-v2` at **`409d486`**; `dec460e^{tree}` = `409d486^{tree}` = `d7fa29ad…`. My scripts are in `$TMPDIR/pub2/`. The private rules file was read locally only to load its patterns; none of its content appears here. Nothing was pushed to or fetched from `origin`.
+
+**1. Scan.** The scan covered 97 commits (messages, author and committer headers), 505 new blobs and every path. Each was matched in plain text, ROT13, reversed, base64-decoded and hex-decoded form against the 44 private substitution patterns, the 8 private detectors and my own categories (owner quotes, private terms, thread ids, coordination text, home paths and user name, AI trailers, secrets, foreign e-mails).
+- **Real hits: 0.** All five residual matches are false positives: "the parent commit" (git sense) in `test-vectors/extraction/README.md`, the ROT13 of an identifier in the matching scripts, and the allowed git identity in this review.
+- **The tool:** 3 versions of `tools/public_history_scrub.py` remain, none is a listed rule-bearing blob, and none carries the removed strings in any encoding.
+
+**2. Reproducibility.**
+- **Deterministic:** in a scratch clone, `rewrite --source 409d486` run twice gives `dec460e` both times, with identical id maps.
+- **Append-stable:** after one appended source commit, the earlier ids are unchanged, `dec460e` is an ancestor of the new tip, and later pushes are fast-forwards.
+
+**3. Trees and dropped commits.**
+- **JSON:** pairing all 97 kept commits through the id map, all 5,635 `.json`/`.jsonl` blob versions are byte-identical, and no path other than the tool is missing.
+- **Correction to the brief:** the 14 dropped commits are **not** only tool-version commits. Three are (`4d5d203`, `6a9b81e`, and `584cbda`, whose lane edits also become no-ops). The other 11 are the scrub commits themselves (owner quotes, thread ids, paths, scratch paths, private terms, tooling sentence), whose edits are exactly the substitutions already applied to every earlier version. All 14 have a rewritten tree equal to their parent's, so dropping them loses no content.
+
+**4. Fresh clone of `dec460e`.** Everything exits 0: `tools/validate.py`, `--links-all`, the unit tests, the four vector checkers and `tools/check_hygiene.py`. `.github/workflows/validate.yml` is byte-identical to the version verified at `651451c`, with SHA pins and no secrets.
+
+**5. Pre-push hook** (local bare remote under `$TMPDIR`). It refuses `roadmap-v2` ("contains a rule-bearing version of the rewrite tool") and accepts `roadmap-v2-public`.
+- **Gap (non-blocking for this push):** the hook checks only the listed tool blobs. It **accepted** `f42156d`, an older `roadmap-v2` commit that predates the tool but still contains an owner quote and a thread id.
+- **Fix before routine use:** have the hook run `tools/public_history_scrub.py scan` on the pushed range with the private rules, or accept only refs whose tip descends from the current public tip.
+
+**6. Map and subjects.** Acceptable. The map names categories and counts, the rules-file SHA-256 and the old→new ids with subjects. Subjects such as "Replace verbatim owner quotes with neutral paraphrase" say that something was removed, not what. No subject contains removed content.
+
+**Verdict: safe to push `dec460e` to `origin` as branch `roadmap-v2`.** Widen the hook (point 5) before any later push from this clone. Correct the dropped-commit description in the map or brief (point 3) at the next regeneration.
