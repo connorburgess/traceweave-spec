@@ -1,12 +1,19 @@
 # M3 evaluation protocol: token-fingerprint baseline on Go and Rust
 
-Protocol version: `m3-eval-draft-4`. Status: **ready to freeze; frozen by the commit that precedes the first tuning run** (2026-11-23). Not run. No corpus has been acquired yet; acquisition is approved (§14.2). Roadmap gates M3.0–M3.6 and backlog item TW-05 ([roadmap](../../ROADMAP.md#m3--measure-usefulness)). Corpus proposal: [evaluation-corpus/](evaluation-corpus/README.md).
+Protocol version: `m3-eval-draft-5`. Status: **ready to freeze; frozen by the commit that precedes the first tuning run** (2026-11-23). Not run. No corpus has been acquired yet; acquisition is approved (§14.2). Roadmap gates M3.0–M3.6 and backlog item TW-05 ([roadmap](../../ROADMAP.md#m3--measure-usefulness)). Corpus proposal: [evaluation-corpus/](evaluation-corpus/README.md).
 
 Protocol digest (SHA-256, self-excluding): `0000000000000000000000000000000000000000000000000000000000000000` (all zeros: **not frozen yet**). The protocol is frozen by the spec-repository commit that fills in this digest, and that commit must precede the first tuning run (§2 step 6). The digest is the SHA-256 of this file's bytes with those 64 hex digits replaced by 64 zeros; the tuning runner and `freeze.json` (§8) repeat it, and both refuse to run if this file's digest differs.
 
 This is a research protocol. It changes nothing in `spec/`, `schemas/`, `profiles/` or `test-vectors/`. The owner decisions it needs are recorded in [§14](#14-decisions-that-need-the-owner): decided on 2026-11-23 (M3.0 budget **1/20**, acquisition approved, storage `~/traceweave-eval`), with the options and both recommendations kept as history. The harness scripts are listed in [IMPLEMENTING.md](evaluation-corpus/IMPLEMENTING.md).
 
 It fixes, before any result exists, what is measured and how each pass/fail becomes an exit code or a count. Where this draft leaves a number open, the number is chosen by a stated mechanical rule on the tuning split, never by looking at held-out data.
+
+**Changes from `m3-eval-draft-4`**, from the [lane 11 audit](../lanes/11-report-audit.md) of two external design reviews (commit `d32b25c`, "Combined ranked list", items 1–3, and its follow-up list). Budget `1/20`, the verdict rule and the manifest are unchanged:
+- the timing pilot becomes the **fold-S outcome count**: outcome classes on all fold-S searches with no suppression catalogue, for every (`k`, `window`), reported as a table; a pre-declared rule adds `minRegionDistinctHashes` 8 and 12 to the grid if the most conservative configuration alarms on more than half of either language's fold-S searches (§5.5); fold S still never reaches held-out data or configuration selection;
+- `k` = 16, the extraction bound, is added: 192 configurations, 12 (`k`, `window`) settings; the run-budget reduction keeps both ends of `k` (§5.3, §5.5);
+- the per-configuration fold-E table is committed with `freeze.json`, and the held-out alarm-audit procedure is fixed before the freeze (§5.4, §8, §12a);
+- new §18 lists follow-up measurements on the same frozen corpus, none part of M3.6;
+- the wording of what 132 searches bound follows the audit: 0.0224 at 0 alarms, 0.0877 one-sided at 6 (§11, §14.1).
 
 **Changes from `m3-eval-draft-3`** (owner decisions of 2026-11-23, delegated to the coordinator):
 - §14 records the decisions: M3.0 budget option A, `1/20` per unordered repository search (met when at most 6 of 132 alarm); `1/100` to be tested on a larger corpus only if this passes; acquisition of the 48 repositories and the mechanical replacements approved; storage `~/traceweave-eval` (`TRACEWEAVE_EVAL_DIR`); licence recheck failing closed;
@@ -82,9 +89,9 @@ Each step is a commit. Gate IDs in brackets.
 | 2 | Manifest frozen; acquisition approved, covering the mechanical replacements of §4.3: **approval done** (2026-11-23, §14.2) | owner [M3.1] |
 | 3 | Acquisition: shallow fetch of each pinned revision; inventory; licence recheck; acquisition-time rules (§3.6) | step 2 |
 | 4 | Groups and rejections by the acquisition-time rules; split file and its digest committed | step 3 [M3.2] |
-| 5 | Timing pilot on tuning fold S (§5.5); run budget fixed | step 4 |
+| 5 | Fold-S outcome count and timing pilot (§5.5); pre-declared grid rule applied; run budget fixed | step 4 |
 | 6 | Protocol digest filled in and committed (this file frozen); then tuning: suppression catalogues, grid, selection rule (§5), on tuning data only | steps 1, 5 |
-| 7 | Freeze file committed (§8) | step 6 [M3.3] |
+| 7 | Freeze file, tuning table and alarm-audit procedure committed together (§8, §12a) | step 6 [M3.3] |
 | 8 | Held-out positives generated; held-out extraction, comparison and metrics | step 7 |
 | 9 | Held-out report and counts committed (the "first held-out result commit") | step 8 [M3.4] |
 | 10 | Independent rerun | step 9 [M3.5] |
@@ -215,7 +222,7 @@ The split file is UTF-8, one line per repository, sorted bytewise, each line `la
 
 ### 5.1 Folds
 
-Per language, sort tuning groups by `SHA-256("traceweave-m3-fold-v1\n" || language || "\n" || group)`. The first half is fold **S** (suppression source and timing pilot), the rest fold **E** (tuning evaluation). Fold S is never used to measure detection or false alarms; fold E never contributes to a suppression catalogue.
+Per language, sort tuning groups by `SHA-256("traceweave-m3-fold-v1\n" || language || "\n" || group)`. The first half is fold **S** (suppression source, fold-S outcome count and timing pilot), the rest fold **E** (tuning evaluation). Fold S is never used for configuration selection or to measure detection; its false-alarm counts (§5.5) feed only the pre-declared grid rule and the report. Fold E never contributes to a suppression catalogue.
 
 ### 5.2 Suppression catalogue construction
 
@@ -223,21 +230,21 @@ For a threshold *T*, a hash of channel *c* is **frequent** when it appears among
 
 ### 5.3 Grid
 
-Fixed in advance; 144 configurations per language:
+Fixed in advance; 192 configurations per language (288 if the §5.5 pre-declared rule fires):
 
 | Parameter | Values |
 | --- | --- |
-| `k` | 5, 8, 12 |
+| `k` | 5, 8, 12, 16 (16 is the extraction bound) |
 | `window` | 4, 8, 16 |
-| `minRegionDistinctHashes` | 2, 3, 4, 6 |
+| `minRegionDistinctHashes` | 2, 3, 4, 6; plus 8 and 12 only if the §5.5 rule fires |
 | suppression threshold *T* | none, 2, 3, 5 |
 | `mergeGap` | equal to `window` |
 | `maxSeedsPerMode`, `maxRegionsPerMode` | 1,000,000 and 1,000, fixed |
 | `maxInputBytes` | 1,048,576, fixed |
 
-All values are inside the extraction and comparison bounds (extraction §10, OD-21; contract §4, OD-C33).
+All values are inside the extraction and comparison bounds (extraction §10, OD-21; contract §4, OD-C33). For orientation (lane 11 audit): under the shipped comparison the smallest possible `match` covers k + 1 tokens (two adjacent selected k-grams with distinct hashes) and the guaranteed one 2·w + k − 1 tokens (two disjoint full windows that merge under `mergeGap` = w). With `minRegionDistinctHashes` 2 the grid's floor k + 1 runs from 6 tokens (`k` 5) to 17 (`k` 16).
 
-**Seed sharing.** Seeds, diagonals and regions depend only on the two catalogues, which depend only on (`k`, `window`), and on `mergeGap` = `window` and the fixed caps. `minRegionDistinctHashes` and *T* act after regions are formed: *T* decides which hashes are common, which changes `distinctCommonHashes`, region status, ambiguity among reportable regions and the outcome, but not the seeds or regions. So the runner computes, per (`k`, `window`) and file pair, the regions with their distinct-hash sets once, and derives the 16 (`minRegionDistinctHashes`, *T*) bodies from them. **Check:** for each (`k`, `window`), file pairs with `u(pair id, 1) mod 50 = 0` (§6.2) are also compared directly under all 16 configurations, and every derived body must equal the direct body byte for byte; any difference stops tuning (exit 2).
+**Seed sharing.** Seeds, diagonals and regions depend only on the two catalogues, which depend only on (`k`, `window`), and on `mergeGap` = `window` and the fixed caps. `minRegionDistinctHashes` and *T* act after regions are formed: *T* decides which hashes are common, which changes `distinctCommonHashes`, region status, ambiguity among reportable regions and the outcome, but not the seeds or regions. So the runner computes, per (`k`, `window`) and file pair, the regions with their distinct-hash sets once, and derives the 16 (`minRegionDistinctHashes`, *T*) bodies (24 if the §5.5 rule fires) from them. **Check:** for each (`k`, `window`), file pairs with `u(pair id, 1) mod 50 = 0` (§6.2) are also compared directly under all of those configurations, and every derived body must equal the direct body byte for byte; any difference stops tuning (exit 2).
 
 ### 5.4 Selection rule
 
@@ -249,6 +256,8 @@ On fold E, generate positive cases with the §6 generator (namespace `tuning`) a
 
 The selection runs as a script whose exit status is 0 when it selected by rule 2, 3 when by rule 3. Either way the selected configuration is frozen; rule 3 is reported.
 
+**Tuning table, committed with the freeze.** The script writes `eval/tuning-table.json`: one row per configuration with *a* (alarms and N_E, per language and pooled, per alarm reason), *r* and its cell counts, reportable regions per search (mean and maximum), and the rule that selected. It is committed **in the same commit as `freeze.json`** (§8), so every rejected configuration stays visible, grouped by `k`.
+
 **What the margin means at this size.** Fold E has about 6 groups per language, so 15 unordered searches per language and 30 in all. With `1/40` and N_E = 30, rule 1 means **zero alarms** on fold E (any budget option of §14.1 would have meant the same). That is mechanical and harmless, and it is the honest reading of how little the tuning split can say about false alarms.
 
 ### 5.5 Cost model, timing pilot, run budget and abort rules
@@ -259,18 +268,25 @@ The selection runs as a script whose exit status is 0 when it selected by rule 2
 | --- | --- | --- | --- |
 | Held-out negatives (66 unordered searches per language) | 685,911 Go + 968,312 Rust = 1.65 M | 1 | 1.65 M |
 | Held-out positives (about 2,500 Go and 2,850 Rust cases; only the modified host file is new) | about 0.6 M | 1 | 0.6 M |
-| Fold-E negatives (15 unordered searches per language) | 245,933 Go + 185,952 Rust = 0.43 M | 9 (`k`, `window`), seeds shared | 3.9 M |
-| Fold-E positives (fewer cases: at most 3 units × 6 source repositories per cell) | about 0.3 M | 9 | 2.7 M |
+| Fold-S outcome count (15 unordered searches per language, no suppression) | 495,756 Go + 141,233 Rust = 0.64 M | 12 (`k`, `window`), seeds shared | 7.6 M |
+| Fold-E negatives (15 unordered searches per language) | 245,933 Go + 185,952 Rust = 0.43 M | 12 (`k`, `window`), seeds shared | 5.2 M |
+| Fold-E positives (fewer cases: at most 3 units × 6 source repositories per cell) | about 0.3 M | 12 | 3.6 M |
 
-Pair caching (§9) makes positives cheap: a positive comparison differs from an unmodified host comparison only in the pairs that involve the modified host file. Without seed sharing the fold-E rows are 16 times larger (about 107 M pair comparisons).
+Pair caching (§9) makes positives cheap: a positive comparison differs from an unmodified host comparison only in the pairs that involve the modified host file. Without seed sharing the fold-E rows are 16 times larger (about 141 M pair comparisons). In all, about 18.7 M pair comparisons; at the review's assumed 1 ms per pair, about 5 hours.
 
-**Timing pilot (step 5), tuning split only.** Per language, take the first two fold-S repositories in fold order. Choose 1,000 file pairs between them with `u("pilot|" || language, j) mod n` for j = 0…999 over the bytewise-sorted pair list. For each of the 9 (`k`, `window`) settings, extract both repositories and compare those pairs, recording per-pair wall time and peak RSS (`/usr/bin/time`). **Comparison outcomes are discarded unread**: the pilot writes timings only. Record the median and 95th-percentile per-pair time *t* and the maximum RSS in `eval/pilot.json`, committed before tuning.
+**Fold-S outcome count and timing pilot (step 5), tuning split only.** This answers the external reviews' question whether `k` = 5 alarms on unrelated code (lane 11, R1), inside tuning and before the protocol digest is filled in.
+- **Searches:** all unordered fold-S searches of each language (about 15 per language), as defined in §1, with **no suppression catalogue** (*T* none). Fold S is otherwise only the suppression source; it is never used for configuration selection (§5.4 uses fold E) and never touches held-out data.
+- **Settings:** every (`k`, `window`) of the grid (12), and for each, every `minRegionDistinctHashes` value of the grid (seed sharing, §5.3).
+- **Recorded:** per language and configuration, the number of searches with an alarm (§1) and the counts per outcome class and code (`match`, `ambiguous`, `seed-limit-exceeded`, `not-compared`, `no-match` codes), per mode. Also, on 1,000 file pairs per language chosen with `u("pilot|" || language, j) mod n` (j = 0…999) over the bytewise-sorted fold-S pair list, per-pair wall time (median and 95th percentile) and peak RSS (`/usr/bin/time`).
+- **Output:** `eval/pilot.json` and a report table "fold-S alarms by `k`, `window` and `minRegionDistinctHashes`", committed before step 6. The `k` = 5 rows are reported as the direct answer to R1, whatever they show.
 
-**Run budget.** Estimated tuning time = Σ over the 9 settings of (fold-E pair comparisons × that setting's 95th-percentile *t*) + extraction. If it exceeds **24 hours** on the pilot machine, the grid is reduced **before any tuning outcome is computed**, by removing `k` = 12, then `window` = 16, in that order, until the estimate fits; the reduction is recorded in `pilot.json` and the freeze. Estimated held-out time is computed the same way and recorded.
+**Pre-declared grid rule (the only data-dependent grid change allowed).** Written here before the pilot runs. Let the most conservative configuration be `k` 16, `window` 16, `minRegionDistinctHashes` 6, *T* none. If it raises an alarm in **more than half** of the fold-S searches of **either** language (alarms × 2 > searches), `minRegionDistinctHashes` **8 and 12** are added to the grid (288 configurations), before the protocol digest is filled in and before any fold-E outcome is computed. Otherwise the grid stands at 192. No other grid value, rule or threshold may change in response to the pilot; `pilot.json` records which branch was taken.
+
+**Run budget.** Estimated tuning time = Σ over the 12 settings of (fold-E pair comparisons × that setting's 95th-percentile *t*) + extraction. If it exceeds **24 hours** on the pilot machine, the grid is reduced **before any fold-E outcome is computed**, by removing, in this order, `window` 16, then `k` 8, then `k` 12, then `window` 8, until the estimate fits; so `k` 5 and `k` 16, both ends, survive any reduction. The reduction is recorded in `pilot.json` and the freeze. Estimated held-out time is computed the same way and recorded.
 
 **Abort rules.** Tuning or the held-out run stops with exit 2 and **no verdict** if: its wall time exceeds 3 times its recorded estimate; any process exceeds 75% of the machine's physical memory; or a seed-sharing or pair-caching check differs. An aborted held-out run is reported as aborted; resuming requires a protocol revision.
 
-For orientation only: I2 measured 8 M seeds at 1.9 s and 1.4 GiB (Rust lane) and 4.2 s and 3.1 GiB (Go lane) per mode, worst-case periodic input ([contract §5.7](../../spec/catalogue-report.md#57-ambiguity-and-the-output-cap)). No real-file per-pair cost has been measured; the review's 1 ms per pair assumption gives about 1 hour for held-out negatives and 2 hours for the shared-seed tuning grid. The pilot replaces that assumption with a measurement.
+For orientation only: I2 measured 8 M seeds at 1.9 s and 1.4 GiB (Rust lane) and 4.2 s and 3.1 GiB (Go lane) per mode, worst-case periodic input ([contract §5.7](../../spec/catalogue-report.md#57-ambiguity-and-the-output-cap)). No real-file per-pair cost has been measured; the review's 1 ms per pair assumption gives about 1 hour for held-out negatives and about 4 hours for the fold-S count and the shared-seed tuning grid. The pilot replaces that assumption with a measurement.
 
 ## 6. Positive set (held-out sources, generated after the freeze)
 
@@ -360,7 +376,9 @@ The **freeze commit** in the implementation repository adds `eval/freeze.json` c
 - per language: the extraction configuration bytes (Base64) and SHA-256; the comparison configuration bytes and SHA-256, including `minRegionDistinctHashes`, `mergeGap`, both caps and `suppressionCatalogueSha256`; the suppression catalogue SHA-256 and *T*;
 - the M3.0 budget as a rational, **`1/20`**, and the spec-repository commit that recorded it (§14.1); any other value is refused by the freeze script;
 - the implementation commit used for lexing, extraction and comparison, which must equal the acquisition lexing commit of `eval/acquisition.json` (§3.4); the generator commit; the `rustfmt` version string;
-- the pilot record digest and any grid reduction (§5.5); the run-time estimates;
+- the pilot record digest, the grid-rule branch taken and any grid reduction (§5.5); the run-time estimates;
+- the digest of `eval/tuning-table.json` (§5.4), committed in the same commit;
+- the alarm-audit procedure of §12a, by protocol section and digest, and the name of the assigned labeller;
 - the M3.5 tolerance (§13).
 
 **When.** After the §5.4 selection, before step 8. Nothing in `freeze.json` changes afterwards; a change is a new protocol version and voids held-out results produced under the old one.
@@ -427,7 +445,7 @@ Counts are written to `eval/results/heldout/counts.json` (canonical JSON: sorted
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Upper bound | 0.221 | 0.117 | 0.044 | 0.022 | 0.0099 | 0.0030 | 0.0010 |
 
-So the proposed 48-repository corpus can **measure** a false-alarm count over 132 searches and compare it with the budget, which is what M3.6 asks. It **cannot demonstrate** a rate below about 0.2 with independent-search confidence, nor below 0.022 even if all 132 searches were independent. Demonstrating 0.01 at 95% needs about 300 independent searches, roughly 600 repositories under the disjoint design. Recall cells of 30 cases have Wilson half-widths up to about ±0.17. The report and every rendering of M3.6 state these limits and print the operating characteristics of §14.1 beside the verdict.
+So the proposed 48-repository corpus can **measure** a false-alarm count over 132 searches and compare it with the budget, which is what M3.6 asks. It **cannot demonstrate** a rate below about 0.2 with independent-search confidence (the disjoint bound). Even treating all 132 searches as independent, which they are not: 0 alarms gives a one-sided 95% upper bound of **0.0224** (the rule of three gives 0.0227); 6 alarms, the largest passing count (observed 0.0455), gives **0.0877** one-sided and 0.0963 two-sided (97.5%). A "met" verdict at 6 alarms is therefore compatible with a true rate near 9%. Demonstrating 0.01 at 95% needs about 300 independent searches, roughly 600 repositories under the disjoint design. Recall cells of 30 cases have Wilson half-widths up to about ±0.17. The report and every rendering of M3.6 state these limits and print the operating characteristics of §14.1 beside the verdict.
 
 ## 12. What M3.6 computes
 
@@ -438,6 +456,19 @@ Inputs: `counts.json` (held-out) and `freeze.json`, whose budget must be `p/q` =
 - `N = 0`, a missing or mismatched freeze, a failed M3.3 check (including the lexing-commit equality), exclusions above the §3.4 bound, a non-zero symmetry or caching difference, or an aborted run is an error, not a verdict.
 
 The script exits 0 for met, 3 for negative-result, 2 for an error. No recall floor is applied; recall is reported without a pass line. The verdict uses the point estimate, as M3.6 states; the intervals of §11, the operating characteristics of §14.1 and the excluded-file counts per repository and reason are printed beside it and do not change it.
+
+## 12a. Alarm audit (fixed before the freeze; never changes the verdict)
+
+Every held-out negative-search alarm is labelled **after** the M3.6 script has printed its verdict, so the labels cannot influence it.
+- **Who.** A labeller named in `freeze.json`, assigned by the coordinator, who did not write the harness. A second person, also named there, relabels every alarm if there are at most 6, otherwise a sample of `u(search id, 3) mod 4 = 0`; agreement is reported as a count.
+- **Unit.** One label per (search, file pair, mode) with an alarm reason, plus one label per search: the label of its first labelled pair in (reference id, candidate id, mode) order.
+- **Labels**, exactly one each, from the report's spans and the two source files only:
+  - `real-shared-code`: the matched regions are the same code in both files beyond the token run itself (shared identifiers, comments or string literals in or around the span, a copied or vendored file, or a stated common origin);
+  - `boilerplate`: licence or file headers, generated-looking code, framework or language-required idioms (for example `if err != nil { return err }`), or code the labeller finds in the language's standard library or a common dependency;
+  - `accidental`: none of the above; the shared tokens are a coincidence of common syntax;
+  - `abstention`: the alarm reason is `ambiguous`, `seed-limit-exceeded`, `not-compared` or a rejected body; a sub-label from the three above describes the underlying regions where there are any.
+- **Record.** `eval/results/heldout/alarm-audit.jsonl`: search id, pair ids, mode, alarm reason, label, one-line reason, labeller. Committed after the verdict.
+- **Effect.** Labels **never** change A, N, the M3.6 exit status or any §10 figure. They are reported as counts beside the verdict and feed the follow-up work of §18.
 
 ## 13. Reproduction (M3.5)
 
@@ -473,7 +504,7 @@ The owner decides each of these. All were decided on 2026-11-23, delegated to th
 
 | Option | M3.6 met iff alarms ≤ | One-sided 95% upper bound at that count | P(met) if true rate = ½ budget | = budget | = 2 × budget |
 | --- | --- | --- | --- | --- | --- |
-| A `1/20` | 6 | 0.088 | 0.951 | 0.508 | 0.018 |
+| A `1/20` | 6 | 0.0877 | 0.951 | 0.508 | 0.018 |
 | B `1/100` | 1 | 0.035 | 0.858 | 0.619 | 0.257 |
 | C `1/1000` | 0 | 0.022 | 0.936 | 0.876 | 0.768 |
 
@@ -501,7 +532,7 @@ At that size B separates ½× from 2× as sharply as A does at 48 repositories. 
 ### 14.2 Acquisition approval (M3.1)
 
 - **What:** the 48 repositories in [manifest-proposal.json](evaluation-corpus/manifest-proposal.json), 24 Go and 24 Rust, by shallow fetch of the pinned revisions, **plus the mechanical replacements of §4.3 from the continuing walk, at most 8 per language**. No dependencies, submodules, releases or build outputs. Likely replacements (from public dependency information, confirmed only at acquisition): `seanmonstar/reqwest` and `tokio-rs/axum` (both depend on `hyper`), and `grpc/grpc-go` (likely required by `micro/go-micro`).
-- **Size:** GitHub reports 621,386 KiB (about 607 MiB) summed over the 48 repositories, *including full history*; this is an upper bound, and the review estimates 100–250 MB for depth-1 fetches. Eligible source is 58,768,417 bytes (about 56 MiB) in 6,254 paths (3,314 Go and 2,940 Rust), counted from the pinned tree listings before the content rules. Derived private data (catalogues for 9 tuning settings and the frozen one) is estimated at 4–5 GB.
+- **Size:** GitHub reports 621,386 KiB (about 607 MiB) summed over the 48 repositories, *including full history*; this is an upper bound, and the review estimates 100–250 MB for depth-1 fetches. Eligible source is 58,768,417 bytes (about 56 MiB) in 6,254 paths (3,314 Go and 2,940 Rust), counted from the pinned tree listings before the content rules. Derived private data (catalogues for 12 tuning settings and the frozen one) is estimated at 5–6 GB.
 - **Licences**, verified from the root licence files at the pinned revisions: MIT only (30 repositories), Apache-2.0 only (9), both MIT and Apache-2.0 files, recorded `Apache-2.0 AND MIT` (7, all Rust), BSD-3-Clause (1) and BSD-2-Clause (1). All permit redistribution with notice retention; the project redistributes none. Acquisition rechecks every licence file's SHA-256 and classification and stops on any difference (§3.6).
 - **Recommendation (history):** approve as proposed, including the replacement rule, after a non-author has rerun `verify_manifest.py`.
 - **Decision (2026-11-23):** approved, delegated to the coordinator: the 48 repositories and the mechanical replacements of §4.3 (at most 8 per language), with the licence recheck of §3.6 failing closed.
@@ -520,11 +551,11 @@ Outside every repository and every version-controlled working tree (contract B1 
   | Eligible source | 56 MiB | about 235 MiB |
   | Held-out negative file pairs | 1.65 M | about 31 M (×18.6, from 66 to 1,225 searches per language) |
   | Fold-E negative file pairs per (`k`, `window`) | 0.43 M | about 8.6 M (25 instead of 6 groups per language) |
-  | Pair comparisons in all (positives about the same) | about 8.9 M | about 112 M |
-  | Runtime at the review's assumed 1 ms per pair | about 2.5 h | about 31 h (held-out about 9 h, tuning about 22 h) |
+  | Pair comparisons in all, 12 (`k`, `window`) settings (positives about the same) | about 18.7 M | about 290 M |
+  | Runtime at the review's assumed 1 ms per pair | about 5 h | about 80 h (held-out about 9 h, fold-S count and tuning about 70 h) |
   | Derived private data | 4–5 GB | about 17–20 GB |
 
-  At 100 per language the tuning estimate approaches the 24-hour budget of §5.5, so the grid would likely shrink by its fixed rule. The pool would also need to grow: the first 100 search results per language yielded 24 acceptances from 29 (Go) and 39 (Rust) visits, so 100 acceptances need about the first 300 results per language (three search pages), a change to §3.1 that needs a new snapshot. **Author recommendation (history):** start at 24 and choose A, or approve 100 per language with B; do not combine B with 24 if M3.6 is meant as evidence. **Decision (2026-11-23):** 24 per language with A; 100 per language with B only if A passes.
+  At 100 per language the tuning estimate exceeds the 24-hour budget of §5.5, so the grid would shrink by its fixed rule. The pool would also need to grow: the first 100 search results per language yielded 24 acceptances from 29 (Go) and 39 (Rust) visits, so 100 acceptances need about the first 300 results per language (three search pages), a change to §3.1 that needs a new snapshot. **Author recommendation (history):** start at 24 and choose A, or approve 100 per language with B; do not combine B with 24 if M3.6 is meant as evidence. **Decision (2026-11-23):** 24 per language with A; 100 per language with B only if A passes.
 - **Allowlist.** The permissive list of §3.2 only. Adding MPL-2.0 or CC0-1.0 would admit a few more pool repositories (for example a CC0 Rust command runner); copyleft is excluded because the project does not want to argue use conditions for corpus code. **Recommendation (history):** keep as proposed. **Decision (2026-11-23):** kept, as part of the acquisition approval.
 
 ### 14.5 Already decided elsewhere, restated
@@ -566,6 +597,7 @@ No push or publication; the manifest and results live in the implementation repo
 | F3 abstention passes M3.6 | Alarm = any `match`, abstention, `not-compared` pair or rejected body (§1). Eligibility (lexes, ≥ 16 tokens) removes the deterministic `not-compared` sources (§3.4) |
 | F4 double counting | Unordered pairs, one comparison each (§1); runner symmetry check with error on difference (§9); thresholds and operating characteristics restated for N = 132 (§14.1) |
 | F5 grouping | Go module-path and Rust crate/URL matching, later-in-walk rejected, replacement order and limit of 8 per language, approval covers replacements (§4.1, §4.3). Token-digest duplicate rule closes reformatted copies; edited copies stated as residual (§4.1) |
+| Lane 11 items 1–3 | Fold-S outcome count with the pre-declared grid rule (§5.5); `k` = 16 and a reduction order keeping both ends of `k` (§5.3, §5.5); tuning table with the freeze and alarm audit fixed before it (§5.4, §8, §12a); follow-ups (§18); bound wording (§11, §14.1) |
 | F6 cost | Pair-count model, seed sharing with a byte-identical check, timing pilot on fold S only, 24-hour budget with a fixed grid reduction, abort rules (§5.3, §5.5) |
 | F7 lenient hit | Covered fraction reported per cell (§1, §10) |
 | F8 ancestry | Limit stated; refusals and the runner identity record in the first result commit (§8) |
@@ -582,3 +614,15 @@ No push or publication; the manifest and results live in the implementation repo
 | §4 statistics (dependence) | Leave-one-repository-out range and repositories-in-alarms count added (§10, §11) |
 | §5 compilability | Stated (§0, §6.3) |
 | §1 tuning margin | Stated: zero fold-E alarms under every option (§5.4) |
+
+## 18. Follow-up measurements on the same frozen corpus (not part of M3.6)
+
+These run after M3.4, on the same frozen corpus, budget `1/20` and unit, as separate records. None changes the M3.6 verdict, and none may start before the first held-out result commit. Each needs its own protocol amendment or gate before it runs.
+
+| Follow-up | What it measures | Needs |
+| --- | --- | --- |
+| Adversarial transformations | Recall under deliberate evasion: one token inserted every k − 1 tokens (breaks every k-gram analytically), dead-code insertion, statement reordering within blocks | Lexical definitions as in §6; the insertion result is known analytically and is reported as a check |
+| LLM-rewrite arm | Recall when a model rewrites held-out units (prompt, model and version recorded; functional validity checked separately) | **Owner decision on using an external model** and on sending corpus code to it |
+| Bag-of-tokens second method | A different system under test (multiset of tokens per unit) compared with the frozen winnowing baseline on the same cases and negatives | Roadmap STRUCT.1 |
+| Keyed fingerprints | Whether per-relationship keyed hashes change any outcome (expected none) and their cost | Roadmap KEYED.1 and RES.1 |
+| Existing open winnowing scanner | A side-by-side run of an existing open-source winnowing scanner (SCANOSS-style) on the same held-out cases and negatives, at the same alarm rule | A pinned, licensed scanner version; no network calls from it during the run |

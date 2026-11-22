@@ -62,3 +62,7 @@ Only `protocolVersion`, now `m3-eval-draft-3`. The draft-3 changes (Go `rename` 
 ## Changes for draft-4
 
 Only `protocolVersion`, now `m3-eval-draft-4`, which records the owner decisions (budget `1/20`, acquisition approved, storage `~/traceweave-eval`). Entries, walk and split digest are unchanged. `IMPLEMENTING.md` is new.
+
+## Draft-5
+
+The protocol moved to `m3-eval-draft-5` (lane 11 audit: fold-S outcome count, `k` = 16, tuning table with the freeze, alarm audit, follow-ups). **The manifest is unchanged**, including its `protocolVersion` `m3-eval-draft-4`: no draft-5 rule touches selection, licences, groups or splits, and the checker's rules are the same. `IMPLEMENTING.md` follows draft-5.
