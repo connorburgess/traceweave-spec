@@ -121,9 +121,10 @@ def scrub_blob(rules, path, data, categories=None):
 
 
 def variants(text):
-    """The text itself, its ROT13 decoding, and printable base64 payloads found inside it."""
+    """The text, its ROT13 decoding, and all printable base64 payloads found inside it (joined, and ROT13-decoded)."""
     yield "plain", text
     yield "rot13", codecs.decode(text, "rot13")
+    payloads = []
     for token in set(BASE64_TOKEN.findall(text)):
         try:
             decoded = base64.b64decode(token + "=" * (-len(token) % 4), validate=True)
@@ -134,8 +135,11 @@ def variants(text):
         except UnicodeDecodeError:
             continue
         if payload and sum(ch.isprintable() or ch in "\n\t" for ch in payload) / len(payload) > 0.95:
-            yield "base64", payload
-            yield "base64+rot13", codecs.decode(payload, "rot13")
+            payloads.append(payload)
+    if payloads:
+        joined = "\n".join(payloads)
+        yield "base64", joined
+        yield "base64+rot13", codecs.decode(joined, "rot13")
 
 
 def residuals(rules, path, text):
