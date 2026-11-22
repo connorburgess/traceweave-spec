@@ -67,7 +67,7 @@ Body digests and outcomes per vector are in `matching.json`. `build_vectors.py` 
 
 ## Extraction records (amendment A1)
 
-`records.json` holds one expected canonical record per case, derived from an existing extraction vector (or, for `unsupported-config`, from a `config-negative.json` entry with input `x := 1\n`). Each entry has `source`, the input (and for unsupported configurations the configuration) as base64, `expectedRecordText` (the record bytes decoded as UTF-8, including the final LF) and `expectedRecordSha256`.
+`records.json` holds one expected canonical record per case, derived from an existing extraction vector (or, for `unsupported-config`, from a `config-negative.json` entry with input `x := 1\n`). Each entry has `source`, the input as base64, **the extraction configuration named explicitly** (`configFile`, a path relative to `records.json`, or `configBase64` with the exact bytes for the two rejected configurations, which exist in no file), `configSha256` over those configuration bytes (equal to the record's own `configSha256`), `expectedRecordText` (the record bytes decoded as UTF-8, including the final LF) and `expectedRecordSha256`.
 
 | Record | Case |
 | --- | --- |
@@ -101,7 +101,7 @@ PASS catalogue rule self-test (no extraction records used): 27/27 as stated
 PASS required-field self-test: 706/706 single-field deletions handled (required fields rejected, optional provenance field accepted)
 PASS wrong-implementation self-test: rejected 24/24
 PASS records.json: records=16 (null input fields: 4) catalogues-from-records=2 (equal to matching.json catalogues) build-rejections=3
-PASS record corruption self-test: rejected 31/31
+PASS record corruption self-test: rejected 34/34
 ```
 
 **What the checker does.** For each vector it:
@@ -130,7 +130,7 @@ Two corrupted files were also written to `$TMPDIR` and passed to the CLI. Both f
 - an extra seed `[5,5]` in the first `rv-gap-boundary` region (`seedCount below listed seeds`);
 - `inputs.suppressionCatalogueSha256` set to `none` in `go-boilerplate-suppressed` (`comparison.suppressionCatalogueSha256 differs from inputs`).
 
-**Record checks.** The checker has its own record writer (fixed key order, ECMAScript escaping). For every record it requires strict JSON, the record schema, byte equality with its own canonical re-serialization, and byte equality with the record it derives from the source vector (whose hashes it recomputes from tokens). It rebuilds the two catalogues from record bytes alone and runs the three refused builds. **Record corruption self-test** (31 cases, all rejected): `inputBytes` field name; extra `contract` key; missing `recordVersion`; envelope or result keys reordered; JCS-sorted keys; no final LF; CRLF; insignificant whitespace; non-ASCII escaped; uppercase hex escape; raw control character; unnecessary `\u0061` escape; non-null input digest, profile or offset for unsupported-config; non-null length for input-too-large; null offset for a lexical error; k-grams, window selections or values omitted; `inserted:false`; wrong or float `tokenCount`; duplicate key; wrong input digest; changed fingerprint hash; wrong record digest; wrong catalogue-from-records digest; a refused build made valid; input-too-large coverage dropped.
+**Record checks.** The checker has its own record writer (fixed key order, ECMAScript escaping). For every record it requires strict JSON, the record schema, byte equality with its own canonical re-serialization, and byte equality with the record it derives from the source vector (whose hashes it recomputes from tokens). It rebuilds the two catalogues from record bytes alone and runs the three refused builds. **Configuration rule.** The checker requires exactly one of `configFile`/`configBase64`, requires those bytes to equal the source vector's configuration, and requires `configSha256` to equal their digest and the record's `configSha256`. **Record corruption self-test** (34 cases, all rejected): configuration not named; wrong configuration file; wrong configuration digest; `inputBytes` field name; extra `contract` key; missing `recordVersion`; envelope or result keys reordered; JCS-sorted keys; no final LF; CRLF; insignificant whitespace; non-ASCII escaped; uppercase hex escape; raw control character; unnecessary `\u0061` escape; non-null input digest, profile or offset for unsupported-config; non-null length for input-too-large; null offset for a lexical error; k-grams, window selections or values omitted; `inserted:false`; wrong or float `tokenCount`; duplicate key; wrong input digest; changed fingerprint hash; wrong record digest; wrong catalogue-from-records digest; a refused build made valid; input-too-large coverage dropped.
 
 **Catalogue rule self-test** (27 cases, no extraction records, as a consumer has). It covers:
 - ordering and identity: unsorted artifacts; duplicate id or digest;

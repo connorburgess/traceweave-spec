@@ -65,6 +65,8 @@ There is no `contract` key: the configuration's `contract` is bound through `con
   - Each k-gram and fingerprint is `position`, `hash`, `span`.
   - k-gram lists, `windowSelections` and `values` are **always present** in the canonical record (empty arrays for `insufficient-tokens`). Extraction §9 calls them optional "in production output"; an implementation MAY offer other outputs, but only this record is canonical.
 
+**Record vectors name their configuration.** A record is a function of (configuration bytes, input bytes), so every entry in `records.json` states its configuration explicitly: `configFile` (path relative to `records.json`) or `configBase64` (the exact bytes, for rejected configurations), plus `configSha256`, which must equal the digest of those bytes and the record's own `configSha256`. The configuration is never left implicit in a source vector.
+
 These are exactly the extraction vectors' `result` objects (extraction §9 and the [vector README](extraction-vectors/README.md)), so record vectors are derived from extraction vectors without new hand work.
 
 **Canonical serialization:**
@@ -521,7 +523,7 @@ All checks are in [check_matching.py](matching-vectors/check_matching.py) unless
 | §6 | Schema interpreter and keyword audit; `bodySha256`; report rule layer for order, cap, counts, ambiguity and outcome; corruptions for outcome, class, side, rank, origin, ownership, signature, float and reduced fraction; provenance note, source text in the name, and provenance config digest |
 | M1.3 | Required-field self-test: every single-field deletion in a catalogue, 3 compared bodies, 4 rejected bodies and the report document |
 | M2.5 | A `large-host` vector with complete containment and partial Jaccard |
-| §2a record bytes | `records.json`: 16 records (ok, Unicode, CR, U+000B, insufficient, empty, lexical error, encoding error, input-too-large ×2, at-limit ok, unsupported-config ×2, Rust ok with quotes and backslashes, Rust error), each derived from an extraction vector and compared with the checker's own record writer; strict parse, schema and canonical round trip. Record corruption self-test, 31 cases |
+| §2a record bytes | `records.json`: 16 records (ok, Unicode, CR, U+000B, insufficient, empty, lexical error, encoding error, input-too-large ×2, at-limit ok, unsupported-config ×2, Rust ok with quotes and backslashes, Rust error), each derived from an extraction vector and compared with the checker's own record writer; strict parse, schema and canonical round trip. Record corruption self-test, 34 cases, including an unnamed configuration, a wrong configuration file and a wrong configuration digest |
 | §3.8 catalogue from records | Two catalogues built from records equal the `matching.json` catalogues; three refused builds |
 | Hand derivation | Codes, counts, seeds, ambiguity flags, excerpt bounds and byte shifts, with a `derivation` label per mode. A corruption that relabels a computed-then-reviewed mode as `hand` is rejected |
 

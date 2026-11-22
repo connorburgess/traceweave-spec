@@ -1474,8 +1474,15 @@ def check_records(rdoc, mdoc, ctx):
                 rec, data, _, cfg_raw, _ = ctx.sources.get(v["source"])   # recomputes hashes from tokens
                 need(v["inputBase64"] == rec["inputBase64"], "input differs from the source vector")
                 result = rec["result"]
+            # Every record names its configuration explicitly (contract §2a, records.json rule).
+            need(("configFile" in v) != ("configBase64" in v), "exactly one of configFile / configBase64 is required")
+            named = (HERE / v["configFile"]).read_bytes() if "configFile" in v else base64.b64decode(v["configBase64"], validate=True)
+            need(named == cfg_raw, "the named configuration is not the source vector's configuration")
+            need(re.fullmatch(r"[0-9a-f]{64}", v.get("configSha256", "")) and v["configSha256"] == sha(named),
+                 "configSha256 missing or not the digest of the named configuration bytes")
             rb = v["expectedRecordText"].encode("utf-8")
             need(sha(rb) == v["expectedRecordSha256"], "expectedRecordSha256 is not the digest of the record bytes")
+            need(strict_loads(rb[:-1])["configSha256"] == v["configSha256"], "record configSha256 differs from the entry's")
             r = check_record_bytes(rb, ctx.rec_schema)
             need(rb == expected_record(cfg_raw, data, result), "record differs from the one derived from its source")
             by_id[v["id"]] = rb
@@ -1565,6 +1572,16 @@ def record_corruptions(rdoc):
     d = copy.deepcopy(rdoc)
     d["records"][0]["expectedRecordSha256"] = "0" * 64
     yield "record-digest-wrong", d
+    d = copy.deepcopy(rdoc)
+    d["records"][0].pop("configFile")
+    yield "config-not-named", d
+    d = copy.deepcopy(rdoc)
+    d["records"][0]["configFile"] = "../extraction-vectors/config-rust.json"
+    d["records"][0]["configSha256"] = sha((HERE / "../extraction-vectors/config-rust.json").read_bytes())
+    yield "config-file-wrong", d
+    d = copy.deepcopy(rdoc)
+    d["records"][0]["configSha256"] = "0" * 64
+    yield "config-digest-wrong", d
     d = copy.deepcopy(rdoc)
     d["cataloguesFromRecords"][0]["expectedCatalogueSha256"] = "0" * 64
     yield "catalogue-from-records-digest-wrong", d

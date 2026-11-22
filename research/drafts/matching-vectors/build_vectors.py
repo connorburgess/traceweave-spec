@@ -1317,11 +1317,16 @@ def build_records(sources, matching_out):
         if "config-negative.json" in src:
             n = negs[src.split("#")[1]]
             cfg_raw, data, result = base64.b64decode(n["configBase64"]), UC_INPUT, n["expectedResult"]
-            entry = {"configBase64": n["configBase64"], "inputBase64": base64.b64encode(data).decode()}
+            entry = {"configBase64": n["configBase64"], "configSha256": sha(cfg_raw),
+                     "inputBase64": base64.b64encode(data).decode()}
         else:
             rec, cfg_raw, _ = sources[src]
             data, result = base64.b64decode(rec["inputBase64"]), rec["result"]
-            entry = {"inputBase64": rec["inputBase64"]}
+            fname = src.split("#")[0]
+            cfg_file = str(Path(fname).parent / json.loads((HERE / fname).read_text())["configFile"])
+            cfg_file = "../extraction-vectors/" + Path(cfg_file).name if "extraction-vectors" in cfg_file else cfg_file
+            assert (HERE / cfg_file).read_bytes() == cfg_raw
+            entry = {"configFile": cfg_file, "configSha256": sha(cfg_raw), "inputBase64": rec["inputBase64"]}
         rb = record_bytes(cfg_raw, data, result)
         by_id[rid] = (rb, cfg_raw)
         records.append({"id": rid, "tags": tags, "description": desc, "source": src, "derivation": "hand", **entry,
@@ -1361,7 +1366,9 @@ def build_records(sources, matching_out):
         rej.append({"id": rid, "extractionConfigFile": f"../extraction-vectors/{cfgname}",
                     "artifacts": [{"id": a, "record": r} for a, r in items], "reason": reason})
     doc = {"recordVersion": RECORD_VERSION,
-           "note": "Expected canonical extraction records (contract §2a). expectedRecordText is the UTF-8 decoding of the "
+           "note": "Expected canonical extraction records (contract §2a). Every record names its extraction configuration "
+                   "explicitly: configFile (path relative to this file) or configBase64 (the exact bytes, used for rejected "
+                   "configurations), plus configSha256 over those bytes. expectedRecordText is the UTF-8 decoding of the "
                    "exact record bytes, including the final LF; expectedRecordSha256 is over those bytes.",
            "records": records, "cataloguesFromRecords": cats, "catalogueBuildRejections": rej}
     (HERE / "records.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
