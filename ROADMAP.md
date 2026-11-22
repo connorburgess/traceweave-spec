@@ -150,7 +150,7 @@ Owner column: **S** = spec repository; **I** = implementation repository (`trace
 These cannot close until the owner acts:
 
 - **M2E.0:** select a carrier or omit embedding.
-- **IMG.0–IMG.5:** image mark study, UC-7 and the TrustMark weight download.
+- **Image mark study (IMG.1–IMG.5), owner-gated parts only:** any real-image set; any weight with a non-commercial or unclear licence; any GPU spend. Synthetic images and permissively licensed weights are approved ([owner decision on image marks and C2PA](#owner-decision-2026-11-23-image-marks-and-c2pa)).
 - **IMGF.6:** any real image set for an at-scale false-match measurement.
 - **TXT.0, TXT.5 (and so TXT.6):** UC-8 wording; the PAN-PC-10 download.
 - **TXT.8:** any new text-mark experiment.
@@ -176,6 +176,18 @@ On 2026-11-23 the coordinator put four decisions to the owner, with recommendati
    - the `text-plain` stage-1 decisions.
 
    M2.10 and M2.11 are met on that basis, with every other clause already satisfied according to the I2 review.
+
+## Owner decision, 2026-11-23: image marks and C2PA
+
+On 2026-11-23 the owner approved two openings. Both are recorded here in paraphrase, as relayed by the coordinator.
+
+**The image embedded-mark study, on child lanes.** This includes downloading model weights once their licences have been checked.
+- IMG.0 becomes "approved; use-case wording being drafted". It is met only when the UC-7 use case is merged into `docs/use-cases.md` and counted as worded.
+- IMG.1–IMG.5 are no longer owner-blocked for synthetic images and permissively licensed weights.
+- Still owner-gated: any real-image set; any weight with a non-commercial or unclear licence; any GPU spend; and IMGF.6.
+
+**The C2PA mapping work.** C2PA.1–C2PA.3 are in progress. This overrides their sequencing: the delivery sequence had placed C2PA after M4. Core M1–M3 gates keep priority under the supervision rule.
+
 
 ## Progress count
 
@@ -216,8 +228,9 @@ M0 ─► M1 ─► M2 ──┬─► M3 ─► M5 ─► EXT ─► RC (1.0 ca
       └─► M4 ─ ─ ─ ─ ─ ─ ─ ─┘
 I0 ► I1 ► I2 ► I3;  I4 after I0;  I5a after I2 and M2E.1 met;  I5b after I3
 Now, by owner override (research and fingerprint-only): TS, IMGF, TXT.0–TXT.4, TXT.7, TXT.8
-Owner-gated: IMG.0–IMG.5 (image marks), TXT.5–TXT.6 (corpus download)
-After I2: SK   After M4: C2PA   After M3.4: BIN, RES, STRUCT, KEYED
+Now, by owner decision of 2026-11-23: IMG.0–IMG.5 (synthetic images, permissive weights), C2PA.1–C2PA.3
+Owner-gated: TXT.5–TXT.6 (corpus download)
+After I2: SK   After M3.4: BIN, RES, STRUCT, KEYED
 ```
 
 **Implementation track status (2026-11-22).** The implementation repository is `<implementation repo>`; its `main` is at `82b02ab`, unpushed.
@@ -229,7 +242,7 @@ After I2: SK   After M4: C2PA   After M3.4: BIN, RES, STRUCT, KEYED
 
 - **Approved targets:** the TypeScript/JavaScript, still-image and text/document profiles.
 - **May start now, before M3.4:** their evidence research and fingerprint-only work. That covers extraction profiles, hand-derived vectors, two-implementation agreement, and experiments that need no download beyond what is already in the repository: TS.1–TS.3, IMGF.1–IMGF.5 (synthetic images only; IMGF.6 is owner-gated) and TXT.0–TXT.4, TXT.7, TXT.8.
-- **Still needs the owner:** any embedded-mark study (IMG.0–IMG.5; any new text-mark experiment under TXT.8); any model-weight or dataset download (TXT.5); and any real, non-synthetic image set (IMGF.6). The IMGF package install was approved; see the record below.
+- **Still needs the owner:** any text-mark experiment under TXT.8; for image marks, only the parts named in the [owner decision on image marks and C2PA](#owner-decision-2026-11-23-image-marks-and-c2pa); any model-weight or dataset download (TXT.5); and any real, non-synthetic image set (IMGF.6). The IMGF package install was approved; see the record below.
 - **Unchanged:** BIN, RES, STRUCT and KEYED still wait for M3.4.
 
 **Owner decision record: fingerprint-only image experiment (2026-11-22).** Earlier that day, the owner approved TypeScript, images and text. Later, the coordinator asked for approval of the fingerprint-only image experiment and its project-local install of Pillow, NumPy and iscc-core, with no model weights and no real images. The owner approved the experiment. This record is as relayed by the coordinator. It approves that install and the synthetic-image run (`e-img-f-2`) only. It does not approve model weights, real image sets (IMGF.6) or any mark study (IMG.0–IMG.5).
@@ -251,8 +264,8 @@ The owner may narrow this reading. Core M1–M3 gates keep priority under the su
 | IMGF.5 | E | Two implementations produce identical PDQ hashes and quality scores on the IMGF.2 vectors and the full frozen synthetic set. A ThreatExchange C++ reference build is one of the comparisons | I |
 | IMGF.6 | R | Any at-scale false-match measurement of our own: a held-out real image set, a frozen threshold, and per-query false matches against a stated catalogue size, each with its denominator. Owner-gated (real image sets); open until approved and run | I |
 | **IMG — image marks, later and owner-gated** ([lane 08](research/lanes/08-evidence-review.md), [lane 10](research/lanes/10-evidence-review.md)) | | | |
-| IMG.0 | O | Owner approves UC-7 ("a creator marks images they publish and later checks a candidate"), written like UC-6, and the TrustMark weight download. **This is a prerequisite of IMG.1–5**, which also start only after IMGF.4 closes. The 2026-11-22 override does not cover mark studies | S |
-| IMG.1 | E | Pin record: TrustMark code commit; weight SHA-256; code, weight and dependency licences; licensed non-private image set | I |
+| IMG.0 | O | Owner approves UC-7 ("a creator marks images they publish and later checks a candidate"), written like UC-6, and the TrustMark weight download. **This is a prerequisite of IMG.1–5**, which also start only after IMGF.4 closes. The 2026-11-22 override does not cover mark studies **Status: approved; use-case wording being drafted** ([owner decision on image marks and C2PA](#owner-decision-2026-11-23-image-marks-and-c2pa)). The weight download is approved once licences are checked. This gate is met only when UC-7 is merged into `docs/use-cases.md` and counted as worded. | S |
+| IMG.1 | E | Pin record: TrustMark code commit; weight SHA-256; code, weight and dependency licences; licensed non-private image set Not owner-blocked for synthetic images and permissively licensed weights. Real-image sets, non-commercial or unclear-licence weights, and GPU spend stay owner-gated. | I |
 | IMG.2 | E | Embed and detect pass under `scripts/offline` after provisioning | I |
 | IMG.3 | E | Frozen and committed before running: transformation list (JPEG, resize, crop, ReMark, and VAE regeneration only if its weight licence is accepted), PSNR floor, threshold, a `dwtDct` no-key negative control and a residual-transplant arm | I |
 | IMG.4 | R | Whole-message success per transformation; unmarked and wrong-key false detections; transplant result. Each has a denominator | I |
@@ -275,9 +288,9 @@ The owner may narrow this reading. Core M1–M3 gates keep priority under the su
 | RES.2 | R | The adversary query model and the leakage metric are named and committed before running; then measured on synthetic catalogues with denominators | S/I |
 | RES.3 | E | Independent review filed, with every finding dispositioned | S |
 | **C2PA — mapping with interop fixtures** | | | |
-| C2PA.1 | E | Mapping pinned to one C2PA version; each field mapped, unmapped or conflicting | S |
-| C2PA.2 | E | Fixtures from a pinned open-source C2PA tool round-trip through a Traceweave adapter in both directions | I |
-| C2PA.3 | E | README makes no compatibility claim until C2PA.2 passes | S |
+| C2PA.1 | E | Mapping pinned to one C2PA version; each field mapped, unmapped or conflicting **Status: in progress** (2026-11-23 override of the after-M4 sequencing). | S |
+| C2PA.2 | E | Fixtures from a pinned open-source C2PA tool round-trip through a Traceweave adapter in both directions **Status: in progress.** | I |
+| C2PA.3 | E | README makes no compatibility claim until C2PA.2 passes **Status: in progress.** | S |
 | **SK — agent skill** | | | |
 | SK.1 | E | Wraps only stable I2 commands; diagnostics pass through unchanged | I |
 | SK.2 | E | Canary strings seeded into catalogues, paths and keys appear 0 times in model-visible transcripts across all fixture runs | I |
@@ -315,7 +328,7 @@ These stay with the owner. No agent or supervision loop decides them or does the
 - Corpus acquisition beyond the approved 48 repositories and their mechanical replacements (approved 2026-11-23).
 - Any change to the false-alarm budget (M3.0 recorded 2026-11-23: 1 in 20; 1 in 100 only on a larger corpus if that passes).
 - Whether to omit embedding from the next release, or select a candidate (M2E.0). The M2E.1(c) payload minimum is also approved by the owner.
-- The post-hoc image mark study (IMG.0 and the protocol in the [lane 06–08 checkpoint](research/research-06-08-checkpoint.md)); any real image set (IMGF.6). The IMGF package install was approved on 2026-11-22.
+- For the image mark study (approved 2026-11-23 for synthetic images and permissively licensed weights; protocol basis in the [lane 06–08 checkpoint](research/research-06-08-checkpoint.md)): any real image set (including IMGF.6), any weight with a non-commercial or unclear licence, and any GPU spend. The IMGF package install was approved on 2026-11-22.
 - Text: UC-8 wording (TXT.0), the PAN-PC-10 download (TXT.5) and any text-mark experiment (TXT.8). The 2026-11-22 override covers fingerprint-only TS, image and text work only.
 - Also: licence split, hosted CI, the EXT reviewers, whether implementers must be independent people, and any contract option not yet decided (OD-C5 and the decided-in-draft items were confirmed 2026-11-23).
 

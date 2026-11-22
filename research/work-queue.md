@@ -1,6 +1,6 @@
 # Active research work queue
 
-Updated 2026-11-22. This queue operationalizes the [roadmap](../ROADMAP.md) by gate ID. It lists open gates and current assignments, not free-standing phases. A component finishing is not the project finishing: a gate closes only according to its type (E met; R met or negative-result; O decision recorded), with committed evidence.
+Updated 2026-11-23. This queue operationalizes the [roadmap](../ROADMAP.md) by gate ID. It lists open gates and current assignments, not free-standing phases. A component finishing is not the project finishing: a gate closes only according to its type (E met; R met or negative-result; O decision recorded), with committed evidence.
 
 ## Loop rule
 
@@ -13,7 +13,7 @@ Updated 2026-11-22. This queue operationalizes the [roadmap](../ROADMAP.md) by g
 
 ## Current assignments
 
-Updated 2026-11-22 after the I1 and I2 integrations. Implementation repository: `<implementation repo>`, with `main` at `82b02ab` (unpushed).
+Updated 2026-11-23 after the owner decisions of that day. Implementation repository: `<implementation repo>`, with `main` at `82b02ab` (unpushed).
 
 | Gates | Work | State |
 | --- | --- | --- |
@@ -26,7 +26,13 @@ Updated 2026-11-22 after the I1 and I2 integrations. Implementation repository: 
 | TS.1–TS.3, TXT.1–TXT.3 | `ts-tokens` and `text-plain` profiles | Frozen for stage 1 and registered in the draft contract. Not yet implemented in the implementation repository |
 | IMGF.1, IMGF.5 | Image profile item map; second implementation with a C++ reference build | Open. IMGF.2–IMGF.4 met (`ec0cf67`) |
 | M2E.0, M2E.1 | Select a carrier or omit embedding | Open. [Lane 06](lanes/06-evidence-review.md) found no ready candidate |
-| Owner | M2E.0; IMG.0–IMG.5; IMGF.6; TXT.0, TXT.5, TXT.8 | Still owner-blocked. Approved 2026-11-23 and pending execution: draft promotion (another lane; closes M1.2, M1.3, M1.6 and the (a) clauses of M1.1 and M2.6); the push after the hygiene check (M1.4; pin correctness in M2.2 and M2.4) ([owner decisions of 2026-11-23](../ROADMAP.md#owner-decisions-2026-11-23)) |
+| IMG.0–IMG.5 | Image embedded-mark study on child lanes: UC-7 wording, then pin record, offline embed/detect, frozen protocol and results | Opened 2026-11-23 ([owner decision on image marks and C2PA](../ROADMAP.md#owner-decision-2026-11-23-image-marks-and-c2pa)). IMG.0 is approved, with the use-case wording being drafted. Synthetic images and permissively licensed weights only, after a licence check |
+| C2PA.1–C2PA.3 | C2PA mapping pinned to one version; round-trip fixtures; no compatibility claim until they pass | In progress; sequencing override of 2026-11-23 ([owner decision on image marks and C2PA](../ROADMAP.md#owner-decision-2026-11-23-image-marks-and-c2pa)) |
+| Lane 11 | External feedback audit (`research/lanes/11-report-audit.md`, brief `research/prompts/11-external-feedback.md`) | In progress; a progress record, not a gate |
+| I3 (M3.1–M3.5) | Evaluation harness in the implementation repository: manifest and licence checks, frozen splits and config, held-out run | Started. Corpus acquisition is approved (owner decisions of 2026-11-23) |
+| Spec CI | The repository validator and tests as a reproducible workflow for the first push | In progress |
+| Implementation CI | `scripts/check` as a hosted workflow in the implementation repository | In progress. Enabling hosted CI follows the push decision |
+| Owner | M2E.0; TXT.0, TXT.5, TXT.8; IMGF.6; for image marks, real-image sets, non-commercial or unclear-licence weights and GPU spend | Still owner-blocked. Approved and pending execution: draft promotion (another lane) and the push after a hygiene check ([owner decisions of 2026-11-23](../ROADMAP.md#owner-decisions-2026-11-23); [owner decision on image marks and C2PA](../ROADMAP.md#owner-decision-2026-11-23-image-marks-and-c2pa)) |
 
 Closed with evidence: M0.1–M0.4, M2.5, M2.8, M2.10, M2.11, M3.0, M4.1, M4.2, and IMGF.2–IMGF.4. Everything else is open.
 
