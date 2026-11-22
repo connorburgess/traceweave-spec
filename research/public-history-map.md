@@ -8,7 +8,7 @@ This history was produced from the local branch `roadmap-v2` so that it can be p
 
 ## Reproducing
 
-`python3 tools/public_history_scrub.py rewrite --branch NAME --source <source commit>` with the private rules file. The rules are not in this repository in any form. Rules file SHA-256: `974e52bf34051e1a0d5a11f33f68ef316a0c8c01dbbad61b61932cf6a1e067c0`.
+`python3 tools/public_history_scrub.py rewrite --branch NAME --source <source commit>` with the private rules file. The rules are not in this repository in any form. Rules file SHA-256: `f1a29ec6e1e7c34c5ed1995c19b490cd9c5bb79457674d929eca3cddb2582b16`.
 
 ## What was substituted, by category
 
@@ -27,11 +27,11 @@ Unchanged on purpose: the git author identity (already public on `origin/main`),
 
 ## Dropped file versions and commits
 
-Every version of `tools/public_history_scrub.py` that held the rules was removed from every rewritten tree: 5 versions. A commit whose tree became equal to its parent's tree was dropped, and its old id maps to the id of its nearest surviving ancestor (listed below as `dropped`).
+Every version of `tools/public_history_scrub.py` that held the rules was removed from every rewritten tree: 5 versions. A commit whose tree became equal to its parent's tree was dropped, and its old id maps to the id of its nearest surviving ancestor. 14 source commits were dropped: 3 changed the rewrite tool (their tool versions are among those removed), and 11 were scrub commits (removing or paraphrasing text) whose changes the rewrite already applies to every earlier version, so they became empty. The state column marks each as `dropped (tool)` or `dropped (empty)`.
 
 ## Verification of the commits listed here
 
-`python3 tools/public_history_scrub.py scan` over the 96 commits and 986 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
+`python3 tools/public_history_scrub.py scan` over the 106 commits and 1104 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
 
 | Category | Hits |
 | --- | --- |
@@ -58,6 +58,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `4d0288f` | `4d0288ffe05a` | `5e29802eb91f` |
 | `95fb157` | `95fb157ec5bb` | `aebb49f51946` |
 | `0bc4e23` | `0bc4e23432ac` | `0766f3a39235` |
+| `409d486` | `409d486cc02c` | `dec460e84334` |
 | `6f39e50` | `6f39e50f3302` | `b47b8945b9d6` |
 | `0c7523c` | `0c7523c23613` | `52049a8a0591` |
 | `dbd109b` | `dbd109bce3cf` | `44179c47fe77` |
@@ -65,7 +66,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `ec0cf67` | `ec0cf67ca3c8` | `ee083b345a31` |
 | `6f39e50f33026c9f1d9526c2a566d6a447219667` | `6f39e50f3302` | `b47b8945b9d6` |
 
-Ancestry was checked for all 120 pairs of these 16 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
+Ancestry was checked for all 136 pairs of these 17 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
 
 ## All commits, oldest first
 
@@ -154,22 +155,22 @@ Ancestry was checked for all 120 pairs of these 16 ids in both directions: the r
 | 81 | `beb8b10886d2` | `1e8136cbb1ce` | kept | Restore the literal code-span example in the text profile |
 | 82 | `b262ec44ca9d` | `15e256fcbb5c` | kept | Add the Unicode License v3 notice for the two Unicode-derived tables |
 | 83 | `51871d4b393c` | `1206af664d8b` | kept | Correct the conformance level-4 wording, the approval scope and the OD-C5 status; point the image README at the results |
-| 84 | `4d5d20303d96` | `1206af664d8b` | dropped | Add the deterministic scrub tool used to prepare a publishable history |
-| 85 | `6aaa983f95f3` | `1206af664d8b` | dropped | Replace verbatim owner quotes with neutral paraphrase |
-| 86 | `d6183608dc31` | `1206af664d8b` | dropped | Remove thread identifiers and internal coordination text |
-| 87 | `27b6cb73b287` | `1206af664d8b` | dropped | Remove the supervision tooling sentence from the review |
-| 88 | `6a18e9d4ee62` | `1206af664d8b` | dropped | Replace absolute local paths with repository-relative paths and placeholders |
-| 89 | `8aef3c9a1346` | `1206af664d8b` | dropped | Remove agent-harness scratch paths |
-| 90 | `6a9b81ece2db` | `1206af664d8b` | dropped | Fix the escaping of the rule tables in the scrub tool |
-| 91 | `95f0ad0b1145` | `1206af664d8b` | dropped | Replace the remaining verbatim owner quotes with neutral paraphrase |
-| 92 | `f29346c31ffd` | `1206af664d8b` | dropped | Remove search terms specific to the private pilot applications |
-| 93 | `1a1392444d70` | `1206af664d8b` | dropped | Remove the remaining internal coordination text and thread identifiers |
-| 94 | `9d799c777e9a` | `1206af664d8b` | dropped | Remove the supervision tooling name used as internal tooling |
+| 84 | `4d5d20303d96` | `1206af664d8b` | dropped (tool) | Add the deterministic scrub tool used to prepare a publishable history |
+| 85 | `6aaa983f95f3` | `1206af664d8b` | dropped (empty) | Replace verbatim owner quotes with neutral paraphrase |
+| 86 | `d6183608dc31` | `1206af664d8b` | dropped (empty) | Remove thread identifiers and internal coordination text |
+| 87 | `27b6cb73b287` | `1206af664d8b` | dropped (empty) | Remove the supervision tooling sentence from the review |
+| 88 | `6a18e9d4ee62` | `1206af664d8b` | dropped (empty) | Replace absolute local paths with repository-relative paths and placeholders |
+| 89 | `8aef3c9a1346` | `1206af664d8b` | dropped (empty) | Remove agent-harness scratch paths |
+| 90 | `6a9b81ece2db` | `1206af664d8b` | dropped (tool) | Fix the escaping of the rule tables in the scrub tool |
+| 91 | `95f0ad0b1145` | `1206af664d8b` | dropped (empty) | Replace the remaining verbatim owner quotes with neutral paraphrase |
+| 92 | `f29346c31ffd` | `1206af664d8b` | dropped (empty) | Remove search terms specific to the private pilot applications |
+| 93 | `1a1392444d70` | `1206af664d8b` | dropped (empty) | Remove the remaining internal coordination text and thread identifiers |
+| 94 | `9d799c777e9a` | `1206af664d8b` | dropped (empty) | Remove the supervision tooling name used as internal tooling |
 | 95 | `645beb4b1f64` | `28fa469c19b1` | kept | Remove agent-harness scratch paths and the harness ignore entry |
-| 96 | `584cbda1c130` | `28fa469c19b1` | dropped | Scrub the remaining tip residuals; refine the scanner |
-| 97 | `1d1f73f697f6` | `28fa469c19b1` | dropped | Replace the last quoted owner reply in the image experiment record |
+| 96 | `584cbda1c130` | `28fa469c19b1` | dropped (tool) | Scrub the remaining tip residuals; refine the scanner |
+| 97 | `1d1f73f697f6` | `28fa469c19b1` | dropped (empty) | Replace the last quoted owner reply in the image experiment record |
 | 98 | `bcd649eceaae` | `9690537b5550` | kept | Confirm post-i2 at e5933a3: flips closed; private export edited mid-build forges in both lanes |
-| 99 | `a0a8a1e60479` | `9690537b5550` | dropped | Replace a scratch path in the post-i2 confirmation |
+| 99 | `a0a8a1e60479` | `9690537b5550` | dropped (empty) | Replace a scratch path in the post-i2 confirmation |
 | 100 | `968e9f075fc6` | `731d565648c0` | kept | Scrub tool: optionally write the old-to-new commit id map |
 | 101 | `9e24e4d3a2cc` | `2f1234fa70fb` | kept | Remove the blank line left at the end of .gitignore; scrub rule no longer leaves one |
 | 102 | `86562e9f1802` | `55d003815579` | kept | Make the validation workflow reproducible for the first push |
@@ -181,3 +182,13 @@ Ancestry was checked for all 120 pairs of these 16 ids in both directions: the r
 | 108 | `02e3ebba68d5` | `b61ad707bab0` | kept | Revise the M3 evaluation protocol to m3-eval-draft-5 after the lane 11 audit |
 | 109 | `dbb157921388` | `8ce35aa2292c` | kept | Scrub tool: allow the ROT13 form of an allowed address; word-boundary thread-id check |
 | 110 | `5c5fc5cea1b4` | `d1fe0ac1977f` | kept | Scrub tool: scan base64 payloads in one batch per blob |
+| 111 | `409d486cc02c` | `dec460e84334` | kept | Add the public history map |
+| 112 | `93c258107462` | `7f83889c0e96` | kept | Draft C2PA 2.5 mapping with illustrative fixtures and checker |
+| 113 | `2c5c4386a9f5` | `a51725031259` | kept | Add public branch verification 2 to the promotion and push review |
+| 114 | `26bb992de276` | `fcfed2858f42` | kept | Record the public roadmap-v2 push at dec460e; keep pin-dependent gates open until the implementation re-vendors |
+| 115 | `9165f198bcd3` | `b83ca671c11c` | kept | Freeze image mark protocol e-img-m-1 with licence check, proposed UC-7 and harness |
+| 116 | `ef0aa0c01a98` | `30ccc550e893` | kept | Add non-author review of the image mark protocol e-img-m-1 and proposed UC-7 |
+| 117 | `d3af1ee07595` | `b91606abb533` | kept | Freeze image mark protocol e-img-m-2; retire e-img-m-1 unrun after its review |
+| 118 | `2f584360c435` | `8b6713dac736` | kept | Add e-img-m-2 confirmation pass to the image mark protocol review |
+| 119 | `6ff7c835162c` | `bad6b5a1af1f` | kept | Accept sandbox-exec network denial with the harness probe in IMG.2 |
+| 120 | `992c4c98e534` | `c5f6c3f05093` | kept | Strengthen the pre-push guard and the scanner |
