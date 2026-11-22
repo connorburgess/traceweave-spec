@@ -40,7 +40,7 @@ spec = importlib.util.spec_from_file_location("check_vectors", VECTORS / "check_
 cv = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(cv)
 
-GO_FILES = ["go.json", "limits-go.json"]
+GO_FILES = ["go.json", "limits-go.json", "exclusion-rule.json"]  # exclusion-rule: Go lexing, synthetic exclusion profile
 RUST_FILES = ["rust.json", "limits-rust.json"]
 GO_CLASS = {"INT": "int", "FLOAT": "float", "IMAG": "imag", "CHAR": "rune", "STRING": "string", "IDENT": "ident"}
 

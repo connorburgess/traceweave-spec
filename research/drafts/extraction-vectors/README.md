@@ -11,6 +11,7 @@ Status: draft for review, 2026-11-22. These vectors accompany the [draft extract
 | `config-negative.json` | `negatives`: 28 configuration byte strings that MUST be rejected, each with its `expectedResult` (`unsupported-config`, offset `null`). `boundaryPositives`: 3 configurations at the §10 bounds that MUST be accepted |
 | `go.json` | 34 vectors for `go-tokens`/`draft-1`: 16 accepted inputs and 18 errors |
 | `rust.json` | 78 vectors for `rust2024-tokens`/`draft-1`: 42 accepted inputs and 36 errors |
+| `exclusion-rule.json`, `config-exclusion-test.json` | 5 vectors for the shared normalized-stream exclusion rule (contract §6, OD-23), using the **test-only** synthetic profile `go-tokens-exclusion-test`: Go lexing with `punct` `;` excluded from `normalized`. Not a profile to implement |
 | `limits-go.json`, `limits-rust.json` | 3 vectors each: exactly the limit, over the limit, and over the limit plus another defect, showing the size check runs first |
 | `unicode-17.0.0-tables.json` | Pinned identifier tables derived from UCD 17.0.0 (contract §3a), SHA-256 `9363b97e…3ac29f` |
 | `check_vectors.py` | Independent checker, standard library only |
@@ -56,6 +57,18 @@ Contract identifiers, profile versions, configuration files and digests, and the
 
 **Lane impact.** The Rust lane's current results differ from these vectors on the `rust-q8-shebang-*` doc-comment cases (D1). The Go lane's results match all 28 report-proposed inputs. Both lanes need the new configuration bounds.
 
+## Amendment (2026-11-22): normalized-stream exclusions
+
+This amendment adds `exclusion-rule.json` and its configuration. Nothing else changed: `harness/build_vectors.py` regenerates every Go/Rust vector, limit and configuration file byte-identically.
+
+The 5 new vectors:
+- `excl-semi-newlines` and `excl-semi-explicit`: a pair where exact differs and normalized is identical.
+- `excl-ok-normalized-empty`: an `ok` result with an empty normalized channel.
+- `excl-insufficient`: an `insufficient-tokens` result that still records `tokenIndices`.
+- `excl-partial-window`: a normalized k-gram whose span covers excluded bytes.
+
+In these vectors the normalized channel carries `tokenIndices` before `values`. Go and Rust vectors never do, and the checker rejects one that does.
+
 The table shows which case each vector covers:
 
 | Case | Go | Rust |
@@ -82,10 +95,11 @@ Output on 2026-11-22 (Python 3.14.6, `unicodedata` 16.0.0):
 
 ```
 PASS config-negative.json: 28/28 invalid configurations rejected, 3/3 boundary configurations accepted
-PASS go.json profile=go-tokens/draft-1 config=dfbc5fe3517e9da6... vectors=34 tokens=170 (inserted ';'=21) identifiers=61 kgrams=228 fingerprints=82 tie-windows=11 errors=18 (lexical offsets plausibility-only: 14) pairs=2 mutations-rejected=12/12
-PASS rust.json profile=rust2024-tokens/draft-1 config=64b34335e4a61383... vectors=78 tokens=322 (inserted ';'=0) identifiers=103 kgrams=384 fingerprints=146 tie-windows=10 errors=36 (lexical offsets plausibility-only: 30) pairs=2 mutations-rejected=13/13
+PASS go.json profile=go-tokens/draft-1 config=dfbc5fe3517e9da6... vectors=34 tokens=170 (inserted ';'=21) identifiers=61 kgrams=228 fingerprints=82 tie-windows=11 errors=18 (lexical offsets plausibility-only: 14) pairs=2 mutations-rejected=13/13
+PASS rust.json profile=rust2024-tokens/draft-1 config=64b34335e4a61383... vectors=78 tokens=322 (inserted ';'=0) identifiers=103 kgrams=384 fingerprints=146 tie-windows=10 errors=36 (lexical offsets plausibility-only: 30) pairs=2 mutations-rejected=14/14
 PASS limits-go.json profile=go-tokens/draft-1 config=aa86722255afbf50... vectors=3 tokens=8 (inserted ';'=1) identifiers=1 kgrams=8 fingerprints=2 tie-windows=0 errors=2 (lexical offsets plausibility-only: 0) pairs=0
 PASS limits-rust.json profile=rust2024-tokens/draft-1 config=71d5ed27bea011f6... vectors=3 tokens=7 (inserted ';'=0) identifiers=2 kgrams=6 fingerprints=2 tie-windows=0 errors=2 (lexical offsets plausibility-only: 0) pairs=0
+PASS exclusion-rule.json profile=go-tokens-exclusion-test/draft-1 config=65ae9f23f38b060e... vectors=5 tokens=36 (inserted ';'=4) identifiers=15 kgrams=24 fingerprints=9 tie-windows=0 errors=0 (lexical offsets plausibility-only: 0) pairs=0 mutations-rejected=4/4
 ```
 
 The checker verifies the following:
@@ -116,7 +130,7 @@ The checker verifies the following:
   - the comment/whitespace and rename pair invariants;
   - coverage of every required case.
 
-**Mutation self-test** (12 Go, 13 Rust). The checker corrupts copies of the data, recomputing hashes so that only the targeted layer is wrong, and requires every copy to be rejected. Per language, these are the corruptions:
+**Mutation self-test** (13 Go, 14 Rust, 4 exclusion-rule). Go and Rust each also reject `tokenIndices` on a profile without exclusions. The checker corrupts copies of the data, recomputing hashes so that only the targeted layer is wrong, and requires every copy to be rejected. Per language, these are the corruptions:
 
 - **Both languages:**
   - flipped hash digit;
@@ -188,7 +202,7 @@ Output on 2026-11-22 (go1.27.3 darwin/arm64, rustc 1.97.1):
 
 ```
 tables: go unicode + unicode-ident 1.0.24 vs pinned 17.0.0 tables: MATCH
-  go accepted agree: 16
+  go accepted agree: 21
   go accepted expected: 1
   go error agree: 12
   go error expected: 8

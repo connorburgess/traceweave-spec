@@ -43,7 +43,7 @@ import unicodedata
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-DEFAULT_FILES = ["go.json", "rust.json", "limits-go.json", "limits-rust.json"]
+DEFAULT_FILES = ["go.json", "rust.json", "limits-go.json", "limits-rust.json", "exclusion-rule.json"]
 TABLES_FILE = "unicode-17.0.0-tables.json"
 TABLES_SHA256 = "9363b97eb849cb236c786098f017728ad04688782f07c2969afddf93b03ac29f"
 DOMAIN = b"traceweave/token-kgram/draft-1"
@@ -78,6 +78,7 @@ PROFILES = {
         "other": {"keyword", "ident", "punct"},
         "whitespace": set(" \t\r\n"),
         "nested": False,
+        "exclusions": (),
     },
     ("rust2024-tokens", "draft-1"): {
         "lang": "rust",
@@ -88,8 +89,13 @@ PROFILES = {
         "other": {"keyword", "ident", "punct", "lifetime"},
         "whitespace": set("\t\n\v\f\r \u0085‎‏  "),
         "nested": True,
+        "exclusions": (),
     },
 }
+# TEST-ONLY synthetic profile for the shared normalized-stream exclusion rule (contract section 6): Go lexing,
+# with every punct ';' (explicit or inserted) excluded from the normalized stream. No implementation is
+# expected to support it as a real profile; exclusion-rule.json uses it to pin the shared arithmetic.
+PROFILES[("go-tokens-exclusion-test", "draft-1")] = dict(PROFILES[("go-tokens", "draft-1")], exclusions=(("punct", ";"),))
 STAT_KEYS = ("tokens", "inserted", "kgrams", "fingerprints", "errors", "lexical-offsets-plausibility-only",
              "tie-windows", "identifiers")
 
@@ -240,6 +246,19 @@ def hash_kgram(cfg, channel, pairs) -> str:
     return hashlib.sha256(bytes(buf)).digest()[:8].hex()
 
 
+def excluded(spec, token):
+    """Contract section 6: a token is excluded from the normalized stream if (class, text) matches a declared
+    exclusion; an entry with text None matches the whole class."""
+    return any(token["class"] == c and (x is None or token["text"] == x) for c, x in spec["exclusions"])
+
+
+def channel_indices(spec, tokens, channel):
+    """Indices into tokens that form the channel's stream (exact: all; normalized: all minus exclusions)."""
+    if channel == "exact":
+        return list(range(len(tokens)))
+    return [i for i, t in enumerate(tokens) if not excluded(spec, t)]
+
+
 def normalized_value(spec, cls, text):
     if cls == "ident" or cls in spec["literals"]:
         return ""
@@ -263,12 +282,18 @@ def rebuild_channels(result, cfg, spec):
     result["tokenCount"] = len(tokens)
     result["status"] = "ok" if len(tokens) >= k else "insufficient-tokens"
     for channel in ("exact", "normalized"):
-        values = [t["text"] if channel == "exact" else normalized_value(spec, t["class"], t["text"]) for t in tokens]
-        pairs = [(t["class"], v) for t, v in zip(tokens, values)]
+        idx = channel_indices(spec, tokens, channel)
+        stream = [tokens[i] for i in idx]
+        values = [t["text"] if channel == "exact" else normalized_value(spec, t["class"], t["text"]) for t in stream]
+        pairs = [(t["class"], v) for t, v in zip(stream, values)]
         kg = [{"position": i, "hash": hash_kgram(cfg, channel, pairs[i:i + k]),
-               "span": [tokens[i]["span"][0], tokens[i + k - 1]["span"][1]]} for i in range(max(0, len(tokens) - k + 1))]
+               "span": [stream[i]["span"][0], stream[i + k - 1]["span"][1]]} for i in range(max(0, len(stream) - k + 1))]
         picks, partial = select([int(g["hash"], 16) for g in kg], w)
-        ch = {"values": values} if channel == "normalized" else {}
+        ch = {}
+        if channel == "normalized":
+            if spec["exclusions"]:
+                ch["tokenIndices"] = idx
+            ch["values"] = values
         ch.update({"kgrams": kg, "windowSelections": picks, "partialWindow": partial,
                    "fingerprints": [{"position": p, "hash": kg[p]["hash"], "span": kg[p]["span"]} for p in sorted(set(picks))]})
         result["channels"][channel] = ch
@@ -677,17 +702,27 @@ def check_vector(v, cfg, spec, stats):
     stats["inserted"] += len(tokens) - len(real)
     for channel in ("exact", "normalized"):
         ch = res["channels"][channel]
-        values = [t["text"] if channel == "exact" else normalized_value(spec, t["class"], t["text"]) for t in tokens]
+        # Contract sections 6-8: each channel has its own token stream; positions index that stream, spans are the
+        # original byte spans of its first and last tokens. tokenIndices appears only when exclusions are declared.
+        idx = channel_indices(spec, tokens, channel)
+        stream = [tokens[i] for i in idx]
+        keys = ["kgrams", "windowSelections", "partialWindow", "fingerprints"]
         if channel == "normalized":
+            keys = (["tokenIndices"] if spec["exclusions"] else []) + ["values"] + keys
+        require(list(ch) == keys, f"{channel}: keys must be {keys}")
+        values = [t["text"] if channel == "exact" else normalized_value(spec, t["class"], t["text"]) for t in stream]
+        if channel == "normalized":
+            if spec["exclusions"]:
+                require(ch["tokenIndices"] == idx, f"normalized tokenIndices must be {idx}")
             require(ch["values"] == values, "normalized values mismatch")
-        pairs = [(t["class"], val) for t, val in zip(tokens, values)]
-        m = max(0, len(tokens) - k + 1)
+        pairs = [(t["class"], val) for t, val in zip(stream, values)]
+        m = max(0, len(stream) - k + 1)
         require(len(ch["kgrams"]) == m, f"{channel}: expected {m} k-grams")
         hashes = []
         for i, g in enumerate(ch["kgrams"]):
             require(g["position"] == i, "k-gram positions must be 0..m-1")
             require(g["hash"] == hash_kgram(cfg, channel, pairs[i:i + k]), f"{channel}: hash mismatch at {i}")
-            require(g["span"] == [tokens[i]["span"][0], tokens[i + k - 1]["span"][1]], f"{channel}: k-gram span at {i}")
+            require(g["span"] == [stream[i]["span"][0], stream[i + k - 1]["span"][1]], f"{channel}: k-gram span at {i}")
             hashes.append(int(g["hash"], 16))
         picks, partial = select(hashes, w)
         require(ch["windowSelections"] == picks, f"{channel}: window selections {ch['windowSelections']} != {picks}")
@@ -734,6 +769,62 @@ def check_pairs(vectors, lang):
             else:
                 require(ha == hb and fa == fb, f"{tag}: {c} hashes and fingerprints must be identical")
     return 2
+
+
+def check_exclusion_rule(vectors, spec):
+    """Shared-rule invariants for a profile that declares normalized-stream exclusions (contract section 6)."""
+    require(spec["exclusions"], "exclusion checks need a profile with exclusions")
+    by_tag = {}
+    for v in vectors:
+        for tag in v["tags"]:
+            by_tag.setdefault(tag, []).append(v)
+    a, b = sorted(by_tag["exclusion-pair"], key=lambda v: v["id"])
+    ca, cb = a["result"]["channels"], b["result"]["channels"]
+    require([g["hash"] for g in ca["exact"]["kgrams"]] != [g["hash"] for g in cb["exact"]["kgrams"]], "exclusion pair: exact must differ")
+    for key in ("kgrams", "fingerprints"):
+        require([(g["position"], g["hash"]) for g in ca["normalized"][key]] == [(g["position"], g["hash"]) for g in cb["normalized"][key]],
+                f"exclusion pair: normalized {key} positions and hashes must be identical")
+    require(any(v["result"]["status"] == "ok" and not v["result"]["channels"]["normalized"]["kgrams"] for v in by_tag["exclusion-empty"]),
+            "need an ok vector whose normalized channel is empty")
+    require(any(any(t.get("inserted") for t in v["result"]["tokens"]) for v in vectors), "need an excluded inserted token")
+    return 1
+
+
+def exclusion_mutations(data, cfg, spec):
+    base = data["vectors"]
+
+    def variant(fn):
+        vs = copy.deepcopy(base)
+        fn(vs)
+        return vs
+
+    def keep_semicolons(vs):  # implementation ignores the declared exclusions
+        nospec = dict(spec, exclusions=())
+        for v in vs:
+            if v["result"]["status"] != "error":
+                rebuild_channels(v["result"], cfg, nospec)
+                ch = v["result"]["channels"]["normalized"]
+                ch_new = {"tokenIndices": list(range(len(v["result"]["tokens"])))}
+                ch_new.update(ch)
+                v["result"]["channels"]["normalized"] = ch_new
+    yield "exclusions ignored (normalized keeps ';')", variant(keep_semicolons)
+
+    def exact_positions(vs):  # normalized spans taken from the exact stream's k-grams
+        v = next(x for x in vs if x["id"] == "excl-semi-explicit")
+        ex, no = v["result"]["channels"]["exact"]["kgrams"], v["result"]["channels"]["normalized"]["kgrams"]
+        for g, h in zip(no, ex):
+            g["span"] = list(h["span"])
+    yield "normalized spans from exact positions", variant(exact_positions)
+
+    def status_from_normalized(vs):
+        v = next(x for x in vs if x["id"] == "excl-ok-normalized-empty")
+        v["result"]["status"] = "insufficient-tokens"
+    yield "status from the normalized count", variant(status_from_normalized)
+
+    def drop_indices(vs):
+        v = next(x for x in vs if x["id"] == "excl-semi-newlines")
+        del v["result"]["channels"]["normalized"]["tokenIndices"]
+    yield "tokenIndices omitted", variant(drop_indices)
 
 
 def load(path):
@@ -919,6 +1010,30 @@ def main(argv):
             required = data.get("requiredCoverage", False)
             s = run_vectors(data["vectors"], cfg, spec, required, path.name)
             muts = mutation_self_test(data, cfg, spec, required) if required else 0
+            if spec["exclusions"]:
+                check_exclusion_rule(data["vectors"], spec)
+                names, missed = [], []
+                for name, vectors in exclusion_mutations(data, cfg, spec):
+                    names.append(name)
+                    try:
+                        run_vectors(vectors, cfg, spec, False)
+                        check_exclusion_rule(vectors, spec)
+                        missed.append(name)
+                    except (CheckError, KeyError, ValueError):
+                        pass
+                require(not missed, f"exclusion mutations not detected: {missed}")
+                muts, required = len(names), True
+            elif required:
+                vs = copy.deepcopy(data["vectors"])  # a profile without exclusions must not emit tokenIndices
+                v = next(x for x in vs if x["result"]["status"] == "ok")
+                ch = v["result"]["channels"]["normalized"]
+                v["result"]["channels"]["normalized"] = dict({"tokenIndices": list(range(len(v["result"]["tokens"])))}, **ch)
+                try:
+                    run_vectors(vs, cfg, spec, required)
+                    raise CheckError("tokenIndices accepted on a profile without exclusions")
+                except CheckError as exc:
+                    require("tokenIndices accepted" not in str(exc), str(exc))
+                muts += 1
             total_mut += muts
         except CheckError as exc:
             print(f"FAIL {path.name}: {exc}")

@@ -2,6 +2,8 @@
 
 Status: **draft for review, revision draft-1 (amended), 2026-11-22.** Roadmap item TW-02, gating M1. This revision resolves the findings of the [clean-room review](../reviews/extraction-contract-review.md) (F1–F8, A1–A4). The amendment rules on the contract questions from the two-implementation cross-check (Rust and Go lanes, 9.9 M differential cases), bounds `k`, `window` and `maxInputBytes`, and states the required complexity. Every disposition is listed in [§15](#15-review-dispositions).
 
+A second amendment (§6, OD-23) lets a profile exclude named tokens from the normalized stream; Go and Rust declare none.
+
 **Identifiers are unchanged.** No previously shipped expected output changed: every existing vector's result is byte-identical. So the profile version stays `draft-1` and the configuration digests stay as they were. The amendment does narrow the set of valid configurations (§10 step 5); whether that alone warrants a new `contract` identifier is listed as OD-20.
 
 This is research material, not a normative change. It does not modify [core](../../spec/core.md), [conformance](../../spec/conformance.md), [the code profile](../../profiles/code.md), schemas or test vectors. "MUST" and "MUST NOT" describe what this draft proposes for an implementation claiming to follow it. Profile versions are `draft-1`, and nothing here is a registered algorithm.
@@ -22,6 +24,8 @@ Each extraction produces exactly one of these results:
 | --- | --- | --- | --- |
 | `ok` | At least `k` tokens | All | Per channel, §8 |
 | `insufficient-tokens` | Fewer than `k` tokens (including zero) | All | None; this is abstention, not an error |
+
+"Tokens" here means the full token stream, which is also the exact channel's stream. A profile's normalized-stream exclusions (§6) never change `status` or `tokenCount`.
 | `error` | Configuration, input or lexing failure, with `code` and `offset` | None | None |
 
 An error result MUST NOT carry partial tokens or fingerprints. An implementation MUST NOT repair input: it does not substitute a character, close an open literal, skip an illegal byte, retry with another lexer, normalize, or decode in another encoding.
@@ -237,7 +241,7 @@ Macro bodies are lexed but not expanded. Cargo-script frontmatter is not recogni
 
 ## 6. Token serializations
 
-Each token is a pair `(class, value)` of UTF-8 strings. The two channels share one token stream and differ only in `value`:
+Each token is a pair `(class, value)` of UTF-8 strings. The exact channel's stream is the full token stream. The normalized channel's stream is the same tokens, minus any the profile excludes (below), in the same order. The channels also differ in `value`:
 
 | Channel | `value` |
 | --- | --- |
@@ -246,11 +250,19 @@ Each token is a pair `(class, value)` of UTF-8 strings. The two channels share o
 
 The class is always kept, so a normalized identifier (`ident`, `""`) differs from a normalized string literal (`string`, `""`) and from a keyword.
 
+**Normalized-stream exclusions** (decided in draft, pending owner confirmation, OD-23; requested by the TypeScript profile's TSOD-13). A profile MAY declare a list `normalizedExclusions` in its profile section. Each entry is either a class, or a class with an exact text. A token is excluded from the normalized stream if its class and exact text match an entry (a class-only entry matches every text of that class). The rule has four parts:
+- **Scope.** Exclusion applies to the normalized channel only. The token stays in the record's token list, in `tokenCount`, in the exact channel, and in the status decision (§2).
+- **Positions and spans.** In a channel with exclusions, k-gram positions, `windowSelections` and fingerprint positions index that channel's own stream (§7, §8). Spans are still the original half-open byte spans of the first and last kept tokens of each k-gram, so a span can cover an excluded token's bytes.
+- **Counts.** A channel with n_C tokens has `max(0, n_C − k + 1)` k-grams. For the exact channel n_C = `tokenCount`. For the normalized channel it is the number of tokens not excluded. An `ok` input can therefore have an empty normalized channel: no k-grams, `windowSelections` `[]` and `partialWindow` `false`.
+- **Recording.** When, and only when, the profile declares exclusions, the normalized channel records `tokenIndices` before `values`: the ascending indices into the token list of the kept tokens. `values` lists the kept tokens' normalized values only. A profile without exclusions MUST NOT emit `tokenIndices`.
+
+**The Go and Rust profiles declare no exclusions** (`normalizedExclusions` is empty). For them both channels contain every token, and every existing Go/Rust vector, record and configuration digest is byte-identical to before this rule. The TypeScript profile `ts-tokens`/`tsx-tokens` `draft-2` declares `punct` `;`. The checker recomputes every accepted TypeScript vector under this rule with no differences. [exclusion-rule.json](extraction-vectors/exclusion-rule.json) pins the shared arithmetic with a synthetic, test-only profile, `go-tokens-exclusion-test`: Go lexing with `punct` `;` excluded, so explicit and inserted semicolons are both dropped. No implementation is expected to support it as a profile.
+
 **Why.** The exact channel preserves literals and names. The normalized channel survives renaming and literal edits, which is the usual purpose of a token-normalized baseline and is needed for the rename vectors. [profiles/code.md](../../profiles/code.md) warns against erasing every identifier and literal in the *sole* representation, so the exact channel always runs alongside. The normalized channel is **not scope-aware** (see §12). Keywords and punctuation carry the remaining structure. An empty value cannot collide with real token text.
 
 ## 7. k-grams and hashing
 
-For n tokens there are `m = max(0, n − k + 1)` k-grams. k-gram `i` (for `0 ≤ i < m`) covers tokens `i … i+k−1`. Its span is `[start(token i), end(token i+k−1))`, which can include trivia.
+K-grams are built per channel over that channel's stream (§6). For a stream of n tokens there are `m = max(0, n − k + 1)` k-grams. k-gram `i` (for `0 ≤ i < m`) covers stream tokens `i … i+k−1`. Its span is `[start(stream token i), end(stream token i+k−1))` in original bytes, which can include trivia and, with exclusions, excluded tokens. Without exclusions both streams are the full token list.
 
 Write `LP(x)` for the 4-byte unsigned big-endian length of the byte string x, followed by x. The bytes hashed for k-gram i in channel C are:
 
@@ -269,7 +281,7 @@ The algorithm follows Schleimer, Wilkerson and Aiken, [*Winnowing*](https://theo
 
 - **Normal case (m ≥ w).** For each window start `s = 0 … m−w`, select the `p` in `[s, s+w)` with minimal `h_p`, **taking the largest `p` on ties**. `windowSelections` lists the `m − w + 1` selections in order.
 - **Partial window (1 ≤ m < w).** Treat all m hashes as one window. `windowSelections` has exactly one element, its rightmost minimum, and `partialWindow` is `true` (OD-8).
-- **m = 0.** Status `insufficient-tokens`, `windowSelections` is `[]`, `partialWindow` is `false` and there are no fingerprints.
+- **m = 0.** `windowSelections` is `[]`, `partialWindow` is `false` and there are no fingerprints. Without exclusions this happens exactly when the status is `insufficient-tokens`. With exclusions, the normalized channel can be empty in an `ok` result (§6).
 - **Fingerprints.** The distinct selected positions in ascending order, each with its hash and k-gram span. Different positions with equal hashes are all kept (OD-16).
 
 The procedure runs independently for each channel.
@@ -288,6 +300,7 @@ The wire schema, including field names and any constant keys, belongs to TW-03. 
 - for errors: `error.code` and `error.offset`
 - tokens: class, exact text, span, and `inserted` for Go
 - per channel: `partialWindow` and fingerprints (position, hash, span)
+- for the normalized channel of a profile with exclusions (§6): `tokenIndices`, which gives that channel's token count, and so its k-gram count
 
 K-gram lists and `windowSelections` are required in vectors and optional in production output.
 
@@ -390,6 +403,7 @@ Two tools check the vectors:
 | Rust numbers and literal suffixes, including the `_` cut (§5.4, §5.5) | Checker re-scans numbers and checks literal closure and the suffix; `rust-literal-suffixes`, `rust-err-*-underscore-suffix` |
 | Trivia, nested comments, shebang look-ahead (Reference SHEBANG: doc comments are content) | Checker trivia scan with the §5.2 look-ahead; `rust-format-b`, `rust-shebang*`, `rust-q8-*`, `rust-q8b-*`, `rust-q11-shebang-first-line-only`, `rust-inner-attribute`, `rust-doc-comment*`; crosscheck (proc-macro2 with the shebang blanked; rustc with the shebang kept and the rest wrapped) |
 | Rulings Q1–Q12 (§3, §3a, §4.4, §4.6, §5.2, §5.3, §5.5, §9) | At least one vector each (`*-q*-*`, `rust-s1-*`, config negatives for Q10); see §15 |
+| §6 normalized-stream exclusions | `exclusion-rule.json` (synthetic `go-tokens-exclusion-test`, 5 vectors). Checker: `tokenIndices` against the declared exclusions; per-channel positions, spans and counts; status from the exact count; the exclusion pair (exact differs, normalized identical); an `ok` input with an empty normalized channel. It rejects 4 corruptions (exclusions ignored, normalized spans from exact positions, status from the normalized count, `tokenIndices` omitted) and rejects `tokenIndices` on Go/Rust. All accepted TypeScript draft-2 vectors are recomputed under the same rule |
 | §10a complexity | Not machine-checked by these tools. The cross-check's adversarial inputs measure it; the bound is derived above |
 | Delimiter balance | Checker (accepted vectors); `rust-err-unbalanced` |
 | Closed error-code lists | Checker per profile; invented-code mutation |
@@ -397,7 +411,7 @@ Two tools check the vectors:
 | Normalization (§6), k-grams, hash, winnowing, ties, duplicates, partial window | Checker recomputes everything; `*-equal-minimum`, `*-repeated`, `*-empty`, `*-short`, `*-exact-k`; hash and tie mutations |
 | Comment/whitespace invariance; rename behavior | `*-format-a/b` and `*-rename-a/b` pair invariants |
 
-**Mutation self-test.** The checker must reject 12 Go and 13 Rust corruptions. Hashes are recomputed so that only the targeted layer is wrong. The corruptions include the reviewer's five: a dropped inserted `;`, `func` relabelled `ident`, `:=` split, `;` after `,`, and an invented error code. They also include U+2160 accepted as a Go letter, `0b2i` accepted as imaginary, `"x"_` split into string plus `_`, `"x"0` as one suffixed string, `->` as one token, U+2E2F accepted as XID, a lifetime relabelled `char`, and a shebang look-ahead that skips `///`.
+**Mutation self-test.** The checker must reject 13 Go and 14 Rust corruptions (each count includes `tokenIndices` emitted by a profile without exclusions). Hashes are recomputed so that only the targeted layer is wrong. The corruptions include the reviewer's five: a dropped inserted `;`, `func` relabelled `ident`, `:=` split, `;` after `,`, and an invented error code. They also include U+2160 accepted as a Go letter, `0b2i` accepted as imaginary, `"x"_` split into string plus `_`, `"x"0` as one suffixed string, `->` as one token, U+2E2F accepted as XID, a lifetime relabelled `char`, and a shebang look-ahead that skips `///`.
 
 **Limits.** The checker validates given token streams and does not produce them. It cannot prove that a different, equally self-consistent tokenization is wrong where the contract's rules are not encoded in it: escape validity, raw-string termination and most error kinds. The crosscheck covers those only for the shipped inputs.
 
@@ -427,6 +441,7 @@ Two tools check the vectors:
 
 | Q1–Q12 | The rulings in §15's second table | Each follows rustc, cmd/compile or the Reference grammar where they agree. Where they disagree, the authority (Reference or Go spec) wins and the oracle difference is a listed crosscheck divergence |
 | OD-21 | `k ≤ 16`, `window ≤ 128`, `maxInputBytes ≤ 8 MiB`; linear time and memory for a fixed configuration (§10a) | Bounded worst case (about 16 GiB of SHA-256 input at the bounds); the cross-check showed unbounded `k` is a denial-of-service vector |
+| OD-23 | Profiles may declare normalized-stream exclusions; per-channel streams, positions and counts; `tokenIndices` recorded only for such profiles (§6) | Lets `ts-tokens` drop `;` from `normalized` (TSOD-13, TSOD-5b (c)) without changing any Go/Rust byte. Smallest change: no new configuration key, no change for profiles without exclusions |
 | OD-22 | `unsupported-config` and `input-too-large` leave the uncomputed values `null` (§9) | The input is not examined or not fully read; no implementation should read gigabytes just to report a limit |
 
 **Still open:**
@@ -478,4 +493,5 @@ Two tools check the vectors:
 | C1 unbounded `k`/`window` | Bounds and complexity (§10a, OD-21) | `cfg-k-above-bound`, `cfg-window-above-bound`, `cfg-max-above-bound`; `boundaryPositives` |
 | R6 reading before the size check | Size checked before reading where knowable; never read past `maxInputBytes + 1` (§3 step 1) | `*-limit-*` (behavioral; reading is not observable in a vector) |
 | S1 checker false rejection | `check_vectors.py` now forbids only a SUFFIX start (`_` or XID_Start) after an unsuffixed literal | `rust-s1-*`: the previous checker failed all 7; the current one passes them |
+| TSOD-13 normalized-stream exclusions (TypeScript profile request) | §6 rule, per-channel streams in §7–§9 (OD-23); Go and Rust declare none, so their vectors, records and configuration digests are unchanged | `exclusion-rule.json` (`excl-*`, 5); the TypeScript draft-2 vectors are the real-profile evidence |
 | S2 harness defects | (a) the Go oracle emits base64; (b) proc-macro2 tokens starting inside a doc comment are dropped; (c) rustc keeps the BOM and shebang line at file start and wraps only the rest | `go-escapes-vt-raw` (the old harness crashed on it), `rust-doc-comment-bracket` (the old filter kept a synthesized `]`), `rust-shebang-unresolved-body` and the `rust-q8-*` inputs (the old harness reported false rustc rejections) |

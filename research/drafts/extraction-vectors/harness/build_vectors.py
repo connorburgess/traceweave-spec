@@ -14,10 +14,13 @@ OUT = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).resolve().paren
 K, W = 5, 4
 CONTRACT = "traceweave-token-winnow-draft-1"
 DOMAIN = b"traceweave/token-kgram/draft-1"
-PROFILES = {"go": "go-tokens", "rust": "rust2024-tokens"}
+PROFILES = {"go": "go-tokens", "rust": "rust2024-tokens",
+            "goexcl": "go-tokens-exclusion-test"}  # TEST-ONLY synthetic profile for the shared exclusion rule
+EXCL = {"goexcl": {("punct", ";")}}  # contract section 6 normalized-stream exclusions; Go and Rust declare none
 PVER = "draft-1"
 LIT = {"go": {"int", "float", "imag", "rune", "string"},
        "rust": {"int", "float", "char", "byte", "string", "rawstring", "bytestring", "rawbytestring", "cstring", "rawcstring"}}
+LIT["goexcl"] = LIT["go"]
 
 def config_bytes(lang, limit=1048576):
     c = {"contract": CONTRACT, "profile": PROFILES[lang], "profileVersion": PVER, "channels": ["exact", "normalized"],
@@ -66,15 +69,19 @@ def build(lang, vid, desc, src, toks=None, err=None, tags=()):
         tokens.append({"class": cls, "text": text, "span": [i, i + len(b)]}); pos = i + len(b)
     res = {"status": "ok" if len(tokens) >= K else "insufficient-tokens", "tokenCount": len(tokens), "tokens": tokens, "channels": {}}
     for ch in ("exact", "normalized"):
-        stream = [(t["class"], t["text"] if ch == "exact" else normalize(lang, t["class"], t["text"])) for t in tokens]
+        idx = [i for i, t in enumerate(tokens) if ch == "exact" or (t["class"], t["text"]) not in EXCL.get(lang, ())]
+        kept = [tokens[i] for i in idx]
+        stream = [(t["class"], t["text"] if ch == "exact" else normalize(lang, t["class"], t["text"])) for t in kept]
         kg = []
-        for i in range(len(tokens) - K + 1):
+        for i in range(len(kept) - K + 1):
             kg.append({"position": i, "hash": kgram_hash(lang, ch, stream[i:i + K]),
-                       "span": [tokens[i]["span"][0], tokens[i + K - 1]["span"][1]]})
+                       "span": [kept[i]["span"][0], kept[i + K - 1]["span"][1]]})
         sel, partial = winnow([int(x["hash"], 16) for x in kg])
         fps = [{"position": p, "hash": kg[p]["hash"], "span": kg[p]["span"]} for p in sorted(set(sel))]
         chd = {}
-        if ch == "normalized": chd["values"] = [s[1] for s in stream]
+        if ch == "normalized":
+            if EXCL.get(lang): chd["tokenIndices"] = idx
+            chd["values"] = [s[1] for s in stream]
         chd.update({"kgrams": kg, "windowSelections": sel, "partialWindow": partial, "fingerprints": fps})
         res["channels"][ch] = chd
     v["result"] = res
@@ -336,6 +343,27 @@ pos = [{"id": i, "reason": r, "configBase64": base64.b64encode(t.encode()).decod
 ]]
 dump({"contract": CONTRACT, "description": "negatives: configuration byte strings that MUST be rejected as unsupported-config (offset null); each is the shipped Go configuration with one change. boundaryPositives: configurations at the section 10 bounds that MUST be accepted.", "negatives": negs, "boundaryPositives": pos}, OUT / "config-negative.json")
 print("negatives", len(negs), "positives", len(pos))
+
+# ---- shared normalized-stream exclusion rule (contract section 6), synthetic TEST-ONLY profile ----
+ex = []
+e = lambda *a, **k: ex.append(build("goexcl", *a, **k))
+e("excl-semi-newlines", "Exclusion pair, reference side: Go-lexed, two inserted ';' are excluded from normalized only. Normalized positions index the 6 kept tokens; spans stay original bytes and cross the excluded ';'.",
+  b"a := b\nc := d\n", [(I, "a"), (P, ":="), (I, "b"), (P, ";", A), (I, "c"), (P, ":="), (I, "d"), (P, ";", A)], tags=["exclusion-pair"])
+e("excl-semi-explicit", "Exclusion pair: the same statements on one line with explicit ';' and an extra ';'. Exact differs (9 tokens), normalized is identical to excl-semi-newlines.",
+  b"a := b; c := d;;", [(I, "a"), (P, ":="), (I, "b"), (P, ";"), (I, "c"), (P, ":="), (I, "d"), (P, ";"), (P, ";")], tags=["exclusion-pair"])
+e("excl-ok-normalized-empty", "Status follows the exact count (5 >= k): ok with one exact k-gram, while the normalized stream keeps 1 token and is empty (no k-grams, windowSelections [], partialWindow false).",
+  b"a;;;;", [(I, "a"), (P, ";"), (P, ";"), (P, ";"), (P, ";")], tags=["exclusion-empty"])
+e("excl-insufficient", "Fewer than k exact tokens: insufficient-tokens; tokenIndices still lists the kept tokens.",
+  b"x;y", [(I, "x"), (P, ";"), (I, "y"), (P, ";", A)], tags=["exclusion-empty"])
+e("excl-partial-window", "Normalized stream of exactly k kept tokens out of 8 exact: one normalized k-gram whose span covers excluded ';' bytes; partial window in both channels.",
+  b"f(a);g(b)", [(I, "f"), (P, "("), (I, "a"), (P, ")"), (P, ";"), (I, "g"), (P, "("), (I, "b"), (P, ")"), (P, ";", A)], tags=["exclusion-span"])
+cb = config_bytes("goexcl")
+(OUT / "config-exclusion-test.json").write_bytes(cb)
+dump({"contract": CONTRACT, "profile": PROFILES["goexcl"], "profileVersion": PVER, "configFile": "config-exclusion-test.json",
+      "configSha256": hashlib.sha256(cb).hexdigest(), "k": K, "window": W, "requiredCoverage": False,
+      "description": "TEST-ONLY synthetic profile: Go lexing (section 4) with normalizedExclusions [punct ';']. It pins the shared section 6-8 rule for profiles that declare exclusions; it is not a profile to implement. The TypeScript vectors (ts-tokens draft-2) are the real-profile evidence.",
+      "vectors": ex}, OUT / "exclusion-rule.json")
+print("exclusion", len(ex))
 
 for lang, vecs in (("go", go), ("rust", rs)):
     cb = config_bytes(lang)
