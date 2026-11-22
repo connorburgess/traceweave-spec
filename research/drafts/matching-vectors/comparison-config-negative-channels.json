@@ -15,11 +15,6 @@
   "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsImZvbGRlZCJdLCJtaW5SZWdpb25EaXN0aW5jdEhhc2hlcyI6MiwibWVyZ2VHYXAiOjQsIm1heFNlZWRzUGVyTW9kZSI6MTAwMDAwLCJtYXhSZWdpb25zUGVyTW9kZSI6MTAwMCwic3VwcHJlc3Npb25DYXRhbG9ndWVTaGEyNTYiOiJub25lIn0K"
  },
  {
-  "id": "modes-text-list-unimplemented",
-  "reason": "the text profiles' list; rejected here because no text profile is implemented by this checker",
-  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsImZvbGRlZCIsInNrZWxldG9uIl0sIm1pblJlZ2lvbkRpc3RpbmN0SGFzaGVzIjoyLCJtZXJnZUdhcCI6NCwibWF4U2VlZHNQZXJNb2RlIjoxMDAwMDAsIm1heFJlZ2lvbnNQZXJNb2RlIjoxMDAwLCJzdXBwcmVzc2lvbkNhdGFsb2d1ZVNoYTI1NiI6Im5vbmUifQo="
- },
- {
   "id": "modes-test-list-outside-tests",
   "reason": "the TEST-ONLY three-channel list; accepted only for vectors flagged testOnlyProfile",
   "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiLCJjbGFzc2VzIl0sIm1pblJlZ2lvbkRpc3RpbmN0SGFzaGVzIjoyLCJtZXJnZUdhcCI6NCwibWF4U2VlZHNQZXJNb2RlIjoxMDAwMDAsIm1heFJlZ2lvbnNQZXJNb2RlIjoxMDAwLCJzdXBwcmVzc2lvbkNhdGFsb2d1ZVNoYTI1NiI6Im5vbmUifQo="

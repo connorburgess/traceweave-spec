@@ -529,6 +529,26 @@
    ],
    "expectedCatalogueSha256": "f195138ae39ed4e66d0bd34719abba36b7d5bd1fc4aeef12afd2214938338180",
    "note": "TEST-ONLY three-channel profile: every entry has channels exact, normalized, classes."
+  },
+  {
+   "id": "cat-text-plain",
+   "extractionConfigFile": "../extraction-vectors-text/config-text-plain.json",
+   "artifacts": [
+    {
+     "id": "err.txt",
+     "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-err-nul"
+    },
+    {
+     "id": "short.txt",
+     "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-short"
+    },
+    {
+     "id": "src.txt",
+     "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-reflow-a"
+    }
+   ],
+   "expectedCatalogueSha256": "df6bd5544bc0140c077fdded0561924729700cd105941bc01c0dd70a90f52aa7",
+   "note": "Built from frozen text-plain records (ok, insufficient-tokens, nul error): channels exact, folded, skeleton."
   }
  ],
  "catalogueBuildRejections": [

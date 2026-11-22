@@ -32,10 +32,11 @@ CATALOGUE_VERSION = "traceweave-catalogue-draft-2"
 REPORT_VERSION = "traceweave-report-draft-2"
 COMPARISON_ID = "traceweave-seed-merge-draft-2"
 CHANNELS = ("exact", "normalized")
-SUPPORTED_PROFILES = {("go-tokens", "draft-1"), ("rust2024-tokens", "draft-1"),
+SUPPORTED_PROFILES = {("go-tokens", "draft-1"), ("rust2024-tokens", "draft-1"), ("ts-tokens", "draft-2"), ("text-plain", "draft-1"),
                       ("go-tokens-three-channel-test", "draft-1")}   # last: TEST-ONLY, flagged in vectors
 # Declared channel lists (contract §2b). Comparison `modes` must equal one of them.
 CHANNEL_LISTS = {"go-tokens": ["exact", "normalized"], "rust2024-tokens": ["exact", "normalized"],
+                 "ts-tokens": ["exact", "normalized"], "text-plain": ["exact", "folded", "skeleton"],
                  "go-tokens-three-channel-test": ["exact", "normalized", "classes"]}
 CH3 = ["exact", "normalized", "classes"]
 TEST_CONTEXT = [True]   # the builder accepts the TEST-ONLY list except when writing negatives
@@ -355,6 +356,14 @@ NEW_GO_CLASSES = [
      "defer y - g(2)\ncontinue\ny--\n"),
 ]
 NG_ = "../extraction-vectors/go.json"
+TEXT_RECORDS = "../extraction-vectors-text/records-text-plain.json"
+TEXT_CFG = "../extraction-vectors-text/config-text-plain.json"
+
+
+def text_record(rid):
+    """Record bytes and input of a frozen text-plain record (owned by the text-profile lane, not generated here)."""
+    r = next(x for x in json.loads((HERE / TEXT_RECORDS).read_text())["records"] if x["id"] == rid)
+    return r["expectedRecordText"].encode("utf-8"), base64.b64decode(r["inputBase64"])
 REC3 = {  # TEST-ONLY three-channel records: id -> Go token source (contract §2b)
     "rec-3ch-format-a": f"{NG_}#go-format-a", "rec-3ch-format-b": f"{NG_}#go-format-b",
     "rec-3ch-rename-a": f"{NG_}#go-rename-a", "rec-3ch-rename-b": f"{NG_}#go-rename-b",
@@ -784,8 +793,6 @@ def main():
         ("modes-three-reordered", comparison_config_bytes(modes=["exact", "classes", "normalized"]), "not a declared channel list (order)"),
         ("modes-duplicate", comparison_config_bytes(modes=["exact", "exact"]), "duplicate mode"),
         ("modes-unknown-channel", comparison_config_bytes(modes=["exact", "folded"]), "no implemented profile declares this list"),
-        ("modes-text-list-unimplemented", comparison_config_bytes(modes=["exact", "folded", "skeleton"]),
-         "the text profiles' list; rejected here because no text profile is implemented by this checker"),
         ("modes-test-list-outside-tests", comparison_config_bytes(modes=CH3),
          "the TEST-ONLY three-channel list; accepted only for vectors flagged testOnlyProfile"),
         ("modes-empty", comparison_config_bytes(modes=[]), "empty modes"),
@@ -1195,6 +1202,37 @@ def main():
         "The shipped two-channel modes with three-channel catalogues: rejected with mode-mismatch.",
         r3(("a.go", "rec-3ch-format-a")), r3(("b.go", "rec-3ch-format-b")), rej("mode-mismatch", "comparison-config"))
 
+    # --- real text-plain records (frozen by the text lane, commit 794f1fe), three modes ------------------
+    # Hand expectations below were derived from the recorded fingerprint lists in records-text-plain.json
+    # (positions and hashes), before this comparison was computed. mergeGap 8 = the text profile's window;
+    # minRegionDistinctHashes 1 because the homoglyph pair shares exactly one skeleton fingerprint (position 7).
+    CCT = comparison_config_bytes(min_hashes=1, gap=8, modes=["exact", "folded", "skeleton"])
+    TE = ["exact", "folded", "skeleton"]
+    none3 = {ch: ex(codeIn=["no-shared-fingerprints"], regions=0) for ch in TE}
+    vec("text-plain-three-modes", ["text-plain", "three-mode", "homoglyph"],
+        "Real text-plain records: identical copy and reflowed copy match in all three modes; the Cyrillic homoglyph variant "
+        "of confusable-latin matches only in skeleton (one shared fingerprint, at position 7, so minRegionDistinctHashes 1); "
+        "an unrelated text shares nothing. mergeGap 8 equals the text window.",
+        ("textrecords", [("latin.txt", "rec-plain-confusable-latin"), ("src.txt", "rec-plain-reflow-a")]),
+        ("textrecords", [("copy.txt", "rec-plain-reflow-a"), ("cyr.txt", "rec-plain-confusable-cyrillic"),
+                         ("reflow.txt", "rec-plain-reflow-b"), ("unrel.txt", "rec-plain-numbers")]),
+        {"status": "compared", "pairs": [
+            pair("latin.txt", "copy.txt", copy.deepcopy(none3)),
+            pair("latin.txt", "cyr.txt", {"exact": ex(codeIn=["no-shared-fingerprints"], regions=0),
+                                          "folded": ex(codeIn=["no-shared-fingerprints"], regions=0),
+                                          "skeleton": ex(codeIn=["match"], reportable=1, seeds=[[[7, 7]]])}),
+            pair("latin.txt", "reflow.txt", copy.deepcopy(none3)),
+            pair("latin.txt", "unrel.txt", copy.deepcopy(none3)),
+            pair("src.txt", "copy.txt", {ch: ex(codeIn=["match"], reportable=1, exhaustiveDiagonalZero=True,
+                                                seeds=[[[p, p] for p in ps]])
+                                         for ch, ps in (("exact", (3, 10, 15)), ("folded", (2, 4, 11)), ("skeleton", (1, 8, 11)))}),
+            pair("src.txt", "cyr.txt", copy.deepcopy(none3)),
+            pair("src.txt", "reflow.txt", {ch: ex(codeIn=["match"], reportable=1, exhaustiveDiagonalZero=True,
+                                                  seeds=[[[p, p] for p in ps]])
+                                           for ch, ps in (("exact", (3, 10, 15)), ("folded", (2, 4, 11)), ("skeleton", (1, 8, 11)))}),
+            pair("src.txt", "unrel.txt", copy.deepcopy(none3))]},
+        cc=CCT)
+
     cc_cache = {}
     out = []
     for v in V:
@@ -1203,6 +1241,16 @@ def main():
             if arts is None:
                 continue
             texts[side] = {}
+            if isinstance(arts, tuple) and arts[0] == "textrecords":
+                items = arts[1]
+                cb = catalogue_from_records((HERE / TEXT_CFG).read_bytes(), [(a, text_record(r)[0]) for a, r in items])
+                for a, r in items:
+                    texts[side][a] = text_record(r)[1].decode("utf-8", "replace")
+                cats[side] = {"fromRecords": {"extractionConfigFile": TEXT_CFG,
+                                              "artifacts": [{"id": a, "record": f"{TEXT_RECORDS}#{r}"} for a, r in items]},
+                              "sha256": sha(cb), "canonical": json.loads(cb)}
+                bytes_[side] = cb
+                continue
             if isinstance(arts, tuple) and arts[0] == "records3":
                 items = arts[1]
                 cb = catalogue_from_records(CONFIG_3CH, [(a, record_bytes(CONFIG_3CH, base64.b64decode(sources[REC3[r]][0]["inputBase64"]),
@@ -1301,7 +1349,7 @@ def main():
                                    "pair-precedence", "match-over-ambiguous", "ambiguous-over-weaker",
                                    "below-over-common", "mixed-common-region", "invariance", "ambiguity-before-cap",
                                    "suppression-artifact-count", "suppression-order", "input-too-large",
-                                   "three-channel", "mode-mismatch"}),
+                                   "three-channel", "mode-mismatch", "text-plain"}),
            "vectors": out}
     (HERE / "matching.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
     build_records(sources, out)
@@ -1503,6 +1551,12 @@ def build_records(sources, matching_out):
                                                                     ("short.go", "rec-3ch-insufficient"))],
                  "expectedCatalogueSha256": sha(cb),
                  "note": "TEST-ONLY three-channel profile: every entry has channels exact, normalized, classes."})
+    titems = [("err.txt", "rec-plain-err-nul"), ("short.txt", "rec-plain-short"), ("src.txt", "rec-plain-reflow-a")]
+    cb = catalogue_from_records((HERE / TEXT_CFG).read_bytes(), [(a, text_record(r)[0]) for a, r in titems])
+    cats.append({"id": "cat-text-plain", "extractionConfigFile": TEXT_CFG,
+                 "artifacts": [{"id": a, "record": f"{TEXT_RECORDS}#{r}"} for a, r in titems],
+                 "expectedCatalogueSha256": sha(cb),
+                 "note": "Built from frozen text-plain records (ok, insufficient-tokens, nul error): channels exact, folded, skeleton."})
     rej = []
     for rid, cfgname, items, reason in rejections:
         try:

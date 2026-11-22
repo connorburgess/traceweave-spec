@@ -41,6 +41,7 @@
   "suppression-artifact-count",
   "suppression-catalogue-mismatch",
   "suppression-order",
+  "text-plain",
   "three-channel",
   "tie",
   "trivia-pair",
@@ -49332,6 +49333,2059 @@
       "side": "comparison-config"
      },
      "status": "rejected"
+    }
+   }
+  },
+  {
+   "id": "text-plain-three-modes",
+   "tags": [
+    "text-plain",
+    "three-mode",
+    "homoglyph"
+   ],
+   "description": "Real text-plain records: identical copy and reflowed copy match in all three modes; the Cyrillic homoglyph variant of confusable-latin matches only in skeleton (one shared fingerprint, at position 7, so minRegionDistinctHashes 1); an unrelated text shares nothing. mergeGap 8 equals the text window.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsImZvbGRlZCIsInNrZWxldG9uIl0sIm1pblJlZ2lvbkRpc3RpbmN0SGFzaGVzIjoxLCJtZXJnZUdhcCI6OCwibWF4U2VlZHNQZXJNb2RlIjoxMDAwMDAsIm1heFJlZ2lvbnNQZXJNb2RlIjoxMDAwLCJzdXBwcmVzc2lvbkNhdGFsb2d1ZVNoYTI1NiI6Im5vbmUifQo="
+   },
+   "reference": {
+    "fromRecords": {
+     "extractionConfigFile": "../extraction-vectors-text/config-text-plain.json",
+     "artifacts": [
+      {
+       "id": "latin.txt",
+       "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-confusable-latin"
+      },
+      {
+       "id": "src.txt",
+       "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-reflow-a"
+      }
+     ]
+    },
+    "sha256": "6d5c166cd63b1283a52167b7c91ffd41b408e4c416db239b8ef818d9f5f2fbec",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 87,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "09c1f0f9b998d205",
+           "position": 2,
+           "span": [
+            10,
+            50
+           ]
+          }
+         ],
+         "kgramCount": 10,
+         "partialWindow": false
+        },
+        "folded": {
+         "fingerprints": [
+          {
+           "hash": "6f0cd0e5150be60d",
+           "position": 4,
+           "span": [
+            18,
+            57
+           ]
+          },
+          {
+           "hash": "1ca5c591696d4614",
+           "position": 8,
+           "span": [
+            40,
+            79
+           ]
+          }
+         ],
+         "kgramCount": 10,
+         "partialWindow": false
+        },
+        "skeleton": {
+         "fingerprints": [
+          {
+           "hash": "0324ac23ec4edf6b",
+           "position": 7,
+           "span": [
+            32,
+            73
+           ]
+          }
+         ],
+         "kgramCount": 10,
+         "partialWindow": false
+        }
+       },
+       "id": "latin.txt",
+       "sha256": "c98562432b623844b520c9e7a0c39b32ce3abaf785cfea0fc9b259ff1d4f70d9",
+       "status": "ok",
+       "tokenCount": 17
+      },
+      {
+       "byteLength": 136,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "3007d756f0d723ad",
+           "position": 3,
+           "span": [
+            20,
+            65
+           ]
+          },
+          {
+           "hash": "3cac3af6c76e49d3",
+           "position": 10,
+           "span": [
+            61,
+            109
+           ]
+          },
+          {
+           "hash": "2cccd3ac79000ddd",
+           "position": 15,
+           "span": [
+            92,
+            134
+           ]
+          }
+         ],
+         "kgramCount": 16,
+         "partialWindow": false
+        },
+        "folded": {
+         "fingerprints": [
+          {
+           "hash": "33fe4533844788b6",
+           "position": 2,
+           "span": [
+            16,
+            60
+           ]
+          },
+          {
+           "hash": "457bad7f2b1ad221",
+           "position": 4,
+           "span": [
+            28,
+            73
+           ]
+          },
+          {
+           "hash": "36a3cf04b189355a",
+           "position": 11,
+           "span": [
+            66,
+            112
+           ]
+          }
+         ],
+         "kgramCount": 16,
+         "partialWindow": false
+        },
+        "skeleton": {
+         "fingerprints": [
+          {
+           "hash": "2157249e633468c5",
+           "position": 1,
+           "span": [
+            7,
+            50
+           ]
+          },
+          {
+           "hash": "55c2fa0548197cef",
+           "position": 8,
+           "span": [
+            49,
+            99
+           ]
+          },
+          {
+           "hash": "02f9288a32d73ddc",
+           "position": 11,
+           "span": [
+            66,
+            112
+           ]
+          }
+         ],
+         "kgramCount": 16,
+         "partialWindow": false
+        }
+       },
+       "id": "src.txt",
+       "sha256": "d042564e4411564f160f26b8e4735ae123b069805e12b785be12d91508bb1e36",
+       "status": "ok",
+       "tokenCount": 23
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "channels": [
+       "exact",
+       "folded",
+       "skeleton"
+      ],
+      "contract": "traceweave-text-winnow-draft-1",
+      "hash": "sha256-first8-u64be",
+      "k": 8,
+      "maxInputBytes": 1048576,
+      "profile": "text-plain",
+      "profileVersion": "draft-1",
+      "window": 8
+     },
+     "profile": {
+      "configSha256": "35c1f63cc2f669a54acb5f9792614721431943b2fd626ffb88982e53bd37323e",
+      "id": "text-plain",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "fromRecords": {
+     "extractionConfigFile": "../extraction-vectors-text/config-text-plain.json",
+     "artifacts": [
+      {
+       "id": "copy.txt",
+       "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-reflow-a"
+      },
+      {
+       "id": "cyr.txt",
+       "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-confusable-cyrillic"
+      },
+      {
+       "id": "reflow.txt",
+       "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-reflow-b"
+      },
+      {
+       "id": "unrel.txt",
+       "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-numbers"
+      }
+     ]
+    },
+    "sha256": "71b3563bd18d2de7c09bd18a4e2380226a928786e025fa468882dc8e933c155d",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 136,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "3007d756f0d723ad",
+           "position": 3,
+           "span": [
+            20,
+            65
+           ]
+          },
+          {
+           "hash": "3cac3af6c76e49d3",
+           "position": 10,
+           "span": [
+            61,
+            109
+           ]
+          },
+          {
+           "hash": "2cccd3ac79000ddd",
+           "position": 15,
+           "span": [
+            92,
+            134
+           ]
+          }
+         ],
+         "kgramCount": 16,
+         "partialWindow": false
+        },
+        "folded": {
+         "fingerprints": [
+          {
+           "hash": "33fe4533844788b6",
+           "position": 2,
+           "span": [
+            16,
+            60
+           ]
+          },
+          {
+           "hash": "457bad7f2b1ad221",
+           "position": 4,
+           "span": [
+            28,
+            73
+           ]
+          },
+          {
+           "hash": "36a3cf04b189355a",
+           "position": 11,
+           "span": [
+            66,
+            112
+           ]
+          }
+         ],
+         "kgramCount": 16,
+         "partialWindow": false
+        },
+        "skeleton": {
+         "fingerprints": [
+          {
+           "hash": "2157249e633468c5",
+           "position": 1,
+           "span": [
+            7,
+            50
+           ]
+          },
+          {
+           "hash": "55c2fa0548197cef",
+           "position": 8,
+           "span": [
+            49,
+            99
+           ]
+          },
+          {
+           "hash": "02f9288a32d73ddc",
+           "position": 11,
+           "span": [
+            66,
+            112
+           ]
+          }
+         ],
+         "kgramCount": 16,
+         "partialWindow": false
+        }
+       },
+       "id": "copy.txt",
+       "sha256": "d042564e4411564f160f26b8e4735ae123b069805e12b785be12d91508bb1e36",
+       "status": "ok",
+       "tokenCount": 23
+      },
+      {
+       "byteLength": 96,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "2bf656f023a8b3e1",
+           "position": 4,
+           "span": [
+            21,
+            63
+           ]
+          },
+          {
+           "hash": "0845f25f8527e450",
+           "position": 9,
+           "span": [
+            49,
+            95
+           ]
+          }
+         ],
+         "kgramCount": 10,
+         "partialWindow": false
+        },
+        "folded": {
+         "fingerprints": [
+          {
+           "hash": "3997f5b960777d32",
+           "position": 3,
+           "span": [
+            18,
+            59
+           ]
+          }
+         ],
+         "kgramCount": 10,
+         "partialWindow": false
+        },
+        "skeleton": {
+         "fingerprints": [
+          {
+           "hash": "0324ac23ec4edf6b",
+           "position": 7,
+           "span": [
+            36,
+            81
+           ]
+          }
+         ],
+         "kgramCount": 10,
+         "partialWindow": false
+        }
+       },
+       "id": "cyr.txt",
+       "sha256": "9938ec6f1e02c704235a90550515825d7f4d866da64198690f357b23efe4cca4",
+       "status": "ok",
+       "tokenCount": 17
+      },
+      {
+       "byteLength": 141,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "3007d756f0d723ad",
+           "position": 3,
+           "span": [
+            20,
+            66
+           ]
+          },
+          {
+           "hash": "3cac3af6c76e49d3",
+           "position": 10,
+           "span": [
+            62,
+            110
+           ]
+          },
+          {
+           "hash": "2cccd3ac79000ddd",
+           "position": 15,
+           "span": [
+            93,
+            137
+           ]
+          }
+         ],
+         "kgramCount": 16,
+         "partialWindow": false
+        },
+        "folded": {
+         "fingerprints": [
+          {
+           "hash": "33fe4533844788b6",
+           "position": 2,
+           "span": [
+            16,
+            61
+           ]
+          },
+          {
+           "hash": "457bad7f2b1ad221",
+           "position": 4,
+           "span": [
+            28,
+            74
+           ]
+          },
+          {
+           "hash": "36a3cf04b189355a",
+           "position": 11,
+           "span": [
+            67,
+            115
+           ]
+          }
+         ],
+         "kgramCount": 16,
+         "partialWindow": false
+        },
+        "skeleton": {
+         "fingerprints": [
+          {
+           "hash": "2157249e633468c5",
+           "position": 1,
+           "span": [
+            7,
+            50
+           ]
+          },
+          {
+           "hash": "55c2fa0548197cef",
+           "position": 8,
+           "span": [
+            49,
+            100
+           ]
+          },
+          {
+           "hash": "02f9288a32d73ddc",
+           "position": 11,
+           "span": [
+            67,
+            115
+           ]
+          }
+         ],
+         "kgramCount": 16,
+         "partialWindow": false
+        }
+       },
+       "id": "reflow.txt",
+       "sha256": "980766b58f99c19266b29221b35d687201ef53ec70614a43807e3b63f5ccefe5",
+       "status": "ok",
+       "tokenCount": 23
+      },
+      {
+       "byteLength": 108,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "1ae278ba69614bf5",
+           "position": 0,
+           "span": [
+            0,
+            34
+           ]
+          },
+          {
+           "hash": "1ea8578c98dd9ee0",
+           "position": 1,
+           "span": [
+            8,
+            39
+           ]
+          },
+          {
+           "hash": "207d291f9956cf8d",
+           "position": 3,
+           "span": [
+            13,
+            45
+           ]
+          },
+          {
+           "hash": "17483fd3fa8864a1",
+           "position": 11,
+           "span": [
+            46,
+            84
+           ]
+          }
+         ],
+         "kgramCount": 16,
+         "partialWindow": false
+        },
+        "folded": {
+         "fingerprints": [
+          {
+           "hash": "11b939268838af02",
+           "position": 2,
+           "span": [
+            10,
+            41
+           ]
+          },
+          {
+           "hash": "5e51aa1e5c344b57",
+           "position": 10,
+           "span": [
+            42,
+            79
+           ]
+          },
+          {
+           "hash": "5abb2090d4f9f4ee",
+           "position": 13,
+           "span": [
+            55,
+            94
+           ]
+          },
+          {
+           "hash": "565291c17a517c6c",
+           "position": 14,
+           "span": [
+            59,
+            100
+           ]
+          },
+          {
+           "hash": "2a5279b7f388b007",
+           "position": 15,
+           "span": [
+            62,
+            107
+           ]
+          }
+         ],
+         "kgramCount": 16,
+         "partialWindow": false
+        },
+        "skeleton": {
+         "fingerprints": [
+          {
+           "hash": "0f4427f2677bb881",
+           "position": 5,
+           "span": [
+            24,
+            54
+           ]
+          },
+          {
+           "hash": "08d8dbfc2e76861d",
+           "position": 8,
+           "span": [
+            35,
+            68
+           ]
+          }
+         ],
+         "kgramCount": 16,
+         "partialWindow": false
+        }
+       },
+       "id": "unrel.txt",
+       "sha256": "8301dff0382f055488a138cfb794104a61c8e8a517d6b79c4fff0629f89819c7",
+       "status": "ok",
+       "tokenCount": 23
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "channels": [
+       "exact",
+       "folded",
+       "skeleton"
+      ],
+      "contract": "traceweave-text-winnow-draft-1",
+      "hash": "sha256-first8-u64be",
+      "k": 8,
+      "maxInputBytes": 1048576,
+      "profile": "text-plain",
+      "profileVersion": "draft-1",
+      "window": 8
+     },
+     "profile": {
+      "configSha256": "35c1f63cc2f669a54acb5f9792614721431943b2fd626ffb88982e53bd37323e",
+      "id": "text-plain",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "compared",
+    "pairs": [
+     {
+      "reference": "latin.txt",
+      "candidate": "copy.txt",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       },
+       "folded": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       },
+       "skeleton": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       }
+      }
+     },
+     {
+      "reference": "latin.txt",
+      "candidate": "cyr.txt",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       },
+       "folded": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       },
+       "skeleton": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "seeds": [
+         [
+          [
+           7,
+           7
+          ]
+         ]
+        ],
+        "derivation": "hand"
+       }
+      }
+     },
+     {
+      "reference": "latin.txt",
+      "candidate": "reflow.txt",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       },
+       "folded": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       },
+       "skeleton": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       }
+      }
+     },
+     {
+      "reference": "latin.txt",
+      "candidate": "unrel.txt",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       },
+       "folded": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       },
+       "skeleton": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       }
+      }
+     },
+     {
+      "reference": "src.txt",
+      "candidate": "copy.txt",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "seeds": [
+         [
+          [
+           3,
+           3
+          ],
+          [
+           10,
+           10
+          ],
+          [
+           15,
+           15
+          ]
+         ]
+        ],
+        "derivation": "hand"
+       },
+       "folded": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "seeds": [
+         [
+          [
+           2,
+           2
+          ],
+          [
+           4,
+           4
+          ],
+          [
+           11,
+           11
+          ]
+         ]
+        ],
+        "derivation": "hand"
+       },
+       "skeleton": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "seeds": [
+         [
+          [
+           1,
+           1
+          ],
+          [
+           8,
+           8
+          ],
+          [
+           11,
+           11
+          ]
+         ]
+        ],
+        "derivation": "hand"
+       }
+      }
+     },
+     {
+      "reference": "src.txt",
+      "candidate": "cyr.txt",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       },
+       "folded": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       },
+       "skeleton": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       }
+      }
+     },
+     {
+      "reference": "src.txt",
+      "candidate": "reflow.txt",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "seeds": [
+         [
+          [
+           3,
+           3
+          ],
+          [
+           10,
+           10
+          ],
+          [
+           15,
+           15
+          ]
+         ]
+        ],
+        "derivation": "hand"
+       },
+       "folded": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "seeds": [
+         [
+          [
+           2,
+           2
+          ],
+          [
+           4,
+           4
+          ],
+          [
+           11,
+           11
+          ]
+         ]
+        ],
+        "derivation": "hand"
+       },
+       "skeleton": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "seeds": [
+         [
+          [
+           1,
+           1
+          ],
+          [
+           8,
+           8
+          ],
+          [
+           11,
+           11
+          ]
+         ]
+        ],
+        "derivation": "hand"
+       }
+      }
+     },
+     {
+      "reference": "src.txt",
+      "candidate": "unrel.txt",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       },
+       "folded": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       },
+       "skeleton": {
+        "codeIn": [
+         "no-shared-fingerprints"
+        ],
+        "regions": 0,
+        "derivation": "hand"
+       }
+      }
+     }
+    ]
+   },
+   "expectedReport": {
+    "bodySha256": "a60fb1ca2b5fa87d3e2debcabb532eaca7e085d0b5b0ccc516fcdbcd1f8ac7be",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "71b3563bd18d2de7c09bd18a4e2380226a928786e025fa468882dc8e933c155d",
+      "comparisonConfigSha256": "91b3b2039a7ec3015a6d2f79c8207e4a95b0beab602bb81deb6c3b9c02b51e64",
+      "referenceCatalogueSha256": "6d5c166cd63b1283a52167b7c91ffd41b408e4c416db239b8ef818d9f5f2fbec",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "candidateArtifactCount": 4,
+     "comparison": {
+      "comparison": "traceweave-seed-merge-draft-2",
+      "modes": [
+       "exact",
+       "folded",
+       "skeleton"
+      ],
+      "minRegionDistinctHashes": 1,
+      "mergeGap": 8,
+      "maxSeedsPerMode": 100000,
+      "maxRegionsPerMode": 1000,
+      "suppressionCatalogueSha256": "none",
+      "parameterStatus": "experimental"
+     },
+     "pairs": [
+      {
+       "candidate": {
+        "id": "copy.txt",
+        "sha256": "d042564e4411564f160f26b8e4735ae123b069805e12b785be12d91508bb1e36"
+       },
+       "reference": {
+        "id": "latin.txt",
+        "sha256": "c98562432b623844b520c9e7a0c39b32ce3abaf785cfea0fc9b259ff1d4f70d9"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 1,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 4,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "folded": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 2,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 5,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "skeleton": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 1,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 4,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      },
+      {
+       "candidate": {
+        "id": "cyr.txt",
+        "sha256": "9938ec6f1e02c704235a90550515825d7f4d866da64198690f357b23efe4cca4"
+       },
+       "reference": {
+        "id": "latin.txt",
+        "sha256": "c98562432b623844b520c9e7a0c39b32ce3abaf785cfea0fc9b259ff1d4f70d9"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 2,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 1,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 3,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "folded": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 1,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 2,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 3,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "skeleton": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 1,
+           "numerator": 1
+          },
+          "referenceInCandidate": {
+           "denominator": 1,
+           "numerator": 1
+          }
+         },
+         "seedCount": 1,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 1,
+           "numerator": 1
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            36,
+            81
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 1,
+           "referenceSpan": [
+            32,
+            73
+           ],
+           "seeds": [
+            [
+             7,
+             7
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      },
+      {
+       "candidate": {
+        "id": "reflow.txt",
+        "sha256": "980766b58f99c19266b29221b35d687201ef53ec70614a43807e3b63f5ccefe5"
+       },
+       "reference": {
+        "id": "latin.txt",
+        "sha256": "c98562432b623844b520c9e7a0c39b32ce3abaf785cfea0fc9b259ff1d4f70d9"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 1,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 4,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "folded": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 2,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 5,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "skeleton": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 1,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 4,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      },
+      {
+       "candidate": {
+        "id": "unrel.txt",
+        "sha256": "8301dff0382f055488a138cfb794104a61c8e8a517d6b79c4fff0629f89819c7"
+       },
+       "reference": {
+        "id": "latin.txt",
+        "sha256": "c98562432b623844b520c9e7a0c39b32ce3abaf785cfea0fc9b259ff1d4f70d9"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 4,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 1,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 5,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "folded": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 5,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 2,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 7,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "skeleton": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 2,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 1,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 3,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      },
+      {
+       "candidate": {
+        "id": "copy.txt",
+        "sha256": "d042564e4411564f160f26b8e4735ae123b069805e12b785be12d91508bb1e36"
+       },
+       "reference": {
+        "id": "src.txt",
+        "sha256": "d042564e4411564f160f26b8e4735ae123b069805e12b785be12d91508bb1e36"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 3
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "seedCount": 3,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            20,
+            134
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 3,
+           "referenceSpan": [
+            20,
+            134
+           ],
+           "seeds": [
+            [
+             3,
+             3
+            ],
+            [
+             10,
+             10
+            ],
+            [
+             15,
+             15
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        },
+        "folded": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 3
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "seedCount": 3,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            16,
+            112
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 3,
+           "referenceSpan": [
+            16,
+            112
+           ],
+           "seeds": [
+            [
+             2,
+             2
+            ],
+            [
+             4,
+             4
+            ],
+            [
+             11,
+             11
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        },
+        "skeleton": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 3
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "seedCount": 3,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            7,
+            112
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 3,
+           "referenceSpan": [
+            7,
+            112
+           ],
+           "seeds": [
+            [
+             1,
+             1
+            ],
+            [
+             8,
+             8
+            ],
+            [
+             11,
+             11
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      },
+      {
+       "candidate": {
+        "id": "cyr.txt",
+        "sha256": "9938ec6f1e02c704235a90550515825d7f4d866da64198690f357b23efe4cca4"
+       },
+       "reference": {
+        "id": "src.txt",
+        "sha256": "d042564e4411564f160f26b8e4735ae123b069805e12b785be12d91508bb1e36"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 2,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 5,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "folded": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 1,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 4,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "skeleton": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 1,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 4,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      },
+      {
+       "candidate": {
+        "id": "reflow.txt",
+        "sha256": "980766b58f99c19266b29221b35d687201ef53ec70614a43807e3b63f5ccefe5"
+       },
+       "reference": {
+        "id": "src.txt",
+        "sha256": "d042564e4411564f160f26b8e4735ae123b069805e12b785be12d91508bb1e36"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 3
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "seedCount": 3,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            20,
+            137
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 3,
+           "referenceSpan": [
+            20,
+            134
+           ],
+           "seeds": [
+            [
+             3,
+             3
+            ],
+            [
+             10,
+             10
+            ],
+            [
+             15,
+             15
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        },
+        "folded": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 3
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "seedCount": 3,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            16,
+            115
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 3,
+           "referenceSpan": [
+            16,
+            112
+           ],
+           "seeds": [
+            [
+             2,
+             2
+            ],
+            [
+             4,
+             4
+            ],
+            [
+             11,
+             11
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        },
+        "skeleton": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 3
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "seedCount": 3,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            7,
+            115
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 3,
+           "referenceSpan": [
+            7,
+            112
+           ],
+           "seeds": [
+            [
+             1,
+             1
+            ],
+            [
+             8,
+             8
+            ],
+            [
+             11,
+             11
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      },
+      {
+       "candidate": {
+        "id": "unrel.txt",
+        "sha256": "8301dff0382f055488a138cfb794104a61c8e8a517d6b79c4fff0629f89819c7"
+       },
+       "reference": {
+        "id": "src.txt",
+        "sha256": "d042564e4411564f160f26b8e4735ae123b069805e12b785be12d91508bb1e36"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 4,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 7,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "folded": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 5,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 8,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "skeleton": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 2,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 5,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      }
+     ],
+     "profile": {
+      "configSha256": "35c1f63cc2f669a54acb5f9792614721431943b2fd626ffb88982e53bd37323e",
+      "id": "text-plain",
+      "version": "draft-1"
+     },
+     "referenceArtifactCount": 2,
+     "status": "compared",
+     "suppression": {
+      "status": "none"
+     }
     }
    }
   }

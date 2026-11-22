@@ -59,6 +59,18 @@ PROFILES = {
 # never as a supported catalogue profile for comparison.
 PROFILES[("go-tokens-exclusion-test", "draft-1")] = dict(PROFILES[("go-tokens", "draft-1")], exclusions=(("punct", ";"),),
                                                          testOnly=True)
+# Registered stage-1 profiles beyond Go and Rust (contract §3.6 step 5, §2b): channel lists and closed error codes.
+PROFILES[("ts-tokens", "draft-2")] = {
+    "lang": "ts", "exclusions": (("punct", ";"),), "channels": ("exact", "normalized"),
+    "codes": {"invalid-utf8", "bom", "nul", "input-too-large", "illegal-character", "unterminated-comment",
+              "unterminated-literal", "malformed-literal", "malformed-identifier", "unbalanced-delimiter"},
+    "literals": {"number", "bigint", "string", "template", "template-head", "template-middle", "template-tail", "regex",
+                 "jsx-text", "jsx-string"}}
+PROFILES[("text-plain", "draft-1")] = {
+    "lang": "text", "exclusions": (), "channels": ("exact", "folded", "skeleton"),
+    "codes": {"invalid-utf8", "nul", "input-too-large"}, "literals": set()}
+DOMAINS = {"traceweave-token-winnow-draft-1": b"traceweave/token-kgram/draft-1",
+           "traceweave-text-winnow-draft-1": b"traceweave/text-kgram/draft-1"}
 for _p in PROFILES.values():
     _p.setdefault("channels", ("exact", "normalized"))   # contract §2b: Go, Rust (and TypeScript) declare exactly these
 # TEST-ONLY three-channel profile (contract §2b): Go lexing, channels exact, normalized and classes, where classes
@@ -940,6 +952,7 @@ class Context:
         self.rep_schema = strict_loads((HERE / "report.schema.json").read_bytes())
         self.rec_schema = strict_loads((HERE / "record.schema.json").read_bytes())
         self.records = {r["id"]: r for r in strict_loads((HERE / "records.json").read_bytes())["records"]}
+        self.external = {}
         audit_schema(self.cat_schema)
         audit_schema(self.rep_schema)
         audit_schema(self.rec_schema)
@@ -971,7 +984,7 @@ def vector_inputs(v, doc, ctx, stats=None):
             fr = entry["fromRecords"]
             items = []
             for a in fr["artifacts"]:
-                rv = ctx.records[a["record"]]
+                rv = resolve_record(a["record"], ctx)
                 items.append((a["id"], rv["expectedRecordText"].encode("utf-8")))
                 texts[side][a["id"]] = base64.b64decode(rv["inputBase64"], validate=True)
             raw = catalogue_from_records((HERE / fr["extractionConfigFile"]).read_bytes(), items, ctx.rec_schema)
@@ -1090,7 +1103,9 @@ def check_all(doc, ctx, negatives, example):
     stats = dict.fromkeys(("catalogues", "fabricated", "synthetic", "pairs", "regions", "reportable", "rejected"), 0)
     need(comparison_config((HERE / doc["comparisonConfigFile"]).read_bytes()) is not None, "shipped comparison config invalid")
     need(sha((HERE / doc["comparisonConfigFile"]).read_bytes()) == doc["comparisonConfigSha256"], "comparison config digest")
-    for n in negatives + strict_loads((HERE / "comparison-config-negative-channels.json").read_bytes()):
+    chn = strict_loads((HERE / "comparison-config-negative-channels.json").read_bytes())
+    stats["channelNegatives"] = len(chn)
+    for n in negatives + chn:
         need(comparison_config(base64.b64decode(n["bytesBase64"])) is None, f"negative comparison config {n['id']} accepted")
     ids = set()
     for v in doc["vectors"]:
@@ -1256,6 +1271,11 @@ def corruptions(doc, negatives, example):
     yield make("mode-mismatch-compared", "tc-mode-mismatch-two-on-three",
                setp(lambda v: v["expectedReport"]["body"]["rejection"], "code", "config-mismatch"))
     yield make("test-only-flag-dropped", "tc-rename", lambda v: v.pop("testOnlyProfile"), do_refresh=False)
+    yield make("text-skeleton-match-dropped", "text-plain-three-modes",
+               setp(lambda v: v["expectedReport"]["body"]["pairs"][1]["modes"]["skeleton"], "outcome",
+                    {"class": "no-match", "code": "below-minimum-evidence"}))
+    yield make("text-folded-mode-dropped", "text-plain-three-modes",
+               lambda v: v["expectedReport"]["body"]["pairs"][4]["modes"].pop("folded"))
     yield make("wrong-rejection-code", "go-config-mismatch", setp(lambda v: v["expectedReport"]["body"]["rejection"], "code", "profile-mismatch"))
     yield make("wrong-rejection-side", "go-suppression-config-mismatch", setp(lambda v: v["expectedReport"]["body"]["rejection"], "side", "candidate"))
     yield make("insufficient-pair-compared", "go-insufficient-tokens",
@@ -1475,6 +1495,8 @@ def wrong_implementation_self_test(doc, ctx):
                 CATALOGUE_VARIANT[0] = name
             try:
                 got = compare(raws["reference"], raws["candidate"], cc_raw, ctx.cat_schema, raws.get("suppression"), variant=name)
+            except (KeyError, CheckError):
+                got = None      # the wrong implementation cannot even process this vector: caught
             finally:
                 CATALOGUE_VARIANT[0] = None
                 ALLOW_TEST_PROFILES[0] = False
@@ -1625,6 +1647,98 @@ def check_record_bytes(rb, rec_schema):
     return r
 
 
+def check_record_hashes(r, cfg):
+    """Recompute every k-gram hash, span, window selection and fingerprint from the record's own tokens and values
+    (exact: token text; other channels: their recorded values over their own stream). Profile-independent: it checks
+    the shared hashing and winnowing layer, not how values were derived."""
+    res = r["result"]
+    if res["status"] == "error":
+        return 0
+    toks, k = res["tokens"], cfg["k"]
+    need(list(res["channels"]) == list(cfg["channels"]), "record channels differ from the configuration's channels")
+    domain = DOMAINS[cfg["contract"]]
+    n = 0
+    for ch, c in res["channels"].items():
+        idx = c.get("tokenIndices", list(range(len(toks))))
+        stream = [toks[i] for i in idx]
+        vals = [t["text"] for t in stream] if ch == "exact" else c["values"]
+        need(len(vals) == len(stream), f"{ch}: values do not match the stream")
+        m = max(0, len(stream) - k + 1)
+        parts = [domain, cfg["profile"].encode(), cfg["profileVersion"].encode(), ch.encode()]
+        head = b"".join(len(x).to_bytes(4, "big") + x for x in parts) + k.to_bytes(4, "big")
+        hashes = []
+        for i in range(m):
+            buf = bytearray(head)
+            for t, v in zip(stream[i:i + k], vals[i:i + k]):
+                for x in (t["class"].encode(), v.encode()):
+                    buf += len(x).to_bytes(4, "big") + x
+            hashes.append(hashlib.sha256(bytes(buf)).digest()[:8].hex())
+        spans = [[stream[i]["span"][0], stream[i + k - 1]["span"][1]] for i in range(m)]
+        need(c["kgrams"] == [{"position": i, "hash": hashes[i], "span": spans[i]} for i in range(m)],
+             f"{ch}: k-grams differ from the hashes of the recorded values")
+        picks, partial = winnow(hashes, cfg["window"])
+        need(c["windowSelections"] == picks and c["partialWindow"] == partial, f"{ch}: window selection differs")
+        need(c["fingerprints"] == [{"position": q, "hash": hashes[q], "span": spans[q]} for q in sorted(set(picks))],
+             f"{ch}: fingerprints differ")
+        n += m
+    return n
+
+
+def resolve_record(ref, ctx):
+    """A record reference: an id in records.json, or `path#id` into another records file (e.g. the text lane's)."""
+    if "#" not in ref:
+        return ctx.records[ref]
+    path, rid = ref.split("#", 1)
+    full = (HERE / path).resolve()
+    need(full.is_relative_to(HERE.parent), "record file outside research/drafts")
+    if path not in ctx.external:
+        ctx.external[path] = {r["id"]: r for r in strict_loads(full.read_bytes())["records"]}
+    return ctx.external[path][rid]
+
+
+def check_external_records(path, ctx, doc=None):
+    """Validate every record of another lane's records file (contract §2a, §2b): named configuration and digests,
+    canonical bytes and schema, closed codes, Q10 nulls, input digest and length, and the hashing layer."""
+    base = (HERE / path).resolve().parent
+    doc = doc if doc is not None else strict_loads((HERE / path).read_bytes())
+    need(doc["recordVersion"] == RECORD_VERSION, f"{path}: recordVersion")
+    n = kgrams = 0
+    for v in doc["records"]:
+        try:
+            need(("configFile" in v) != ("configBase64" in v), "exactly one of configFile / configBase64")
+            cfg_raw = (base / v["configFile"]).read_bytes() if "configFile" in v else base64.b64decode(v["configBase64"], validate=True)
+            need(v["configSha256"] == sha(cfg_raw), "configSha256 is not the digest of the named configuration")
+            rb = v["expectedRecordText"].encode("utf-8")
+            need(sha(rb) == v["expectedRecordSha256"], "expectedRecordSha256 is not the digest of the record bytes")
+            r = check_record_bytes(rb, ctx.rec_schema)
+            need(r["configSha256"] == v["configSha256"], "record configSha256 differs from the entry's")
+            data = base64.b64decode(v["inputBase64"], validate=True)
+            res = r["result"]
+            code = res["error"]["code"] if res["status"] == "error" else None
+            if code == "unsupported-config":
+                need(r["profile"] is None, "unsupported-config record names a profile")
+            else:
+                cfg = parse_extraction_config(cfg_raw)
+                prof = supported(cfg["profile"], cfg["profileVersion"])
+                need(prof is not None, f"profile {cfg['profile']}/{cfg['profileVersion']} is not registered")
+                need(list(cfg["channels"]) == list(prof["channels"]), "configuration channels are not the profile's list")
+                need([r["profile"], r["profileVersion"]] == [cfg["profile"], cfg["profileVersion"]], "record profile differs")
+                if code == "input-too-large":
+                    need(len(data) > cfg["maxInputBytes"], "input-too-large for an input within the limit")
+                else:
+                    need([r["inputSha256"], r["inputLength"]] == [sha(data), len(data)], "input digest or length differs")
+                if code is None:
+                    for t in res["tokens"]:
+                        need(data[t["span"][0]:t["span"][1]] == t["text"].encode("utf-8") or t.get("inserted"),
+                             "token text != input[span]")
+                    need((res["status"] == "ok") == (res["tokenCount"] >= cfg["k"]), "status inconsistent with k")
+                    kgrams += check_record_hashes(r, cfg)
+            n += 1
+        except CheckError as exc:
+            raise CheckError(f"{path}:{v['id']}: {exc}") from None
+    return n, kgrams
+
+
 def catalogue_from_records(cfg_raw, items, rec_schema):
     """Contract §3.8: build catalogue bytes from (id, record bytes) pairs, or raise CheckError."""
     cfg = parse_extraction_config(cfg_raw)
@@ -1656,6 +1770,7 @@ def catalogue_from_records(cfg_raw, items, rec_schema):
 def check_records(rdoc, mdoc, ctx):
     need(rdoc["recordVersion"] == RECORD_VERSION, "records.json recordVersion")
     stats = {"records": 0, "nullInput": 0, "catalogues": 0, "rejections": 0}
+    stats["textRecords"], stats["textKgrams"] = check_external_records("../extraction-vectors-text/records-text-plain.json", ctx)
     by_id, codes = {}, set()
     for v in rdoc["records"]:
         try:
@@ -1689,6 +1804,8 @@ def check_records(rdoc, mdoc, ctx):
             need(strict_loads(rb[:-1])["configSha256"] == v["configSha256"], "record configSha256 differs from the entry's")
             r = check_record_bytes(rb, ctx.rec_schema)
             need(rb == expected_record(cfg_raw, data, result), "record differs from the one derived from its source")
+            if r["result"]["status"] != "error":
+                check_record_hashes(r, parse_extraction_config(named))
             by_id[v["id"]] = rb
             codes.add(r["result"]["status"] if r["result"]["status"] != "error" else r["result"]["error"]["code"])
             stats["records"] += 1
@@ -1699,16 +1816,21 @@ def check_records(rdoc, mdoc, ctx):
          and codes - {"ok", "insufficient-tokens", "unsupported-config", "input-too-large"},
          "record vectors must cover ok, insufficient-tokens, a lexical error, unsupported-config and input-too-large")
     mvec = {v["id"]: v for v in mdoc["vectors"]}
+
+    def rec_bytes(ref):
+        return by_id[ref] if "#" not in ref else resolve_record(ref, ctx)["expectedRecordText"].encode("utf-8")
     for c in rdoc["cataloguesFromRecords"]:
         ALLOW_TEST_PROFILES[0] = bool(c.get("testOnlyProfile"))
         try:
             cb = catalogue_from_records((HERE / c["extractionConfigFile"]).read_bytes(),
-                                        [(a["id"], by_id[a["record"]]) for a in c["artifacts"]], ctx.rec_schema)
+                                        [(a["id"], rec_bytes(a["record"])) for a in c["artifacts"]], ctx.rec_schema)
             need(sha(cb) == c["expectedCatalogueSha256"], f"{c['id']}: catalogue from records digest")
             need(catalogue_rejection(cb, ctx.cat_schema)[1] is None, f"{c['id']}: catalogue fails the §3.6 rules")
             if "sameAs" in c:
                 vid, side = c["sameAs"].split("#", 1)[1].split("/")
                 need(sha(cb) == mvec[vid][side]["sha256"], f"{c['id']}: differs from the catalogue in {c['sameAs']}")
+            elif any("#" in a["record"] for a in c["artifacts"]):
+                pass    # records of another lane, validated by check_external_records()
             elif any(next(r for r in rdoc["records"] if r["id"] == a["record"]).get("rederivedFromTokens") for a in c["artifacts"]):
                 pass    # re-derived records were each checked against derive_result() above; no extraction vector holds them
             else:   # rebuild from the extraction vectors behind the records
@@ -1818,6 +1940,10 @@ def record_corruptions(rdoc):
     next(r for r in d["records"] if r["id"] == "rec-3ch-format-a").pop("rederivedFromTokens")
     yield "rederivation-undeclared", d
     d = copy.deepcopy(rdoc)
+    c = next(x for x in d["cataloguesFromRecords"] if x["id"] == "cat-text-plain")
+    c["artifacts"][2]["record"] = c["artifacts"][2]["record"].replace("rec-plain-reflow-a", "rec-plain-reflow-b")
+    yield "text-catalogue-wrong-record", d
+    d = copy.deepcopy(rdoc)
     d["records"][0].pop("configFile")
     yield "config-not-named", d
     d = copy.deepcopy(rdoc)
@@ -1853,7 +1979,7 @@ def main(argv):
     print(f"PASS {path.name}: vectors={len(doc['vectors'])} catalogues-rebuilt={stats['catalogues']} "
           f"synthetic-catalogues={stats['synthetic']} fabricated-catalogues={stats['fabricated']} pairs={stats['pairs']} "
           f"regions={stats['regions']} reportable={stats['reportable']} rejected-reports={stats['rejected']} "
-          f"comparison-config-negatives={len(negatives)}/{len(negatives)} + channel-list negatives 6/6 rejected; example-report.json valid")
+          f"comparison-config-negatives={len(negatives)}/{len(negatives)} + channel-list negatives {stats['channelNegatives']}/{stats['channelNegatives']} rejected; example-report.json valid")
     print("  rule situations (vectors each, minimum 2): " + ", ".join(f"{k}={n}" for k, n in stats["situations"].items()))
     missed = []
     results = []
@@ -1891,8 +2017,10 @@ def main(argv):
     try:
         rdoc = strict_loads((HERE / "records.json").read_bytes())
         rs = check_records(rdoc, doc, ctx)
+        print(f"PASS records-text-plain.json (text lane, external): {rs['textRecords']}/60 records valid, "
+              f"{rs['textKgrams']} k-gram hashes recomputed from recorded values")
         print(f"PASS records.json: records={rs['records']} (null input fields: {rs['nullInput']}) "
-              f"catalogues-from-records={rs["catalogues"]} (2 equal to matching.json catalogues, 1 to a rebuild from extraction vectors, 1 from re-derived records) build-rejections={rs['rejections']}")
+              f"catalogues-from-records={rs["catalogues"]} (2 equal to matching.json catalogues, 1 to a rebuild from extraction vectors, 1 from re-derived records, 1 from text-plain records) build-rejections={rs['rejections']}")
     except CheckError as exc:
         print(f"FAIL records.json: {exc}")
         return 1
@@ -1905,6 +2033,29 @@ def main(argv):
             rec_results.append((name, str(exc)))
     for name, msg in rec_results:
         print(f"  record corruption {name}: {'REJECTED: ' + msg if msg else 'ACCEPTED (checker defect)'}")
+    TP = "../extraction-vectors-text/records-text-plain.json"
+    tdoc = strict_loads((HERE / TP).read_bytes())
+
+    def tmut(rid, fn):
+        d = copy.deepcopy(tdoc)
+        v = next(x for x in d["records"] if x["id"] == rid)
+        r = json.loads(v["expectedRecordText"])
+        fn(r)
+        v["expectedRecordText"] = write_record(r)
+        v["expectedRecordSha256"] = sha(v["expectedRecordText"].encode("utf-8"))
+        return d
+    for name, d in (
+            ("text-skeleton-value-changed", tmut("rec-plain-reflow-a", lambda r: r["result"]["channels"]["skeleton"]["values"].__setitem__(0, "x"))),
+            ("text-channels-reordered", tmut("rec-plain-reflow-a", lambda r: r["result"].__setitem__("channels", {
+                "exact": r["result"]["channels"]["exact"], "skeleton": r["result"]["channels"]["skeleton"],
+                "folded": r["result"]["channels"]["folded"]}))),
+            ("text-code-not-in-profile", tmut("rec-plain-err-nul", lambda r: r["result"]["error"].__setitem__("code", "bom")))):
+        try:
+            check_external_records(TP, ctx, d)
+            rec_results.append((name, None))
+        except CheckError as exc:
+            rec_results.append((name, str(exc)))
+        print(f"  record corruption {name}: {'REJECTED: ' + rec_results[-1][1] if rec_results[-1][1] else 'ACCEPTED (checker defect)'}")
     rec_missed = [n for n, m in rec_results if m is None]
     print(f"{'PASS' if not rec_missed else 'FAIL'} record corruption self-test: rejected "
           f"{len(rec_results) - len(rec_missed)}/{len(rec_results)}")
