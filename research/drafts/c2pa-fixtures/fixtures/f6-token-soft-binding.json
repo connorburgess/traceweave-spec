@@ -1,0 +1,588 @@
+{
+  "fixtureVersion": "traceweave-c2pa-fixture-draft-1",
+  "id": "f6-token-soft-binding",
+  "kind": "soft-binding-tokens",
+  "notice": "Illustrative only: CBOR/JUMBF structures in JSON diagnostic form. Not a signed C2PA manifest, not produced or validated by any C2PA implementation, and no compatibility claim is made.",
+  "c2paVersion": "2.5",
+  "description": "A Go token-catalogue entry written as two soft-binding assertions, one per channel; spans are not carried.",
+  "sourceRef": {
+    "path": "test-vectors/matching/matching.json",
+    "sha256": "2f3406323014d065267cceab327bc33e5975fdf5325411a4c6d71b21f905dbdc",
+    "entry": "go-function-in-host reference sum.go"
+  },
+  "traceweave": {
+    "catalogueVersion": "traceweave-catalogue-draft-2",
+    "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+    },
+    "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+        "exact",
+        "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+    },
+    "artifact": {
+      "byteLength": 127,
+      "id": "sum.go",
+      "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+      "status": "ok",
+      "tokenCount": 40,
+      "channels": {
+        "exact": {
+          "fingerprints": [
+            {
+              "hash": "13c53975ffd60dcc",
+              "position": 2,
+              "span": [
+                16,
+                29
+              ]
+            },
+            {
+              "hash": "330210cd0c3466ab",
+              "position": 3,
+              "span": [
+                17,
+                30
+              ]
+            },
+            {
+              "hash": "3d497652a23fceab",
+              "position": 5,
+              "span": [
+                25,
+                36
+              ]
+            },
+            {
+              "hash": "3c56878685555e32",
+              "position": 8,
+              "span": [
+                31,
+                48
+              ]
+            },
+            {
+              "hash": "2f8f40a61dcfae85",
+              "position": 12,
+              "span": [
+                47,
+                56
+              ]
+            },
+            {
+              "hash": "423c6c9d5d7a23e7",
+              "position": 16,
+              "span": [
+                55,
+                74
+              ]
+            },
+            {
+              "hash": "02937060fc62470c",
+              "position": 19,
+              "span": [
+                62,
+                83
+              ]
+            },
+            {
+              "hash": "08bdc1a417005230",
+              "position": 21,
+              "span": [
+                75,
+                87
+              ]
+            },
+            {
+              "hash": "233116908c1f7fdf",
+              "position": 22,
+              "span": [
+                79,
+                89
+              ]
+            },
+            {
+              "hash": "79a8f5e4448bba08",
+              "position": 24,
+              "span": [
+                84,
+                101
+              ]
+            },
+            {
+              "hash": "a036c4dd8fd8dddf",
+              "position": 27,
+              "span": [
+                93,
+                107
+              ]
+            },
+            {
+              "hash": "725af00bf2abe7a3",
+              "position": 29,
+              "span": [
+                102,
+                110
+              ]
+            },
+            {
+              "hash": "5c344617045cf67d",
+              "position": 30,
+              "span": [
+                103,
+                110
+              ]
+            },
+            {
+              "hash": "76a6eecc8c7a8901",
+              "position": 33,
+              "span": [
+                109,
+                124
+              ]
+            }
+          ],
+          "kgramCount": 36,
+          "partialWindow": false
+        },
+        "normalized": {
+          "fingerprints": [
+            {
+              "hash": "18da42eca06cd4a1",
+              "position": 0,
+              "span": [
+                0,
+                25
+              ]
+            },
+            {
+              "hash": "31d938568ab36b20",
+              "position": 4,
+              "span": [
+                24,
+                34
+              ]
+            },
+            {
+              "hash": "1beb73344cd06447",
+              "position": 6,
+              "span": [
+                26,
+                43
+              ]
+            },
+            {
+              "hash": "13515a9361cb6941",
+              "position": 7,
+              "span": [
+                29,
+                46
+              ]
+            },
+            {
+              "hash": "38ecb2aa93d2dc60",
+              "position": 8,
+              "span": [
+                31,
+                48
+              ]
+            },
+            {
+              "hash": "5b464df2df0f81f9",
+              "position": 9,
+              "span": [
+                35,
+                48
+              ]
+            },
+            {
+              "hash": "91c4632deae1e20f",
+              "position": 10,
+              "span": [
+                38,
+                53
+              ]
+            },
+            {
+              "hash": "43d309ceb22374c8",
+              "position": 14,
+              "span": [
+                50,
+                61
+              ]
+            },
+            {
+              "hash": "233ab16433c2d8fb",
+              "position": 15,
+              "span": [
+                54,
+                67
+              ]
+            },
+            {
+              "hash": "538093b29a561332",
+              "position": 18,
+              "span": [
+                59,
+                81
+              ]
+            },
+            {
+              "hash": "1e71d06c4e29e3eb",
+              "position": 21,
+              "span": [
+                75,
+                87
+              ]
+            },
+            {
+              "hash": "3f23472de367053b",
+              "position": 25,
+              "span": [
+                86,
+                103
+              ]
+            },
+            {
+              "hash": "345ab877317b6271",
+              "position": 26,
+              "span": [
+                88,
+                103
+              ]
+            },
+            {
+              "hash": "2ea7cfbedf6a3813",
+              "position": 27,
+              "span": [
+                93,
+                107
+              ]
+            },
+            {
+              "hash": "1a900123cb5873b4",
+              "position": 28,
+              "span": [
+                99,
+                107
+              ]
+            },
+            {
+              "hash": "2d2dd98d75a840f9",
+              "position": 32,
+              "span": [
+                107,
+                124
+              ]
+            },
+            {
+              "hash": "23d66ee0192f35a1",
+              "position": 35,
+              "span": [
+                112,
+                126
+              ]
+            }
+          ],
+          "kgramCount": 36,
+          "partialWindow": false
+        }
+      }
+    }
+  },
+  "mapping": {
+    "unregisteredAlg": true,
+    "lossy": [
+      {
+        "field": "/profile",
+        "reason": "carried only in bindingMetadata",
+        "carriedAt": "/assertions/c2pa.soft-binding/bindingMetadata/invalid.traceweave.profile"
+      },
+      {
+        "field": "/extractionConfig",
+        "reason": "carried only in bindingMetadata; k, window and hash framing have no C2PA meaning",
+        "carriedAt": "/assertions/c2pa.soft-binding/bindingMetadata/invalid.traceweave.extractionConfig"
+      },
+      {
+        "field": "/artifact/channels/exact/fingerprints/*/position",
+        "reason": "block order keeps the sequence; the k-gram position number is lost"
+      },
+      {
+        "field": "/artifact/channels/normalized/fingerprints/*/position",
+        "reason": "block order keeps the sequence; the k-gram position number is lost"
+      }
+    ],
+    "unmapped": [
+      {
+        "field": "/catalogueVersion",
+        "reason": "no C2PA field"
+      },
+      {
+        "field": "/artifact/id",
+        "reason": "caller-chosen label"
+      },
+      {
+        "field": "/artifact/byteLength",
+        "reason": "the data hash assertion carries no length"
+      },
+      {
+        "field": "/artifact/status",
+        "reason": "no C2PA field; error and insufficient-tokens entries produce no soft binding"
+      },
+      {
+        "field": "/artifact/tokenCount",
+        "reason": "no C2PA field"
+      },
+      {
+        "field": "/artifact/channels/exact/kgramCount",
+        "reason": "no C2PA field"
+      },
+      {
+        "field": "/artifact/channels/exact/partialWindow",
+        "reason": "no C2PA field"
+      },
+      {
+        "field": "/artifact/channels/normalized/kgramCount",
+        "reason": "no C2PA field"
+      },
+      {
+        "field": "/artifact/channels/normalized/partialWindow",
+        "reason": "no C2PA field"
+      }
+    ],
+    "opaque": [],
+    "conflicting": [
+      {
+        "field": "/artifact/channels/exact/fingerprints/*/span",
+        "reason": "a half-open UTF-8 byte span has no C2PA home: a textual range counts characters with an inclusive end inside a fragment identifier (16.9.2.2.5), so it is not written"
+      },
+      {
+        "field": "/artifact/channels/normalized/fingerprints/*/span",
+        "reason": "a half-open UTF-8 byte span has no C2PA home: a textual range counts characters with an inclusive end inside a fragment identifier (16.9.2.2.5), so it is not written"
+      }
+    ]
+  },
+  "c2pa": {
+    "fragment": "only the assertions this mapping needs; not a complete manifest",
+    "activeManifest": "urn:c2pa:00000000-0000-4000-8000-000000000002",
+    "claim": {
+      "instanceID": "xmp:iid:00000000-0000-4000-8000-000000000002",
+      "claim_generator_info": {
+        "name": "traceweave-c2pa-fixture-builder",
+        "version": "draft-1",
+        "specVersion": "2.5.0"
+      },
+      "signature": "self#jumbf=c2pa.signature",
+      "alg": "sha256",
+      "created_assertions": [
+        {
+          "url": "self#jumbf=c2pa.assertions/c2pa.hash.data",
+          "hash": "not computed: no JUMBF box was serialized"
+        },
+        {
+          "url": "self#jumbf=c2pa.assertions/c2pa.soft-binding",
+          "hash": "not computed: no JUMBF box was serialized"
+        },
+        {
+          "url": "self#jumbf=c2pa.assertions/c2pa.soft-binding__1",
+          "hash": "not computed: no JUMBF box was serialized"
+        }
+      ]
+    },
+    "assertions": {
+      "c2pa.hash.data": {
+        "alg": "sha256",
+        "hash": "h'974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c'",
+        "pad": "h''",
+        "name": "whole file; sidecar manifest, no exclusions"
+      },
+      "c2pa.soft-binding": {
+        "alg": "invalid.traceweave.go-tokens.exact.draft-1",
+        "blocks": [
+          {
+            "scope": {},
+            "value": "h'13c53975ffd60dcc'"
+          },
+          {
+            "scope": {},
+            "value": "h'330210cd0c3466ab'"
+          },
+          {
+            "scope": {},
+            "value": "h'3d497652a23fceab'"
+          },
+          {
+            "scope": {},
+            "value": "h'3c56878685555e32'"
+          },
+          {
+            "scope": {},
+            "value": "h'2f8f40a61dcfae85'"
+          },
+          {
+            "scope": {},
+            "value": "h'423c6c9d5d7a23e7'"
+          },
+          {
+            "scope": {},
+            "value": "h'02937060fc62470c'"
+          },
+          {
+            "scope": {},
+            "value": "h'08bdc1a417005230'"
+          },
+          {
+            "scope": {},
+            "value": "h'233116908c1f7fdf'"
+          },
+          {
+            "scope": {},
+            "value": "h'79a8f5e4448bba08'"
+          },
+          {
+            "scope": {},
+            "value": "h'a036c4dd8fd8dddf'"
+          },
+          {
+            "scope": {},
+            "value": "h'725af00bf2abe7a3'"
+          },
+          {
+            "scope": {},
+            "value": "h'5c344617045cf67d'"
+          },
+          {
+            "scope": {},
+            "value": "h'76a6eecc8c7a8901'"
+          }
+        ],
+        "name": "winnowed exact-channel fingerprints, one block each, in position order",
+        "bindingMetadata": {
+          "invalid.traceweave.profile": {
+            "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+            "id": "go-tokens",
+            "version": "draft-1"
+          },
+          "invalid.traceweave.extractionConfig": {
+            "contract": "traceweave-token-winnow-draft-1",
+            "profile": "go-tokens",
+            "profileVersion": "draft-1",
+            "channels": [
+              "exact",
+              "normalized"
+            ],
+            "k": 5,
+            "window": 4,
+            "hash": "sha256-first8-u64be",
+            "maxInputBytes": 1048576
+          }
+        }
+      },
+      "c2pa.soft-binding__1": {
+        "alg": "invalid.traceweave.go-tokens.normalized.draft-1",
+        "blocks": [
+          {
+            "scope": {},
+            "value": "h'18da42eca06cd4a1'"
+          },
+          {
+            "scope": {},
+            "value": "h'31d938568ab36b20'"
+          },
+          {
+            "scope": {},
+            "value": "h'1beb73344cd06447'"
+          },
+          {
+            "scope": {},
+            "value": "h'13515a9361cb6941'"
+          },
+          {
+            "scope": {},
+            "value": "h'38ecb2aa93d2dc60'"
+          },
+          {
+            "scope": {},
+            "value": "h'5b464df2df0f81f9'"
+          },
+          {
+            "scope": {},
+            "value": "h'91c4632deae1e20f'"
+          },
+          {
+            "scope": {},
+            "value": "h'43d309ceb22374c8'"
+          },
+          {
+            "scope": {},
+            "value": "h'233ab16433c2d8fb'"
+          },
+          {
+            "scope": {},
+            "value": "h'538093b29a561332'"
+          },
+          {
+            "scope": {},
+            "value": "h'1e71d06c4e29e3eb'"
+          },
+          {
+            "scope": {},
+            "value": "h'3f23472de367053b'"
+          },
+          {
+            "scope": {},
+            "value": "h'345ab877317b6271'"
+          },
+          {
+            "scope": {},
+            "value": "h'2ea7cfbedf6a3813'"
+          },
+          {
+            "scope": {},
+            "value": "h'1a900123cb5873b4'"
+          },
+          {
+            "scope": {},
+            "value": "h'2d2dd98d75a840f9'"
+          },
+          {
+            "scope": {},
+            "value": "h'23d66ee0192f35a1'"
+          }
+        ],
+        "name": "winnowed normalized-channel fingerprints, one block each, in position order",
+        "bindingMetadata": {
+          "invalid.traceweave.profile": {
+            "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+            "id": "go-tokens",
+            "version": "draft-1"
+          },
+          "invalid.traceweave.extractionConfig": {
+            "contract": "traceweave-token-winnow-draft-1",
+            "profile": "go-tokens",
+            "profileVersion": "draft-1",
+            "channels": [
+              "exact",
+              "normalized"
+            ],
+            "k": 5,
+            "window": 4,
+            "hash": "sha256-first8-u64be",
+            "maxInputBytes": 1048576
+          }
+        }
+      }
+    },
+    "signature": "absent: nothing was signed"
+  }
+}

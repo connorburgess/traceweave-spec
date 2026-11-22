@@ -1,0 +1,214 @@
+{
+  "fixtureVersion": "traceweave-c2pa-fixture-draft-1",
+  "id": "neg-conflict-undeclared",
+  "kind": "mark-detection",
+  "notice": "Illustrative only: CBOR/JUMBF structures in JSON diagnostic form. Not a signed C2PA manifest, not produced or validated by any C2PA implementation, and no compatibility claim is made.",
+  "c2paVersion": "2.5",
+  "description": "An invented mark-detection record against the soft binding and watermarked.bound action an embedder would write.",
+  "sourceRef": {
+    "path": null,
+    "note": "invented values; no mark was embedded or detected"
+  },
+  "traceweave": {
+    "recordKind": "mark-detection-illustrative",
+    "artifact": {
+      "sha256": "ba32f9f5b0a780296d6769bf9f756ca342eed931f0615a0f6258fc7cdb3147aa",
+      "role": "query"
+    },
+    "carrier": {
+      "algorithm": "trustmark",
+      "variant": "P",
+      "codeCommit": "0000000000000000000000000000000000000000",
+      "weightSha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "region": {
+      "unit": "pixel",
+      "basis": "after-exif-orientation",
+      "x": 0,
+      "y": 0,
+      "width": 512,
+      "height": 512,
+      "imageWidth": 512,
+      "imageHeight": 512
+    },
+    "raw": {
+      "bitCount": 100,
+      "bitsHex": "a5c3e1f00f1e3c5a96a5c3e1f0"
+    },
+    "decoded": {
+      "status": "ok",
+      "ecc": "BCH_5",
+      "payloadHex": "1f2e3d4c5b6a7980"
+    },
+    "statistic": {
+      "name": "expected-payload-agreement",
+      "matchedBits": 97,
+      "comparedBits": 100,
+      "threshold": 90,
+      "calibrationId": "none"
+    },
+    "outcome": {
+      "class": "match",
+      "code": "expected-payload"
+    },
+    "searchScope": {
+      "keys": 1,
+      "expectedPayloads": 1
+    },
+    "confidence": null
+  },
+  "mapping": {
+    "unregisteredAlg": false,
+    "direction": "the C2PA side is what the embedder's manifest would hold; a detection is a verifier result with no C2PA home",
+    "lossy": [
+      {
+        "field": "/region/imageWidth",
+        "reason": "a pixel rectangle does not record the image size it refers to"
+      },
+      {
+        "field": "/region/imageHeight",
+        "reason": "a pixel rectangle does not record the image size it refers to"
+      }
+    ],
+    "unmapped": [
+      {
+        "field": "/recordKind",
+        "reason": "no C2PA field"
+      },
+      {
+        "field": "/artifact",
+        "reason": "the queried artifact is not the asset the embedder's manifest binds"
+      },
+      {
+        "field": "/carrier/algorithm",
+        "reason": "folded into alg"
+      },
+      {
+        "field": "/carrier/codeCommit",
+        "reason": "the algorithm entry pins no code commit"
+      },
+      {
+        "field": "/carrier/weightSha256",
+        "reason": "the algorithm entry pins no weights"
+      },
+      {
+        "field": "/raw",
+        "reason": "raw bits before error correction have no C2PA field"
+      },
+      {
+        "field": "/decoded/status",
+        "reason": "no C2PA field"
+      },
+      {
+        "field": "/decoded/ecc",
+        "reason": "no C2PA field"
+      },
+      {
+        "field": "/statistic",
+        "reason": "presence statistic, threshold and calibration id are verifier results"
+      },
+      {
+        "field": "/outcome",
+        "reason": "no C2PA outcome vocabulary"
+      },
+      {
+        "field": "/searchScope",
+        "reason": "no C2PA field; needed to bound false detections"
+      },
+      {
+        "field": "/confidence",
+        "reason": "empty because nothing is calibrated; C2PA has no confidence field"
+      }
+    ],
+    "opaque": [],
+    "conflicting": [
+      {
+        "field": "/decoded/payloadHex",
+        "reason": "the value byte layout is algorithm-specific (16.3.7.4) and was not checked against the TrustMark informational page"
+      }
+    ]
+  },
+  "c2pa": {
+    "fragment": "only the assertions this mapping needs; not a complete manifest",
+    "activeManifest": "urn:c2pa:00000000-0000-4000-8000-000000000004",
+    "claim": {
+      "instanceID": "xmp:iid:00000000-0000-4000-8000-000000000004",
+      "claim_generator_info": {
+        "name": "traceweave-c2pa-fixture-builder",
+        "version": "draft-1",
+        "specVersion": "2.5.0"
+      },
+      "signature": "self#jumbf=c2pa.signature",
+      "alg": "sha256",
+      "created_assertions": [
+        {
+          "url": "self#jumbf=c2pa.assertions/c2pa.hash.data",
+          "hash": "not computed: no JUMBF box was serialized"
+        },
+        {
+          "url": "self#jumbf=c2pa.assertions/c2pa.soft-binding",
+          "hash": "not computed: no JUMBF box was serialized"
+        },
+        {
+          "url": "self#jumbf=c2pa.assertions/c2pa.actions.v2",
+          "hash": "not computed: no JUMBF box was serialized"
+        }
+      ]
+    },
+    "assertions": {
+      "c2pa.hash.data": {
+        "alg": "sha256",
+        "hash": "h'0000000000000000000000000000000000000000000000000000000000000000'",
+        "pad": "h''",
+        "name": "hard binding of the marked asset written by the embedder; unknown to a detector, so zero here"
+      },
+      "c2pa.soft-binding": {
+        "alg": "com.adobe.trustmark.P",
+        "blocks": [
+          {
+            "scope": {
+              "region": {
+                "region": [
+                  {
+                    "type": "spatial",
+                    "shape": {
+                      "type": "rectangle",
+                      "unit": "pixel",
+                      "origin": {
+                        "x": 0.0,
+                        "y": 0.0
+                      },
+                      "width": 512.0,
+                      "height": 512.0
+                    }
+                  }
+                ]
+              }
+            },
+            "value": "h'1f2e3d4c5b6a7980'"
+          }
+        ]
+      },
+      "c2pa.actions.v2": {
+        "actions": [
+          {
+            "action": "c2pa.watermarked.bound",
+            "parameters": {
+              "relatedAssertions": [
+                {
+                  "url": "self#jumbf=c2pa.assertions/c2pa.soft-binding",
+                  "hash": "not computed: no JUMBF box was serialized"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "signature": "absent: nothing was signed"
+  },
+  "expect": {
+    "code": "conflict-undeclared",
+    "why": "the orientation basis conflict is not declared"
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "fixtureVersion": "traceweave-c2pa-fixture-draft-1",
+  "id": "f1-image-pdq-soft-binding",
+  "kind": "soft-binding-image",
+  "notice": "Illustrative only: CBOR/JUMBF structures in JSON diagnostic form. Not a signed C2PA manifest, not produced or validated by any C2PA implementation, and no compatibility claim is made.",
+  "c2paVersion": "2.5",
+  "description": "An image-catalogue PDQ fingerprint written as a c2pa.soft-binding assertion beside a whole-file hard binding.",
+  "sourceRef": {
+    "path": "research/experiments/image-fingerprint/results/e-img-f-2/full-1/catalogue.json",
+    "sha256": "1253c88eb1f81287c90b27966a194c763e41ecd505dd40306eda05bedb894f9d",
+    "entry": "s0000000"
+  },
+  "traceweave": {
+    "catalogueVersion": "traceweave-image-catalogue-draft-1",
+    "profile": {
+      "configSha256": "c740e92de69a47904fa81bb3614c086194717be856fa6a44d89ad6fdba3bb927",
+      "id": "traceweave-image-fingerprint",
+      "version": "draft-2"
+    },
+    "matchingConfigSha256": "fe3fa0395d3701fa5b1b55839063998eba528851d4f9e3dcaca62d3a0f6c97ac",
+    "artifact": {
+      "byteLength": 440974,
+      "decode": {
+        "exifOrientation": 1,
+        "format": "PNG",
+        "height": 512,
+        "iccPresent": false,
+        "sourceMode": "RGB",
+        "status": "ok",
+        "width": 512
+      },
+      "id": "s0000000",
+      "iscc": {
+        "hash": "9275ec9d171707c1",
+        "status": "ok"
+      },
+      "pdq": {
+        "hash": "f1fbe0d7c9d6e92e3c3cbf1c340115c3c783db4149e0357424f48698c99b09d7",
+        "quality": 100,
+        "status": "ok"
+      },
+      "sha256": "04a3e978c7018455ab5fc3889f3cd0c0956898e1d35f65f872cbf3f0076b718f"
+    }
+  },
+  "mapping": {
+    "unregisteredAlg": true,
+    "lossy": [
+      {
+        "field": "/artifact/pdq/quality",
+        "reason": "carried only in bindingMetadata, which a validator should not use (16.3.7.3.1); the quality floor and abstention it drives have no C2PA meaning",
+        "carriedAt": "/assertions/c2pa.soft-binding/bindingMetadata/invalid.traceweave.pdqQuality"
+      },
+      {
+        "field": "/profile",
+        "reason": "carried only in bindingMetadata; the alg string names an algorithm, not a profile triple with a configuration digest",
+        "carriedAt": "/assertions/c2pa.soft-binding/bindingMetadata/invalid.traceweave.profile"
+      },
+      {
+        "field": "/matchingConfigSha256",
+        "reason": "threshold and dihedral policy; C2PA leaves matching to the algorithm entry (16.3.7.5.1)",
+        "carriedAt": "/assertions/c2pa.soft-binding/bindingMetadata/invalid.traceweave.matchingConfigSha256"
+      },
+      {
+        "field": "/artifact/decode/width",
+        "reason": "whole-image scope is written as an empty scope; the pixel size is not carried"
+      },
+      {
+        "field": "/artifact/decode/height",
+        "reason": "whole-image scope is written as an empty scope; the pixel size is not carried"
+      }
+    ],
+    "unmapped": [
+      {
+        "field": "/catalogueVersion",
+        "reason": "no C2PA field for a Traceweave record format"
+      },
+      {
+        "field": "/artifact/id",
+        "reason": "caller-chosen label; instanceID identifies the asset version, not a catalogue entry"
+      },
+      {
+        "field": "/artifact/byteLength",
+        "reason": "the data hash assertion carries no length"
+      },
+      {
+        "field": "/artifact/pdq/status",
+        "reason": "an abstaining entry produces no soft binding at all; C2PA has no abstention record"
+      },
+      {
+        "field": "/artifact/iscc",
+        "reason": "a 64-bit Image-Code body without ISCC header is not an io.iscc.v0 value: IEP-0020 requires 256-bit units including Data-Code and Instance-Code and ignores shorter units"
+      },
+      {
+        "field": "/artifact/decode/status",
+        "reason": "no C2PA field for a decoder result"
+      },
+      {
+        "field": "/artifact/decode/format",
+        "reason": "implied by the asset container; C2PA records no decoder view"
+      },
+      {
+        "field": "/artifact/decode/sourceMode",
+        "reason": "no C2PA field"
+      },
+      {
+        "field": "/artifact/decode/iccPresent",
+        "reason": "no C2PA field"
+      }
+    ],
+    "opaque": [],
+    "conflicting": [
+      {
+        "field": "/artifact/decode/exifOrientation",
+        "reason": "the PDQ value is computed after the profile's orientation step; a soft-binding value states no orientation basis"
+      }
+    ]
+  },
+  "c2pa": {
+    "fragment": "only the assertions this mapping needs; not a complete manifest",
+    "activeManifest": "urn:c2pa:00000000-0000-4000-8000-000000000001",
+    "claim": {
+      "instanceID": "xmp:iid:00000000-0000-4000-8000-000000000001",
+      "claim_generator_info": {
+        "name": "traceweave-c2pa-fixture-builder",
+        "version": "draft-1",
+        "specVersion": "2.5.0"
+      },
+      "signature": "self#jumbf=c2pa.signature",
+      "alg": "sha256",
+      "created_assertions": [
+        {
+          "url": "self#jumbf=c2pa.assertions/c2pa.hash.data",
+          "hash": "not computed: no JUMBF box was serialized"
+        },
+        {
+          "url": "self#jumbf=c2pa.assertions/c2pa.soft-binding",
+          "hash": "not computed: no JUMBF box was serialized"
+        }
+      ]
+    },
+    "assertions": {
+      "c2pa.hash.data": {
+        "alg": "sha256",
+        "hash": "h'04a3e978c7018455ab5fc3889f3cd0c0956898e1d35f65f872cbf3f0076b718f'",
+        "pad": "h''",
+        "name": "whole file; sidecar manifest, no exclusions"
+      },
+      "c2pa.soft-binding": {
+        "alg": "invalid.traceweave.pdq.draft-2",
+        "blocks": [
+          {
+            "scope": {},
+            "value": "h'f1fbe0d7c9d6e92e3c3cbf1c340115c3c783db4149e0357424f48698c99b09d7'"
+          }
+        ],
+        "name": "PDQ 256-bit hash of the decoded image (profile section 4)",
+        "bindingMetadata": {
+          "description": "Unregistered placeholder algorithm id; see c2pa-mapping.md section 2",
+          "invalid.traceweave.profile": {
+            "configSha256": "c740e92de69a47904fa81bb3614c086194717be856fa6a44d89ad6fdba3bb927",
+            "id": "traceweave-image-fingerprint",
+            "version": "draft-2"
+          },
+          "invalid.traceweave.matchingConfigSha256": "fe3fa0395d3701fa5b1b55839063998eba528851d4f9e3dcaca62d3a0f6c97ac",
+          "invalid.traceweave.pdqQuality": 100
+        }
+      }
+    },
+    "signature": "absent: nothing was signed"
+  }
+}
