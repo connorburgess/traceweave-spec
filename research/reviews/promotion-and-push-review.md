@@ -87,3 +87,26 @@ Blocking, before the push:
 3. **U1:** add the Unicode licence notice for the two derived tables before they are published as normative vectors.
 
 Non-blocking, at the tip: H2–H6, P2–P5.
+
+## Public branch verification
+
+Checked 2026-11-23: `roadmap-v2-public` at `651451c` against `roadmap-v2` at `3346d55` and `origin/main` at `8d5e6a7`. My scripts are in `$TMPDIR/pub/`; I did not use the lane scanner. Nothing was pushed or fetched; GitHub's API was used read-only for the action pins.
+
+**1. Scan of everything new.** That is 104 commits (messages, author and committer fields) and 975 new objects, of which 495 are distinct text blobs. **Zero hits:** owner quotes, thread ids, coordination text, e-mail addresses other than the already-public identity, raw reports. **Paths and user name:** no blob version contains `/Users/<name>` or the bare user name. The remaining hits are the generic `/Users/…` and `~/Library/…` in two reviews and the transcript. **Benign hits:** "private" terms are corpus GitHub topics (`interview-questions`) and "resume point" in the text profile. "AI" terms are corpus topics, hygiene-checker patterns and review prose. `traceweave.local` is a Go module path. `github_pat_` occurs only in this review's prose. **Exception (B1 below):** `tools/public_history_scrub.py`, in every version from map row 84, stores its rules ROT13-encoded. Decoded locally, they contain the verbatim owner quotes with their typos (48 hits), the private-application search terms and both pilot-application names (85 hits), the home path including the user name, and the agent's scratch path.
+
+**2. Trees and JSON.** The tip trees differ only in `research/public-history-map.md`. Pairing all 103 commits in order: author, committer, dates and subjects are equal; all 6,073 `.json`/`.jsonl` blob versions are byte-identical; 23 text paths differ somewhere in history, all of them scrubbed documents; the frozen image protocol and its harness never differ.
+
+**3. Reproducibility.** **Deterministic:** in a scratch clone, `rewrite` run twice gives `74c0329` both times, with identical id maps. That equals `651451c^`. **Append-stable:** after one appended source commit, the first 103 ids are unchanged and the new tip descends from `74c0329`. **But not a fast-forward from the pushed tip (B2):** the map commit `651451c` exists only on the public branch, so the next rewrite will not descend from it.
+
+**4. Fresh clone of `651451c`.** All exit 0: `tools/validate.py`, and `--links-all`; the unit tests; the extraction, matching, TypeScript and text checkers; `tools/check_hygiene.py`.
+
+The workflow has `contents: read`, `persist-credentials: false` and no `secrets.` references. Its pins resolve on GitHub: `actions/checkout@3d3c42e5…` = tag v7.0.1, and `actions/setup-python@6d4fd22b…` = tag v7.1.0.
+
+**5. Earlier findings: all resolved at the public tip.** **P1–P5:** P1 restored at `profiles/text.md:122`. P2 has a results pointer at image README:5. P3 is reworded at `spec/conformance.md:11`. P4 now names `spec/` at ROADMAP:166 and :312. P5 reads "OD-C5 … confirmed". **U1:** `LICENSES/Unicode-3.0.txt` is the Unicode License v3 text, and its SHA-256 `e7a93b00…` equals the digest recorded in `LICENSE.md:11`. Both vector READMEs carry a notice naming the UCD 17.0.0 source files. **H1–H6:** no clear-text hits remain (§1), and `.claude/` is gone from `.gitignore`.
+
+**6. What should not be public.** **B1 (blocking).** ROT13 is not protection: anyone can decode it in one line, so the encoded rule list publishes exactly the strings the rewrite removed. That covers every historical version of the tool, not just the tip. An encoded rule list is not acceptable in any form that allows replacement. Keep the rules out of the public branch entirely: exclude `tools/public_history_scrub.py` from every rewritten commit, with a deterministic rule for the commits that become empty; keep the rules on `roadmap-v2` only; record in the map the SHA-256 of the tool file used, so it can be reproduced privately. **B2 (blocking for fast-forward pushes).** Commit the map on `roadmap-v2`, so it flows through the rewrite, and regenerate. **Id map:** acceptable. Its commit subjects ("Remove the supervision tooling name…", "Fix the escaping of the rule tables…") say that something was removed, not what. After B1, the tool commits stay listed only by subject.
+
+**Verdict: blocking items B1 and B2; do not push `651451c`.**
+- After B1 (tool and rules dropped from all public commits) and B2 (map committed on the source branch), regenerate the public branch. Re-run the scan with ROT13 decoding, plus the determinism check. Then push the new tip as `origin roadmap-v2`.
+
+Everything else is ready.
