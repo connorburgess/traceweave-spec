@@ -1,0 +1,64 @@
+[
+  {
+    "repository": "go-spew",
+    "files": 18,
+    "bytes": 197931,
+    "fileDigestChecks": 18,
+    "archiveEntrySizeChecks": 18,
+    "classInventory": {
+      "primary": {
+        "files": 8,
+        "regexFunctionLines": 63,
+        "ASTDeclarations": 63,
+        "explainedRawStringLines": 0
+      },
+      "test": {
+        "files": 9,
+        "regexFunctionLines": 75,
+        "ASTDeclarations": 75,
+        "explainedRawStringLines": 0
+      },
+      "testdata": {
+        "files": 1,
+        "regexFunctionLines": 7,
+        "ASTDeclarations": 7,
+        "explainedRawStringLines": 0
+      }
+    },
+    "generatedHeaderFiles": 0,
+    "generatedDependencyFiles": 0,
+    "auditedPrimaryRefusals": 3,
+    "auditedPrimaryPotentials": 2
+  },
+  {
+    "repository": "hey",
+    "files": 73,
+    "bytes": 1808366,
+    "fileDigestChecks": 73,
+    "archiveEntrySizeChecks": 73,
+    "classInventory": {
+      "dependency": {
+        "files": 65,
+        "regexFunctionLines": 927,
+        "ASTDeclarations": 925,
+        "explainedRawStringLines": 2
+      },
+      "primary": {
+        "files": 6,
+        "regexFunctionLines": 32,
+        "ASTDeclarations": 32,
+        "explainedRawStringLines": 0
+      },
+      "test": {
+        "files": 2,
+        "regexFunctionLines": 9,
+        "ASTDeclarations": 9,
+        "explainedRawStringLines": 0
+      }
+    },
+    "generatedHeaderFiles": 10,
+    "generatedDependencyFiles": 10,
+    "auditedPrimaryRefusals": 4,
+    "auditedPrimaryPotentials": 3
+  }
+]

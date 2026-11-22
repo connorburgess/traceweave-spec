@@ -1,0 +1,16 @@
+{
+  "acquire_sha256": "d02494e8120bf5c9d5049fc101d26e1e7d5ca36a3a4b487524e82b31920e721a",
+  "acquisition_note": "Initial collector verified itoa and stopped before hexyl source on its legacy MIT/Apache-2.0 Cargo spelling. Both upstream license files had matched; reviewed exact metadata and adjusted collector expected value only. Scanner hash and rules unchanged; no census scan had run.",
+  "carrier_sha256": "8354dbc8a5210ed10e8517e863452f63ee7336ca42785048baccc8f97f7afa05",
+  "frozen_before_collection_and_both_scans": true,
+  "manifest_sha256": "3c0e1bb29ba8b38938888a24c9dbb64843cf1d1dd52b6ce5781d4a786b5a6b8f",
+  "rule_version": "rust-census-v1",
+  "rules": [
+    "whole-file exact reviewed grammar shape, separately from unknown safety boundary; exact eligibility established remains zero",
+    "lexical fn keyword tokens outside opaque comments/strings/chars, including macro body tokens; no parsed function denominator",
+    "potential canonical decimal u32 spelling tokens and explicit let name:u32=literal declarations; adjacent runs of two or more; no type/scope/effect certification",
+    "generated banner heuristic first ten lines; directories exclude vendor/generated/target/third_party; auxiliaries separate; src may include inline tests",
+    "local file digests/byte offsets retained only in ignored corpus reports; reject absolute/parent/symlink paths"
+  ],
+  "scanner_sha256": "e31b9372ca21c03c10f834bd979c53156229038019d18a65e5b8ef8f85c2cdc1"
+}

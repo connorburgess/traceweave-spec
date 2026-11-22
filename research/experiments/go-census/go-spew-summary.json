@@ -1,0 +1,289 @@
+{
+  "Rules": "go-census-v1",
+  "ScannerSHA256": "03c2e9343e8522324d8e203427fc952647dfae09d59bb4f3da4820a6cb6e2a5f",
+  "GoVersion": "go1.27.3",
+  "GoFiles": 18,
+  "GoBytes": 197931,
+  "SkippedSymlinks": 0,
+  "FilesystemErrors": [],
+  "Classes": {
+    "primary": {
+      "Files": 8,
+      "Bytes": 69266,
+      "Parsed": 8,
+      "ParserFailures": 0,
+      "Unreadable": 0,
+      "Functions": 63,
+      "AnonymousFunctions": 1,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 2,
+      "PotentialBindings": 2,
+      "SingletonRuns": 2,
+      "RunsAtLeastTwo": 0,
+      "ShapeRefusals": {
+        "result_shape": 1,
+        "signature": 62
+      },
+      "GateFailures": {
+        "fixed_function_name": 63,
+        "fixed_package_name": 63,
+        "single_comment_free_import_free_file": 63,
+        "source_build_scope_type_preconditions_unestablished": 63,
+        "substantive_shape": 63
+      },
+      "RunLengths": {
+        "1": 2
+      },
+      "Flags": {
+        "build_constraints": 2,
+        "unsafe": 1
+      }
+    },
+    "test": {
+      "Files": 9,
+      "Bytes": 125381,
+      "Parsed": 9,
+      "ParserFailures": 0,
+      "Unreadable": 0,
+      "Functions": 75,
+      "AnonymousFunctions": 7,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 6,
+      "PotentialBindings": 6,
+      "SingletonRuns": 6,
+      "RunsAtLeastTwo": 0,
+      "ShapeRefusals": {
+        "signature": 75
+      },
+      "GateFailures": {
+        "fixed_function_name": 75,
+        "fixed_package_name": 75,
+        "single_comment_free_import_free_file": 75,
+        "source_build_scope_type_preconditions_unestablished": 75,
+        "substantive_shape": 75
+      },
+      "RunLengths": {
+        "1": 6
+      },
+      "Flags": {
+        "build_constraints": 3,
+        "unsafe": 2
+      }
+    },
+    "testdata": {
+      "Files": 1,
+      "Bytes": 3284,
+      "Parsed": 1,
+      "ParserFailures": 0,
+      "Unreadable": 0,
+      "Functions": 7,
+      "AnonymousFunctions": 0,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "PotentialBindings": 0,
+      "SingletonRuns": 0,
+      "RunsAtLeastTwo": 0,
+      "ShapeRefusals": {
+        "result_shape": 2,
+        "signature": 5
+      },
+      "GateFailures": {
+        "fixed_function_name": 7,
+        "fixed_package_name": 7,
+        "single_comment_free_import_free_file": 7,
+        "source_build_scope_type_preconditions_unestablished": 7,
+        "substantive_shape": 7
+      },
+      "RunLengths": {},
+      "Flags": {
+        "build_constraints": 1,
+        "cgo": 1
+      }
+    }
+  },
+  "Files": [
+    {
+      "Path": "spew/bypass.go",
+      "Class": "primary",
+      "Bytes": 4715,
+      "Functions": 3,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/bypasssafe.go",
+      "Class": "primary",
+      "Bytes": 1741,
+      "Functions": 1,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/common.go",
+      "Class": "primary",
+      "Bytes": 10364,
+      "Functions": 15,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/common_test.go",
+      "Class": "test",
+      "Bytes": 7930,
+      "Functions": 11,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/config.go",
+      "Class": "primary",
+      "Bytes": 12842,
+      "Functions": 16,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/doc.go",
+      "Class": "primary",
+      "Bytes": 8527,
+      "Functions": 0,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/dump.go",
+      "Class": "primary",
+      "Bytes": 13794,
+      "Functions": 9,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 1,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/dump_test.go",
+      "Class": "test",
+      "Bytes": 33781,
+      "Functions": 21,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 2,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/dumpcgo_test.go",
+      "Class": "test",
+      "Bytes": 3992,
+      "Functions": 1,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/dumpnocgo_test.go",
+      "Class": "test",
+      "Bytes": 1219,
+      "Functions": 1,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/example_test.go",
+      "Class": "test",
+      "Bytes": 5580,
+      "Functions": 6,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/format.go",
+      "Class": "primary",
+      "Bytes": 11314,
+      "Functions": 8,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 1,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/format_test.go",
+      "Class": "test",
+      "Bytes": 57466,
+      "Functions": 24,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 2,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/internal_test.go",
+      "Class": "test",
+      "Bytes": 2546,
+      "Functions": 5,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 1,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/internalunsafe_test.go",
+      "Class": "test",
+      "Bytes": 3226,
+      "Functions": 2,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 1,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/spew.go",
+      "Class": "primary",
+      "Bytes": 5969,
+      "Functions": 11,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/spew_test.go",
+      "Class": "test",
+      "Bytes": 9641,
+      "Functions": 4,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "spew/testdata/dumpcgo.go",
+      "Class": "testdata",
+      "Bytes": 3284,
+      "Functions": 7,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    }
+  ]
+}

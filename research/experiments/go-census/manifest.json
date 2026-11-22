@@ -1,0 +1,75 @@
+{
+  "study": "go-census-v1",
+  "scannerFrozenUTC": "2026-11-21T13:10:46Z",
+  "scannerSHA256": "03c2e9343e8522324d8e203427fc952647dfae09d59bb4f3da4820a6cb6e2a5f",
+  "testSHA256": "390a7a88f17bb96ef295dac768053e9fc44122186c8dd74e64a05ccd64459816",
+  "selection": "Small historical convenience sample, different upstream maintainers, one debugging library and one HTTP CLI; no population inference.",
+  "selectionScope": "All regular .go files recursively; dependency, testdata, generated and test classes separated. Primary excludes those classes. No tag evaluation or candidate type-check/build/execute.",
+  "exactEligibilityInterpretation": "Not established by source-only study: full source/build/scope/type preconditions remain unsupported. Zero is not a proof that no implementation can mark these sources.",
+  "potentialRules": "Maximal consecutive direct BlockStmt single-lowercase-name := decimal nonnegative signed-32-bit literal runs. Singletons separate from length>=2. Dependency/use/freshness/scope/effect/build conditions unestablished; no capacity inferred.",
+  "shapeRules": "Whole-function literal-binding/array-return syntax from the reviewed grammar with names/package ignored only for structural measurement; no scope/type or safety claim.",
+  "repositories": [
+    {
+      "id": "go-spew",
+      "role": "library",
+      "upstream": "https://github.com/davecgh/go-spew",
+      "tag": "v1.1.1",
+      "commit": "8991bc29aa16c548c550c7ff78260e27b9ab7c73",
+      "license": "ISC",
+      "licensePath": "LICENSE",
+      "licenseSHA256": "1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251",
+      "acquiredUTC": "2026-11-21T13:11:44.463864+00:00",
+      "archiveSHA256": "69fb08bf0b0d09d1d40ed1c010fc1c5f65ed3db3f8e6b2021eddcd8ec9c50394",
+      "url": "https://codeload.github.com/davecgh/go-spew/tar.gz/8991bc29aa16c548c550c7ff78260e27b9ab7c73",
+      "skippedSpecialMembers": [],
+      "includedDirectories": [
+        ". (all regular .go paths recursively)"
+      ],
+      "primaryExclusions": [
+        "*_test.go",
+        "testdata/",
+        "vendor/ and third_party/ equivalents",
+        "standard generated-code header"
+      ],
+      "licenseHeaderAudit": "All first-party Go source/test headers identify the declared root license; no additional first-party license files found."
+    },
+    {
+      "id": "hey",
+      "role": "application",
+      "upstream": "https://github.com/rakyll/hey",
+      "tag": "v0.1.4",
+      "commit": "af177063f85bd935c55f1f2ee59c2898d9654f82",
+      "license": "Apache-2.0",
+      "licensePath": "LICENSE",
+      "licenseSHA256": "d0bc204f82616d966e412365cc98afa1a8a9a15be07614e4770e84295e7e83ef",
+      "acquiredUTC": "2026-11-21T13:11:45.927833+00:00",
+      "archiveSHA256": "fb48701e6840c10f140873b7d8e9da842bbd3af628405e720f631be385707ce7",
+      "url": "https://codeload.github.com/rakyll/hey/tar.gz/af177063f85bd935c55f1f2ee59c2898d9654f82",
+      "skippedSpecialMembers": [],
+      "includedDirectories": [
+        ". (all regular .go paths recursively)"
+      ],
+      "primaryExclusions": [
+        "*_test.go",
+        "testdata/",
+        "vendor/ and third_party/ equivalents",
+        "standard generated-code header"
+      ],
+      "licenseHeaderAudit": "All first-party Go source/test headers identify the declared root license; no additional first-party license files found.",
+      "vendoredLicenses": [
+        {
+          "path": "vendor/golang.org/x/net/LICENSE",
+          "license": "BSD-3-Clause",
+          "sha256": "2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067"
+        },
+        {
+          "path": "vendor/golang.org/x/text/LICENSE",
+          "license": "BSD-3-Clause",
+          "sha256": "2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067"
+        }
+      ]
+    }
+  ],
+  "classPriority": "dependency > testdata > generated > test > primary; generated dependency overlap recorded by independent verification",
+  "auditSelection": "First two per observed primary shape-refusal reason per repository; all primary potential runs. No exact accepted units to audit. Boundary/license/excluded-class headers reviewed separately."
+}

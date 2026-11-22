@@ -1,0 +1,42 @@
+{
+  "collection": "GitHub pinned tree inventory; raw Rust files only from src/tests/benches/examples/fuzz, excluding vendor/generated/target/third_party paths and symlinks; metadata/license copies local only.",
+  "preconditions": "Unknown source/build observers in both projects; no exact eligibility can be established. src includes possible inline tests. No builds/macros/dependencies executed.",
+  "protocol": "research/public-census-plan.md",
+  "repositories": [
+    {
+      "cargo_license": "MIT OR Apache-2.0",
+      "commit": "9339ca99a43c550b5ee36e2afe524d1c90413461",
+      "kind": "library",
+      "licenses": [
+        {
+          "path": "LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        },
+        {
+          "path": "LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        }
+      ],
+      "local_id": "itoa",
+      "repository": "dtolnay/itoa"
+    },
+    {
+      "cargo_license": "MIT/Apache-2.0",
+      "commit": "6ecc29b9c8c84d08a7e860f7f69c22b113b480ea",
+      "kind": "application",
+      "licenses": [
+        {
+          "path": "LICENSE-MIT",
+          "sha256": "f9c4c77baa3828004ee54b8a4f2db2e88ed44a6237a493965bf551fac0fcb62d"
+        },
+        {
+          "path": "LICENSE-APACHE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        }
+      ],
+      "local_id": "hexyl",
+      "repository": "sharkdp/hexyl"
+    }
+  ],
+  "selection": "Convenience sample: small integer-formatting library and terminal application; distinct owner/maintainer projects. Not held-out or representative."
+}

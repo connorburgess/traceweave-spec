@@ -1,0 +1,474 @@
+{
+  "repositories": [
+    {
+      "acquired_utc": "2026-11-21T13:12:30.445877+00:00",
+      "api_tree_sha256": "df6cd73f17273cb189b2a8ca83dd6a7ca57b60f250a082725c43bbfad2c474ab",
+      "build_rs_present": false,
+      "cargo_edition": "2021",
+      "cargo_license": "MIT OR Apache-2.0",
+      "cargo_sha256": "e5c0e93914f73b0e0473f59b24c7f2a82370bd474b5aa6dbf3be1c76c1f79827",
+      "carrier_sha256": "8354dbc8a5210ed10e8517e863452f63ee7336ca42785048baccc8f97f7afa05",
+      "commit": "9339ca99a43c550b5ee36e2afe524d1c90413461",
+      "failure_reasons": {},
+      "files": [
+        {
+          "classification": "auxiliary_benches",
+          "downloaded": true,
+          "exact_boundary": "not_established",
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "git_blob_sha1": "bfd3192d1f11be43593e2074e26653f946e1c4c8",
+          "grammar_refusal": "outside whole-input function grammar",
+          "lexical_fn_tokens": 2,
+          "markers": {
+            "attribute_hash_tokens": 0,
+            "cfg_tokens": 0,
+            "inline_test_marker_tokens": 0,
+            "macro_bang_tokens": 3,
+            "unsafe_tokens": 0
+          },
+          "mode": "100644",
+          "number_tokens": 4,
+          "path": "benches/bench.rs",
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0,
+          "sha256": "29a0bdb973848007d681e571c57487e21e1bfb7aed5980c2190dba354498b154",
+          "size": 1193
+        },
+        {
+          "classification": "auxiliary_fuzz",
+          "downloaded": true,
+          "exact_boundary": "not_established",
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "git_blob_sha1": "2342153b148d7fd7918bc4866b06329f6f92b21c",
+          "grammar_refusal": "outside whole-input function grammar",
+          "lexical_fn_tokens": 0,
+          "markers": {
+            "attribute_hash_tokens": 2,
+            "cfg_tokens": 0,
+            "inline_test_marker_tokens": 0,
+            "macro_bang_tokens": 17,
+            "unsafe_tokens": 0
+          },
+          "mode": "100644",
+          "number_tokens": 0,
+          "path": "fuzz/fuzz_targets/fuzz_itoa.rs",
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0,
+          "sha256": "6af95f50e4388cc11d70101ccda37e47abbfdcb73a7cc28568c35d67f84b0850",
+          "size": 1350
+        },
+        {
+          "classification": "primary_src_may_contain_inline_tests",
+          "downloaded": true,
+          "exact_boundary": "not_established",
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "git_blob_sha1": "cf4ebbe0aa42784e9d7e9299e0a9d759602bfb63",
+          "grammar_refusal": "outside whole-input function grammar",
+          "lexical_fn_tokens": 15,
+          "markers": {
+            "attribute_hash_tokens": 33,
+            "cfg_tokens": 10,
+            "inline_test_marker_tokens": 0,
+            "macro_bang_tokens": 27,
+            "unsafe_tokens": 16
+          },
+          "mode": "100644",
+          "number_tokens": 133,
+          "path": "src/lib.rs",
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0,
+          "sha256": "4289a1fc5c20e8927f4ce27d1d0f085ae0f9fe7b666462dce92bd36466e89829",
+          "size": 17333
+        },
+        {
+          "classification": "primary_src_may_contain_inline_tests",
+          "downloaded": true,
+          "exact_boundary": "not_established",
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "git_blob_sha1": "866a7334df8f6439bbc454092091b046992a8b60",
+          "grammar_refusal": "outside whole-input function grammar",
+          "lexical_fn_tokens": 1,
+          "markers": {
+            "attribute_hash_tokens": 3,
+            "cfg_tokens": 1,
+            "inline_test_marker_tokens": 0,
+            "macro_bang_tokens": 0,
+            "unsafe_tokens": 0
+          },
+          "mode": "100644",
+          "number_tokens": 5,
+          "path": "src/u128_ext.rs",
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0,
+          "sha256": "498cc94f13805e551248fd82f47cc318f51d953a5002a9f8698858cd12fbae3c",
+          "size": 695
+        },
+        {
+          "classification": "auxiliary_tests",
+          "downloaded": true,
+          "exact_boundary": "not_established",
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "git_blob_sha1": "a4f433e26e7cb8b95030cf5f1254addd94ceab5b",
+          "grammar_refusal": "outside whole-input function grammar",
+          "lexical_fn_tokens": 2,
+          "markers": {
+            "attribute_hash_tokens": 3,
+            "cfg_tokens": 0,
+            "inline_test_marker_tokens": 2,
+            "macro_bang_tokens": 14,
+            "unsafe_tokens": 0
+          },
+          "mode": "100644",
+          "number_tokens": 13,
+          "path": "tests/test.rs",
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0,
+          "sha256": "fca9b50e3f7ddb9466a69f682c2e624b2102c619f3fdd4e63e39a8bc1f2ac8e9",
+          "size": 1310
+        }
+      ],
+      "grammar_refusal_reasons": {
+        "outside whole-input function grammar": 5
+      },
+      "groups": {
+        "auxiliary_benches": {
+          "bytes": 1193,
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "failures": 0,
+          "files": 1,
+          "inspected": 1,
+          "lexical_fn_tokens": 2,
+          "number_tokens": 4,
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0
+        },
+        "auxiliary_fuzz": {
+          "bytes": 1350,
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "failures": 0,
+          "files": 1,
+          "inspected": 1,
+          "lexical_fn_tokens": 0,
+          "number_tokens": 0,
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0
+        },
+        "auxiliary_tests": {
+          "bytes": 1310,
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "failures": 0,
+          "files": 1,
+          "inspected": 1,
+          "lexical_fn_tokens": 2,
+          "number_tokens": 13,
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0
+        },
+        "primary_src_may_contain_inline_tests": {
+          "bytes": 18028,
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "failures": 0,
+          "files": 2,
+          "inspected": 2,
+          "lexical_fn_tokens": 16,
+          "number_tokens": 138,
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0
+        }
+      },
+      "independent_bytes": 21881,
+      "independent_file_inventory_matches": true,
+      "independent_files_count": 5,
+      "independent_fn_like_line_total": 20,
+      "inventory_sha256": "05c334ba661189bcdae071d73849cbaf30629af2bacb0c092716028c7c280a71",
+      "licenses": [
+        {
+          "path": "LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        },
+        {
+          "path": "LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        }
+      ],
+      "nested_license_paths": [],
+      "repository": "dtolnay/itoa",
+      "scan_sha256": "57ff7a24992b82851ce46c655792909f26e4b03c01b62cafbe0b3e0d9b2a8df3",
+      "scanner_sha256": "e31b9372ca21c03c10f834bd979c53156229038019d18a65e5b8ef8f85c2cdc1",
+      "submodules": [],
+      "unicode_byte_offset_audit_passed": true
+    },
+    {
+      "acquired_utc": "2026-11-21T13:12:36.252557+00:00",
+      "api_tree_sha256": "276c09a5bd84b78353060314d073ee4aaa58e7c6fa0dddeb475300b9ba902bce",
+      "build_rs_present": false,
+      "cargo_edition": "2021",
+      "cargo_license": "MIT/Apache-2.0",
+      "cargo_sha256": "da6100d14c9d19c5c9659ac7d050149156c063cedc83b50c2f11e74dccdb6ddb",
+      "carrier_sha256": "8354dbc8a5210ed10e8517e863452f63ee7336ca42785048baccc8f97f7afa05",
+      "commit": "6ecc29b9c8c84d08a7e860f7f69c22b113b480ea",
+      "failure_reasons": {},
+      "files": [
+        {
+          "classification": "auxiliary_examples",
+          "downloaded": true,
+          "exact_boundary": "not_established",
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "git_blob_sha1": "fa9af917318ebfae1f380b5648fe187a703552f8",
+          "grammar_refusal": "outside whole-input function grammar",
+          "lexical_fn_tokens": 1,
+          "markers": {
+            "attribute_hash_tokens": 0,
+            "cfg_tokens": 0,
+            "inline_test_marker_tokens": 0,
+            "macro_bang_tokens": 0,
+            "unsafe_tokens": 0
+          },
+          "mode": "100644",
+          "number_tokens": 31,
+          "path": "examples/simple.rs",
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0,
+          "sha256": "3bb07376341211a379c53e9740faeae5a9722ac6a80d9074214b6060e6a3a70b",
+          "size": 692
+        },
+        {
+          "classification": "primary_src_may_contain_inline_tests",
+          "downloaded": true,
+          "exact_boundary": "not_established",
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "git_blob_sha1": "0d7a7bec3a558c0564118fcd21b57d1fe50d7302",
+          "grammar_refusal": "outside whole-input function grammar",
+          "lexical_fn_tokens": 4,
+          "markers": {
+            "attribute_hash_tokens": 2,
+            "cfg_tokens": 0,
+            "inline_test_marker_tokens": 0,
+            "macro_bang_tokens": 3,
+            "unsafe_tokens": 0
+          },
+          "mode": "100644",
+          "number_tokens": 91,
+          "path": "src/colors.rs",
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0,
+          "sha256": "27df8760bff8cff9fc500c068153a546d6777106cba3462355ec1cd38c25ff59",
+          "size": 7956
+        },
+        {
+          "classification": "primary_src_may_contain_inline_tests",
+          "downloaded": true,
+          "exact_boundary": "not_established",
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "git_blob_sha1": "acc9b419a4dbb9d80c90fbceaf41890ca8ee5248",
+          "grammar_refusal": "outside whole-input function grammar",
+          "lexical_fn_tokens": 4,
+          "markers": {
+            "attribute_hash_tokens": 0,
+            "cfg_tokens": 0,
+            "inline_test_marker_tokens": 0,
+            "macro_bang_tokens": 0,
+            "unsafe_tokens": 0
+          },
+          "mode": "100644",
+          "number_tokens": 0,
+          "path": "src/input.rs",
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0,
+          "sha256": "dbf7cdca7d9db33cb291588c69e0c91c366ac27563e18b67acd6a10054483839",
+          "size": 1911
+        },
+        {
+          "classification": "primary_src_may_contain_inline_tests",
+          "downloaded": true,
+          "exact_boundary": "not_established",
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "git_blob_sha1": "48fbc5bdde930f4fa33cea4992f3fe2ef9c6ace9",
+          "grammar_refusal": "outside whole-input function grammar",
+          "lexical_fn_tokens": 46,
+          "markers": {
+            "attribute_hash_tokens": 26,
+            "cfg_tokens": 1,
+            "inline_test_marker_tokens": 11,
+            "macro_bang_tokens": 47,
+            "unsafe_tokens": 0
+          },
+          "mode": "100644",
+          "number_tokens": 130,
+          "path": "src/lib.rs",
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0,
+          "sha256": "78b70f9e2b9efb36a5323917441d6936fb994142de4425ef739102a81489bcfb",
+          "size": 43638
+        },
+        {
+          "classification": "primary_src_may_contain_inline_tests",
+          "downloaded": true,
+          "exact_boundary": "not_established",
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "git_blob_sha1": "079a7c3797e7886fa396d23d5f844a40d80a3654",
+          "grammar_refusal": "outside whole-input function grammar",
+          "lexical_fn_tokens": 16,
+          "markers": {
+            "attribute_hash_tokens": 51,
+            "cfg_tokens": 1,
+            "inline_test_marker_tokens": 1,
+            "macro_bang_tokens": 30,
+            "unsafe_tokens": 0
+          },
+          "mode": "100644",
+          "number_tokens": 51,
+          "path": "src/main.rs",
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0,
+          "sha256": "4d3712519f131f826ab0b45d8bdb6d1c773d4e9ec6e54b86e3331e1bbbebb5a1",
+          "size": 26247
+        },
+        {
+          "classification": "primary_src_may_contain_inline_tests",
+          "downloaded": true,
+          "exact_boundary": "not_established",
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "git_blob_sha1": "73f44040a6a6f83bc35c36baccc3827306599234",
+          "grammar_refusal": "outside whole-input function grammar",
+          "lexical_fn_tokens": 5,
+          "markers": {
+            "attribute_hash_tokens": 5,
+            "cfg_tokens": 0,
+            "inline_test_marker_tokens": 5,
+            "macro_bang_tokens": 70,
+            "unsafe_tokens": 0
+          },
+          "mode": "100644",
+          "number_tokens": 40,
+          "path": "src/tests.rs",
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0,
+          "sha256": "2e96d1fe2e514d33732c44ba5df47c9932a2c76fa0712093173e248169655c64",
+          "size": 5996
+        },
+        {
+          "classification": "auxiliary_tests",
+          "downloaded": true,
+          "exact_boundary": "not_established",
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "git_blob_sha1": "fcc372b9d8cc8460a1b83c339bd20f3fb2641675",
+          "grammar_refusal": "outside whole-input function grammar",
+          "lexical_fn_tokens": 47,
+          "markers": {
+            "attribute_hash_tokens": 41,
+            "cfg_tokens": 0,
+            "inline_test_marker_tokens": 41,
+            "macro_bang_tokens": 6,
+            "unsafe_tokens": 0
+          },
+          "mode": "100644",
+          "number_tokens": 9,
+          "path": "tests/integration_tests.rs",
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0,
+          "sha256": "c8cf144dac349c682bbcbcd0c414b7e73fbd6eb79ee08e9dddbfb9e5e88f87d9",
+          "size": 50821
+        }
+      ],
+      "grammar_refusal_reasons": {
+        "outside whole-input function grammar": 7
+      },
+      "groups": {
+        "auxiliary_examples": {
+          "bytes": 692,
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "failures": 0,
+          "files": 1,
+          "inspected": 1,
+          "lexical_fn_tokens": 1,
+          "number_tokens": 31,
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0
+        },
+        "auxiliary_tests": {
+          "bytes": 50821,
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "failures": 0,
+          "files": 1,
+          "inspected": 1,
+          "lexical_fn_tokens": 47,
+          "number_tokens": 9,
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0
+        },
+        "primary_src_may_contain_inline_tests": {
+          "bytes": 85748,
+          "exact_eligible": 0,
+          "exact_whole_file_grammar_shape": 0,
+          "failures": 0,
+          "files": 5,
+          "inspected": 5,
+          "lexical_fn_tokens": 75,
+          "number_tokens": 312,
+          "potential_adjacent_runs": 0,
+          "potential_literal_declarations": 0,
+          "potential_spelling_tokens": 0
+        }
+      },
+      "independent_bytes": 137261,
+      "independent_file_inventory_matches": true,
+      "independent_files_count": 7,
+      "independent_fn_like_line_total": 123,
+      "inventory_sha256": "e4648ea1e3899d8c9949f34254229a695e148f08f38b2c9db3c9e955f37cf3ae",
+      "licenses": [
+        {
+          "path": "LICENSE-MIT",
+          "sha256": "f9c4c77baa3828004ee54b8a4f2db2e88ed44a6237a493965bf551fac0fcb62d"
+        },
+        {
+          "path": "LICENSE-APACHE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        }
+      ],
+      "nested_license_paths": [],
+      "repository": "sharkdp/hexyl",
+      "scan_sha256": "1846b1552337f1a8e513d110bfb65219c5f48dd312a5e245d18dc82d0a2d0702",
+      "scanner_sha256": "e31b9372ca21c03c10f834bd979c53156229038019d18a65e5b8ef8f85c2cdc1",
+      "submodules": [],
+      "unicode_byte_offset_audit_passed": true
+    }
+  ],
+  "rule_version": "rust-census-v1"
+}

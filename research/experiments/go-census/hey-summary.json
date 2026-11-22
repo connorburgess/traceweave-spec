@@ -1,0 +1,838 @@
+{
+  "Rules": "go-census-v1",
+  "ScannerSHA256": "03c2e9343e8522324d8e203427fc952647dfae09d59bb4f3da4820a6cb6e2a5f",
+  "GoVersion": "go1.27.3",
+  "GoFiles": 73,
+  "GoBytes": 1808366,
+  "SkippedSymlinks": 0,
+  "FilesystemErrors": [],
+  "Classes": {
+    "dependency": {
+      "Files": 65,
+      "Bytes": 1773777,
+      "Parsed": 65,
+      "ParserFailures": 0,
+      "Unreadable": 0,
+      "Functions": 925,
+      "AnonymousFunctions": 58,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 16,
+      "PotentialBindings": 16,
+      "SingletonRuns": 16,
+      "RunsAtLeastTwo": 0,
+      "ShapeRefusals": {
+        "result_shape": 13,
+        "signature": 912
+      },
+      "GateFailures": {
+        "fixed_function_name": 925,
+        "fixed_package_name": 887,
+        "single_comment_free_import_free_file": 925,
+        "source_build_scope_type_preconditions_unestablished": 925,
+        "substantive_shape": 925
+      },
+      "RunLengths": {
+        "1": 16
+      },
+      "Flags": {
+        "build_constraints": 23,
+        "filename_configuration_unresolved": 12,
+        "go_or_line_directive": 3
+      }
+    },
+    "primary": {
+      "Files": 6,
+      "Bytes": 29184,
+      "Parsed": 6,
+      "ParserFailures": 0,
+      "Unreadable": 0,
+      "Functions": 32,
+      "AnonymousFunctions": 13,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 3,
+      "PotentialBindings": 3,
+      "SingletonRuns": 3,
+      "RunsAtLeastTwo": 0,
+      "ShapeRefusals": {
+        "result_shape": 3,
+        "signature": 29
+      },
+      "GateFailures": {
+        "fixed_function_name": 32,
+        "fixed_package_name": 26,
+        "single_comment_free_import_free_file": 32,
+        "source_build_scope_type_preconditions_unestablished": 32,
+        "substantive_shape": 32
+      },
+      "RunLengths": {
+        "1": 3
+      },
+      "Flags": {
+        "build_constraints": 1,
+        "filename_configuration_unresolved": 2,
+        "unsafe": 1
+      }
+    },
+    "test": {
+      "Files": 2,
+      "Bytes": 5405,
+      "Parsed": 2,
+      "ParserFailures": 0,
+      "Unreadable": 0,
+      "Functions": 9,
+      "AnonymousFunctions": 5,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "PotentialBindings": 0,
+      "SingletonRuns": 0,
+      "RunsAtLeastTwo": 0,
+      "ShapeRefusals": {
+        "signature": 9
+      },
+      "GateFailures": {
+        "fixed_function_name": 9,
+        "fixed_package_name": 4,
+        "single_comment_free_import_free_file": 9,
+        "source_build_scope_type_preconditions_unestablished": 9,
+        "substantive_shape": 9
+      },
+      "RunLengths": {},
+      "Flags": {}
+    }
+  },
+  "Files": [
+    {
+      "Path": "hey.go",
+      "Class": "primary",
+      "Bytes": 6924,
+      "Functions": 6,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "hey_test.go",
+      "Class": "test",
+      "Bytes": 2094,
+      "Functions": 5,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "requester/now_other.go",
+      "Class": "primary",
+      "Bytes": 798,
+      "Functions": 1,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "requester/now_windows.go",
+      "Class": "primary",
+      "Bytes": 1550,
+      "Functions": 2,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "requester/print.go",
+      "Class": "primary",
+      "Bytes": 4937,
+      "Functions": 5,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 1,
+      "Parsed": true
+    },
+    {
+      "Path": "requester/report.go",
+      "Class": "primary",
+      "Bytes": 7866,
+      "Functions": 8,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 2,
+      "Parsed": true
+    },
+    {
+      "Path": "requester/requester.go",
+      "Class": "primary",
+      "Bytes": 7109,
+      "Functions": 10,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "requester/requester_test.go",
+      "Class": "test",
+      "Bytes": 3311,
+      "Functions": 4,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http/httpguts/guts.go",
+      "Class": "dependency",
+      "Bytes": 1425,
+      "Functions": 1,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http/httpguts/httplex.go",
+      "Class": "dependency",
+      "Bytes": 9064,
+      "Functions": 15,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/ciphers.go",
+      "Class": "dependency",
+      "Bytes": 35208,
+      "Functions": 1,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/client_conn_pool.go",
+      "Class": "dependency",
+      "Bytes": 7632,
+      "Functions": 13,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/configure_transport.go",
+      "Class": "dependency",
+      "Bytes": 2428,
+      "Functions": 3,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/databuffer.go",
+      "Class": "dependency",
+      "Bytes": 4023,
+      "Functions": 7,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 1,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/errors.go",
+      "Class": "dependency",
+      "Bytes": 4243,
+      "Functions": 10,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/flow.go",
+      "Class": "dependency",
+      "Bytes": 1109,
+      "Functions": 4,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/frame.go",
+      "Class": "dependency",
+      "Bytes": 45811,
+      "Functions": 82,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 1,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/go111.go",
+      "Class": "dependency",
+      "Bytes": 647,
+      "Functions": 3,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/go16.go",
+      "Class": "dependency",
+      "Bytes": 331,
+      "Functions": 1,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/go17.go",
+      "Class": "dependency",
+      "Bytes": 3010,
+      "Functions": 16,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/go17_not18.go",
+      "Class": "dependency",
+      "Bytes": 1369,
+      "Functions": 1,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/go18.go",
+      "Class": "dependency",
+      "Bytes": 1289,
+      "Functions": 7,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/go19.go",
+      "Class": "dependency",
+      "Bytes": 347,
+      "Functions": 1,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/gotrack.go",
+      "Class": "dependency",
+      "Bytes": 3160,
+      "Functions": 6,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/headermap.go",
+      "Class": "dependency",
+      "Bytes": 1734,
+      "Functions": 3,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/hpack/encode.go",
+      "Class": "dependency",
+      "Bytes": 7128,
+      "Functions": 13,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/hpack/hpack.go",
+      "Class": "dependency",
+      "Bytes": 14456,
+      "Functions": 29,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/hpack/huffman.go",
+      "Class": "dependency",
+      "Bytes": 5397,
+      "Functions": 10,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/hpack/tables.go",
+      "Class": "dependency",
+      "Bytes": 9677,
+      "Functions": 7,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/http2.go",
+      "Class": "dependency",
+      "Bytes": 9692,
+      "Functions": 27,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/not_go111.go",
+      "Class": "dependency",
+      "Bytes": 458,
+      "Functions": 3,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/not_go16.go",
+      "Class": "dependency",
+      "Bytes": 412,
+      "Functions": 2,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/not_go17.go",
+      "Class": "dependency",
+      "Bytes": 2642,
+      "Functions": 20,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/not_go18.go",
+      "Class": "dependency",
+      "Bytes": 632,
+      "Functions": 5,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/not_go19.go",
+      "Class": "dependency",
+      "Bytes": 325,
+      "Functions": 1,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/pipe.go",
+      "Class": "dependency",
+      "Bytes": 3900,
+      "Functions": 10,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/server.go",
+      "Class": "dependency",
+      "Bytes": 90872,
+      "Functions": 103,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/transport.go",
+      "Class": "dependency",
+      "Bytes": 69432,
+      "Functions": 96,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/write.go",
+      "Class": "dependency",
+      "Bytes": 10751,
+      "Functions": 31,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/writesched.go",
+      "Class": "dependency",
+      "Bytes": 7420,
+      "Functions": 11,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/writesched_priority.go",
+      "Class": "dependency",
+      "Bytes": 13782,
+      "Functions": 14,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/http2/writesched_random.go",
+      "Class": "dependency",
+      "Bytes": 1933,
+      "Functions": 6,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/idna/idna.go",
+      "Class": "dependency",
+      "Bytes": 20297,
+      "Functions": 34,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/idna/punycode.go",
+      "Class": "dependency",
+      "Bytes": 4367,
+      "Functions": 6,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/idna/tables.go",
+      "Class": "dependency",
+      "Bytes": 273558,
+      "Functions": 6,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/idna/trie.go",
+      "Class": "dependency",
+      "Bytes": 1868,
+      "Functions": 2,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/net/idna/trieval.go",
+      "Class": "dependency",
+      "Bytes": 3069,
+      "Functions": 5,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/secure/bidirule/bidirule.go",
+      "Class": "dependency",
+      "Bytes": 9558,
+      "Functions": 12,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/secure/bidirule/bidirule10.0.0.go",
+      "Class": "dependency",
+      "Bytes": 322,
+      "Functions": 1,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/secure/bidirule/bidirule9.0.0.go",
+      "Class": "dependency",
+      "Bytes": 357,
+      "Functions": 1,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/transform/transform.go",
+      "Class": "dependency",
+      "Bytes": 22199,
+      "Functions": 23,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/bidi/bidi.go",
+      "Class": "dependency",
+      "Bytes": 6786,
+      "Functions": 17,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/bidi/bracket.go",
+      "Class": "dependency",
+      "Bytes": 11496,
+      "Functions": 13,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/bidi/core.go",
+      "Class": "dependency",
+      "Bytes": 29784,
+      "Functions": 40,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 3,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/bidi/gen.go",
+      "Class": "dependency",
+      "Bytes": 3074,
+      "Functions": 2,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/bidi/gen_ranges.go",
+      "Class": "dependency",
+      "Bytes": 1571,
+      "Functions": 2,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/bidi/gen_trieval.go",
+      "Class": "dependency",
+      "Bytes": 1749,
+      "Functions": 0,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/bidi/prop.go",
+      "Class": "dependency",
+      "Bytes": 5862,
+      "Functions": 7,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/bidi/tables10.0.0.go",
+      "Class": "dependency",
+      "Bytes": 113560,
+      "Functions": 6,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/bidi/tables9.0.0.go",
+      "Class": "dependency",
+      "Bytes": 111796,
+      "Functions": 6,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/bidi/trieval.go",
+      "Class": "dependency",
+      "Bytes": 1650,
+      "Functions": 0,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/norm/composition.go",
+      "Class": "dependency",
+      "Bytes": 14324,
+      "Functions": 30,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 2,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/norm/forminfo.go",
+      "Class": "dependency",
+      "Bytes": 8403,
+      "Functions": 22,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/norm/input.go",
+      "Class": "dependency",
+      "Bytes": 2070,
+      "Functions": 12,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/norm/iter.go",
+      "Class": "dependency",
+      "Bytes": 11269,
+      "Functions": 20,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 3,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/norm/maketables.go",
+      "Class": "dependency",
+      "Bytes": 24806,
+      "Functions": 28,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 4,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/norm/normalize.go",
+      "Class": "dependency",
+      "Bytes": 15243,
+      "Functions": 28,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 1,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/norm/readwriter.go",
+      "Class": "dependency",
+      "Bytes": 2961,
+      "Functions": 5,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/norm/tables10.0.0.go",
+      "Class": "dependency",
+      "Bytes": 347741,
+      "Functions": 12,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/norm/tables9.0.0.go",
+      "Class": "dependency",
+      "Bytes": 345900,
+      "Functions": 12,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/norm/transform.go",
+      "Class": "dependency",
+      "Bytes": 2406,
+      "Functions": 4,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 1,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/norm/trie.go",
+      "Class": "dependency",
+      "Bytes": 1238,
+      "Functions": 1,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    },
+    {
+      "Path": "vendor/golang.org/x/text/unicode/norm/triegen.go",
+      "Class": "dependency",
+      "Bytes": 2754,
+      "Functions": 6,
+      "ExactEligible": 0,
+      "ShapeMatches": 0,
+      "PotentialRuns": 0,
+      "Parsed": true
+    }
+  ]
+}
