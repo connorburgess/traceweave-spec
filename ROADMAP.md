@@ -6,7 +6,7 @@ Start with [use cases](docs/use-cases.md), then [implementation patterns](docs/i
 
 ## Pilot languages
 
-Initial experimentation uses synthetic Go and Rust source code, with planned expansion to multiple media types. TypeScript/JavaScript is a later code-profile candidate. Private applications are outside the current experimental scope. Shared evidence formats stay language-independent; transformations, safety conditions and build-pipeline tests are profile-specific. Python research tooling does not select Python as the marked language. See the [feasibility investigation](research/02-carrier-feasibility.md).
+Initial experimentation uses synthetic Go and Rust source code, with planned expansion to multiple media types. TypeScript/JavaScript, still images and text are owner-approved profile targets (2026-11-22; scope under [later profiles](#later-profiles-and-sequence)). Private applications are outside the current experimental scope. Shared evidence formats stay language-independent; transformations, safety conditions and build-pipeline tests are profile-specific. Python research tooling does not select Python as the marked language. See the [feasibility investigation](research/02-carrier-feasibility.md).
 
 ## Core tracks
 
@@ -153,15 +153,19 @@ These cannot close until the owner acts:
 - **Strict spec pin and M1.4 completion:** need a pushed spec commit.
 - **M3.0:** the false-alarm budget.
 - **M2E.0:** select a carrier or omit embedding.
+- **IMG.0–IMG.5:** image mark study, UC-7 and the TrustMark weight download.
+- **IMGF.3:** the package install for the synthetic fingerprint experiment.
+- **TXT.0, TXT.5 (and so TXT.6):** UC-8 wording; the PAN-PC-10 download.
+- **TXT.8:** any new text-mark experiment.
 
 ## Progress count
 
-Counted on 2026-11-22 from the status columns above.
+Counted on 2026-11-22 from the status columns above. The later-profile table has no status column; all of its rows are open.
 
 | Gates | Total | Met | Negative-result | Open |
 | --- | --- | --- | --- | --- |
 | Core M0–M5 | 47 | 6 (M0.1, M0.2, M0.3, M0.4, M4.1, M4.2) | 0 | 41 |
-| Later profiles, EXT and RC | 26 | 0 | 0 | 26 |
+| Later profiles, EXT and RC | 40 | 0 | 0 | 40 |
 
 M0.1 is met on the second non-author recount (`3a640b3`). The SYN records are research records and are not counted. Evidence for M4.1 and M4.2 is committed in `0bc4e23`.
 
@@ -172,11 +176,19 @@ M0 ─► M1 ─► M2 ──┬─► M3 ─► M5 ─► EXT ─► RC (1.0 ca
       │    M2E ──┘          ▲ M4 required only if the release claims signatures
       └─► M4 ─ ─ ─ ─ ─ ─ ─ ─┘
 I0 ► I1 ► I2 ► I3;  I4 after I0;  I5a after I2 and M2E.1 met;  I5b after I3
-After M1: TS   After I2: SK   After M4: C2PA
-After M3.4 (or a recorded owner override): IMG, BIN, RES, STRUCT, KEYED
+Now, by owner override (research and fingerprint-only): TS, IMGF, TXT.0–TXT.4, TXT.7, TXT.8
+Owner-gated: IMG.0–IMG.5 (image marks), TXT.5–TXT.6 (corpus download)
+After I2: SK   After M4: C2PA   After M3.4: BIN, RES, STRUCT, KEYED
 ```
 
-Media and resolver lanes wait for M3.4. Starting them earlier repeats the earlier drift, when work went to external research lanes instead of the baseline, and [lane 08](research/lanes/08-evidence-review.md) names deferral as the strongest alternative. The implementation-track gate mapping is in [the plan](docs/implementation-repo-plan.md#milestones).
+**Owner override of the M3.4 ordering (recorded 2026-11-22).** Asked about TypeScript, images and text, the owner approved all three. Coordinator reading, recorded here as the decision:
+
+- **Approved targets:** the TypeScript/JavaScript, still-image and text/document profiles.
+- **May start now, before M3.4:** their evidence research and fingerprint-only work. That covers extraction profiles, hand-derived vectors, two-implementation agreement, and experiments that need no download beyond what is already in the repository: TS.1–TS.3, IMGF.1–IMGF.5 (synthetic images only) and TXT.0–TXT.4, TXT.7, TXT.8.
+- **Still needs the owner:** any embedded-mark study (IMG.0–IMG.5; any new text-mark experiment under TXT.8); any model-weight, dataset or package download (TXT.5, and the IMGF package install); and any real, non-synthetic image set.
+- **Unchanged:** BIN, RES, STRUCT and KEYED still wait for M3.4.
+
+The owner may narrow this reading. Core M1–M3 gates keep priority under the supervision rule: these lanes do not close or replace any core gate. Evidence: [lane 09](research/lanes/09-evidence-review.md) (text) and [lane 10](research/lanes/10-evidence-review.md) (image). The implementation-track gate mapping is in [the plan](docs/implementation-repo-plan.md#milestones).
 
 | ID | Type | Verifiable criterion | Owner |
 | --- | --- | --- | --- |
@@ -185,13 +197,29 @@ Media and resolver lanes wait for M3.4. Starting them earlier repeats the earlie
 | TS.2 | E | Hand-derived vectors cover the M1.2 classes plus the TS.1 classes | S |
 | TS.3 | E | Two implementations without a shared lexer match the TS.2 expected bytes | I |
 | TS.4 | E | Own M3 split, reported separately and not pooled | I |
-| **IMG — first non-code profile: images** ([lane 08](research/lanes/08-evidence-review.md)) | | | |
-| IMG.0 | O | Owner approves UC-7 ("a creator marks images they publish and later checks a candidate"), written like UC-6. **This is a prerequisite of IMG.1–5**, and approval is also the override if IMG starts before M3.4 | S |
+| **IMGF — still images, fingerprint-only first** ([lane 10](research/lanes/10-evidence-review.md)) | | | |
+| IMGF.1 | E | An image extraction profile answers every item in lane 10's "Extraction contract (fingerprints)" list, with 0 TBDs. The items are: decoder and version, EXIF orientation, colour conversion, alpha flattening, multi-frame policy, luminance formula, resize filter and size, border crop, hash algorithm and bit length, quality abstention threshold, dihedral variants and distance metric | S |
+| IMGF.2 | E | PDQ output equals the published ThreatExchange `pdq/data` vector outputs, k/k. ISCC Image-Code output equals the iscc-core reference outputs for the vectors used, k/k | I |
+| IMGF.3 | E | The E-IMG-F protocol (lane 10) is frozen, and its commit is a git ancestor of the first result commit. It fixes: a seeded generator; 2,000 synthetic images split 500/500/1,000 by seed; 12 transforms; PDQ threshold 31 and quality floor 49; an ISCC threshold chosen on the selection split only; and the decoder version. Package install (Pillow, NumPy, iscc-core into a project-local environment) needs owner approval | I |
+| IMGF.4 | R | The run passes under `scripts/offline`; a non-author rechecks the counts. Negative-result if any of lane 10's failure criteria holds: any of 1,000 negatives matches at the frozen threshold; more than 5 wrong-entry matches across 6,000 positives; or recall below 95% for JPEG 75 or the PNG round trip. Crop, screenshot and quality-30 results are recorded as limits, not failures. Every figure has its denominator; no rate is claimed beyond what n supports | I |
+| IMGF.5 | E | Two implementations produce identical PDQ hashes and quality scores on the IMGF.2 vectors and the full frozen synthetic set | I |
+| **IMG — image marks, later and owner-gated** ([lane 08](research/lanes/08-evidence-review.md), [lane 10](research/lanes/10-evidence-review.md)) | | | |
+| IMG.0 | O | Owner approves UC-7 ("a creator marks images they publish and later checks a candidate"), written like UC-6, and the TrustMark weight download. **This is a prerequisite of IMG.1–5**, which also start only after IMGF.4 closes. The 2026-11-22 override does not cover mark studies | S |
 | IMG.1 | E | Pin record: TrustMark code commit; weight SHA-256; code, weight and dependency licences; licensed non-private image set | I |
 | IMG.2 | E | Embed and detect pass under `scripts/offline` after provisioning | I |
-| IMG.3 | E | Frozen and committed before running: transformation list (JPEG, resize, crop, ReMark), PSNR floor, threshold | I |
+| IMG.3 | E | Frozen and committed before running: transformation list (JPEG, resize, crop, ReMark, and VAE regeneration only if its weight licence is accepted), PSNR floor, threshold, a `dwtDct` no-key negative control and a residual-transplant arm | I |
 | IMG.4 | R | Whole-message success per transformation; unmarked and wrong-key false detections; transplant result. Each has a denominator | I |
-| IMG.5 | E | Results fit the lane-08 container fields, or a schema change goes through CONTRIBUTING | S |
+| IMG.5 | E | IMGF and IMG results fit the lane-08 container fields, or a schema change goes through CONTRIBUTING | S |
+| **TXT — text and documents** ([lane 09](research/lanes/09-evidence-review.md); proposed [UC-8](docs/use-cases.md#proposed-uc-8-find-reused-passages-in-prose)) | | | |
+| TXT.0 | O | Owner accepts the wording of proposed UC-8 in `docs/use-cases.md`, or amends it. Not a prerequisite of TXT.1–TXT.4 under the override | S |
+| TXT.1 | E | A text extraction profile answers every item of lane 09's "How the extraction contract could host a text profile", with 0 TBDs. Items: format front end (`plain`/`markdown`, pinned CommonMark version); BOM policy; the fold over pinned Unicode 17.0.0 files (NFKC, full case folding, delete Default_Ignorable_Code_Point, White_Space mapping, optional confusable channel pinned by `confusables.txt` digest); token rule, including scripts written without spaces; `exact` and `folded` channels with no stemming or stop words; span mapping of every folded token to its original half-open UTF-8 byte span; k and w in the config bytes; a closed error list; and a hash-framing string | S |
+| TXT.2 | E | Hand-derived vectors (`derivation: hand`), at least 1 for each class: empty; below `k+w-1`; BOM; CRLF; NFD input; NFKC expansion (U+FB01); case-fold expansion (U+00DF); zero-width inside a word; listed confusable; other Default_Ignorable; Markdown syntax; invalid UTF-8; NUL. Each vector gives expected tokens and original byte spans, and each positive vector has a paired rejection vector | S |
+| TXT.3 | E | Two implementations, each using its own Unicode normalization and case-folding code pinned to the profile's Unicode version, equal the TXT.2 expected bytes on every vector | I |
+| TXT.4 | R | Stage 1, no download. Input: the repository's own CC BY 4.0 prose (the 11 files under `docs/`, `spec/` and `profiles/` at a pinned commit) plus TXT.2. Lane 09's transformations are applied to every file. Negatives: all 110 ordered file pairs and the boilerplate set. Protocol frozen as an ancestor commit; run under `scripts/offline`; a non-author rechecks the counts. Negative-result if any lane 09 failure criterion holds: (i) the implementations differ on any vector; (ii) any reported span does not equal the original bytes of the matched tokens; (iii) any transformed positive keeps an unchanged folded run of at least `k+w-1` tokens yet shares 0 fingerprints. Negatives are reported as matches/110 | S/I |
+| TXT.5 | O | Owner approves the PAN-PC-10 download (Zenodo record 3250123, 1,773,941,212 bytes, CC BY 4.0 on the record), licence acceptance and storage location | S |
+| TXT.6 | E | Stage 2, only after TXT.4 met and TXT.5 recorded. Frozen before running: a seeded sample of 200 cases for each of 5 obfuscation classes (1,000 positives) and 200 suspicious documents without plagiarism; k, w and the boilerplate catalogue. Report per class: detection under the PAN measures, abstentions, and negatives with any match (out of 200), each with its denominator. No rate is claimed beyond n (0/200 bounds only below about 1.5%) | I |
+| TXT.7 | E | The profile and release notes list the limits: paraphrase; translation; fragments shorter than `k+w-1` tokens; scripts without spaces, if unmeasured. Each limit cites a TXT.4 or TXT.6 count or a lane 09 source. A non-author counts 0 uncited limits | S |
+| TXT.8 | R | Research question: does any embedded mark in existing text survive the cheapest declared fold? [Lane 09](research/lanes/09-evidence-review.md#embedded-marks-in-existing-text) finds homoglyph and zero-width carriers erased by one published fold (NFKC + UTS #39 skeleton + delete Default_Ignorable), and rejects the AWT lexical rewriter. Status open: recorded as negative-result for Unicode carriers only after a non-author confirms that reading against the cited sources. Any new text-mark experiment needs the owner | S |
 | **BIN — binary/compiled artifacts** | | | |
 | BIN.1 | R | Primary-source review of source-to-binary mark survival and binary similarity, in the lanes 06–08 format | S |
 | BIN.2 | O | Decision record citing BIN.1: a binary profile with its own gates, or out of scope | S |
@@ -240,7 +268,8 @@ These stay with the owner. No agent or supervision loop decides them or does the
 - Corpus acquisition (M3.1).
 - The false-alarm budget and its unit (M3.0).
 - Whether to omit embedding from the next release, or select a candidate (M2E.0). The M2E.1(c) payload minimum is also approved by the owner.
-- The post-hoc image study after M3 (IMG.0 and the protocol in the [lane 06–08 checkpoint](research/research-06-08-checkpoint.md)).
+- The post-hoc image mark study (IMG.0 and the protocol in the [lane 06–08 checkpoint](research/research-06-08-checkpoint.md)); the IMGF package install; any real image set.
+- Text: UC-8 wording (TXT.0), the PAN-PC-10 download (TXT.5) and any text-mark experiment (TXT.8). The 2026-11-22 override covers fingerprint-only TS, image and text work only.
 - Also: licence split, hosted CI, the EXT reviewers, whether implementers must be independent people, and the draft contract's pending options (OD-C5).
 
 ## How work is accepted

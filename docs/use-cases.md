@@ -108,6 +108,21 @@ These filenames describe a proposed example; these three files and the detector 
 - **By:** M2.1 (offline run), M2.2/M2.3 (the three files become cases), M2.5, M2.6; M5.3 has a non-author reproduce it from a clean clone.
 - **Pass/fail:** as UC-1, including the control rule: `control.py` must return the outcome code frozen for it, and a `match` there is shown as a false alarm. **Today:** none; the three files do not exist yet. **Unverifiable:** reviewer judgment in step 5 (a person inspects origin records), and the permission assessment.
 
+## Proposed UC-8: find reused passages in prose
+
+**Status: proposed, awaiting the owner's acceptance of this wording (roadmap gate TXT.0).** The owner approved text as a profile target on 2026-11-22. This entry is not counted in the capability index below until accepted.
+
+**UC-8 (proposed) — Find reused passages in prose.** A writer or maintainer asks whether a document they can read locally contains passages from their own reference prose. Inputs: an authorized reference text (plain text or Markdown), a local candidate document, and a pinned text profile (fold, tokens, k and w). Useful result: candidate passages as original UTF-8 byte spans, with profile/config, artifact digests and the comparison evidence, and fragment containment kept separate from whole-document similarity. Important limit: heavy paraphrase, translation and passages shorter than the profile's `k+w-1` tokens are expected misses. Common phrases and boilerplate can match. No result does not establish absence. A match says nothing about authorship or permission. This is an extracted fingerprint, not an embedded mark; [lane 09](../research/lanes/09-evidence-review.md) found no text mark ready to test.
+
+### UC-8 verification plan (proposed)
+
+- **Checked:** folded tokens map back to original bytes; two implementations agree; matched passages are reported at their original spans; the expected limits are measured, not assumed.
+- **By:** TXT.1 (profile), TXT.2 (hand-derived vectors), TXT.3 (two-implementation agreement), TXT.4 (stage 1 on repository prose), TXT.6 (stage 2, owner-gated download), TXT.7 (recorded limits).
+- **Pass:** each implementation's output equals the TXT.2 expected bytes on every vector (differing vectors: 0). In TXT.4, the count of reported spans that differ from the original bytes of the matched tokens is 0, and the count of transformed positives that keep a folded run of at least `k+w-1` tokens but share 0 fingerprints is 0. Negatives are reported as matches/110. TXT.7 has 0 uncited limits.
+- **Fail:** any differing vector; any span mismatch; any such zero-fingerprint positive (TXT.4 is then recorded as negative-result); a limit without a cited count or source.
+- **Today:** nothing; no text profile or extractor exists. **Needs** TXT.1–TXT.3 and the implementation repository's `scripts/offline`.
+- **Unverifiable:** absence of reuse; paraphrase or translation detection (expected misses); authorship or permission; rates beyond what the sample size supports.
+
 ## Outside the first release
 
 Internet-wide scanning, automatic enforcement, proving model-training membership, automatic ownership attribution, and guaranteed survival under arbitrary rewrites are outside the initial scope. Traceweave is not a DRM system. Optional provenance adapters do not turn similarity into proof.
