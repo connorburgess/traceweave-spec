@@ -1,0 +1,11 @@
+[package]
+name = "crosscheck-rust"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+# Exact pins: proc-macro2's identifier set comes from unicode-ident, and
+# unicode-ident 1.0.26+ ships Unicode 18. 1.0.24 is Unicode 17.0.0.
+[dependencies]
+proc-macro2 = { version = "=1.0.107", default-features = false, features = ["span-locations"] }
+unicode-ident = "=1.0.24"

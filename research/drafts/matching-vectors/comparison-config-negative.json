@@ -1,0 +1,112 @@
+[
+ {
+  "id": "no-final-lf",
+  "reason": "missing final LF",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2Ijoibm9uZSJ9"
+ },
+ {
+  "id": "crlf",
+  "reason": "CR before the final LF",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2Ijoibm9uZSJ9DQo="
+ },
+ {
+  "id": "spaces",
+  "reason": "insignificant whitespace",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCAibW9kZXMiOlsiZXhhY3QiLCAibm9ybWFsaXplZCJdLCAibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsICJtZXJnZUdhcCI6NCwgIm1heFNlZWRzUGVyTW9kZSI6MTAwMDAwLCAibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsICJzdXBwcmVzc2lvbkNhdGFsb2d1ZVNoYTI1NiI6Im5vbmUifQo="
+ },
+ {
+  "id": "key-order",
+  "reason": "keys out of order",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1heFNlZWRzUGVyTW9kZSI6MTAwMDAwLCJtZXJnZUdhcCI6NCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2Ijoibm9uZSJ9Cg=="
+ },
+ {
+  "id": "duplicate-key",
+  "reason": "duplicate key",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtZXJnZUdhcCI6NCwibWF4U2VlZHNQZXJNb2RlIjoxMDAwMDAsIm1heFJlZ2lvbnNQZXJNb2RlIjoxMDAwLCJzdXBwcmVzc2lvbkNhdGFsb2d1ZVNoYTI1NiI6Im5vbmUifQo="
+ },
+ {
+  "id": "unknown-id",
+  "reason": "unknown comparison identifier",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTkiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2Ijoibm9uZSJ9Cg=="
+ },
+ {
+  "id": "draft-1-id",
+  "reason": "previous draft identifier",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTEiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2Ijoibm9uZSJ9Cg=="
+ },
+ {
+  "id": "modes-subset",
+  "reason": "modes subset",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCJdLCJtaW5SZWdpb25EaXN0aW5jdEhhc2hlcyI6MiwibWVyZ2VHYXAiOjQsIm1heFNlZWRzUGVyTW9kZSI6MTAwMDAwLCJtYXhSZWdpb25zUGVyTW9kZSI6MTAwMCwic3VwcHJlc3Npb25DYXRhbG9ndWVTaGEyNTYiOiJub25lIn0K"
+ },
+ {
+  "id": "modes-order",
+  "reason": "modes order",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJub3JtYWxpemVkIiwiZXhhY3QiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2Ijoibm9uZSJ9Cg=="
+ },
+ {
+  "id": "min-zero",
+  "reason": "minRegionDistinctHashes below 1",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjAsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2Ijoibm9uZSJ9Cg=="
+ },
+ {
+  "id": "gap-zero",
+  "reason": "mergeGap below 1",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjowLCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2Ijoibm9uZSJ9Cg=="
+ },
+ {
+  "id": "seeds-zero",
+  "reason": "maxSeedsPerMode below 1",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjAsIm1heFJlZ2lvbnNQZXJNb2RlIjoxMDAwLCJzdXBwcmVzc2lvbkNhdGFsb2d1ZVNoYTI1NiI6Im5vbmUifQo="
+ },
+ {
+  "id": "regions-zero",
+  "reason": "maxRegionsPerMode below 1",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2Ijoibm9uZSJ9Cg=="
+ },
+ {
+  "id": "float",
+  "reason": "non-integer number",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LjAsIm1heFNlZWRzUGVyTW9kZSI6MTAwMDAwLCJtYXhSZWdpb25zUGVyTW9kZSI6MTAwMCwic3VwcHJlc3Npb25DYXRhbG9ndWVTaGEyNTYiOiJub25lIn0K"
+ },
+ {
+  "id": "leading-zero",
+  "reason": "leading zero",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjowNCwibWF4U2VlZHNQZXJNb2RlIjoxMDAwMDAsIm1heFJlZ2lvbnNQZXJNb2RlIjoxMDAwLCJzdXBwcmVzc2lvbkNhdGFsb2d1ZVNoYTI1NiI6Im5vbmUifQo="
+ },
+ {
+  "id": "too-large",
+  "reason": "above 2^32-1",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0Mjk0OTY3Mjk2LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2Ijoibm9uZSJ9Cg=="
+ },
+ {
+  "id": "extra-key",
+  "reason": "unknown key",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2Ijoibm9uZSIsIngiOjF9Cg=="
+ },
+ {
+  "id": "not-object",
+  "reason": "top level not an object",
+  "bytesBase64": "WyJleGFjdCJdCg=="
+ },
+ {
+  "id": "suppression-uppercase",
+  "reason": "suppression digest not lowercase hex",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2IjoiQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQSJ9Cg=="
+ },
+ {
+  "id": "suppression-short",
+  "reason": "suppression digest wrong length",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2IjoiYWJjIn0K"
+ },
+ {
+  "id": "suppression-null",
+  "reason": "suppression digest not a string",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2IjpudWxsfQo="
+ },
+ {
+  "id": "old-key",
+  "reason": "draft-1 key name",
+  "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRmluZ2VycHJpbnRzIjoyLCJtZXJnZUdhcCI6NCwibWF4U2VlZHNQZXJNb2RlIjoxMDAwMDAsIm1heFJlZ2lvbnNQZXJNb2RlIjoxMDAwLCJzdXBwcmVzc2lvbkNhdGFsb2d1ZVNoYTI1NiI6Im5vbmUifQo="
+ }
+]

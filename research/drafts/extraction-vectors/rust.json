@@ -1,0 +1,1692 @@
+{
+  "contract": "traceweave-token-winnow-draft-1",
+  "profile": "rust2024-tokens",
+  "profileVersion": "draft-1",
+  "configFile": "config-rust.json",
+  "configSha256": "64b34335e4a61383ada1403a2df97c2e45dba987bbf0c8ec21385e04104d1277",
+  "k": 5,
+  "window": 4,
+  "requiredCoverage": true,
+  "lexingCheck": "Token streams are hand-derived; check_vectors.py re-verifies lexical invariants and harness/crosscheck.py compares them with go/scanner, proc-macro2 and rustc.",
+  "vectors": [
+    {
+      "id": "rust-empty",
+      "tags": ["empty"],
+      "description": "Empty input: zero tokens, no k-grams.",
+      "inputBase64": "",
+      "inputText": "",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 0,
+        "tokens": [],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {"values": [], "kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []}
+        }
+      }
+    },
+    {
+      "id": "rust-short",
+      "tags": ["short"],
+      "description": "Four tokens is fewer than k=5.",
+      "inputBase64": "bGV0IHggPSAx",
+      "inputText": "let x = 1",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 4,
+        "tokens": [
+          {"class": "keyword", "text": "let", "span": [0, 3]},
+          {"class": "ident", "text": "x", "span": [4, 5]},
+          {"class": "punct", "text": "=", "span": [6, 7]},
+          {"class": "int", "text": "1", "span": [8, 9]}
+        ],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {
+            "values": ["let", "", "=", ""],
+            "kgrams": [],
+            "windowSelections": [],
+            "partialWindow": false,
+            "fingerprints": []
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-exact-k",
+      "tags": ["exact-k"],
+      "description": "Exactly k=5 tokens: one k-gram, partial window selects it.",
+      "inputBase64": "bGV0IHggPSAxOw==",
+      "inputText": "let x = 1;",
+      "result": {
+        "status": "ok",
+        "tokenCount": 5,
+        "tokens": [
+          {"class": "keyword", "text": "let", "span": [0, 3]},
+          {"class": "ident", "text": "x", "span": [4, 5]},
+          {"class": "punct", "text": "=", "span": [6, 7]},
+          {"class": "int", "text": "1", "span": [8, 9]},
+          {"class": "punct", "text": ";", "span": [9, 10]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [{"position": 0, "hash": "beecca295208a8f4", "span": [0, 10]}],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "beecca295208a8f4", "span": [0, 10]}]
+          },
+          "normalized": {
+            "values": ["let", "", "=", "", ";"],
+            "kgrams": [{"position": 0, "hash": "c8f20ec1156a7abf", "span": [0, 10]}],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "c8f20ec1156a7abf", "span": [0, 10]}]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-unicode",
+      "tags": ["unicode"],
+      "description": "NFC Unicode identifiers, multi-byte string and char literals; spans are UTF-8 byte offsets.",
+      "inputBase64": "bGV0IGdyw7bDn2U6ICZzdHIgPSAibmHDr3ZlIOKYgyDkuJbnlYwiOwpsZXQgzrsgPSAnw6knOwo=",
+      "inputText": "let größe: &str = \"naïve ☃ 世界\";\nlet λ = 'é';\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 13,
+        "tokens": [
+          {"class": "keyword", "text": "let", "span": [0, 3]},
+          {"class": "ident", "text": "größe", "span": [4, 11]},
+          {"class": "punct", "text": ":", "span": [11, 12]},
+          {"class": "punct", "text": "&", "span": [13, 14]},
+          {"class": "ident", "text": "str", "span": [14, 17]},
+          {"class": "punct", "text": "=", "span": [18, 19]},
+          {"class": "string", "text": "\"naïve ☃ 世界\"", "span": [20, 39]},
+          {"class": "punct", "text": ";", "span": [39, 40]},
+          {"class": "keyword", "text": "let", "span": [41, 44]},
+          {"class": "ident", "text": "λ", "span": [45, 47]},
+          {"class": "punct", "text": "=", "span": [48, 49]},
+          {"class": "char", "text": "'é'", "span": [50, 54]},
+          {"class": "punct", "text": ";", "span": [54, 55]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "3901f36d3bdb485d", "span": [0, 17]},
+              {"position": 1, "hash": "7dbca275d7af3e4c", "span": [4, 19]},
+              {"position": 2, "hash": "a279afc6f79fef28", "span": [11, 39]},
+              {"position": 3, "hash": "751eff57b24ee353", "span": [13, 40]},
+              {"position": 4, "hash": "0bd3c6bee15a4688", "span": [14, 44]},
+              {"position": 5, "hash": "97c99e92014ae328", "span": [18, 47]},
+              {"position": 6, "hash": "f7785df1878863ce", "span": [20, 49]},
+              {"position": 7, "hash": "a1f8ae46b84c27f8", "span": [39, 54]},
+              {"position": 8, "hash": "75da73677e5350ef", "span": [41, 55]}
+            ],
+            "windowSelections": [0, 4, 4, 4, 4, 8],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 0, "hash": "3901f36d3bdb485d", "span": [0, 17]},
+              {"position": 4, "hash": "0bd3c6bee15a4688", "span": [14, 44]},
+              {"position": 8, "hash": "75da73677e5350ef", "span": [41, 55]}
+            ]
+          },
+          "normalized": {
+            "values": ["let", "", ":", "&", "", "=", "", ";", "let", "", "=", "", ";"],
+            "kgrams": [
+              {"position": 0, "hash": "d007e79478dce468", "span": [0, 17]},
+              {"position": 1, "hash": "56205e58cc1e393d", "span": [4, 19]},
+              {"position": 2, "hash": "de2d2dd5d4f76d68", "span": [11, 39]},
+              {"position": 3, "hash": "ddd5e645f3460753", "span": [13, 40]},
+              {"position": 4, "hash": "8fb0447b6e3c57f1", "span": [14, 44]},
+              {"position": 5, "hash": "91810528ea83d4e7", "span": [18, 47]},
+              {"position": 6, "hash": "a37f125e9beef925", "span": [20, 49]},
+              {"position": 7, "hash": "de13c98f34e90308", "span": [39, 54]},
+              {"position": 8, "hash": "5661bc841b7c599d", "span": [41, 55]}
+            ],
+            "windowSelections": [1, 1, 4, 4, 4, 8],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 1, "hash": "56205e58cc1e393d", "span": [4, 19]},
+              {"position": 4, "hash": "8fb0447b6e3c57f1", "span": [14, 44]},
+              {"position": 8, "hash": "5661bc841b7c599d", "span": [41, 55]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-literals",
+      "tags": ["literals"],
+      "description": "Integer/float forms with suffixes, '2.' float, tuple-index float, raw/byte/raw-byte/C strings.",
+      "inputBase64": "bGV0IHYgPSBbMHhGRl91OCwgMV8wMDAsIDBvMTcsIDBiMTAxMCwgMS41ZTMsIDIuLCAzZjMyXTsKbGV0IHMgPSByIyJyYXcgInEiIiM7IGxldCBiID0gYidcbic7IGxldCBicyA9IGJyIlxkIjsgbGV0IGMgPSBjImhpIjsKbGV0IHQgPSBwLjAuMTsK",
+      "inputText": "let v = [0xFF_u8, 1_000, 0o17, 0b1010, 1.5e3, 2., 3f32];\nlet s = r#\"raw \"q\"\"#; let b = b'\\n'; let bs = br\"\\d\"; let c = c\"hi\";\nlet t = p.0.1;\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 46,
+        "tokens": [
+          {"class": "keyword", "text": "let", "span": [0, 3]},
+          {"class": "ident", "text": "v", "span": [4, 5]},
+          {"class": "punct", "text": "=", "span": [6, 7]},
+          {"class": "punct", "text": "[", "span": [8, 9]},
+          {"class": "int", "text": "0xFF_u8", "span": [9, 16]},
+          {"class": "punct", "text": ",", "span": [16, 17]},
+          {"class": "int", "text": "1_000", "span": [18, 23]},
+          {"class": "punct", "text": ",", "span": [23, 24]},
+          {"class": "int", "text": "0o17", "span": [25, 29]},
+          {"class": "punct", "text": ",", "span": [29, 30]},
+          {"class": "int", "text": "0b1010", "span": [31, 37]},
+          {"class": "punct", "text": ",", "span": [37, 38]},
+          {"class": "float", "text": "1.5e3", "span": [39, 44]},
+          {"class": "punct", "text": ",", "span": [44, 45]},
+          {"class": "float", "text": "2.", "span": [46, 48]},
+          {"class": "punct", "text": ",", "span": [48, 49]},
+          {"class": "int", "text": "3f32", "span": [50, 54]},
+          {"class": "punct", "text": "]", "span": [54, 55]},
+          {"class": "punct", "text": ";", "span": [55, 56]},
+          {"class": "keyword", "text": "let", "span": [57, 60]},
+          {"class": "ident", "text": "s", "span": [61, 62]},
+          {"class": "punct", "text": "=", "span": [63, 64]},
+          {"class": "rawstring", "text": "r#\"raw \"q\"\"#", "span": [65, 77]},
+          {"class": "punct", "text": ";", "span": [77, 78]},
+          {"class": "keyword", "text": "let", "span": [79, 82]},
+          {"class": "ident", "text": "b", "span": [83, 84]},
+          {"class": "punct", "text": "=", "span": [85, 86]},
+          {"class": "byte", "text": "b'\\n'", "span": [87, 92]},
+          {"class": "punct", "text": ";", "span": [92, 93]},
+          {"class": "keyword", "text": "let", "span": [94, 97]},
+          {"class": "ident", "text": "bs", "span": [98, 100]},
+          {"class": "punct", "text": "=", "span": [101, 102]},
+          {"class": "rawbytestring", "text": "br\"\\d\"", "span": [103, 109]},
+          {"class": "punct", "text": ";", "span": [109, 110]},
+          {"class": "keyword", "text": "let", "span": [111, 114]},
+          {"class": "ident", "text": "c", "span": [115, 116]},
+          {"class": "punct", "text": "=", "span": [117, 118]},
+          {"class": "cstring", "text": "c\"hi\"", "span": [119, 124]},
+          {"class": "punct", "text": ";", "span": [124, 125]},
+          {"class": "keyword", "text": "let", "span": [126, 129]},
+          {"class": "ident", "text": "t", "span": [130, 131]},
+          {"class": "punct", "text": "=", "span": [132, 133]},
+          {"class": "ident", "text": "p", "span": [134, 135]},
+          {"class": "punct", "text": ".", "span": [135, 136]},
+          {"class": "float", "text": "0.1", "span": [136, 139]},
+          {"class": "punct", "text": ";", "span": [139, 140]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "3c704de56d9b88be", "span": [0, 16]},
+              {"position": 1, "hash": "650f5b61ec7920db", "span": [4, 17]},
+              {"position": 2, "hash": "44aced9f36398431", "span": [6, 23]},
+              {"position": 3, "hash": "7c204c2ac7ba7ca8", "span": [8, 24]},
+              {"position": 4, "hash": "2ba70bb8c668c7fa", "span": [9, 29]},
+              {"position": 5, "hash": "22e51055d5db91dd", "span": [16, 30]},
+              {"position": 6, "hash": "56f7b00c8b4fba35", "span": [18, 37]},
+              {"position": 7, "hash": "852589d89a5b0957", "span": [23, 38]},
+              {"position": 8, "hash": "afe436bd00f97e6e", "span": [25, 44]},
+              {"position": 9, "hash": "aab061b291f8367b", "span": [29, 45]},
+              {"position": 10, "hash": "40c231ceb60866f2", "span": [31, 48]},
+              {"position": 11, "hash": "725f7dc9cf55ba84", "span": [37, 49]},
+              {"position": 12, "hash": "61aa40b399426efd", "span": [39, 54]},
+              {"position": 13, "hash": "d7a8e48b4311145a", "span": [44, 55]},
+              {"position": 14, "hash": "b59b0fef7303e257", "span": [46, 56]},
+              {"position": 15, "hash": "7a43e2bc9d177b29", "span": [48, 60]},
+              {"position": 16, "hash": "dfcf3442c3a205e6", "span": [50, 62]},
+              {"position": 17, "hash": "b0dbe56dcd1f37e6", "span": [54, 64]},
+              {"position": 18, "hash": "bf0a90ae33e55a4e", "span": [55, 77]},
+              {"position": 19, "hash": "b46fff46c9768425", "span": [57, 78]},
+              {"position": 20, "hash": "8dc3eb252a07c40b", "span": [61, 82]},
+              {"position": 21, "hash": "b271468d6828de63", "span": [63, 84]},
+              {"position": 22, "hash": "99a716a08f322976", "span": [65, 86]},
+              {"position": 23, "hash": "19343c9c701256d2", "span": [77, 92]},
+              {"position": 24, "hash": "bbd123ad1ac7961a", "span": [79, 93]},
+              {"position": 25, "hash": "184c65b37bad228e", "span": [83, 97]},
+              {"position": 26, "hash": "bd1da5b50f9cc9ab", "span": [85, 100]},
+              {"position": 27, "hash": "b1311fbe77bf80f6", "span": [87, 102]},
+              {"position": 28, "hash": "26b8f6d00e008513", "span": [92, 109]},
+              {"position": 29, "hash": "a41741db53f6e6e5", "span": [94, 110]},
+              {"position": 30, "hash": "1e2a89f8dfbb6bde", "span": [98, 114]},
+              {"position": 31, "hash": "4e4860adc6fae862", "span": [101, 116]},
+              {"position": 32, "hash": "c23dd48c75e16997", "span": [103, 118]},
+              {"position": 33, "hash": "0f5519c5ed77eec1", "span": [109, 124]},
+              {"position": 34, "hash": "37fb082d6a192088", "span": [111, 125]},
+              {"position": 35, "hash": "8f2d4270cd853187", "span": [115, 129]},
+              {"position": 36, "hash": "fd57aab2dd2bc056", "span": [117, 131]},
+              {"position": 37, "hash": "f597e0df45d064b8", "span": [119, 133]},
+              {"position": 38, "hash": "7ed58d6da645bb21", "span": [124, 135]},
+              {"position": 39, "hash": "042b0b6405d1f9f4", "span": [126, 136]},
+              {"position": 40, "hash": "f4a04a2e4503795d", "span": [130, 139]},
+              {"position": 41, "hash": "1ed37d1a2f53c0fb", "span": [132, 140]}
+            ],
+            "windowSelections": [
+              0,
+              4,
+              5,
+              5,
+              5,
+              5,
+              6,
+              10,
+              10,
+              10,
+              10,
+              12,
+              12,
+              15,
+              15,
+              15,
+              17,
+              20,
+              20,
+              20,
+              23,
+              23,
+              25,
+              25,
+              25,
+              25,
+              28,
+              30,
+              30,
+              30,
+              33,
+              33,
+              33,
+              33,
+              34,
+              38,
+              39,
+              39,
+              39
+            ],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 0, "hash": "3c704de56d9b88be", "span": [0, 16]},
+              {"position": 4, "hash": "2ba70bb8c668c7fa", "span": [9, 29]},
+              {"position": 5, "hash": "22e51055d5db91dd", "span": [16, 30]},
+              {"position": 6, "hash": "56f7b00c8b4fba35", "span": [18, 37]},
+              {"position": 10, "hash": "40c231ceb60866f2", "span": [31, 48]},
+              {"position": 12, "hash": "61aa40b399426efd", "span": [39, 54]},
+              {"position": 15, "hash": "7a43e2bc9d177b29", "span": [48, 60]},
+              {"position": 17, "hash": "b0dbe56dcd1f37e6", "span": [54, 64]},
+              {"position": 20, "hash": "8dc3eb252a07c40b", "span": [61, 82]},
+              {"position": 23, "hash": "19343c9c701256d2", "span": [77, 92]},
+              {"position": 25, "hash": "184c65b37bad228e", "span": [83, 97]},
+              {"position": 28, "hash": "26b8f6d00e008513", "span": [92, 109]},
+              {"position": 30, "hash": "1e2a89f8dfbb6bde", "span": [98, 114]},
+              {"position": 33, "hash": "0f5519c5ed77eec1", "span": [109, 124]},
+              {"position": 34, "hash": "37fb082d6a192088", "span": [111, 125]},
+              {"position": 38, "hash": "7ed58d6da645bb21", "span": [124, 135]},
+              {"position": 39, "hash": "042b0b6405d1f9f4", "span": [126, 136]}
+            ]
+          },
+          "normalized": {
+            "values": [
+              "let",
+              "",
+              "=",
+              "[",
+              "",
+              ",",
+              "",
+              ",",
+              "",
+              ",",
+              "",
+              ",",
+              "",
+              ",",
+              "",
+              ",",
+              "",
+              "]",
+              ";",
+              "let",
+              "",
+              "=",
+              "",
+              ";",
+              "let",
+              "",
+              "=",
+              "",
+              ";",
+              "let",
+              "",
+              "=",
+              "",
+              ";",
+              "let",
+              "",
+              "=",
+              "",
+              ";",
+              "let",
+              "",
+              "=",
+              "",
+              ".",
+              "",
+              ";"
+            ],
+            "kgrams": [
+              {"position": 0, "hash": "5969289069740cf7", "span": [0, 16]},
+              {"position": 1, "hash": "42bd24e619af7ea9", "span": [4, 17]},
+              {"position": 2, "hash": "b22bccba8567b716", "span": [6, 23]},
+              {"position": 3, "hash": "e7eeaf69a7042980", "span": [8, 24]},
+              {"position": 4, "hash": "04a97049c64677d6", "span": [9, 29]},
+              {"position": 5, "hash": "5cf7ec698161fe8b", "span": [16, 30]},
+              {"position": 6, "hash": "04a97049c64677d6", "span": [18, 37]},
+              {"position": 7, "hash": "5cf7ec698161fe8b", "span": [23, 38]},
+              {"position": 8, "hash": "77ab43031d9f3fc8", "span": [25, 44]},
+              {"position": 9, "hash": "5e2f161f661738b4", "span": [29, 45]},
+              {"position": 10, "hash": "ccb46767bd62a1bf", "span": [31, 48]},
+              {"position": 11, "hash": "558fdc913d457ccf", "span": [37, 49]},
+              {"position": 12, "hash": "6610849d4e5db11e", "span": [39, 54]},
+              {"position": 13, "hash": "0c4d87130c9950e9", "span": [44, 55]},
+              {"position": 14, "hash": "143ac0cc918dfe68", "span": [46, 56]},
+              {"position": 15, "hash": "1dab253019d41005", "span": [48, 60]},
+              {"position": 16, "hash": "0e1591ddc10345f3", "span": [50, 62]},
+              {"position": 17, "hash": "9d7cdac4ddae6c43", "span": [54, 64]},
+              {"position": 18, "hash": "c957b32fbdae827d", "span": [55, 77]},
+              {"position": 19, "hash": "c86679751215ca4f", "span": [57, 78]},
+              {"position": 20, "hash": "971e6f992e29f73c", "span": [61, 82]},
+              {"position": 21, "hash": "107590b192661ebe", "span": [63, 84]},
+              {"position": 22, "hash": "c1dc60067ce8b295", "span": [65, 86]},
+              {"position": 23, "hash": "94569a04a35d6ddf", "span": [77, 92]},
+              {"position": 24, "hash": "b9741994844d6cb8", "span": [79, 93]},
+              {"position": 25, "hash": "e8bdf6d7fd6f14ee", "span": [83, 97]},
+              {"position": 26, "hash": "ab5104cdeb2f1dcd", "span": [85, 100]},
+              {"position": 27, "hash": "a35e20d564c5ca79", "span": [87, 102]},
+              {"position": 28, "hash": "606dc721b4faa3fa", "span": [92, 109]},
+              {"position": 29, "hash": "d0a694b9c888ae52", "span": [94, 110]},
+              {"position": 30, "hash": "5ccf97209cdc7bc4", "span": [98, 114]},
+              {"position": 31, "hash": "367865a07cc006d6", "span": [101, 116]},
+              {"position": 32, "hash": "14a097c9da07deca", "span": [103, 118]},
+              {"position": 33, "hash": "3b8edee4a064b88a", "span": [109, 124]},
+              {"position": 34, "hash": "9be054f3bc4d73bb", "span": [111, 125]},
+              {"position": 35, "hash": "29d1f29eabca360d", "span": [115, 129]},
+              {"position": 36, "hash": "0e173a07526c5aba", "span": [117, 131]},
+              {"position": 37, "hash": "e410cc61373c35fc", "span": [119, 133]},
+              {"position": 38, "hash": "ba744ddb124e29c7", "span": [124, 135]},
+              {"position": 39, "hash": "ed350dd562a9891b", "span": [126, 136]},
+              {"position": 40, "hash": "fcb3fefbf13d057f", "span": [130, 139]},
+              {"position": 41, "hash": "62f0b7d10f605e05", "span": [132, 140]}
+            ],
+            "windowSelections": [
+              1,
+              4,
+              4,
+              6,
+              6,
+              6,
+              6,
+              7,
+              11,
+              11,
+              13,
+              13,
+              13,
+              13,
+              16,
+              16,
+              16,
+              20,
+              21,
+              21,
+              21,
+              21,
+              23,
+              23,
+              27,
+              28,
+              28,
+              30,
+              31,
+              32,
+              32,
+              32,
+              32,
+              36,
+              36,
+              36,
+              36,
+              38,
+              41
+            ],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 1, "hash": "42bd24e619af7ea9", "span": [4, 17]},
+              {"position": 4, "hash": "04a97049c64677d6", "span": [9, 29]},
+              {"position": 6, "hash": "04a97049c64677d6", "span": [18, 37]},
+              {"position": 7, "hash": "5cf7ec698161fe8b", "span": [23, 38]},
+              {"position": 11, "hash": "558fdc913d457ccf", "span": [37, 49]},
+              {"position": 13, "hash": "0c4d87130c9950e9", "span": [44, 55]},
+              {"position": 16, "hash": "0e1591ddc10345f3", "span": [50, 62]},
+              {"position": 20, "hash": "971e6f992e29f73c", "span": [61, 82]},
+              {"position": 21, "hash": "107590b192661ebe", "span": [63, 84]},
+              {"position": 23, "hash": "94569a04a35d6ddf", "span": [77, 92]},
+              {"position": 27, "hash": "a35e20d564c5ca79", "span": [87, 102]},
+              {"position": 28, "hash": "606dc721b4faa3fa", "span": [92, 109]},
+              {"position": 30, "hash": "5ccf97209cdc7bc4", "span": [98, 114]},
+              {"position": 31, "hash": "367865a07cc006d6", "span": [101, 116]},
+              {"position": 32, "hash": "14a097c9da07deca", "span": [103, 118]},
+              {"position": 36, "hash": "0e173a07526c5aba", "span": [117, 131]},
+              {"position": 38, "hash": "ba744ddb124e29c7", "span": [124, 135]},
+              {"position": 41, "hash": "62f0b7d10f605e05", "span": [132, 140]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-lifetimes-chars",
+      "tags": ["lifetimes", "chars"],
+      "description": "Lifetimes versus char literals, 'static kept under normalization, raw identifier, single-character punctuation for '->'.",
+      "inputBase64": "Zm4gciNtYXRjaDwnYT4oeDogJidhIHN0ciwgeTogJidzdGF0aWMgc3RyKSAtPiBjaGFyIHsgJ2EnIH0=",
+      "inputText": "fn r#match<'a>(x: &'a str, y: &'static str) -> char { 'a' }",
+      "result": {
+        "status": "ok",
+        "tokenCount": 24,
+        "tokens": [
+          {"class": "keyword", "text": "fn", "span": [0, 2]},
+          {"class": "ident", "text": "r#match", "span": [3, 10]},
+          {"class": "punct", "text": "<", "span": [10, 11]},
+          {"class": "lifetime", "text": "'a", "span": [11, 13]},
+          {"class": "punct", "text": ">", "span": [13, 14]},
+          {"class": "punct", "text": "(", "span": [14, 15]},
+          {"class": "ident", "text": "x", "span": [15, 16]},
+          {"class": "punct", "text": ":", "span": [16, 17]},
+          {"class": "punct", "text": "&", "span": [18, 19]},
+          {"class": "lifetime", "text": "'a", "span": [19, 21]},
+          {"class": "ident", "text": "str", "span": [22, 25]},
+          {"class": "punct", "text": ",", "span": [25, 26]},
+          {"class": "ident", "text": "y", "span": [27, 28]},
+          {"class": "punct", "text": ":", "span": [28, 29]},
+          {"class": "punct", "text": "&", "span": [30, 31]},
+          {"class": "lifetime", "text": "'static", "span": [31, 38]},
+          {"class": "ident", "text": "str", "span": [39, 42]},
+          {"class": "punct", "text": ")", "span": [42, 43]},
+          {"class": "punct", "text": "-", "span": [44, 45]},
+          {"class": "punct", "text": ">", "span": [45, 46]},
+          {"class": "ident", "text": "char", "span": [47, 51]},
+          {"class": "punct", "text": "{", "span": [52, 53]},
+          {"class": "char", "text": "'a'", "span": [54, 57]},
+          {"class": "punct", "text": "}", "span": [58, 59]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "2c6e01fc453be96c", "span": [0, 14]},
+              {"position": 1, "hash": "0b7bc8c24d0d9af8", "span": [3, 15]},
+              {"position": 2, "hash": "b3b62564a329577a", "span": [10, 16]},
+              {"position": 3, "hash": "a077200655fb7779", "span": [11, 17]},
+              {"position": 4, "hash": "850558fc8139f3c1", "span": [13, 19]},
+              {"position": 5, "hash": "8e27d8078f356e67", "span": [14, 21]},
+              {"position": 6, "hash": "b313eb6e3263d9a2", "span": [15, 25]},
+              {"position": 7, "hash": "908b6cf64bb67b36", "span": [16, 26]},
+              {"position": 8, "hash": "0c7130efc900bd5c", "span": [18, 28]},
+              {"position": 9, "hash": "cfc775e5be3b3aa1", "span": [19, 29]},
+              {"position": 10, "hash": "2ccbc05bf774b58f", "span": [22, 31]},
+              {"position": 11, "hash": "418c8decd1bdca9f", "span": [25, 38]},
+              {"position": 12, "hash": "11084296bac40122", "span": [27, 42]},
+              {"position": 13, "hash": "8c12eb9b7bc53d51", "span": [28, 43]},
+              {"position": 14, "hash": "5e2cb8c564957730", "span": [30, 45]},
+              {"position": 15, "hash": "895d797673e55e6a", "span": [31, 46]},
+              {"position": 16, "hash": "6f400a0ac5dd5bec", "span": [39, 51]},
+              {"position": 17, "hash": "51179791cbe1bde9", "span": [42, 53]},
+              {"position": 18, "hash": "bcd67c97ef2554b2", "span": [44, 57]},
+              {"position": 19, "hash": "15e40bda1ae2c9a9", "span": [45, 59]}
+            ],
+            "windowSelections": [1, 1, 4, 4, 4, 8, 8, 8, 8, 12, 12, 12, 12, 14, 17, 17, 19],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 1, "hash": "0b7bc8c24d0d9af8", "span": [3, 15]},
+              {"position": 4, "hash": "850558fc8139f3c1", "span": [13, 19]},
+              {"position": 8, "hash": "0c7130efc900bd5c", "span": [18, 28]},
+              {"position": 12, "hash": "11084296bac40122", "span": [27, 42]},
+              {"position": 14, "hash": "5e2cb8c564957730", "span": [30, 45]},
+              {"position": 17, "hash": "51179791cbe1bde9", "span": [42, 53]},
+              {"position": 19, "hash": "15e40bda1ae2c9a9", "span": [45, 59]}
+            ]
+          },
+          "normalized": {
+            "values": [
+              "fn",
+              "",
+              "<",
+              "",
+              ">",
+              "(",
+              "",
+              ":",
+              "&",
+              "",
+              "",
+              ",",
+              "",
+              ":",
+              "&",
+              "'static",
+              "",
+              ")",
+              "-",
+              ">",
+              "",
+              "{",
+              "",
+              "}"
+            ],
+            "kgrams": [
+              {"position": 0, "hash": "7f34ba88ce7dcab5", "span": [0, 14]},
+              {"position": 1, "hash": "c34246b5d75f64da", "span": [3, 15]},
+              {"position": 2, "hash": "c62ab95ec4cdb24c", "span": [10, 16]},
+              {"position": 3, "hash": "3f10322afb8aeef9", "span": [11, 17]},
+              {"position": 4, "hash": "c6c2afc508de3bf8", "span": [13, 19]},
+              {"position": 5, "hash": "7149309f06ae591c", "span": [14, 21]},
+              {"position": 6, "hash": "99586270b4f9036d", "span": [15, 25]},
+              {"position": 7, "hash": "c070d378ee191651", "span": [16, 26]},
+              {"position": 8, "hash": "e9f5b2581983b7b1", "span": [18, 28]},
+              {"position": 9, "hash": "815a9ac81a2e4bc3", "span": [19, 29]},
+              {"position": 10, "hash": "ec23fcafc05fd4c2", "span": [22, 31]},
+              {"position": 11, "hash": "2c7c9e4c1b3ea7f5", "span": [25, 38]},
+              {"position": 12, "hash": "b59eb4965cb3b284", "span": [27, 42]},
+              {"position": 13, "hash": "afdff707a7d1cec2", "span": [28, 43]},
+              {"position": 14, "hash": "8b0377cc12e1f12d", "span": [30, 45]},
+              {"position": 15, "hash": "977e36e2b7f716b6", "span": [31, 46]},
+              {"position": 16, "hash": "4dc3cda665a7c4a4", "span": [39, 51]},
+              {"position": 17, "hash": "3b1c019650f9606f", "span": [42, 53]},
+              {"position": 18, "hash": "0460834ff1e78304", "span": [44, 57]},
+              {"position": 19, "hash": "3195acb37a1821ae", "span": [45, 59]}
+            ],
+            "windowSelections": [3, 3, 3, 3, 5, 5, 9, 9, 11, 11, 11, 11, 14, 16, 17, 18, 18],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 3, "hash": "3f10322afb8aeef9", "span": [11, 17]},
+              {"position": 5, "hash": "7149309f06ae591c", "span": [14, 21]},
+              {"position": 9, "hash": "815a9ac81a2e4bc3", "span": [19, 29]},
+              {"position": 11, "hash": "2c7c9e4c1b3ea7f5", "span": [25, 38]},
+              {"position": 14, "hash": "8b0377cc12e1f12d", "span": [30, 45]},
+              {"position": 16, "hash": "4dc3cda665a7c4a4", "span": [39, 51]},
+              {"position": 17, "hash": "3b1c019650f9606f", "span": [42, 53]},
+              {"position": 18, "hash": "0460834ff1e78304", "span": [44, 57]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-shebang",
+      "tags": ["shebang"],
+      "description": "A first line starting '#!' not followed by '[' is a shebang and is skipped.",
+      "inputBase64": "IyEvdXNyL2Jpbi9lbnYgcnVuLWNhcmdvLXNjcmlwdApmbiBtYWluKCkge30K",
+      "inputText": "#!/usr/bin/env run-cargo-script\nfn main() {}\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 6,
+        "tokens": [
+          {"class": "keyword", "text": "fn", "span": [32, 34]},
+          {"class": "ident", "text": "main", "span": [35, 39]},
+          {"class": "punct", "text": "(", "span": [39, 40]},
+          {"class": "punct", "text": ")", "span": [40, 41]},
+          {"class": "punct", "text": "{", "span": [42, 43]},
+          {"class": "punct", "text": "}", "span": [43, 44]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "48d12f1b6ca7e859", "span": [32, 43]},
+              {"position": 1, "hash": "779a20040de558e0", "span": [35, 44]}
+            ],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "48d12f1b6ca7e859", "span": [32, 43]}]
+          },
+          "normalized": {
+            "values": ["fn", "", "(", ")", "{", "}"],
+            "kgrams": [
+              {"position": 0, "hash": "22108fd33e4996ce", "span": [32, 43]},
+              {"position": 1, "hash": "a5f2fdbd9b845910", "span": [35, 44]}
+            ],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "22108fd33e4996ce", "span": [32, 43]}]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-inner-attribute",
+      "tags": ["shebang"],
+      "description": "'#!' followed by '[' is an inner attribute, not a shebang.",
+      "inputBase64": "IyFbYWxsb3coZGVhZF9jb2RlKV0KZm4gbWFpbigpIHt9Cg==",
+      "inputText": "#![allow(dead_code)]\nfn main() {}\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 14,
+        "tokens": [
+          {"class": "punct", "text": "#", "span": [0, 1]},
+          {"class": "punct", "text": "!", "span": [1, 2]},
+          {"class": "punct", "text": "[", "span": [2, 3]},
+          {"class": "ident", "text": "allow", "span": [3, 8]},
+          {"class": "punct", "text": "(", "span": [8, 9]},
+          {"class": "ident", "text": "dead_code", "span": [9, 18]},
+          {"class": "punct", "text": ")", "span": [18, 19]},
+          {"class": "punct", "text": "]", "span": [19, 20]},
+          {"class": "keyword", "text": "fn", "span": [21, 23]},
+          {"class": "ident", "text": "main", "span": [24, 28]},
+          {"class": "punct", "text": "(", "span": [28, 29]},
+          {"class": "punct", "text": ")", "span": [29, 30]},
+          {"class": "punct", "text": "{", "span": [31, 32]},
+          {"class": "punct", "text": "}", "span": [32, 33]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "5956e48773cfd56b", "span": [0, 9]},
+              {"position": 1, "hash": "bdea0574bec9fff9", "span": [1, 18]},
+              {"position": 2, "hash": "02a0a0d922951cd0", "span": [2, 19]},
+              {"position": 3, "hash": "b2a282c59df935c8", "span": [3, 20]},
+              {"position": 4, "hash": "7a9f953d94675c62", "span": [8, 23]},
+              {"position": 5, "hash": "7c8232fddd7db432", "span": [9, 28]},
+              {"position": 6, "hash": "b048089e88ae8d23", "span": [18, 29]},
+              {"position": 7, "hash": "a355632bba2d245d", "span": [19, 30]},
+              {"position": 8, "hash": "48d12f1b6ca7e859", "span": [21, 32]},
+              {"position": 9, "hash": "779a20040de558e0", "span": [24, 33]}
+            ],
+            "windowSelections": [2, 2, 2, 4, 4, 8, 8],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 2, "hash": "02a0a0d922951cd0", "span": [2, 19]},
+              {"position": 4, "hash": "7a9f953d94675c62", "span": [8, 23]},
+              {"position": 8, "hash": "48d12f1b6ca7e859", "span": [21, 32]}
+            ]
+          },
+          "normalized": {
+            "values": ["#", "!", "[", "", "(", "", ")", "]", "fn", "", "(", ")", "{", "}"],
+            "kgrams": [
+              {"position": 0, "hash": "6a8b475b94bbcf3d", "span": [0, 9]},
+              {"position": 1, "hash": "599071003d4b18a7", "span": [1, 18]},
+              {"position": 2, "hash": "b707ac460602cb63", "span": [2, 19]},
+              {"position": 3, "hash": "725a48ff4f7a9310", "span": [3, 20]},
+              {"position": 4, "hash": "b5e047dd0b3282f2", "span": [8, 23]},
+              {"position": 5, "hash": "84dd3d84ff2ce841", "span": [9, 28]},
+              {"position": 6, "hash": "adf60fc7d09c4d05", "span": [18, 29]},
+              {"position": 7, "hash": "822e993a2c3de14c", "span": [19, 30]},
+              {"position": 8, "hash": "22108fd33e4996ce", "span": [21, 32]},
+              {"position": 9, "hash": "a5f2fdbd9b845910", "span": [24, 33]}
+            ],
+            "windowSelections": [1, 1, 3, 3, 7, 8, 8],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 1, "hash": "599071003d4b18a7", "span": [1, 18]},
+              {"position": 3, "hash": "725a48ff4f7a9310", "span": [3, 20]},
+              {"position": 7, "hash": "822e993a2c3de14c", "span": [19, 30]},
+              {"position": 8, "hash": "22108fd33e4996ce", "span": [21, 32]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-doc-comment",
+      "tags": ["comments"],
+      "description": "Doc comments are dropped like other comments (rustc treats them as doc attributes).",
+      "inputBase64": "Ly8vIEFkZHMuCi8vISBpbm5lcgovKiogYmxvY2sgZG9jICovCmZuIGFkZCgpIHt9Cg==",
+      "inputText": "/// Adds.\n//! inner\n/** block doc */\nfn add() {}\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 6,
+        "tokens": [
+          {"class": "keyword", "text": "fn", "span": [37, 39]},
+          {"class": "ident", "text": "add", "span": [40, 43]},
+          {"class": "punct", "text": "(", "span": [43, 44]},
+          {"class": "punct", "text": ")", "span": [44, 45]},
+          {"class": "punct", "text": "{", "span": [46, 47]},
+          {"class": "punct", "text": "}", "span": [47, 48]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "2485278850f336c8", "span": [37, 47]},
+              {"position": 1, "hash": "39a8c7305c838b89", "span": [40, 48]}
+            ],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "2485278850f336c8", "span": [37, 47]}]
+          },
+          "normalized": {
+            "values": ["fn", "", "(", ")", "{", "}"],
+            "kgrams": [
+              {"position": 0, "hash": "22108fd33e4996ce", "span": [37, 47]},
+              {"position": 1, "hash": "a5f2fdbd9b845910", "span": [40, 48]}
+            ],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "22108fd33e4996ce", "span": [37, 47]}]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-repeated",
+      "tags": ["repeated", "equal-minimum"],
+      "description": "Ten identical tokens: all k-grams identical, every window ties, rightmost minimum wins.",
+      "inputBase64": "KyArICsgKyArICsgKyArICsgKw==",
+      "inputText": "+ + + + + + + + + +",
+      "result": {
+        "status": "ok",
+        "tokenCount": 10,
+        "tokens": [
+          {"class": "punct", "text": "+", "span": [0, 1]},
+          {"class": "punct", "text": "+", "span": [2, 3]},
+          {"class": "punct", "text": "+", "span": [4, 5]},
+          {"class": "punct", "text": "+", "span": [6, 7]},
+          {"class": "punct", "text": "+", "span": [8, 9]},
+          {"class": "punct", "text": "+", "span": [10, 11]},
+          {"class": "punct", "text": "+", "span": [12, 13]},
+          {"class": "punct", "text": "+", "span": [14, 15]},
+          {"class": "punct", "text": "+", "span": [16, 17]},
+          {"class": "punct", "text": "+", "span": [18, 19]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "6b22078bae3072e4", "span": [0, 9]},
+              {"position": 1, "hash": "6b22078bae3072e4", "span": [2, 11]},
+              {"position": 2, "hash": "6b22078bae3072e4", "span": [4, 13]},
+              {"position": 3, "hash": "6b22078bae3072e4", "span": [6, 15]},
+              {"position": 4, "hash": "6b22078bae3072e4", "span": [8, 17]},
+              {"position": 5, "hash": "6b22078bae3072e4", "span": [10, 19]}
+            ],
+            "windowSelections": [3, 4, 5],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 3, "hash": "6b22078bae3072e4", "span": [6, 15]},
+              {"position": 4, "hash": "6b22078bae3072e4", "span": [8, 17]},
+              {"position": 5, "hash": "6b22078bae3072e4", "span": [10, 19]}
+            ]
+          },
+          "normalized": {
+            "values": ["+", "+", "+", "+", "+", "+", "+", "+", "+", "+"],
+            "kgrams": [
+              {"position": 0, "hash": "798c55286dd7a24f", "span": [0, 9]},
+              {"position": 1, "hash": "798c55286dd7a24f", "span": [2, 11]},
+              {"position": 2, "hash": "798c55286dd7a24f", "span": [4, 13]},
+              {"position": 3, "hash": "798c55286dd7a24f", "span": [6, 15]},
+              {"position": 4, "hash": "798c55286dd7a24f", "span": [8, 17]},
+              {"position": 5, "hash": "798c55286dd7a24f", "span": [10, 19]}
+            ],
+            "windowSelections": [3, 4, 5],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 3, "hash": "798c55286dd7a24f", "span": [6, 15]},
+              {"position": 4, "hash": "798c55286dd7a24f", "span": [8, 17]},
+              {"position": 5, "hash": "798c55286dd7a24f", "span": [10, 19]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-equal-minimum",
+      "tags": ["repeated", "equal-minimum"],
+      "description": "Period-3 token sequence: every window of 4 contains a repeated k-gram, so ties on the minimum are guaranteed.",
+      "inputBase64": "e3h9IHt4fSB7eH0ge3h9",
+      "inputText": "{x} {x} {x} {x}",
+      "result": {
+        "status": "ok",
+        "tokenCount": 12,
+        "tokens": [
+          {"class": "punct", "text": "{", "span": [0, 1]},
+          {"class": "ident", "text": "x", "span": [1, 2]},
+          {"class": "punct", "text": "}", "span": [2, 3]},
+          {"class": "punct", "text": "{", "span": [4, 5]},
+          {"class": "ident", "text": "x", "span": [5, 6]},
+          {"class": "punct", "text": "}", "span": [6, 7]},
+          {"class": "punct", "text": "{", "span": [8, 9]},
+          {"class": "ident", "text": "x", "span": [9, 10]},
+          {"class": "punct", "text": "}", "span": [10, 11]},
+          {"class": "punct", "text": "{", "span": [12, 13]},
+          {"class": "ident", "text": "x", "span": [13, 14]},
+          {"class": "punct", "text": "}", "span": [14, 15]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "7c2ef097135362ea", "span": [0, 6]},
+              {"position": 1, "hash": "57c4436c29bbb40d", "span": [1, 7]},
+              {"position": 2, "hash": "513ca314fe0d77b7", "span": [2, 9]},
+              {"position": 3, "hash": "7c2ef097135362ea", "span": [4, 10]},
+              {"position": 4, "hash": "57c4436c29bbb40d", "span": [5, 11]},
+              {"position": 5, "hash": "513ca314fe0d77b7", "span": [6, 13]},
+              {"position": 6, "hash": "7c2ef097135362ea", "span": [8, 14]},
+              {"position": 7, "hash": "57c4436c29bbb40d", "span": [9, 15]}
+            ],
+            "windowSelections": [2, 2, 5, 5, 5],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 2, "hash": "513ca314fe0d77b7", "span": [2, 9]},
+              {"position": 5, "hash": "513ca314fe0d77b7", "span": [6, 13]}
+            ]
+          },
+          "normalized": {
+            "values": ["{", "", "}", "{", "", "}", "{", "", "}", "{", "", "}"],
+            "kgrams": [
+              {"position": 0, "hash": "ef51b74bb18a1654", "span": [0, 6]},
+              {"position": 1, "hash": "b80a08936041da79", "span": [1, 7]},
+              {"position": 2, "hash": "78556981c11e5d65", "span": [2, 9]},
+              {"position": 3, "hash": "ef51b74bb18a1654", "span": [4, 10]},
+              {"position": 4, "hash": "b80a08936041da79", "span": [5, 11]},
+              {"position": 5, "hash": "78556981c11e5d65", "span": [6, 13]},
+              {"position": 6, "hash": "ef51b74bb18a1654", "span": [8, 14]},
+              {"position": 7, "hash": "b80a08936041da79", "span": [9, 15]}
+            ],
+            "windowSelections": [2, 2, 5, 5, 5],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 2, "hash": "78556981c11e5d65", "span": [2, 9]},
+              {"position": 5, "hash": "78556981c11e5d65", "span": [6, 13]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-format-a",
+      "tags": ["trivia-pair"],
+      "description": "Reference for the comment/whitespace pair.",
+      "inputBase64": "Zm4gYWRkKGE6IGkzMiwgYjogaTMyKSAtPiBpMzIgewogICAgYSArIGIKfQo=",
+      "inputText": "fn add(a: i32, b: i32) -> i32 {\n    a + b\n}\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 19,
+        "tokens": [
+          {"class": "keyword", "text": "fn", "span": [0, 2]},
+          {"class": "ident", "text": "add", "span": [3, 6]},
+          {"class": "punct", "text": "(", "span": [6, 7]},
+          {"class": "ident", "text": "a", "span": [7, 8]},
+          {"class": "punct", "text": ":", "span": [8, 9]},
+          {"class": "ident", "text": "i32", "span": [10, 13]},
+          {"class": "punct", "text": ",", "span": [13, 14]},
+          {"class": "ident", "text": "b", "span": [15, 16]},
+          {"class": "punct", "text": ":", "span": [16, 17]},
+          {"class": "ident", "text": "i32", "span": [18, 21]},
+          {"class": "punct", "text": ")", "span": [21, 22]},
+          {"class": "punct", "text": "-", "span": [23, 24]},
+          {"class": "punct", "text": ">", "span": [24, 25]},
+          {"class": "ident", "text": "i32", "span": [26, 29]},
+          {"class": "punct", "text": "{", "span": [30, 31]},
+          {"class": "ident", "text": "a", "span": [36, 37]},
+          {"class": "punct", "text": "+", "span": [38, 39]},
+          {"class": "ident", "text": "b", "span": [40, 41]},
+          {"class": "punct", "text": "}", "span": [42, 43]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "3c53aaad1021aa55", "span": [0, 9]},
+              {"position": 1, "hash": "eacc4d7d70390f9d", "span": [3, 13]},
+              {"position": 2, "hash": "f85297f4ed8d20b2", "span": [6, 14]},
+              {"position": 3, "hash": "0ec3fc58630fbc8b", "span": [7, 16]},
+              {"position": 4, "hash": "e4f553d922ee2d27", "span": [8, 17]},
+              {"position": 5, "hash": "5ba3ae6af21629be", "span": [10, 21]},
+              {"position": 6, "hash": "f808147fbdcac3f6", "span": [13, 22]},
+              {"position": 7, "hash": "e9d6dd36b4032964", "span": [15, 24]},
+              {"position": 8, "hash": "eb5548ddebc244f1", "span": [16, 25]},
+              {"position": 9, "hash": "fe568f54045705d2", "span": [18, 29]},
+              {"position": 10, "hash": "e550fabba468a13c", "span": [21, 31]},
+              {"position": 11, "hash": "26644e7286b35d43", "span": [23, 37]},
+              {"position": 12, "hash": "e74a5fb42fb169c4", "span": [24, 39]},
+              {"position": 13, "hash": "8f08f855b5412a84", "span": [26, 41]},
+              {"position": 14, "hash": "c68c93e9c0df6929", "span": [30, 43]}
+            ],
+            "windowSelections": [3, 3, 3, 3, 5, 5, 7, 10, 11, 11, 11, 11],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 3, "hash": "0ec3fc58630fbc8b", "span": [7, 16]},
+              {"position": 5, "hash": "5ba3ae6af21629be", "span": [10, 21]},
+              {"position": 7, "hash": "e9d6dd36b4032964", "span": [15, 24]},
+              {"position": 10, "hash": "e550fabba468a13c", "span": [21, 31]},
+              {"position": 11, "hash": "26644e7286b35d43", "span": [23, 37]}
+            ]
+          },
+          "normalized": {
+            "values": ["fn", "", "(", "", ":", "", ",", "", ":", "", ")", "-", ">", "", "{", "", "+", "", "}"],
+            "kgrams": [
+              {"position": 0, "hash": "d566fd58205e94bd", "span": [0, 9]},
+              {"position": 1, "hash": "027eab62594a65c3", "span": [3, 13]},
+              {"position": 2, "hash": "d72187437df82b55", "span": [6, 14]},
+              {"position": 3, "hash": "dece576fff82f9a1", "span": [7, 16]},
+              {"position": 4, "hash": "47c74c79fc4d852a", "span": [8, 17]},
+              {"position": 5, "hash": "04613d5a277c2323", "span": [10, 21]},
+              {"position": 6, "hash": "e747794de3816855", "span": [13, 22]},
+              {"position": 7, "hash": "5464a09764ed2b28", "span": [15, 24]},
+              {"position": 8, "hash": "ba77645195a63a0b", "span": [16, 25]},
+              {"position": 9, "hash": "4dc3cda665a7c4a4", "span": [18, 29]},
+              {"position": 10, "hash": "3b1c019650f9606f", "span": [21, 31]},
+              {"position": 11, "hash": "99c66f0f5218eeb2", "span": [23, 37]},
+              {"position": 12, "hash": "f3868a38f1821cf8", "span": [24, 39]},
+              {"position": 13, "hash": "0bffeb251169e4a9", "span": [26, 41]},
+              {"position": 14, "hash": "8cb384208b3c5a5f", "span": [30, 43]}
+            ],
+            "windowSelections": [1, 1, 5, 5, 5, 5, 9, 10, 10, 10, 13, 13],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 1, "hash": "027eab62594a65c3", "span": [3, 13]},
+              {"position": 5, "hash": "04613d5a277c2323", "span": [10, 21]},
+              {"position": 9, "hash": "4dc3cda665a7c4a4", "span": [18, 29]},
+              {"position": 10, "hash": "3b1c019650f9606f", "span": [21, 31]},
+              {"position": 13, "hash": "0bffeb251169e4a9", "span": [26, 41]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-format-b",
+      "tags": ["trivia-pair", "comments"],
+      "description": "Same tokens as rust-format-a with line and nested block comments and different whitespace; fingerprint hashes must be identical.",
+      "inputBase64": "Ly8gbGluZSBjb21tZW50DQpmbiBhZGQoYTppMzIsYjppMzIpLT5pMzJ7Lyogb3V0ZXIgLyogbmVzdGVkICovIHN0aWxsIGNvbW1lbnQgKi9hK2IgLy8gdGFpbA0KfQ==",
+      "inputText": "// line comment\r\nfn add(a:i32,b:i32)->i32{/* outer /* nested */ still comment */a+b // tail\r\n}",
+      "result": {
+        "status": "ok",
+        "tokenCount": 19,
+        "tokens": [
+          {"class": "keyword", "text": "fn", "span": [17, 19]},
+          {"class": "ident", "text": "add", "span": [20, 23]},
+          {"class": "punct", "text": "(", "span": [23, 24]},
+          {"class": "ident", "text": "a", "span": [24, 25]},
+          {"class": "punct", "text": ":", "span": [25, 26]},
+          {"class": "ident", "text": "i32", "span": [26, 29]},
+          {"class": "punct", "text": ",", "span": [29, 30]},
+          {"class": "ident", "text": "b", "span": [30, 31]},
+          {"class": "punct", "text": ":", "span": [31, 32]},
+          {"class": "ident", "text": "i32", "span": [32, 35]},
+          {"class": "punct", "text": ")", "span": [35, 36]},
+          {"class": "punct", "text": "-", "span": [36, 37]},
+          {"class": "punct", "text": ">", "span": [37, 38]},
+          {"class": "ident", "text": "i32", "span": [38, 41]},
+          {"class": "punct", "text": "{", "span": [41, 42]},
+          {"class": "ident", "text": "a", "span": [80, 81]},
+          {"class": "punct", "text": "+", "span": [81, 82]},
+          {"class": "ident", "text": "b", "span": [82, 83]},
+          {"class": "punct", "text": "}", "span": [93, 94]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "3c53aaad1021aa55", "span": [17, 26]},
+              {"position": 1, "hash": "eacc4d7d70390f9d", "span": [20, 29]},
+              {"position": 2, "hash": "f85297f4ed8d20b2", "span": [23, 30]},
+              {"position": 3, "hash": "0ec3fc58630fbc8b", "span": [24, 31]},
+              {"position": 4, "hash": "e4f553d922ee2d27", "span": [25, 32]},
+              {"position": 5, "hash": "5ba3ae6af21629be", "span": [26, 35]},
+              {"position": 6, "hash": "f808147fbdcac3f6", "span": [29, 36]},
+              {"position": 7, "hash": "e9d6dd36b4032964", "span": [30, 37]},
+              {"position": 8, "hash": "eb5548ddebc244f1", "span": [31, 38]},
+              {"position": 9, "hash": "fe568f54045705d2", "span": [32, 41]},
+              {"position": 10, "hash": "e550fabba468a13c", "span": [35, 42]},
+              {"position": 11, "hash": "26644e7286b35d43", "span": [36, 81]},
+              {"position": 12, "hash": "e74a5fb42fb169c4", "span": [37, 82]},
+              {"position": 13, "hash": "8f08f855b5412a84", "span": [38, 83]},
+              {"position": 14, "hash": "c68c93e9c0df6929", "span": [41, 94]}
+            ],
+            "windowSelections": [3, 3, 3, 3, 5, 5, 7, 10, 11, 11, 11, 11],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 3, "hash": "0ec3fc58630fbc8b", "span": [24, 31]},
+              {"position": 5, "hash": "5ba3ae6af21629be", "span": [26, 35]},
+              {"position": 7, "hash": "e9d6dd36b4032964", "span": [30, 37]},
+              {"position": 10, "hash": "e550fabba468a13c", "span": [35, 42]},
+              {"position": 11, "hash": "26644e7286b35d43", "span": [36, 81]}
+            ]
+          },
+          "normalized": {
+            "values": ["fn", "", "(", "", ":", "", ",", "", ":", "", ")", "-", ">", "", "{", "", "+", "", "}"],
+            "kgrams": [
+              {"position": 0, "hash": "d566fd58205e94bd", "span": [17, 26]},
+              {"position": 1, "hash": "027eab62594a65c3", "span": [20, 29]},
+              {"position": 2, "hash": "d72187437df82b55", "span": [23, 30]},
+              {"position": 3, "hash": "dece576fff82f9a1", "span": [24, 31]},
+              {"position": 4, "hash": "47c74c79fc4d852a", "span": [25, 32]},
+              {"position": 5, "hash": "04613d5a277c2323", "span": [26, 35]},
+              {"position": 6, "hash": "e747794de3816855", "span": [29, 36]},
+              {"position": 7, "hash": "5464a09764ed2b28", "span": [30, 37]},
+              {"position": 8, "hash": "ba77645195a63a0b", "span": [31, 38]},
+              {"position": 9, "hash": "4dc3cda665a7c4a4", "span": [32, 41]},
+              {"position": 10, "hash": "3b1c019650f9606f", "span": [35, 42]},
+              {"position": 11, "hash": "99c66f0f5218eeb2", "span": [36, 81]},
+              {"position": 12, "hash": "f3868a38f1821cf8", "span": [37, 82]},
+              {"position": 13, "hash": "0bffeb251169e4a9", "span": [38, 83]},
+              {"position": 14, "hash": "8cb384208b3c5a5f", "span": [41, 94]}
+            ],
+            "windowSelections": [1, 1, 5, 5, 5, 5, 9, 10, 10, 10, 13, 13],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 1, "hash": "027eab62594a65c3", "span": [20, 29]},
+              {"position": 5, "hash": "04613d5a277c2323", "span": [26, 35]},
+              {"position": 9, "hash": "4dc3cda665a7c4a4", "span": [32, 41]},
+              {"position": 10, "hash": "3b1c019650f9606f", "span": [35, 42]},
+              {"position": 13, "hash": "0bffeb251169e4a9", "span": [38, 83]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-rename-a",
+      "tags": ["rename-pair"],
+      "description": "Reference for the rename pair.",
+      "inputBase64": "Zm4gYWRkKGE6IGkzMiwgYjogaTMyKSAtPiBpMzIgeyBhICsgYiB9",
+      "inputText": "fn add(a: i32, b: i32) -> i32 { a + b }",
+      "result": {
+        "status": "ok",
+        "tokenCount": 19,
+        "tokens": [
+          {"class": "keyword", "text": "fn", "span": [0, 2]},
+          {"class": "ident", "text": "add", "span": [3, 6]},
+          {"class": "punct", "text": "(", "span": [6, 7]},
+          {"class": "ident", "text": "a", "span": [7, 8]},
+          {"class": "punct", "text": ":", "span": [8, 9]},
+          {"class": "ident", "text": "i32", "span": [10, 13]},
+          {"class": "punct", "text": ",", "span": [13, 14]},
+          {"class": "ident", "text": "b", "span": [15, 16]},
+          {"class": "punct", "text": ":", "span": [16, 17]},
+          {"class": "ident", "text": "i32", "span": [18, 21]},
+          {"class": "punct", "text": ")", "span": [21, 22]},
+          {"class": "punct", "text": "-", "span": [23, 24]},
+          {"class": "punct", "text": ">", "span": [24, 25]},
+          {"class": "ident", "text": "i32", "span": [26, 29]},
+          {"class": "punct", "text": "{", "span": [30, 31]},
+          {"class": "ident", "text": "a", "span": [32, 33]},
+          {"class": "punct", "text": "+", "span": [34, 35]},
+          {"class": "ident", "text": "b", "span": [36, 37]},
+          {"class": "punct", "text": "}", "span": [38, 39]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "3c53aaad1021aa55", "span": [0, 9]},
+              {"position": 1, "hash": "eacc4d7d70390f9d", "span": [3, 13]},
+              {"position": 2, "hash": "f85297f4ed8d20b2", "span": [6, 14]},
+              {"position": 3, "hash": "0ec3fc58630fbc8b", "span": [7, 16]},
+              {"position": 4, "hash": "e4f553d922ee2d27", "span": [8, 17]},
+              {"position": 5, "hash": "5ba3ae6af21629be", "span": [10, 21]},
+              {"position": 6, "hash": "f808147fbdcac3f6", "span": [13, 22]},
+              {"position": 7, "hash": "e9d6dd36b4032964", "span": [15, 24]},
+              {"position": 8, "hash": "eb5548ddebc244f1", "span": [16, 25]},
+              {"position": 9, "hash": "fe568f54045705d2", "span": [18, 29]},
+              {"position": 10, "hash": "e550fabba468a13c", "span": [21, 31]},
+              {"position": 11, "hash": "26644e7286b35d43", "span": [23, 33]},
+              {"position": 12, "hash": "e74a5fb42fb169c4", "span": [24, 35]},
+              {"position": 13, "hash": "8f08f855b5412a84", "span": [26, 37]},
+              {"position": 14, "hash": "c68c93e9c0df6929", "span": [30, 39]}
+            ],
+            "windowSelections": [3, 3, 3, 3, 5, 5, 7, 10, 11, 11, 11, 11],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 3, "hash": "0ec3fc58630fbc8b", "span": [7, 16]},
+              {"position": 5, "hash": "5ba3ae6af21629be", "span": [10, 21]},
+              {"position": 7, "hash": "e9d6dd36b4032964", "span": [15, 24]},
+              {"position": 10, "hash": "e550fabba468a13c", "span": [21, 31]},
+              {"position": 11, "hash": "26644e7286b35d43", "span": [23, 33]}
+            ]
+          },
+          "normalized": {
+            "values": ["fn", "", "(", "", ":", "", ",", "", ":", "", ")", "-", ">", "", "{", "", "+", "", "}"],
+            "kgrams": [
+              {"position": 0, "hash": "d566fd58205e94bd", "span": [0, 9]},
+              {"position": 1, "hash": "027eab62594a65c3", "span": [3, 13]},
+              {"position": 2, "hash": "d72187437df82b55", "span": [6, 14]},
+              {"position": 3, "hash": "dece576fff82f9a1", "span": [7, 16]},
+              {"position": 4, "hash": "47c74c79fc4d852a", "span": [8, 17]},
+              {"position": 5, "hash": "04613d5a277c2323", "span": [10, 21]},
+              {"position": 6, "hash": "e747794de3816855", "span": [13, 22]},
+              {"position": 7, "hash": "5464a09764ed2b28", "span": [15, 24]},
+              {"position": 8, "hash": "ba77645195a63a0b", "span": [16, 25]},
+              {"position": 9, "hash": "4dc3cda665a7c4a4", "span": [18, 29]},
+              {"position": 10, "hash": "3b1c019650f9606f", "span": [21, 31]},
+              {"position": 11, "hash": "99c66f0f5218eeb2", "span": [23, 33]},
+              {"position": 12, "hash": "f3868a38f1821cf8", "span": [24, 35]},
+              {"position": 13, "hash": "0bffeb251169e4a9", "span": [26, 37]},
+              {"position": 14, "hash": "8cb384208b3c5a5f", "span": [30, 39]}
+            ],
+            "windowSelections": [1, 1, 5, 5, 5, 5, 9, 10, 10, 10, 13, 13],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 1, "hash": "027eab62594a65c3", "span": [3, 13]},
+              {"position": 5, "hash": "04613d5a277c2323", "span": [10, 21]},
+              {"position": 9, "hash": "4dc3cda665a7c4a4", "span": [18, 29]},
+              {"position": 10, "hash": "3b1c019650f9606f", "span": [21, 31]},
+              {"position": 13, "hash": "0bffeb251169e4a9", "span": [26, 37]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-rename-b",
+      "tags": ["rename-pair"],
+      "description": "Identifiers renamed: exact hashes differ, normalized hashes equal rust-rename-a.",
+      "inputBase64": "Zm4gc3VtKHg6IGkzMiwgeTogaTMyKSAtPiBpMzIgeyB4ICsgeSB9",
+      "inputText": "fn sum(x: i32, y: i32) -> i32 { x + y }",
+      "result": {
+        "status": "ok",
+        "tokenCount": 19,
+        "tokens": [
+          {"class": "keyword", "text": "fn", "span": [0, 2]},
+          {"class": "ident", "text": "sum", "span": [3, 6]},
+          {"class": "punct", "text": "(", "span": [6, 7]},
+          {"class": "ident", "text": "x", "span": [7, 8]},
+          {"class": "punct", "text": ":", "span": [8, 9]},
+          {"class": "ident", "text": "i32", "span": [10, 13]},
+          {"class": "punct", "text": ",", "span": [13, 14]},
+          {"class": "ident", "text": "y", "span": [15, 16]},
+          {"class": "punct", "text": ":", "span": [16, 17]},
+          {"class": "ident", "text": "i32", "span": [18, 21]},
+          {"class": "punct", "text": ")", "span": [21, 22]},
+          {"class": "punct", "text": "-", "span": [23, 24]},
+          {"class": "punct", "text": ">", "span": [24, 25]},
+          {"class": "ident", "text": "i32", "span": [26, 29]},
+          {"class": "punct", "text": "{", "span": [30, 31]},
+          {"class": "ident", "text": "x", "span": [32, 33]},
+          {"class": "punct", "text": "+", "span": [34, 35]},
+          {"class": "ident", "text": "y", "span": [36, 37]},
+          {"class": "punct", "text": "}", "span": [38, 39]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "d3200c9af0b575fc", "span": [0, 9]},
+              {"position": 1, "hash": "78714360e3052ab2", "span": [3, 13]},
+              {"position": 2, "hash": "00be6ba3933f3440", "span": [6, 14]},
+              {"position": 3, "hash": "7761a5076bd086c6", "span": [7, 16]},
+              {"position": 4, "hash": "d15cb409b98cdd99", "span": [8, 17]},
+              {"position": 5, "hash": "8ad9a0ba317a2951", "span": [10, 21]},
+              {"position": 6, "hash": "5ce9ff0b0084745e", "span": [13, 22]},
+              {"position": 7, "hash": "fca60e0e850e00e1", "span": [15, 24]},
+              {"position": 8, "hash": "eb5548ddebc244f1", "span": [16, 25]},
+              {"position": 9, "hash": "fe568f54045705d2", "span": [18, 29]},
+              {"position": 10, "hash": "e550fabba468a13c", "span": [21, 31]},
+              {"position": 11, "hash": "21750cfc3e192292", "span": [23, 33]},
+              {"position": 12, "hash": "21aacd69f5c11cac", "span": [24, 35]},
+              {"position": 13, "hash": "c97fdc0ab84f35ca", "span": [26, 37]},
+              {"position": 14, "hash": "4cce3d09f6d6d478", "span": [30, 39]}
+            ],
+            "windowSelections": [2, 2, 2, 6, 6, 6, 6, 10, 11, 11, 11, 11],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 2, "hash": "00be6ba3933f3440", "span": [6, 14]},
+              {"position": 6, "hash": "5ce9ff0b0084745e", "span": [13, 22]},
+              {"position": 10, "hash": "e550fabba468a13c", "span": [21, 31]},
+              {"position": 11, "hash": "21750cfc3e192292", "span": [23, 33]}
+            ]
+          },
+          "normalized": {
+            "values": ["fn", "", "(", "", ":", "", ",", "", ":", "", ")", "-", ">", "", "{", "", "+", "", "}"],
+            "kgrams": [
+              {"position": 0, "hash": "d566fd58205e94bd", "span": [0, 9]},
+              {"position": 1, "hash": "027eab62594a65c3", "span": [3, 13]},
+              {"position": 2, "hash": "d72187437df82b55", "span": [6, 14]},
+              {"position": 3, "hash": "dece576fff82f9a1", "span": [7, 16]},
+              {"position": 4, "hash": "47c74c79fc4d852a", "span": [8, 17]},
+              {"position": 5, "hash": "04613d5a277c2323", "span": [10, 21]},
+              {"position": 6, "hash": "e747794de3816855", "span": [13, 22]},
+              {"position": 7, "hash": "5464a09764ed2b28", "span": [15, 24]},
+              {"position": 8, "hash": "ba77645195a63a0b", "span": [16, 25]},
+              {"position": 9, "hash": "4dc3cda665a7c4a4", "span": [18, 29]},
+              {"position": 10, "hash": "3b1c019650f9606f", "span": [21, 31]},
+              {"position": 11, "hash": "99c66f0f5218eeb2", "span": [23, 33]},
+              {"position": 12, "hash": "f3868a38f1821cf8", "span": [24, 35]},
+              {"position": 13, "hash": "0bffeb251169e4a9", "span": [26, 37]},
+              {"position": 14, "hash": "8cb384208b3c5a5f", "span": [30, 39]}
+            ],
+            "windowSelections": [1, 1, 5, 5, 5, 5, 9, 10, 10, 10, 13, 13],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 1, "hash": "027eab62594a65c3", "span": [3, 13]},
+              {"position": 5, "hash": "04613d5a277c2323", "span": [10, 21]},
+              {"position": 9, "hash": "4dc3cda665a7c4a4", "span": [18, 29]},
+              {"position": 10, "hash": "3b1c019650f9606f", "span": [21, 31]},
+              {"position": 13, "hash": "0bffeb251169e4a9", "span": [26, 37]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-err-invalid-utf8",
+      "tags": ["malformed"],
+      "description": "Byte 0xFF inside a string literal: invalid UTF-8.",
+      "inputBase64": "bGV0IHMgPSAiYf9iIjs=",
+      "inputText": null,
+      "inputDisplay": "let s = \"a\\xffb\";",
+      "result": {"status": "error", "error": {"code": "invalid-utf8", "offset": 10}}
+    },
+    {
+      "id": "rust-err-bom",
+      "tags": ["malformed"],
+      "description": "Leading byte order mark: rejected (stricter than the Reference, which removes it).",
+      "inputBase64": "77u/Zm4gbWFpbigpIHt9Cg==",
+      "inputText": "﻿fn main() {}\n",
+      "result": {"status": "error", "error": {"code": "bom", "offset": 0}}
+    },
+    {
+      "id": "rust-err-nul",
+      "tags": ["malformed"],
+      "description": "NUL inside a string literal: rejected (stricter than the Reference).",
+      "inputBase64": "bGV0IHMgPSAiYQAiOw==",
+      "inputText": "let s = \"a\u0000\";",
+      "result": {"status": "error", "error": {"code": "nul", "offset": 10}}
+    },
+    {
+      "id": "rust-err-isolated-cr",
+      "tags": ["malformed"],
+      "description": "CR not followed by LF: rejected (stricter than the Reference, which treats it as whitespace here).",
+      "inputBase64": "bGV0IGEgPSAxOw1sZXQgYiA9IDI7",
+      "inputText": "let a = 1;\rlet b = 2;",
+      "result": {"status": "error", "error": {"code": "isolated-cr", "offset": 10}}
+    },
+    {
+      "id": "rust-err-unterminated-nested-comment",
+      "tags": ["malformed", "comments"],
+      "description": "Nested block comment: the inner '*/' closes only the inner level.",
+      "inputBase64": "Zm4gZigpIHt9IC8qIG91dGVyIC8qIGlubmVyICovIHN0aWxsIG9wZW4=",
+      "inputText": "fn f() {} /* outer /* inner */ still open",
+      "result": {"status": "error", "error": {"code": "unterminated-comment", "offset": 10}}
+    },
+    {
+      "id": "rust-err-unterminated-string",
+      "tags": ["malformed"],
+      "description": "String literal never closed.",
+      "inputBase64": "bGV0IHMgPSAiYWJjOwo=",
+      "inputText": "let s = \"abc;\n",
+      "result": {"status": "error", "error": {"code": "unterminated-literal", "offset": 8}}
+    },
+    {
+      "id": "rust-err-unbalanced",
+      "tags": ["malformed"],
+      "description": "Closing '}' while '(' is open.",
+      "inputBase64": "Zm4gZigpIHsgKDEgfQ==",
+      "inputText": "fn f() { (1 }",
+      "result": {"status": "error", "error": {"code": "unbalanced-delimiter", "offset": 12}}
+    },
+    {
+      "id": "rust-err-char-two-codepoints",
+      "tags": ["malformed", "lifetimes"],
+      "description": "'ab' is neither a char literal nor a lifetime.",
+      "inputBase64": "bGV0IGMgPSAnYWInOw==",
+      "inputText": "let c = 'ab';",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 8}}
+    },
+    {
+      "id": "rust-err-reserved-prefix",
+      "tags": ["malformed"],
+      "description": "Identifier immediately followed by '\"' is a reserved prefix in edition 2021+.",
+      "inputBase64": "bGV0IHMgPSBmIngiOw==",
+      "inputText": "let s = f\"x\";",
+      "result": {"status": "error", "error": {"code": "reserved-token", "offset": 8}}
+    },
+    {
+      "id": "rust-err-non-nfc-identifier",
+      "tags": ["malformed", "unicode"],
+      "description": "Identifier 'e' + U+0301 is valid XID but not NFC: rejected rather than normalized.",
+      "inputBase64": "bGV0IGXMgSA9IDE7",
+      "inputText": "let é = 1;",
+      "result": {"status": "error", "error": {"code": "non-nfc-identifier", "offset": 4}}
+    },
+    {
+      "id": "rust-unicode-boundary",
+      "tags": ["unicode", "unicode-boundary"],
+      "description": "XID boundary code points accepted by Rust: U+2160 (XID_Start), U+00B7 and U+0345 (XID_Continue); all NFC.",
+      "inputBase64": "bGV0IHjihaAgPSB4wrd5ICsgeM2FOw==",
+      "inputText": "let xⅠ = x·y + xͅ;",
+      "result": {
+        "status": "ok",
+        "tokenCount": 7,
+        "tokens": [
+          {"class": "keyword", "text": "let", "span": [0, 3]},
+          {"class": "ident", "text": "xⅠ", "span": [4, 8]},
+          {"class": "punct", "text": "=", "span": [9, 10]},
+          {"class": "ident", "text": "x·y", "span": [11, 15]},
+          {"class": "punct", "text": "+", "span": [16, 17]},
+          {"class": "ident", "text": "xͅ", "span": [18, 21]},
+          {"class": "punct", "text": ";", "span": [21, 22]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "ff95f0bc56d365fe", "span": [0, 17]},
+              {"position": 1, "hash": "a8820143fcd51dde", "span": [4, 21]},
+              {"position": 2, "hash": "db1600cfa3adbc56", "span": [9, 22]}
+            ],
+            "windowSelections": [1],
+            "partialWindow": true,
+            "fingerprints": [{"position": 1, "hash": "a8820143fcd51dde", "span": [4, 21]}]
+          },
+          "normalized": {
+            "values": ["let", "", "=", "", "+", "", ";"],
+            "kgrams": [
+              {"position": 0, "hash": "548a957e4f189e22", "span": [0, 17]},
+              {"position": 1, "hash": "6e41f5183eeffa76", "span": [4, 21]},
+              {"position": 2, "hash": "864dae85682c0a42", "span": [9, 22]}
+            ],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "548a957e4f189e22", "span": [0, 17]}]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-err-u2e2f",
+      "tags": ["malformed", "unicode-boundary"],
+      "description": "U+2E2F VERTICAL TILDE is Pattern_Syntax, not XID: illegal character after the identifier 'a' (Go accepts it as Lm).",
+      "inputBase64": "bGV0IGHiuK8gPSAxOw==",
+      "inputText": "let aⸯ = 1;",
+      "result": {"status": "error", "error": {"code": "illegal-character", "offset": 5}}
+    },
+    {
+      "id": "rust-err-u200d",
+      "tags": ["malformed", "unicode-boundary"],
+      "description": "U+200D is XID_Continue in Unicode 17.0 but forbidden in identifiers by [ident.zero-width-chars].",
+      "inputBase64": "bGV0IHjigI0gPSAxOw==",
+      "inputText": "let x‍ = 1;",
+      "result": {"status": "error", "error": {"code": "malformed-identifier", "offset": 4}}
+    },
+    {
+      "id": "rust-err-non-nfc-suffix",
+      "tags": ["malformed", "unicode-boundary"],
+      "description": "Literal suffix 'u8' + 'e' + U+0301 is not NFC; offset is the literal start.",
+      "inputBase64": "bGV0IG4gPSAxX3U4ZcyBOw==",
+      "inputText": "let n = 1_u8é;",
+      "result": {"status": "error", "error": {"code": "non-nfc-identifier", "offset": 8}}
+    },
+    {
+      "id": "rust-err-non-nfc-raw-ident",
+      "tags": ["malformed", "unicode-boundary"],
+      "description": "Raw identifier r#e + U+0301 is not NFC; offset is the token start (the 'r').",
+      "inputBase64": "bGV0IHIjZcyBID0gMTs=",
+      "inputText": "let r#é = 1;",
+      "result": {"status": "error", "error": {"code": "non-nfc-identifier", "offset": 4}}
+    },
+    {
+      "id": "rust-err-non-nfc-before-quote",
+      "tags": ["malformed", "unicode-boundary"],
+      "description": "Non-NFC identifier immediately followed by '\"': the NFC check precedes the reserved-prefix check.",
+      "inputBase64": "bGV0IHMgPSBlzIEieCI7",
+      "inputText": "let s = é\"x\";",
+      "result": {"status": "error", "error": {"code": "non-nfc-identifier", "offset": 8}}
+    },
+    {
+      "id": "rust-err-string-underscore-suffix",
+      "tags": ["malformed", "literals"],
+      "description": "'_' after a string with no XID_Continue after it: the Reference SUFFIX cut makes this an error, not a string plus '_'.",
+      "inputBase64": "bGV0IHMgPSAieCJfOw==",
+      "inputText": "let s = \"x\"_;",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 8}}
+    },
+    {
+      "id": "rust-err-char-underscore-suffix",
+      "tags": ["malformed", "literals"],
+      "description": "Same suffix cut after a char literal.",
+      "inputBase64": "bGV0IGMgPSAnYSdfOw==",
+      "inputText": "let c = 'a'_;",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 8}}
+    },
+    {
+      "id": "rust-literal-suffixes",
+      "tags": ["literals"],
+      "description": "Suffixes are part of literal tokens: '_' followed by XID_Continue is a valid suffix; 0x1f32 is a hex int; 1e3f32 a float.",
+      "inputBase64": "bSEoIngiX2EgJ2Mnc2Z4IDFfdTggMHgxZjMyIDFlM2YzMiBiInkiX3opOw==",
+      "inputText": "m!(\"x\"_a 'c'sfx 1_u8 0x1f32 1e3f32 b\"y\"_z);",
+      "result": {
+        "status": "ok",
+        "tokenCount": 11,
+        "tokens": [
+          {"class": "ident", "text": "m", "span": [0, 1]},
+          {"class": "punct", "text": "!", "span": [1, 2]},
+          {"class": "punct", "text": "(", "span": [2, 3]},
+          {"class": "string", "text": "\"x\"_a", "span": [3, 8]},
+          {"class": "char", "text": "'c'sfx", "span": [9, 15]},
+          {"class": "int", "text": "1_u8", "span": [16, 20]},
+          {"class": "int", "text": "0x1f32", "span": [21, 27]},
+          {"class": "float", "text": "1e3f32", "span": [28, 34]},
+          {"class": "bytestring", "text": "b\"y\"_z", "span": [35, 41]},
+          {"class": "punct", "text": ")", "span": [41, 42]},
+          {"class": "punct", "text": ";", "span": [42, 43]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "793b7d378f15c363", "span": [0, 15]},
+              {"position": 1, "hash": "b1154c98a011b34c", "span": [1, 20]},
+              {"position": 2, "hash": "4f7e73f4f7002dc1", "span": [2, 27]},
+              {"position": 3, "hash": "ae0e25e4413701ec", "span": [3, 34]},
+              {"position": 4, "hash": "760971c0dd5ea7c5", "span": [9, 41]},
+              {"position": 5, "hash": "5315accd89190ae3", "span": [16, 42]},
+              {"position": 6, "hash": "8a932a90d43f4d2a", "span": [21, 43]}
+            ],
+            "windowSelections": [2, 2, 2, 5],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 2, "hash": "4f7e73f4f7002dc1", "span": [2, 27]},
+              {"position": 5, "hash": "5315accd89190ae3", "span": [16, 42]}
+            ]
+          },
+          "normalized": {
+            "values": ["", "!", "(", "", "", "", "", "", "", ")", ";"],
+            "kgrams": [
+              {"position": 0, "hash": "f5f31b47a36b32f9", "span": [0, 15]},
+              {"position": 1, "hash": "5eedc83ad5f20717", "span": [1, 20]},
+              {"position": 2, "hash": "186d84951d99f375", "span": [2, 27]},
+              {"position": 3, "hash": "9e67c39146277777", "span": [3, 34]},
+              {"position": 4, "hash": "6ae38064ef35741e", "span": [9, 41]},
+              {"position": 5, "hash": "4fc2d73d28cfe41e", "span": [16, 42]},
+              {"position": 6, "hash": "adeab3d07128d8dc", "span": [21, 43]}
+            ],
+            "windowSelections": [2, 2, 2, 5],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 2, "hash": "186d84951d99f375", "span": [2, 27]},
+              {"position": 5, "hash": "4fc2d73d28cfe41e", "span": [16, 42]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-raw-lifetime",
+      "tags": ["lifetimes"],
+      "description": "Raw lifetimes (edition 2021+) are single lifetime tokens; normalized to empty like other lifetimes.",
+      "inputBase64": "Zm4gZjwnciNmbj4oeDogJidyI2ZuIHU4KSB7fQ==",
+      "inputText": "fn f<'r#fn>(x: &'r#fn u8) {}",
+      "result": {
+        "status": "ok",
+        "tokenCount": 14,
+        "tokens": [
+          {"class": "keyword", "text": "fn", "span": [0, 2]},
+          {"class": "ident", "text": "f", "span": [3, 4]},
+          {"class": "punct", "text": "<", "span": [4, 5]},
+          {"class": "lifetime", "text": "'r#fn", "span": [5, 10]},
+          {"class": "punct", "text": ">", "span": [10, 11]},
+          {"class": "punct", "text": "(", "span": [11, 12]},
+          {"class": "ident", "text": "x", "span": [12, 13]},
+          {"class": "punct", "text": ":", "span": [13, 14]},
+          {"class": "punct", "text": "&", "span": [15, 16]},
+          {"class": "lifetime", "text": "'r#fn", "span": [16, 21]},
+          {"class": "ident", "text": "u8", "span": [22, 24]},
+          {"class": "punct", "text": ")", "span": [24, 25]},
+          {"class": "punct", "text": "{", "span": [26, 27]},
+          {"class": "punct", "text": "}", "span": [27, 28]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "870e0ea261fb60a1", "span": [0, 11]},
+              {"position": 1, "hash": "331b213d962db9d8", "span": [3, 12]},
+              {"position": 2, "hash": "e205f487b8cf7253", "span": [4, 13]},
+              {"position": 3, "hash": "55c55c3aada3695b", "span": [5, 14]},
+              {"position": 4, "hash": "850558fc8139f3c1", "span": [10, 16]},
+              {"position": 5, "hash": "5940bc1535998dfc", "span": [11, 21]},
+              {"position": 6, "hash": "739067e9a8f35436", "span": [12, 24]},
+              {"position": 7, "hash": "4e8be717bf1d02b1", "span": [13, 25]},
+              {"position": 8, "hash": "83fd17ee5c0bccb5", "span": [15, 27]},
+              {"position": 9, "hash": "e99c418739f522f2", "span": [16, 28]}
+            ],
+            "windowSelections": [1, 1, 3, 3, 7, 7, 7],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 1, "hash": "331b213d962db9d8", "span": [3, 12]},
+              {"position": 3, "hash": "55c55c3aada3695b", "span": [5, 14]},
+              {"position": 7, "hash": "4e8be717bf1d02b1", "span": [13, 25]}
+            ]
+          },
+          "normalized": {
+            "values": ["fn", "", "<", "", ">", "(", "", ":", "&", "", "", ")", "{", "}"],
+            "kgrams": [
+              {"position": 0, "hash": "7f34ba88ce7dcab5", "span": [0, 11]},
+              {"position": 1, "hash": "c34246b5d75f64da", "span": [3, 12]},
+              {"position": 2, "hash": "c62ab95ec4cdb24c", "span": [4, 13]},
+              {"position": 3, "hash": "3f10322afb8aeef9", "span": [5, 14]},
+              {"position": 4, "hash": "c6c2afc508de3bf8", "span": [10, 16]},
+              {"position": 5, "hash": "7149309f06ae591c", "span": [11, 21]},
+              {"position": 6, "hash": "99586270b4f9036d", "span": [12, 24]},
+              {"position": 7, "hash": "c73c35574c7909c3", "span": [13, 25]},
+              {"position": 8, "hash": "1337a40a3e5aac3c", "span": [15, 27]},
+              {"position": 9, "hash": "bbe752c1e423dd56", "span": [16, 28]}
+            ],
+            "windowSelections": [3, 3, 3, 3, 5, 8, 8],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 3, "hash": "3f10322afb8aeef9", "span": [5, 14]},
+              {"position": 5, "hash": "7149309f06ae591c", "span": [11, 21]},
+              {"position": 8, "hash": "1337a40a3e5aac3c", "span": [15, 27]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-err-reserved-raw-lifetime",
+      "tags": ["malformed", "lifetimes"],
+      "description": "'r#_ is RESERVED_RAW_LIFETIME.",
+      "inputBase64": "Zm4gZjwnciNfPigpIHt9",
+      "inputText": "fn f<'r#_>() {}",
+      "result": {"status": "error", "error": {"code": "reserved-token", "offset": 5}}
+    },
+    {
+      "id": "rust-err-pounds",
+      "tags": ["malformed"],
+      "description": "'##' is RESERVED_POUNDS in edition 2024.",
+      "inputBase64": "YSAjIyBi",
+      "inputText": "a ## b",
+      "result": {"status": "error", "error": {"code": "reserved-token", "offset": 2}}
+    },
+    {
+      "id": "rust-cstring-escapes",
+      "tags": ["literals"],
+      "description": "C string with byte, Unicode and ASCII escapes.",
+      "inputBase64": "bGV0IGMgPSBjImFceDQxXHV7ZTl9XG4iOw==",
+      "inputText": "let c = c\"a\\x41\\u{e9}\\n\";",
+      "result": {
+        "status": "ok",
+        "tokenCount": 5,
+        "tokens": [
+          {"class": "keyword", "text": "let", "span": [0, 3]},
+          {"class": "ident", "text": "c", "span": [4, 5]},
+          {"class": "punct", "text": "=", "span": [6, 7]},
+          {"class": "cstring", "text": "c\"a\\x41\\u{e9}\\n\"", "span": [8, 24]},
+          {"class": "punct", "text": ";", "span": [24, 25]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [{"position": 0, "hash": "f4257523a5bf974c", "span": [0, 25]}],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "f4257523a5bf974c", "span": [0, 25]}]
+          },
+          "normalized": {
+            "values": ["let", "", "=", "", ";"],
+            "kgrams": [{"position": 0, "hash": "9be054f3bc4d73bb", "span": [0, 25]}],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "9be054f3bc4d73bb", "span": [0, 25]}]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-err-cstring-nul-escape",
+      "tags": ["malformed", "literals"],
+      "description": "C strings forbid the \\0 escape.",
+      "inputBase64": "bGV0IGMgPSBjIlwwIjs=",
+      "inputText": "let c = c\"\\0\";",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 8}}
+    },
+    {
+      "id": "rust-err-raw-too-many-hashes",
+      "tags": ["malformed", "literals"],
+      "description": "A raw string with 256 '#' exceeds the 255 limit.",
+      "inputBase64": "ciMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMieCIjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj",
+      "inputText": "r################################################################################################################################################################################################################################################################\"x\"################################################################################################################################################################################################################################################################",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 0}}
+    },
+    {
+      "id": "rust-err-cr-in-literal",
+      "tags": ["malformed"],
+      "description": "Isolated CR inside a string literal: rejected by the forbidden-code-point scan.",
+      "inputBase64": "bGV0IHMgPSAiYQ1iIjs=",
+      "inputText": "let s = \"a\rb\";",
+      "result": {"status": "error", "error": {"code": "isolated-cr", "offset": 10}}
+    },
+    {
+      "id": "rust-err-mid-bom",
+      "tags": ["malformed"],
+      "description": "U+FEFF inside a string literal (not at offset 0) is rejected.",
+      "inputBase64": "bGV0IHMgPSAi77u/Ijs=",
+      "inputText": "let s = \"﻿\";",
+      "result": {"status": "error", "error": {"code": "bom", "offset": 9}}
+    },
+    {
+      "id": "rust-shebang-unterminated-comment",
+      "tags": ["shebang"],
+      "description": "Shebang look-ahead: an unterminated block comment counts as comment, so '#!' starts a shebang (matches rustc).",
+      "inputBase64": "IyEvKngKZm4gbWFpbigpIHt9",
+      "inputText": "#!/*x\nfn main() {}",
+      "result": {
+        "status": "ok",
+        "tokenCount": 6,
+        "tokens": [
+          {"class": "keyword", "text": "fn", "span": [6, 8]},
+          {"class": "ident", "text": "main", "span": [9, 13]},
+          {"class": "punct", "text": "(", "span": [13, 14]},
+          {"class": "punct", "text": ")", "span": [14, 15]},
+          {"class": "punct", "text": "{", "span": [16, 17]},
+          {"class": "punct", "text": "}", "span": [17, 18]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "48d12f1b6ca7e859", "span": [6, 17]},
+              {"position": 1, "hash": "779a20040de558e0", "span": [9, 18]}
+            ],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "48d12f1b6ca7e859", "span": [6, 17]}]
+          },
+          "normalized": {
+            "values": ["fn", "", "(", ")", "{", "}"],
+            "kgrams": [
+              {"position": 0, "hash": "22108fd33e4996ce", "span": [6, 17]},
+              {"position": 1, "hash": "a5f2fdbd9b845910", "span": [9, 18]}
+            ],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "22108fd33e4996ce", "span": [6, 17]}]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,4799 @@
+{
+ "contract": "traceweave-token-winnow-draft-1",
+ "profile": "rust2024-tokens",
+ "profileVersion": "draft-1",
+ "configFile": "../extraction-vectors/config-rust.json",
+ "configSha256": "64b34335e4a61383ada1403a2df97c2e45dba987bbf0c8ec21385e04104d1277",
+ "k": 5,
+ "window": 4,
+ "requiredCoverage": false,
+ "lexingCheck": "New synthetic inputs for the matching vectors. Token streams are produced by build_vectors.py and validated by ../extraction-vectors/check_vectors.py; see README.md.",
+ "vectors": [
+  {
+   "id": "mv-rust-sum",
+   "tags": [
+    "function"
+   ],
+   "description": "Original Rust function.",
+   "inputBase64": "Zm4gc3VtX3Bvc2l0aXZlKHZhbHVlczogJltpMzJdKSAtPiBpMzIgewogICAgbGV0IG11dCB0b3RhbCA9IDA7CiAgICBmb3IgdiBpbiB2YWx1ZXMgewogICAgICAgIGlmICp2ID4gMCB7CiAgICAgICAgICAgIHRvdGFsICs9ICp2OwogICAgICAgIH0KICAgIH0KICAgIHRvdGFsCn0K",
+   "inputText": "fn sum_positive(values: &[i32]) -> i32 {\n    let mut total = 0;\n    for v in values {\n        if *v > 0 {\n            total += *v;\n        }\n    }\n    total\n}\n",
+   "result": {
+    "status": "ok",
+    "tokenCount": 41,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "fn",
+      "span": [
+       0,
+       2
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "sum_positive",
+      "span": [
+       3,
+       15
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       15,
+       16
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "values",
+      "span": [
+       16,
+       22
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       22,
+       23
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "&",
+      "span": [
+       24,
+       25
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "[",
+      "span": [
+       25,
+       26
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "i32",
+      "span": [
+       26,
+       29
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "]",
+      "span": [
+       29,
+       30
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       30,
+       31
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "-",
+      "span": [
+       32,
+       33
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       33,
+       34
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "i32",
+      "span": [
+       35,
+       38
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       39,
+       40
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "let",
+      "span": [
+       45,
+       48
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "mut",
+      "span": [
+       49,
+       52
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "total",
+      "span": [
+       53,
+       58
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       59,
+       60
+      ]
+     },
+     {
+      "class": "int",
+      "text": "0",
+      "span": [
+       61,
+       62
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       62,
+       63
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "for",
+      "span": [
+       68,
+       71
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "v",
+      "span": [
+       72,
+       73
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "in",
+      "span": [
+       74,
+       76
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "values",
+      "span": [
+       77,
+       83
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       84,
+       85
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "if",
+      "span": [
+       94,
+       96
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "*",
+      "span": [
+       97,
+       98
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "v",
+      "span": [
+       98,
+       99
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       100,
+       101
+      ]
+     },
+     {
+      "class": "int",
+      "text": "0",
+      "span": [
+       102,
+       103
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       104,
+       105
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "total",
+      "span": [
+       118,
+       123
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "+",
+      "span": [
+       124,
+       125
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       125,
+       126
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "*",
+      "span": [
+       127,
+       128
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "v",
+      "span": [
+       128,
+       129
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       129,
+       130
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       139,
+       140
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       145,
+       146
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "total",
+      "span": [
+       151,
+       156
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       157,
+       158
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "89808829c81c8ea6",
+        "span": [
+         0,
+         23
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "86b05226292a56dd",
+        "span": [
+         3,
+         25
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "0458f855f8f8f38e",
+        "span": [
+         15,
+         26
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "7c0934e143bce22b",
+        "span": [
+         16,
+         29
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "63ab845926a31f53",
+        "span": [
+         22,
+         30
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "399d15e5bc7fd7df",
+        "span": [
+         24,
+         31
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "c43f04abc8b095d6",
+        "span": [
+         25,
+         33
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "804818015c1a77f1",
+        "span": [
+         26,
+         34
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "8324969b14f36e56",
+        "span": [
+         29,
+         38
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "e550fabba468a13c",
+        "span": [
+         30,
+         40
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "0a713b739d324166",
+        "span": [
+         32,
+         48
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "c2ce0c4f109c8a08",
+        "span": [
+         33,
+         52
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "4d83292edd989296",
+        "span": [
+         35,
+         58
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "9486137ae6356d08",
+        "span": [
+         39,
+         60
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "d430c3e8d69d371a",
+        "span": [
+         45,
+         62
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "da4287014cc48134",
+        "span": [
+         49,
+         63
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "6433fa53ccc22b8c",
+        "span": [
+         53,
+         71
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "b22ff5602c220e71",
+        "span": [
+         59,
+         73
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "66b965919fac38ee",
+        "span": [
+         61,
+         76
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "bcc5b0832fc9423b",
+        "span": [
+         62,
+         83
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "0f73d5c24f4e115c",
+        "span": [
+         68,
+         85
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "c2c67246d2471642",
+        "span": [
+         72,
+         96
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "5c9413f785c92b37",
+        "span": [
+         74,
+         98
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "dc51b1a34b2bdaf7",
+        "span": [
+         77,
+         99
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "f7b9098d31b9274c",
+        "span": [
+         84,
+         101
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "4980fe44a058c460",
+        "span": [
+         94,
+         103
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "0863822c5c38b782",
+        "span": [
+         97,
+         105
+        ]
+       },
+       {
+        "position": 27,
+        "hash": "6057cc3c741fb771",
+        "span": [
+         98,
+         123
+        ]
+       },
+       {
+        "position": 28,
+        "hash": "98afed458ace21a0",
+        "span": [
+         100,
+         125
+        ]
+       },
+       {
+        "position": 29,
+        "hash": "4dfe1438e071799f",
+        "span": [
+         102,
+         126
+        ]
+       },
+       {
+        "position": 30,
+        "hash": "8123ca3af6f31980",
+        "span": [
+         104,
+         128
+        ]
+       },
+       {
+        "position": 31,
+        "hash": "9ffb907850240346",
+        "span": [
+         118,
+         129
+        ]
+       },
+       {
+        "position": 32,
+        "hash": "213c8d2e736c47b5",
+        "span": [
+         124,
+         130
+        ]
+       },
+       {
+        "position": 33,
+        "hash": "d2e8b39e1a539aaa",
+        "span": [
+         125,
+         140
+        ]
+       },
+       {
+        "position": 34,
+        "hash": "d24287507d69da63",
+        "span": [
+         127,
+         146
+        ]
+       },
+       {
+        "position": 35,
+        "hash": "6f4b94bd41e2c31d",
+        "span": [
+         128,
+         156
+        ]
+       },
+       {
+        "position": 36,
+        "hash": "9bd87d3b6bccc35d",
+        "span": [
+         129,
+         158
+        ]
+       }
+      ],
+      "windowSelections": [
+       2,
+       2,
+       2,
+       5,
+       5,
+       5,
+       7,
+       10,
+       10,
+       10,
+       10,
+       12,
+       12,
+       16,
+       16,
+       16,
+       16,
+       20,
+       20,
+       20,
+       20,
+       22,
+       25,
+       26,
+       26,
+       26,
+       26,
+       29,
+       29,
+       32,
+       32,
+       32,
+       32,
+       35
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 2,
+        "hash": "0458f855f8f8f38e",
+        "span": [
+         15,
+         26
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "399d15e5bc7fd7df",
+        "span": [
+         24,
+         31
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "804818015c1a77f1",
+        "span": [
+         26,
+         34
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "0a713b739d324166",
+        "span": [
+         32,
+         48
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "4d83292edd989296",
+        "span": [
+         35,
+         58
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "6433fa53ccc22b8c",
+        "span": [
+         53,
+         71
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "0f73d5c24f4e115c",
+        "span": [
+         68,
+         85
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "5c9413f785c92b37",
+        "span": [
+         74,
+         98
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "4980fe44a058c460",
+        "span": [
+         94,
+         103
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "0863822c5c38b782",
+        "span": [
+         97,
+         105
+        ]
+       },
+       {
+        "position": 29,
+        "hash": "4dfe1438e071799f",
+        "span": [
+         102,
+         126
+        ]
+       },
+       {
+        "position": 32,
+        "hash": "213c8d2e736c47b5",
+        "span": [
+         124,
+         130
+        ]
+       },
+       {
+        "position": 35,
+        "hash": "6f4b94bd41e2c31d",
+        "span": [
+         128,
+         156
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "fn",
+       "",
+       "(",
+       "",
+       ":",
+       "&",
+       "[",
+       "",
+       "]",
+       ")",
+       "-",
+       ">",
+       "",
+       "{",
+       "let",
+       "mut",
+       "",
+       "=",
+       "",
+       ";",
+       "for",
+       "",
+       "in",
+       "",
+       "{",
+       "if",
+       "*",
+       "",
+       ">",
+       "",
+       "{",
+       "",
+       "+",
+       "=",
+       "*",
+       "",
+       ";",
+       "}",
+       "}",
+       "",
+       "}"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "d566fd58205e94bd",
+        "span": [
+         0,
+         23
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "10858b98de8d732a",
+        "span": [
+         3,
+         25
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "f420d9780e1fb118",
+        "span": [
+         15,
+         26
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "9abf664c26116ecf",
+        "span": [
+         16,
+         29
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "008b9533ac8ea0c7",
+        "span": [
+         22,
+         30
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "d4a443351e61abbb",
+        "span": [
+         24,
+         31
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "c2880421b0839abc",
+        "span": [
+         25,
+         33
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "8c53ccb1a1426055",
+        "span": [
+         26,
+         34
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "96bbf76130cadd23",
+        "span": [
+         29,
+         38
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "3b1c019650f9606f",
+        "span": [
+         30,
+         40
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "8580df3d51a3495c",
+        "span": [
+         32,
+         48
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "bf4960f1fb14c137",
+        "span": [
+         33,
+         52
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "93f183748ffda0d9",
+        "span": [
+         35,
+         58
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "bd7ee25e2c955151",
+        "span": [
+         39,
+         60
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "95c2708b33e7878c",
+        "span": [
+         45,
+         62
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "57a3ffa4e99dcd43",
+        "span": [
+         49,
+         63
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "35a86727b9886113",
+        "span": [
+         53,
+         71
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "d6a06f64aa51ef45",
+        "span": [
+         59,
+         73
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "734faea59cc908d1",
+        "span": [
+         61,
+         76
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "4a6f13fede181dba",
+        "span": [
+         62,
+         83
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "e5307c35230084da",
+        "span": [
+         68,
+         85
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "1703a7c5909404b3",
+        "span": [
+         72,
+         96
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "e84da10880f0da71",
+        "span": [
+         74,
+         98
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "1b344cbc75764c3f",
+        "span": [
+         77,
+         99
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "f7a306d25bb13552",
+        "span": [
+         84,
+         101
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "294bfc4adbf08281",
+        "span": [
+         94,
+         103
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "a0c8ab77dd9786ab",
+        "span": [
+         97,
+         105
+        ]
+       },
+       {
+        "position": 27,
+        "hash": "7ae25a245fdc7f80",
+        "span": [
+         98,
+         123
+        ]
+       },
+       {
+        "position": 28,
+        "hash": "9c05b31914dd86d5",
+        "span": [
+         100,
+         125
+        ]
+       },
+       {
+        "position": 29,
+        "hash": "26546545cc97a89a",
+        "span": [
+         102,
+         126
+        ]
+       },
+       {
+        "position": 30,
+        "hash": "07bd88724df410ed",
+        "span": [
+         104,
+         128
+        ]
+       },
+       {
+        "position": 31,
+        "hash": "918d12dd2178eae7",
+        "span": [
+         118,
+         129
+        ]
+       },
+       {
+        "position": 32,
+        "hash": "3acb30bbd74cf750",
+        "span": [
+         124,
+         130
+        ]
+       },
+       {
+        "position": 33,
+        "hash": "d8953b998d897b2c",
+        "span": [
+         125,
+         140
+        ]
+       },
+       {
+        "position": 34,
+        "hash": "b8b430f4e3796626",
+        "span": [
+         127,
+         146
+        ]
+       },
+       {
+        "position": 35,
+        "hash": "4e1d687d7dd113fb",
+        "span": [
+         128,
+         156
+        ]
+       },
+       {
+        "position": 36,
+        "hash": "e415bb9e9ff1eda6",
+        "span": [
+         129,
+         158
+        ]
+       }
+      ],
+      "windowSelections": [
+       1,
+       4,
+       4,
+       4,
+       4,
+       7,
+       9,
+       9,
+       9,
+       9,
+       10,
+       12,
+       15,
+       16,
+       16,
+       16,
+       16,
+       19,
+       21,
+       21,
+       21,
+       21,
+       23,
+       23,
+       25,
+       25,
+       29,
+       30,
+       30,
+       30,
+       30,
+       32,
+       32,
+       35
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 1,
+        "hash": "10858b98de8d732a",
+        "span": [
+         3,
+         25
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "008b9533ac8ea0c7",
+        "span": [
+         22,
+         30
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "8c53ccb1a1426055",
+        "span": [
+         26,
+         34
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "3b1c019650f9606f",
+        "span": [
+         30,
+         40
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "8580df3d51a3495c",
+        "span": [
+         32,
+         48
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "93f183748ffda0d9",
+        "span": [
+         35,
+         58
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "57a3ffa4e99dcd43",
+        "span": [
+         49,
+         63
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "35a86727b9886113",
+        "span": [
+         53,
+         71
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "4a6f13fede181dba",
+        "span": [
+         62,
+         83
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "1703a7c5909404b3",
+        "span": [
+         72,
+         96
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "1b344cbc75764c3f",
+        "span": [
+         77,
+         99
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "294bfc4adbf08281",
+        "span": [
+         94,
+         103
+        ]
+       },
+       {
+        "position": 29,
+        "hash": "26546545cc97a89a",
+        "span": [
+         102,
+         126
+        ]
+       },
+       {
+        "position": 30,
+        "hash": "07bd88724df410ed",
+        "span": [
+         104,
+         128
+        ]
+       },
+       {
+        "position": 32,
+        "hash": "3acb30bbd74cf750",
+        "span": [
+         124,
+         130
+        ]
+       },
+       {
+        "position": 35,
+        "hash": "4e1d687d7dd113fb",
+        "span": [
+         128,
+         156
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "mv-rust-host",
+   "tags": [
+    "large-host"
+   ],
+   "description": "Rust host file containing RUST_SUM verbatim after unrelated items.",
+   "inputBase64": "dXNlIHN0ZDo6Zm10OwoKcHViIHN0cnVjdCBQb2ludCB7CiAgICB4OiBmNjQsCiAgICB5OiBmNjQsCn0KCmltcGwgZm10OjpEaXNwbGF5IGZvciBQb2ludCB7CiAgICBmbiBmbXQoJnNlbGYsIGY6ICZtdXQgZm10OjpGb3JtYXR0ZXIpIC0+IGZtdDo6UmVzdWx0IHsKICAgICAgICB3cml0ZSEoZiwgIih7fSwge30pIiwgc2VsZi54LCBzZWxmLnkpCiAgICB9Cn0KCmZuIHN1bV9wb3NpdGl2ZSh2YWx1ZXM6ICZbaTMyXSkgLT4gaTMyIHsKICAgIGxldCBtdXQgdG90YWwgPSAwOwogICAgZm9yIHYgaW4gdmFsdWVzIHsKICAgICAgICBpZiAqdiA+IDAgewogICAgICAgICAgICB0b3RhbCArPSAqdjsKICAgICAgICB9CiAgICB9CiAgICB0b3RhbAp9Cg==",
+   "inputText": "use std::fmt;\n\npub struct Point {\n    x: f64,\n    y: f64,\n}\n\nimpl fmt::Display for Point {\n    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {\n        write!(f, \"({}, {})\", self.x, self.y)\n    }\n}\n\nfn sum_positive(values: &[i32]) -> i32 {\n    let mut total = 0;\n    for v in values {\n        if *v > 0 {\n            total += *v;\n        }\n    }\n    total\n}\n",
+   "result": {
+    "status": "ok",
+    "tokenCount": 107,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "use",
+      "span": [
+       0,
+       3
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "std",
+      "span": [
+       4,
+       7
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       7,
+       8
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       8,
+       9
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "fmt",
+      "span": [
+       9,
+       12
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       12,
+       13
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "pub",
+      "span": [
+       15,
+       18
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "struct",
+      "span": [
+       19,
+       25
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "Point",
+      "span": [
+       26,
+       31
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       32,
+       33
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "x",
+      "span": [
+       38,
+       39
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       39,
+       40
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "f64",
+      "span": [
+       41,
+       44
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       44,
+       45
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "y",
+      "span": [
+       50,
+       51
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       51,
+       52
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "f64",
+      "span": [
+       53,
+       56
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       56,
+       57
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       58,
+       59
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "impl",
+      "span": [
+       61,
+       65
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "fmt",
+      "span": [
+       66,
+       69
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       69,
+       70
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       70,
+       71
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "Display",
+      "span": [
+       71,
+       78
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "for",
+      "span": [
+       79,
+       82
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "Point",
+      "span": [
+       83,
+       88
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       89,
+       90
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "fn",
+      "span": [
+       95,
+       97
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "fmt",
+      "span": [
+       98,
+       101
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       101,
+       102
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "&",
+      "span": [
+       102,
+       103
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "self",
+      "span": [
+       103,
+       107
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       107,
+       108
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "f",
+      "span": [
+       109,
+       110
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       110,
+       111
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "&",
+      "span": [
+       112,
+       113
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "mut",
+      "span": [
+       113,
+       116
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "fmt",
+      "span": [
+       117,
+       120
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       120,
+       121
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       121,
+       122
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "Formatter",
+      "span": [
+       122,
+       131
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       131,
+       132
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "-",
+      "span": [
+       133,
+       134
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       134,
+       135
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "fmt",
+      "span": [
+       136,
+       139
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       139,
+       140
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       140,
+       141
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "Result",
+      "span": [
+       141,
+       147
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       148,
+       149
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "write",
+      "span": [
+       158,
+       163
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "!",
+      "span": [
+       163,
+       164
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       164,
+       165
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "f",
+      "span": [
+       165,
+       166
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       166,
+       167
+      ]
+     },
+     {
+      "class": "string",
+      "text": "\"({}, {})\"",
+      "span": [
+       168,
+       178
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       178,
+       179
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "self",
+      "span": [
+       180,
+       184
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ".",
+      "span": [
+       184,
+       185
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "x",
+      "span": [
+       185,
+       186
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       186,
+       187
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "self",
+      "span": [
+       188,
+       192
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ".",
+      "span": [
+       192,
+       193
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "y",
+      "span": [
+       193,
+       194
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       194,
+       195
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       200,
+       201
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       202,
+       203
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "fn",
+      "span": [
+       205,
+       207
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "sum_positive",
+      "span": [
+       208,
+       220
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       220,
+       221
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "values",
+      "span": [
+       221,
+       227
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       227,
+       228
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "&",
+      "span": [
+       229,
+       230
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "[",
+      "span": [
+       230,
+       231
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "i32",
+      "span": [
+       231,
+       234
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "]",
+      "span": [
+       234,
+       235
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       235,
+       236
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "-",
+      "span": [
+       237,
+       238
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       238,
+       239
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "i32",
+      "span": [
+       240,
+       243
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       244,
+       245
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "let",
+      "span": [
+       250,
+       253
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "mut",
+      "span": [
+       254,
+       257
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "total",
+      "span": [
+       258,
+       263
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       264,
+       265
+      ]
+     },
+     {
+      "class": "int",
+      "text": "0",
+      "span": [
+       266,
+       267
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       267,
+       268
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "for",
+      "span": [
+       273,
+       276
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "v",
+      "span": [
+       277,
+       278
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "in",
+      "span": [
+       279,
+       281
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "values",
+      "span": [
+       282,
+       288
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       289,
+       290
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "if",
+      "span": [
+       299,
+       301
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "*",
+      "span": [
+       302,
+       303
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "v",
+      "span": [
+       303,
+       304
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       305,
+       306
+      ]
+     },
+     {
+      "class": "int",
+      "text": "0",
+      "span": [
+       307,
+       308
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       309,
+       310
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "total",
+      "span": [
+       323,
+       328
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "+",
+      "span": [
+       329,
+       330
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       330,
+       331
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "*",
+      "span": [
+       332,
+       333
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "v",
+      "span": [
+       333,
+       334
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       334,
+       335
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       344,
+       345
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       350,
+       351
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "total",
+      "span": [
+       356,
+       361
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       362,
+       363
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "74909728277881e0",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "e6fdf99801eac0df",
+        "span": [
+         4,
+         13
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "d53f54e1377880eb",
+        "span": [
+         7,
+         18
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "bf9e9c36974df4ab",
+        "span": [
+         8,
+         25
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "64198323d86f8a3e",
+        "span": [
+         9,
+         31
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "c536a4ec7f6ea0c4",
+        "span": [
+         12,
+         33
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "b60bee7a9654f2a1",
+        "span": [
+         15,
+         39
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "66b48dc5327ed180",
+        "span": [
+         19,
+         40
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "ad884401a735dfd8",
+        "span": [
+         26,
+         44
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "7215ee8b4fe033e1",
+        "span": [
+         32,
+         45
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "1f097e006c398749",
+        "span": [
+         38,
+         51
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "0af5a064f6e65bad",
+        "span": [
+         39,
+         52
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "a4d6478545837880",
+        "span": [
+         41,
+         56
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "c5f18cae1ecd387b",
+        "span": [
+         44,
+         57
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "d97593a6623bf133",
+        "span": [
+         50,
+         59
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "39b7a310b73a3d8f",
+        "span": [
+         51,
+         65
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "781c4107b4a54b0a",
+        "span": [
+         53,
+         69
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "e336f10e263feb4c",
+        "span": [
+         56,
+         70
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "860d3307818369a9",
+        "span": [
+         58,
+         71
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "e7cd5521e6fe611d",
+        "span": [
+         61,
+         78
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "7f65583add28cb39",
+        "span": [
+         66,
+         82
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "873e29c8dbd66dda",
+        "span": [
+         69,
+         88
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "906cdc2227680ceb",
+        "span": [
+         70,
+         90
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "980fa86cd9a52d05",
+        "span": [
+         71,
+         97
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "0d860ebecf817b80",
+        "span": [
+         79,
+         101
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "096f90a60381e408",
+        "span": [
+         83,
+         102
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "d5a1f7228e9c0a59",
+        "span": [
+         89,
+         103
+        ]
+       },
+       {
+        "position": 27,
+        "hash": "bab538f9d598bee2",
+        "span": [
+         95,
+         107
+        ]
+       },
+       {
+        "position": 28,
+        "hash": "2bfaafb26ea3d65a",
+        "span": [
+         98,
+         108
+        ]
+       },
+       {
+        "position": 29,
+        "hash": "c512781e847d95fc",
+        "span": [
+         101,
+         110
+        ]
+       },
+       {
+        "position": 30,
+        "hash": "db549280e4174c7c",
+        "span": [
+         102,
+         111
+        ]
+       },
+       {
+        "position": 31,
+        "hash": "5a7f8e12625d307d",
+        "span": [
+         103,
+         113
+        ]
+       },
+       {
+        "position": 32,
+        "hash": "7aabe512b50c0f22",
+        "span": [
+         107,
+         116
+        ]
+       },
+       {
+        "position": 33,
+        "hash": "41f940d845e9701f",
+        "span": [
+         109,
+         120
+        ]
+       },
+       {
+        "position": 34,
+        "hash": "d454579da8354390",
+        "span": [
+         110,
+         121
+        ]
+       },
+       {
+        "position": 35,
+        "hash": "c518cfd694d5156b",
+        "span": [
+         112,
+         122
+        ]
+       },
+       {
+        "position": 36,
+        "hash": "52a3adbd60bf60f5",
+        "span": [
+         113,
+         131
+        ]
+       },
+       {
+        "position": 37,
+        "hash": "04817ad55e388633",
+        "span": [
+         117,
+         132
+        ]
+       },
+       {
+        "position": 38,
+        "hash": "25dd1de62088aba9",
+        "span": [
+         120,
+         134
+        ]
+       },
+       {
+        "position": 39,
+        "hash": "20ef39cdc4bbe92e",
+        "span": [
+         121,
+         135
+        ]
+       },
+       {
+        "position": 40,
+        "hash": "ab5198ff79402fe4",
+        "span": [
+         122,
+         139
+        ]
+       },
+       {
+        "position": 41,
+        "hash": "2bbe84e99581f61a",
+        "span": [
+         131,
+         140
+        ]
+       },
+       {
+        "position": 42,
+        "hash": "8c8bb672488e81b3",
+        "span": [
+         133,
+         141
+        ]
+       },
+       {
+        "position": 43,
+        "hash": "6024aac0b6ed33e5",
+        "span": [
+         134,
+         147
+        ]
+       },
+       {
+        "position": 44,
+        "hash": "897c51fd99e131b2",
+        "span": [
+         136,
+         149
+        ]
+       },
+       {
+        "position": 45,
+        "hash": "043d5dd4980d0ea8",
+        "span": [
+         139,
+         163
+        ]
+       },
+       {
+        "position": 46,
+        "hash": "cdeaa7a4c6bcf676",
+        "span": [
+         140,
+         164
+        ]
+       },
+       {
+        "position": 47,
+        "hash": "5e36d3f1791aeb7b",
+        "span": [
+         141,
+         165
+        ]
+       },
+       {
+        "position": 48,
+        "hash": "8d9542d5b4034fdd",
+        "span": [
+         148,
+         166
+        ]
+       },
+       {
+        "position": 49,
+        "hash": "f8b0db963545b820",
+        "span": [
+         158,
+         167
+        ]
+       },
+       {
+        "position": 50,
+        "hash": "11343df4f553bb64",
+        "span": [
+         163,
+         178
+        ]
+       },
+       {
+        "position": 51,
+        "hash": "d960e9d1be531ee8",
+        "span": [
+         164,
+         179
+        ]
+       },
+       {
+        "position": 52,
+        "hash": "13fffb81e35ce447",
+        "span": [
+         165,
+         184
+        ]
+       },
+       {
+        "position": 53,
+        "hash": "889bd794403c4eed",
+        "span": [
+         166,
+         185
+        ]
+       },
+       {
+        "position": 54,
+        "hash": "6c6da23ed94372b7",
+        "span": [
+         168,
+         186
+        ]
+       },
+       {
+        "position": 55,
+        "hash": "9d2bbaa1eb02210e",
+        "span": [
+         178,
+         187
+        ]
+       },
+       {
+        "position": 56,
+        "hash": "e1e7fde57ba98202",
+        "span": [
+         180,
+         192
+        ]
+       },
+       {
+        "position": 57,
+        "hash": "0c3b45d3ef7e38d5",
+        "span": [
+         184,
+         193
+        ]
+       },
+       {
+        "position": 58,
+        "hash": "731bc2830cfd9563",
+        "span": [
+         185,
+         194
+        ]
+       },
+       {
+        "position": 59,
+        "hash": "da5fcf660f13803f",
+        "span": [
+         186,
+         195
+        ]
+       },
+       {
+        "position": 60,
+        "hash": "3fa5f9871416f466",
+        "span": [
+         188,
+         201
+        ]
+       },
+       {
+        "position": 61,
+        "hash": "9b00ca84c27d9f32",
+        "span": [
+         192,
+         203
+        ]
+       },
+       {
+        "position": 62,
+        "hash": "df847479a31636e6",
+        "span": [
+         193,
+         207
+        ]
+       },
+       {
+        "position": 63,
+        "hash": "7ec813ce25839db2",
+        "span": [
+         194,
+         220
+        ]
+       },
+       {
+        "position": 64,
+        "hash": "7dbb7cf23e189981",
+        "span": [
+         200,
+         221
+        ]
+       },
+       {
+        "position": 65,
+        "hash": "c03a0c1d749f8467",
+        "span": [
+         202,
+         227
+        ]
+       },
+       {
+        "position": 66,
+        "hash": "89808829c81c8ea6",
+        "span": [
+         205,
+         228
+        ]
+       },
+       {
+        "position": 67,
+        "hash": "86b05226292a56dd",
+        "span": [
+         208,
+         230
+        ]
+       },
+       {
+        "position": 68,
+        "hash": "0458f855f8f8f38e",
+        "span": [
+         220,
+         231
+        ]
+       },
+       {
+        "position": 69,
+        "hash": "7c0934e143bce22b",
+        "span": [
+         221,
+         234
+        ]
+       },
+       {
+        "position": 70,
+        "hash": "63ab845926a31f53",
+        "span": [
+         227,
+         235
+        ]
+       },
+       {
+        "position": 71,
+        "hash": "399d15e5bc7fd7df",
+        "span": [
+         229,
+         236
+        ]
+       },
+       {
+        "position": 72,
+        "hash": "c43f04abc8b095d6",
+        "span": [
+         230,
+         238
+        ]
+       },
+       {
+        "position": 73,
+        "hash": "804818015c1a77f1",
+        "span": [
+         231,
+         239
+        ]
+       },
+       {
+        "position": 74,
+        "hash": "8324969b14f36e56",
+        "span": [
+         234,
+         243
+        ]
+       },
+       {
+        "position": 75,
+        "hash": "e550fabba468a13c",
+        "span": [
+         235,
+         245
+        ]
+       },
+       {
+        "position": 76,
+        "hash": "0a713b739d324166",
+        "span": [
+         237,
+         253
+        ]
+       },
+       {
+        "position": 77,
+        "hash": "c2ce0c4f109c8a08",
+        "span": [
+         238,
+         257
+        ]
+       },
+       {
+        "position": 78,
+        "hash": "4d83292edd989296",
+        "span": [
+         240,
+         263
+        ]
+       },
+       {
+        "position": 79,
+        "hash": "9486137ae6356d08",
+        "span": [
+         244,
+         265
+        ]
+       },
+       {
+        "position": 80,
+        "hash": "d430c3e8d69d371a",
+        "span": [
+         250,
+         267
+        ]
+       },
+       {
+        "position": 81,
+        "hash": "da4287014cc48134",
+        "span": [
+         254,
+         268
+        ]
+       },
+       {
+        "position": 82,
+        "hash": "6433fa53ccc22b8c",
+        "span": [
+         258,
+         276
+        ]
+       },
+       {
+        "position": 83,
+        "hash": "b22ff5602c220e71",
+        "span": [
+         264,
+         278
+        ]
+       },
+       {
+        "position": 84,
+        "hash": "66b965919fac38ee",
+        "span": [
+         266,
+         281
+        ]
+       },
+       {
+        "position": 85,
+        "hash": "bcc5b0832fc9423b",
+        "span": [
+         267,
+         288
+        ]
+       },
+       {
+        "position": 86,
+        "hash": "0f73d5c24f4e115c",
+        "span": [
+         273,
+         290
+        ]
+       },
+       {
+        "position": 87,
+        "hash": "c2c67246d2471642",
+        "span": [
+         277,
+         301
+        ]
+       },
+       {
+        "position": 88,
+        "hash": "5c9413f785c92b37",
+        "span": [
+         279,
+         303
+        ]
+       },
+       {
+        "position": 89,
+        "hash": "dc51b1a34b2bdaf7",
+        "span": [
+         282,
+         304
+        ]
+       },
+       {
+        "position": 90,
+        "hash": "f7b9098d31b9274c",
+        "span": [
+         289,
+         306
+        ]
+       },
+       {
+        "position": 91,
+        "hash": "4980fe44a058c460",
+        "span": [
+         299,
+         308
+        ]
+       },
+       {
+        "position": 92,
+        "hash": "0863822c5c38b782",
+        "span": [
+         302,
+         310
+        ]
+       },
+       {
+        "position": 93,
+        "hash": "6057cc3c741fb771",
+        "span": [
+         303,
+         328
+        ]
+       },
+       {
+        "position": 94,
+        "hash": "98afed458ace21a0",
+        "span": [
+         305,
+         330
+        ]
+       },
+       {
+        "position": 95,
+        "hash": "4dfe1438e071799f",
+        "span": [
+         307,
+         331
+        ]
+       },
+       {
+        "position": 96,
+        "hash": "8123ca3af6f31980",
+        "span": [
+         309,
+         333
+        ]
+       },
+       {
+        "position": 97,
+        "hash": "9ffb907850240346",
+        "span": [
+         323,
+         334
+        ]
+       },
+       {
+        "position": 98,
+        "hash": "213c8d2e736c47b5",
+        "span": [
+         329,
+         335
+        ]
+       },
+       {
+        "position": 99,
+        "hash": "d2e8b39e1a539aaa",
+        "span": [
+         330,
+         345
+        ]
+       },
+       {
+        "position": 100,
+        "hash": "d24287507d69da63",
+        "span": [
+         332,
+         351
+        ]
+       },
+       {
+        "position": 101,
+        "hash": "6f4b94bd41e2c31d",
+        "span": [
+         333,
+         361
+        ]
+       },
+       {
+        "position": 102,
+        "hash": "9bd87d3b6bccc35d",
+        "span": [
+         334,
+         363
+        ]
+       }
+      ],
+      "windowSelections": [
+       0,
+       4,
+       4,
+       4,
+       4,
+       7,
+       7,
+       10,
+       11,
+       11,
+       11,
+       11,
+       15,
+       15,
+       15,
+       15,
+       16,
+       20,
+       20,
+       20,
+       20,
+       24,
+       25,
+       25,
+       25,
+       25,
+       28,
+       28,
+       28,
+       31,
+       33,
+       33,
+       33,
+       33,
+       37,
+       37,
+       37,
+       37,
+       39,
+       39,
+       41,
+       41,
+       45,
+       45,
+       45,
+       45,
+       47,
+       50,
+       50,
+       50,
+       50,
+       52,
+       52,
+       54,
+       57,
+       57,
+       57,
+       57,
+       60,
+       60,
+       60,
+       64,
+       64,
+       64,
+       64,
+       68,
+       68,
+       68,
+       68,
+       71,
+       71,
+       71,
+       73,
+       76,
+       76,
+       76,
+       76,
+       78,
+       78,
+       82,
+       82,
+       82,
+       82,
+       86,
+       86,
+       86,
+       86,
+       88,
+       91,
+       92,
+       92,
+       92,
+       92,
+       95,
+       95,
+       98,
+       98,
+       98,
+       98,
+       101
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 0,
+        "hash": "74909728277881e0",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "64198323d86f8a3e",
+        "span": [
+         9,
+         31
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "66b48dc5327ed180",
+        "span": [
+         19,
+         40
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "1f097e006c398749",
+        "span": [
+         38,
+         51
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "0af5a064f6e65bad",
+        "span": [
+         39,
+         52
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "39b7a310b73a3d8f",
+        "span": [
+         51,
+         65
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "781c4107b4a54b0a",
+        "span": [
+         53,
+         69
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "7f65583add28cb39",
+        "span": [
+         66,
+         82
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "0d860ebecf817b80",
+        "span": [
+         79,
+         101
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "096f90a60381e408",
+        "span": [
+         83,
+         102
+        ]
+       },
+       {
+        "position": 28,
+        "hash": "2bfaafb26ea3d65a",
+        "span": [
+         98,
+         108
+        ]
+       },
+       {
+        "position": 31,
+        "hash": "5a7f8e12625d307d",
+        "span": [
+         103,
+         113
+        ]
+       },
+       {
+        "position": 33,
+        "hash": "41f940d845e9701f",
+        "span": [
+         109,
+         120
+        ]
+       },
+       {
+        "position": 37,
+        "hash": "04817ad55e388633",
+        "span": [
+         117,
+         132
+        ]
+       },
+       {
+        "position": 39,
+        "hash": "20ef39cdc4bbe92e",
+        "span": [
+         121,
+         135
+        ]
+       },
+       {
+        "position": 41,
+        "hash": "2bbe84e99581f61a",
+        "span": [
+         131,
+         140
+        ]
+       },
+       {
+        "position": 45,
+        "hash": "043d5dd4980d0ea8",
+        "span": [
+         139,
+         163
+        ]
+       },
+       {
+        "position": 47,
+        "hash": "5e36d3f1791aeb7b",
+        "span": [
+         141,
+         165
+        ]
+       },
+       {
+        "position": 50,
+        "hash": "11343df4f553bb64",
+        "span": [
+         163,
+         178
+        ]
+       },
+       {
+        "position": 52,
+        "hash": "13fffb81e35ce447",
+        "span": [
+         165,
+         184
+        ]
+       },
+       {
+        "position": 54,
+        "hash": "6c6da23ed94372b7",
+        "span": [
+         168,
+         186
+        ]
+       },
+       {
+        "position": 57,
+        "hash": "0c3b45d3ef7e38d5",
+        "span": [
+         184,
+         193
+        ]
+       },
+       {
+        "position": 60,
+        "hash": "3fa5f9871416f466",
+        "span": [
+         188,
+         201
+        ]
+       },
+       {
+        "position": 64,
+        "hash": "7dbb7cf23e189981",
+        "span": [
+         200,
+         221
+        ]
+       },
+       {
+        "position": 68,
+        "hash": "0458f855f8f8f38e",
+        "span": [
+         220,
+         231
+        ]
+       },
+       {
+        "position": 71,
+        "hash": "399d15e5bc7fd7df",
+        "span": [
+         229,
+         236
+        ]
+       },
+       {
+        "position": 73,
+        "hash": "804818015c1a77f1",
+        "span": [
+         231,
+         239
+        ]
+       },
+       {
+        "position": 76,
+        "hash": "0a713b739d324166",
+        "span": [
+         237,
+         253
+        ]
+       },
+       {
+        "position": 78,
+        "hash": "4d83292edd989296",
+        "span": [
+         240,
+         263
+        ]
+       },
+       {
+        "position": 82,
+        "hash": "6433fa53ccc22b8c",
+        "span": [
+         258,
+         276
+        ]
+       },
+       {
+        "position": 86,
+        "hash": "0f73d5c24f4e115c",
+        "span": [
+         273,
+         290
+        ]
+       },
+       {
+        "position": 88,
+        "hash": "5c9413f785c92b37",
+        "span": [
+         279,
+         303
+        ]
+       },
+       {
+        "position": 91,
+        "hash": "4980fe44a058c460",
+        "span": [
+         299,
+         308
+        ]
+       },
+       {
+        "position": 92,
+        "hash": "0863822c5c38b782",
+        "span": [
+         302,
+         310
+        ]
+       },
+       {
+        "position": 95,
+        "hash": "4dfe1438e071799f",
+        "span": [
+         307,
+         331
+        ]
+       },
+       {
+        "position": 98,
+        "hash": "213c8d2e736c47b5",
+        "span": [
+         329,
+         335
+        ]
+       },
+       {
+        "position": 101,
+        "hash": "6f4b94bd41e2c31d",
+        "span": [
+         333,
+         361
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "use",
+       "",
+       ":",
+       ":",
+       "",
+       ";",
+       "pub",
+       "struct",
+       "",
+       "{",
+       "",
+       ":",
+       "",
+       ",",
+       "",
+       ":",
+       "",
+       ",",
+       "}",
+       "impl",
+       "",
+       ":",
+       ":",
+       "",
+       "for",
+       "",
+       "{",
+       "fn",
+       "",
+       "(",
+       "&",
+       "self",
+       ",",
+       "",
+       ":",
+       "&",
+       "mut",
+       "",
+       ":",
+       ":",
+       "",
+       ")",
+       "-",
+       ">",
+       "",
+       ":",
+       ":",
+       "",
+       "{",
+       "",
+       "!",
+       "(",
+       "",
+       ",",
+       "",
+       ",",
+       "self",
+       ".",
+       "",
+       ",",
+       "self",
+       ".",
+       "",
+       ")",
+       "}",
+       "}",
+       "fn",
+       "",
+       "(",
+       "",
+       ":",
+       "&",
+       "[",
+       "",
+       "]",
+       ")",
+       "-",
+       ">",
+       "",
+       "{",
+       "let",
+       "mut",
+       "",
+       "=",
+       "",
+       ";",
+       "for",
+       "",
+       "in",
+       "",
+       "{",
+       "if",
+       "*",
+       "",
+       ">",
+       "",
+       "{",
+       "",
+       "+",
+       "=",
+       "*",
+       "",
+       ";",
+       "}",
+       "}",
+       "",
+       "}"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "8f79254179a47903",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "bec775a9ccceeb6e",
+        "span": [
+         4,
+         13
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "c8997f3372a39d95",
+        "span": [
+         7,
+         18
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "fb58c8596d5e5706",
+        "span": [
+         8,
+         25
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "f1a89aa683c42975",
+        "span": [
+         9,
+         31
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "c5c654abef8aab81",
+        "span": [
+         12,
+         33
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "be1b72c987ae858a",
+        "span": [
+         15,
+         39
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "f3ba45a041f0bed2",
+        "span": [
+         19,
+         40
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "e149bcfb4cdd5012",
+        "span": [
+         26,
+         44
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "f5ec8a1ad56304f6",
+        "span": [
+         32,
+         45
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "dece576fff82f9a1",
+        "span": [
+         38,
+         51
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "47c74c79fc4d852a",
+        "span": [
+         39,
+         52
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "04613d5a277c2323",
+        "span": [
+         41,
+         56
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "681c738fa8bf1088",
+        "span": [
+         44,
+         57
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "6b53e68722e292c3",
+        "span": [
+         50,
+         59
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "2b35f5d4bcb6070d",
+        "span": [
+         51,
+         65
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "3d2075c023ae722a",
+        "span": [
+         53,
+         69
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "9eb85aeb20626c9f",
+        "span": [
+         56,
+         70
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "37f233d9fb016f25",
+        "span": [
+         58,
+         71
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "2f4e2615f764e123",
+        "span": [
+         61,
+         78
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "184c27036a8b345f",
+        "span": [
+         66,
+         82
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "dbfa07f6c84740c3",
+        "span": [
+         69,
+         88
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "b176351c43b708f1",
+        "span": [
+         70,
+         90
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "1cda841b4e115ab7",
+        "span": [
+         71,
+         97
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "0f6c4bd3fd6a6349",
+        "span": [
+         79,
+         101
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "60bb085002cbbb72",
+        "span": [
+         83,
+         102
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "6049e415429a7cf5",
+        "span": [
+         89,
+         103
+        ]
+       },
+       {
+        "position": 27,
+        "hash": "945676e282e5a014",
+        "span": [
+         95,
+         107
+        ]
+       },
+       {
+        "position": 28,
+        "hash": "cda07daddc02eb1e",
+        "span": [
+         98,
+         108
+        ]
+       },
+       {
+        "position": 29,
+        "hash": "27b8e8368e56af58",
+        "span": [
+         101,
+         110
+        ]
+       },
+       {
+        "position": 30,
+        "hash": "b0471b9aa098f78f",
+        "span": [
+         102,
+         111
+        ]
+       },
+       {
+        "position": 31,
+        "hash": "3a32b5502df183aa",
+        "span": [
+         103,
+         113
+        ]
+       },
+       {
+        "position": 32,
+        "hash": "bf3dd491053e8998",
+        "span": [
+         107,
+         116
+        ]
+       },
+       {
+        "position": 33,
+        "hash": "1f5588a695bcf0c2",
+        "span": [
+         109,
+         120
+        ]
+       },
+       {
+        "position": 34,
+        "hash": "83c92a6ea901fee8",
+        "span": [
+         110,
+         121
+        ]
+       },
+       {
+        "position": 35,
+        "hash": "1d2482f520c5e04c",
+        "span": [
+         112,
+         122
+        ]
+       },
+       {
+        "position": 36,
+        "hash": "8227df63a3f39163",
+        "span": [
+         113,
+         131
+        ]
+       },
+       {
+        "position": 37,
+        "hash": "eb4d03e433dce315",
+        "span": [
+         117,
+         132
+        ]
+       },
+       {
+        "position": 38,
+        "hash": "b6bc26115f921604",
+        "span": [
+         120,
+         134
+        ]
+       },
+       {
+        "position": 39,
+        "hash": "ba77645195a63a0b",
+        "span": [
+         121,
+         135
+        ]
+       },
+       {
+        "position": 40,
+        "hash": "4dc3cda665a7c4a4",
+        "span": [
+         122,
+         139
+        ]
+       },
+       {
+        "position": 41,
+        "hash": "0bfc4de3a7cb159c",
+        "span": [
+         131,
+         140
+        ]
+       },
+       {
+        "position": 42,
+        "hash": "89ec2152d4a6d724",
+        "span": [
+         133,
+         141
+        ]
+       },
+       {
+        "position": 43,
+        "hash": "1940a7b2d61a87ec",
+        "span": [
+         134,
+         147
+        ]
+       },
+       {
+        "position": 44,
+        "hash": "5ace9dfb3798f45c",
+        "span": [
+         136,
+         149
+        ]
+       },
+       {
+        "position": 45,
+        "hash": "5127e254c58672e0",
+        "span": [
+         139,
+         163
+        ]
+       },
+       {
+        "position": 46,
+        "hash": "00f81a31d6f523b2",
+        "span": [
+         140,
+         164
+        ]
+       },
+       {
+        "position": 47,
+        "hash": "9842c0ff0f63c773",
+        "span": [
+         141,
+         165
+        ]
+       },
+       {
+        "position": 48,
+        "hash": "367d3ca4035fdbdb",
+        "span": [
+         148,
+         166
+        ]
+       },
+       {
+        "position": 49,
+        "hash": "76a36b4c9bc101f6",
+        "span": [
+         158,
+         167
+        ]
+       },
+       {
+        "position": 50,
+        "hash": "7f7b14f6f1f94899",
+        "span": [
+         163,
+         178
+        ]
+       },
+       {
+        "position": 51,
+        "hash": "6a6055ba1f20d8e5",
+        "span": [
+         164,
+         179
+        ]
+       },
+       {
+        "position": 52,
+        "hash": "ecc58c4e8b4eae09",
+        "span": [
+         165,
+         184
+        ]
+       },
+       {
+        "position": 53,
+        "hash": "934b3bca936f34b9",
+        "span": [
+         166,
+         185
+        ]
+       },
+       {
+        "position": 54,
+        "hash": "e7c93f08eb49ea26",
+        "span": [
+         168,
+         186
+        ]
+       },
+       {
+        "position": 55,
+        "hash": "ab260d25e330e5e6",
+        "span": [
+         178,
+         187
+        ]
+       },
+       {
+        "position": 56,
+        "hash": "3741d3f07abdbaa9",
+        "span": [
+         180,
+         192
+        ]
+       },
+       {
+        "position": 57,
+        "hash": "ba11ff273018bcdc",
+        "span": [
+         184,
+         193
+        ]
+       },
+       {
+        "position": 58,
+        "hash": "9c8df4f7df4c7b6c",
+        "span": [
+         185,
+         194
+        ]
+       },
+       {
+        "position": 59,
+        "hash": "68a726b2d74f60ae",
+        "span": [
+         186,
+         195
+        ]
+       },
+       {
+        "position": 60,
+        "hash": "2102ec95928d94e4",
+        "span": [
+         188,
+         201
+        ]
+       },
+       {
+        "position": 61,
+        "hash": "cc6b3379de87d739",
+        "span": [
+         192,
+         203
+        ]
+       },
+       {
+        "position": 62,
+        "hash": "1d6dd05cd9f91bc9",
+        "span": [
+         193,
+         207
+        ]
+       },
+       {
+        "position": 63,
+        "hash": "3114e8d4f066e731",
+        "span": [
+         194,
+         220
+        ]
+       },
+       {
+        "position": 64,
+        "hash": "c0f2f7bb8e78090f",
+        "span": [
+         200,
+         221
+        ]
+       },
+       {
+        "position": 65,
+        "hash": "07690984f31ac564",
+        "span": [
+         202,
+         227
+        ]
+       },
+       {
+        "position": 66,
+        "hash": "d566fd58205e94bd",
+        "span": [
+         205,
+         228
+        ]
+       },
+       {
+        "position": 67,
+        "hash": "10858b98de8d732a",
+        "span": [
+         208,
+         230
+        ]
+       },
+       {
+        "position": 68,
+        "hash": "f420d9780e1fb118",
+        "span": [
+         220,
+         231
+        ]
+       },
+       {
+        "position": 69,
+        "hash": "9abf664c26116ecf",
+        "span": [
+         221,
+         234
+        ]
+       },
+       {
+        "position": 70,
+        "hash": "008b9533ac8ea0c7",
+        "span": [
+         227,
+         235
+        ]
+       },
+       {
+        "position": 71,
+        "hash": "d4a443351e61abbb",
+        "span": [
+         229,
+         236
+        ]
+       },
+       {
+        "position": 72,
+        "hash": "c2880421b0839abc",
+        "span": [
+         230,
+         238
+        ]
+       },
+       {
+        "position": 73,
+        "hash": "8c53ccb1a1426055",
+        "span": [
+         231,
+         239
+        ]
+       },
+       {
+        "position": 74,
+        "hash": "96bbf76130cadd23",
+        "span": [
+         234,
+         243
+        ]
+       },
+       {
+        "position": 75,
+        "hash": "3b1c019650f9606f",
+        "span": [
+         235,
+         245
+        ]
+       },
+       {
+        "position": 76,
+        "hash": "8580df3d51a3495c",
+        "span": [
+         237,
+         253
+        ]
+       },
+       {
+        "position": 77,
+        "hash": "bf4960f1fb14c137",
+        "span": [
+         238,
+         257
+        ]
+       },
+       {
+        "position": 78,
+        "hash": "93f183748ffda0d9",
+        "span": [
+         240,
+         263
+        ]
+       },
+       {
+        "position": 79,
+        "hash": "bd7ee25e2c955151",
+        "span": [
+         244,
+         265
+        ]
+       },
+       {
+        "position": 80,
+        "hash": "95c2708b33e7878c",
+        "span": [
+         250,
+         267
+        ]
+       },
+       {
+        "position": 81,
+        "hash": "57a3ffa4e99dcd43",
+        "span": [
+         254,
+         268
+        ]
+       },
+       {
+        "position": 82,
+        "hash": "35a86727b9886113",
+        "span": [
+         258,
+         276
+        ]
+       },
+       {
+        "position": 83,
+        "hash": "d6a06f64aa51ef45",
+        "span": [
+         264,
+         278
+        ]
+       },
+       {
+        "position": 84,
+        "hash": "734faea59cc908d1",
+        "span": [
+         266,
+         281
+        ]
+       },
+       {
+        "position": 85,
+        "hash": "4a6f13fede181dba",
+        "span": [
+         267,
+         288
+        ]
+       },
+       {
+        "position": 86,
+        "hash": "e5307c35230084da",
+        "span": [
+         273,
+         290
+        ]
+       },
+       {
+        "position": 87,
+        "hash": "1703a7c5909404b3",
+        "span": [
+         277,
+         301
+        ]
+       },
+       {
+        "position": 88,
+        "hash": "e84da10880f0da71",
+        "span": [
+         279,
+         303
+        ]
+       },
+       {
+        "position": 89,
+        "hash": "1b344cbc75764c3f",
+        "span": [
+         282,
+         304
+        ]
+       },
+       {
+        "position": 90,
+        "hash": "f7a306d25bb13552",
+        "span": [
+         289,
+         306
+        ]
+       },
+       {
+        "position": 91,
+        "hash": "294bfc4adbf08281",
+        "span": [
+         299,
+         308
+        ]
+       },
+       {
+        "position": 92,
+        "hash": "a0c8ab77dd9786ab",
+        "span": [
+         302,
+         310
+        ]
+       },
+       {
+        "position": 93,
+        "hash": "7ae25a245fdc7f80",
+        "span": [
+         303,
+         328
+        ]
+       },
+       {
+        "position": 94,
+        "hash": "9c05b31914dd86d5",
+        "span": [
+         305,
+         330
+        ]
+       },
+       {
+        "position": 95,
+        "hash": "26546545cc97a89a",
+        "span": [
+         307,
+         331
+        ]
+       },
+       {
+        "position": 96,
+        "hash": "07bd88724df410ed",
+        "span": [
+         309,
+         333
+        ]
+       },
+       {
+        "position": 97,
+        "hash": "918d12dd2178eae7",
+        "span": [
+         323,
+         334
+        ]
+       },
+       {
+        "position": 98,
+        "hash": "3acb30bbd74cf750",
+        "span": [
+         329,
+         335
+        ]
+       },
+       {
+        "position": 99,
+        "hash": "d8953b998d897b2c",
+        "span": [
+         330,
+         345
+        ]
+       },
+       {
+        "position": 100,
+        "hash": "b8b430f4e3796626",
+        "span": [
+         332,
+         351
+        ]
+       },
+       {
+        "position": 101,
+        "hash": "4e1d687d7dd113fb",
+        "span": [
+         333,
+         361
+        ]
+       },
+       {
+        "position": 102,
+        "hash": "e415bb9e9ff1eda6",
+        "span": [
+         334,
+         363
+        ]
+       }
+      ],
+      "windowSelections": [
+       0,
+       1,
+       5,
+       6,
+       6,
+       6,
+       6,
+       10,
+       11,
+       12,
+       12,
+       12,
+       12,
+       15,
+       15,
+       15,
+       19,
+       20,
+       20,
+       20,
+       20,
+       24,
+       24,
+       24,
+       24,
+       26,
+       29,
+       29,
+       29,
+       29,
+       33,
+       33,
+       35,
+       35,
+       35,
+       35,
+       36,
+       40,
+       41,
+       41,
+       41,
+       41,
+       43,
+       46,
+       46,
+       46,
+       46,
+       48,
+       48,
+       51,
+       51,
+       51,
+       53,
+       56,
+       56,
+       56,
+       56,
+       60,
+       60,
+       62,
+       62,
+       62,
+       65,
+       65,
+       65,
+       65,
+       67,
+       70,
+       70,
+       70,
+       70,
+       73,
+       75,
+       75,
+       75,
+       75,
+       76,
+       78,
+       81,
+       82,
+       82,
+       82,
+       82,
+       85,
+       87,
+       87,
+       87,
+       87,
+       89,
+       89,
+       91,
+       91,
+       95,
+       96,
+       96,
+       96,
+       96,
+       98,
+       98,
+       101
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 0,
+        "hash": "8f79254179a47903",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "bec775a9ccceeb6e",
+        "span": [
+         4,
+         13
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "c5c654abef8aab81",
+        "span": [
+         12,
+         33
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "be1b72c987ae858a",
+        "span": [
+         15,
+         39
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "dece576fff82f9a1",
+        "span": [
+         38,
+         51
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "47c74c79fc4d852a",
+        "span": [
+         39,
+         52
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "04613d5a277c2323",
+        "span": [
+         41,
+         56
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "2b35f5d4bcb6070d",
+        "span": [
+         51,
+         65
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "2f4e2615f764e123",
+        "span": [
+         61,
+         78
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "184c27036a8b345f",
+        "span": [
+         66,
+         82
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "0f6c4bd3fd6a6349",
+        "span": [
+         79,
+         101
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "6049e415429a7cf5",
+        "span": [
+         89,
+         103
+        ]
+       },
+       {
+        "position": 29,
+        "hash": "27b8e8368e56af58",
+        "span": [
+         101,
+         110
+        ]
+       },
+       {
+        "position": 33,
+        "hash": "1f5588a695bcf0c2",
+        "span": [
+         109,
+         120
+        ]
+       },
+       {
+        "position": 35,
+        "hash": "1d2482f520c5e04c",
+        "span": [
+         112,
+         122
+        ]
+       },
+       {
+        "position": 36,
+        "hash": "8227df63a3f39163",
+        "span": [
+         113,
+         131
+        ]
+       },
+       {
+        "position": 40,
+        "hash": "4dc3cda665a7c4a4",
+        "span": [
+         122,
+         139
+        ]
+       },
+       {
+        "position": 41,
+        "hash": "0bfc4de3a7cb159c",
+        "span": [
+         131,
+         140
+        ]
+       },
+       {
+        "position": 43,
+        "hash": "1940a7b2d61a87ec",
+        "span": [
+         134,
+         147
+        ]
+       },
+       {
+        "position": 46,
+        "hash": "00f81a31d6f523b2",
+        "span": [
+         140,
+         164
+        ]
+       },
+       {
+        "position": 48,
+        "hash": "367d3ca4035fdbdb",
+        "span": [
+         148,
+         166
+        ]
+       },
+       {
+        "position": 51,
+        "hash": "6a6055ba1f20d8e5",
+        "span": [
+         164,
+         179
+        ]
+       },
+       {
+        "position": 53,
+        "hash": "934b3bca936f34b9",
+        "span": [
+         166,
+         185
+        ]
+       },
+       {
+        "position": 56,
+        "hash": "3741d3f07abdbaa9",
+        "span": [
+         180,
+         192
+        ]
+       },
+       {
+        "position": 60,
+        "hash": "2102ec95928d94e4",
+        "span": [
+         188,
+         201
+        ]
+       },
+       {
+        "position": 62,
+        "hash": "1d6dd05cd9f91bc9",
+        "span": [
+         193,
+         207
+        ]
+       },
+       {
+        "position": 65,
+        "hash": "07690984f31ac564",
+        "span": [
+         202,
+         227
+        ]
+       },
+       {
+        "position": 67,
+        "hash": "10858b98de8d732a",
+        "span": [
+         208,
+         230
+        ]
+       },
+       {
+        "position": 70,
+        "hash": "008b9533ac8ea0c7",
+        "span": [
+         227,
+         235
+        ]
+       },
+       {
+        "position": 73,
+        "hash": "8c53ccb1a1426055",
+        "span": [
+         231,
+         239
+        ]
+       },
+       {
+        "position": 75,
+        "hash": "3b1c019650f9606f",
+        "span": [
+         235,
+         245
+        ]
+       },
+       {
+        "position": 76,
+        "hash": "8580df3d51a3495c",
+        "span": [
+         237,
+         253
+        ]
+       },
+       {
+        "position": 78,
+        "hash": "93f183748ffda0d9",
+        "span": [
+         240,
+         263
+        ]
+       },
+       {
+        "position": 81,
+        "hash": "57a3ffa4e99dcd43",
+        "span": [
+         254,
+         268
+        ]
+       },
+       {
+        "position": 82,
+        "hash": "35a86727b9886113",
+        "span": [
+         258,
+         276
+        ]
+       },
+       {
+        "position": 85,
+        "hash": "4a6f13fede181dba",
+        "span": [
+         267,
+         288
+        ]
+       },
+       {
+        "position": 87,
+        "hash": "1703a7c5909404b3",
+        "span": [
+         277,
+         301
+        ]
+       },
+       {
+        "position": 89,
+        "hash": "1b344cbc75764c3f",
+        "span": [
+         282,
+         304
+        ]
+       },
+       {
+        "position": 91,
+        "hash": "294bfc4adbf08281",
+        "span": [
+         299,
+         308
+        ]
+       },
+       {
+        "position": 95,
+        "hash": "26546545cc97a89a",
+        "span": [
+         307,
+         331
+        ]
+       },
+       {
+        "position": 96,
+        "hash": "07bd88724df410ed",
+        "span": [
+         309,
+         333
+        ]
+       },
+       {
+        "position": 98,
+        "hash": "3acb30bbd74cf750",
+        "span": [
+         329,
+         335
+        ]
+       },
+       {
+        "position": 101,
+        "hash": "4e1d687d7dd113fb",
+        "span": [
+         333,
+         361
+        ]
+       }
+      ]
+     }
+    }
+   }
+  }
+ ]
+}

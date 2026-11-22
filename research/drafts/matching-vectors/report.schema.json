@@ -1,0 +1,744 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/connorburgess/traceweave-spec/blob/main/research/drafts/matching-vectors/report.schema.json",
+  "title": "Traceweave draft comparison report (traceweave-report-draft-2)",
+  "description": "Draft research schema, not a file in schemas/. A report document is a canonical body plus a separate provenance block. The body holds comparison results only: no signature, trust, time, exact-subject, rights, origin, dependency, ranking or index result, and no score, probability or ownership field. No field accepts free text. Ordering, count and outcome consistency rules are in catalogue-report-contract.md sections 5 and 6 and are enforced by check_matching.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "body",
+    "provenance"
+  ],
+  "properties": {
+    "body": {
+      "$ref": "#/$defs/body"
+    },
+    "provenance": {
+      "$ref": "#/$defs/provenance"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "positive": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "u32": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4294967295
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9.-]+$",
+      "maxLength": 64
+    },
+    "label": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._+-]{1,64}$"
+    },
+    "span": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "$ref": "#/$defs/count"
+      }
+    },
+    "fraction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "denominator",
+        "numerator"
+      ],
+      "properties": {
+        "denominator": {
+          "$ref": "#/$defs/count"
+        },
+        "numerator": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "artifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "sha256"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "suppressionRef": {
+      "type": "string",
+      "pattern": "^([0-9a-f]{64}|none)$"
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidateCatalogueSha256",
+        "comparisonConfigSha256",
+        "referenceCatalogueSha256",
+        "suppressionCatalogueSha256"
+      ],
+      "properties": {
+        "candidateCatalogueSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "comparisonConfigSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "referenceCatalogueSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "suppressionCatalogueSha256": {
+          "$ref": "#/$defs/suppressionRef"
+        }
+      }
+    },
+    "body": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/comparedBody"
+        },
+        {
+          "$ref": "#/$defs/rejectedBody"
+        }
+      ]
+    },
+    "rejectedBody": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inputs",
+        "rejection",
+        "reportVersion",
+        "resultKind",
+        "status"
+      ],
+      "properties": {
+        "inputs": {
+          "$ref": "#/$defs/inputs"
+        },
+        "rejection": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "class",
+                "code",
+                "side"
+              ],
+              "properties": {
+                "class": {
+                  "const": "unsupported-input"
+                },
+                "code": {
+                  "const": "unsupported-comparison-config"
+                },
+                "side": {
+                  "const": "comparison-config"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "class",
+                "code",
+                "side"
+              ],
+              "properties": {
+                "class": {
+                  "const": "unsupported-input"
+                },
+                "code": {
+                  "enum": [
+                    "malformed-catalogue",
+                    "unsupported-catalogue",
+                    "unsupported-profile"
+                  ]
+                },
+                "side": {
+                  "enum": [
+                    "reference",
+                    "candidate",
+                    "suppression"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "class",
+                "code",
+                "side"
+              ],
+              "properties": {
+                "class": {
+                  "const": "mismatch"
+                },
+                "code": {
+                  "enum": [
+                    "profile-mismatch",
+                    "config-mismatch"
+                  ]
+                },
+                "side": {
+                  "enum": [
+                    "candidate",
+                    "suppression"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "class",
+                "code",
+                "side"
+              ],
+              "properties": {
+                "class": {
+                  "const": "mismatch"
+                },
+                "code": {
+                  "const": "suppression-catalogue-mismatch"
+                },
+                "side": {
+                  "const": "suppression"
+                }
+              }
+            }
+          ]
+        },
+        "reportVersion": {
+          "const": "traceweave-report-draft-2"
+        },
+        "resultKind": {
+          "const": "token-fingerprint-comparison"
+        },
+        "status": {
+          "const": "rejected"
+        }
+      }
+    },
+    "comparedBody": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidateArtifactCount",
+        "comparison",
+        "inputs",
+        "pairs",
+        "profile",
+        "referenceArtifactCount",
+        "reportVersion",
+        "resultKind",
+        "status",
+        "suppression"
+      ],
+      "properties": {
+        "candidateArtifactCount": {
+          "$ref": "#/$defs/positive"
+        },
+        "comparison": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "comparison",
+            "maxRegionsPerMode",
+            "maxSeedsPerMode",
+            "mergeGap",
+            "minRegionDistinctHashes",
+            "modes",
+            "parameterStatus",
+            "suppressionCatalogueSha256"
+          ],
+          "properties": {
+            "comparison": {
+              "const": "traceweave-seed-merge-draft-2"
+            },
+            "maxRegionsPerMode": {
+              "$ref": "#/$defs/u32"
+            },
+            "maxSeedsPerMode": {
+              "$ref": "#/$defs/u32"
+            },
+            "mergeGap": {
+              "$ref": "#/$defs/u32"
+            },
+            "minRegionDistinctHashes": {
+              "$ref": "#/$defs/u32"
+            },
+            "modes": {
+              "const": [
+                "exact",
+                "normalized"
+              ]
+            },
+            "parameterStatus": {
+              "const": "experimental"
+            },
+            "suppressionCatalogueSha256": {
+              "$ref": "#/$defs/suppressionRef"
+            }
+          }
+        },
+        "inputs": {
+          "$ref": "#/$defs/inputs"
+        },
+        "pairs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/pair"
+          }
+        },
+        "profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "configSha256",
+            "id",
+            "version"
+          ],
+          "properties": {
+            "configSha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "id": {
+              "$ref": "#/$defs/name"
+            },
+            "version": {
+              "$ref": "#/$defs/name"
+            }
+          }
+        },
+        "referenceArtifactCount": {
+          "$ref": "#/$defs/positive"
+        },
+        "reportVersion": {
+          "const": "traceweave-report-draft-2"
+        },
+        "resultKind": {
+          "const": "token-fingerprint-comparison"
+        },
+        "status": {
+          "const": "compared"
+        },
+        "suppression": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "status": {
+                  "const": "none"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "artifactCount",
+                "distinctHashes",
+                "status"
+              ],
+              "properties": {
+                "artifactCount": {
+                  "$ref": "#/$defs/positive"
+                },
+                "distinctHashes": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "exact",
+                    "normalized"
+                  ],
+                  "properties": {
+                    "exact": {
+                      "$ref": "#/$defs/count"
+                    },
+                    "normalized": {
+                      "$ref": "#/$defs/count"
+                    }
+                  }
+                },
+                "status": {
+                  "const": "supplied"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "pair": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "candidate",
+            "modes",
+            "reference",
+            "status"
+          ],
+          "properties": {
+            "candidate": {
+              "$ref": "#/$defs/artifactRef"
+            },
+            "modes": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "exact",
+                "normalized"
+              ],
+              "properties": {
+                "exact": {
+                  "$ref": "#/$defs/mode"
+                },
+                "normalized": {
+                  "$ref": "#/$defs/mode"
+                }
+              }
+            },
+            "reference": {
+              "$ref": "#/$defs/artifactRef"
+            },
+            "status": {
+              "const": "compared"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "candidate",
+            "outcome",
+            "reference",
+            "status"
+          ],
+          "properties": {
+            "candidate": {
+              "$ref": "#/$defs/artifactRef"
+            },
+            "outcome": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "class",
+                    "code"
+                  ],
+                  "properties": {
+                    "class": {
+                      "const": "unsupported-input"
+                    },
+                    "code": {
+                      "enum": [
+                        "reference-extraction-error",
+                        "candidate-extraction-error"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "class",
+                    "code"
+                  ],
+                  "properties": {
+                    "class": {
+                      "const": "abstain"
+                    },
+                    "code": {
+                      "const": "insufficient-tokens"
+                    }
+                  }
+                }
+              ]
+            },
+            "reference": {
+              "$ref": "#/$defs/artifactRef"
+            },
+            "status": {
+              "const": "not-compared"
+            }
+          }
+        }
+      ]
+    },
+    "mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "containment",
+        "outcome",
+        "regionCounts",
+        "regions",
+        "seedCount",
+        "sharedCommonDistinctHashes",
+        "similarity",
+        "truncatedRegions"
+      ],
+      "properties": {
+        "containment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "candidateInReference",
+            "referenceInCandidate"
+          ],
+          "properties": {
+            "candidateInReference": {
+              "$ref": "#/$defs/fraction"
+            },
+            "referenceInCandidate": {
+              "$ref": "#/$defs/fraction"
+            }
+          }
+        },
+        "outcome": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "class",
+                "code"
+              ],
+              "properties": {
+                "class": {
+                  "const": "match"
+                },
+                "code": {
+                  "const": "match"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "class",
+                "code"
+              ],
+              "properties": {
+                "class": {
+                  "const": "abstain"
+                },
+                "code": {
+                  "enum": [
+                    "ambiguous",
+                    "seed-limit-exceeded"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "class",
+                "code"
+              ],
+              "properties": {
+                "class": {
+                  "const": "no-match"
+                },
+                "code": {
+                  "enum": [
+                    "no-shared-fingerprints",
+                    "below-minimum-evidence",
+                    "common-only"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "regionCounts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "belowMinimumEvidence",
+            "commonOnly",
+            "reportable"
+          ],
+          "properties": {
+            "belowMinimumEvidence": {
+              "$ref": "#/$defs/count"
+            },
+            "commonOnly": {
+              "$ref": "#/$defs/count"
+            },
+            "reportable": {
+              "$ref": "#/$defs/count"
+            }
+          }
+        },
+        "regions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/region"
+          }
+        },
+        "seedCount": {
+          "$ref": "#/$defs/count"
+        },
+        "sharedCommonDistinctHashes": {
+          "$ref": "#/$defs/count"
+        },
+        "similarity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "jaccard"
+          ],
+          "properties": {
+            "jaccard": {
+              "$ref": "#/$defs/fraction"
+            }
+          }
+        },
+        "truncatedRegions": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "region": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ambiguous",
+        "candidateSpan",
+        "distinctCommonHashes",
+        "distinctHashes",
+        "referenceSpan",
+        "seeds",
+        "status"
+      ],
+      "properties": {
+        "ambiguous": {
+          "type": "boolean"
+        },
+        "candidateSpan": {
+          "$ref": "#/$defs/span"
+        },
+        "distinctCommonHashes": {
+          "$ref": "#/$defs/count"
+        },
+        "distinctHashes": {
+          "$ref": "#/$defs/positive"
+        },
+        "referenceSpan": {
+          "$ref": "#/$defs/span"
+        },
+        "seeds": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "$ref": "#/$defs/count"
+            }
+          }
+        },
+        "status": {
+          "enum": [
+            "reportable",
+            "below-minimum-evidence",
+            "common-only"
+          ]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bodySha256",
+        "comparisonConfigSha256",
+        "implementation",
+        "specCommit"
+      ],
+      "properties": {
+        "bodySha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "comparisonConfigSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "generatedAt": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+        },
+        "implementation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "commit",
+            "name",
+            "version"
+          ],
+          "properties": {
+            "commit": {
+              "$ref": "#/$defs/commit"
+            },
+            "name": {
+              "$ref": "#/$defs/label"
+            },
+            "version": {
+              "$ref": "#/$defs/label"
+            }
+          }
+        },
+        "specCommit": {
+          "$ref": "#/$defs/commit"
+        }
+      }
+    }
+  }
+}

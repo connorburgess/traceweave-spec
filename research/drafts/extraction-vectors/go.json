@@ -1,0 +1,1039 @@
+{
+  "contract": "traceweave-token-winnow-draft-1",
+  "profile": "go-tokens",
+  "profileVersion": "draft-1",
+  "configFile": "config-go.json",
+  "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+  "k": 5,
+  "window": 4,
+  "requiredCoverage": true,
+  "lexingCheck": "Token streams are hand-derived; check_vectors.py re-verifies lexical invariants and harness/crosscheck.py compares them with go/scanner, proc-macro2 and rustc.",
+  "vectors": [
+    {
+      "id": "go-empty",
+      "tags": ["empty"],
+      "description": "Empty input: zero tokens, no k-grams.",
+      "inputBase64": "",
+      "inputText": "",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 0,
+        "tokens": [],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {"values": [], "kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []}
+        }
+      }
+    },
+    {
+      "id": "go-short",
+      "tags": ["short"],
+      "description": "Four tokens (including the semicolon inserted at the final newline) is fewer than k=5.",
+      "inputBase64": "eCA6PSAxCg==",
+      "inputText": "x := 1\n",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 4,
+        "tokens": [
+          {"class": "ident", "text": "x", "span": [0, 1]},
+          {"class": "punct", "text": ":=", "span": [2, 4]},
+          {"class": "int", "text": "1", "span": [5, 6]},
+          {"class": "punct", "text": ";", "span": [6, 6], "inserted": true}
+        ],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {
+            "values": ["", ":=", "", ";"],
+            "kgrams": [],
+            "windowSelections": [],
+            "partialWindow": false,
+            "fingerprints": []
+          }
+        }
+      }
+    },
+    {
+      "id": "go-exact-k",
+      "tags": ["exact-k"],
+      "description": "Exactly k=5 tokens: one k-gram, partial window selects it.",
+      "inputBase64": "cmV0dXJuIHggKyAxCg==",
+      "inputText": "return x + 1\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 5,
+        "tokens": [
+          {"class": "keyword", "text": "return", "span": [0, 6]},
+          {"class": "ident", "text": "x", "span": [7, 8]},
+          {"class": "punct", "text": "+", "span": [9, 10]},
+          {"class": "int", "text": "1", "span": [11, 12]},
+          {"class": "punct", "text": ";", "span": [12, 12], "inserted": true}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [{"position": 0, "hash": "abc28a1dff9b3756", "span": [0, 12]}],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "abc28a1dff9b3756", "span": [0, 12]}]
+          },
+          "normalized": {
+            "values": ["return", "", "+", "", ";"],
+            "kgrams": [{"position": 0, "hash": "6c5bd99b8f724a9c", "span": [0, 12]}],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "6c5bd99b8f724a9c", "span": [0, 12]}]
+          }
+        }
+      }
+    },
+    {
+      "id": "go-unicode",
+      "tags": ["unicode"],
+      "description": "Unicode letters in identifiers, multi-byte string and rune literals; spans are UTF-8 byte offsets.",
+      "inputBase64": "cMOkaXbDpCA6PSAiaMOpbGxvLCDkuJbnlYwiICsg5ZCN5YmNICsgc3RyaW5nKCfimIMnKQo=",
+      "inputText": "päivä := \"héllo, 世界\" + 名前 + string('☃')\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 11,
+        "tokens": [
+          {"class": "ident", "text": "päivä", "span": [0, 7]},
+          {"class": "punct", "text": ":=", "span": [8, 10]},
+          {"class": "string", "text": "\"héllo, 世界\"", "span": [11, 27]},
+          {"class": "punct", "text": "+", "span": [28, 29]},
+          {"class": "ident", "text": "名前", "span": [30, 36]},
+          {"class": "punct", "text": "+", "span": [37, 38]},
+          {"class": "ident", "text": "string", "span": [39, 45]},
+          {"class": "punct", "text": "(", "span": [45, 46]},
+          {"class": "rune", "text": "'☃'", "span": [46, 51]},
+          {"class": "punct", "text": ")", "span": [51, 52]},
+          {"class": "punct", "text": ";", "span": [52, 52], "inserted": true}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "65ca4372e737e0cd", "span": [0, 36]},
+              {"position": 1, "hash": "dfde9bbcc458ae85", "span": [8, 38]},
+              {"position": 2, "hash": "495768414ffa35ff", "span": [11, 45]},
+              {"position": 3, "hash": "6931cf5269bf705e", "span": [28, 46]},
+              {"position": 4, "hash": "5265837c6ff40802", "span": [30, 51]},
+              {"position": 5, "hash": "47a8628e8adb95e5", "span": [37, 52]},
+              {"position": 6, "hash": "c8d6e8bc479391a3", "span": [39, 52]}
+            ],
+            "windowSelections": [2, 2, 5, 5],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 2, "hash": "495768414ffa35ff", "span": [11, 45]},
+              {"position": 5, "hash": "47a8628e8adb95e5", "span": [37, 52]}
+            ]
+          },
+          "normalized": {
+            "values": ["", ":=", "", "+", "", "+", "", "(", "", ")", ";"],
+            "kgrams": [
+              {"position": 0, "hash": "dba62112c4d2b7be", "span": [0, 36]},
+              {"position": 1, "hash": "723f9b2fdc701e81", "span": [8, 38]},
+              {"position": 2, "hash": "6559c2c53b16cd72", "span": [11, 45]},
+              {"position": 3, "hash": "158a1e27c0c022d8", "span": [28, 46]},
+              {"position": 4, "hash": "dfb19584192e914a", "span": [30, 51]},
+              {"position": 5, "hash": "84b1a2fef937b769", "span": [37, 52]},
+              {"position": 6, "hash": "bf3b99a838a8abb0", "span": [39, 52]}
+            ],
+            "windowSelections": [3, 3, 3, 3],
+            "partialWindow": false,
+            "fingerprints": [{"position": 3, "hash": "158a1e27c0c022d8", "span": [28, 46]}]
+          }
+        }
+      }
+    },
+    {
+      "id": "go-literals",
+      "tags": ["literals"],
+      "description": "Numeric literal forms, raw string spanning a newline (no insertion inside it), interpreted string escapes.",
+      "inputBase64": "YSA6PSBbXWludHsweDFGLCAxXzAwMCwgMG8xNywgMDc1NX0KYiA6PSAxLjVlMyArIC41ICsgMHgxcC0yICsgMmkKYyA6PSBgcmF3CmxpbmVgICsgIlx0XCJxXCIiCg==",
+      "inputText": "a := []int{0x1F, 1_000, 0o17, 0755}\nb := 1.5e3 + .5 + 0x1p-2 + 2i\nc := `raw\nline` + \"\\t\\\"q\\\"\"\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 31,
+        "tokens": [
+          {"class": "ident", "text": "a", "span": [0, 1]},
+          {"class": "punct", "text": ":=", "span": [2, 4]},
+          {"class": "punct", "text": "[", "span": [5, 6]},
+          {"class": "punct", "text": "]", "span": [6, 7]},
+          {"class": "ident", "text": "int", "span": [7, 10]},
+          {"class": "punct", "text": "{", "span": [10, 11]},
+          {"class": "int", "text": "0x1F", "span": [11, 15]},
+          {"class": "punct", "text": ",", "span": [15, 16]},
+          {"class": "int", "text": "1_000", "span": [17, 22]},
+          {"class": "punct", "text": ",", "span": [22, 23]},
+          {"class": "int", "text": "0o17", "span": [24, 28]},
+          {"class": "punct", "text": ",", "span": [28, 29]},
+          {"class": "int", "text": "0755", "span": [30, 34]},
+          {"class": "punct", "text": "}", "span": [34, 35]},
+          {"class": "punct", "text": ";", "span": [35, 35], "inserted": true},
+          {"class": "ident", "text": "b", "span": [36, 37]},
+          {"class": "punct", "text": ":=", "span": [38, 40]},
+          {"class": "float", "text": "1.5e3", "span": [41, 46]},
+          {"class": "punct", "text": "+", "span": [47, 48]},
+          {"class": "float", "text": ".5", "span": [49, 51]},
+          {"class": "punct", "text": "+", "span": [52, 53]},
+          {"class": "float", "text": "0x1p-2", "span": [54, 60]},
+          {"class": "punct", "text": "+", "span": [61, 62]},
+          {"class": "imag", "text": "2i", "span": [63, 65]},
+          {"class": "punct", "text": ";", "span": [65, 65], "inserted": true},
+          {"class": "ident", "text": "c", "span": [66, 67]},
+          {"class": "punct", "text": ":=", "span": [68, 70]},
+          {"class": "string", "text": "`raw\nline`", "span": [71, 81]},
+          {"class": "punct", "text": "+", "span": [82, 83]},
+          {"class": "string", "text": "\"\\t\\\"q\\\"\"", "span": [84, 93]},
+          {"class": "punct", "text": ";", "span": [93, 93], "inserted": true}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "61c1e3485d0b5a2a", "span": [0, 10]},
+              {"position": 1, "hash": "c83f9f1708e52a43", "span": [2, 11]},
+              {"position": 2, "hash": "2f58276c519124f1", "span": [5, 15]},
+              {"position": 3, "hash": "74a665250250f7b2", "span": [6, 16]},
+              {"position": 4, "hash": "a83ba8b4c7970fc2", "span": [7, 22]},
+              {"position": 5, "hash": "75f9eca246d0f557", "span": [10, 23]},
+              {"position": 6, "hash": "4eae0b11fef4ef9e", "span": [11, 28]},
+              {"position": 7, "hash": "f52b315128126871", "span": [15, 29]},
+              {"position": 8, "hash": "3928acc95c274931", "span": [17, 34]},
+              {"position": 9, "hash": "bb388b82727866a1", "span": [22, 35]},
+              {"position": 10, "hash": "fa7ad9a88f1d9c5a", "span": [24, 35]},
+              {"position": 11, "hash": "eb00a717a8c81e9c", "span": [28, 37]},
+              {"position": 12, "hash": "5ac0eaeb8b17a703", "span": [30, 40]},
+              {"position": 13, "hash": "0b6d5fce5daf409a", "span": [34, 46]},
+              {"position": 14, "hash": "be9a88a59acbdc7f", "span": [35, 48]},
+              {"position": 15, "hash": "a8ae1f8b111c1425", "span": [36, 51]},
+              {"position": 16, "hash": "405bf13ab1ca1d00", "span": [38, 53]},
+              {"position": 17, "hash": "76d3816d5d22a933", "span": [41, 60]},
+              {"position": 18, "hash": "1aab79e63d63f16b", "span": [47, 62]},
+              {"position": 19, "hash": "5cd3686cf7d7d657", "span": [49, 65]},
+              {"position": 20, "hash": "c28ea5b908eda1fe", "span": [52, 65]},
+              {"position": 21, "hash": "4f14e40b9d105adf", "span": [54, 67]},
+              {"position": 22, "hash": "02884e3a3885ede4", "span": [61, 70]},
+              {"position": 23, "hash": "e4dcc8abd3b89f1d", "span": [63, 81]},
+              {"position": 24, "hash": "c1989e41f0303bbe", "span": [65, 83]},
+              {"position": 25, "hash": "f75a2eebdf3d7e92", "span": [66, 93]},
+              {"position": 26, "hash": "a866a4d88ce35016", "span": [68, 93]}
+            ],
+            "windowSelections": [2, 2, 2, 6, 6, 8, 8, 8, 8, 12, 13, 13, 13, 13, 16, 18, 18, 18, 18, 22, 22, 22, 22, 26],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 2, "hash": "2f58276c519124f1", "span": [5, 15]},
+              {"position": 6, "hash": "4eae0b11fef4ef9e", "span": [11, 28]},
+              {"position": 8, "hash": "3928acc95c274931", "span": [17, 34]},
+              {"position": 12, "hash": "5ac0eaeb8b17a703", "span": [30, 40]},
+              {"position": 13, "hash": "0b6d5fce5daf409a", "span": [34, 46]},
+              {"position": 16, "hash": "405bf13ab1ca1d00", "span": [38, 53]},
+              {"position": 18, "hash": "1aab79e63d63f16b", "span": [47, 62]},
+              {"position": 22, "hash": "02884e3a3885ede4", "span": [61, 70]},
+              {"position": 26, "hash": "a866a4d88ce35016", "span": [68, 93]}
+            ]
+          },
+          "normalized": {
+            "values": [
+              "",
+              ":=",
+              "[",
+              "]",
+              "",
+              "{",
+              "",
+              ",",
+              "",
+              ",",
+              "",
+              ",",
+              "",
+              "}",
+              ";",
+              "",
+              ":=",
+              "",
+              "+",
+              "",
+              "+",
+              "",
+              "+",
+              "",
+              ";",
+              "",
+              ":=",
+              "",
+              "+",
+              "",
+              ";"
+            ],
+            "kgrams": [
+              {"position": 0, "hash": "044d4ef9759a462a", "span": [0, 10]},
+              {"position": 1, "hash": "5707e50bc5e10739", "span": [2, 11]},
+              {"position": 2, "hash": "b9a5edf52d2c3bdb", "span": [5, 15]},
+              {"position": 3, "hash": "38988ea49eb65520", "span": [6, 16]},
+              {"position": 4, "hash": "5d3772abccc7dd34", "span": [7, 22]},
+              {"position": 5, "hash": "918b2c9c9ea3eb89", "span": [10, 23]},
+              {"position": 6, "hash": "843492b5ca6d0c72", "span": [11, 28]},
+              {"position": 7, "hash": "968ac7635521b2fb", "span": [15, 29]},
+              {"position": 8, "hash": "843492b5ca6d0c72", "span": [17, 34]},
+              {"position": 9, "hash": "fc3a17c16dd7a6db", "span": [22, 35]},
+              {"position": 10, "hash": "1d22f84d5d1ebe7a", "span": [24, 35]},
+              {"position": 11, "hash": "71cb39b3af04a250", "span": [28, 37]},
+              {"position": 12, "hash": "0a7556cddac6ec6f", "span": [30, 40]},
+              {"position": 13, "hash": "59a7fcff3a3e2b4a", "span": [34, 46]},
+              {"position": 14, "hash": "00a57640b8d53248", "span": [35, 48]},
+              {"position": 15, "hash": "611b5a878dd30984", "span": [36, 51]},
+              {"position": 16, "hash": "dd2f5f1fdbf8f05c", "span": [38, 53]},
+              {"position": 17, "hash": "b4f48db744c63d30", "span": [41, 60]},
+              {"position": 18, "hash": "b8645f84deee7594", "span": [47, 62]},
+              {"position": 19, "hash": "c90a8e1db4e75a69", "span": [49, 65]},
+              {"position": 20, "hash": "bea72520e003330d", "span": [52, 65]},
+              {"position": 21, "hash": "97970f84e631061e", "span": [54, 67]},
+              {"position": 22, "hash": "a51cb640e36bbd8a", "span": [61, 70]},
+              {"position": 23, "hash": "75d52d22447e0dd1", "span": [63, 81]},
+              {"position": 24, "hash": "8b7a39fa72b8dae8", "span": [65, 83]},
+              {"position": 25, "hash": "a97b7eb673c78947", "span": [66, 93]},
+              {"position": 26, "hash": "48e828f63ff10eff", "span": [68, 93]}
+            ],
+            "windowSelections": [0, 3, 3, 3, 4, 8, 8, 10, 10, 12, 12, 14, 14, 14, 14, 15, 17, 17, 21, 21, 23, 23, 23, 26],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 0, "hash": "044d4ef9759a462a", "span": [0, 10]},
+              {"position": 3, "hash": "38988ea49eb65520", "span": [6, 16]},
+              {"position": 4, "hash": "5d3772abccc7dd34", "span": [7, 22]},
+              {"position": 8, "hash": "843492b5ca6d0c72", "span": [17, 34]},
+              {"position": 10, "hash": "1d22f84d5d1ebe7a", "span": [24, 35]},
+              {"position": 12, "hash": "0a7556cddac6ec6f", "span": [30, 40]},
+              {"position": 14, "hash": "00a57640b8d53248", "span": [35, 48]},
+              {"position": 15, "hash": "611b5a878dd30984", "span": [36, 51]},
+              {"position": 17, "hash": "b4f48db744c63d30", "span": [41, 60]},
+              {"position": 21, "hash": "97970f84e631061e", "span": [54, 67]},
+              {"position": 23, "hash": "75d52d22447e0dd1", "span": [63, 81]},
+              {"position": 26, "hash": "48e828f63ff10eff", "span": [68, 93]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "go-semicolon-comments",
+      "tags": ["semicolon-insertion", "comments"],
+      "description": "No insertion after ',' at line end; a general comment containing a newline and a final line comment each act as a newline.",
+      "inputBase64": "eCA6PSBmKGEsCgliKSAvKiBjCiAqLyB5IDo9IDIgLy8gZW5k",
+      "inputText": "x := f(a,\n\tb) /* c\n */ y := 2 // end",
+      "result": {
+        "status": "ok",
+        "tokenCount": 13,
+        "tokens": [
+          {"class": "ident", "text": "x", "span": [0, 1]},
+          {"class": "punct", "text": ":=", "span": [2, 4]},
+          {"class": "ident", "text": "f", "span": [5, 6]},
+          {"class": "punct", "text": "(", "span": [6, 7]},
+          {"class": "ident", "text": "a", "span": [7, 8]},
+          {"class": "punct", "text": ",", "span": [8, 9]},
+          {"class": "ident", "text": "b", "span": [11, 12]},
+          {"class": "punct", "text": ")", "span": [12, 13]},
+          {"class": "punct", "text": ";", "span": [13, 13], "inserted": true},
+          {"class": "ident", "text": "y", "span": [23, 24]},
+          {"class": "punct", "text": ":=", "span": [25, 27]},
+          {"class": "int", "text": "2", "span": [28, 29]},
+          {"class": "punct", "text": ";", "span": [29, 29], "inserted": true}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "a0f0cc2a15590861", "span": [0, 8]},
+              {"position": 1, "hash": "d6f481cbe86f5a3c", "span": [2, 9]},
+              {"position": 2, "hash": "fcaf15c579a37a31", "span": [5, 12]},
+              {"position": 3, "hash": "215155cc9657bcb8", "span": [6, 13]},
+              {"position": 4, "hash": "7f681e0be8d7575a", "span": [7, 13]},
+              {"position": 5, "hash": "bbb4d226ff3ac16b", "span": [8, 24]},
+              {"position": 6, "hash": "d5915fe23f9cebe6", "span": [11, 27]},
+              {"position": 7, "hash": "afc07d93262552ea", "span": [12, 29]},
+              {"position": 8, "hash": "c7ac0a8c48d46eed", "span": [13, 29]}
+            ],
+            "windowSelections": [3, 3, 3, 3, 4, 7],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 3, "hash": "215155cc9657bcb8", "span": [6, 13]},
+              {"position": 4, "hash": "7f681e0be8d7575a", "span": [7, 13]},
+              {"position": 7, "hash": "afc07d93262552ea", "span": [12, 29]}
+            ]
+          },
+          "normalized": {
+            "values": ["", ":=", "", "(", "", ",", "", ")", ";", "", ":=", "", ";"],
+            "kgrams": [
+              {"position": 0, "hash": "3310083addc5229a", "span": [0, 8]},
+              {"position": 1, "hash": "918b409ee7c83f85", "span": [2, 9]},
+              {"position": 2, "hash": "41eca3755b91bc20", "span": [5, 12]},
+              {"position": 3, "hash": "8c73bc606d938d4c", "span": [6, 13]},
+              {"position": 4, "hash": "ccc58aa52d6537bb", "span": [7, 13]},
+              {"position": 5, "hash": "031b3b039e3213f7", "span": [8, 24]},
+              {"position": 6, "hash": "1072a4eae5a1ed1b", "span": [11, 27]},
+              {"position": 7, "hash": "d97e95949da9420b", "span": [12, 29]},
+              {"position": 8, "hash": "88f2a0486c93b1e0", "span": [13, 29]}
+            ],
+            "windowSelections": [0, 2, 5, 5, 5, 5],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 0, "hash": "3310083addc5229a", "span": [0, 8]},
+              {"position": 2, "hash": "41eca3755b91bc20", "span": [5, 12]},
+              {"position": 5, "hash": "031b3b039e3213f7", "span": [8, 24]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "go-repeated",
+      "tags": ["repeated", "equal-minimum"],
+      "description": "Ten identical tokens: all k-grams identical, every window ties, rightmost minimum wins; duplicate hashes at distinct positions are all retained.",
+      "inputBase64": "KyArICsgKyArICsgKyArICsgKw==",
+      "inputText": "+ + + + + + + + + +",
+      "result": {
+        "status": "ok",
+        "tokenCount": 10,
+        "tokens": [
+          {"class": "punct", "text": "+", "span": [0, 1]},
+          {"class": "punct", "text": "+", "span": [2, 3]},
+          {"class": "punct", "text": "+", "span": [4, 5]},
+          {"class": "punct", "text": "+", "span": [6, 7]},
+          {"class": "punct", "text": "+", "span": [8, 9]},
+          {"class": "punct", "text": "+", "span": [10, 11]},
+          {"class": "punct", "text": "+", "span": [12, 13]},
+          {"class": "punct", "text": "+", "span": [14, 15]},
+          {"class": "punct", "text": "+", "span": [16, 17]},
+          {"class": "punct", "text": "+", "span": [18, 19]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "d2f3f03896bc8ae3", "span": [0, 9]},
+              {"position": 1, "hash": "d2f3f03896bc8ae3", "span": [2, 11]},
+              {"position": 2, "hash": "d2f3f03896bc8ae3", "span": [4, 13]},
+              {"position": 3, "hash": "d2f3f03896bc8ae3", "span": [6, 15]},
+              {"position": 4, "hash": "d2f3f03896bc8ae3", "span": [8, 17]},
+              {"position": 5, "hash": "d2f3f03896bc8ae3", "span": [10, 19]}
+            ],
+            "windowSelections": [3, 4, 5],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 3, "hash": "d2f3f03896bc8ae3", "span": [6, 15]},
+              {"position": 4, "hash": "d2f3f03896bc8ae3", "span": [8, 17]},
+              {"position": 5, "hash": "d2f3f03896bc8ae3", "span": [10, 19]}
+            ]
+          },
+          "normalized": {
+            "values": ["+", "+", "+", "+", "+", "+", "+", "+", "+", "+"],
+            "kgrams": [
+              {"position": 0, "hash": "bf7db599c3c01f84", "span": [0, 9]},
+              {"position": 1, "hash": "bf7db599c3c01f84", "span": [2, 11]},
+              {"position": 2, "hash": "bf7db599c3c01f84", "span": [4, 13]},
+              {"position": 3, "hash": "bf7db599c3c01f84", "span": [6, 15]},
+              {"position": 4, "hash": "bf7db599c3c01f84", "span": [8, 17]},
+              {"position": 5, "hash": "bf7db599c3c01f84", "span": [10, 19]}
+            ],
+            "windowSelections": [3, 4, 5],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 3, "hash": "bf7db599c3c01f84", "span": [6, 15]},
+              {"position": 4, "hash": "bf7db599c3c01f84", "span": [8, 17]},
+              {"position": 5, "hash": "bf7db599c3c01f84", "span": [10, 19]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "go-equal-minimum",
+      "tags": ["repeated", "equal-minimum"],
+      "description": "Period-3 token sequence: every window of 4 contains a repeated k-gram, so ties on the minimum are guaranteed.",
+      "inputBase64": "eCsrCngrKwp4KysKeCsrCg==",
+      "inputText": "x++\nx++\nx++\nx++\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 12,
+        "tokens": [
+          {"class": "ident", "text": "x", "span": [0, 1]},
+          {"class": "punct", "text": "++", "span": [1, 3]},
+          {"class": "punct", "text": ";", "span": [3, 3], "inserted": true},
+          {"class": "ident", "text": "x", "span": [4, 5]},
+          {"class": "punct", "text": "++", "span": [5, 7]},
+          {"class": "punct", "text": ";", "span": [7, 7], "inserted": true},
+          {"class": "ident", "text": "x", "span": [8, 9]},
+          {"class": "punct", "text": "++", "span": [9, 11]},
+          {"class": "punct", "text": ";", "span": [11, 11], "inserted": true},
+          {"class": "ident", "text": "x", "span": [12, 13]},
+          {"class": "punct", "text": "++", "span": [13, 15]},
+          {"class": "punct", "text": ";", "span": [15, 15], "inserted": true}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "55e1d04e19dbd47c", "span": [0, 7]},
+              {"position": 1, "hash": "d4aafb7b748cafbc", "span": [1, 7]},
+              {"position": 2, "hash": "1d99e08d0ae1fdd8", "span": [3, 9]},
+              {"position": 3, "hash": "55e1d04e19dbd47c", "span": [4, 11]},
+              {"position": 4, "hash": "d4aafb7b748cafbc", "span": [5, 11]},
+              {"position": 5, "hash": "1d99e08d0ae1fdd8", "span": [7, 13]},
+              {"position": 6, "hash": "55e1d04e19dbd47c", "span": [8, 15]},
+              {"position": 7, "hash": "d4aafb7b748cafbc", "span": [9, 15]}
+            ],
+            "windowSelections": [2, 2, 5, 5, 5],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 2, "hash": "1d99e08d0ae1fdd8", "span": [3, 9]},
+              {"position": 5, "hash": "1d99e08d0ae1fdd8", "span": [7, 13]}
+            ]
+          },
+          "normalized": {
+            "values": ["", "++", ";", "", "++", ";", "", "++", ";", "", "++", ";"],
+            "kgrams": [
+              {"position": 0, "hash": "b7345fb39438d2d0", "span": [0, 7]},
+              {"position": 1, "hash": "22a5e779f1c7df59", "span": [1, 7]},
+              {"position": 2, "hash": "cc27c55d72d384f0", "span": [3, 9]},
+              {"position": 3, "hash": "b7345fb39438d2d0", "span": [4, 11]},
+              {"position": 4, "hash": "22a5e779f1c7df59", "span": [5, 11]},
+              {"position": 5, "hash": "cc27c55d72d384f0", "span": [7, 13]},
+              {"position": 6, "hash": "b7345fb39438d2d0", "span": [8, 15]},
+              {"position": 7, "hash": "22a5e779f1c7df59", "span": [9, 15]}
+            ],
+            "windowSelections": [1, 4, 4, 4, 7],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 1, "hash": "22a5e779f1c7df59", "span": [1, 7]},
+              {"position": 4, "hash": "22a5e779f1c7df59", "span": [5, 11]},
+              {"position": 7, "hash": "22a5e779f1c7df59", "span": [9, 15]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "go-format-a",
+      "tags": ["trivia-pair"],
+      "description": "Reference for the comment/whitespace pair.",
+      "inputBase64": "ZnVuYyBhZGQoYSwgYiBpbnQpIGludCB7CglyZXR1cm4gYSArIGIKfQo=",
+      "inputText": "func add(a, b int) int {\n\treturn a + b\n}\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 17,
+        "tokens": [
+          {"class": "keyword", "text": "func", "span": [0, 4]},
+          {"class": "ident", "text": "add", "span": [5, 8]},
+          {"class": "punct", "text": "(", "span": [8, 9]},
+          {"class": "ident", "text": "a", "span": [9, 10]},
+          {"class": "punct", "text": ",", "span": [10, 11]},
+          {"class": "ident", "text": "b", "span": [12, 13]},
+          {"class": "ident", "text": "int", "span": [14, 17]},
+          {"class": "punct", "text": ")", "span": [17, 18]},
+          {"class": "ident", "text": "int", "span": [19, 22]},
+          {"class": "punct", "text": "{", "span": [23, 24]},
+          {"class": "keyword", "text": "return", "span": [26, 32]},
+          {"class": "ident", "text": "a", "span": [33, 34]},
+          {"class": "punct", "text": "+", "span": [35, 36]},
+          {"class": "ident", "text": "b", "span": [37, 38]},
+          {"class": "punct", "text": ";", "span": [38, 38], "inserted": true},
+          {"class": "punct", "text": "}", "span": [39, 40]},
+          {"class": "punct", "text": ";", "span": [40, 40], "inserted": true}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "cd271166e1bc7b44", "span": [0, 11]},
+              {"position": 1, "hash": "67961df97caa2439", "span": [5, 13]},
+              {"position": 2, "hash": "a63bac5f07a88510", "span": [8, 17]},
+              {"position": 3, "hash": "d7fa8f131a78964c", "span": [9, 18]},
+              {"position": 4, "hash": "0dada62e34aa91f9", "span": [10, 22]},
+              {"position": 5, "hash": "20ac96beed28cc03", "span": [12, 24]},
+              {"position": 6, "hash": "98d347bed6f435ca", "span": [14, 32]},
+              {"position": 7, "hash": "ad6c3a04658ef8d6", "span": [17, 34]},
+              {"position": 8, "hash": "232b8fa7b06e08de", "span": [19, 36]},
+              {"position": 9, "hash": "c65a9d25fbd3fe4f", "span": [23, 38]},
+              {"position": 10, "hash": "83851b3a22ebd3f8", "span": [26, 38]},
+              {"position": 11, "hash": "bd91bf35982cd9ed", "span": [33, 40]},
+              {"position": 12, "hash": "08c771e25647f35f", "span": [35, 40]}
+            ],
+            "windowSelections": [1, 4, 4, 4, 4, 5, 8, 8, 8, 12],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 1, "hash": "67961df97caa2439", "span": [5, 13]},
+              {"position": 4, "hash": "0dada62e34aa91f9", "span": [10, 22]},
+              {"position": 5, "hash": "20ac96beed28cc03", "span": [12, 24]},
+              {"position": 8, "hash": "232b8fa7b06e08de", "span": [19, 36]},
+              {"position": 12, "hash": "08c771e25647f35f", "span": [35, 40]}
+            ]
+          },
+          "normalized": {
+            "values": ["func", "", "(", "", ",", "", "", ")", "", "{", "return", "", "+", "", ";", "}", ";"],
+            "kgrams": [
+              {"position": 0, "hash": "5a0bb21d2f40f669", "span": [0, 11]},
+              {"position": 1, "hash": "41eca3755b91bc20", "span": [5, 13]},
+              {"position": 2, "hash": "22641673c2f08ccb", "span": [8, 17]},
+              {"position": 3, "hash": "6e3b75adcca33712", "span": [9, 18]},
+              {"position": 4, "hash": "1b78a516202f7860", "span": [10, 22]},
+              {"position": 5, "hash": "c5bd51446b773c13", "span": [12, 24]},
+              {"position": 6, "hash": "9abaa12781e9d6ac", "span": [14, 32]},
+              {"position": 7, "hash": "80b8029a7bc9895d", "span": [17, 34]},
+              {"position": 8, "hash": "953839ea8c3da2df", "span": [19, 36]},
+              {"position": 9, "hash": "2349273c2f66e02d", "span": [23, 38]},
+              {"position": 10, "hash": "f5a754c25e21130b", "span": [26, 38]},
+              {"position": 11, "hash": "a5b7e35d72b278aa", "span": [33, 40]},
+              {"position": 12, "hash": "85adbe4d292bf2e6", "span": [35, 40]}
+            ],
+            "windowSelections": [2, 4, 4, 4, 4, 7, 9, 9, 9, 9],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 2, "hash": "22641673c2f08ccb", "span": [8, 17]},
+              {"position": 4, "hash": "1b78a516202f7860", "span": [10, 22]},
+              {"position": 7, "hash": "80b8029a7bc9895d", "span": [17, 34]},
+              {"position": 9, "hash": "2349273c2f66e02d", "span": [23, 38]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "go-format-b",
+      "tags": ["trivia-pair", "comments"],
+      "description": "Same tokens as go-format-a with different comments and whitespace and no final newline; fingerprint hashes must be identical.",
+      "inputBase64": "Ly8gYWRkIHN1bXMuCmZ1bmMgYWRkKGEsYiBpbnQpaW50eyAvLyBzdW0KICByZXR1cm4gYStiIC8qIHBsYWluICovCn0=",
+      "inputText": "// add sums.\nfunc add(a,b int)int{ // sum\n  return a+b /* plain */\n}",
+      "result": {
+        "status": "ok",
+        "tokenCount": 17,
+        "tokens": [
+          {"class": "keyword", "text": "func", "span": [13, 17]},
+          {"class": "ident", "text": "add", "span": [18, 21]},
+          {"class": "punct", "text": "(", "span": [21, 22]},
+          {"class": "ident", "text": "a", "span": [22, 23]},
+          {"class": "punct", "text": ",", "span": [23, 24]},
+          {"class": "ident", "text": "b", "span": [24, 25]},
+          {"class": "ident", "text": "int", "span": [26, 29]},
+          {"class": "punct", "text": ")", "span": [29, 30]},
+          {"class": "ident", "text": "int", "span": [30, 33]},
+          {"class": "punct", "text": "{", "span": [33, 34]},
+          {"class": "keyword", "text": "return", "span": [44, 50]},
+          {"class": "ident", "text": "a", "span": [51, 52]},
+          {"class": "punct", "text": "+", "span": [52, 53]},
+          {"class": "ident", "text": "b", "span": [53, 54]},
+          {"class": "punct", "text": ";", "span": [54, 54], "inserted": true},
+          {"class": "punct", "text": "}", "span": [67, 68]},
+          {"class": "punct", "text": ";", "span": [68, 68], "inserted": true}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "cd271166e1bc7b44", "span": [13, 24]},
+              {"position": 1, "hash": "67961df97caa2439", "span": [18, 25]},
+              {"position": 2, "hash": "a63bac5f07a88510", "span": [21, 29]},
+              {"position": 3, "hash": "d7fa8f131a78964c", "span": [22, 30]},
+              {"position": 4, "hash": "0dada62e34aa91f9", "span": [23, 33]},
+              {"position": 5, "hash": "20ac96beed28cc03", "span": [24, 34]},
+              {"position": 6, "hash": "98d347bed6f435ca", "span": [26, 50]},
+              {"position": 7, "hash": "ad6c3a04658ef8d6", "span": [29, 52]},
+              {"position": 8, "hash": "232b8fa7b06e08de", "span": [30, 53]},
+              {"position": 9, "hash": "c65a9d25fbd3fe4f", "span": [33, 54]},
+              {"position": 10, "hash": "83851b3a22ebd3f8", "span": [44, 54]},
+              {"position": 11, "hash": "bd91bf35982cd9ed", "span": [51, 68]},
+              {"position": 12, "hash": "08c771e25647f35f", "span": [52, 68]}
+            ],
+            "windowSelections": [1, 4, 4, 4, 4, 5, 8, 8, 8, 12],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 1, "hash": "67961df97caa2439", "span": [18, 25]},
+              {"position": 4, "hash": "0dada62e34aa91f9", "span": [23, 33]},
+              {"position": 5, "hash": "20ac96beed28cc03", "span": [24, 34]},
+              {"position": 8, "hash": "232b8fa7b06e08de", "span": [30, 53]},
+              {"position": 12, "hash": "08c771e25647f35f", "span": [52, 68]}
+            ]
+          },
+          "normalized": {
+            "values": ["func", "", "(", "", ",", "", "", ")", "", "{", "return", "", "+", "", ";", "}", ";"],
+            "kgrams": [
+              {"position": 0, "hash": "5a0bb21d2f40f669", "span": [13, 24]},
+              {"position": 1, "hash": "41eca3755b91bc20", "span": [18, 25]},
+              {"position": 2, "hash": "22641673c2f08ccb", "span": [21, 29]},
+              {"position": 3, "hash": "6e3b75adcca33712", "span": [22, 30]},
+              {"position": 4, "hash": "1b78a516202f7860", "span": [23, 33]},
+              {"position": 5, "hash": "c5bd51446b773c13", "span": [24, 34]},
+              {"position": 6, "hash": "9abaa12781e9d6ac", "span": [26, 50]},
+              {"position": 7, "hash": "80b8029a7bc9895d", "span": [29, 52]},
+              {"position": 8, "hash": "953839ea8c3da2df", "span": [30, 53]},
+              {"position": 9, "hash": "2349273c2f66e02d", "span": [33, 54]},
+              {"position": 10, "hash": "f5a754c25e21130b", "span": [44, 54]},
+              {"position": 11, "hash": "a5b7e35d72b278aa", "span": [51, 68]},
+              {"position": 12, "hash": "85adbe4d292bf2e6", "span": [52, 68]}
+            ],
+            "windowSelections": [2, 4, 4, 4, 4, 7, 9, 9, 9, 9],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 2, "hash": "22641673c2f08ccb", "span": [21, 29]},
+              {"position": 4, "hash": "1b78a516202f7860", "span": [23, 33]},
+              {"position": 7, "hash": "80b8029a7bc9895d", "span": [29, 52]},
+              {"position": 9, "hash": "2349273c2f66e02d", "span": [33, 54]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "go-rename-a",
+      "tags": ["rename-pair"],
+      "description": "Reference for the rename pair.",
+      "inputBase64": "ZnVuYyBhZGQoYSwgYiBpbnQpIGludCB7IHJldHVybiBhICsgYiB9Cg==",
+      "inputText": "func add(a, b int) int { return a + b }\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 16,
+        "tokens": [
+          {"class": "keyword", "text": "func", "span": [0, 4]},
+          {"class": "ident", "text": "add", "span": [5, 8]},
+          {"class": "punct", "text": "(", "span": [8, 9]},
+          {"class": "ident", "text": "a", "span": [9, 10]},
+          {"class": "punct", "text": ",", "span": [10, 11]},
+          {"class": "ident", "text": "b", "span": [12, 13]},
+          {"class": "ident", "text": "int", "span": [14, 17]},
+          {"class": "punct", "text": ")", "span": [17, 18]},
+          {"class": "ident", "text": "int", "span": [19, 22]},
+          {"class": "punct", "text": "{", "span": [23, 24]},
+          {"class": "keyword", "text": "return", "span": [25, 31]},
+          {"class": "ident", "text": "a", "span": [32, 33]},
+          {"class": "punct", "text": "+", "span": [34, 35]},
+          {"class": "ident", "text": "b", "span": [36, 37]},
+          {"class": "punct", "text": "}", "span": [38, 39]},
+          {"class": "punct", "text": ";", "span": [39, 39], "inserted": true}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "cd271166e1bc7b44", "span": [0, 11]},
+              {"position": 1, "hash": "67961df97caa2439", "span": [5, 13]},
+              {"position": 2, "hash": "a63bac5f07a88510", "span": [8, 17]},
+              {"position": 3, "hash": "d7fa8f131a78964c", "span": [9, 18]},
+              {"position": 4, "hash": "0dada62e34aa91f9", "span": [10, 22]},
+              {"position": 5, "hash": "20ac96beed28cc03", "span": [12, 24]},
+              {"position": 6, "hash": "98d347bed6f435ca", "span": [14, 31]},
+              {"position": 7, "hash": "ad6c3a04658ef8d6", "span": [17, 33]},
+              {"position": 8, "hash": "232b8fa7b06e08de", "span": [19, 35]},
+              {"position": 9, "hash": "c65a9d25fbd3fe4f", "span": [23, 37]},
+              {"position": 10, "hash": "e8668ce1a19cb450", "span": [25, 39]},
+              {"position": 11, "hash": "9243911fcddad96b", "span": [32, 39]}
+            ],
+            "windowSelections": [1, 4, 4, 4, 4, 5, 8, 8, 8],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 1, "hash": "67961df97caa2439", "span": [5, 13]},
+              {"position": 4, "hash": "0dada62e34aa91f9", "span": [10, 22]},
+              {"position": 5, "hash": "20ac96beed28cc03", "span": [12, 24]},
+              {"position": 8, "hash": "232b8fa7b06e08de", "span": [19, 35]}
+            ]
+          },
+          "normalized": {
+            "values": ["func", "", "(", "", ",", "", "", ")", "", "{", "return", "", "+", "", "}", ";"],
+            "kgrams": [
+              {"position": 0, "hash": "5a0bb21d2f40f669", "span": [0, 11]},
+              {"position": 1, "hash": "41eca3755b91bc20", "span": [5, 13]},
+              {"position": 2, "hash": "22641673c2f08ccb", "span": [8, 17]},
+              {"position": 3, "hash": "6e3b75adcca33712", "span": [9, 18]},
+              {"position": 4, "hash": "1b78a516202f7860", "span": [10, 22]},
+              {"position": 5, "hash": "c5bd51446b773c13", "span": [12, 24]},
+              {"position": 6, "hash": "9abaa12781e9d6ac", "span": [14, 31]},
+              {"position": 7, "hash": "80b8029a7bc9895d", "span": [17, 33]},
+              {"position": 8, "hash": "953839ea8c3da2df", "span": [19, 35]},
+              {"position": 9, "hash": "2349273c2f66e02d", "span": [23, 37]},
+              {"position": 10, "hash": "409da59c5788778d", "span": [25, 39]},
+              {"position": 11, "hash": "43ec05ff2b17e4b3", "span": [32, 39]}
+            ],
+            "windowSelections": [2, 4, 4, 4, 4, 7, 9, 9, 9],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 2, "hash": "22641673c2f08ccb", "span": [8, 17]},
+              {"position": 4, "hash": "1b78a516202f7860", "span": [10, 22]},
+              {"position": 7, "hash": "80b8029a7bc9895d", "span": [17, 33]},
+              {"position": 9, "hash": "2349273c2f66e02d", "span": [23, 37]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "go-rename-b",
+      "tags": ["rename-pair"],
+      "description": "Identifiers renamed: exact hashes differ, normalized hashes equal go-rename-a.",
+      "inputBase64": "ZnVuYyBzdW0oeCwgeSBpbnQpIGludCB7IHJldHVybiB4ICsgeSB9Cg==",
+      "inputText": "func sum(x, y int) int { return x + y }\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 16,
+        "tokens": [
+          {"class": "keyword", "text": "func", "span": [0, 4]},
+          {"class": "ident", "text": "sum", "span": [5, 8]},
+          {"class": "punct", "text": "(", "span": [8, 9]},
+          {"class": "ident", "text": "x", "span": [9, 10]},
+          {"class": "punct", "text": ",", "span": [10, 11]},
+          {"class": "ident", "text": "y", "span": [12, 13]},
+          {"class": "ident", "text": "int", "span": [14, 17]},
+          {"class": "punct", "text": ")", "span": [17, 18]},
+          {"class": "ident", "text": "int", "span": [19, 22]},
+          {"class": "punct", "text": "{", "span": [23, 24]},
+          {"class": "keyword", "text": "return", "span": [25, 31]},
+          {"class": "ident", "text": "x", "span": [32, 33]},
+          {"class": "punct", "text": "+", "span": [34, 35]},
+          {"class": "ident", "text": "y", "span": [36, 37]},
+          {"class": "punct", "text": "}", "span": [38, 39]},
+          {"class": "punct", "text": ";", "span": [39, 39], "inserted": true}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "89b5d152362d24b1", "span": [0, 11]},
+              {"position": 1, "hash": "4eb99959523dbec8", "span": [5, 13]},
+              {"position": 2, "hash": "98f173d4b2fe9603", "span": [8, 17]},
+              {"position": 3, "hash": "e4a9eb1d9a2a6be8", "span": [9, 18]},
+              {"position": 4, "hash": "0ce69c3d0cff5cf1", "span": [10, 22]},
+              {"position": 5, "hash": "847ba9653333e3da", "span": [12, 24]},
+              {"position": 6, "hash": "98d347bed6f435ca", "span": [14, 31]},
+              {"position": 7, "hash": "7519e84d350af4b1", "span": [17, 33]},
+              {"position": 8, "hash": "1ff8d2009af8fd7f", "span": [19, 35]},
+              {"position": 9, "hash": "cba30f88f976cf31", "span": [23, 37]},
+              {"position": 10, "hash": "32921913fdbe29cb", "span": [25, 39]},
+              {"position": 11, "hash": "c70b1a7ff2954559", "span": [32, 39]}
+            ],
+            "windowSelections": [1, 4, 4, 4, 4, 8, 8, 8, 8],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 1, "hash": "4eb99959523dbec8", "span": [5, 13]},
+              {"position": 4, "hash": "0ce69c3d0cff5cf1", "span": [10, 22]},
+              {"position": 8, "hash": "1ff8d2009af8fd7f", "span": [19, 35]}
+            ]
+          },
+          "normalized": {
+            "values": ["func", "", "(", "", ",", "", "", ")", "", "{", "return", "", "+", "", "}", ";"],
+            "kgrams": [
+              {"position": 0, "hash": "5a0bb21d2f40f669", "span": [0, 11]},
+              {"position": 1, "hash": "41eca3755b91bc20", "span": [5, 13]},
+              {"position": 2, "hash": "22641673c2f08ccb", "span": [8, 17]},
+              {"position": 3, "hash": "6e3b75adcca33712", "span": [9, 18]},
+              {"position": 4, "hash": "1b78a516202f7860", "span": [10, 22]},
+              {"position": 5, "hash": "c5bd51446b773c13", "span": [12, 24]},
+              {"position": 6, "hash": "9abaa12781e9d6ac", "span": [14, 31]},
+              {"position": 7, "hash": "80b8029a7bc9895d", "span": [17, 33]},
+              {"position": 8, "hash": "953839ea8c3da2df", "span": [19, 35]},
+              {"position": 9, "hash": "2349273c2f66e02d", "span": [23, 37]},
+              {"position": 10, "hash": "409da59c5788778d", "span": [25, 39]},
+              {"position": 11, "hash": "43ec05ff2b17e4b3", "span": [32, 39]}
+            ],
+            "windowSelections": [2, 4, 4, 4, 4, 7, 9, 9, 9],
+            "partialWindow": false,
+            "fingerprints": [
+              {"position": 2, "hash": "22641673c2f08ccb", "span": [8, 17]},
+              {"position": 4, "hash": "1b78a516202f7860", "span": [10, 22]},
+              {"position": 7, "hash": "80b8029a7bc9895d", "span": [17, 33]},
+              {"position": 9, "hash": "2349273c2f66e02d", "span": [23, 37]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "go-err-invalid-utf8",
+      "tags": ["malformed"],
+      "description": "Byte 0xFF inside a string literal: invalid UTF-8, rejected before lexing.",
+      "inputBase64": "eCA6PSAiYf9iIgo=",
+      "inputText": null,
+      "inputDisplay": "x := \"a\\xffb\"\n",
+      "result": {"status": "error", "error": {"code": "invalid-utf8", "offset": 7}}
+    },
+    {
+      "id": "go-err-bom",
+      "tags": ["malformed"],
+      "description": "Leading UTF-8 byte order mark: rejected (stricter than go/scanner, which skips it).",
+      "inputBase64": "77u/cGFja2FnZSBwCg==",
+      "inputText": "﻿package p\n",
+      "result": {"status": "error", "error": {"code": "bom", "offset": 0}}
+    },
+    {
+      "id": "go-err-nul",
+      "tags": ["malformed"],
+      "description": "NUL character: rejected.",
+      "inputBase64": "eCA6PSAxAAo=",
+      "inputText": "x := 1\u0000\n",
+      "result": {"status": "error", "error": {"code": "nul", "offset": 6}}
+    },
+    {
+      "id": "go-err-unterminated-string",
+      "tags": ["malformed"],
+      "description": "Newline before the closing quote of an interpreted string.",
+      "inputBase64": "cyA6PSAiYWJjCnQgOj0gMQo=",
+      "inputText": "s := \"abc\nt := 1\n",
+      "result": {"status": "error", "error": {"code": "unterminated-literal", "offset": 5}}
+    },
+    {
+      "id": "go-err-unterminated-comment",
+      "tags": ["malformed"],
+      "description": "General comment never closed.",
+      "inputBase64": "eCA6PSAxIC8qIG5ldmVyIGNsb3NlZA==",
+      "inputText": "x := 1 /* never closed",
+      "result": {"status": "error", "error": {"code": "unterminated-comment", "offset": 7}}
+    },
+    {
+      "id": "go-err-illegal-character",
+      "tags": ["malformed"],
+      "description": "'#' does not begin any Go token.",
+      "inputBase64": "YSA6PSBiICMgYwo=",
+      "inputText": "a := b # c\n",
+      "result": {"status": "error", "error": {"code": "illegal-character", "offset": 7}}
+    },
+    {
+      "id": "go-err-malformed-number",
+      "tags": ["malformed"],
+      "description": "Hex prefix without digits.",
+      "inputBase64": "eCA6PSAweAo=",
+      "inputText": "x := 0x\n",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 5}}
+    },
+    {
+      "id": "go-err-invalid-escape",
+      "tags": ["malformed"],
+      "description": "Unknown escape \\q in an interpreted string; offset is the literal start.",
+      "inputBase64": "cyA6PSAiXHEiCg==",
+      "inputText": "s := \"\\q\"\n",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 5}}
+    },
+    {
+      "id": "go-unicode-boundary",
+      "tags": ["unicode", "unicode-boundary"],
+      "description": "Identifier boundary code points accepted by Go: U+2E2F VERTICAL TILDE is Lm (a letter), U+0660 is Nd (a digit, allowed after the first character), '_' alone is an identifier.",
+      "inputBase64": "YeK4ryA6PSB42aAgKyBfCg==",
+      "inputText": "aⸯ := x٠ + _\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 6,
+        "tokens": [
+          {"class": "ident", "text": "aⸯ", "span": [0, 4]},
+          {"class": "punct", "text": ":=", "span": [5, 7]},
+          {"class": "ident", "text": "x٠", "span": [8, 11]},
+          {"class": "punct", "text": "+", "span": [12, 13]},
+          {"class": "ident", "text": "_", "span": [14, 15]},
+          {"class": "punct", "text": ";", "span": [15, 15], "inserted": true}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "a8f48757945832a3", "span": [0, 15]},
+              {"position": 1, "hash": "356d08a31ce9a7ad", "span": [5, 15]}
+            ],
+            "windowSelections": [1],
+            "partialWindow": true,
+            "fingerprints": [{"position": 1, "hash": "356d08a31ce9a7ad", "span": [5, 15]}]
+          },
+          "normalized": {
+            "values": ["", ":=", "", "+", "", ";"],
+            "kgrams": [
+              {"position": 0, "hash": "040a223168f6b606", "span": [0, 15]},
+              {"position": 1, "hash": "15ff893a47217ce3", "span": [5, 15]}
+            ],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "040a223168f6b606", "span": [0, 15]}]
+          }
+        }
+      }
+    },
+    {
+      "id": "go-err-u2160",
+      "tags": ["malformed", "unicode-boundary"],
+      "description": "U+2160 ROMAN NUMERAL ONE is Nl, not a Go letter: illegal character (Rust accepts it).",
+      "inputBase64": "eOKFoCA6PSAxCg==",
+      "inputText": "xⅠ := 1\n",
+      "result": {"status": "error", "error": {"code": "illegal-character", "offset": 1}}
+    },
+    {
+      "id": "go-err-u00b7",
+      "tags": ["malformed", "unicode-boundary"],
+      "description": "U+00B7 MIDDLE DOT is Po: illegal in Go identifiers (Rust XID_Continue accepts it).",
+      "inputBase64": "eMK3eSA6PSAxCg==",
+      "inputText": "x·y := 1\n",
+      "result": {"status": "error", "error": {"code": "illegal-character", "offset": 1}}
+    },
+    {
+      "id": "go-err-u0345",
+      "tags": ["malformed", "unicode-boundary"],
+      "description": "U+0345 COMBINING YPOGEGRAMMENI is Mn: illegal in Go (Rust XID_Continue accepts it).",
+      "inputBase64": "eM2FIDo9IDEK",
+      "inputText": "xͅ := 1\n",
+      "result": {"status": "error", "error": {"code": "illegal-character", "offset": 1}}
+    },
+    {
+      "id": "go-err-u200d",
+      "tags": ["malformed", "unicode-boundary"],
+      "description": "U+200D ZERO WIDTH JOINER is Cf: illegal in Go.",
+      "inputBase64": "eOKAjSA6PSAxCg==",
+      "inputText": "x‍ := 1\n",
+      "result": {"status": "error", "error": {"code": "illegal-character", "offset": 1}}
+    },
+    {
+      "id": "go-err-nd-start",
+      "tags": ["malformed", "unicode-boundary"],
+      "description": "U+0660 (Nd) cannot start an identifier and does not start a number.",
+      "inputBase64": "2aB4IDo9IDEK",
+      "inputText": "٠x := 1\n",
+      "result": {"status": "error", "error": {"code": "illegal-character", "offset": 0}}
+    },
+    {
+      "id": "go-err-mid-bom",
+      "tags": ["malformed"],
+      "description": "U+FEFF after offset 0 is rejected by the forbidden-code-point scan.",
+      "inputBase64": "eCA6PSAxCu+7vw==",
+      "inputText": "x := 1\n﻿",
+      "result": {"status": "error", "error": {"code": "bom", "offset": 7}}
+    },
+    {
+      "id": "go-err-hex-float-no-exponent",
+      "tags": ["malformed", "literals"],
+      "description": "Hex mantissa with '.' but no 'p' exponent matches no literal production.",
+      "inputBase64": "ZiA6PSAweDEuOAo=",
+      "inputText": "f := 0x1.8\n",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 5}}
+    },
+    {
+      "id": "go-raw-string-cr",
+      "tags": ["literals"],
+      "description": "CR inside a raw string is kept in the exact token text (OD-9); go/scanner strips it from its literal value.",
+      "inputBase64": "cyA6PSBgYQ0KYmAgKyB0Cg==",
+      "inputText": "s := `a\r\nb` + t\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 6,
+        "tokens": [
+          {"class": "ident", "text": "s", "span": [0, 1]},
+          {"class": "punct", "text": ":=", "span": [2, 4]},
+          {"class": "string", "text": "`a\r\nb`", "span": [5, 11]},
+          {"class": "punct", "text": "+", "span": [12, 13]},
+          {"class": "ident", "text": "t", "span": [14, 15]},
+          {"class": "punct", "text": ";", "span": [15, 15], "inserted": true}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "d809c37e47d9e69d", "span": [0, 15]},
+              {"position": 1, "hash": "f9cd0cb92f193638", "span": [2, 15]}
+            ],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "d809c37e47d9e69d", "span": [0, 15]}]
+          },
+          "normalized": {
+            "values": ["", ":=", "", "+", "", ";"],
+            "kgrams": [
+              {"position": 0, "hash": "dba62112c4d2b7be", "span": [0, 15]},
+              {"position": 1, "hash": "ad74efa0d0044d39", "span": [2, 15]}
+            ],
+            "windowSelections": [1],
+            "partialWindow": true,
+            "fingerprints": [{"position": 1, "hash": "ad74efa0d0044d39", "span": [2, 15]}]
+          }
+        }
+      }
+    }
+  ]
+}

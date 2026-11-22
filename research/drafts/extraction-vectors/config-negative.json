@@ -1,0 +1,127 @@
+{
+  "contract": "traceweave-token-winnow-draft-1",
+  "description": "Configuration byte strings that MUST be rejected as unsupported-config. Each is the shipped Go configuration with one change.",
+  "negatives": [
+    {
+      "id": "cfg-whitespace",
+      "reason": "insignificant whitespace added",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCAicHJvZmlsZSI6ImdvLXRva2VucyIsInByb2ZpbGVWZXJzaW9uIjoiZHJhZnQtMSIsImNoYW5uZWxzIjpbImV4YWN0Iiwibm9ybWFsaXplZCJdLCJrIjo1LCJ3aW5kb3ciOjQsImhhc2giOiJzaGEyNTYtZmlyc3Q4LXU2NGJlIiwibWF4SW5wdXRCeXRlcyI6MTA0ODU3Nn0K"
+    },
+    {
+      "id": "cfg-key-order",
+      "reason": "keys reordered",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sIndpbmRvdyI6NCwiayI6NSwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo="
+    },
+    {
+      "id": "cfg-unknown-key",
+      "reason": "unknown key",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJleHRyYSI6IngiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo="
+    },
+    {
+      "id": "cfg-duplicate-key",
+      "reason": "duplicate key",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo="
+    },
+    {
+      "id": "cfg-missing-key",
+      "reason": "required key missing",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUifQo="
+    },
+    {
+      "id": "cfg-no-final-lf",
+      "reason": "missing trailing LF",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQ=="
+    },
+    {
+      "id": "cfg-crlf",
+      "reason": "CRLF line ending",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQ0K"
+    },
+    {
+      "id": "cfg-channels-order",
+      "reason": "channels reordered",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsibm9ybWFsaXplZCIsImV4YWN0Il0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo="
+    },
+    {
+      "id": "cfg-channels-subset",
+      "reason": "channel subset",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiXSwiayI6NSwid2luZG93Ijo0LCJoYXNoIjoic2hhMjU2LWZpcnN0OC11NjRiZSIsIm1heElucHV0Qnl0ZXMiOjEwNDg1NzZ9Cg=="
+    },
+    {
+      "id": "cfg-unknown-profile",
+      "reason": "unknown profile",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zLXgiLCJwcm9maWxlVmVyc2lvbiI6ImRyYWZ0LTEiLCJjaGFubmVscyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwiayI6NSwid2luZG93Ijo0LCJoYXNoIjoic2hhMjU2LWZpcnN0OC11NjRiZSIsIm1heElucHV0Qnl0ZXMiOjEwNDg1NzZ9Cg=="
+    },
+    {
+      "id": "cfg-unknown-profile-version",
+      "reason": "unknown profile version",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC05IiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo="
+    },
+    {
+      "id": "cfg-unknown-contract",
+      "reason": "unknown contract",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTAiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo="
+    },
+    {
+      "id": "cfg-unknown-hash",
+      "reason": "unknown hash",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDQtdTMyYmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo="
+    },
+    {
+      "id": "cfg-k-zero",
+      "reason": "k below 1",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjAsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo="
+    },
+    {
+      "id": "cfg-k-too-large",
+      "reason": "k above 2^32-1",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjQyOTQ5NjcyOTYsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo="
+    },
+    {
+      "id": "cfg-window-zero",
+      "reason": "window below 1",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6MCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo="
+    },
+    {
+      "id": "cfg-max-zero",
+      "reason": "maxInputBytes below 1",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjowfQo="
+    },
+    {
+      "id": "cfg-max-too-large",
+      "reason": "maxInputBytes above 2^32-1",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjo0Mjk0OTY3Mjk2fQo="
+    },
+    {
+      "id": "cfg-leading-zero",
+      "reason": "integer with leading zero",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjA1LCJ3aW5kb3ciOjQsImhhc2giOiJzaGEyNTYtZmlyc3Q4LXU2NGJlIiwibWF4SW5wdXRCeXRlcyI6MTA0ODU3Nn0K"
+    },
+    {
+      "id": "cfg-float",
+      "reason": "non-integer number",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUuMCwid2luZG93Ijo0LCJoYXNoIjoic2hhMjU2LWZpcnN0OC11NjRiZSIsIm1heElucHV0Qnl0ZXMiOjEwNDg1NzZ9Cg=="
+    },
+    {
+      "id": "cfg-negative",
+      "reason": "negative integer",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6LTQsImhhc2giOiJzaGEyNTYtZmlyc3Q4LXU2NGJlIiwibWF4SW5wdXRCeXRlcyI6MTA0ODU3Nn0K"
+    },
+    {
+      "id": "cfg-string-number",
+      "reason": "number as string",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOiI1Iiwid2luZG93Ijo0LCJoYXNoIjoic2hhMjU2LWZpcnN0OC11NjRiZSIsIm1heElucHV0Qnl0ZXMiOjEwNDg1NzZ9Cg=="
+    },
+    {
+      "id": "cfg-escape",
+      "reason": "string escape in a value",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ29cdTAwMmR0b2tlbnMiLCJwcm9maWxlVmVyc2lvbiI6ImRyYWZ0LTEiLCJjaGFubmVscyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwiayI6NSwid2luZG93Ijo0LCJoYXNoIjoic2hhMjU2LWZpcnN0OC11NjRiZSIsIm1heElucHV0Qnl0ZXMiOjEwNDg1NzZ9Cg=="
+    },
+    {"id": "cfg-not-json", "reason": "not JSON", "configBase64": "Y29udHJhY3Q9dHJhY2V3ZWF2ZQo="},
+    {
+      "id": "cfg-invalid-utf8",
+      "reason": "invalid UTF-8",
+      "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9r/25zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo="
+    }
+  ]
+}

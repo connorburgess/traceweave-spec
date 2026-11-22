@@ -1,0 +1,75 @@
+{
+  "contract": "traceweave-token-winnow-draft-1",
+  "profile": "go-tokens",
+  "profileVersion": "draft-1",
+  "configFile": "config-go-limit16.json",
+  "configSha256": "aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8",
+  "k": 5,
+  "window": 4,
+  "requiredCoverage": false,
+  "vectors": [
+    {
+      "id": "go-limit-exact",
+      "tags": ["limits"],
+      "description": "Input of exactly maxInputBytes=16 bytes is accepted.",
+      "inputBase64": "eHkgOj0gMSArIDIgKyAzCg==",
+      "inputText": "xy := 1 + 2 + 3\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 8,
+        "tokens": [
+          {"class": "ident", "text": "xy", "span": [0, 2]},
+          {"class": "punct", "text": ":=", "span": [3, 5]},
+          {"class": "int", "text": "1", "span": [6, 7]},
+          {"class": "punct", "text": "+", "span": [8, 9]},
+          {"class": "int", "text": "2", "span": [10, 11]},
+          {"class": "punct", "text": "+", "span": [12, 13]},
+          {"class": "int", "text": "3", "span": [14, 15]},
+          {"class": "punct", "text": ";", "span": [15, 15], "inserted": true}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "7dda1e3b7c235c54", "span": [0, 11]},
+              {"position": 1, "hash": "0804884ba6e64ef2", "span": [3, 13]},
+              {"position": 2, "hash": "730b582f65c7e678", "span": [6, 15]},
+              {"position": 3, "hash": "ef0c0d6fb5ca808a", "span": [8, 15]}
+            ],
+            "windowSelections": [1],
+            "partialWindow": false,
+            "fingerprints": [{"position": 1, "hash": "0804884ba6e64ef2", "span": [3, 13]}]
+          },
+          "normalized": {
+            "values": ["", ":=", "", "+", "", "+", "", ";"],
+            "kgrams": [
+              {"position": 0, "hash": "afdcf57ebbc7074e", "span": [0, 11]},
+              {"position": 1, "hash": "e6d5c54c9f5d7107", "span": [3, 13]},
+              {"position": 2, "hash": "d4d47e3429c0b42d", "span": [6, 15]},
+              {"position": 3, "hash": "d68489da29883961", "span": [8, 15]}
+            ],
+            "windowSelections": [0],
+            "partialWindow": false,
+            "fingerprints": [{"position": 0, "hash": "afdcf57ebbc7074e", "span": [0, 11]}]
+          }
+        }
+      }
+    },
+    {
+      "id": "go-limit-over",
+      "tags": ["limits", "malformed"],
+      "description": "17 bytes with maxInputBytes=16.",
+      "inputBase64": "eHl6IDo9IDEgKyAyICsgMwo=",
+      "inputText": "xyz := 1 + 2 + 3\n",
+      "result": {"status": "error", "error": {"code": "input-too-large", "offset": 0}}
+    },
+    {
+      "id": "go-limit-precedence",
+      "tags": ["limits", "malformed"],
+      "description": "18 bytes that are also invalid UTF-8: the size check runs first.",
+      "inputBase64": "eCA6PSAi/yIgKyAxICsgMjMK",
+      "inputText": null,
+      "inputDisplay": "x := \"\\xff\" + 1 + 23\n",
+      "result": {"status": "error", "error": {"code": "input-too-large", "offset": 0}}
+    }
+  ]
+}

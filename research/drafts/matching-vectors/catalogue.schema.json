@@ -1,0 +1,339 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/connorburgess/traceweave-spec/blob/main/research/drafts/matching-vectors/catalogue.schema.json",
+  "title": "Traceweave draft fingerprint catalogue (traceweave-catalogue-draft-2)",
+  "description": "Draft research schema, not a file in schemas/. Structure only: canonical bytes, ordering, digest consistency and count rules are in catalogue-report-contract.md section 3 and are enforced by check_matching.py. Every string is restricted to the canonical character set, so no JSON escape can occur.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifacts",
+    "catalogueVersion",
+    "extractionConfig",
+    "profile"
+  ],
+  "properties": {
+    "catalogueVersion": {
+      "const": "traceweave-catalogue-draft-2"
+    },
+    "profile": {
+      "$ref": "#/$defs/profile"
+    },
+    "extractionConfig": {
+      "$ref": "#/$defs/extractionConfig"
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/okArtifact"
+          },
+          {
+            "$ref": "#/$defs/insufficientArtifact"
+          },
+          {
+            "$ref": "#/$defs/errorArtifact"
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "u32": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4294967295
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9.-]+$",
+      "maxLength": 64
+    },
+    "artifactId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "span": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "$ref": "#/$defs/count"
+      }
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "configSha256",
+        "id",
+        "version"
+      ],
+      "properties": {
+        "configSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "id": {
+          "$ref": "#/$defs/name"
+        },
+        "version": {
+          "$ref": "#/$defs/name"
+        }
+      }
+    },
+    "extractionConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "channels",
+        "contract",
+        "hash",
+        "k",
+        "maxInputBytes",
+        "profile",
+        "profileVersion",
+        "window"
+      ],
+      "properties": {
+        "channels": {
+          "const": [
+            "exact",
+            "normalized"
+          ]
+        },
+        "contract": {
+          "const": "traceweave-token-winnow-draft-1"
+        },
+        "hash": {
+          "const": "sha256-first8-u64be"
+        },
+        "k": {
+          "$ref": "#/$defs/u32"
+        },
+        "maxInputBytes": {
+          "$ref": "#/$defs/u32"
+        },
+        "profile": {
+          "$ref": "#/$defs/name"
+        },
+        "profileVersion": {
+          "$ref": "#/$defs/name"
+        },
+        "window": {
+          "$ref": "#/$defs/u32"
+        }
+      }
+    },
+    "fingerprint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hash",
+        "position",
+        "span"
+      ],
+      "properties": {
+        "hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{16}$"
+        },
+        "position": {
+          "$ref": "#/$defs/count"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        }
+      }
+    },
+    "okChannel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fingerprints",
+        "kgramCount",
+        "partialWindow"
+      ],
+      "properties": {
+        "fingerprints": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/fingerprint"
+          }
+        },
+        "kgramCount": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "partialWindow": {
+          "type": "boolean"
+        }
+      }
+    },
+    "emptyChannel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fingerprints",
+        "kgramCount",
+        "partialWindow"
+      ],
+      "properties": {
+        "fingerprints": {
+          "type": "array",
+          "maxItems": 0
+        },
+        "kgramCount": {
+          "const": 0
+        },
+        "partialWindow": {
+          "const": false
+        }
+      }
+    },
+    "okArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "byteLength",
+        "channels",
+        "id",
+        "sha256",
+        "status",
+        "tokenCount"
+      ],
+      "properties": {
+        "byteLength": {
+          "$ref": "#/$defs/count"
+        },
+        "channels": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "exact",
+            "normalized"
+          ],
+          "properties": {
+            "exact": {
+              "$ref": "#/$defs/okChannel"
+            },
+            "normalized": {
+              "$ref": "#/$defs/okChannel"
+            }
+          }
+        },
+        "id": {
+          "$ref": "#/$defs/artifactId"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "status": {
+          "const": "ok"
+        },
+        "tokenCount": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "insufficientArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "byteLength",
+        "channels",
+        "id",
+        "sha256",
+        "status",
+        "tokenCount"
+      ],
+      "properties": {
+        "byteLength": {
+          "$ref": "#/$defs/count"
+        },
+        "channels": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "exact",
+            "normalized"
+          ],
+          "properties": {
+            "exact": {
+              "$ref": "#/$defs/emptyChannel"
+            },
+            "normalized": {
+              "$ref": "#/$defs/emptyChannel"
+            }
+          }
+        },
+        "id": {
+          "$ref": "#/$defs/artifactId"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "status": {
+          "const": "insufficient-tokens"
+        },
+        "tokenCount": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "errorArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "byteLength",
+        "error",
+        "id",
+        "sha256",
+        "status"
+      ],
+      "properties": {
+        "byteLength": {
+          "$ref": "#/$defs/count"
+        },
+        "error": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "code",
+            "offset"
+          ],
+          "properties": {
+            "code": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]+$",
+              "maxLength": 64
+            },
+            "offset": {
+              "$ref": "#/$defs/count"
+            }
+          }
+        },
+        "id": {
+          "$ref": "#/$defs/artifactId"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "status": {
+          "const": "error"
+        }
+      }
+    }
+  }
+}
