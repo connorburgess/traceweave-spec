@@ -1,0 +1,105 @@
+[Note: absolute local paths in this transcript were replaced by placeholders after the run. The committed results are otherwise unchanged.]
+$ (cd <repository root>) git worktree add --detach <run worktree> 6f39e50f33026c9f1d9526c2a566d6a447219667   [outside sandbox]
+Preparing worktree (detached HEAD 6f39e50)
+HEAD is now at 6f39e50 Freeze E-IMG-F protocol e-img-f-2 (200-image contract check) and profile draft-2
+[exit 0]
+
+$ (cd <run worktree>/research/experiments/image-fingerprint) python3 fetch_wheels.py
+Traceback (most recent call last):
+  File "<run worktree>/research/experiments/image-fingerprint/fetch_wheels.py", line 52, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "<run worktree>/research/experiments/image-fingerprint/fetch_wheels.py", line 28, in main
+    os.makedirs(OUT, exist_ok=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "<frozen os>", line 236, in makedirs
+PermissionError: [Errno 1] Operation not permitted: '<run worktree>/research/experiments/image-fingerprint/wheelhouse'
+[exit 1]
+
+$ (cd <run worktree>/research/experiments/image-fingerprint) python3 fetch_wheels.py && python3 fetch_pdq_vectors.py
+20/20 pinned files present and verified in wheelhouse/
+30/30 vector files verified
+[exit 0]
+
+$ (cd <run worktree>/research/experiments/image-fingerprint) /opt/homebrew/bin/python3.14 -m venv .venv && .venv/bin/python -m pip install --no-index --find-links wheelhouse --require-hashes -r requirements-build.txt && .venv/bin/python -m pip install --no-index --find-links wheelhouse --require-hashes --no-build-isolation -r requirements.txt
+Looking in links: wheelhouse
+Processing ./wheelhouse/setuptools-84.2.1-py3-none-any.whl (from -r requirements-build.txt (line 3))
+Installing collected packages: setuptools
+Successfully installed setuptools-84.2.1
+Looking in links: wheelhouse
+Processing ./wheelhouse/annotated_types-0.8.0-py3-none-any.whl (from -r requirements.txt (line 5))
+Processing ./wheelhouse/base58-2.1.1-py3-none-any.whl (from -r requirements.txt (line 7))
+Processing ./wheelhouse/bitarray-3.12.4-cp314-cp314-macosx_11_0_arm64.whl (from -r requirements.txt (line 9))
+Processing ./wheelhouse/blake3-1.0.11-cp314-cp314-macosx_11_0_arm64.whl (from -r requirements.txt (line 11))
+Processing ./wheelhouse/data_url-1.4.0.tar.gz (from -r requirements.txt (line 13))
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Processing ./wheelhouse/iscc_core-1.5.0-cp314-cp314-macosx_11_0_arm64.whl (from -r requirements.txt (line 15))
+Processing ./wheelhouse/jcs-0.3.0-py3-none-any.whl (from -r requirements.txt (line 17))
+Processing ./wheelhouse/loguru-0.8.0-py3-none-any.whl (from -r requirements.txt (line 19))
+Processing ./wheelhouse/more_itertools-11.2.1-py3-none-any.whl (from -r requirements.txt (line 21))
+Processing ./wheelhouse/numpy-2.5.5-cp314-cp314-macosx_14_0_arm64.whl (from -r requirements.txt (line 23))
+Processing ./wheelhouse/pillow-13.0.0-cp314-cp314-macosx_11_0_arm64.whl (from -r requirements.txt (line 25))
+Processing ./wheelhouse/pybase64-1.5.2-cp314-cp314-macosx_11_0_arm64.whl (from -r requirements.txt (line 27))
+Processing ./wheelhouse/pydantic-2.14.4-py3-none-any.whl (from -r requirements.txt (line 29))
+Processing ./wheelhouse/pydantic_core-2.50.5-cp314-cp314-macosx_11_0_arm64.whl (from -r requirements.txt (line 31))
+Processing ./wheelhouse/python_dotenv-1.2.4-py3-none-any.whl (from -r requirements.txt (line 33))
+Processing ./wheelhouse/typing_extensions-4.16.0-py3-none-any.whl (from -r requirements.txt (line 35))
+Processing ./wheelhouse/typing_inspection-0.4.5-py3-none-any.whl (from -r requirements.txt (line 37))
+Processing ./wheelhouse/uvarint-1.2.0-py3-none-any.whl (from -r requirements.txt (line 39))
+Processing ./wheelhouse/xxhash-4.1.0-cp314-cp314-macosx_11_0_arm64.whl (from -r requirements.txt (line 41))
+Building wheels for collected packages: data-url
+  Building wheel for data-url (pyproject.toml): started
+  Building wheel for data-url (pyproject.toml): finished with status 'done'
+  Created wheel for data-url: filename=data_url-1.4.0-py3-none-any.whl size=5582 sha256=e5bbe4578bd610795187a41fdf033b7df1c0f907c8dd792b7be1f8e733451714
+  Stored in directory: <home>/Library/Caches/pip/wheels/c3/b1/6e/dfe3eb75310a90a08de987b2cb11c67e8df7f864afc5d85dce
+Successfully built data-url
+Installing collected packages: xxhash, uvarint, typing-extensions, python-dotenv, pybase64, pillow, numpy, more-itertools, loguru, jcs, data-url, blake3, bitarray, base58, annotated-types, typing-inspection, pydantic-core, pydantic, iscc-core
+
+Successfully installed annotated-types-0.8.0 base58-2.1.1 bitarray-3.12.4 blake3-1.0.11 data-url-1.4.0 iscc-core-1.5.0 jcs-0.3.0 loguru-0.8.0 more-itertools-11.2.1 numpy-2.5.5 pillow-13.0.0 pybase64-1.5.2 pydantic-2.14.4 pydantic-core-2.50.5 python-dotenv-1.2.4 typing-extensions-4.16.0 typing-inspection-0.4.5 uvarint-1.2.0 xxhash-4.1.0
+[exit 0]
+
+$ (cd <run worktree>) git rev-parse HEAD; git status --porcelain --untracked-files=all; echo "(status end)"
+6f39e50f33026c9f1d9526c2a566d6a447219667
+(status end)
+[exit 0]
+
+$ /usr/bin/sandbox-exec -p '(version 1)(allow default)(deny network*)' .venv/bin/python -m unittest discover -s tests -t .   [outside agent sandbox; started 2026-11-22T10:31:58Z]
+..............................
+----------------------------------------------------------------------
+Ran 30 tests in 3.378s
+
+OK
+[exit 0; ended 2026-11-22T10:32:20Z]
+
+$ /usr/bin/sandbox-exec -p '(version 1)(allow default)(deny network*)' .venv/bin/python run_experiment.py full --frozen-commit 6f39e50f33026c9f1d9526c2a566d6a447219667 --require-network-denied --out out/full-1   [outside agent sandbox; started 2026-11-22T10:32:23Z]
+MEASURED RUN (contract check; counts have no pass line): 1300 queries, 856.4 s, peak RSS 721 MiB
+resultsSha256 f4808162da6d9a1eb08f1b64b7abd6744bdfcbb7e2b849389ec61b861f92c546
+vendor cross-check 1400/1400 equal; record errors: catalogue 0, queries 0
+[exit 0; ended 2026-11-22T10:46:40Z]
+
+$ /usr/bin/sandbox-exec -p '(version 1)(allow default)(deny network*)' .venv/bin/python run_experiment.py full --frozen-commit 6f39e50f33026c9f1d9526c2a566d6a447219667 --require-network-denied --out out/full-2   [outside agent sandbox; started 2026-11-22T10:46:47Z]
+MEASURED RUN (contract check; counts have no pass line): 1300 queries, 841.4 s, peak RSS 780 MiB
+resultsSha256 f4808162da6d9a1eb08f1b64b7abd6744bdfcbb7e2b849389ec61b861f92c546
+vendor cross-check 1400/1400 equal; record errors: catalogue 0, queries 0
+[exit 0; ended 2026-11-22T11:00:49Z]
+
+$ /usr/bin/sandbox-exec -p '(version 1)(allow default)(deny network*)' .venv/bin/python run_experiment.py compare out/full-1 out/full-2   [outside agent sandbox; started 2026-11-22T11:00:51Z]
+resultsSha256 equal: True; record files byte-identical: True
+[exit 0; ended 2026-11-22T11:00:51Z]
+
+$ (cd <run worktree>) git rev-parse HEAD; git status --porcelain --untracked-files=all; echo "(status end)"
+6f39e50f33026c9f1d9526c2a566d6a447219667
+(status end)
+[exit 0]
+
+# Added by the recording step (not commands in the reviewed sequence; run inside the agent sandbox)
+$ du -sk .venv wheelhouse vectors/pdq-data out out/full-1 out/full-2   (worktree image-fingerprint dir, after both runs)
+89124	.venv
+15128	wheelhouse
+6984	vectors/pdq-data
+4056	out
+2028	out/full-1
+2028	out/full-2
+# compare was run under the same deny-network sandbox-exec profile (the review's sequence does this; the README's does not).
+# pip also wrote a wheel cache for the locally built data-url wheel to ~/Library/Caches/pip (outside the worktree).

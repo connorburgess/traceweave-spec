@@ -1,0 +1,697 @@
+{
+ "codeIdentity": {
+  "diffAgainstFrozen": {
+   "exitCode": 0,
+   "stat": []
+  },
+  "frozenCommit": "6f39e50f33026c9f1d9526c2a566d6a447219667",
+  "frozenIsAncestorOfHead": true,
+  "head": "6f39e50f33026c9f1d9526c2a566d6a447219667",
+  "ok": true,
+  "protocolVersionInFile": "e-img-f-2",
+  "statusPorcelain": []
+ },
+ "counts": {
+  "catalogue": 100,
+  "queries": 1300
+ },
+ "crossHost": "not-tested: one host (macOS arm64). Audit source X1 (arXiv:2610.04151v1, author-run preprint) reports PDQ and ISCC bit-identical across x86 and arm64 on 200 PNG files; that is not our measurement",
+ "deterministic": {
+  "catalogueSha256": "1253c88eb1f81287c90b27966a194c763e41ecd505dd40306eda05bedb894f9d",
+  "queriesSha256": "4ed2b9ab66ea89a9d36218187651e0d29feceda7e399e425dc1e4d3f7492e121"
+ },
+ "elapsedSeconds": 856.4,
+ "enrollment": {
+  "iscc": {
+   "abstained": {},
+   "catalogue": 100,
+   "enrolled": 100
+  },
+  "pdq": {
+   "abstained": {
+    "low-quality": 2
+   },
+   "catalogue": 100,
+   "enrolled": 98
+  }
+ },
+ "environment": {
+  "implementation": "CPython",
+  "libjpegTurbo": "3.2.0",
+  "machine": "arm64",
+  "packages": {
+   "annotated-types": "0.8.0",
+   "base58": "2.1.1",
+   "bitarray": "3.12.4",
+   "blake3": "1.0.11",
+   "data-url": "1.4.0",
+   "iscc-core": "1.5.0",
+   "jcs": "0.3.0",
+   "loguru": "0.8.0",
+   "more-itertools": "11.2.1",
+   "numpy": "2.5.5",
+   "pillow": "13.0.0",
+   "pybase64": "1.5.2",
+   "pydantic": "2.14.4",
+   "pydantic-core": "2.50.5",
+   "python-dotenv": "1.2.4",
+   "typing-extensions": "4.16.0",
+   "typing-inspection": "0.4.5",
+   "uvarint": "1.2.0",
+   "xxhash": "4.1.0"
+  },
+  "python": "3.14.6",
+  "system": "Darwin",
+  "zlib": "1.3.1.zlib-ng"
+ },
+ "environmentDeviations": [],
+ "extractionConfigSha256": "c740e92de69a47904fa81bb3614c086194717be856fa6a44d89ad6fdba3bb927",
+ "generator": "traceweave-synth-draft-1",
+ "label": "MEASURED RUN (contract check; counts have no pass line)",
+ "matchingConfigSha256": "fe3fa0395d3701fa5b1b55839063998eba528851d4f9e3dcaca62d3a0f6c97ac",
+ "metrics": {
+  "iscc": {
+   "negatives": {
+    "anyWithinThreshold": 0,
+    "n": 100,
+    "nearestDistanceHistogram": {
+     "12": 1,
+     "14": 5,
+     "16": 10,
+     "18": 44,
+     "20": 40
+    },
+    "outcomes": {
+     "no-match": 100
+    }
+   },
+   "positives": {
+    "crop50": {
+     "abstain": {},
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 0,
+     "n": 100,
+     "noMatch": 100,
+     "trueDistanceHistogram": {
+      "14": 3,
+      "16": 3,
+      "18": 5,
+      "20": 12,
+      "22": 16,
+      "24": 20,
+      "26": 21,
+      "28": 13,
+      "30": 7
+     },
+     "wrongTopMatch": 0
+    },
+    "crop75": {
+     "abstain": {},
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 5,
+     "n": 100,
+     "noMatch": 95,
+     "trueDistanceHistogram": {
+      "10": 14,
+      "12": 29,
+      "14": 18,
+      "16": 11,
+      "18": 10,
+      "20": 4,
+      "22": 1,
+      "24": 1,
+      "26": 1,
+      "6": 5,
+      "8": 6
+     },
+     "wrongTopMatch": 0
+    },
+    "crop90": {
+     "abstain": {},
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 69,
+     "n": 100,
+     "noMatch": 31,
+     "trueDistanceHistogram": {
+      "0": 1,
+      "10": 5,
+      "12": 1,
+      "14": 2,
+      "2": 8,
+      "4": 32,
+      "6": 28,
+      "8": 23
+     },
+     "wrongTopMatch": 0
+    },
+    "flip": {
+     "abstain": {},
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 100,
+     "n": 100,
+     "noMatch": 0,
+     "trueDistanceHistogram": {
+      "0": 100
+     },
+     "wrongTopMatch": 0
+    },
+    "jpeg30": {
+     "abstain": {},
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 100,
+     "n": 100,
+     "noMatch": 0,
+     "trueDistanceHistogram": {
+      "0": 83,
+      "2": 16,
+      "4": 1
+     },
+     "wrongTopMatch": 0
+    },
+    "jpeg50": {
+     "abstain": {},
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 100,
+     "n": 100,
+     "noMatch": 0,
+     "trueDistanceHistogram": {
+      "0": 87,
+      "2": 13
+     },
+     "wrongTopMatch": 0
+    },
+    "jpeg75": {
+     "abstain": {},
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 100,
+     "n": 100,
+     "noMatch": 0,
+     "trueDistanceHistogram": {
+      "0": 93,
+      "2": 7
+     },
+     "wrongTopMatch": 0
+    },
+    "jpeg90": {
+     "abstain": {},
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 100,
+     "n": 100,
+     "noMatch": 0,
+     "trueDistanceHistogram": {
+      "0": 92,
+      "2": 8
+     },
+     "wrongTopMatch": 0
+    },
+    "png": {
+     "abstain": {},
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 100,
+     "n": 100,
+     "noMatch": 0,
+     "trueDistanceHistogram": {
+      "0": 100
+     },
+     "wrongTopMatch": 0
+    },
+    "resize25": {
+     "abstain": {},
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 100,
+     "n": 100,
+     "noMatch": 0,
+     "trueDistanceHistogram": {
+      "0": 92,
+      "2": 8
+     },
+     "wrongTopMatch": 0
+    },
+    "resize50": {
+     "abstain": {},
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 100,
+     "n": 100,
+     "noMatch": 0,
+     "trueDistanceHistogram": {
+      "0": 94,
+      "2": 6
+     },
+     "wrongTopMatch": 0
+    },
+    "screenshot": {
+     "abstain": {},
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 100,
+     "n": 100,
+     "noMatch": 0,
+     "trueDistanceHistogram": {
+      "0": 91,
+      "2": 8,
+      "6": 1
+     },
+     "wrongTopMatch": 0
+    }
+   },
+   "positivesNearestWrongHistogram": {
+    "12": 2,
+    "14": 32,
+    "16": 185,
+    "18": 442,
+    "20": 519,
+    "22": 20
+   },
+   "positivesTotal": {
+    "anyWrongWithinThreshold": 0,
+    "n": 1200,
+    "wrongTopMatch": 0
+   },
+   "threshold": 7
+  },
+  "pdq": {
+   "negatives": {
+    "anyWithinThreshold": 0,
+    "n": 100,
+    "nearestDistanceHistogram": {
+     "100": 22,
+     "102": 22,
+     "104": 22,
+     "106": 11,
+     "108": 2,
+     "88": 1,
+     "90": 1,
+     "92": 1,
+     "94": 1,
+     "96": 6,
+     "98": 10
+    },
+    "outcomes": {
+     "abstain-low-quality": 1,
+     "no-match": 99
+    }
+   },
+   "positives": {
+    "crop50": {
+     "abstain": {
+      "abstain-low-quality": 10
+     },
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 0,
+     "n": 100,
+     "noMatch": 90,
+     "trueDistanceHistogram": {
+      "100": 2,
+      "104": 3,
+      "106": 1,
+      "108": 3,
+      "110": 5,
+      "112": 8,
+      "114": 7,
+      "116": 20,
+      "118": 13,
+      "120": 10,
+      "122": 9,
+      "124": 2,
+      "126": 2,
+      "128": 2,
+      "130": 1,
+      "80": 1,
+      "98": 1
+     },
+     "wrongTopMatch": 0
+    },
+    "crop75": {
+     "abstain": {
+      "abstain-low-quality": 4
+     },
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 0,
+     "n": 100,
+     "noMatch": 96,
+     "trueDistanceHistogram": {
+      "100": 3,
+      "102": 5,
+      "104": 8,
+      "106": 6,
+      "108": 4,
+      "110": 7,
+      "112": 3,
+      "114": 5,
+      "116": 5,
+      "118": 2,
+      "120": 5,
+      "122": 3,
+      "124": 2,
+      "128": 1,
+      "62": 1,
+      "72": 1,
+      "76": 1,
+      "78": 2,
+      "80": 2,
+      "82": 2,
+      "84": 2,
+      "86": 3,
+      "88": 3,
+      "90": 4,
+      "92": 5,
+      "94": 1,
+      "96": 5,
+      "98": 5
+     },
+     "wrongTopMatch": 0
+    },
+    "crop90": {
+     "abstain": {
+      "abstain-low-quality": 2
+     },
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 2,
+     "n": 100,
+     "noMatch": 96,
+     "trueDistanceHistogram": {
+      "28": 1,
+      "30": 1,
+      "32": 2,
+      "34": 5,
+      "36": 7,
+      "38": 7,
+      "40": 5,
+      "42": 5,
+      "44": 5,
+      "46": 9,
+      "48": 9,
+      "50": 8,
+      "52": 8,
+      "54": 3,
+      "56": 6,
+      "58": 3,
+      "60": 3,
+      "62": 4,
+      "66": 2,
+      "70": 3,
+      "72": 1,
+      "88": 1
+     },
+     "wrongTopMatch": 0
+    },
+    "flip": {
+     "abstain": {
+      "abstain-low-quality": 2
+     },
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 98,
+     "n": 100,
+     "noMatch": 0,
+     "trueDistanceHistogram": {
+      "0": 12,
+      "10": 8,
+      "12": 6,
+      "14": 12,
+      "16": 5,
+      "18": 5,
+      "2": 19,
+      "20": 1,
+      "22": 1,
+      "26": 1,
+      "4": 6,
+      "6": 8,
+      "8": 14
+     },
+     "wrongTopMatch": 0
+    },
+    "jpeg30": {
+     "abstain": {
+      "abstain-low-quality": 1
+     },
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 98,
+     "n": 100,
+     "noMatch": 1,
+     "trueDistanceHistogram": {
+      "0": 23,
+      "10": 1,
+      "2": 41,
+      "4": 26,
+      "6": 3,
+      "8": 4
+     },
+     "wrongTopMatch": 0
+    },
+    "jpeg50": {
+     "abstain": {
+      "abstain-low-quality": 2
+     },
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 98,
+     "n": 100,
+     "noMatch": 0,
+     "trueDistanceHistogram": {
+      "0": 35,
+      "2": 55,
+      "4": 8
+     },
+     "wrongTopMatch": 0
+    },
+    "jpeg75": {
+     "abstain": {
+      "abstain-low-quality": 2
+     },
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 98,
+     "n": 100,
+     "noMatch": 0,
+     "trueDistanceHistogram": {
+      "0": 61,
+      "2": 33,
+      "4": 4
+     },
+     "wrongTopMatch": 0
+    },
+    "jpeg90": {
+     "abstain": {
+      "abstain-low-quality": 2
+     },
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 98,
+     "n": 100,
+     "noMatch": 0,
+     "trueDistanceHistogram": {
+      "0": 77,
+      "2": 20,
+      "4": 1
+     },
+     "wrongTopMatch": 0
+    },
+    "png": {
+     "abstain": {
+      "abstain-low-quality": 2
+     },
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 98,
+     "n": 100,
+     "noMatch": 0,
+     "trueDistanceHistogram": {
+      "0": 98
+     },
+     "wrongTopMatch": 0
+    },
+    "resize25": {
+     "abstain": {
+      "abstain-low-quality": 2
+     },
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 98,
+     "n": 100,
+     "noMatch": 0,
+     "trueDistanceHistogram": {
+      "0": 57,
+      "2": 28,
+      "4": 11,
+      "6": 2
+     },
+     "wrongTopMatch": 0
+    },
+    "resize50": {
+     "abstain": {
+      "abstain-low-quality": 2
+     },
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 98,
+     "n": 100,
+     "noMatch": 0,
+     "trueDistanceHistogram": {
+      "0": 80,
+      "2": 18
+     },
+     "wrongTopMatch": 0
+    },
+    "screenshot": {
+     "abstain": {},
+     "ambiguous": 0,
+     "anyWrongWithinThreshold": 0,
+     "correctMatch": 0,
+     "n": 100,
+     "noMatch": 100,
+     "trueDistanceHistogram": {
+      "100": 7,
+      "102": 1,
+      "106": 5,
+      "108": 5,
+      "110": 3,
+      "112": 4,
+      "114": 2,
+      "116": 1,
+      "118": 1,
+      "120": 3,
+      "124": 1,
+      "130": 1,
+      "46": 2,
+      "48": 1,
+      "52": 3,
+      "54": 1,
+      "56": 2,
+      "58": 2,
+      "60": 3,
+      "62": 2,
+      "64": 2,
+      "66": 5,
+      "68": 1,
+      "70": 2,
+      "72": 1,
+      "74": 4,
+      "76": 2,
+      "78": 6,
+      "80": 3,
+      "84": 4,
+      "86": 1,
+      "88": 5,
+      "90": 1,
+      "92": 4,
+      "94": 2,
+      "96": 4,
+      "98": 1
+     },
+     "wrongTopMatch": 0
+    }
+   },
+   "positivesNearestWrongHistogram": {
+    "100": 167,
+    "102": 311,
+    "104": 311,
+    "106": 106,
+    "108": 26,
+    "110": 1,
+    "88": 14,
+    "90": 10,
+    "92": 25,
+    "94": 38,
+    "96": 50,
+    "98": 110
+   },
+   "positivesTotal": {
+    "anyWrongWithinThreshold": 0,
+    "n": 1200,
+    "wrongTopMatch": 0
+   },
+   "threshold": 31
+  }
+ },
+ "mode": "full",
+ "networkDenied": {
+  "denied": true,
+  "probe": "bind refused errno 1; loopback connect refused errno 1 (EPERM)"
+ },
+ "passLine": "none: match and false-match counts are reported, not judged (protocol \u00a76)",
+ "peakRssBytes": 755826688,
+ "protocolDigest": {
+  "computed": "44a67a14c6e4c3028bd20a093896390c308a89cf92fc2d521c788346ad6b90c4",
+  "recorded": "44a67a14c6e4c3028bd20a093896390c308a89cf92fc2d521c788346ad6b90c4"
+ },
+ "protocolVersion": "e-img-f-2",
+ "recordValidation": {
+  "catalogueErrors": [],
+  "queriesChecked": 1300,
+  "queryErrorCount": 0,
+  "queryErrors": []
+ },
+ "resultsSha256": "f4808162da6d9a1eb08f1b64b7abd6744bdfcbb7e2b849389ec61b861f92c546",
+ "status": "completed",
+ "statusAfterRun": [],
+ "statusAfterVectorCheck": [],
+ "thresholds": {
+  "iscc": 7,
+  "pdq": 31
+ },
+ "validity": {
+  "V1-reference-vectors": true,
+  "V2-run-to-run": "decided by compare (two runs)",
+  "V3-cross-host": "not-tested",
+  "V4-vendor-cross-check": true,
+  "V5-records-fit": true,
+  "start-code-identity": true,
+  "start-environment-and-digest": true,
+  "start-network-denied": true,
+  "work-tree-clean-after-vector-check-and-run": true
+ },
+ "vectorChecks": {
+  "checks": {
+   "inputFilesVerified": [
+    30,
+    30
+   ],
+   "isccConformanceEqual": [
+    3,
+    3
+   ],
+   "pdqCorePortEqualsVendored": [
+    30,
+    30
+   ],
+   "pdqCppQualityEqual": [
+    8,
+    8
+   ],
+   "pdqCppWithin10": [
+    8,
+    8
+   ],
+   "pdqPythonReadmeWithin16": [
+    12,
+    12
+   ],
+   "pdqPythonUnittestWithin16": [
+    18,
+    18
+   ]
+  },
+  "pass": true
+ },
+ "vendorCrossCheck": {
+  "compared": 1400,
+  "mismatchIds": [],
+  "mismatches": 0
+ }
+}
