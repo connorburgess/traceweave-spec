@@ -119,7 +119,7 @@ The masks are applied in this order:
 - Indented code blocks are not recognized (`md-indented-code`).
 - HTML blocks are masked only tag by tag, so text between tags remains (`md-html-block`). CommonMark hides the whole block through the next blank line; this profile keeps prose that sits between tags.
 - Front matter is not CommonMark at all. pulldown-cmark's metadata extension does not recognize it after a BOM, while MD-1 does (`md-bom-front-matter`).
-- Code-span contents are not literal: in `` `&amp;` ``, `` `<b>` `` and `` `[x](../research/drafts/y)` `` the entity, tag and destination are masked (review M3).
+- Code-span contents are not literal: in `` `&amp;` ``, `` `<b>` `` and `` `[x](y)` `` the entity, tag and destination are masked (review M3).
 - `<script>` and `<style>` bodies are tokenized; only the tags are masked.
 - Fences inside block quotes (`> ````) are not recognized.
 - `<!-->` and `<!--->` are not complete comments: the `-->` search starts 4 bytes after `<`. CommonMark 0.31.2 accepts them.

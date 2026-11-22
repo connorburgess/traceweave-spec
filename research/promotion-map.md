@@ -20,6 +20,10 @@ Promoted on 2026-11-23 under the owner's delegation, as a series of local commit
 
 Not promoted, still in `research/drafts/`: the image extraction profile, the image experiment protocol, the evaluation protocol and the evaluation corpus.
 
+## Correction after review
+
+The first promotion commit series rewrote the literal code-span example `[x](y)` in `profiles/text.md` as a link path. That was a rule-text change, not a path change. It was restored in a later commit, and the "after" digest of `profiles/text.md` below is the corrected one. The promotion then changed only paths, cross-references and status lines in the Markdown and script files (checked by a word-level diff of every changed file against its draft).
+
 ## JSON files whose bytes changed, and why
 
 Vector and configuration JSON is byte-identical except these files. Their expected outputs, digests of other files and bodies did not change; only path strings did. Each was checked by reversing the substitution and comparing with the old digest.
@@ -43,7 +47,7 @@ One deliberate exception to updating paths: `profileDraft` in `test-vectors/extr
 
 | Old path | New path | SHA-256 before | SHA-256 after | Result |
 | --- | --- | --- | --- | --- |
-| `research/drafts/extraction-profile-text.md` | `profiles/text.md` | `b0e09f0426e6cf05cc7f4c674339b62458cdfbddadbe4fbddfbaa5f996d355c9` | `70b551131411cf678ee1f4fa04ff93deb1bfda42f1773b09c7a6dd0f9b27187a` | changed: status line, paths and cross-references |
+| `research/drafts/extraction-profile-text.md` | `profiles/text.md` | `b0e09f0426e6cf05cc7f4c674339b62458cdfbddadbe4fbddfbaa5f996d355c9` | `3683820dcb93b3b9cd78dc22a8b99f89515685a7ac9afc91a07d299ab6ebf7ff` | changed: status line, paths and cross-references |
 | `research/drafts/extraction-profile-typescript.md` | `profiles/typescript.md` | `4d8692dc09bad4e8eec3626792309e7e2ef80bc2ab9e6ad7731b3120d29dc22d` | `e675e3e139412728e49dffc7db867baab83b4fdf86911593fa819bc1c298f0e5` | changed: status line, paths and cross-references |
 | `research/drafts/matching-vectors/catalogue.schema.json` | `schemas/catalogue.schema.json` | `9370770f2514ce6517f4fea4a9a3d250add9077384cb995c01fac05914e055e8` | `aaba30069901b2f779e944bbdb786cf92e4a8a9684051f0bff3080ca3110e04e` | changed: path-only: `$id` URL now under `schemas/`; description no longer says "not a file in schemas/"; contract name in description |
 | `research/drafts/matching-vectors/record.schema.json` | `schemas/record.schema.json` | `5ce5eebb195f7f02a7c89986e40548f42352957140456e9dd5dd68cb9704aa3c` | `20e4c49123616c76b0e06df4248a34281e96ce0c6106a4d52ccfaf40e31962bd` | changed: path-only: `$id` URL now under `schemas/`; description no longer says "not a file in schemas/"; contract name in description |
