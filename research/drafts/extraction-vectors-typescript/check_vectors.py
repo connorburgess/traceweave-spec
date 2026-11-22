@@ -127,9 +127,12 @@ def select(hashes, w):
     return [sorted(range(a, b), key=lambda j: (hashes[j], -j))[0] for a, b in wins], m < w
 
 
+# Profile §6: normalizedExclusions, applied with the contract §6 rule (OD-23).
+EXCLUSIONS = [{"class": "punct", "text": ";"}]
+
+
 def normalized_keep(t):
-    """Profile §6 (TSOD-5b (c)): the normalized stream omits punct ';'."""
-    return not (t["class"] == "punct" and t["text"] == ";")
+    return not any(t["class"] == e["class"] and ("text" not in e or t["text"] == e["text"]) for e in EXCLUSIONS)
 
 
 def channels_for(tokens, cfg, keep_semicolons=False):
@@ -262,6 +265,9 @@ def check_vector(v, cfg, stats, lexer=tslex.Lexer):
     require(r["tokenCount"] == len(r["tokens"]), "tokenCount")
     require(r["status"] == ("ok" if len(got) >= cfg["k"] else "insufficient-tokens"), "status vs k")
     want = channels_for(r["tokens"], cfg)
+    require(list(r["channels"]["normalized"])[:2] == ["tokenIndices", "values"],
+            "normalized channel must record tokenIndices before values (contract §6)")
+    require("tokenIndices" not in r["channels"]["exact"], "tokenIndices on the exact channel")
     for ch in ("exact", "normalized"):
         for key, val in want[ch].items():
             require(r["channels"][ch][key] == val, f"{ch}.{key} differs from recomputation")
@@ -336,6 +342,7 @@ def load(name):
     cfg = validate_config(raw)
     require(hashlib.sha256(raw).hexdigest() == doc["configSha256"], f"{name}: config digest")
     require(cfg["profile"] == doc["profile"], f"{name}: profile")
+    require(doc.get("normalizedExclusions") == EXCLUSIONS, f"{name}: normalizedExclusions differs from profile §6")
     return doc, cfg
 
 
@@ -506,6 +513,10 @@ def mutations():
         i = find(v, "/re/")
         a = ts[i]["span"][0]
         ts[i:i + 1] = [tok("punct", "/", a), tok("ident", "re", a + 1), tok("punct", "/", a + 3)]
+
+    @add("ts.json", "ts-semi-b", "tokenIndices omitted from the normalized channel", rehash=False)
+    def _(v):
+        del v["result"]["channels"]["normalized"]["tokenIndices"]
 
     @add("ts.json", "ts-exact-k", "hash corrupted", rehash=False)
     def _(v):
@@ -683,7 +694,8 @@ def main():
     rejected, failures = self_test(docs)
     total = rejected + len(failures)
     lexical = sum(1 for m in mutations() if m[2] not in ("winnowing tie broken leftmost", "hash corrupted",
-                                                         "normalized channel keeps ';' (draft-1 rule)"))
+                                                         "normalized channel keeps ';' (draft-1 rule)",
+                                                         "tokenIndices omitted from the normalized channel"))
     if failures:
         for d in failures:
             print(f"FAIL mutation not rejected: {d}")

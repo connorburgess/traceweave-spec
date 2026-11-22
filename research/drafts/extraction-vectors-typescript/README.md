@@ -28,7 +28,7 @@ The Unicode identifier table is the shared, read-only [unicode-17.0.0-tables.jso
 - `inputBase64` (authoritative) and `inputText`;
 - a `result`: either `status: "error"` with `error.code` and `error.offset`, or `status: "ok"` / `"insufficient-tokens"` with `tokens` (class, text, byte span) and the `exact` and `normalized` channels (k-grams, `windowSelections`, `partialWindow`, fingerprints, and normalized `values`).
 
-**The normalized channel omits `;`** (profile §6). `channels.normalized.tokenIndices` lists the indices into `tokens` that it keeps, and its `values`, k-gram positions and fingerprint positions refer to that filtered stream. `status` still counts all tokens, so `ts-exact-k` is `ok` with an empty normalized channel.
+**The normalized channel omits `;`** (profile §6, which declares `normalizedExclusions` `punct` `;` under contract §6 / OD-23; each vector file repeats the declaration in its header). `channels.normalized.tokenIndices` lists the indices into `tokens` that it keeps, and its `values`, k-gram positions and fingerprint positions refer to that filtered stream. `status` still counts all tokens, so `ts-exact-k` is `ok` with an empty normalized channel.
 
 Every accepted vector names a `pairedRejection`: an error vector that exercises the same rule.
 
@@ -67,7 +67,7 @@ PASS ts.json profile=ts-tokens/draft-2 config=aeeed14177cd3be8... vectors=76 tok
 PASS tsx.json profile=tsx-tokens/draft-2 config=4f121891d73b98b5... vectors=33 tokens=422 kgrams=338 fingerprints=254 tie-windows=0 errors=12 (code and offset re-derived) pairs=1 classes=9
 PASS limits-ts.json profile=ts-tokens/draft-2 config=94403dd3e71a8105... vectors=3 tokens=7 kgrams=3 fingerprints=2 tie-windows=0 errors=2 (code and offset re-derived) pairs=0 classes=3
 PASS every accepted vector has derivation=hand and a pairedRejection that is an error vector
-PASS mutation self-test: 27/27 corruptions rejected (24 lexical)
+PASS mutation self-test: 28/28 corruptions rejected (24 lexical)
 PASS wrong-lexer self-test: 14/14 wrong lexers rejected (the review's 8 accepted variants V1 V5 V25 V22 V11 V21 V13 V26, plus 6 more)
 ```
 
@@ -99,7 +99,7 @@ PASS wrong-lexer self-test: 14/14 wrong lexers rejected (the review's 8 accepted
 - U+309B rejected;
 - an invented error code, a moved offset, and malformed before unterminated.
 
-Draft-2 adds a corruption that treats `++` after a line break as postfix. The three non-lexical corruptions are a leftmost tie, a flipped hash bit (both left unrehashed), and a normalized channel that keeps `;`.
+Draft-2 adds a corruption that treats `++` after a line break as postfix. The four non-lexical corruptions are a leftmost tie, a flipped hash bit (both left unrehashed), a normalized channel that keeps `;`, and `tokenIndices` omitted.
 
 **Wrong-lexer self-test** (new in draft-2). Vector corruptions cannot reveal a rule choice that no vector exercises, which the review showed with 8 accepted wrong lexers. Each wrong lexer is a `tslex.Lexer` subclass with one rule changed, substituted for the profile's lexer, and the checker must fail on the shipped vectors:
 - the review's 8: V1 `}` always followed by a regex, V5 `await`/`yield` end an expression, V25 most keywords end an expression, V22 `exprEnd` false after a JSX element, V11 ASCII-only JSX trimming, V21 `<` anywhere in a tag, V13 a lone CR not ending a string, V26 `0_1` accepted;

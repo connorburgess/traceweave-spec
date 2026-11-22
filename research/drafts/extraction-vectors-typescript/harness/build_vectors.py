@@ -111,6 +111,7 @@ def write(name, profile, cfgfile, limit, items):
     (OUT / cfgfile).write_bytes(cfg)
     doc = {"contract": "traceweave-token-winnow-draft-1", "profile": profile, "profileVersion": VERSION,
            "configFile": cfgfile, "configSha256": hashlib.sha256(cfg).hexdigest(), "k": 5, "window": 4,
+           "normalizedExclusions": [{"class": "punct", "text": ";"}],
            "lexingCheck": "Token streams are hand-derived (harness/vector_sources.py); check_vectors.py re-lexes "
                           "every input with tslex.py and harness/crosscheck.js compares them with the TypeScript "
                           "6.0.3 parser and scanner.",

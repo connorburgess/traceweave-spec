@@ -6,6 +6,12 @@
  "configSha256": "94403dd3e71a8105a9dcec894fc0d05d09cb771efaada28802dcf43ecd08f8d6",
  "k": 5,
  "window": 4,
+ "normalizedExclusions": [
+  {
+   "class": "punct",
+   "text": ";"
+  }
+ ],
  "lexingCheck": "Token streams are hand-derived (harness/vector_sources.py); check_vectors.py re-lexes every input with tslex.py and harness/crosscheck.js compares them with the TypeScript 6.0.3 parser and scanner.",
  "vectors": [
   {

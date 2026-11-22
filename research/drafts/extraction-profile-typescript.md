@@ -6,11 +6,11 @@ Status: **draft for review, revision draft-2, 2026-11-22.** Roadmap items TS.1 a
 
 This is research material, not a normative change. It does not modify `spec/`, `schemas/`, `profiles/`, `test-vectors/` or the [extraction contract](extraction-contract.md). "MUST" describes what this draft proposes for an implementation claiming to follow it. Nothing here is a registered algorithm.
 
-**How it plugs in.** This document adds two profile sections in the shape of contract §4 (Go) and §5 (Rust). Every shared part of the contract applies unchanged, **with one exception that needs a contract amendment**: §6 below drops `;` from the normalized stream (TSOD-5b). The shared parts are:
+**How it plugs in.** This document adds two profile sections in the shape of contract §4 (Go) and §5 (Rust). Every shared part of the contract applies unchanged. The profile also uses the contract's normalized-stream exclusion rule (contract §6, OD-23) to drop `;` from the normalized stream (§6 below, TSOD-5b). The shared parts are:
 - §2 outcomes, the no-repair rule and the error-offset rules;
 - §3 processing order: configuration, size, UTF-8, then U+FEFF (`bom`) and U+0000 (`nul`). This profile adds no forbidden code point, so a lone CR is legal;
 - §3a Unicode 17.0.0 data, plus two small deltas derived from the same digest-pinned file (§3.2);
-- §6 serializations, except the normalized `;` filter of §6 below; §7 k-gram hashing, §8 winnowing and §9 record fields;
+- §6 serializations, with `normalizedExclusions` declared in §6 below; §7 k-gram hashing, §8 winnowing and §9 record fields;
 - §10 configuration bytes and validation. This profile only adds two `(profile, profileVersion)` pairs (§10 below).
 
 The vectors are in [extraction-vectors-typescript/](extraction-vectors-typescript/README.md). Decisions are in §12. Items marked "decided in draft" are pending owner confirmation.
@@ -333,11 +333,19 @@ Such an input usually ends in `illegal-character` at the `>` of `=>`, or in `unb
 
 Contract §6 applies, with one change.
 
-**The normalized stream omits every `punct` `;` token** (TSOD-5b (c), §4.10). The exact stream keeps all tokens. In the normalized channel, k-gram positions, window selections and fingerprint positions index the filtered stream. Spans are still the original byte spans of the remaining tokens. The vectors record the filter in `channels.normalized.tokenIndices`, the indices into `tokens` that the normalized stream keeps.
+**Declared normalized-stream exclusions** (contract §6, OD-23):
 
-`status` is still decided by the exact token count (contract §2). An `ok` input whose normalized stream has fewer than k tokens has an empty normalized channel: no k-grams, `windowSelections` `[]` and `partialWindow` false. For example, `ts-exact-k` (`let a = b;`) has one exact k-gram and none in `normalized`.
+```
+normalizedExclusions: [ {class: "punct", text: ";"} ]
+```
 
-**Contract amendment needed** (TSOD-13, must be settled before freezing). Contract §6 says "the two channels share one token stream and differ only in value". The catalogue contract derives `kgramCount = max(0, tokenCount − k + 1)` for each channel from the record's `tokenCount`. Both need a per-profile normalized-stream filter: a per-channel token count or k-gram count in the record. This profile cannot make that change, and the coordinator owns it.
+This holds for both `ts-tokens` and `tsx-tokens` `draft-2` (TSOD-5b (c), §4.10). The contract's rule then applies unchanged:
+- Every `;` stays in the token list, `tokenCount`, the exact channel and the status decision.
+- Normalized k-gram positions, window selections and fingerprint positions index the filtered stream. Spans are the byte spans of the first and last kept tokens.
+- The normalized channel records `tokenIndices` (ascending indices of the kept tokens) before `values`.
+- An `ok` input can have an empty normalized channel. For example, `ts-exact-k` (`let a = b;`) has one exact k-gram and none in `normalized`.
+
+The vector files repeat the declaration as `normalizedExclusions`, and the checker requires it to equal this one.
 
 **Normalized values.** The value is `""` for `ident` and for every literal class of this profile: `privatename`, `number`, `bigint`, `string`, the four template classes, `regex`, `jsx-text` and `jsx-string`. `keyword` and `punct` keep their text. Exact values are original bytes, so escapes are not decoded: `"A"` and `"\x41"` differ in `exact` and agree in `normalized`.
 
@@ -415,7 +423,7 @@ Contract §10 applies, including the draft-2 bounds of contract §10a (k ≤ 16,
 | Numbers (§4.5) | `ts-numbers`, `ts-bigint`, `ts-legacy-octal`, `ts-nonoctal-separators`, 7 error vectors; corruption `07.5` as one number; wrong lexers V26, WNonOctalSep |
 | Strings, templates, regex (§4.6–§4.8) | Vectors tagged `strings`, `template`, `regex`; corruptions: nested template merged, substitution closed at the wrong `}`, template-head relabelled, regex flags split; wrong lexer V13 |
 | `exprEnd` (§4.9), every row and every departure | The vectors named in the §4.9 tables; corruptions: regex as division (twice); wrong lexers V1, V5, V25, V22, WNewline, WArrow, WHeader, WBang |
-| `;` dropped from normalized (§6) | `ts-semi-a/b` pair invariant, `ts-exact-k`; corruption: normalized keeps `;` |
+| `;` excluded from normalized (§6, contract OD-23) | Checker: declared `normalizedExclusions` equals the profile's; `tokenIndices` against it, placed before `values`; `ts-semi-a/b` pair invariant, `ts-exact-k`; corruptions: normalized keeps `;`, `tokenIndices` omitted |
 | JSX (§5, deferred) | 21 accepted and 12 error vectors in `tsx.json`; corruptions: JSX text as identifiers, untrimmed JSX text; wrong lexers V11, V21, V22, WEscape |
 | Hashbang, HTML-like comments, no ASI | `ts-hashbang`, `ts-html-comment`, `ts-no-asi`; corruptions: hashbang tokenized, `<!--` as a comment, an inserted `;` |
 | Unicode (§3.1, §3.2) | `ts-unicode-boundary`, `ts-err-u2e2f`, `-u180e`, `tsx-nbsp-text`; `derive_deltas.py` against UCD 17.0.0; crosscheck table sweep; corruption: U+309B rejected |
@@ -462,11 +470,7 @@ Contract §10 applies, including the draft-2 bounds of contract §10a (k ≤ 16,
 | TSOD-9 | (a) `jsx-text` trimmed with the full trivia set; white-space-only text dropped | Layout invariance (`tsx-format-a/b`, `tsx-nbsp-text`) |
 | TSOD-10 | (a) ID_Start/ID_Continue from the pinned UCD (§3.2), not XID; no NFC | ECMA-262 2026 |
 
-**Must be settled before `ts-tokens` is frozen:**
-- **TSOD-13, the contract amendment for the normalized `;` filter (§6).** Contract §6 must allow a profile-defined normalized-stream filter. The record and catalogue contract need a per-channel token or k-gram count (today `kgramCount` is derived from one `tokenCount`). Options:
-  - (a) per-channel `tokenCount` in the record;
-  - (b) `kgramCount` recorded per channel;
-  - (c) instead of dropping `;`, keep it with a reserved normalized value. This does **not** restore survival, because positions still shift. It is listed only to show why (a) or (b) is needed.
+**Closed:** TSOD-13 (normalized-stream exclusions) is settled by contract OD-23 at roadmap-v2 c81be10. §6 declares `punct` `;`, and every accepted vector is recomputed under the contract rule.
 
 **Must be settled before `tsx-tokens` leaves deferral:**
 - **TSOD-8 frequency** on a real `.tsx`/`.jsx` corpus, then the choice between (a), (b) one more look-ahead and (c) a minimal type/expression context tracker.
@@ -491,7 +495,7 @@ The M1.4 cross-check spent 9.88 million cases to find a single Rust divergence (
 The risk is concentrated in JSX, where the profile admits a known gap (TSOD-8) and has no corpus evidence.
 
 **Recommendation: staged, now decided in draft (TSOD-1).**
-1. **Stage 1:** freeze `ts-tokens` (`.ts`, `.mts`, `.cts`, `.js`, `.mjs`, `.cjs`) once TSOD-13 is settled. Run TS.3 and TS.4 on it.
+1. **Stage 1:** freeze `ts-tokens` (`.ts`, `.mts`, `.cts`, `.js`, `.mjs`, `.cjs`); TSOD-13 is closed by contract OD-23. Run TS.3 and TS.4 on it.
 2. **Stage 2:** add `tsx-tokens` after a `.tsx`/`.jsx` corpus measures how many files the TSOD-8 limitation rejects, and after TSOD-8 is settled.
 
 The vectors are already split by profile, so stage 1 can freeze `ts.json` and `limits-ts.json` without touching `tsx.json`. Before TS.3, extend the M1.4-style differential: random token streams with mutations, and the `exprEnd`, template and JSX state spaces in particular.
@@ -521,7 +525,7 @@ The [clean-room review](../reviews/extraction-profile-typescript-review.md) of d
 | F1: vectors did not pin 8 rule choices | Vectors added: `ts-object-class-division` (V1), `ts-err-await-identifier` and `ts-yield-await-regex` (V5, V25), `tsx-element-division` (V22), `tsx-nbsp-text` (V11), `tsx-err-attr-lt` (V21), `ts-err-cr-in-string` (V13), `ts-err-zero-separator` (V26). The checker's new wrong-lexer self-test runs all 8 variants plus 6 more and rejects 14/14 |
 | F2: §4.9's departure list was incomplete; "never departed" overclaimed | Two rules changed where a parser-free rule matches ECMAScript exactly: the arrow-body `}` and `!`/`++`/`--` after a line terminator (`ts-arrow-body-regex`, `ts-newline-prefix-regex`). Function and class declaration `}` and `await`/`yield` as identifiers are documented departures, pinned by `ts-function-decl-division`, `ts-class-decl-division` and `ts-err-await-identifier`, with the reason for not tracking statement position (§4.9). The corpus claim is now qualified |
 | F3 / A1: the generic look-ahead was underspecified | §5.2 now covers trivia (skipped everywhere), escapes (none allowed; D-14), no reserved-word check on the name after `const`, `extends` as a whole word, and the unterminated-comment conflict (JSX, which is observationally equivalent). Vectors `tsx-generic-const-reserved`, `tsx-extends-word`, `tsx-err-lookahead-escape`, `tsx-err-extends-comment` |
-| F4: `;` made the normalized channel style-dependent | TSOD-5b (c): `;` dropped from `normalized` (§6, §4.10), `ts-semi-a/b`, and the survival figures. This needs a contract amendment (TSOD-13) |
+| F4: `;` made the normalized channel style-dependent | TSOD-5b (c): `;` excluded from `normalized` (§6, §4.10), `ts-semi-a/b`, and the survival figures. The contract amendment (TSOD-13) is in place as contract OD-23 |
 | F5: §5.5 under-listed the limitation | Construct signatures `new <T>(…)` and the `(`, `\|`, `&`, `,` and `<` positions added, with the 6.4% proxy. Probes for the construct-signature, `(` and type-argument cases |
 | A2: separators in a NonOctalDecimal fraction | Allowed in the fraction and exponent, not in the integer part (§4.5, `ts-nonoctal-separators`) |
 | A3: offset after a self-closing `/` | The offending character (§5.3) |
