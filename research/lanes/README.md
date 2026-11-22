@@ -19,3 +19,11 @@ See the [coordinator reconciliation](../fragment-policy-checkpoint.md), [Go frag
 ## Public-code census
 
 [Coordinator checkpoint](../public-census-checkpoint.md), [Go census](go-census-results.md) and [Rust census](rust-census-results.md) record the bounded four-repository source-only study. Exact eligibility remains unestablished; no carrier was promoted.
+
+## Lanes 06–08
+
+[Evidence reviews and report audits](../research-06-08-checkpoint.md) for practical code carriers (06), fragment recovery and transplant (07) and cross-media architecture (08): [06](06-evidence-review.md), [07](07-evidence-review.md) with its [audit](07-report-audit.md), [08](08-evidence-review.md) with its [audit](08-report-audit.md). Raw provider reports stay untracked.
+
+## Assignments
+
+Current assignments are by gate ID in the [work queue](../work-queue.md) and the [roadmap](../../ROADMAP.md). The implementation repository holds the I1 extractors on local branches; a differential test is in progress and I2 is next. A lane finishing is a progress record, not a closed gate.

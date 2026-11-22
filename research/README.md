@@ -38,11 +38,13 @@ The language-planning task is complete. The subsequent [synthetic experiment che
 
 ## Active work
 
-Follow the [research work queue](work-queue.md) for assignments, acceptance gates and next decisions.
+Follow the [research work queue](work-queue.md): it lists open gate IDs from the [roadmap](../ROADMAP.md), current assignments and the loop rule. Checkpoints and reviews are progress records; a gate closes only by its type, with committed evidence.
 
-[Fragment recovery and signing-policy checkpoint](fragment-policy-checkpoint.md) records the reviewed follow-up experiments. The [public-code census protocol](public-census-plan.md) defines the next bounded investigation.
+[Fragment recovery and signing-policy checkpoint](fragment-policy-checkpoint.md) records the reviewed follow-up experiments. The [public-code census protocol](public-census-plan.md) defines the bounded investigation, and the [census checkpoint](public-census-checkpoint.md) records it: four pinned repositories scanned; current narrow patterns remain experimental controls.
 
-[Public-code eligibility checkpoint](public-census-checkpoint.md): four pinned repositories scanned; current narrow patterns remain experimental controls.
+[Lane 06–08 reconciliation checkpoint](research-06-08-checkpoint.md): practical code carriers, fragment recovery and cross-media architecture reviewed; no code carrier cleared the bar, and the image study is deferred until after M3 and needs the owner.
+
+[Independent reviews](reviews/) of the roadmap, repository plan, contracts and checkpoints are kept there. [Drafts](drafts/extraction-contract.md) of the extraction contract, catalogue and report contract and their vectors stay in `research/drafts/` until the owner approves promotion to normative locations.
 
 ## Follow-up deep research — 2026-11-22
 
