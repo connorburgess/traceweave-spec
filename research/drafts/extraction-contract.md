@@ -288,7 +288,7 @@ The procedure runs independently for each channel.
 
 **Vector example (`go-equal-minimum`, exact channel).** The window starting at 2 spans positions 2–5 and holds `1d99e08d…` at both 2 and 5. Position 5 is selected. The selections are `[2, 2, 5, 5, 5]` and the fingerprints are at `[2, 5]`. The [implementation-patterns](../../docs/implementation-patterns.md) example `[8, 4, 4, 7, 2]` with `w = 3` gives fingerprints at `[2, 4]`.
 
-**Locality.** An unchanged token run of at least `k + w − 1` tokens yields at least one shared fingerprint under identical configuration bytes. That is the paper's guarantee restated, not a detection rate.
+**Locality.** In each channel, an unchanged run of at least `k + w − 1` tokens of that channel's own stream (§6; for a normalized channel with exclusions, kept tokens only) yields at least one shared fingerprint in that channel under identical configuration bytes. That is the paper's guarantee restated, not a detection rate.
 
 ## 9. Extraction record (logical fields)
 
@@ -322,7 +322,7 @@ The Rust configuration differs only in `"profile":"rust2024-tokens"`. Digests: G
 
 **Mapping to core.** The core profile triple `id`, `version`, `configSha256` maps to `profile`, `profileVersion` and the SHA-256 of these bytes. `contract` names the algorithm family of §6–§8, and `hash` names the function of §7.
 
-**Versioning.** Profile identifiers deliberately omit toolchain versions. A new `profileVersion` is minted only when tokens, classes, errors or Unicode tables change. A new toolchain release is accepted for an existing version by re-running the shipped crosscheck and finding no new divergence.
+**Versioning.** Profile identifiers deliberately omit toolchain versions. A new `profileVersion` is minted only when tokens, classes, errors, Unicode tables, normalized values or `normalizedExclusions` change, that is, on any change to any channel's bytes. A new toolchain release is accepted for an existing version by re-running the shipped crosscheck and finding no new divergence.
 
 **Validation**, which runs before any input check (§3 step 0). Apply these checks in order. The first failure is `unsupported-config`, offset `null`:
 
