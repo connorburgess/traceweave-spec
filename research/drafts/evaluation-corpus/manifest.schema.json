@@ -29,7 +29,7 @@
       "const": "proposed, not acquired"
     },
     "protocolVersion": {
-      "const": "m3-eval-draft-3"
+      "const": "m3-eval-draft-4"
     },
     "protocol": {
       "const": "research/drafts/evaluation-protocol.md"

@@ -1,12 +1,18 @@
 # M3 evaluation protocol: token-fingerprint baseline on Go and Rust
 
-Protocol version: `m3-eval-draft-3`. Status: **draft for review, 2026-11-22. Not frozen, not run. No corpus has been acquired.** Roadmap gates M3.0–M3.6 and backlog item TW-05 ([roadmap](../../ROADMAP.md#m3--measure-usefulness)). Corpus proposal: [evaluation-corpus/](evaluation-corpus/README.md).
+Protocol version: `m3-eval-draft-4`. Status: **ready to freeze; frozen by the commit that precedes the first tuning run** (2026-11-23). Not run. No corpus has been acquired yet; acquisition is approved (§14.2). Roadmap gates M3.0–M3.6 and backlog item TW-05 ([roadmap](../../ROADMAP.md#m3--measure-usefulness)). Corpus proposal: [evaluation-corpus/](evaluation-corpus/README.md).
 
-Protocol digest (SHA-256, self-excluding): `0000000000000000000000000000000000000000000000000000000000000000` (all zeros: **not frozen**). At the freeze, the digest is the SHA-256 of this file's bytes with those 64 hex digits replaced by 64 zeros; `freeze.json` (§8) repeats it.
+Protocol digest (SHA-256, self-excluding): `0000000000000000000000000000000000000000000000000000000000000000` (all zeros: **not frozen yet**). The protocol is frozen by the spec-repository commit that fills in this digest, and that commit must precede the first tuning run (§2 step 6). The digest is the SHA-256 of this file's bytes with those 64 hex digits replaced by 64 zeros; the tuning runner and `freeze.json` (§8) repeat it, and both refuse to run if this file's digest differs.
 
-This is a research protocol. It changes nothing in `spec/`, `schemas/`, `profiles/` or `test-vectors/`, and it decides nothing the roadmap reserves for the owner. Every owner decision it needs is listed in [§14](#14-decisions-that-need-the-owner) with options; none is assumed.
+This is a research protocol. It changes nothing in `spec/`, `schemas/`, `profiles/` or `test-vectors/`. The owner decisions it needs are recorded in [§14](#14-decisions-that-need-the-owner): decided on 2026-11-23 (M3.0 budget **1/20**, acquisition approved, storage `~/traceweave-eval`), with the options and both recommendations kept as history. The harness scripts are listed in [IMPLEMENTING.md](evaluation-corpus/IMPLEMENTING.md).
 
 It fixes, before any result exists, what is measured and how each pass/fail becomes an exit code or a count. Where this draft leaves a number open, the number is chosen by a stated mechanical rule on the tuning split, never by looking at held-out data.
+
+**Changes from `m3-eval-draft-3`** (owner decisions of 2026-11-23, delegated to the coordinator):
+- §14 records the decisions: M3.0 budget option A, `1/20` per unordered repository search (met when at most 6 of 132 alarm); `1/100` to be tested on a larger corpus only if this passes; acquisition of the 48 repositories and the mechanical replacements approved; storage `~/traceweave-eval` (`TRACEWEAVE_EVAL_DIR`); licence recheck failing closed;
+- the budget is fixed where it enters: the tuning rule (§5.4, at most 0 fold-E alarms in 30), the freeze (§8) and the M3.6 script (§12);
+- status: ready to freeze; the protocol is frozen by the commit that fills in its digest before the first tuning run (§2, §8);
+- an implementer brief lists every harness script in order ([IMPLEMENTING.md](evaluation-corpus/IMPLEMENTING.md)).
 
 **Changes from `m3-eval-draft-2`**, resolving the review's [confirmation pass](../reviews/evaluation-protocol-review.md#confirmation-pass-m3-eval-draft-2) (commit `1df11d3`):
 - Go `rename` takes a name after `func` only from the unit's own head `func`, so a function literal's parameter types are never bindings (§6.3);
@@ -72,13 +78,13 @@ Each step is a commit. Gate IDs in brackets.
 
 | Step | Content | Needs |
 | --- | --- | --- |
-| 1 | M3.0 budget recorded in the spec repository | owner [M3.0] |
-| 2 | Manifest frozen; acquisition approved, covering the mechanical replacements of §4.3 | owner [M3.1] |
+| 1 | M3.0 budget recorded in the spec repository: **done**, `1/20`, §14.1 (2026-11-23) | owner [M3.0] |
+| 2 | Manifest frozen; acquisition approved, covering the mechanical replacements of §4.3: **approval done** (2026-11-23, §14.2) | owner [M3.1] |
 | 3 | Acquisition: shallow fetch of each pinned revision; inventory; licence recheck; acquisition-time rules (§3.6) | step 2 |
 | 4 | Groups and rejections by the acquisition-time rules; split file and its digest committed | step 3 [M3.2] |
 | 5 | Timing pilot on tuning fold S (§5.5); run budget fixed | step 4 |
-| 6 | Tuning: suppression catalogues, grid, selection rule (§5), on tuning data only | steps 1, 5 |
-| 7 | Protocol digest filled in; freeze file committed (§8) | step 6 [M3.3] |
+| 6 | Protocol digest filled in and committed (this file frozen); then tuning: suppression catalogues, grid, selection rule (§5), on tuning data only | steps 1, 5 |
+| 7 | Freeze file committed (§8) | step 6 [M3.3] |
 | 8 | Held-out positives generated; held-out extraction, comparison and metrics | step 7 |
 | 9 | Held-out report and counts committed (the "first held-out result commit") | step 8 [M3.4] |
 | 10 | Independent rerun | step 9 [M3.5] |
@@ -237,13 +243,13 @@ All values are inside the extraction and comparison bounds (extraction §10, OD-
 
 On fold E, generate positive cases with the §6 generator (namespace `tuning`) and run all fold-E negative searches. For each configuration compute: *a* = false alarms per negative search (§1 alarm rule, unordered searches), and *r* = the unweighted mean, over transformation × bucket cells with at least 10 cases, of detected/cases.
 
-1. Eligible configurations: *a* ≤ budget / 2 (the M3.0 budget, halved as a margin for tuning-to-held-out drift).
+1. Eligible configurations: *a* ≤ budget / 2, the M3.0 budget halved as a margin for tuning-to-held-out drift. With the decided budget `1/20` this is *a* ≤ `1/40`, evaluated in integers as `alarms × 40 ≤ N_E` over the N_E fold-E searches of both languages together.
 2. Choose the eligible configuration with the largest *r*. Ties, in order: smaller *a*; smaller `k`; larger `minRegionDistinctHashes`; smaller `window`; *T* in the order none, 5, 3, 2.
 3. If none is eligible, choose by smallest *a*, then the same ties.
 
 The selection runs as a script whose exit status is 0 when it selected by rule 2, 3 when by rule 3. Either way the selected configuration is frozen; rule 3 is reported.
 
-**What the margin means at this size.** Fold E has about 6 groups per language, so 15 unordered searches per language and 30 in all. Every budget option of §14.1 is below 1/30, so rule 1 means **zero alarms** on fold E whichever budget is chosen. That is mechanical and harmless, and it is the honest reading of how little the tuning split can say about false alarms.
+**What the margin means at this size.** Fold E has about 6 groups per language, so 15 unordered searches per language and 30 in all. With `1/40` and N_E = 30, rule 1 means **zero alarms** on fold E (any budget option of §14.1 would have meant the same). That is mechanical and harmless, and it is the honest reading of how little the tuning split can say about false alarms.
 
 ### 5.5 Cost model, timing pilot, run budget and abort rules
 
@@ -349,10 +355,10 @@ Common boilerplate enters in two ways: naturally, inside every negative search (
 ## 8. Freeze and git ancestry (M3.3)
 
 The **freeze commit** in the implementation repository adds `eval/freeze.json` containing:
-- this protocol's self-excluding digest (filled in this file at step 7, before `freeze.json` is written) and the spec-repository commit holding it;
+- this protocol's self-excluding digest (filled in this file at step 6, before the first tuning run) and the spec-repository commit holding it, which must be an ancestor of the spec commit current when tuning started;
 - the manifest digest and the M3.2 split digest;
 - per language: the extraction configuration bytes (Base64) and SHA-256; the comparison configuration bytes and SHA-256, including `minRegionDistinctHashes`, `mergeGap`, both caps and `suppressionCatalogueSha256`; the suppression catalogue SHA-256 and *T*;
-- the M3.0 budget as a rational `numerator/denominator`, and the spec-repository commit that recorded it;
+- the M3.0 budget as a rational, **`1/20`**, and the spec-repository commit that recorded it (§14.1); any other value is refused by the freeze script;
 - the implementation commit used for lexing, extraction and comparison, which must equal the acquisition lexing commit of `eval/acquisition.json` (§3.4); the generator commit; the `rustfmt` version string;
 - the pilot record digest and any grid reduction (§5.5); the run-time estimates;
 - the M3.5 tolerance (§13).
@@ -425,10 +431,10 @@ So the proposed 48-repository corpus can **measure** a false-alarm count over 13
 
 ## 12. What M3.6 computes
 
-Inputs: `counts.json` (held-out), the budget `p/q` from the M3.0 record named in `freeze.json`.
+Inputs: `counts.json` (held-out) and `freeze.json`, whose budget must be `p/q` = **`1/20`** (§14.1); any other value is an error.
 
 - `A` = unordered negative searches with an alarm (§1); `N` = unordered negative searches.
-- **met** when `A × q ≤ p × N` (exact integer arithmetic); **negative-result** otherwise.
+- **met** when `A × 20 ≤ N` (exact integer arithmetic; with N = 132 that is A ≤ 6); **negative-result** otherwise.
 - `N = 0`, a missing or mismatched freeze, a failed M3.3 check (including the lexing-commit equality), exclusions above the §3.4 bound, a non-zero symmetry or caching difference, or an aborted run is an error, not a verdict.
 
 The script exits 0 for met, 3 for negative-result, 2 for an error. No recall floor is applied; recall is reported without a pass line. The verdict uses the point estimate, as M3.6 states; the intervals of §11, the operating characteristics of §14.1 and the excluded-file counts per repository and reason are printed beside it and do not change it.
@@ -451,7 +457,7 @@ M3.5 is met when steps 1–6 exit 0 and step 7 exits 0 or reports "not comparabl
 
 ## 14. Decisions that need the owner
 
-The owner decides each of these; this draft records options and a recommendation only.
+The owner decides each of these. All were decided on 2026-11-23, delegated to the coordinator; each subsection keeps its options and recommendations as history and ends with the decision.
 
 ### 14.1 M3.0: the false-alarm budget
 
@@ -476,7 +482,9 @@ Each alarm costs a person a review of localized evidence (UC-1, UC-2).
 - **B** is a usable operator target (about one review per 100 candidates) and is decided by a count (at most 1 alarmed pair of 132), but it separates ½× from 2× only moderately (0.86 against 0.26), and a single noisy repository can decide it.
 - **C** is what a registry sweep would want, but on this corpus the verdict means little: it is met with probability 0.77 even when the true rate is twice the budget, and the corpus cannot bound a rate near 1/1000.
 
-**Two recommendations; the owner chooses.**
+**Decision (2026-11-23).** The owner delegated the choice to the coordinator, who chose **option A: `1/20` false alarms per unordered repository search on the current 48-repository corpus**, so M3.6 is met when at most 6 of the 132 held-out searches alarm. `1/100` is to be tested on a larger corpus (about 100 repositories per language, §14.4) **only if this passes**; that would be a new protocol version with its own M3.0 record. The text below is kept as the history of the choice.
+
+**Two recommendations (history).**
 - **Author: B**, with the operating characteristics printed beside the verdict. It is the operator target that matters (about one review per 100 candidate repositories) and is still decided by a count. Its weakness at this size is stated: it separates ½× from 2× the budget only moderately (0.86 against 0.26), and one noisy repository can decide it.
 - **Reviewer (confirmation pass): A at this corpus size, or B only with about 100 repositories per language.** If M3.6 is meant as evidence, the verdict should be unlikely to come out "met" when the true rate is twice the budget; A does that here (0.018), B does not (0.257).
 
@@ -495,11 +503,12 @@ At that size B separates ½× from 2× as sharply as A does at 48 repositories. 
 - **What:** the 48 repositories in [manifest-proposal.json](evaluation-corpus/manifest-proposal.json), 24 Go and 24 Rust, by shallow fetch of the pinned revisions, **plus the mechanical replacements of §4.3 from the continuing walk, at most 8 per language**. No dependencies, submodules, releases or build outputs. Likely replacements (from public dependency information, confirmed only at acquisition): `seanmonstar/reqwest` and `tokio-rs/axum` (both depend on `hyper`), and `grpc/grpc-go` (likely required by `micro/go-micro`).
 - **Size:** GitHub reports 621,386 KiB (about 607 MiB) summed over the 48 repositories, *including full history*; this is an upper bound, and the review estimates 100–250 MB for depth-1 fetches. Eligible source is 58,768,417 bytes (about 56 MiB) in 6,254 paths (3,314 Go and 2,940 Rust), counted from the pinned tree listings before the content rules. Derived private data (catalogues for 9 tuning settings and the frozen one) is estimated at 4–5 GB.
 - **Licences**, verified from the root licence files at the pinned revisions: MIT only (30 repositories), Apache-2.0 only (9), both MIT and Apache-2.0 files, recorded `Apache-2.0 AND MIT` (7, all Rust), BSD-3-Clause (1) and BSD-2-Clause (1). All permit redistribution with notice retention; the project redistributes none. Acquisition rechecks every licence file's SHA-256 and classification and stops on any difference (§3.6).
-- **Recommendation:** approve as proposed, including the replacement rule, after a non-author has rerun `verify_manifest.py`.
+- **Recommendation (history):** approve as proposed, including the replacement rule, after a non-author has rerun `verify_manifest.py`.
+- **Decision (2026-11-23):** approved, delegated to the coordinator: the 48 repositories and the mechanical replacements of §4.3 (at most 8 per language), with the licence recheck of §3.6 failing closed.
 
 ### 14.3 Where the corpus is stored
 
-Outside every repository and every version-controlled working tree (contract B1 markers), in an absolute directory named by `TRACEWEAVE_EVAL_DIR`, with `corpus/`, `derived/` (catalogues, report bodies: private), `cases/` (case bytes) and `logs/`. Options: (a) a directory under the owner's home, such as `~/traceweave-eval`; (b) an external or encrypted volume; (c) a separate private storage service (paid services need the owner anyway). **Recommendation: (a)**, local disk, never synchronized to a public location, with the runner refusing a location inside a working tree as the contract's B1 rule does for private output.
+Outside every repository and every version-controlled working tree (contract B1 markers), in an absolute directory named by `TRACEWEAVE_EVAL_DIR`, with `corpus/`, `derived/` (catalogues, report bodies: private), `cases/` (case bytes) and `logs/`. Options: (a) a directory under the owner's home, such as `~/traceweave-eval`; (b) an external or encrypted volume; (c) a separate private storage service (paid services need the owner anyway). **Recommendation (history): (a)**, local disk, never synchronized to a public location, with the runner refusing a location inside a working tree as the contract's B1 rule does for private output. **Decision (2026-11-23):** (a), `~/traceweave-eval`, named by `TRACEWEAVE_EVAL_DIR` (an absolute path; a relative or empty value is a usage error, as contract B4–B5).
 
 ### 14.4 Corpus scale and licence allowlist
 
@@ -515,8 +524,8 @@ Outside every repository and every version-controlled working tree (contract B1 
   | Runtime at the review's assumed 1 ms per pair | about 2.5 h | about 31 h (held-out about 9 h, tuning about 22 h) |
   | Derived private data | 4–5 GB | about 17–20 GB |
 
-  At 100 per language the tuning estimate approaches the 24-hour budget of §5.5, so the grid would likely shrink by its fixed rule. The pool would also need to grow: the first 100 search results per language yielded 24 acceptances from 29 (Go) and 39 (Rust) visits, so 100 acceptances need about the first 300 results per language (three search pages), a change to §3.1 that needs a new snapshot. **Author recommendation:** start at 24 and choose A, or approve 100 per language with B; do not combine B with 24 if M3.6 is meant as evidence.
-- **Allowlist.** The permissive list of §3.2 only. Adding MPL-2.0 or CC0-1.0 would admit a few more pool repositories (for example a CC0 Rust command runner); copyleft is excluded because the project does not want to argue use conditions for corpus code. **Recommendation:** keep as proposed.
+  At 100 per language the tuning estimate approaches the 24-hour budget of §5.5, so the grid would likely shrink by its fixed rule. The pool would also need to grow: the first 100 search results per language yielded 24 acceptances from 29 (Go) and 39 (Rust) visits, so 100 acceptances need about the first 300 results per language (three search pages), a change to §3.1 that needs a new snapshot. **Author recommendation (history):** start at 24 and choose A, or approve 100 per language with B; do not combine B with 24 if M3.6 is meant as evidence. **Decision (2026-11-23):** 24 per language with A; 100 per language with B only if A passes.
+- **Allowlist.** The permissive list of §3.2 only. Adding MPL-2.0 or CC0-1.0 would admit a few more pool repositories (for example a CC0 Rust command runner); copyleft is excluded because the project does not want to argue use conditions for corpus code. **Recommendation (history):** keep as proposed. **Decision (2026-11-23):** kept, as part of the acquisition approval.
 
 ### 14.5 Already decided elsewhere, restated
 
@@ -540,7 +549,7 @@ No push or publication; the manifest and results live in the implementation repo
 
 | Gate | Evidence this protocol defines | Pass/fail as |
 | --- | --- | --- |
-| M3.0 | Owner record of `p/q` (§14.1) | record exists |
+| M3.0 | Decision record of `p/q` = `1/20` (§14.1, 2026-11-23) | record exists (in this file; the roadmap status is the coordinator's to change) |
 | M3.1 | Manifest; `verify_manifest.py`, and `--licence-dir` at acquisition | exit 0; self-test rejects every broken manifest |
 | M3.2 | Split file and digest; disjointness | `verify_manifest.py` exit 0; digest equality |
 | M3.3 | §8 commands | all exit 0 |

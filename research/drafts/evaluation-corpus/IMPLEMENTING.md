@@ -1,0 +1,39 @@
+# Implementing the M3 evaluation harness
+
+Brief for whoever builds the harness in the implementation repository (`traceweave`, owner column `I`), against protocol [`m3-eval-draft-4`](../evaluation-protocol.md). The protocol governs; this list only orders the work. Decided on 2026-11-23: budget **`1/20`** per unordered repository search, acquisition approved with mechanical replacements, corpus root `~/traceweave-eval` named by `TRACEWEAVE_EVAL_DIR`.
+
+**Conventions for every script.**
+- Exit status: 0 success, 1 a checked condition failed (invalid input, mismatch, refusal), 2 usage, environment, I/O or abort. M3.6 adds 3 (negative-result).
+- `TRACEWEAVE_EVAL_DIR` must be absolute, and outside every version-controlled working tree (contract B1 markers); otherwise exit 2.
+- Committed outputs go under `eval/` in the implementation repository and contain no corpus source bytes. Corpus files, catalogues, report bodies and case bytes stay under `TRACEWEAVE_EVAL_DIR`.
+- JSON outputs are canonical: sorted keys, no insignificant whitespace, integers only where counts, and a final LF.
+- Every script records its own commit and refuses a dirty work tree when writing a committed output.
+
+## Scripts, in order
+
+| # | Script | Inputs | Outputs | Protocol | Pass/fail observable |
+| --- | --- | --- | --- | --- | --- |
+| 1 | `acquire` | `eval/manifest.json` (copy of `manifest-proposal.json`), network to `github.com` | `$DIR/corpus/<lang>/<owner>/<repo>/` at each pinned revision (depth 1), `eval/acquisition.json` (per repository: revision, fetch time, path inventory with SHA-256 and length, acquisition lexing commit) | §3.6 | exit 0; every checkout's `HEAD` equals the manifest revision |
+| 2 | `licence-recheck` | corpus checkouts, manifest | copies of root licence files under `$DIR/licences/<owner>/<repo>/`, then `verify_manifest.py --licence-dir` | §3.2, §3.6 step 1 | exit 0; **any** missing file, blob SHA-1, SHA-256, length or classification difference exits 1 and stops acquisition (fail closed, no replacement) |
+| 3 | `eligibility` | corpus checkouts, acquisition lexing commit | per file: eligibility reason (path rules, `generated`, `lex-error`, `under-16-tokens`, `oversize`), token count, token digest; `eval/eligibility.json` with excluded counts per repository and reason and their denominators | §3.4 | exit 0; lexing commit equals the one in `acquisition.json`; the 5% per language / 25% per repository bound is checked again at script 11 |
+| 4 | `group-split` | manifest walk and pool, `eligibility.json`, every `go.mod` and `Cargo.toml` outside excluded directories | walk continued with `dependency-linked` / `duplicate-content` rejections and replacements (with facts), updated manifest, `eval/splits.tsv`, split digest | §4.1–§4.4 | `verify_manifest.py` exit 0 on the updated manifest; at most 8 replacements per language (a ninth exits 1 and returns to the owner); `sha256sum eval/splits.tsv` equals the recorded digest (M3.2) |
+| 5 | `pilot` | fold-S repositories (first two per language in fold order), the 9 (`k`, `window`) settings | `eval/pilot.json`: per-pair time median and 95th percentile, peak RSS, estimates, any grid reduction | §5.5 | exit 0; comparison outcomes are discarded unread (the script writes no body) |
+| 6 | `generate-cases` | source and host repositories of one split, namespace (`tuning` or `held-out`), generator salt | `cases-<lang>-<namespace>.jsonl` (offsets and digests), case bytes under `$DIR/cases/` | §6 (one function per transformation: `verbatim`, `ws`, `comments-strip`, `comments-add`, `fmt` (Rust only, `rustfmt --edition 2024 --config max_width=50,tab_spaces=2`), `rename`, `reorder`, `split-mix`, `compound`) | exit 0; a second implementation from §6 alone gives byte-identical `cases-*.jsonl` (`cmp`); `held-out` refused (exit 1) unless HEAD descends from the freeze commit and the tree is clean |
+| 7 | `build-suppression` | fold-S eligible files, `k`, `window`, threshold *T* ∈ {2, 3, 5} | suppression catalogue per (language, `k`, `window`, *T*), its SHA-256, `snippet-dropped` count | §5.2 | exit 0; the catalogue validates (contract §3.6); rebuilding gives the same SHA-256 |
+| 8 | `tune` | protocol digest (filled in, committed), fold-E catalogues, fold-E cases and searches, suppression catalogues, budget `1/20` | per configuration: *a*, *r*, cell counts; selected configuration | §5.3–§5.4 | refuses to start (exit 2) unless the protocol file's self-excluding digest equals the committed one; seed-sharing check on `u(pair id, 1) mod 50 = 0` pairs is byte-identical (else exit 2); exit 0 selected by rule 2 (`alarms × 40 ≤ N_E`), 3 by rule 3 |
+| 9 | `freeze` | selection, split digest, manifest digest, configurations, suppression digests, pilot, tolerance, protocol digest, M3.0 commit | `eval/freeze.json` | §8 | exit 0; refuses any budget other than `1/20` (exit 1); lexing commit equals `acquisition.json`'s |
+| 10 | `heldout-run` | `freeze.json`, held-out catalogues at the frozen configuration, held-out cases (script 6 after the freeze) | report bodies under `$DIR/derived/`, `eval/results/heldout/identity.json`, `resources.json` | §8, §9 | refuses to start (exit 1) unless HEAD descends from the freeze commit, the tree is clean and digests match; pair-caching check (1 in 50) and symmetry check (1 in 10) show 0 differences, else exit 2; abort rules of §5.5 exit 2 |
+| 11 | `counts` | report bodies, `cases-*-held-out.jsonl`, `eligibility.json` | `eval/results/heldout/counts.json` (every §10 figure with numerator and denominator, excluded counts per repository and reason), report tables | §10, §11 | exit 0; schema check that every figure has a denominator; exclusion bound of §3.4 checked (over the bound is recorded and makes script 12 an error) |
+| 12 | `m36-verdict` | `counts.json`, `freeze.json`, the §8 ancestry commands | printed verdict with *A*, *N*, `1/20`, intervals, operating characteristics, excluded counts | §12 | **exit 0 met** (`A × 20 ≤ N`; with N = 132, A ≤ 6), **exit 3 negative-result**, **exit 2 error** (N = 0, budget ≠ `1/20`, failed ancestry or lexing-commit check, exclusions over the bound, symmetry or caching difference, aborted run) |
+| 13 | `reproduce` | a clean clone at the first held-out result commit, a fresh `TRACEWEAVE_EVAL_DIR` | reruns scripts 1–4, 7 (frozen *T* only), 6 (`held-out`), 10, 11; resource comparison | §13 | exit 0 when the ancestry commands, licence recheck, split digest, suppression digests, `cases-*-held-out.jsonl` and `counts.json` all match byte for byte (`cmp`) and resources are within tolerance or "not comparable" on another platform |
+
+The §8 ancestry check (M3.3) is the five shell lines in the protocol plus the lexing-commit equality; it can be a small script of its own, run by scripts 12 and 13.
+
+## Order of commits
+
+1. Scripts 1–4 and their outputs (`acquisition.json`, `eligibility.json`, updated manifest, `splits.tsv`): M3.1 and M3.2 evidence.
+2. Script 5 output (`pilot.json`).
+3. In this spec repository: the protocol digest filled in (the protocol freeze). Nothing tunes before this commit.
+4. Scripts 6 (`tuning`), 7 and 8; then script 9 output (`freeze.json`): M3.3.
+5. Scripts 6 (`held-out`), 10 and 11 outputs: the first held-out result commit (M3.4).
+6. Script 13 by a second person (M3.5); script 12 (M3.6), recorded in this repository.

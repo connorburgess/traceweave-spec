@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the M3 corpus manifest (protocol m3-eval-draft-3). Standard library only.
+"""Check the M3 corpus manifest (protocol m3-eval-draft-4). Standard library only.
 
 Usage:
   python3 -I verify_manifest.py [MANIFEST] [--schema SCHEMA]   exit 0 valid, 1 invalid, 2 usage or I/O error

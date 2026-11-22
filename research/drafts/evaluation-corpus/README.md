@@ -1,8 +1,8 @@
 # M3 evaluation corpus: manifest proposal
 
-Status: **proposed, not acquired, 2026-11-22.** Nothing listed here has been downloaded, cloned or extracted. Acquisition needs the owner's approval (roadmap M3.1, [protocol §14.2](../evaluation-protocol.md#142-acquisition-approval-m31)).
+Status: **proposed, not acquired, 2026-11-22.** Nothing listed here has been downloaded, cloned or extracted. Acquisition was approved on 2026-11-23, with the mechanical replacements, storage at `~/traceweave-eval` and the licence recheck failing closed ([protocol §14.2](../evaluation-protocol.md#142-acquisition-approval-m31)).
 
-These files accompany the [evaluation protocol](../evaluation-protocol.md) (`m3-eval-draft-3`). They are research material and change nothing normative.
+These files accompany the [evaluation protocol](../evaluation-protocol.md) (`m3-eval-draft-4`). They are research material and change nothing normative.
 
 ## Files
 
@@ -11,6 +11,7 @@ These files accompany the [evaluation protocol](../evaluation-protocol.md) (`m3-
 | `manifest-proposal.json` | The pool snapshots (100 GitHub search results per language, retrieved 2026-11-22), the selection walk with every verdict and the facts behind it, and 48 proposed entries (24 Go, 24 Rust) with pinned revision, licence files and their digests, licence expression, redistribution status, sizes, split group, provisional split and rationale |
 | `manifest.schema.json` | JSON Schema 2020-12 for the manifest. It uses only the keywords `verify_manifest.py` interprets |
 | `verify_manifest.py` | Checker, Python standard library only, no network |
+| `IMPLEMENTING.md` | Implementer brief: every harness script in order, with inputs, outputs, protocol section and pass/fail observable |
 
 ## Checking
 
@@ -57,3 +58,7 @@ The entries, revisions, licence files, walk, sizes and split digest (`146acfc2�
 ## Changes for draft-3
 
 Only `protocolVersion`, now `m3-eval-draft-3`. The draft-3 changes (Go `rename` scope, inserted-`;` statement ends, the lexing-commit pin and excluded-file bound, struct/interface braces) apply at acquisition and case generation, so the entries, walk and split digest are unchanged and the checker's rules are unchanged.
+
+## Changes for draft-4
+
+Only `protocolVersion`, now `m3-eval-draft-4`, which records the owner decisions (budget `1/20`, acquisition approved, storage `~/traceweave-eval`). Entries, walk and split digest are unchanged. `IMPLEMENTING.md` is new.
