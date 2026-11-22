@@ -1,4 +1,4 @@
-"""Reference lexer for the draft ts-tokens / tsx-tokens profiles (draft-1).
+"""Reference lexer for the draft ts-tokens / tsx-tokens profiles (draft-2).
 
 Written from the profile text (extraction-profile-typescript.md §3-§6) for the
 checker. It is NOT how the vectors were made: their token streams are
@@ -107,11 +107,51 @@ class LexError(Exception):
 
 
 class Lexer:
+    """The profile's lexer. The small policy methods below are the rule choices the
+    review found unpinned; check_vectors.py overrides them to build wrong lexers."""
+
     def __init__(self, text, jsx):
         self.s, self.n, self.jsx = text, len(text), jsx
         self.toks = []          # (class, start_index, end_index)
         self.stack = []         # dicts with key 'k' in ( [ { ${ jbrace tag elem
         self.expr_end = False
+        self.nl_before = False  # a line terminator lies between the previous token and this one
+
+    # ------------------------------------------------------------ policies (§4.9, §5)
+    def keyword_expr_end(self, word):
+        return word in EXPR_END_KEYWORDS
+
+    def closer_expr_end(self, entry, c):
+        """exprEnd after a matching ')', ']' or '}' (§4.9)."""
+        return not entry.get("header", False) and not entry.get("arrow", False)
+
+    def prefix_like_expr_end(self, p):
+        """exprEnd after '!', '++', '--': unchanged unless a line terminator precedes it (§4.9)."""
+        return False if self.nl_before else self.expr_end
+
+    def element_end_expr_end(self):
+        return True
+
+    def jsx_trim(self, ch):
+        return ch in TRIVIA_CHARS
+
+    def attr_element_ok(self, prev):
+        return prev == "="
+
+    def string_breaks(self):
+        return ("\n", "\r")
+
+    def zero_separator_ok(self):
+        return False
+
+    def lookahead_escapes_ok(self):
+        return False
+
+    def lookahead_comment_after_extends(self):
+        return False  # unterminated comment anywhere in the look-ahead: JSX (§5.2)
+
+    def nonoctal_fraction_separators_ok(self):
+        return True
 
     # ------------------------------------------------------------ helpers
     def at(self, i):
@@ -202,7 +242,9 @@ class Lexer:
         while True:
             top = self.stack[-1]["k"] if self.stack else None
             if top != "elem":
-                i = self.skip_trivia(i)
+                j = self.skip_trivia(i)
+                self.nl_before = any(ch in LINE_TERMINATORS for ch in s[i:j])
+                i = j
             if i >= self.n:
                 break
             if top == "elem":
@@ -233,7 +275,7 @@ class Lexer:
             after_dot = prev in (".", "?.") and self.toks[-1][0] == "punct"
             if not esc and word in KEYWORDS and not after_dot:
                 self.emit("keyword", i, j)
-                self.expr_end = word in EXPR_END_KEYWORDS
+                self.expr_end = self.keyword_expr_end(word)
             else:
                 self.emit("ident", i, j)
                 self.expr_end = True
@@ -264,8 +306,9 @@ class Lexer:
             return i + 1
         if c in "([{":
             hdr = bool(c == "(" and self.toks and self.toks[-1][0] == "keyword" and prev in HEADER_KEYWORDS)
+            arrow = bool(c == "{" and self.toks and self.toks[-1][0] == "punct" and prev == "=>")
             self.emit("punct", i, i + 1)
-            self.stack.append({"k": c, "at": i, "header": hdr})
+            self.stack.append({"k": c, "at": i, "header": hdr, "arrow": arrow})
             self.expr_end = False
             return i + 1
         if c in ")]}":
@@ -282,7 +325,7 @@ class Lexer:
                 raise LexError("unbalanced-delimiter", i)
             self.stack.pop()
             self.emit("punct", i, i + 1)
-            self.expr_end = not t.get("header", False)
+            self.expr_end = self.closer_expr_end(t, c)
             return i + 1
         for p in PUNCTUATORS:
             if s.startswith(p, i):
@@ -291,56 +334,62 @@ class Lexer:
                 if p in "{}()[]":
                     continue
                 self.emit("punct", i, i + len(p))
-                if p not in ("!", "++", "--"):
+                if p in ("!", "++", "--"):
+                    self.expr_end = self.prefix_like_expr_end(p)
+                else:
                     self.expr_end = False
                 return i + len(p)
         raise LexError("illegal-character", i)
 
     def generic_arrow(self, i):
-        """§5.3 look-ahead at a JSX-position '<' in tsx-tokens. True: not JSX."""
-        try:
-            j = self.skip_trivia(i + 1, errors=False)
-            if j < 0:
-                return False
-            r = self.ident_name(j)
-            if r is None:
-                return False
-            w1 = self.s[j:r[0]]
-            j = r[0]
-            if w1 == "const" and not r[1]:
-                j = self.skip_trivia(j, errors=False)
-                if j < 0:
-                    return False
+        """§5.2 look-ahead at a JSX-position '<' in tsx-tokens. True: generic arrow, not JSX."""
+        def name(j):
+            # An escape-free IdentifierName at j, or None. A '\\' where a name is expected,
+            # or an escape inside it, makes the '<' JSX (§5.2 rule 1).
+            if j < 0 or not self.starts_ident(j):
+                return None
+            try:
                 r = self.ident_name(j)
-                if r is None:
-                    return False
-                j = r[0]
-            elif not r[1] and w1 in RESERVED_WORDS:
-                return False
-            j = self.skip_trivia(j, errors=False)
-            if j < 0:
-                return False
-            c = self.at(j)
-            if c == ",":
-                return True
-            if c == "=" and self.at(j + 1) not in ("=", ">"):
-                return True
-            r = self.ident_name(j) if self.starts_ident(j) else None
-            if r is not None and not r[1] and self.s[j:r[0]] == "extends":
-                k = self.skip_trivia(r[0], errors=False)
-                if k < 0:
-                    return False
-                c4 = self.at(k)
-                if c4 == "=" and self.at(k + 1) not in ("=", ">"):
-                    return False
-                if c4 == ">":
-                    return False
-                if c4 == "/" and self.at(k + 1) != "=":
-                    return False
-                return True
+            except LexError:
+                return None
+            if r is None or (r[1] and not self.lookahead_escapes_ok()):
+                return None
+            return r[0]
+
+        j = self.skip_trivia(i + 1, errors=False)
+        e = name(j)
+        if e is None:
             return False
-        except LexError:
+        w1 = self.s[j:e]
+        if w1 == "const":
+            j = self.skip_trivia(e, errors=False)
+            e = name(j)
+            if e is None:
+                return False
+        elif w1 in RESERVED_WORDS:
             return False
+        j = self.skip_trivia(e, errors=False)
+        if j < 0:
+            return False
+        c = self.at(j)
+        if c == ",":
+            return True
+        if c == "=" and self.at(j + 1) not in ("=", ">"):
+            return True
+        e = name(j)
+        if e is not None and self.s[j:e] == "extends":
+            k = self.skip_trivia(e, errors=False)
+            if k < 0:
+                return self.lookahead_comment_after_extends()
+            c4 = self.at(k)
+            if c4 == "=" and self.at(k + 1) not in ("=", ">"):
+                return False
+            if c4 == ">":
+                return False
+            if c4 == "/" and self.at(k + 1) != "=":
+                return False
+            return True
+        return False
 
     # ------------------------------------------------------------ literals
     def number(self, i):
@@ -377,14 +426,14 @@ class Lexer:
             if all(ch in "01234567" for ch in s[i:j]):
                 end = j  # LegacyOctalIntegerLiteral: no fraction, exponent or suffix
             else:
-                end = self.fraction_exponent(i, j)
+                end = self.fraction_exponent(i, j, nonoctal=True)
         elif c == ".":
             run, j = digits(i + 1, DEC)
             if run is None:
                 raise LexError("malformed-literal", i)
             end = self.exponent(i, j)
         else:
-            if c == "0":
+            if c == "0" and not (self.zero_separator_ok() and self.at(i + 1) == "_"):
                 j = i + 1
             else:
                 run, j = digits(i, DEC)
@@ -401,26 +450,27 @@ class Lexer:
         self.expr_end = True
         return end
 
-    def fraction_exponent(self, i, j):
+    def fraction_exponent(self, i, j, nonoctal=False):
         s = self.s
+        sep = not nonoctal or self.nonoctal_fraction_separators_ok()
         if self.at(j) == ".":
             k = j + 1
-            while k < self.n and (s[k] in DEC or s[k] == "_"):
+            while k < self.n and (s[k] in DEC or (sep and s[k] == "_")):
                 k += 1
             run = s[j + 1:k]
             if run and (run[0] == "_" or run[-1] == "_" or "__" in run):
                 raise LexError("malformed-literal", i)
             j = k
-        return self.exponent(i, j)
+        return self.exponent(i, j, sep)
 
-    def exponent(self, i, j):
+    def exponent(self, i, j, sep=True):
         s = self.s
         if self.at(j) in ("e", "E") and self.at(j) != "":
             k = j + 1
             if self.at(k) in ("+", "-") and self.at(k) != "":
                 k += 1
             m = k
-            while m < self.n and (s[m] in DEC or s[m] == "_"):
+            while m < self.n and (s[m] in DEC or (sep and s[m] == "_")):
                 m += 1
             run = s[k:m]
             if not run or run[0] == "_" or run[-1] == "_" or "__" in run:
@@ -436,7 +486,7 @@ class Lexer:
             c = s[j]
             if c == q:
                 break
-            if c in ("\n", "\r"):
+            if c in self.string_breaks():
                 raise LexError("unterminated-literal", i)
             if c == "\\":
                 if j + 1 >= self.n:
@@ -518,7 +568,7 @@ class Lexer:
     # ------------------------------------------------------------ JSX
     def element_done(self):
         if not self.stack or self.stack[-1]["k"] not in ("elem", "tag"):
-            self.expr_end = True
+            self.expr_end = self.element_end_expr_end()
 
     def children(self, i):
         s = self.s
@@ -540,9 +590,9 @@ class Lexer:
         while j < self.n and s[j] not in "{<>}":
             j += 1
         a, b = i, j
-        while a < b and s[a] in TRIVIA_CHARS:
+        while a < b and self.jsx_trim(s[a]):
             a += 1
-        while b > a and s[b - 1] in TRIVIA_CHARS:
+        while b > a and self.jsx_trim(s[b - 1]):
             b -= 1
         if a < b:
             self.emit("jsx-text", a, b)
@@ -602,7 +652,7 @@ class Lexer:
             self.emit("jsx-string", i, j + 1)
             return j + 1
         if c == "<":
-            if prev != "=":
+            if not self.attr_element_ok(prev):
                 raise LexError("illegal-character", i)
             self.emit("punct", i, i + 1)
             self.stack.append({"k": "tag", "at": i, "closing": False, "started": False, "slash": False})
@@ -616,9 +666,9 @@ class Lexer:
         raise LexError("illegal-character", i)
 
 
-def lex(text, profile):
+def lex(text, profile, lexer=Lexer):
     """Returns ('ok', [(class, start, end)]) with character indices, or ('error', code, index)."""
-    lx = Lexer(text, PROFILES[profile])
+    lx = lexer(text, PROFILES[profile])
     try:
         return ("ok", lx.run())
     except LexError as e:

@@ -141,7 +141,9 @@ function compare(mine, theirs, adj) {
 // ---------------------------------------------------------------- vectors
 const report = { typescript: ts.version, vectors: [], tables: {} };
 const tally = { ok_agree: 0, ok_agree_raw: 0, ok_diverge: 0, err_same_offset: 0, err_other_offset: 0,
-  err_ts_accepts: 0, prelex_not_compared: 0 };
+  err_ts_accepts: 0, prelex_not_compared: 0, documented_divergence: 0 };
+// Vectors tagged "departure" pin a deliberate divergence (profile §9); they must diverge.
+const isDeparture = v => (v.tags || []).includes("departure");
 const adj = {};
 for (const [file, kind, name] of FILES) {
   const doc = JSON.parse(fs.readFileSync(path.join(DIR, file), "utf8"));
@@ -169,7 +171,8 @@ for (const [file, kind, name] of FILES) {
     const diags = sf.parseDiagnostics.map(d => ({ code: d.code, offset: bm[d.start],
       message: ts.flattenDiagnosticMessageText(d.messageText, " ") }));
     if (r.status === "error") {
-      if (diags.length === 0) { rec.outcome = "DIVERGE: profile rejects, TypeScript parses without diagnostics"; tally.err_ts_accepts++; }
+      if (diags.length === 0 && isDeparture(v)) { rec.outcome = "documented divergence: profile rejects, TypeScript parses"; tally.documented_divergence++; }
+      else if (diags.length === 0) { rec.outcome = "DIVERGE: profile rejects, TypeScript parses without diagnostics"; tally.err_ts_accepts++; }
       else if (diags.some(d => d.offset === r.error.offset)) { rec.outcome = "agree: both reject, a TS diagnostic at the same offset"; tally.err_same_offset++; }
       else { rec.outcome = "agree on rejection, offsets differ"; tally.err_other_offset++; }
       rec.profile = `${r.error.code}@${r.error.offset}`;
@@ -183,7 +186,10 @@ for (const [file, kind, name] of FILES) {
     if (diags.length === 0) {
       const d = compare(mine, toBytes(parserTokens(sf, text)), local);
       rec.oracle = "parser";
-      if (d) { rec.outcome = "DIVERGE: " + d; tally.ok_diverge++; } else { rec.outcome = "agree"; tally.ok_agree++; }
+      if (d && isDeparture(v)) { rec.outcome = "documented divergence: " + d; tally.documented_divergence++; }
+      else if (d) { rec.outcome = "DIVERGE: " + d; tally.ok_diverge++; }
+      else if (isDeparture(v)) { rec.outcome = "UNEXPECTED agreement on a departure vector"; tally.ok_diverge++; }
+      else { rec.outcome = "agree"; tally.ok_agree++; }
     } else {
       const d = compare(mine, toBytes(scannerTokens(text, variant)), local);
       rec.oracle = "raw scanner (TS parse diagnostics: " + diags.map(x => `${x.code}@${x.offset}`).join(", ") + ")";
@@ -196,8 +202,7 @@ for (const [file, kind, name] of FILES) {
 }
 
 // ---------------------------------------------------------------- corpus (--corpus)
-// Every lib/*.d.ts (ts-tokens) and lib/*.js (tsx-tokens, the profile's mapping for
-// .js) file shipped in the pinned typescript package, lexed by ../tslex.py via
+// Every lib/*.d.ts and lib/*.js file (both ts-tokens; .js maps to ts-tokens in stage 1) shipped in the pinned typescript package, lexed by ../tslex.py via
 // lex_json.py with no size limit, compared with the TypeScript parser's tokens.
 // .d.ts files are outside the profile's input scope (§2); they are used here only
 // as lexer test material.
@@ -205,7 +210,7 @@ if (process.argv.includes("--corpus")) {
   const { spawnSync } = require("child_process");
   const lib = path.join(__dirname, "node_modules", "typescript", "lib");
   const groups = [["ts-tokens", ts.ScriptKind.TS, fs.readdirSync(lib).filter(f => f.endsWith(".d.ts"))],
-    ["tsx-tokens", ts.ScriptKind.JS, fs.readdirSync(lib).filter(f => f.endsWith(".js"))]];
+    ["ts-tokens", ts.ScriptKind.JS, fs.readdirSync(lib).filter(f => f.endsWith(".js"))]];
   const corpus = { files: 0, bytes: 0, tokens: 0, agree: 0, diverge: [], tsDiagnostics: [] };
   for (const [profile, kind, names] of groups) {
     const res = spawnSync("python3", ["-I", path.join(__dirname, "lex_json.py"), profile,
@@ -237,7 +242,23 @@ if (process.argv.includes("--corpus")) {
 // it diverge. Any outcome other than the expected one is printed as UNEXPECTED.
 const PROBES = [
   ["ts-tokens", "if (x) {}\n/re/.test(s);\n", "diverge:TSOD-3 '}' is always followed by division"],
-  ["ts-tokens", "function f() {}\n/re/.test(s);\n", "diverge:TSOD-3 '}' is always followed by division"],
+  ["ts-tokens", "function f() {}\n/re/.test(s);\n", "diverge:TSOD-3 function-declaration '}' is followed by division"],
+  ["ts-tokens", "class C {}\n/re/.test(s);\n", "diverge:TSOD-3 class-declaration '}' is followed by division"],
+  ["ts-tokens", "x = await / 2;\n", "diverge:TSOD-3 'await' is always a keyword (script-code identifier misread)"],
+  ["ts-tokens", "x = (a) => {}\n/re/.test(s);\n", "agree"],
+  ["ts-tokens", "a\n++/re/.lastIndex;\n", "agree"],
+  ["ts-tokens", "b\n!/x/.test(s);\n", "agree"],
+  ["ts-tokens", "x = {} / 2;\ny = class {} / 2;\n", "agree"],
+  ["ts-tokens", "s = 'a\rb';\n", "agree"],
+  ["ts-tokens", "x = 0_1;\n", "agree"],
+  ["ts-tokens", "o = 08.1_1;\n", "diverge:D-4 NonOctalDecimal literal is lexically valid (TS: strict-mode diagnostic)"],
+  ["ts-tokens", "const a = <div>hi</div>;\n", "agree"],
+  ["tsx-tokens", "const z = <div>a</div> / 2;\n", "agree"],
+  ["tsx-tokens", "const a = <a <b/> />;\n", "agree"],
+  ["tsx-tokens", "class A { m() { return new <T>(x: T) => x; } }\n", "agree"],
+  ["tsx-tokens", "interface I { new <T>(x: T): T }\n", "diverge:TSOD-8 construct signature in tsx"],
+  ["tsx-tokens", "type U = A | (<T>() => T);\n", "diverge:TSOD-8 generic function type after '(' in tsx"],
+  ["tsx-tokens", "f<(<T>(x: T) => T)>(g);\n", "diverge:TSOD-8 generic function type in a type argument in tsx"],
   ["ts-tokens", "for (const m of /a/g.exec(s)) {}\n", "diverge:TSOD-3 contextual 'of' is an ident"],
   ["tsx-tokens", "type F = <T>(x: T) => T;\n", "diverge:TSOD-5 generic function type after '=' in tsx"],
   ["tsx-tokens", "interface I { <T>(x: T): T }\n", "diverge:TSOD-5 generic call signature in tsx"],

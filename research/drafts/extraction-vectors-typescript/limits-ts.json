@@ -1,9 +1,9 @@
 {
  "contract": "traceweave-token-winnow-draft-1",
  "profile": "ts-tokens",
- "profileVersion": "draft-1",
+ "profileVersion": "draft-2",
  "configFile": "config-ts-limit16.json",
- "configSha256": "b4f9f6347726610ec242c970f1e53f26184ddced5a3bc928f66e65a44bf1373d",
+ "configSha256": "94403dd3e71a8105a9dcec894fc0d05d09cb771efaada28802dcf43ecd08f8d6",
  "k": 5,
  "window": 4,
  "lexingCheck": "Token streams are hand-derived (harness/vector_sources.py); check_vectors.py re-lexes every input with tslex.py and harness/crosscheck.js compares them with the TypeScript 6.0.3 parser and scanner.",
@@ -84,7 +84,7 @@
       "kgrams": [
        {
         "position": 0,
-        "hash": "c9f5721c70bb1b1b",
+        "hash": "812592637836a039",
         "span": [
          0,
          12
@@ -92,7 +92,7 @@
        },
        {
         "position": 1,
-        "hash": "f0aed5c141ffb263",
+        "hash": "eae68be0d7d723ed",
         "span": [
          4,
          14
@@ -100,7 +100,7 @@
        },
        {
         "position": 2,
-        "hash": "66bf4e503fd627bc",
+        "hash": "2726c798457d7856",
         "span": [
          7,
          15
@@ -114,7 +114,7 @@
       "fingerprints": [
        {
         "position": 2,
-        "hash": "66bf4e503fd627bc",
+        "hash": "2726c798457d7856",
         "span": [
          7,
          15
@@ -123,19 +123,26 @@
       ]
      },
      "normalized": {
+      "tokenIndices": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5
+      ],
       "values": [
        "let",
        "",
        "=",
        "",
        "+",
-       "",
-       ";"
+       ""
       ],
       "kgrams": [
        {
         "position": 0,
-        "hash": "d22aa61d1611ec99",
+        "hash": "af71fafc6d0dd733",
         "span": [
          0,
          12
@@ -143,18 +150,10 @@
        },
        {
         "position": 1,
-        "hash": "56b910302d696753",
+        "hash": "2fc75cdfa0a857ae",
         "span": [
          4,
          14
-        ]
-       },
-       {
-        "position": 2,
-        "hash": "5f249664f7ca35b4",
-        "span": [
-         7,
-         15
         ]
        }
       ],
@@ -165,7 +164,7 @@
       "fingerprints": [
        {
         "position": 1,
-        "hash": "56b910302d696753",
+        "hash": "2fc75cdfa0a857ae",
         "span": [
          4,
          14

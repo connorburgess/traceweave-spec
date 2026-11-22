@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build ts.json, tsx.json and limits-ts.json from the hand-written sources.
+"""Build ts.json, tsx.json and limits-ts.json (draft-2) from the hand-written sources.
 
 This adds spans, k-grams, hashes and winnowing to hand-derived token streams.
 It does not lex: a token's span is the first occurrence of its hand-written
@@ -19,12 +19,13 @@ sys.path.insert(0, str(HERE))
 import vector_sources as src  # noqa: E402
 
 DOMAIN = b"traceweave/token-kgram/draft-1"
+VERSION = "draft-2"
 LITERALS = {"ident", "privatename", "number", "bigint", "string", "template", "template-head", "template-middle",
             "template-tail", "regex", "jsx-text", "jsx-string"}
 
 
 def config_bytes(profile, limit):
-    return ('{"contract":"traceweave-token-winnow-draft-1","profile":"%s","profileVersion":"draft-1",'
+    return ('{"contract":"traceweave-token-winnow-draft-1","profile":"%s","profileVersion":"draft-2",'
             '"channels":["exact","normalized"],"k":5,"window":4,"hash":"sha256-first8-u64be",'
             '"maxInputBytes":%d}\n' % (profile, limit)).encode()
 
@@ -35,7 +36,7 @@ def lp(b):
 
 def kgram_hash(profile, channel, k, pairs):
     h = hashlib.sha256()
-    h.update(lp(DOMAIN) + lp(profile.encode()) + lp(b"draft-1") + lp(channel.encode()) + k.to_bytes(4, "big"))
+    h.update(lp(DOMAIN) + lp(profile.encode()) + lp(VERSION.encode()) + lp(channel.encode()) + k.to_bytes(4, "big"))
     for cls, val in pairs:
         h.update(lp(cls.encode()) + lp(val.encode()))
     return h.digest()[:8].hex()
@@ -89,13 +90,16 @@ def build(vid, tags, desc, inp, exp, profile, limit):
     res = {"status": "ok" if len(toks) >= k else "insufficient-tokens", "tokenCount": len(toks), "tokens": toks,
            "channels": {}}
     for ch in ("exact", "normalized"):
-        vals = [t["text"] if ch == "exact" or t["class"] not in LITERALS else "" for t in toks]
-        pairs = [(t["class"], x) for t, x in zip(toks, vals)]
+        # Profile §6 (TSOD-5b (c)): the normalized stream omits every punct ';'.
+        idx = [n for n, t in enumerate(toks) if ch == "exact" or (t["class"], t["text"]) != ("punct", ";")]
+        sub = [toks[n] for n in idx]
+        vals = [t["text"] if ch == "exact" or t["class"] not in LITERALS else "" for t in sub]
+        pairs = [(t["class"], x) for t, x in zip(sub, vals)]
         kg = [{"position": i, "hash": kgram_hash(profile, ch, k, pairs[i:i + k]),
-               "span": [toks[i]["span"][0], toks[i + k - 1]["span"][1]]} for i in range(max(0, len(toks) - k + 1))]
+               "span": [sub[i]["span"][0], sub[i + k - 1]["span"][1]]} for i in range(max(0, len(sub) - k + 1))]
         sel, partial = winnow([int(g["hash"], 16) for g in kg], w)
         fps = [kg[p] for p in sorted(set(sel))]
-        c = {"values": vals} if ch == "normalized" else {}
+        c = {"tokenIndices": idx, "values": vals} if ch == "normalized" else {}
         c.update({"kgrams": kg, "windowSelections": sel, "partialWindow": partial, "fingerprints": fps})
         res["channels"][ch] = c
     v["result"] = res
@@ -105,7 +109,7 @@ def build(vid, tags, desc, inp, exp, profile, limit):
 def write(name, profile, cfgfile, limit, items):
     cfg = config_bytes(profile, limit)
     (OUT / cfgfile).write_bytes(cfg)
-    doc = {"contract": "traceweave-token-winnow-draft-1", "profile": profile, "profileVersion": "draft-1",
+    doc = {"contract": "traceweave-token-winnow-draft-1", "profile": profile, "profileVersion": VERSION,
            "configFile": cfgfile, "configSha256": hashlib.sha256(cfg).hexdigest(), "k": 5, "window": 4,
            "lexingCheck": "Token streams are hand-derived (harness/vector_sources.py); check_vectors.py re-lexes "
                           "every input with tslex.py and harness/crosscheck.js compares them with the TypeScript "

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Checker for the draft ts-tokens / tsx-tokens vectors (draft-1).
+"""Checker for the draft ts-tokens / tsx-tokens vectors (draft-2).
 
     python3 -I research/drafts/extraction-vectors-typescript/check_vectors.py
 
@@ -15,8 +15,10 @@ Standard library only. For every vector it:
   * recomputes normalized values, k-gram bytes, hashes and winnowing
     (sort-based selection, a different formulation from the builder);
   * checks the comment/whitespace and rename pair invariants;
-and then runs a mutation self-test: each corruption, rehashed so only the
-targeted layer is wrong, must be rejected.
+and then runs two self-tests: each vector corruption (rehashed so only the
+targeted layer is wrong) must be rejected, and each wrong-but-plausible lexer
+(a tslex.Lexer subclass with one rule choice changed) substituted for the
+profile's lexer must make the checker fail on the shipped vectors.
 """
 import base64
 import copy
@@ -33,8 +35,11 @@ DOMAIN = b"traceweave/token-kgram/draft-1"
 CONTRACT = "traceweave-token-winnow-draft-1"
 KEY_ORDER = ["contract", "profile", "profileVersion", "channels", "k", "window", "hash", "maxInputBytes"]
 FILES = [("ts.json", "ts-tokens"), ("tsx.json", "tsx-tokens"), ("limits-ts.json", "ts-tokens")]
+VERSION = "draft-2"
 PAIRS = {"format": [("ts-format-a", "ts-format-b"), ("tsx-format-a", "tsx-format-b")],
-         "rename": [("ts-rename-a", "ts-rename-b")]}
+         "rename": [("ts-rename-a", "ts-rename-b")],
+         "semi": [("ts-semi-a", "ts-semi-b")]}
+BOUNDS = {"k": 16, "window": 128, "maxInputBytes": 8388608}  # contract §10 step 5 / §10a (OD-21)
 
 
 class CheckError(Exception):
@@ -73,10 +78,10 @@ def validate_config(raw):
         require(isinstance(cfg[key], str) and cfg[key] and all(c in "abcdefghijklmnopqrstuvwxyz0123456789.-"
                                                                 for c in cfg[key]), key)
     for key in ("k", "window", "maxInputBytes"):
-        require(type(cfg[key]) is int and 1 <= cfg[key] <= 2 ** 32 - 1, key)
+        require(type(cfg[key]) is int and 1 <= cfg[key] <= BOUNDS[key], key)
     require(cfg["channels"] == ["exact", "normalized"], "channels")
     require(cfg["contract"] == CONTRACT and cfg["hash"] == "sha256-first8-u64be", "contract/hash")
-    require(cfg["profile"] in tslex.PROFILES and cfg["profileVersion"] == "draft-1", "profile pair")
+    require(cfg["profile"] in tslex.PROFILES and cfg["profileVersion"] == VERSION, "profile pair")
     canon = json.dumps(cfg, separators=(",", ":"), ensure_ascii=False) + "\n"
     require(canon.encode() == raw, "not canonical")
     return cfg
@@ -122,17 +127,24 @@ def select(hashes, w):
     return [sorted(range(a, b), key=lambda j: (hashes[j], -j))[0] for a, b in wins], m < w
 
 
-def channels_for(tokens, cfg):
+def normalized_keep(t):
+    """Profile §6 (TSOD-5b (c)): the normalized stream omits punct ';'."""
+    return not (t["class"] == "punct" and t["text"] == ";")
+
+
+def channels_for(tokens, cfg, keep_semicolons=False):
     k, w = cfg["k"], cfg["window"]
     out = {}
     for ch in ("exact", "normalized"):
-        vals = [t["text"] if ch == "exact" else normalized(t["class"], t["text"]) for t in tokens]
-        pairs = [(t["class"], v) for t, v in zip(tokens, vals)]
+        idx = [n for n, t in enumerate(tokens) if ch == "exact" or keep_semicolons or normalized_keep(t)]
+        sub = [tokens[n] for n in idx]
+        vals = [t["text"] if ch == "exact" else normalized(t["class"], t["text"]) for t in sub]
+        pairs = [(t["class"], v) for t, v in zip(sub, vals)]
         kg = [{"position": i, "hash": kgram_hash(cfg, ch, pairs[i:i + k]),
-               "span": [tokens[i]["span"][0], tokens[i + k - 1]["span"][1]]}
-              for i in range(max(0, len(tokens) - k + 1))]
+               "span": [sub[i]["span"][0], sub[i + k - 1]["span"][1]]}
+              for i in range(max(0, len(sub) - k + 1))]
         sel, partial = select([int(g["hash"], 16) for g in kg], w)
-        c = {"values": vals} if ch == "normalized" else {}
+        c = {"tokenIndices": idx, "values": vals} if ch == "normalized" else {}
         c.update({"kgrams": kg, "windowSelections": sel, "partialWindow": partial,
                   "fingerprints": [kg[p] for p in sorted(set(sel))]})
         out[ch] = c
@@ -158,7 +170,7 @@ def first_invalid_utf8(data):
         return e.start
 
 
-def expected_result(data, cfg):
+def expected_result(data, cfg, lexer=tslex.Lexer):
     """('error', code, byte offset) or ('ok', [(class, start, end)] in bytes)."""
     if len(data) > cfg["maxInputBytes"]:
         return ("error", "input-too-large", 0)
@@ -174,7 +186,7 @@ def expected_result(data, cfg):
             return ("error", "bom", boff[i])
         if ch == "\x00":
             return ("error", "nul", boff[i])
-    r = tslex.lex(text, cfg["profile"])
+    r = tslex.lex(text, cfg["profile"], lexer)
     if r[0] == "error":
         return ("error", r[1], boff[r[2]])
     return ("ok", [(c, boff[a], boff[b]) for c, a, b in r[1]])
@@ -226,11 +238,11 @@ def stream_invariants(v, data, cfg):
 
 # ------------------------------------------------------------------ vector check
 
-def check_vector(v, cfg, stats):
+def check_vector(v, cfg, stats, lexer=tslex.Lexer):
     data = base64.b64decode(v["inputBase64"])
     if v.get("inputText") is not None:
         require(v["inputText"].encode("utf-8") == data, "inputText differs from inputBase64")
-    exp = expected_result(data, cfg)
+    exp = expected_result(data, cfg, lexer)
     r = v["result"]
     if exp[0] == "error":
         require(r["status"] == "error", f"expected error {exp[1]}@{exp[2]}, vector has {r['status']}")
@@ -277,6 +289,15 @@ def check_pairs(by_id):
             require([g["hash"] for g in ra["channels"]["exact"]["kgrams"]]
                     == [g["hash"] for g in rb["channels"]["exact"]["kgrams"]], f"format pair {a}/{b}: exact hashes")
             n += 1
+    for a, b in PAIRS["semi"]:
+        if a in by_id and b in by_id:
+            ra, rb = by_id[a]["result"], by_id[b]["result"]
+            require([g["hash"] for g in ra["channels"]["normalized"]["kgrams"]]
+                    == [g["hash"] for g in rb["channels"]["normalized"]["kgrams"]],
+                    f"semi pair {a}/{b}: normalized hashes differ")
+            require([g["hash"] for g in ra["channels"]["exact"]["kgrams"]]
+                    != [g["hash"] for g in rb["channels"]["exact"]["kgrams"]], "semi pair exact hashes equal")
+            n += 1
     for a, b in PAIRS["rename"]:
         if a in by_id and b in by_id:
             ra, rb = by_id[a]["result"], by_id[b]["result"]
@@ -290,14 +311,14 @@ def check_pairs(by_id):
     return n
 
 
-def run_file(doc, cfg):
+def run_file(doc, cfg, lexer=tslex.Lexer):
     stats = {"tokens": 0, "kgrams": 0, "fingerprints": 0, "errors": 0, "tie-windows": 0, "classes": set()}
     by_id = {}
     for v in doc["vectors"]:
         require(v["id"] not in by_id, f"duplicate id {v['id']}")
         by_id[v["id"]] = v
         try:
-            check_vector(v, cfg, stats)
+            check_vector(v, cfg, stats, lexer)
         except CheckError as e:
             raise CheckError(f"{v['id']}: {e}")
     stats["pairs"] = check_pairs(by_id)
@@ -475,12 +496,142 @@ def mutations():
             c["windowSelections"] = sel
             c["fingerprints"] = [c["kgrams"][p] for p in sorted(set(sel))]
 
+    @add("ts.json", "ts-semi-a", "normalized channel keeps ';' (draft-1 rule)", rehash=False)
+    def _(v):
+        v["result"]["channels"] = channels_for(v["result"]["tokens"], CFG["ts.json"], keep_semicolons=True)
+
+    @add("ts.json", "ts-newline-prefix-regex", "'++' after a line break treated as postfix (regex as division)")
+    def _(v):
+        ts = v["result"]["tokens"]
+        i = find(v, "/re/")
+        a = ts[i]["span"][0]
+        ts[i:i + 1] = [tok("punct", "/", a), tok("ident", "re", a + 1), tok("punct", "/", a + 3)]
+
     @add("ts.json", "ts-exact-k", "hash corrupted", rehash=False)
     def _(v):
         g = v["result"]["channels"]["exact"]["kgrams"][0]
         g["hash"] = "%016x" % (int(g["hash"], 16) ^ 1)
 
     return M
+
+
+CFG = {}
+
+
+# ------------------------------------------------------------------ wrong-lexer self-test
+# Each class changes exactly one rule choice. V1-V26 numbering follows the review
+# (research/reviews/extraction-profile-typescript-review.md §3); W-variants are added here.
+
+class V1(tslex.Lexer):
+    """'}' always followed by a regex."""
+    def closer_expr_end(self, entry, c):
+        return False if c == "}" else super().closer_expr_end(entry, c)
+
+
+class V5(tslex.Lexer):
+    """'await' and 'yield' end an expression."""
+    def keyword_expr_end(self, word):
+        return word in ("await", "yield") or super().keyword_expr_end(word)
+
+
+class V25(tslex.Lexer):
+    """Every keyword ends an expression except a short operator-like list."""
+    def keyword_expr_end(self, word):
+        return word not in ("return", "typeof", "case", "in", "instanceof", "delete", "void", "new", "else", "do")
+
+
+class V22(tslex.Lexer):
+    """exprEnd false after a JSX element."""
+    def element_end_expr_end(self):
+        return False
+
+
+class V11(tslex.Lexer):
+    """JSX text trimmed with ASCII white space only."""
+    def jsx_trim(self, ch):
+        return ch in " \t\n\r\x0b\x0c"
+
+
+class V21(tslex.Lexer):
+    """Attribute-value '<' allowed anywhere in a tag."""
+    def attr_element_ok(self, prev):
+        return True
+
+
+class V13(tslex.Lexer):
+    """A lone CR does not end a string."""
+    def string_breaks(self):
+        return ("\n",)
+
+
+class V26(tslex.Lexer):
+    """'0_1' accepted."""
+    def zero_separator_ok(self):
+        return True
+
+
+class WNewline(tslex.Lexer):
+    """Line terminator before '!', '++', '--' ignored (draft-1 rule)."""
+    def prefix_like_expr_end(self, p):
+        return self.expr_end
+
+
+class WArrow(tslex.Lexer):
+    """Arrow-body '}' followed by division (draft-1 rule)."""
+    def closer_expr_end(self, entry, c):
+        return not entry.get("header", False)
+
+
+class WEscape(tslex.Lexer):
+    """Escapes allowed in generic look-ahead names."""
+    def lookahead_escapes_ok(self):
+        return True
+
+
+class WExtendsComment(tslex.Lexer):
+    """Unterminated comment after 'extends' read as a generic."""
+    def lookahead_comment_after_extends(self):
+        return True
+
+
+class WNonOctalSep(tslex.Lexer):
+    """Separators rejected in a NonOctalDecimal fraction and exponent."""
+    def nonoctal_fraction_separators_ok(self):
+        return False
+
+
+class WHeader(tslex.Lexer):
+    """No header marking: every ')' followed by division."""
+    def closer_expr_end(self, entry, c):
+        return not entry.get("arrow", False)
+
+
+class WBang(tslex.Lexer):
+    """'!', '++', '--' reset exprEnd to false."""
+    def prefix_like_expr_end(self, p):
+        return False
+
+
+# WExtendsComment is defined but not listed: it is observationally equivalent to the
+# profile (the unterminated comment fails at the same offset in either mode; profile §5.2).
+WRONG_LEXERS = [V1, V5, V25, V22, V11, V21, V13, V26, WNewline, WArrow, WEscape, WNonOctalSep, WHeader, WBang]
+
+
+def wrong_lexer_test(docs):
+    rejected, failures = 0, []
+    for cls in WRONG_LEXERS:
+        caught = None
+        for name, (doc, cfg) in docs.items():
+            try:
+                run_file(doc, cfg, cls)
+            except CheckError as e:
+                caught = f"{name}: {e}"
+                break
+        if caught:
+            rejected += 1
+        else:
+            failures.append(f"{cls.__name__}: {cls.__doc__}")
+    return rejected, failures
 
 
 def self_test(docs):
@@ -521,8 +672,9 @@ def main():
     for name, profile in FILES:
         doc, cfg = load(name)
         docs[name] = (doc, cfg)
+        CFG[name] = cfg
         st = run_file(doc, cfg)
-        print(f"PASS {name} profile={cfg['profile']}/draft-1 config={doc['configSha256'][:16]}... "
+        print(f"PASS {name} profile={cfg['profile']}/{cfg['profileVersion']} config={doc['configSha256'][:16]}... "
               f"vectors={len(doc['vectors'])} tokens={st['tokens']} kgrams={st['kgrams']} "
               f"fingerprints={st['fingerprints']} tie-windows={st['tie-windows']} errors={st['errors']} "
               f"(code and offset re-derived) pairs={st['pairs']} classes={len(st['classes'])}")
@@ -530,12 +682,20 @@ def main():
     print("PASS every accepted vector has derivation=hand and a pairedRejection that is an error vector")
     rejected, failures = self_test(docs)
     total = rejected + len(failures)
-    lexical = sum(1 for m in mutations() if m[2] not in ("winnowing tie broken leftmost", "hash corrupted"))
+    lexical = sum(1 for m in mutations() if m[2] not in ("winnowing tie broken leftmost", "hash corrupted",
+                                                         "normalized channel keeps ';' (draft-1 rule)"))
     if failures:
         for d in failures:
             print(f"FAIL mutation not rejected: {d}")
         sys.exit(1)
     print(f"PASS mutation self-test: {rejected}/{total} corruptions rejected ({lexical} lexical)")
+    wr, wf = wrong_lexer_test(docs)
+    for d in wf:
+        print(f"FAIL wrong lexer accepted: {d}")
+    if wf:
+        sys.exit(1)
+    print(f"PASS wrong-lexer self-test: {wr}/{len(WRONG_LEXERS)} wrong lexers rejected "
+          f"(the review's 8 accepted variants V1 V5 V25 V22 V11 V21 V13 V26, plus {len(WRONG_LEXERS) - 8} more)")
 
 
 if __name__ == "__main__":

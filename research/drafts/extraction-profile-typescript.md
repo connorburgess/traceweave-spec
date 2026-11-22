@@ -1,14 +1,16 @@
 # Draft extraction profile: TypeScript and JavaScript (`ts-tokens`, `tsx-tokens`)
 
-Status: **draft for review, revision draft-1, 2026-11-22.** Roadmap items TS.1 and TS.2. TS.3 (two implementations) and TS.4 (own M3 split) are implementation gates and are not claimed here.
+Status: **draft for review, revision draft-2, 2026-11-22.** Roadmap items TS.1 and TS.2. TS.3 (two implementations) and TS.4 (own M3 split) are implementation gates and are not claimed here. Draft-2 resolves the [clean-room review](../reviews/extraction-profile-typescript-review.md) of draft-1 (F1–F6, A1–A6). The dispositions are in §15 and the output changes in §16.
+
+**Staging** (decided in draft, pending owner confirmation, TSOD-1): **`ts-tokens` is stage 1** and is the profile to freeze. It also takes plain `.js`, `.mjs` and `.cjs`. **`tsx-tokens` is deferred.** §5 and its vectors are kept as a draft, but they are not frozen until a real `.tsx`/`.jsx` corpus measures TSOD-8.
 
 This is research material, not a normative change. It does not modify `spec/`, `schemas/`, `profiles/`, `test-vectors/` or the [extraction contract](extraction-contract.md). "MUST" describes what this draft proposes for an implementation claiming to follow it. Nothing here is a registered algorithm.
 
-**How it plugs in.** This document adds two profile sections in the shape of contract §4 (Go) and §5 (Rust). Every shared part of the contract applies unchanged:
+**How it plugs in.** This document adds two profile sections in the shape of contract §4 (Go) and §5 (Rust). Every shared part of the contract applies unchanged, **with one exception that needs a contract amendment**: §6 below drops `;` from the normalized stream (TSOD-5b). The shared parts are:
 - §2 outcomes, the no-repair rule and the error-offset rules;
 - §3 processing order: configuration, size, UTF-8, then U+FEFF (`bom`) and U+0000 (`nul`). This profile adds no forbidden code point, so a lone CR is legal;
 - §3a Unicode 17.0.0 data, plus two small deltas derived from the same digest-pinned file (§3.2);
-- §6 serializations, §7 k-gram hashing, §8 winnowing and §9 record fields;
+- §6 serializations, except the normalized `;` filter of §6 below; §7 k-gram hashing, §8 winnowing and §9 record fields;
 - §10 configuration bytes and validation. This profile only adds two `(profile, profileVersion)` pairs (§10 below).
 
 The vectors are in [extraction-vectors-typescript/](extraction-vectors-typescript/README.md). Decisions are in §12. Items marked "decided in draft" are pending owner confirmation.
@@ -29,11 +31,13 @@ The vectors are in [extraction-vectors-typescript/](extraction-vectors-typescrip
 
 ## 2. Inputs in scope, and why two profiles
 
-| Input | Profile | Reason |
-| --- | --- | --- |
-| `.ts`, `.mts`, `.cts` | `ts-tokens` | No JSX: `<` at expression start is a type assertion or a generic |
-| `.tsx`, `.jsx` | `tsx-tokens` | JSX recognized (§5) |
-| `.js`, `.mjs`, `.cjs` | `tsx-tokens` | TypeScript treats JavaScript files as JSX-capable. Valid JavaScript without JSX lexes identically under both profiles, because `<` at expression start is not valid JavaScript outside JSX (vector `tsx-plain-js`) |
+| Input | Profile | Stage | Reason |
+| --- | --- | --- | --- |
+| `.ts`, `.mts`, `.cts` | `ts-tokens` | 1 | No JSX: `<` at expression start is a type assertion or a generic |
+| `.js`, `.mjs`, `.cjs` | `ts-tokens` | 1 | Valid JavaScript without JSX lexes identically under both profiles, because `<` at expression start is not valid JavaScript outside JSX (vectors `ts-plain-js` and `tsx-plain-js`). JSX in such a file usually becomes an explicit error (`ts-err-jsx-in-js`) |
+| `.tsx`, `.jsx` | `tsx-tokens` | deferred | JSX recognized (§5) |
+
+**JSX in a `.js` file under `ts-tokens` is not always rejected.** Any element with a closing tag or with text makes `</` start a regular expression that runs to the end of the line. That gives `unterminated-literal` unless the line happens to contain another `/` (`ts-err-jsx-in-js`). A text-free self-closing element such as `x = <br/>;` lexes as the punctuators `< br / > ;` and is fingerprinted (`ts-jsx-selfclosing-in-js`, D-16). A repository whose `.js` files hold JSX should map them to `tsx-tokens` once stage 2 exists. Until then, TW-01/TW-03 may exclude them.
 
 **Why two profiles and not one or four.** At the token level TypeScript adds nothing to ECMAScript except `@`, which both profiles accept. JavaScript and TypeScript therefore need no separate grammars. JSX is the one real fork: `<T>x` is a type assertion in `.ts` and an element in `.tsx`, and no lexical rule can serve both (vectors `ts-type-assertion` and `tsx-err-ts-type-assertion` use the same input). Separate `js-tokens` and `jsx-tokens` profiles would duplicate these two with no lexical difference.
 
@@ -100,13 +104,15 @@ In normal mode, after the hashbang (§3.3), at each position:
 7. **`#`:** if the next character is an IdentifierStartChar or `\`, read `#` IdentifierName as `privatename`. An invalid escape there is `malformed-identifier` at the `#`. Otherwise the result is `illegal-character` at the `#`.
 8. **`/`** (not a comment): when `exprEnd` is false, a regular expression (§4.8); otherwise punctuation.
 9. **`<`** in `tsx-tokens` when `exprEnd` is false: JSX, unless the generic-arrow look-ahead (§5.2) says otherwise.
-10. **`(`, `[`, `{`:** `punct`, pushed onto the stack, `exprEnd` false. A `(` whose previous token is the `keyword` `if`, `while`, `for` or `with` is marked as a **header**.
+10. **`(`, `[`, `{`:** `punct`, pushed onto the stack, `exprEnd` false. A `(` whose previous token is the `keyword` `if`, `while`, `for` or `with` is marked as a **header**. A `{` whose previous token is `punct` `=>` is marked as an **arrow body**.
 11. **`)`, `]`, `}`:**
     - `}` with `${` on top pops it and continues a template (§4.7).
     - `}` with `jbrace` on top pops it and emits `punct` `}` (§5).
     - Otherwise the closer must match the top (`(`, `[` or `{`); if it does not, or the stack is empty, the result is `unbalanced-delimiter` at the closer.
-    - After a matching closer, `exprEnd` is true, except after a `)` that closes a header, where it is false.
-12. **Punctuator:** the longest match from §4.4, class `punct`. After `!`, `++` or `--`, `exprEnd` is unchanged (§4.9). After any other punctuator it is false.
+    - After a matching closer, `exprEnd` is true, except after a `)` that closes a header or a `}` that closes an arrow body, where it is false.
+12. **Punctuator:** the longest match from §4.4, class `punct`.
+    - After `!`, `++` or `--`, `exprEnd` is false if a line terminator lies between the previous token and this one. This includes a line terminator inside a block comment, and does not count the hashbang. Otherwise `exprEnd` is unchanged (§4.9).
+    - After any other punctuator, `exprEnd` is false.
 13. **Any other character** is `illegal-character` at its offset, for example U+2E2F, U+180E, U+0085 and `€`. (`@` is a punctuator, §4.4.)
 
 **End of input.** If the stack is empty, scanning is done. If the top is `${`, the result is `unterminated-literal` at the start of the template-head or template-middle token that opened it. Otherwise the result is `unbalanced-delimiter` at the innermost unclosed opener: the `(`, `[`, `{`, or the `<` of a JSX tag or element.
@@ -147,7 +153,7 @@ Starting at an ASCII digit, or at `.` followed by an ASCII digit, scan as follow
 1. **`0x`, `0X`, `0b`, `0B`, `0o` or `0O`:** consume the prefix, then the maximal run of IdentifierPartChars. The run MUST be one or more digits of the radix under the separator rules, optionally followed by `n` (class `bigint`; otherwise `number`).
 2. **`0` followed by an ASCII digit:** consume the maximal run of ASCII digits.
    - If every digit is 0–7, the literal is a LegacyOctalIntegerLiteral. It ends there, with no fraction, exponent or `n`. So `07.5` is `07` then `.5` (vector `ts-legacy-octal`).
-   - Otherwise it is a NonOctalDecimalIntegerLiteral. It may take a fraction and an exponent (step 4), but no separators and no `n`.
+   - Otherwise it is a NonOctalDecimalIntegerLiteral. Its integer part takes no separators, and it takes no `n`. It may take a fraction and an exponent as in step 4, **with** separators there: ES2026 uses DecimalDigits[+Sep] and ExponentPart[+Sep] after any DecimalIntegerLiteral. So `08.1_1e1_0` is one number (vector `ts-nonoctal-separators`).
 3. **`.` followed by a digit:** consume `.` and a digit run under the separator rules, then an exponent (step 4).
 4. **Otherwise (a decimal):** consume `0`, or a nonzero digit followed by a digit run under the separator rules.
    - If `n` follows immediately, consume it (`bigint`).
@@ -155,7 +161,7 @@ Starting at an ASCII digit, or at `.` followed by an ASCII digit, scan as follow
    - Then, if `e` or `E` follows, consume it, an optional `+` or `-`, and a non-empty digit run under the separator rules.
 5. **After the literal,** the next character MUST NOT be an IdentifierStartChar, an ASCII digit or `\` (§12.9.3: "must not be an IdentifierStart or DecimalDigit").
 
-Any violation is `malformed-literal` at the literal start: `3in`, `1__0`, `1.5n`, `07n`, `08n`, `0x`, `0b2`, `1.toString`, `1e+` and `0_1`. Legacy octal and NonOctalDecimal literals are lexically valid: they are part of the main ES2026 grammar, and rejecting them is a strict-mode early error, not a lexical one (D-4).
+Any violation is `malformed-literal` at the literal start: `3in`, `1__0`, `1.5n`, `07n`, `08n`, `0x`, `0b2`, `1.toString`, `1e+` and `0_1` (a `0` alone is followed by `_`, an IdentifierStartChar; vector `ts-err-zero-separator`). Legacy octal and NonOctalDecimal literals are lexically valid: they are part of the main ES2026 grammar, and rejecting them is a strict-mode early error, not a lexical one (D-4).
 
 ### 4.6 String literals (§12.9.4)
 
@@ -165,7 +171,7 @@ From `'` or `"`, scan in two passes.
 
 **Then validate the escapes.** Each `\x` needs two hex digits, and each `\u` must be a valid escape (§3.2, any code point including surrogates). Any other escape is lexically valid, including `\8`, `\9`, `\0`, legacy octal `\012` and identity escapes such as `\q`. A violation is `malformed-literal` at the opening quote.
 
-**Termination is decided first,** so `'\u{110000}` followed by a newline is `unterminated-literal` (vector `ts-err-unterminated-before-malformed`).
+**Termination is decided first,** so `'\u{110000}` followed by a newline is `unterminated-literal` (vector `ts-err-unterminated-before-malformed`). A lone CR ends nothing either: `'a⏎b'` with CR is `unterminated-literal` (vector `ts-err-cr-in-string`).
 
 ### 4.7 Template literals (§12.9.6)
 
@@ -194,32 +200,55 @@ A line terminator or the end of input before the closing `/` is `unterminated-li
 
 ### 4.9 Regular expression or division: the `exprEnd` rule
 
-ECMAScript chooses between InputElementDiv and InputElementRegExp from the syntactic context (§12). This profile replaces the parser with the `exprEnd` flag, which is maintained exactly as in §4.2. The full rule:
+ECMAScript chooses between InputElementDiv and InputElementRegExp from the syntactic context (§12). This profile replaces the parser with the `exprEnd` flag, which is maintained exactly as in §4.2 (TSOD-3, decided in draft). The full rule:
 
-| Previous token | Next `/` is | Note |
+| Previous token | Next `/` is | Vectors |
 | --- | --- | --- |
 | (none) | regex | |
-| `ident`, `privatename`, `number`, `bigint`, `string`, `template`, `template-tail`, `regex` | division | |
+| `ident`, `privatename`, `number`, `bigint`, `string`, `template`, `template-tail`, `regex` | division | `ts-division-after-paren` |
 | keyword `this`, `super`, `null`, `true`, `false` | division | |
-| any other keyword (`return`, `typeof`, `in`, `case`, `do`, `else`, `yield`, `await`, …) | regex | |
-| `)` closing a header `(` (after `if`, `while`, `for`, `with`) | regex | `if (ok) /a+/.test(s)` |
-| any other `)`, `]`, `}` | division | `(a + b) / 2` |
-| `!`, `++`, `--` | unchanged from before them | postfix non-null `total! / n` stays division; prefix `!/re/` stays regex |
+| any other keyword (`return`, `typeof`, `in`, `case`, `do`, `else`, `throw`, `yield`, `await`, …) | regex | `ts-regex-after-keyword`, `ts-yield-await-regex` |
+| `)` closing a header `(` (after `if`, `while`, `for`, `with`) | regex | `ts-regex-after-header` |
+| `}` closing an arrow body (`{` right after `=>`) | regex | `ts-arrow-body-regex` |
+| any other `)`, `]`, `}` | division | `ts-object-class-division` |
+| `!`, `++`, `--` with a line terminator before it | regex | `ts-newline-prefix-regex` |
+| `!`, `++`, `--` without one | unchanged from before it | `ts-nonnull-division`, `ts-postfix-division` |
 | `template-head`, `template-middle`, any other punctuator | regex | |
-| end of a JSX element in normal mode | division | §5 |
+| end of a JSX element in normal mode (`tsx-tokens`) | division | `tsx-element-division` |
 
-**Known departures from ECMAScript** (TSOD-3). These are rare, and are recorded as cross-check probes:
-- a regex right after the `}` of a block statement (`if (x) {}` newline `/re/`);
-- a regex after the contextual `of` (`for (m of /x/g…)`);
-- a regex after the `)` of `for await (…)`.
+**Why these rows match ECMAScript without a parser.**
+- **Arrow body `}`.** An ArrowFunction is an AssignmentExpression, so it cannot be the left operand of `/`. A `/` after an arrow body's `}` is therefore never division.
+- **`!`, `++` and `--` after a line terminator.** Postfix `++` and `--` are restricted productions with "[no LineTerminator here]". TypeScript's non-null `!` likewise requires no preceding line break. After a line break the operator can only be prefix, and the line break is an ASI point (`a⏎++/re/.lastIndex` is `a; ++/re/.lastIndex`).
 
-In each case the profile lexes division. TypeScript's own classifier makes the same `}` choice: its `noRegexTable` (in `typescript.js` 6.0.3) lists `CloseBraceToken`. In 2.48 million tokens of real code (§11) the rule never departed from the TypeScript parser.
+**Known departures from ECMAScript** (D-10, D-15). These are the complete list of classes found by the review's 536 context runs and this revision's probes. Each is pinned by a vector or a probe:
 
-### 4.10 Automatic semicolon insertion (§12.10)
+| Input class | ECMAScript / TypeScript | Profile | Pinned by |
+| --- | --- | --- | --- |
+| Regex after the `}` of a block statement (`if (x) {}⏎/re/`, `{}⏎/re/`) | regex | division | probe |
+| Regex after the `}` of a **function declaration** | regex | division | `ts-function-decl-division` |
+| Regex after the `}` of a **class declaration** | regex | division | `ts-class-decl-division` |
+| Regex after contextual `of` (`for (m of /x/g…)`) | regex | division | probe |
+| Regex after the `)` of `for await (…)` | regex | division | probe |
+| **`await` or `yield` used as an identifier** (script code, non-async, non-generator: `x = await / 2`) | division | regex, usually `unterminated-literal` | `ts-err-await-identifier` |
+| `@dec /re/` (a syntax error either way) | regex | division | — |
 
-**No tokens are inserted** (decided in draft, TSOD-5a). Unlike Go's rule, ECMAScript ASI is defined by the syntactic grammar ("offending token", restricted productions), so it cannot be computed lexically. Explicit `;` tokens are kept. `let a = 1⏎let b = a⏎(b)` stays a call (vector `ts-no-asi`).
+A parser-free rule that tells a statement-level `}` (block, function or class declaration) from an expression-level one (object literal, function or class expression) has to infer statement position. It would need ASI after expression ends, the `function`/`class` name rule, and return-type and type-parameter object literals. That is a second, larger state machine, and the review counts every such rule as a new place for two implementers to diverge. A regex statement right after a declaration (`/re/.test(s);` as a statement) has no effect unless the regex has side effects, so the departure is kept and documented. `await` and `yield` stay keywords because TypeScript code is module or async code, where `await /re/` and `yield /re/` are the real uses.
 
-The consequence: code written with and without semicolons ("semi" and "no-semi" styles) produces different streams, and the format pair invariant holds only within one style. TSOD-5b records the option of dropping `;` from both channels.
+**Evidence and its limits.** The 2.48 million corpus tokens (§11) produced no departure. That corpus is compiler-emitted JavaScript and declaration files: it has no JSX and few regex statements. The claim therefore says nothing about hand-written or `.tsx` code. The review's 536 targeted runs found only the classes above. TypeScript's own classifier makes the same `}` choice: its `noRegexTable` (in `typescript.js` 6.0.3) lists `CloseBraceToken`.
+
+### 4.10 Automatic semicolon insertion and `;` (§12.10)
+
+**No tokens are inserted** (decided in draft, TSOD-5a). Unlike Go's rule, ECMAScript ASI is defined by the syntactic grammar ("offending token", restricted productions), so it cannot be computed lexically. `let a = 1⏎let b = a⏎(b)` stays a call (vector `ts-no-asi`).
+
+**`;` is kept in the exact stream and dropped from the normalized stream** (decided in draft, pending owner confirmation, TSOD-5b option (c); §6). Without this, a Prettier `semi: false` reformat defeats the channel meant to survive surface edits.
+
+Measurements, with each `;` that is followed by spaces or tabs and then a line terminator deleted:
+- **The review:** 61.1% of normalized fingerprints survive on 42,043 tokens of TypeScript 6.0.3's `lib/_tsc.js` when `;` stays, and 100% when it is dropped.
+- **This revision**, using [harness/semi_survival.py](extraction-vectors-typescript/harness/semi_survival.py) and counting distinct fingerprint hashes:
+  - the same 42,043-token prefix: 62.5% (1,769/2,831) under draft-1 and 100% (3,077/3,077) under draft-2;
+  - the whole file (874,387 tokens, 49,866 `;` removed): 67.3% and 100%.
+
+The two measurements count slightly differently, and both show the same gap. Vectors `ts-semi-a` and `ts-semi-b` (with and without semicolons) have different exact hashes and identical normalized hashes, and the checker enforces that as a pair invariant. The cost is that `for (;;)` loses its separators in `normalized`.
 
 ### 4.11 Hand check
 
@@ -229,9 +258,11 @@ The consequence: code written with and without semicolons ("semi" and "no-semi" 
 s = `a${ b + `c${ d }e` }f${ { g : 1 } . g }h` ;
 ```
 
-The classes, in order: `ident punct template-head ident punct template-head ident template-tail template-middle punct ident punct number punct punct ident template-tail punct`. The object literal's `}` is `punct`, because `{` is on top of the stack, and the next `}` pops `${`. Exact-channel window selections are `[3, 3, 3, 3, 7, 8, 8, 8, 8, 11, 11]` and the fingerprints are at `[3, 7, 8, 11]`.
+The classes, in order: `ident punct template-head ident punct template-head ident template-tail template-middle punct ident punct number punct punct ident template-tail punct`. The object literal's `}` is `punct`, because `{` is on top of the stack, and the next `}` pops `${`. Under draft-2, exact-channel window selections are `[3, 3, 3, 6, 6, 6, 6, 8, 8, 12, 12]` and the fingerprints are at `[3, 6, 8, 12]`. The normalized stream drops the final `;`: 17 tokens, 13 k-grams, selections `[2, 2, 2, 3, 4, 8, 8, 8, 8, 11]`.
 
-## 5. JSX (`tsx-tokens` only)
+## 5. JSX (`tsx-tokens` only; deferred)
+
+This section is a draft for stage 2 (TSOD-1). It is complete enough for the vectors in `tsx.json` and the checker, but it is not frozen. The TSOD-8 limitation (§5.5) must be measured on a real `.tsx`/`.jsx` corpus first.
 
 ### 5.1 Trigger
 
@@ -241,27 +272,30 @@ A `<` with `exprEnd` true is the less-than or type-argument operator. That cover
 
 ### 5.2 Generic-arrow look-ahead
 
-This mirrors TypeScript 6.0.3's `isParenthesizedArrowFunctionExpressionWorker`, JSX branch. After the `<`, skipping trivia:
-1. Read an IdentifierName N1. If there is none, the `<` is JSX.
-2. If N1 is `const` (unescaped), read a second IdentifierName; if there is none, the `<` is JSX. Otherwise, if N1 is one of the 38 ReservedWords (unescaped), the `<` is JSX.
+This mirrors TypeScript 6.0.3's `isParenthesizedArrowFunctionExpressionWorker`, JSX branch. A **name** here is an IdentifierName written without any `\u` escape. Starting after the `<`:
+
+1. Skip trivia. Read a name N1. If there is none (including a `\` or an escape inside the name), the `<` is JSX.
+2. If N1 is `const`, skip trivia and read a second name. If there is none, the `<` is JSX. The second name is **not** checked against reserved words (vector `tsx-generic-const-reserved`), as in TypeScript, which skips that token unchecked. Otherwise, if N1 is one of the 38 ReservedWords, the `<` is JSX.
 3. Skip trivia and look at the next character c:
    - c is `,` → generic;
    - c is `=` not followed by `=` or `>` → generic;
-   - the next word is an unescaped `extends`: skip trivia after it. Then a `=` not followed by `=` or `>`, a `>`, or a `/` not followed by `=` means JSX. Anything else, including the end of input, means generic;
+   - a name that is exactly `extends` starts at c (whole word, so `extendsX` does not count, vector `tsx-extends-word`): skip trivia after it. Then a `=` not followed by `=` or `>`, a `>`, or a `/` not followed by `=` means JSX. Any other character, including the end of input, means generic;
    - anything else → JSX.
 
-An unterminated comment during the look-ahead makes the `<` JSX, and tag mode then reports the comment. On a generic, the `<` is an ordinary punctuator and normal scanning continues. Vectors: `tsx-generic-arrow`, `tsx-generic-arrow-const` and `tsx-extends-attribute`.
+**An unterminated comment anywhere in the look-ahead makes the `<` JSX.** That includes one after `extends`, and this rule takes precedence over "any other character … means generic". The choice is not observable: in either mode the same comment is scanned next and fails with `unterminated-comment` at the same offset (vector `tsx-err-extends-comment`). The checker ships the opposite reading as a lexer variant and confirms it gives identical results.
+
+On a generic, the `<` is an ordinary punctuator and normal scanning continues. Vectors: `tsx-generic-arrow`, `tsx-generic-arrow-const`, `tsx-extends-attribute` and `tsx-err-lookahead-escape`. TypeScript decodes escapes, so `<\u0054,>` is a generic arrow there and JSX here (D-14).
 
 ### 5.3 Tag mode (stack top `tag`)
 
-Trivia, including comments, is skipped as in normal mode. Then:
+Trivia, including comments, is skipped as in normal mode. Every token emitted in tag mode is `punct` (`<`, `/`, `>`, `.`, `:`, `=`, `{`), `ident` (names) or `jsx-string`. Then:
 - **Name:** an IdentifierStartChar followed by IdentifierPartChars or `-` (JSXIdentifier) is `ident`. No `\u` escapes are allowed, and reserved words are `ident` here (`<label class=… for=…>`, vector `tsx-attr-keyword-names`).
 - **`.`, `:` and `=`** are `punct`.
 - **`"…"` or `'…'`** is `jsx-string`: no escapes, line terminators allowed, ending at the same quote. With no closing quote, the result is `unterminated-literal` at the opening quote.
 - **`{`** is `punct`; push `jbrace` (normal mode, `exprEnd` false).
-- **`<`**, only directly after an `=` token, opens an attribute-value element (push `tag`).
+- **`<`**, only when the previous token is `=`, opens an attribute-value element (push `tag`). Trivia may come between them (vector `tsx-attr-element-space`). Anywhere else in a tag, `<` is `illegal-character` (vector `tsx-err-attr-lt`).
 - **`/` as the first token after `<`** makes this a closing tag. The entry below `tag` MUST be `elem`; otherwise the result is `unbalanced-delimiter` at the tag's `<` (vector `tsx-err-stray-close`).
-- **`/` later in an opening tag** marks it self-closing. The next non-trivia character MUST be `>`, otherwise `illegal-character` (vector `tsx-err-self-closing`).
+- **`/` later in an opening tag** marks it self-closing. The next non-trivia character MUST be `>`, otherwise `illegal-character` at that character (vector `tsx-err-self-closing`).
 - **`>`** is `punct`, and pops `tag`:
   - for a closing tag, it also pops the `elem` it closes;
   - for a self-closing tag, nothing more;
@@ -276,18 +310,36 @@ Tag names are not matched against each other (`<a></b>` is lexically fine; match
 
 - `{` is `punct`; push `jbrace`.
 - `<` is `punct`; push `tag`.
+- A `}` that pops `jbrace` (in normal mode, §4.2 step 11) leaves `exprEnd` unchanged. The flag is not consulted in tag or children mode, and it is set again before normal mode next reads a `/` or `<`: false on every `jbrace` push, true when an element ends in normal mode.
 - `>` and `}` are `illegal-character` (JSXText excludes them; vectors `tsx-err-text-gt`, `tsx-err-brace-in-text`).
-- Otherwise, the maximal run of characters up to `{`, `<`, `>`, `}` or end of input is JSX text. Leading and trailing white space and line terminators (§3.1) are trimmed and become trivia. If anything remains, one `jsx-text` token covers it, with inner white space kept. `//`, quotes and reserved words inside text are text (vector `tsx-text-comment-keywords`). Entities such as `&amp;` are text and are not decoded.
+- Otherwise, the maximal run of characters up to `{`, `<`, `>`, `}` or end of input is JSX text. Leading and trailing white space and line terminators (§3.1, the full set including U+00A0 and the other Zs; vector `tsx-nbsp-text`) are trimmed and become trivia. If anything remains, one `jsx-text` token covers it, with inner white space kept. `//`, quotes and reserved words inside text are text (vector `tsx-text-comment-keywords`). Entities such as `&amp;` are text and are not decoded.
 
 The end of input in children mode is `unbalanced-delimiter` at the element's `<`.
 
 ### 5.5 Known limitation (TSOD-8)
 
-A generic signature written with a leading `<` in a position where an expression could also start is lexed as JSX. That covers `type F = <T>(x: T) => T`, `let f: <T>() => void` and call signatures `{ <T>(x: T): T }` in `.tsx`. Such an input usually ends in `illegal-character` at the `>` of `=>`, so the file is rejected rather than mis-fingerprinted (vector `tsx-err-generic-type-position`; TypeScript parses it). Telling these apart needs to know whether the position is a type or an expression, which is the parser's job. The size of this limitation on real `.tsx` code is unmeasured and belongs to TS.4.
+A generic signature or generic function type written with a leading `<` in a position where an expression could also start is lexed as JSX. In `.tsx` (D-11), these include:
+- `type F = <T>(x: T) => T` (after `=`);
+- `let f: <T>() => void` (after `:`);
+- call signatures `{ <T>(x: T): T }` (after `{` or `;`);
+- **construct signatures `new <T>(x: T): T`** (after keyword `new`);
+- function types after `(`, `|`, `&`, `,` or `<` in type positions, such as `A | (<T>() => T)` and `f<(<T>(x: T) => T)>(g)`.
+
+Such an input usually ends in `illegal-character` at the `>` of `=>`, or in `unbalanced-delimiter`, so the file is rejected rather than mis-fingerprinted (vector `tsx-err-generic-type-position`; probes for the construct-signature and `(` cases). Telling these apart needs to know whether the position is a type or an expression, which is the parser's job.
+
+**Frequency is unmeasured on real `.tsx` code.** The review found no `.tsx`/`.jsx` sources available offline. As a proxy only, 7 of TypeScript's 110 `lib/*.d.ts` files (6.4%) are rejected when lexed as `tsx-tokens`, partly because of construct signatures. Declaration files are excluded in practice, so the proxy only shows that the pattern is common in type-heavy code. This measurement is the condition for freezing `tsx-tokens`.
 
 ## 6. Serializations
 
-Contract §6 applies unchanged. In the `normalized` channel, the value is `""` for `ident` and for every literal class of this profile: `privatename`, `number`, `bigint`, `string`, the four template classes, `regex`, `jsx-text` and `jsx-string`. `keyword` and `punct` keep their text. Exact values are original bytes, so escapes are not decoded: `"A"` and `"\x41"` differ in `exact` and agree in `normalized`.
+Contract §6 applies, with one change.
+
+**The normalized stream omits every `punct` `;` token** (TSOD-5b (c), §4.10). The exact stream keeps all tokens. In the normalized channel, k-gram positions, window selections and fingerprint positions index the filtered stream. Spans are still the original byte spans of the remaining tokens. The vectors record the filter in `channels.normalized.tokenIndices`, the indices into `tokens` that the normalized stream keeps.
+
+`status` is still decided by the exact token count (contract §2). An `ok` input whose normalized stream has fewer than k tokens has an empty normalized channel: no k-grams, `windowSelections` `[]` and `partialWindow` false. For example, `ts-exact-k` (`let a = b;`) has one exact k-gram and none in `normalized`.
+
+**Contract amendment needed** (TSOD-13, must be settled before freezing). Contract §6 says "the two channels share one token stream and differ only in value". The catalogue contract derives `kgramCount = max(0, tokenCount − k + 1)` for each channel from the record's `tokenCount`. Both need a per-profile normalized-stream filter: a per-channel token count or k-gram count in the record. This profile cannot make that change, and the coordinator owns it.
+
+**Normalized values.** The value is `""` for `ident` and for every literal class of this profile: `privatename`, `number`, `bigint`, `string`, the four template classes, `regex`, `jsx-text` and `jsx-string`. `keyword` and `punct` keep their text. Exact values are original bytes, so escapes are not decoded: `"A"` and `"\x41"` differ in `exact` and agree in `normalized`.
 
 ## 7. Errors
 
@@ -328,50 +380,68 @@ Contract §6 applies unchanged. In the `normalized` channel, the value is `""` f
 | D-7 | Merge-conflict markers | punctuators | trivia plus diagnostic | punctuators | Follows ECMA-262 |
 | D-8 | Identifier characters added after TypeScript's tables | ID_Start/ID_Continue of the Unicode version in use | invalid character | accepted (Unicode 17.0.0) | Contract §3a |
 | D-9 | BOM, NUL | BOM is white space; NUL is allowed in literals | same | `bom`, `nul` | Shared contract OD-1 and §3 |
-| D-10 | Regex after a block `}`, after `of`, after `for await (…)` | regex | regex (parser) | division | No parser (§4.9, TSOD-3) |
+| D-10 | Regex after the `}` of a block statement, function declaration or class declaration; after `of`; after `for await (…)` | regex | regex (parser) | division | No parser (§4.9, TSOD-3) |
 | D-11 | Generic function type or signature after `=`, `:` or `{` in `.tsx` | — | parsed | JSX, then an error | No parser (§5.5, TSOD-8) |
 | D-12 | HTML-like comments | comments (Script goal only) | punctuators | punctuators | Module goal; matches TypeScript |
 | D-13 | Error offsets | — | usually at the failing character | token start | Contract OD-13 |
+| D-14 | Escaped name in the `.tsx` generic look-ahead (`<\u0054,>`) | — | escape decoded; generic | JSX (then `illegal-character` at `\`) | Escape-free names keep the look-ahead textual (§5.2) |
+| D-15 | `await`/`yield` as identifiers in script code (`x = await / 2`) | division | division | regex | TypeScript code is module or async code (§4.9) |
+| D-16 | Text-free self-closing JSX in a `.js` file under `ts-tokens` (`<br/>`) | — | JSX element (`.js` is JSX-capable) | punctuators, accepted | Stage 1 routes `.js` to `ts-tokens` (§2) |
 
 ## 10. Configuration
 
-Contract §10 applies. The canonical bytes for `ts-tokens` are:
+Contract §10 applies, including the draft-2 bounds of contract §10a (k ≤ 16, window ≤ 128, maxInputBytes ≤ 8 MiB). The canonical bytes for `ts-tokens` are:
 
 ```
-{"contract":"traceweave-token-winnow-draft-1","profile":"ts-tokens","profileVersion":"draft-1","channels":["exact","normalized"],"k":5,"window":4,"hash":"sha256-first8-u64be","maxInputBytes":1048576}
+{"contract":"traceweave-token-winnow-draft-1","profile":"ts-tokens","profileVersion":"draft-2","channels":["exact","normalized"],"k":5,"window":4,"hash":"sha256-first8-u64be","maxInputBytes":1048576}
 ```
 
-Digests: `ts-tokens` `69d1e98bc8e0d52c137f6203286a066437b136e9f38f021ca18920db7fb558fa`; `tsx-tokens` (same bytes with `"profile":"tsx-tokens"`) `6a7f8184ff2ab1d1eb5a75b5b87739acaf47b499fc7916e08c32da59c6f76ab5`; `ts-tokens` with `maxInputBytes` 16 `b4f9f6347726610ec242c970f1e53f26184ddced5a3bc928f66e65a44bf1373d`. [config-negative-typescript.json](extraction-vectors-typescript/config-negative-typescript.json) adds 14 rejections, among them `typescript-tokens`, `js-tokens`, `draft-2` and an escaped profile string. k = 5 and w = 4 are contract OD-10.
+**Digests:**
+- `ts-tokens`: `aeeed14177cd3be8fea69e453c825e74f2fd301d03babbf49329bde0cc4754de`;
+- `tsx-tokens` (the same bytes with `"profile":"tsx-tokens"`): `4f121891d73b98b51032e4f3bcb823a215b3edc6afaee6493ea9025a2a8564e6`;
+- `ts-tokens` with `maxInputBytes` 16: `94403dd3e71a8105a9dcec894fc0d05d09cb771efaada28802dcf43ecd08f8d6`.
+
+`draft-1` is no longer accepted. [config-negative-typescript.json](extraction-vectors-typescript/config-negative-typescript.json) lists 19 rejections, among them both superseded `draft-1` pairs, `typescript-tokens`, `js-tokens`, one value just above each contract bound, and an escaped profile string. k = 5 and w = 4 are contract OD-10.
 
 ## 11. Requirement-to-check map and verification
 
 | Requirement | Check |
 | --- | --- |
-| Config bytes and pairs (§10) | Checker validates three configs and rejects 14 negatives |
+| Config bytes, pairs and bounds (§10) | Checker validates three configs and rejects 19 negatives |
 | Contract §3 order | `ts-err-invalid-utf8`, `-bom`, `-nul`, `ts-limit-*`; recomputed by the checker |
 | Every token: class, text, byte span; every error: code and offset | Checker re-lexes each input with [tslex.py](extraction-vectors-typescript/tslex.py) and requires identity |
 | Keyword list, property and JSX positions, escapes (§4.1, §5.3) | Checker invariants plus re-lex; `ts-contextual-keywords`, `ts-property-keywords`, `ts-unicode-escape-ident`, `tsx-attr-keyword-names`; corruptions: `return` as ident, `type`, `.catch`, `\u0069f` and JSX `class` as keyword |
 | Longest match and `?.` (§4.4) | Checker invariant; `ts-shift-ops`, `ts-generics-gt`, `ts-optional-chaining`; corruptions: `>>` split in an expression and in generics, `?.5` as `?.` `5` |
-| Numbers (§4.5) | `ts-numbers`, `ts-bigint`, `ts-legacy-octal`, 7 error vectors; corruption: `07.5` as one number |
-| Strings, templates, regex (§4.6–§4.9) | Vectors tagged `strings`, `template`, `regex`, `division`; corruptions: regex as division, nested template merged, substitution closed at the wrong `}`, template-head relabelled, regex flags split |
-| JSX (§5) | 16 accepted and 9 error vectors in `tsx.json`; corruptions: JSX text as identifiers, untrimmed JSX text |
+| Numbers (§4.5) | `ts-numbers`, `ts-bigint`, `ts-legacy-octal`, `ts-nonoctal-separators`, 7 error vectors; corruption `07.5` as one number; wrong lexers V26, WNonOctalSep |
+| Strings, templates, regex (§4.6–§4.8) | Vectors tagged `strings`, `template`, `regex`; corruptions: nested template merged, substitution closed at the wrong `}`, template-head relabelled, regex flags split; wrong lexer V13 |
+| `exprEnd` (§4.9), every row and every departure | The vectors named in the §4.9 tables; corruptions: regex as division (twice); wrong lexers V1, V5, V25, V22, WNewline, WArrow, WHeader, WBang |
+| `;` dropped from normalized (§6) | `ts-semi-a/b` pair invariant, `ts-exact-k`; corruption: normalized keeps `;` |
+| JSX (§5, deferred) | 21 accepted and 12 error vectors in `tsx.json`; corruptions: JSX text as identifiers, untrimmed JSX text; wrong lexers V11, V21, V22, WEscape |
 | Hashbang, HTML-like comments, no ASI | `ts-hashbang`, `ts-html-comment`, `ts-no-asi`; corruptions: hashbang tokenized, `<!--` as a comment, an inserted `;` |
-| Unicode (§3.1, §3.2) | `ts-unicode-boundary`, `ts-err-u2e2f`, `-u180e`; `derive_deltas.py` against UCD 17.0.0; crosscheck table sweep; corruption: U+309B rejected |
-| Errors and precedence (§7) | 38 error vectors with exact offsets; corruptions: invented code, moved offset, malformed before unterminated |
-| Hash, winnowing, ties, pairs | Checker recomputation; `ts-repeated` and others (23 tie windows), format and rename pairs; corruptions: leftmost tie, flipped hash bit |
+| Unicode (§3.1, §3.2) | `ts-unicode-boundary`, `ts-err-u2e2f`, `-u180e`, `tsx-nbsp-text`; `derive_deltas.py` against UCD 17.0.0; crosscheck table sweep; corruption: U+309B rejected |
+| Errors and precedence (§7) | 45 error vectors with exact offsets; corruptions: invented code, moved offset, malformed before unterminated |
+| Hash, winnowing, ties, pairs | Checker recomputation; 22 tie windows; format, rename and semi pairs; corruptions: leftmost tie, flipped hash bit |
 | Toolchain agreement | [harness/crosscheck.js](extraction-vectors-typescript/harness/crosscheck.js): parser oracle, corpus, probes, table sweep |
 
-**Results, 2026-11-22.** Python 3.14.6, Node 22.23.2, TypeScript 6.0.3.
+**Results, draft-2, 2026-11-22** (Python 3.14.6, Node 22.23.2, TypeScript 6.0.3).
 
-- **Checker:** PASS for 89 vectors (61 `ts`, 25 `tsx`, 3 limits): 820 tokens, 38 errors, all with re-derived code and offset. The 14 negative configurations are rejected. **The mutation self-test rejects 25 of 25 corruptions, 23 of them lexical.** These include: a regex relabelled as division, a nested template merged, a substitution closed at the wrong `}`, JSX text tokenized as identifiers, untrimmed JSX text, `>>` split in an expression and in generics, a keyword or contextual word mis-classed, `?.5`, `07.5`, a tokenized hashbang, `<!--` as a comment, an inserted ASI `;`, split regex flags, U+309B rejected, an invented code, a moved offset, and malformed before unterminated.
-- **Cross-check, vectors:** all 51 accepted vectors agree with TypeScript. 47 compare against the parser and 4 against the raw scanner, because TypeScript reports syntax (not lexical) diagnostics for them: `ts-html-comment`, `ts-legacy-octal`, `ts-unicode-escape-ident` and `ts-strings`. Two `gt-merge` adjustments were needed.
-  - Of the 33 lexical error vectors, 32 are rejected by TypeScript too: 16 at the same offset and 16 at another offset. The remaining one is `tsx-err-generic-type-position` (D-11).
-  - 5 pre-lexing vectors are not compared. TypeScript accepts the BOM and NUL inputs (D-9).
-- **Cross-check, corpus:** every `lib/*.d.ts` file (as `ts-tokens`) and `lib/*.js` file (as `tsx-tokens`) in the pinned package: 119 files, 19.8 MB, 2,478,321 tokens. **All 119 agree**, with 71 `gt-merge` adjustments. This corpus is compiler-emitted or declaration code with no JSX. It does not represent hand-written `.tsx`.
-- **Cross-check, probes:** 39 inputs. 25 agree as expected and 14 diverge exactly as §9 documents (D-3, D-4, D-6 to D-11). There are 0 unexpected outcomes.
-- **Unicode sweep** over every scalar value: identifier start differs on 8,949 code points and identifier part on 9,132, all accepted by the profile and rejected by TypeScript's older tables (D-8). White space differs on 2 (D-6), and line terminators on 0.
+- **Checker:** PASS for 112 vectors: 76 `ts`, 33 `tsx` and 3 limits. That is 1,059 tokens and 45 errors, all with re-derived code and offset. The 19 negative configurations are rejected.
+- **Vector-corruption self-test:** 27 of 27 rejected, 24 of them lexical.
+- **Wrong-lexer self-test (new):** **14 of 14 wrong lexers rejected.** Each is `tslex.Lexer` with one rule choice changed, substituted for the profile's lexer, and the checker must fail on the shipped vectors. Each fails on the vector added for it:
+  - all **8 variants the review found accepted**: V1 `}` always followed by a regex, V5 `await`/`yield` end an expression, V25 most keywords end an expression, V22 `exprEnd` false after a JSX element, V11 ASCII-only JSX trimming, V21 `<` anywhere in a tag, V13 a lone CR not ending a string, and V26 `0_1` accepted;
+  - 6 more: the draft-1 newline rule, the draft-1 arrow-body rule, escapes in the look-ahead, no separators in a NonOctalDecimal fraction, no header marking, and `!` resetting the flag.
 
-**Limits.** The checker's lexer and the hand-written streams come from the same author and the same reading of this text. Agreement between them shows consistency, not independence; TS.3 needs two implementers. The cross-check covers only the shipped inputs, the probes and a corpus without JSX.
+  A 15th variant (unterminated comment after `extends` read as generic) is observationally equivalent to the profile (§5.2), so it is shipped but not counted.
+- **Cross-check, vectors:**
+  - Of the 67 accepted vectors, 58 agree with TypeScript's parser and 7 with its raw scanner (TypeScript reports syntax or strict-mode diagnostics for those). 2 diverge as documented: `ts-function-decl-division` and `ts-class-decl-division`, both tagged `departure`.
+  - Of the 40 lexical error vectors, 17 are rejected by TypeScript at the same offset and 20 at another offset. 3 are accepted by TypeScript, as documented: `ts-err-await-identifier`, `tsx-err-generic-type-position` and `tsx-err-lookahead-escape`.
+  - The 5 pre-lexing vectors are not compared.
+  - There are 0 undocumented divergences.
+- **Cross-check, corpus:** every `lib/*.d.ts` and `lib/*.js` file of the pinned package, all as `ts-tokens`: 119 files, 19.8 MB, 2,478,321 tokens. **All 119 agree**, with 71 `gt-merge` adjustments. The corpus is compiler-emitted code and declaration files with no JSX.
+- **Cross-check, probes:** 55 inputs. 35 agree as expected and 20 diverge exactly as §9 documents. There are 0 unexpected outcomes.
+- **Unicode sweep:** unchanged from draft-1. Identifier start differs on 8,949 code points and identifier part on 9,132 (D-8), white space on 2 (D-6) and line terminators on 0.
+
+**Limits.** The hand-written streams, `tslex.py` and the wrong-lexer variants come from one author. The review's independent lexer reproduced all 89 draft-1 vectors byte for byte. The 23 vectors added in draft-2 have not been reproduced independently. The cross-check covers only the shipped inputs, the probes and a corpus without JSX.
 
 ## 12. Decisions
 
@@ -379,37 +449,29 @@ Digests: `ts-tokens` `69d1e98bc8e0d52c137f6203286a066437b136e9f38f021ca18920db7f
 
 | ID | Decision | Reason |
 | --- | --- | --- |
-| TSOD-1 | (a) Two profiles, `ts-tokens` and `tsx-tokens`; `.js`, `.mjs`, `.cjs` and `.jsx` map to `tsx-tokens` | JSX is the only lexical fork (§2) |
+| TSOD-1 | (b, revised in draft-2) Staged: `ts-tokens` (stage 1) takes `.ts`, `.mts`, `.cts`, `.js`, `.mjs` and `.cjs`. `tsx-tokens` (`.tsx`, `.jsx`) is deferred, kept as a draft and not frozen until a `.tsx` corpus measures TSOD-8 | Coordinator decision after the review. JSX in `.js` usually fails explicitly (§2, D-16) |
 | TSOD-2 | (a) `keyword` is the 46 ECMAScript reserved and strict-reserved words; TypeScript-only and contextual words are `ident` | Rename robustness, like Go OD-7; a textual rule that needs no parser |
-| TSOD-3 | (a) The `exprEnd` rule of §4.9, with header `)` and `!`/`++`/`--` passing the state through | Deterministic, and agrees with TypeScript on every vector and the whole corpus; departures listed |
+| TSOD-2b | (a) No separate class for contextual words. A `ctxword` class can come later as a new profile version | The review recommends settling now, because the choice changes hashes |
+| TSOD-3 | (a) The `exprEnd` rule of §4.9, with header `)`, arrow-body `}`, and `!`/`++`/`--` passing the state through unless a line terminator precedes them. Departure list completed | Coordinator decision. Deterministic and portable; the remaining departures are listed and pinned |
 | TSOD-4 | (a) `>`-family longest match everywhere | ECMA-262 lexical grammar; TypeScript is adjusted in the cross-check |
-| TSOD-5a | (a) No ASI tokens; explicit `;` kept | ASI is syntactic |
+| TSOD-5a | (a) No ASI tokens | ASI is syntactic |
+| TSOD-5b | (c) `;` kept in `exact`, dropped from `normalized` | Coordinator decision. Measured survival on a semi→no-semi reformat: 61.1% (review) or 62.5%–67.3% (this revision) with `;`, and 100% without (§4.10) |
 | TSOD-6 | (a) HTML-like comments and conflict markers are not trivia | Module goal; deterministic |
-| TSOD-7 | (a) The exclusions in §2 (`.d.ts` family, `@generated`/`DO NOT EDIT` in the first 2048 bytes, `.min.*` or a line over 4096 bytes) | TS.1 needs a decidable rule. The thresholds are unmeasured |
-| TSOD-9 | (a) `jsx-text` trimmed; white-space-only text dropped | Layout invariance (`tsx-format-a/b`) |
+| TSOD-7 | (a) The exclusions in §2 (`.d.ts` family, `@generated`/`DO NOT EDIT` in the first 2048 bytes, `.min.*` or a line over 4096 bytes) | A file-selection rule (TW-01/TW-03), not an extractor rule. The thresholds are unmeasured |
+| TSOD-8 | (a) for the deferred `tsx-tokens`: accept the §5.5 limitation and reject those inputs | Options (b) and (c) need corpus numbers first |
+| TSOD-9 | (a) `jsx-text` trimmed with the full trivia set; white-space-only text dropped | Layout invariance (`tsx-format-a/b`, `tsx-nbsp-text`) |
 | TSOD-10 | (a) ID_Start/ID_Continue from the pinned UCD (§3.2), not XID; no NFC | ECMA-262 2026 |
 
-**Must be settled before implementation:**
+**Must be settled before `ts-tokens` is frozen:**
+- **TSOD-13, the contract amendment for the normalized `;` filter (§6).** Contract §6 must allow a profile-defined normalized-stream filter. The record and catalogue contract need a per-channel token or k-gram count (today `kgramCount` is derived from one `tokenCount`). Options:
+  - (a) per-channel `tokenCount` in the record;
+  - (b) `kgramCount` recorded per channel;
+  - (c) instead of dropping `;`, keep it with a reserved normalized value. This does **not** restore survival, because positions still shift. It is listed only to show why (a) or (b) is needed.
 
-- **TSOD-5b `;` in the normalized channel.**
-  - (a) Keep `;` (current).
-  - (b) Drop every `;` token from both channels, so semi and no-semi styles match. Cost: `for (;;)` loses its structure tokens, and Go-style layout invariance would hold here and nowhere else.
-  - (c) Drop `;` from `normalized` only.
+**Must be settled before `tsx-tokens` leaves deferral:**
+- **TSOD-8 frequency** on a real `.tsx`/`.jsx` corpus, then the choice between (a), (b) one more look-ahead and (c) a minimal type/expression context tracker.
 
-  This changes hashes, so it must be decided before vectors are frozen.
-- **TSOD-8 TSX generic signatures.**
-  - (a) Accept the limitation and reject those inputs (current).
-  - (b) Add one more look-ahead: after `:`, `=` (in a `type` alias) or `{`, treat `<` IdentifierName `>` `(` as generic. This leaves new ambiguities (`cond ? x : <T>(…)</T>`).
-  - (c) Specify a minimal type/expression context tracker.
-
-  Option (b) or (c) needs TS.4 corpus numbers first. If the limitation rejects more than a small share of real `.tsx` files, ship `ts-tokens` alone first.
-- **TSOD-2b contextual words as a class.**
-  - (a) `ident` (current).
-  - (b) A separate `ctxword` class that keeps its text in `normalized` for a fixed list (`type`, `declare`, `namespace`, `abstract`, `readonly`, `as`, `satisfies`, `keyof`, `infer`, `is`, `async`, `of`, `get`, `set`, `accessor`, `override`, `using`). This preserves more TypeScript structure, but a variable named `type` then keeps its name.
-- **TSOD-11 Ecma PDF pin.** Replace or supplement the tc39.es HTML digest with the formal Ecma publication.
-- **TSOD-12 TypeScript 7.** Decide whether the oracle must be re-run on the native compiler before promotion, and how, since 7.0.2 ships no scanner API.
-
-**Can wait:** TSOD-7 threshold tuning (TS.4 corpus); k and w for this profile (TW-05, contract OD-10).
+**Can wait:** TSOD-11 (the Ecma PDF pin, before promotion), TSOD-12 (re-running the TypeScript 7 oracle; the oracle is a cross-check, not the authority), TSOD-7 threshold tuning (TS.4 corpus), and k and w for this profile (TW-05, contract OD-10).
 
 ## 13. How hard is agreement, compared with Go and Rust
 
@@ -428,8 +490,8 @@ The M1.4 cross-check spent 9.88 million cases to find a single Rust divergence (
 
 The risk is concentrated in JSX, where the profile admits a known gap (TSOD-8) and has no corpus evidence.
 
-**Recommendation: stage it.**
-1. **Stage 1:** register `ts-tokens` only (`.ts`, `.mts`, `.cts`, and JavaScript files without JSX). Run TS.3 and TS.4 on it.
+**Recommendation: staged, now decided in draft (TSOD-1).**
+1. **Stage 1:** freeze `ts-tokens` (`.ts`, `.mts`, `.cts`, `.js`, `.mjs`, `.cjs`) once TSOD-13 is settled. Run TS.3 and TS.4 on it.
 2. **Stage 2:** add `tsx-tokens` after a `.tsx`/`.jsx` corpus measures how many files the TSOD-8 limitation rejects, and after TSOD-8 is settled.
 
 The vectors are already split by profile, so stage 1 can freeze `ts.json` and `limits-ts.json` without touching `tsx.json`. Before TS.3, extend the M1.4-style differential: random token streams with mutations, and the `exprEnd`, template and JSX state spaces in particular.
@@ -444,8 +506,44 @@ The vectors are already split by profile, so stage 1 can freeze `ts.json` and `l
 | Encodings | Contract §3: UTF-8 only, no BOM, no NUL; lone CR is legal (§3.1) |
 | Parser error behavior | No parser. Lexical errors are listed in §7. Syntactically invalid but lexically valid input is fingerprinted |
 | Comments and docstrings | §4.3: dropped, JSDoc included; JSX `//` text is text (§5.4) |
-| Significant whitespace | Only in JSX text trimming (§5.4) and line terminators ending comments and strings; no ASI (§4.10) |
+| Significant whitespace | JSX text trimming (§5.4); line terminators end comments and strings and turn a following `!`, `++` or `--` into a prefix operator (§4.9); no ASI tokens, and `;` is dropped from `normalized` (§4.10, §6) |
 | Macros and generated code | No macros. Generated, minified and declaration files are excluded (§2, TSOD-7) |
 | Token serialization | §6, contract §6 |
 | Hash parameters, window sizes, tie-breaking | Contract §7–§8 and OD-10 (k = 5, w = 4, rightmost minimum) |
 | Coordinate units | UTF-8 byte offsets, half-open (contract §3). The cross-check converts TypeScript's UTF-16 offsets |
+
+## 15. Review dispositions
+
+The [clean-room review](../reviews/extraction-profile-typescript-review.md) of draft-1 (commit fb09039) found:
+
+| Finding | Resolution |
+| --- | --- |
+| F1: vectors did not pin 8 rule choices | Vectors added: `ts-object-class-division` (V1), `ts-err-await-identifier` and `ts-yield-await-regex` (V5, V25), `tsx-element-division` (V22), `tsx-nbsp-text` (V11), `tsx-err-attr-lt` (V21), `ts-err-cr-in-string` (V13), `ts-err-zero-separator` (V26). The checker's new wrong-lexer self-test runs all 8 variants plus 6 more and rejects 14/14 |
+| F2: §4.9's departure list was incomplete; "never departed" overclaimed | Two rules changed where a parser-free rule matches ECMAScript exactly: the arrow-body `}` and `!`/`++`/`--` after a line terminator (`ts-arrow-body-regex`, `ts-newline-prefix-regex`). Function and class declaration `}` and `await`/`yield` as identifiers are documented departures, pinned by `ts-function-decl-division`, `ts-class-decl-division` and `ts-err-await-identifier`, with the reason for not tracking statement position (§4.9). The corpus claim is now qualified |
+| F3 / A1: the generic look-ahead was underspecified | §5.2 now covers trivia (skipped everywhere), escapes (none allowed; D-14), no reserved-word check on the name after `const`, `extends` as a whole word, and the unterminated-comment conflict (JSX, which is observationally equivalent). Vectors `tsx-generic-const-reserved`, `tsx-extends-word`, `tsx-err-lookahead-escape`, `tsx-err-extends-comment` |
+| F4: `;` made the normalized channel style-dependent | TSOD-5b (c): `;` dropped from `normalized` (§6, §4.10), `ts-semi-a/b`, and the survival figures. This needs a contract amendment (TSOD-13) |
+| F5: §5.5 under-listed the limitation | Construct signatures `new <T>(…)` and the `(`, `\|`, `&`, `,` and `<` positions added, with the 6.4% proxy. Probes for the construct-signature, `(` and type-argument cases |
+| A2: separators in a NonOctalDecimal fraction | Allowed in the fraction and exponent, not in the integer part (§4.5, `ts-nonoctal-separators`) |
+| A3: offset after a self-closing `/` | The offending character (§5.3) |
+| A4: "directly after `=`" | The previous token is `=`, and trivia may come between them (§5.3, `tsx-attr-element-space`) |
+| A5: `exprEnd` after a `jbrace` `}` | Unchanged, and unobservable (§5.4) |
+| A6: tag-mode token classes | Stated in §5.3 |
+| Review §4: stage, with `.js` through `ts-tokens` | TSOD-1 (b); `ts-plain-js`, `ts-err-jsx-in-js`, and limitation D-16 `ts-jsx-selfclosing-in-js` |
+| Review §4: settle TSOD-2b | (a), decided in draft |
+
+## 16. Changes from draft-1 to draft-2
+
+**Version bump.** The `profileVersion` is now `draft-2` in both profiles, because the normalized channel changed. All three configuration digests changed (§10). The profile version is part of every k-gram hash input (contract §7), so **every k-gram hash of every accepted vector changed**.
+
+**Token streams and error results:** unchanged for all 89 draft-1 vectors. The new rules (arrow body, line terminator before `!`/`++`/`--`, escape-free look-ahead, NonOctalDecimal separators) are not exercised by any draft-1 input.
+
+**Normalized channel changed** (`;` dropped) in 46 vectors:
+- every accepted `ts.json` vector except `ts-empty`, `ts-short`, `ts-html-comment`, `ts-no-asi` and `ts-line-terminators`;
+- every accepted `tsx.json` vector;
+- `ts-limit-exact`.
+
+**23 vectors added:**
+- **`ts.json`:** `ts-semi-a`, `ts-semi-b`, `ts-object-class-division`, `ts-arrow-body-regex`, `ts-function-decl-division`, `ts-class-decl-division`, `ts-newline-prefix-regex`, `ts-yield-await-regex`, `ts-nonoctal-separators`, `ts-plain-js`, `ts-jsx-selfclosing-in-js`, `ts-err-jsx-in-js`, `ts-err-await-identifier`, `ts-err-cr-in-string`, `ts-err-zero-separator`;
+- **`tsx.json`:** `tsx-element-division`, `tsx-nbsp-text`, `tsx-attr-element-space`, `tsx-generic-const-reserved`, `tsx-extends-word`, `tsx-err-attr-lt`, `tsx-err-lookahead-escape`, `tsx-err-extends-comment`.
+
+**Tags.** `tsx-err-generic-type-position` and `tsx-err-lookahead-escape` gained the `departure` tag, which the cross-check uses to expect a divergence.
