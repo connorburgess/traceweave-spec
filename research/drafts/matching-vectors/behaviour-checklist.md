@@ -1,6 +1,6 @@
 # Behavioural conformance checklist (amendment A6)
 
-Status: draft, 2026-11-22, amended by A7. Companion to [catalogue-report-contract.md](../catalogue-report-contract.md) §6.8 (rules B1–B13; B10 as refined by A8). Item numbers are stable: A7 rewords items 36, 37, 43 and 46 and appends items 47–58; A8 rewords item 55 and appends items 59–60; A9 rewords items 42, 46 and 47 and appends item 61; A10 appends items 62–64. These behaviours cannot be pinned by vectors. Each item is one command with an observable outcome: an exit status, files present or absent, file modes, or output bytes. Both implementations should script every item. The I2 probe `xcheck/probes/i2_behaviour.py` on `merge-i2` is the current executable record.
+Status: draft, 2026-11-22, amended by A7. Companion to [catalogue-report-contract.md](../catalogue-report-contract.md) §6.8 (rules B1–B13; B10 as refined by A8). Item numbers are stable: A7 rewords items 36, 37, 43 and 46 and appends items 47–58; A8 rewords item 55 and appends items 59–60; A9 rewords items 42, 46 and 47 and appends item 61; A10 appends items 62–64; A11 appends item 65. These behaviours cannot be pinned by vectors. Each item is one command with an observable outcome: an exit status, files present or absent, file modes, or output bytes. Both implementations should script every item. The I2 probe `xcheck/probes/i2_behaviour.py` on `merge-i2` is the current executable record.
 
 ## Operations
 
@@ -137,4 +137,13 @@ In each item, the "edit" changes one compiled source file so that the `go-identi
 
     The outcome is the same as in item 62 or 63: a document exists only if its body equals what the recorded commit's content produces (`bodySha256` for an unedited effect). Otherwise there is no document, `DOC` exit 2. An implementation records which routes its toolchain cannot express (for example `go.work` for the Rust lane), and those sub-cases are "not applicable".
 
-**Item count: 64.** Items 16–24 are nine marker items.
+### Commit resolved once (A11: B10 point 4)
+
+65. **Ref flipped during the build.** In a clean clone at commit `A`, create a second commit `B` on another branch whose edit changes the `go-identical` body. Start the documented verifying build step. While it is compiling, run `git checkout B` (or `git update-ref HEAD B`, or `git reset --hard B`), for example from a hook, a delayed background job or a wrapper that pauses the compiler. The outcome is one of:
+    - the build refuses to stamp, so `DOC` gives exit 2 and no document;
+    - the stamped binary's `DOC` names `A` with a body equal to `bodySha256` (A's code);
+    - it names `B` with B's body.
+
+    A document whose commit and body disagree (`A` with B's body, or `B` with A's body) fails the item. Repeat with the change made to the working tree or the index instead of the ref.
+
+**Item count: 65.** Items 16–24 are nine marker items.
