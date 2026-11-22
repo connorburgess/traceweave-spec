@@ -91,3 +91,36 @@ All are low severity and none blocks the fast-forward.
 - **F4 (README).** Change "A1–A4" to A1–A5, 42 files to 43, add the four I2 crates to "Layout", and give the I2 case count per scale.
 - **Spec nit.** Contract §2b says six channel negatives; `comparison-config-negative-channels.json` has 5.
 - **Test gap (Rust).** Add unit tests for suppression, distinct evidence and ambiguity before the cap, so that `cargo test` catches R1–R3 without the vendored vectors.
+
+## Confirmation: post-i2
+
+Branch `post-i2` at `f955fc1` (contract A6–A9 through spec `f0da1f0`); `82b02ab` is an ancestor. Scratch clones only; probes are `<scratch>/post.sh` and `post2.sh`. **Verdict: listed fixes first.** Fix P1 and P2 below; everything else holds.
+
+1. **`scripts/offline scripts/check` exits 0** (1 min 26 s). The wrapper proved the denial first (loopback and 1.1.1.1 refused inside its sandbox), and the behaviour comparison reports 61/61 in both runners plus the one-harness item 61.
+   Under my own outer sandbox the wrapper refused (exit 2, "denial NOT proven"): it fails closed, so I ran it outside my sandbox. **P3 (low):** in a detached-HEAD clone, the Go runner `go/tools/behaviourcheck` fails (`git clone`: "Remote branch HEAD not found") and all 61 Go items show MISSING. It passed once I put the clone on a branch.
+2. **Checklist items I ran myself against both CLIs, same result in each:**
+   - **43:** a stamped build writes a document naming `f955fc1` with body `998c64c2…`; a run-time commit option exits 2.
+   - **44:** `DOC` exits 2 with no document for dirty-src and dirty-doc (Rust `cargo build`; Go `stampbuild` refuses with exit 1, and its plain build exits 2); the bodies are identical; `go run` writes no document.
+   - **45, 55, 59:** an archive export built outside any repository, untracked inside another repository, or inside that repository's ignored folder: no document, identical body (Go `stampbuild` exit 1, plain build and `-buildvcs=false` exit 2).
+   - **60:** a plain `go build` or `go run` in a clean clone writes no document.
+   - **54:** `TRACEWEAVE_BUILD_COMMIT` and `TRACEWEAVE_IMPL_COMMIT` are ignored. **39:** `-` means stdout, and no file named `-` is created.
+   - **23, 24:** with the `_FOSSIL_` and `.fslckout` markers present, both exit 2 and write no file.
+   - **47, 48:** after SIGKILL one `TMP(OUT)` file remains; the next normal build removes it and leaves `.other.json.tw-tmp-x` untouched.
+   - **51:** a symlink target is replaced by a regular file and the victim is unchanged. **52:** a symlink into a checkout gives exit 2. **57:** the canary key appears in no output.
+3. **M2.4 as worded, with rule B10: met for both CLIs** on the normal build routes. A second fresh clean clone of `f955fc1`, rebuilt (Rust `cargo build --release`, Go `go run ./tools/stampbuild`), gives a byte-identical body (`998c64c2…`, equal to the vector's `bodySha256`) and the commit `f955fc1`. `comparisonConfigSha256` is in `inputs`. The commit's correctness is undermined only by P1 and P2.
+4. **A document whose commit does not describe the code.** I changed `<= mergeGap` to `<` in `compare.rs`/`compare.go` of a clean clone and built:
+   - **P1 (both lanes, blocking):** with `git update-index --assume-unchanged` or `--skip-worktree` on the edited files, `git status --porcelain` is empty. Rust `cargo build` and Go `stampbuild` then stamp **clean `f955fc1`**, and the documents name `f955fc1` while their body is `a6d7fd1c…`, not `998c64c2…`.
+     - **Fix:** stop trusting index flags. Refuse when `git ls-files -v` shows any `h`/`S` (lower-case) entry, or compare `git hash-object` of every tracked file with `git ls-files -s`.
+   - **P2 (Go, blocking):** `stampbuild` sets `GOFLAGS=` empty, so the go command falls back to the `GOENV` file. A `GOENV` file with `GOFLAGS=-overlay=…` that replaces `compare.go` yields a stamped `f955fc1` document with body `a6d7fd1c…`.
+     - **Fix:** build with `GOENV=off` (and `GOFLAGS=`), or refuse when `go env GOFLAGS` is not empty.
+   - Add both routes as checklist items.
+5. **Earlier follow-ups:**
+   - **F1, F2, F3 resolved:** items 39, 48 (stale temporary files cleaned up) and 57 (neither lane echoes the key).
+   - **F4 mostly resolved:** the README now says A1–A9, 43 files and lists the I2 crates; "about 20,000 cases per seed" (line 62) still needs `--scale 2`.
+   - **Rust test gap resolved:** `crates/tw-compare/tests/sabotage.rs` has 3 tests. I applied my R2 sabotage, and `cargo test --test sabotage` fails on `evidence_counts_distinct_hashes_not_seeds`.
+6. **Commits:** the 29 commits `82b02ab..f955fc1` (single author; 53 files, +4,715/−567) carry no AI attribution or trailer, no secrets or keys, and no `/Users/…` or scratch paths.
+
+**Gates, as worded:**
+- **M2.1 met on macOS:** `scripts/offline` proves the denial, and `scripts/check` (extract, catalogue, compare and document steps across conformance and the checklist) passes under it. It refuses rather than run unconfined on other systems; a Linux equivalent is not provided.
+- **M2.2 open:** no frozen manifest; the cases are in `research/drafts` at an unpushed commit. **M2.3 open:** the vendor class (OD-C19) is missing. **M2.7 open:** no review-packet record or schema exists.
+- **M2.9 open:** there is no candidate-generation record keyed by `bodySha256` and no index; rank-field rejection and order irrelevance hold, as before.
