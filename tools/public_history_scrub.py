@@ -65,7 +65,9 @@ class Rules:
         self.detector_only = [(d["category"], d["scope"], re.compile(d["pattern"])) for d in data.get("detector_only_paths", [])]
         self.notes = data.get("notes", [])
         self.categories = data.get("categories", [])
-        self.allowed_emails = set(data.get("allowed_emails", []))
+        emails = data.get("allowed_emails", [])
+        # An allowed address is also allowed in its ROT13 form, which is how it appears in the ROT13 decoding of the same text.
+        self.allowed_emails = set(emails) | {codecs.decode(e, "rot13") for e in emails}
         self.drop_tool_blobs = set(data.get("drop_tool_blobs", []))
 
 
