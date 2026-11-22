@@ -1,6 +1,8 @@
 # Draft extraction contract: token-fingerprint comparison baseline
 
-Status: **draft for review, revision draft-1 (amended), 2026-11-22.** Roadmap item TW-02, gating M1. This revision resolves the findings of the [clean-room review](../reviews/extraction-contract-review.md) (F1–F8, A1–A4). The amendment rules on the contract questions from the two-implementation cross-check (Rust and Go lanes, 9.9 M differential cases), bounds `k`, `window` and `maxInputBytes`, and states the required complexity. Every disposition is listed in [§15](#15-review-dispositions).
+Status: experimental draft, normative for conformance of this draft version; decided-in-draft items confirmed by the owner's delegation on 2026-11-23.
+
+Revision status: **draft for review, revision draft-1 (amended), 2026-11-22.** Roadmap item TW-02, gating M1. This revision resolves the findings of the [clean-room review](../reviews/extraction-contract-review.md) (F1–F8, A1–A4). The amendment rules on the contract questions from the two-implementation cross-check (Rust and Go lanes, 9.9 M differential cases), bounds `k`, `window` and `maxInputBytes`, and states the required complexity. Every disposition is listed in [§15](#15-review-dispositions).
 
 A second amendment (§6, OD-23) lets a profile exclude named tokens from the normalized stream; Go and Rust declare none.
 

@@ -1,6 +1,10 @@
 # Draft text-profile vectors (`text-plain` draft-1, `text-markdown` draft-2)
 
-Status: revised after the [clean-room review](../../reviews/extraction-profile-text-review.md), 2026-11-22. `text-plain` draft-1 is frozen for stage-1 implementation (profile §17: digests listed there); `text-markdown` draft-2 is still a draft. These are the hand-derived vectors (roadmap gate TXT.2) for the [draft text extraction profile](../extraction-profile-text.md). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
+Status: experimental draft, normative for conformance of this draft version; decided-in-draft items confirmed by the owner's delegation on 2026-11-23.
+
+Vector status: **`text-plain` vectors are frozen** (draft-1). **`text-markdown` vectors (`text-markdown.json`, `config-text-markdown.json`) are a draft and are not normative.**
+
+Revision status: revised after the [clean-room review](../../reviews/extraction-profile-text-review.md), 2026-11-22. `text-plain` draft-1 is frozen for stage-1 implementation (profile §17: digests listed there); `text-markdown` draft-2 is still a draft. These are the hand-derived vectors (roadmap gate TXT.2) for the [draft text extraction profile](../extraction-profile-text.md). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
 
 ## Files
 

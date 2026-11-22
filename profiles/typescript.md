@@ -1,6 +1,10 @@
 # Draft extraction profile: TypeScript and JavaScript (`ts-tokens`, `tsx-tokens`)
 
-Status: **draft for review, revision draft-2, 2026-11-22.** Roadmap items TS.1 and TS.2. TS.3 (two implementations) and TS.4 (own M3 split) are implementation gates and are not claimed here. Draft-2 resolves the [clean-room review](../reviews/extraction-profile-typescript-review.md) of draft-1 (F1–F6, A1–A6). The dispositions are in §15 and the output changes in §16.
+Status: experimental draft, normative for conformance of this draft version; decided-in-draft items confirmed by the owner's delegation on 2026-11-23.
+
+Profiles in this document: **`ts-tokens` is frozen for implementation** (draft-2). **`tsx-tokens` is a deferred draft and is not normative**: no implementation is expected to support it until it is reviewed and frozen.
+
+Revision status: **draft for review, revision draft-2, 2026-11-22.** Roadmap items TS.1 and TS.2. TS.3 (two implementations) and TS.4 (own M3 split) are implementation gates and are not claimed here. Draft-2 resolves the [clean-room review](../reviews/extraction-profile-typescript-review.md) of draft-1 (F1–F6, A1–A6). The dispositions are in §15 and the output changes in §16.
 
 **`ts-tokens` `draft-2` is frozen for stage-1 implementation, pending owner confirmation of the decided-in-draft items** (§17 lists the frozen files and digests).
 

@@ -1,6 +1,10 @@
 # Draft text extraction profile: `text-plain` and `text-markdown`
 
-Status: **revised after the [clean-room review](../reviews/extraction-profile-text-review.md), 2026-11-22. `text-plain` is version `draft-1`, staged first and frozen for stage-1 implementation (§17); `text-markdown` is version `draft-2` and stays a draft until it is re-reviewed.** Both are decided in draft, pending owner confirmation. Roadmap gates TXT.1 (profile) and TXT.2 (hand-derived vectors), started under the 2026-11-22 owner override for fingerprint-only text work. It serves the proposed [UC-8](../../docs/use-cases.md#proposed-uc-8-find-reused-passages-in-prose), whose wording still awaits the owner (TXT.0). The evidence comes from [lane 09](../lanes/09-evidence-review.md).
+Status: experimental draft, normative for conformance of this draft version; decided-in-draft items confirmed by the owner's delegation on 2026-11-23.
+
+Profiles in this document: **`text-plain` is frozen for stage-1 implementation** (draft-1). **`text-markdown` is a draft and is not normative** until it is re-reviewed.
+
+Revision status: **revised after the [clean-room review](../reviews/extraction-profile-text-review.md), 2026-11-22. `text-plain` is version `draft-1`, staged first and frozen for stage-1 implementation (§17); `text-markdown` is version `draft-2` and stays a draft until it is re-reviewed.** Both are decided in draft, pending owner confirmation. Roadmap gates TXT.1 (profile) and TXT.2 (hand-derived vectors), started under the 2026-11-22 owner override for fingerprint-only text work. It serves the proposed [UC-8](../../docs/use-cases.md#proposed-uc-8-find-reused-passages-in-prose), whose wording still awaits the owner (TXT.0). The evidence comes from [lane 09](../lanes/09-evidence-review.md).
 
 This is research material, not a normative change. It does not modify `spec/`, `schemas/`, `profiles/` or `test-vectors/`. "MUST" describes what this draft proposes for an implementation claiming to follow it. Nothing here is a registered algorithm. The vectors, checker, tables and cross-check are in [extraction-vectors-text/](extraction-vectors-text/README.md).
 

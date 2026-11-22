@@ -1,6 +1,10 @@
 # Draft TypeScript/JavaScript extraction vectors (revision draft-2)
 
-Status: draft for review, 2026-11-22, **draft-2**. Draft-2 resolves the [review](../../reviews/extraction-profile-typescript-review.md) of draft-1, and the changes are listed in [profile §16](../extraction-profile-typescript.md#16-changes-from-draft-1-to-draft-2). These vectors go with the [draft TypeScript/JavaScript profile](../extraction-profile-typescript.md), which plugs into the [extraction contract](../extraction-contract.md). **`ts-tokens` (`ts.json`, `limits-ts.json`) is stage 1 and frozen for stage-1 implementation, pending owner confirmation of the decided-in-draft items. The digests are in [profile §17](../extraction-profile-typescript.md#17-freeze-record-ts-tokens-draft-2). `tsx-tokens` (`tsx.json`) is deferred:** it is kept as a draft and is not to be frozen yet (profile TSOD-1). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
+Status: experimental draft, normative for conformance of this draft version; decided-in-draft items confirmed by the owner's delegation on 2026-11-23.
+
+Vector status: **`ts-tokens` vectors are frozen** (draft-2). **`tsx-tokens` vectors (`tsx.json`, `config-tsx.json`) are a deferred draft and are not normative.**
+
+Revision status: draft for review, 2026-11-22, **draft-2**. Draft-2 resolves the [review](../../reviews/extraction-profile-typescript-review.md) of draft-1, and the changes are listed in [profile §16](../extraction-profile-typescript.md#16-changes-from-draft-1-to-draft-2). These vectors go with the [draft TypeScript/JavaScript profile](../extraction-profile-typescript.md), which plugs into the [extraction contract](../extraction-contract.md). **`ts-tokens` (`ts.json`, `limits-ts.json`) is stage 1 and frozen for stage-1 implementation, pending owner confirmation of the decided-in-draft items. The digests are in [profile §17](../extraction-profile-typescript.md#17-freeze-record-ts-tokens-draft-2). `tsx-tokens` (`tsx.json`) is deferred:** it is kept as a draft and is not to be frozen yet (profile TSOD-1). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
 
 ## Files
 
