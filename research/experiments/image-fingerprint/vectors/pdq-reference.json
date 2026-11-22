@@ -1,0 +1,501 @@
+{
+ "source": {
+  "repository": "https://github.com/meta/ThreatExchange",
+  "commit": "9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2",
+  "licence": "BSD (LICENSE at the commit)",
+  "accessed": "2026-11-22"
+ },
+ "note": "Expected outputs transcribed by script from the three vendor locations at the pinned commit; line numbers refer to those files. The vendor PDQ README defines correctness as (1) exact hash equality when fed the C++ reference luma arrays and (2) Hamming distance <= 10 to the C++ output when quality >= 80.",
+ "files": [
+  {
+   "path": "bridge-mods/aaa-orig.jpg",
+   "bytes": 361182,
+   "gitBlobSha1": "66ad092df7cd508634dbea49cc5362df50c69da5",
+   "sha256": "b5b0799616df52d475a3968dc7e54f1d0724c912244ffa6175bc786375dd7298"
+  },
+  {
+   "path": "bridge-mods/blur-a-little.jpg",
+   "bytes": 307263,
+   "gitBlobSha1": "5addf2dd8e9c42e504a63816f0f471d0128456ad",
+   "sha256": "25094afa08e258b3135208b54b0ed28a50ad5386a4e4b66501e7ad886864fd54"
+  },
+  {
+   "path": "bridge-mods/blur-a-lot.jpg",
+   "bytes": 171315,
+   "gitBlobSha1": "e5e90f0646537d95b16a2ac14e846137f683a1c6",
+   "sha256": "08e69270937da0226e4571465672d57d7da20a3884aff672461affd7824948cd"
+  },
+  {
+   "path": "bridge-mods/high-contrast.jpg",
+   "bytes": 372595,
+   "gitBlobSha1": "b03847f3b2a3957beacf588aa6325b07474a82b2",
+   "sha256": "053d99bef5580cc7d6b855fd4c9f61385911a560b17b7db80bab45e735d90d87"
+  },
+  {
+   "path": "bridge-mods/high-saturation.jpg",
+   "bytes": 376609,
+   "gitBlobSha1": "5289f22dde84e2c691d812d591f82a518bedfcb5",
+   "sha256": "0aef8254125e3949e0997e8aec94ea6e906b154eac99fc2306858b216eb9a7e4"
+  },
+  {
+   "path": "bridge-mods/sharpen-a-little.jpg",
+   "bytes": 420148,
+   "gitBlobSha1": "b289105986e91a9da479dfa27286a2b4075c8961",
+   "sha256": "5e683cb1711a8fdf65b18e68b4c7d8ae5c653314a982cd9d6c5b5673379fc298"
+  },
+  {
+   "path": "bridge-mods/sharpen-a-lot.jpg",
+   "bytes": 571940,
+   "gitBlobSha1": "beff8df6a0e192ae0ea2a55ee88caaa894c4e547",
+   "sha256": "ed086e12a054a9f8f32da1c60b8ccecc7954cfae78573f888a8b6ad8a1e78cdb"
+  },
+  {
+   "path": "bridge-mods/shrink-a-little.jpg",
+   "bytes": 214410,
+   "gitBlobSha1": "aaa13fca37006c3bdee0c4098a4e05b5f76d32ba",
+   "sha256": "85c341bcd6293ace5413fd7febd7e689ef57d7af4324fd5d9315126d95233bfb"
+  },
+  {
+   "path": "bridge-mods/shrink-a-lot.jpg",
+   "bytes": 7350,
+   "gitBlobSha1": "22cde692806e8ef57bc5c2b8f60bf733264030fc",
+   "sha256": "b5711c814bea20d2f24703680393c1dfb3f41b4da5624c00da0d64bf71a12461"
+  },
+  {
+   "path": "bridge-mods/square-128x128.jpg",
+   "bytes": 7528,
+   "gitBlobSha1": "99c9f53fad11ac94757aa655bf478bf7e2efa5b9",
+   "sha256": "9428e7578052968561f8e6f4a1114f1eaed57d659e7dd03be70d4ece371bbc15"
+  },
+  {
+   "path": "bridge-mods/square-256x256.jpg",
+   "bytes": 24174,
+   "gitBlobSha1": "38a77783bd687a6e146cae32234ee981e21bbc91",
+   "sha256": "3327d0c23446434767c9240b8ab230eca516ec788db1f82869a20fb51294b56c"
+  },
+  {
+   "path": "bridge-mods/square-512x512.jpg",
+   "bytes": 81353,
+   "gitBlobSha1": "9cc1d2cfabd554fc2c3e409c6224473e247427e0",
+   "sha256": "653cde67071b1c70f69d64682e599400baff1db579c1244467cb9160aeb79d4d"
+  },
+  {
+   "path": "misc-images/c.png",
+   "bytes": 1178841,
+   "gitBlobSha1": "2c3cbcf84cde37a5f48994f38464a63beab2c4fc",
+   "sha256": "93aa0ba454d3805e02be04a883b839a85bee83d0cbac3d306331584c1ebec0c6"
+  },
+  {
+   "path": "misc-images/small.jpg",
+   "bytes": 1756,
+   "gitBlobSha1": "0905a805ae644aa6af21659487adf4764ae508ce",
+   "sha256": "329479790610cd0a2668eea439374cf279ef58d7330400dbb4e3569429ef5e3d"
+  },
+  {
+   "path": "misc-images/wee.jpg",
+   "bytes": 13664,
+   "gitBlobSha1": "266c64e788fe8131f26a6322b55609d219d6cc77",
+   "sha256": "05636c50d0c2ffe3a820f964eaba35b404deadd10538fe452ad9fb16fdd823d7"
+  },
+  {
+   "path": "reg-test-input/dih/bridge-1-original.jpg",
+   "bytes": 361182,
+   "gitBlobSha1": "66ad092df7cd508634dbea49cc5362df50c69da5",
+   "sha256": "b5b0799616df52d475a3968dc7e54f1d0724c912244ffa6175bc786375dd7298"
+  },
+  {
+   "path": "reg-test-input/dih/bridge-2-rotate-90.jpg",
+   "bytes": 373855,
+   "gitBlobSha1": "66fe14bdba738b3769b747b462aef9a4dd693320",
+   "sha256": "a4ec0b39cf38469e3c5e16869a5ea1f23995b42a4b5de15d223e905b87788317"
+  },
+  {
+   "path": "reg-test-input/dih/bridge-3-rotate-180.jpg",
+   "bytes": 356813,
+   "gitBlobSha1": "e0a931c7d7d5d14e2f071ac23018cc72e9541824",
+   "sha256": "fc9073d9b08f7b4d90e0fbdb4693fa7c58a9746dfc4c339fce5b3320905a3b3b"
+  },
+  {
+   "path": "reg-test-input/dih/bridge-4-rotate-270.jpg",
+   "bytes": 357530,
+   "gitBlobSha1": "e78786a0ae2182f60c6f21ede44a868a2cf126be",
+   "sha256": "ed7769b97c8eab168eefe5cc5a49a1372d25cfecb354e457153a8e45f208daa5"
+  },
+  {
+   "path": "reg-test-input/dih/bridge-5-flipx.jpg",
+   "bytes": 356799,
+   "gitBlobSha1": "c6458b162afe635235cacddf2431739c4f1a74a9",
+   "sha256": "3069d9eb8d9de760229cf99ddcc5a7834f08e3924b37c080c2df8bc5836737fb"
+  },
+  {
+   "path": "reg-test-input/dih/bridge-6-flipy.jpg",
+   "bytes": 372851,
+   "gitBlobSha1": "4d8a88241fcaef6451711b6dd842b210e767d931",
+   "sha256": "c2225164ee53418ec001fa33bf9a4cf95a73514f493c87f676a1af9f9624d19b"
+  },
+  {
+   "path": "reg-test-input/dih/bridge-7-flip-plus-1.jpg",
+   "bytes": 373862,
+   "gitBlobSha1": "73f6bfe028ceeca355bae8275a236a540adaab37",
+   "sha256": "355dd5a4ccef6e205ed705c73bce8676981f9f943a06453a2f68d9d8bba3f7f1"
+  },
+  {
+   "path": "reg-test-input/dih/bridge-8-flip-minus-1.jpg",
+   "bytes": 357443,
+   "gitBlobSha1": "1187b5d249775a75fae843ba585dfb58b27a89d5",
+   "sha256": "092bfe6026946f3b9322662d010fb16dabf3da7ece9f0cbaad99772fdf16a30e"
+  },
+  {
+   "path": "reg-test-input/labelme-subset/q0003.jpg",
+   "bytes": 3187,
+   "gitBlobSha1": "5bfd22ce8b6f6068385d3be11858c87146ef1bf4",
+   "sha256": "9f93a23582535bc62088240e38ee050c9c0e2eed5c4741339b8415bf04a0604e"
+  },
+  {
+   "path": "reg-test-input/labelme-subset/q0004.jpg",
+   "bytes": 3345,
+   "gitBlobSha1": "6bad2c1878ade3667361cbdbbb76c4a82ab5351e",
+   "sha256": "d517f25c0142f9d897a00959acc16ac2a67cf20ade0997bb5ab378f607ab7f3b"
+  },
+  {
+   "path": "reg-test-input/labelme-subset/q0122.jpg",
+   "bytes": 6928,
+   "gitBlobSha1": "7e6244c5ee4dade3472bac019b78864c37af7e92",
+   "sha256": "3e7b6b95d72f6ea61c0e6c3f2a4afc7c78ee2ab08b9ac51c58388e50deb139e9"
+  },
+  {
+   "path": "reg-test-input/labelme-subset/q0291.jpg",
+   "bytes": 9559,
+   "gitBlobSha1": "a45f7eca606ef41279dc485db10bf54caa4101d0",
+   "sha256": "25db315820a1faee9bc4a8086914f4c6fcb818448a0e1a707fe160bb67818846"
+  },
+  {
+   "path": "reg-test-input/labelme-subset/q0746.jpg",
+   "bytes": 11530,
+   "gitBlobSha1": "0f93ac41095bc2886913239a9598a377f33f087e",
+   "sha256": "acf23ed39052296ed032981dcdc063a1e442691be54e2927043a08f97675a1f1"
+  },
+  {
+   "path": "reg-test-input/labelme-subset/q1050.jpg",
+   "bytes": 17984,
+   "gitBlobSha1": "c62773ca99bc3e30765d202bbcbe2dd16b585307",
+   "sha256": "e570fd8266489c94f1da079da69e62c24e90851c424e5a26f63ebdd13f0e51a4"
+  },
+  {
+   "path": "reg-test-input/labelme-subset/q2821.jpg",
+   "bytes": 19660,
+   "gitBlobSha1": "da07c5167131f9ec4c7b1898565e2065b7e02a04",
+   "sha256": "418b85299aa697927c29ff139280a988ec3c44df540a35c221dcb0fcf8051fcd"
+  }
+ ],
+ "referenceSets": [
+  {
+   "id": "cpp-regtest",
+   "location": "pdq/cpp/reg_test/expected/out",
+   "producer": "C++ pdq-photo-hasher (CImg decoder), vendor regression output",
+   "tolerance": "none stated; exact regression diff",
+   "vectors": [
+    {
+     "path": "reg-test-input/dih/bridge-1-original.jpg",
+     "hash": "d8f8f0cee0f4a84f0637022a078f67f0b36e2ed596621e1d33e6339c4e9c9b22",
+     "quality": 100,
+     "line": 8
+    },
+    {
+     "path": "reg-test-input/dih/bridge-2-rotate-90.jpg",
+     "hash": "30a10efdf1c83f429013d48d0ffffc52e34e0e35ada952a9d29605215aa9e5af",
+     "quality": 100,
+     "line": 9
+    },
+    {
+     "path": "reg-test-input/dih/bridge-3-rotate-180.jpg",
+     "hash": "2dad5a64b1a142e7d362a09857da895ae63b8c7fc23794b766b319361fc93188",
+     "quality": 100,
+     "line": 10
+    },
+    {
+     "path": "reg-test-input/dih/bridge-4-rotate-270.jpg",
+     "hash": "a5f0a457248995e8c9065c275aaa5498b61ba4bdf8fcf80387c32f8b5bfc4f05",
+     "quality": 100,
+     "line": 11
+    },
+    {
+     "path": "reg-test-input/dih/bridge-5-flipx.jpg",
+     "hash": "d8f80f33e0f417b20e37f5cd028f980fb36ed02a9662c1e233e64c634e9c64dd",
+     "quality": 100,
+     "line": 12
+    },
+    {
+     "path": "reg-test-input/dih/bridge-6-flipy.jpg",
+     "hash": "2da9259bb1a1bd1a5362576552da32a5e63b7380c2774b4866b346c91b89ce77",
+     "quality": 100,
+     "line": 13
+    },
+    {
+     "path": "reg-test-input/dih/bridge-7-flip-plus-1.jpg",
+     "hash": "f0a1e10271ccc0bd90530b720fff038de34ef1e8ada9a956d6967ade5ea91a50",
+     "quality": 100,
+     "line": 14
+    },
+    {
+     "path": "reg-test-input/dih/bridge-8-flip-minus-1.jpg",
+     "hash": "2df05aa8a4896a17c14682da5aaaab07b61b5b42f8fc07fc87c3d0741bfcb0fa",
+     "quality": 100,
+     "line": 15
+    }
+   ],
+   "dihedral": [
+    {
+     "path": "reg-test-input/dih/bridge-1-original.jpg",
+     "xform": "orig",
+     "hash": "d8f8f0cee0f4a84f0637022a078f67f0b36e2ed596621e1d33e6339c4e9c9b22",
+     "line": 55
+    },
+    {
+     "path": "reg-test-input/dih/bridge-1-original.jpg",
+     "xform": "rot90",
+     "hash": "f0a10efd51c83d429053d48d0fffbc52e34e0e17ada956a9d29685211ea9e58f",
+     "line": 56
+    },
+    {
+     "path": "reg-test-input/dih/bridge-1-original.jpg",
+     "xform": "rot180",
+     "hash": "adad5a64b5a102e55b62a88052dacd5ae63b847fc337b4b766b399361bc93188",
+     "line": 57
+    },
+    {
+     "path": "reg-test-input/dih/bridge-1-original.jpg",
+     "xform": "rot270",
+     "hash": "a5f0b457248995e8c1065c275aaa56d8b61ba4bdf8fcfc0383c32f8b0bfc4f05",
+     "line": 58
+    },
+    {
+     "path": "reg-test-input/dih/bridge-1-original.jpg",
+     "xform": "flipx",
+     "hash": "d8f80f31e0f457b00637f5d5038f980fb36ed12a9662c1e233e64c634e9c64dd",
+     "line": 59
+    },
+    {
+     "path": "reg-test-input/dih/bridge-1-original.jpg",
+     "xform": "flipy",
+     "hash": "8dada49991a1bd1a5362577742da32a5e63b7b80c2364b4866b346c91bc9ce77",
+     "line": 60
+    },
+    {
+     "path": "reg-test-input/dih/bridge-1-original.jpg",
+     "xform": "flipp",
+     "hash": "f0a1e10271ccc0bd90530b720fff038de34ef1e8ada9a956d6967ade5ea91a50",
+     "line": 61
+    },
+    {
+     "path": "reg-test-input/dih/bridge-1-original.jpg",
+     "xform": "flipm",
+     "hash": "a5f44ba8a4996a17cd06a1d85aaaa927b61b5b42f8fc03fc83c3d0740bfcb0fa",
+     "line": 62
+    }
+   ]
+  },
+  {
+   "id": "python-readme",
+   "location": "pdq/python/README.md",
+   "producer": "pure-Python pdq_photo_hasher_tool --pdq (fromFile: Pillow open, thumbnail(512,512), convert RGB); Pillow version not stated",
+   "tolerance": "none stated",
+   "vectors": [
+    {
+     "path": "bridge-mods/aaa-orig.jpg",
+     "hash": "d8f8f0cce0f4a84f0e370a22028f67f0b36e2ed596623e1d33e6b39c4e9c9b22",
+     "quality": 100,
+     "line": 19
+    },
+    {
+     "path": "bridge-mods/blur-a-little.jpg",
+     "hash": "d8f8f0cce0f4a84f0e370a22028f67f0b36e2ed596623e1d33e6b39c4e9c9b22",
+     "quality": 100,
+     "line": 20
+    },
+    {
+     "path": "bridge-mods/blur-a-lot.jpg",
+     "hash": "d8f8f0cce0f4e84f0637022a028f67f0b36e2ed596623e1d33e6b39c4e9c9b22",
+     "quality": 100,
+     "line": 21
+    },
+    {
+     "path": "bridge-mods/high-contrast.jpg",
+     "hash": "d8f8f0cce0f4e84d06370a32068f67f0b36e2ed596623e1d33e6339c4e9c9b22",
+     "quality": 100,
+     "line": 22
+    },
+    {
+     "path": "bridge-mods/high-saturation.jpg",
+     "hash": "d8f8f0cce0f4e84f0e370a22028f67f0b36e2ed596621e1d33e6b39c4e9c9b22",
+     "quality": 100,
+     "line": 23
+    },
+    {
+     "path": "bridge-mods/sharpen-a-little.jpg",
+     "hash": "d8f8f0cce0f4a84f0e370a22038f67f0b36e2ed596621e1d33e6b39c4e9c9b22",
+     "quality": 100,
+     "line": 24
+    },
+    {
+     "path": "bridge-mods/sharpen-a-lot.jpg",
+     "hash": "d0f8f1cec0f4a8470a370a32238f67f0b36e2ef597231e1d72a6a39c4e9c9b22",
+     "quality": 100,
+     "line": 25
+    },
+    {
+     "path": "bridge-mods/shrink-a-little.jpg",
+     "hash": "d8f8f0cce0f4a84f0e370a22038f67f0b36e2ed596621e1d33e6b39c4e9c9b22",
+     "quality": 100,
+     "line": 26
+    },
+    {
+     "path": "bridge-mods/shrink-a-lot.jpg",
+     "hash": "d0f8f1ccc0f4a84d0a370a3a228f67f0b36e2ed5b6623e1d33e6339c4e9c9b22",
+     "quality": 100,
+     "line": 27
+    },
+    {
+     "path": "bridge-mods/square-128x128.jpg",
+     "hash": "d8f8f1eec0f4a84f0e37022a078f63f0b36e2ed596621e1d33e6239c4e9c9b22",
+     "quality": 100,
+     "line": 28
+    },
+    {
+     "path": "bridge-mods/square-256x256.jpg",
+     "hash": "d8f8f0cec4f4a84f0637022a078f67f0b36e2ee5b6621e1d33e6239c4e9c9b22",
+     "quality": 100,
+     "line": 29
+    },
+    {
+     "path": "bridge-mods/square-512x512.jpg",
+     "hash": "d8f8f0cec0f4a84f0637022a278f67f0b36e2ed596621e1d33e6339c4e9c9b22",
+     "quality": 100,
+     "line": 30
+    }
+   ]
+  },
+  {
+   "id": "python-unittest",
+   "location": "pdq/python/pdqhashing/tests/pdq_test.py",
+   "producer": "pure-Python PDQHasher.fromFile",
+   "tolerance": "vendor test asserts Hamming distance <= 16, not equality",
+   "vectors": [
+    {
+     "path": "misc-images/b.jpg",
+     "hash": "d8f8f0cce0f4a84f0e370a22028f67f0b36e2ed596623e1d33e6b39c4e9c9b22",
+     "line": 17,
+     "inputPresentAtCommit": false
+    },
+    {
+     "path": "misc-images/c.png",
+     "hash": "e64cc9d91e623842f8d1f1d9a398e78c9f199a3bd87924f2b7e11e0bf061b064",
+     "line": 21,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "misc-images/small.jpg",
+     "hash": "0007001f003f003f007f00ff00ff00ff01ff01ff01ff03ff03ff03ff03ff03ff",
+     "line": 25,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "misc-images/wee.jpg",
+     "hash": "6227401f601ff4ccafcc9fad4b0d95d371a2eb7265a3285234d228ca94deeb2d",
+     "line": 29,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "reg-test-input/labelme-subset/q0003.jpg",
+     "hash": "54a977c221d14c1c43ba5e6e21d4a13989a3553f1462611cbb85fda7be83b677",
+     "line": 33,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "reg-test-input/labelme-subset/q0004.jpg",
+     "hash": "992d44af36d69e6ca6b812585928bac11def254ef5398c6d07466c9abcc65b92",
+     "line": 37,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "reg-test-input/labelme-subset/q0122.jpg",
+     "hash": "cfb2009ddd21c6dab0046a7745b5984757a8a4535b3377aea2591d32b33ff940",
+     "line": 41,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "reg-test-input/labelme-subset/q0291.jpg",
+     "hash": "a0fe94f1e5cc1cc8dd855948498dc9243f7ca27336f036d7f212b74bc103c9a7",
+     "line": 45,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "reg-test-input/labelme-subset/q0746.jpg",
+     "hash": "1049d96239e24d4dca2c55512b8bdb77425f4dbcf575a0a95555aaab5554aaaa",
+     "line": 49,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "reg-test-input/labelme-subset/q1050.jpg",
+     "hash": "489db672e9190276d452aeab41eba20f02375fe4092d88defdf491a5c55c5f70",
+     "line": 53,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "reg-test-input/labelme-subset/q2821.jpg",
+     "hash": "b150231ffae4710ffcf4f18bb574b109a576f14bb8543189f8743289f174b109",
+     "line": 57,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "reg-test-input/dih/bridge-1-original.jpg",
+     "hash": "d8f8f0cce0f4a84f0e370a22028f67f0b36e2ed596623e1d33e6b39c4e9c9b22",
+     "line": 61,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "reg-test-input/dih/bridge-2-rotate-90.jpg",
+     "hash": "38a50efd71c83f429013d68d0ffffc52e34e0e15ada952a9d29684214aa9e5af",
+     "line": 65,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "reg-test-input/dih/bridge-3-rotate-180.jpg",
+     "hash": "2dadda64b5a142e5d362209057da895ae63b8c7fc277b4b766b319361f893188",
+     "line": 69,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "reg-test-input/dih/bridge-4-rotate-270.jpg",
+     "hash": "a5f0a457248995e8c9065c275aaa54d8b61ba4bdf8fcfc0387c32f8b0bfc4f05",
+     "line": 73,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "reg-test-input/dih/bridge-5-flipx.jpg",
+     "hash": "d8f80f31e0f417b00e37f5dd028f980fb36ed12a9662c1e233e64c634e9c64dd",
+     "line": 77,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "reg-test-input/dih/bridge-6-flipy.jpg",
+     "hash": "0dad259bb1a1bd18d362576556da32a1e63b7380c2374b4866b3c6c91b89ce77",
+     "line": 81,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "reg-test-input/dih/bridge-7-flip-plus-1.jpg",
+     "hash": "f0a5e10271dcc0bd9c5309720fff018de34ef1e8ada9a956d2967ade1ea91a50",
+     "line": 85,
+     "inputPresentAtCommit": true
+    },
+    {
+     "path": "reg-test-input/dih/bridge-8-flip-minus-1.jpg",
+     "hash": "69f05aa8a4996a17c146a2da5aaaab07b61b5b60f8fc07fc83c3d0740bfcb0fa",
+     "line": 89,
+     "inputPresentAtCommit": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,4 @@
+# Build backend for the sdist-only data-url (dependency of iscc-core). Install first, then
+# requirements.txt with --no-build-isolation. Hashes are for the exact files used (CPython 3.14).
+setuptools==84.2.1 \
+    --hash=sha256:ca140b45d5325a9478f880e351484f62fef15f336462e449ca0c03c873d589c2

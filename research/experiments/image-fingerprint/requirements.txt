@@ -1,0 +1,42 @@
+# Hash-locked runtime environment for research/experiments/image-fingerprint.
+# Platform-locked: the hashes are for CPython 3.14, macOS arm64 wheels (plus one sdist and
+# pure-Python wheels). Another platform needs its own hashes, recorded as a protocol change.
+# Install (offline, from wheelhouse/): see README.md. Licences are listed in README.md.
+annotated-types==0.8.0 \
+    --hash=sha256:f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0
+base58==2.1.1 \
+    --hash=sha256:11a36f4d3ce51dfc1043f3218591ac4eb1ceb172919cebe05b52a5bcc8d245c2
+bitarray==3.12.4 \
+    --hash=sha256:32595a38c1a222f3062b65aa127887461d4b198cf147586452186f3fb1207e52
+blake3==1.0.11 \
+    --hash=sha256:235bbfdd1dd3b0bf82aee8de8df01c55ade5648daf978d41527763786d3b5aa8
+data-url==1.4.0 \
+    --hash=sha256:21a13f65fa3b3c75b1d7beb56bbb47b46110e8ae21bdcfe20c3da05a7fc59521
+iscc-core==1.5.0 \
+    --hash=sha256:3bc109085b3794206e29827cc1b50f691632c46e343674c7a91b80caa8eb15f1
+jcs==0.3.0 \
+    --hash=sha256:c8e0113e717873f22ea7090cf877eed45a8715997eedc60c18ff789a3e89106d
+loguru==0.8.0 \
+    --hash=sha256:e0fba09d6f76ba2d2f4bd1757122942f5a670c702e988b5efaeab99dacba0069
+more-itertools==11.2.1 \
+    --hash=sha256:35a7377edd1dd6608dcb2cdf534ded55ea32d49448875ad042cd3f879fb1ded0
+numpy==2.5.5 \
+    --hash=sha256:229743571f901a082f031f511dc4f926b4b4a714075d98b1ff2af62d836365ac
+pillow==13.0.0 \
+    --hash=sha256:d9b0a2bee3f3e03e9f29057aedb807dbf1e1d96ee1b9d0f422d9db6c8583271d
+pybase64==1.5.2 \
+    --hash=sha256:1e7528aa387bdb94859c3a2fa92daddd054953f5b4f6f7c844eee598a9cc10d6
+pydantic==2.14.4 \
+    --hash=sha256:653a2ad9f6d8858529c77c72717d0ea991d6c6837fe683246b2f4b2bbfc3fadc
+pydantic-core==2.50.5 \
+    --hash=sha256:e8fe516a4b3b06e4ff83b9adee4a786d28a617e5fb5fe90bda49fb6f52a5ac19
+python-dotenv==1.2.4 \
+    --hash=sha256:42269a8a5b3fd54ffa6f3d84b18abed50064717576b4ecf03dc4a55d8aa04fdc
+typing-extensions==4.16.0 \
+    --hash=sha256:481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8
+typing-inspection==0.4.5 \
+    --hash=sha256:bc210535442b39e1bf2805e0c7a17dfd6a4ace760c84c7f7d16245d23a6b1c39
+uvarint==1.2.0 \
+    --hash=sha256:9dcc98ad92b642c57494bed9370c4f93479d2d36223b2c3702823f0aa8b1a9a3
+xxhash==4.1.0 \
+    --hash=sha256:ebe8d35912ce55e0f36532dd36afff76b7893b92bb127916b870094d97cc2d0f

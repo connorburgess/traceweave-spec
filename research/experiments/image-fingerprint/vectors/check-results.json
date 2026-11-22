@@ -1,0 +1,758 @@
+{
+ "environment": {
+  "implementation": "CPython",
+  "libjpegTurbo": "3.2.0",
+  "machine": "arm64",
+  "packages": {
+   "annotated-types": "0.8.0",
+   "base58": "2.1.1",
+   "bitarray": "3.12.4",
+   "blake3": "1.0.11",
+   "data-url": "1.4.0",
+   "iscc-core": "1.5.0",
+   "jcs": "0.3.0",
+   "loguru": "0.8.0",
+   "more-itertools": "11.2.1",
+   "numpy": "2.5.5",
+   "pillow": "13.0.0",
+   "pybase64": "1.5.2",
+   "pydantic": "2.14.4",
+   "pydantic-core": "2.50.5",
+   "python-dotenv": "1.2.4",
+   "typing-extensions": "4.16.0",
+   "typing-inspection": "0.4.5",
+   "uvarint": "1.2.0",
+   "xxhash": "4.1.0"
+  },
+  "python": "3.14.6",
+  "system": "Darwin",
+  "zlib": "1.3.1.zlib-ng"
+ },
+ "environmentDeviations": [],
+ "inputFiles": {
+  "listed": 30,
+  "verified": 30
+ },
+ "isccConformance": {
+  "alg_dct_module": "iscc_core.dct",
+  "compiledDctEqual": 3,
+  "pureDctEqual": 3,
+  "rows": [
+   {
+    "bits": 64,
+    "compiledDct": "ISCC:EEAQAAAAAAAAAAAA",
+    "expected": "ISCC:EEAQAAAAAAAAAAAA",
+    "name": "test_0000_all_black_64",
+    "pureDct": "ISCC:EEAQAAAAAAAAAAAA"
+   },
+   {
+    "bits": 128,
+    "compiledDct": "ISCC:EEBYAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "expected": "ISCC:EEBYAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "name": "test_0001_all_white_128",
+    "pureDct": "ISCC:EEBYAAAAAAAAAAAAAAAAAAAAAAAAA"
+   },
+   {
+    "bits": 256,
+    "compiledDct": "ISCC:EED4GQZQTY6J5DTHNDQ7S7EGNENJNRTEGLGHFWXFGNDZHSMO4HEZGZI",
+    "expected": "ISCC:EED4GQZQTY6J5DTHNDQ7S7EGNENJNRTEGLGHFWXFGNDZHSMO4HEZGZI",
+    "name": "test_0003_img_256",
+    "pureDct": "ISCC:EED4GQZQTY6J5DTHNDQ7S7EGNENJNRTEGLGHFWXFGNDZHSMO4HEZGZI"
+   }
+  ],
+  "source": "iscc_core/data.json gen_image_code_v0 (shipped in the pinned iscc-core 1.5.0 wheel)",
+  "total": 3
+ },
+ "pdqCorePortVsVendor": {
+  "compared": "8 dihedral hashes + quality, full-resolution profile decode",
+  "equal": 30,
+  "total": 30
+ },
+ "pdqPublished": [
+  {
+   "comparable": 8,
+   "decodePath": "profile-full-resolution",
+   "distances": [
+    6,
+    8,
+    6,
+    2,
+    2,
+    8,
+    6,
+    6
+   ],
+   "exactEqual": 0,
+   "listed": 8,
+   "maxDistance": 8,
+   "qualityEqual": 8,
+   "rows": [
+    {
+     "computed": "f8f8f0cee0f4a84f06370a22038f63f0b36e2ed596621e1d33e6b39c4e9c9b22",
+     "distance": 6,
+     "path": "reg-test-input/dih/bridge-1-original.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "30a10efd71cc3d429013d48d0ffffc52e34e0e17ada952a9d29685211ea9e5af",
+     "distance": 8,
+     "path": "reg-test-input/dih/bridge-2-rotate-90.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "adad5a64b5a142e75b62a09857da895ae63b847fc23794b766b319361bc93188",
+     "distance": 6,
+     "path": "reg-test-input/dih/bridge-3-rotate-180.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "a5f0a457a48995e8c9065c275aaa5498b61ba4bdf8fcf80387c32f8b1bfc4f05",
+     "distance": 2,
+     "path": "reg-test-input/dih/bridge-4-rotate-270.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "f8f80f31e0f417b20e37f5cd028f980fb36ed02a9662c1e233e64c634e9c64dd",
+     "distance": 2,
+     "path": "reg-test-input/dih/bridge-5-flipx.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "0dad2599b1a1bd1a5362576742da32a5e63b7380c2374b4866b366c91bc9ce77",
+     "distance": 8,
+     "path": "reg-test-input/dih/bridge-6-flipy.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "f0a5e102f1ccc0bd945308720fff038de34ef1e8ada9a956d2967ade5ea91a50",
+     "distance": 6,
+     "path": "reg-test-input/dih/bridge-7-flip-plus-1.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "a5f05aa8a4896a17c906a2d85aaaab07b61b5b42f8fc07fc87c3d0741bfcb0fa",
+     "distance": 6,
+     "path": "reg-test-input/dih/bridge-8-flip-minus-1.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    }
+   ],
+   "set": "cpp-regtest",
+   "within10": 8,
+   "within16": 8
+  },
+  {
+   "comparable": 8,
+   "decodePath": "vendor-python-thumbnail512",
+   "distances": [
+    8,
+    8,
+    8,
+    4,
+    4,
+    8,
+    8,
+    8
+   ],
+   "exactEqual": 0,
+   "listed": 8,
+   "maxDistance": 8,
+   "qualityEqual": 8,
+   "rows": [
+    {
+     "computed": "d8f8f0cce0f4a84f0e370a22028f67f0b36e2ed596623e1d33e6b39c4e9c9b22",
+     "distance": 8,
+     "path": "reg-test-input/dih/bridge-1-original.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "38a50efd71c83f429013d68d0ffffc52e34e0e15ada952a9d29684214aa9e5af",
+     "distance": 8,
+     "path": "reg-test-input/dih/bridge-2-rotate-90.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "2dadda64b5a142e5d362209057da895ae63b8c7fc277b4b766b319361f893188",
+     "distance": 8,
+     "path": "reg-test-input/dih/bridge-3-rotate-180.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "a5f0a457248995e8c9065c275aaa54d8b61ba4bdf8fcfc0387c32f8b0bfc4f05",
+     "distance": 4,
+     "path": "reg-test-input/dih/bridge-4-rotate-270.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d8f80f31e0f417b00e37f5dd028f980fb36ed12a9662c1e233e64c634e9c64dd",
+     "distance": 4,
+     "path": "reg-test-input/dih/bridge-5-flipx.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "0dad259bb1a1bd18d362576556da32a1e63b7380c2374b4866b3c6c91b89ce77",
+     "distance": 8,
+     "path": "reg-test-input/dih/bridge-6-flipy.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "f0a5e10271dcc0bd9c5309720fff018de34ef1e8ada9a956d2967ade1ea91a50",
+     "distance": 8,
+     "path": "reg-test-input/dih/bridge-7-flip-plus-1.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "69f05aa8a4996a17c146a2da5aaaab07b61b5b60f8fc07fc83c3d0740bfcb0fa",
+     "distance": 8,
+     "path": "reg-test-input/dih/bridge-8-flip-minus-1.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    }
+   ],
+   "set": "cpp-regtest",
+   "within10": 8,
+   "within16": 8
+  },
+  {
+   "comparable": 8,
+   "decodePath": "profile-full-resolution",
+   "distances": [
+    6,
+    8,
+    4,
+    4,
+    4,
+    8,
+    6,
+    4
+   ],
+   "exactEqual": 0,
+   "maxDistance": 8,
+   "set": "cpp-regtest-dihedral-of-reg-test-input/dih/bridge-1-original.jpg"
+  },
+  {
+   "comparable": 12,
+   "decodePath": "profile-full-resolution",
+   "distances": [
+    6,
+    8,
+    6,
+    8,
+    6,
+    4,
+    12,
+    4,
+    0,
+    0,
+    0,
+    0
+   ],
+   "exactEqual": 4,
+   "listed": 12,
+   "maxDistance": 12,
+   "qualityEqual": 12,
+   "rows": [
+    {
+     "computed": "f8f8f0cee0f4a84f06370a22038f63f0b36e2ed596621e1d33e6b39c4e9c9b22",
+     "distance": 6,
+     "path": "bridge-mods/aaa-orig.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "f8f8f0cee0f4a84f06370a2a038f63f0b36e26d596621e1d33e6b39c4e9c9b22",
+     "distance": 8,
+     "path": "bridge-mods/blur-a-little.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "f8f8f0cee0f4a84f0637022a038f67f0b36e26d596621e1d33e6b39c4e9c9b22",
+     "distance": 6,
+     "path": "bridge-mods/blur-a-lot.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "f8f8f0cee0f4a84f06370a2a068f67f0b36e26d596621e1d33e6339c4e9c9b22",
+     "distance": 8,
+     "path": "bridge-mods/high-contrast.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "f8f8f0cee0f4a84f06370a22038f67f0b36e2ed596221e1d33e6b39c4e9c9b22",
+     "distance": 6,
+     "path": "bridge-mods/high-saturation.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "f8f8f0cee0f4a84f0e370a22038f67f0b36e2ed596221e1d33e6b39c4a9c9b22",
+     "distance": 4,
+     "path": "bridge-mods/sharpen-a-little.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d8f8f0cec0f4a84f8e370a22038f67f0b36a2ed597231e1d72e6b39c4a9c9b22",
+     "distance": 12,
+     "path": "bridge-mods/sharpen-a-lot.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "f8f8f0cee0f4a84f06370a22038f67f0b36e2ed596621e1d33e6339c4e9c9b22",
+     "distance": 4,
+     "path": "bridge-mods/shrink-a-little.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d0f8f1ccc0f4a84d0a370a3a228f67f0b36e2ed5b6623e1d33e6339c4e9c9b22",
+     "distance": 0,
+     "path": "bridge-mods/shrink-a-lot.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d8f8f1eec0f4a84f0e37022a078f63f0b36e2ed596621e1d33e6239c4e9c9b22",
+     "distance": 0,
+     "path": "bridge-mods/square-128x128.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d8f8f0cec4f4a84f0637022a078f67f0b36e2ee5b6621e1d33e6239c4e9c9b22",
+     "distance": 0,
+     "path": "bridge-mods/square-256x256.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d8f8f0cec0f4a84f0637022a278f67f0b36e2ed596621e1d33e6339c4e9c9b22",
+     "distance": 0,
+     "path": "bridge-mods/square-512x512.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    }
+   ],
+   "set": "python-readme",
+   "within10": 11,
+   "within16": 12
+  },
+  {
+   "comparable": 12,
+   "decodePath": "vendor-python-thumbnail512",
+   "distances": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    2,
+    2,
+    2,
+    0,
+    0,
+    0,
+    0
+   ],
+   "exactEqual": 9,
+   "listed": 12,
+   "maxDistance": 2,
+   "qualityEqual": 12,
+   "rows": [
+    {
+     "computed": "d8f8f0cce0f4a84f0e370a22028f67f0b36e2ed596623e1d33e6b39c4e9c9b22",
+     "distance": 0,
+     "path": "bridge-mods/aaa-orig.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d8f8f0cce0f4a84f0e370a22028f67f0b36e2ed596623e1d33e6b39c4e9c9b22",
+     "distance": 0,
+     "path": "bridge-mods/blur-a-little.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d8f8f0cce0f4e84f0637022a028f67f0b36e2ed596623e1d33e6b39c4e9c9b22",
+     "distance": 0,
+     "path": "bridge-mods/blur-a-lot.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d8f8f0cce0f4e84d06370a32068f67f0b36e2ed596623e1d33e6339c4e9c9b22",
+     "distance": 0,
+     "path": "bridge-mods/high-contrast.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d8f8f0cce0f4e84f0e370a22028f67f0b36e2ed596621e1d33e6b39c4e9c9b22",
+     "distance": 0,
+     "path": "bridge-mods/high-saturation.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d8f8f0cee0f4a84d0e370a22038f67f0b36e2ed596621e1d33e6b39c4e9c9b22",
+     "distance": 2,
+     "path": "bridge-mods/sharpen-a-little.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d0f8f0cec0f4a8470a370a32238f67f0b36e2ef597231e1d72a6b39c4e9c9b22",
+     "distance": 2,
+     "path": "bridge-mods/sharpen-a-lot.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d8f8f0cce0f4a84f0e370a22028f67f0b36e2ed596623e1d33e6b39c4e9c9b22",
+     "distance": 2,
+     "path": "bridge-mods/shrink-a-little.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d0f8f1ccc0f4a84d0a370a3a228f67f0b36e2ed5b6623e1d33e6339c4e9c9b22",
+     "distance": 0,
+     "path": "bridge-mods/shrink-a-lot.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d8f8f1eec0f4a84f0e37022a078f63f0b36e2ed596621e1d33e6239c4e9c9b22",
+     "distance": 0,
+     "path": "bridge-mods/square-128x128.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d8f8f0cec4f4a84f0637022a078f67f0b36e2ee5b6621e1d33e6239c4e9c9b22",
+     "distance": 0,
+     "path": "bridge-mods/square-256x256.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    },
+    {
+     "computed": "d8f8f0cec0f4a84f0637022a278f67f0b36e2ed596621e1d33e6339c4e9c9b22",
+     "distance": 0,
+     "path": "bridge-mods/square-512x512.jpg",
+     "quality": 100,
+     "qualityEqual": true
+    }
+   ],
+   "set": "python-readme",
+   "within10": 12,
+   "within16": 12
+  },
+  {
+   "comparable": 18,
+   "decodePath": "profile-full-resolution",
+   "distances": [
+    6,
+    0,
+    0,
+    10,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    6,
+    10,
+    12,
+    4,
+    4,
+    10,
+    6,
+    12
+   ],
+   "exactEqual": 8,
+   "listed": 19,
+   "maxDistance": 12,
+   "rows": [
+    {
+     "path": "misc-images/b.jpg",
+     "status": "input-missing-at-commit"
+    },
+    {
+     "computed": "e64cc9d91c623882f8d1f1d9a398e78c9f199b3bd83924f2b7e11e0bf861b064",
+     "distance": 6,
+     "path": "misc-images/c.png",
+     "quality": 100
+    },
+    {
+     "computed": "0007001f003f003f007f00ff00ff00ff01ff01ff01ff03ff03ff03ff03ff03ff",
+     "distance": 0,
+     "path": "misc-images/small.jpg",
+     "quality": 0
+    },
+    {
+     "computed": "6227401f601ff4ccafcc9fad4b0d95d371a2eb7265a3285234d228ca94deeb2d",
+     "distance": 0,
+     "path": "misc-images/wee.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "54a9f7c321d1443c43ba566e21d4a13989a3553f1472611cbbc5fda59e03b677",
+     "distance": 10,
+     "path": "reg-test-input/labelme-subset/q0003.jpg",
+     "quality": 3
+    },
+    {
+     "computed": "992d44af36d69e6ca6b812585928bac11def254ef5398c6d07466c9abcc65b92",
+     "distance": 0,
+     "path": "reg-test-input/labelme-subset/q0004.jpg",
+     "quality": 4
+    },
+    {
+     "computed": "cfb2009ddd21c6dab0046a7745b5984757a8a4535b3377aea2591d32b33ff940",
+     "distance": 0,
+     "path": "reg-test-input/labelme-subset/q0122.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "a0fe94f1e5cc1cc8dd855948498dc9243f7ca27336f036d7f212b74bc103c9a7",
+     "distance": 0,
+     "path": "reg-test-input/labelme-subset/q0291.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "1049d96239e24d4dca2c55512b8bdb77425f4dbcf575a0a95555aaab5554aaaa",
+     "distance": 0,
+     "path": "reg-test-input/labelme-subset/q0746.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "489db672e9190276d452aeab41eba20f02375fe4092d88defdf491a5c55c5f70",
+     "distance": 0,
+     "path": "reg-test-input/labelme-subset/q1050.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "b150231ffae4710ffcf4f18bb574b109a576f14bb8543189f8743289f174b109",
+     "distance": 0,
+     "path": "reg-test-input/labelme-subset/q2821.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "f8f8f0cee0f4a84f06370a22038f63f0b36e2ed596621e1d33e6b39c4e9c9b22",
+     "distance": 6,
+     "path": "reg-test-input/dih/bridge-1-original.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "30a10efd71cc3d429013d48d0ffffc52e34e0e17ada952a9d29685211ea9e5af",
+     "distance": 10,
+     "path": "reg-test-input/dih/bridge-2-rotate-90.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "adad5a64b5a142e75b62a09857da895ae63b847fc23794b766b319361bc93188",
+     "distance": 12,
+     "path": "reg-test-input/dih/bridge-3-rotate-180.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "a5f0a457a48995e8c9065c275aaa5498b61ba4bdf8fcf80387c32f8b1bfc4f05",
+     "distance": 4,
+     "path": "reg-test-input/dih/bridge-4-rotate-270.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "f8f80f31e0f417b20e37f5cd028f980fb36ed02a9662c1e233e64c634e9c64dd",
+     "distance": 4,
+     "path": "reg-test-input/dih/bridge-5-flipx.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "0dad2599b1a1bd1a5362576742da32a5e63b7380c2374b4866b366c91bc9ce77",
+     "distance": 10,
+     "path": "reg-test-input/dih/bridge-6-flipy.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "f0a5e102f1ccc0bd945308720fff038de34ef1e8ada9a956d2967ade5ea91a50",
+     "distance": 6,
+     "path": "reg-test-input/dih/bridge-7-flip-plus-1.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "a5f05aa8a4896a17c906a2d85aaaab07b61b5b42f8fc07fc87c3d0741bfcb0fa",
+     "distance": 12,
+     "path": "reg-test-input/dih/bridge-8-flip-minus-1.jpg",
+     "quality": 100
+    }
+   ],
+   "set": "python-unittest",
+   "within10": 16,
+   "within16": 18
+  },
+  {
+   "comparable": 18,
+   "decodePath": "vendor-python-thumbnail512",
+   "distances": [
+    0,
+    0,
+    0,
+    10,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "exactEqual": 17,
+   "listed": 19,
+   "maxDistance": 10,
+   "rows": [
+    {
+     "path": "misc-images/b.jpg",
+     "status": "input-missing-at-commit"
+    },
+    {
+     "computed": "e64cc9d91e623842f8d1f1d9a398e78c9f199a3bd87924f2b7e11e0bf061b064",
+     "distance": 0,
+     "path": "misc-images/c.png",
+     "quality": 100
+    },
+    {
+     "computed": "0007001f003f003f007f00ff00ff00ff01ff01ff01ff03ff03ff03ff03ff03ff",
+     "distance": 0,
+     "path": "misc-images/small.jpg",
+     "quality": 0
+    },
+    {
+     "computed": "6227401f601ff4ccafcc9fad4b0d95d371a2eb7265a3285234d228ca94deeb2d",
+     "distance": 0,
+     "path": "misc-images/wee.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "54a9f7c321d1443c43ba566e21d4a13989a3553f1472611cbbc5fda59e03b677",
+     "distance": 10,
+     "path": "reg-test-input/labelme-subset/q0003.jpg",
+     "quality": 3
+    },
+    {
+     "computed": "992d44af36d69e6ca6b812585928bac11def254ef5398c6d07466c9abcc65b92",
+     "distance": 0,
+     "path": "reg-test-input/labelme-subset/q0004.jpg",
+     "quality": 4
+    },
+    {
+     "computed": "cfb2009ddd21c6dab0046a7745b5984757a8a4535b3377aea2591d32b33ff940",
+     "distance": 0,
+     "path": "reg-test-input/labelme-subset/q0122.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "a0fe94f1e5cc1cc8dd855948498dc9243f7ca27336f036d7f212b74bc103c9a7",
+     "distance": 0,
+     "path": "reg-test-input/labelme-subset/q0291.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "1049d96239e24d4dca2c55512b8bdb77425f4dbcf575a0a95555aaab5554aaaa",
+     "distance": 0,
+     "path": "reg-test-input/labelme-subset/q0746.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "489db672e9190276d452aeab41eba20f02375fe4092d88defdf491a5c55c5f70",
+     "distance": 0,
+     "path": "reg-test-input/labelme-subset/q1050.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "b150231ffae4710ffcf4f18bb574b109a576f14bb8543189f8743289f174b109",
+     "distance": 0,
+     "path": "reg-test-input/labelme-subset/q2821.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "d8f8f0cce0f4a84f0e370a22028f67f0b36e2ed596623e1d33e6b39c4e9c9b22",
+     "distance": 0,
+     "path": "reg-test-input/dih/bridge-1-original.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "38a50efd71c83f429013d68d0ffffc52e34e0e15ada952a9d29684214aa9e5af",
+     "distance": 0,
+     "path": "reg-test-input/dih/bridge-2-rotate-90.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "2dadda64b5a142e5d362209057da895ae63b8c7fc277b4b766b319361f893188",
+     "distance": 0,
+     "path": "reg-test-input/dih/bridge-3-rotate-180.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "a5f0a457248995e8c9065c275aaa54d8b61ba4bdf8fcfc0387c32f8b0bfc4f05",
+     "distance": 0,
+     "path": "reg-test-input/dih/bridge-4-rotate-270.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "d8f80f31e0f417b00e37f5dd028f980fb36ed12a9662c1e233e64c634e9c64dd",
+     "distance": 0,
+     "path": "reg-test-input/dih/bridge-5-flipx.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "0dad259bb1a1bd18d362576556da32a1e63b7380c2374b4866b3c6c91b89ce77",
+     "distance": 0,
+     "path": "reg-test-input/dih/bridge-6-flipy.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "f0a5e10271dcc0bd9c5309720fff018de34ef1e8ada9a956d2967ade1ea91a50",
+     "distance": 0,
+     "path": "reg-test-input/dih/bridge-7-flip-plus-1.jpg",
+     "quality": 100
+    },
+    {
+     "computed": "69f05aa8a4996a17c146a2da5aaaab07b61b5b60f8fc07fc83c3d0740bfcb0fa",
+     "distance": 0,
+     "path": "reg-test-input/dih/bridge-8-flip-minus-1.jpg",
+     "quality": 100
+    }
+   ],
+   "set": "python-unittest",
+   "within10": 18,
+   "within16": 18
+  }
+ ]
+}

@@ -1,0 +1,8 @@
+# Local environment and downloads: re-created from requirements*.txt and fetch_pdq_vectors.py.
+.venv/
+wheelhouse/
+vectors/pdq-data/
+# Run outputs. Smoke runs are never results. A measured run's outputs are copied into
+# results/ deliberately, in a commit that descends from the frozen-protocol commit.
+out/
+__pycache__/
