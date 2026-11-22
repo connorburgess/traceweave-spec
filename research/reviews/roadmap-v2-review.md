@@ -176,3 +176,23 @@ Checked 2026-11-22 on local branch `roadmap-v2` (`80de674`). Line numbers refer 
 2. Settle the provisional-pin precedence rule for M1.4.
 3. Make UC-6, W-1, H-1, H-3 and H-5 decidable, then recount.
 4. Tighten M5.2 (N4).
+
+## M0.1 second recount
+
+Checked on `roadmap-v2` at `e821bd8`, after fix commits `215145b` and `e821bd8`. The same greps give 13 rows. Each row below is decided by a command exit code or a count.
+
+**Use cases** (`docs/use-cases.md`):
+- yes: UC-1 (:25-26, spans and frozen codes N/N); UC-2 (:34-35, `validate` exit code, each key resolves to exactly 1 region); UC-3 (:43-44, unit-test exit code, digest equality); UC-4 (:52-53, identical reason codes on every vector); UC-5 (:61-62, denominators, identical rerun counts, computed M3.6).
+- yes: UC-6 (:76-77, rerun exit code, k/k, 5 classes, transplant count 0, 0 rates below the frozen value); W-1 (:103, each step exits 0, class counts, transplant count 0); W-2 (:109, as UC-1).
+
+**Patterns** (`docs/implementation-patterns.md`):
+- yes: H-1 (:13, `validate` exit code, 0 fixtures with a score and no result kind); H-2 (:23, equal bytes on every vector, M1.5 unmapped 0); H-3 (:31, exit code, 0 files written, 3/3 fault runs, identical body, 0 candidate-generation fields).
+- yes: H-4 (:41, result equals the committed vector); H-5 (:75, script exit codes, SK counts of 0, C2PA.3 grep prints 0).
+
+**Result: 13/13. M0.1 can be marked met, citing this commit.**
+
+**H-3 now agrees with M2.9 (ROADMAP L86):** candidate generation stays out of the body, in a separate record keyed by `bodySha256`.
+
+**M5.2 and M1.4 read as intended.** M5.2 (L143): every non-excluded sentence is a claim, and the non-author approves the exclusions. M1.4 (L70): a provisional pin passes only if its vector digests equal those in the commit later pinned, and the script checks that equality.
+
+**Residual note, not blocking.** H-1's "detection-output schema fixtures" have no named creating gate yet. Name it when a carrier is selected.
