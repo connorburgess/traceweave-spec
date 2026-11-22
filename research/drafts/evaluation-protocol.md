@@ -1,12 +1,20 @@
 # M3 evaluation protocol: token-fingerprint baseline on Go and Rust
 
-Protocol version: `m3-eval-draft-2`. Status: **draft for review, 2026-11-22. Not frozen, not run. No corpus has been acquired.** Roadmap gates M3.0–M3.6 and backlog item TW-05 ([roadmap](../../ROADMAP.md#m3--measure-usefulness)). Corpus proposal: [evaluation-corpus/](evaluation-corpus/README.md).
+Protocol version: `m3-eval-draft-3`. Status: **draft for review, 2026-11-22. Not frozen, not run. No corpus has been acquired.** Roadmap gates M3.0–M3.6 and backlog item TW-05 ([roadmap](../../ROADMAP.md#m3--measure-usefulness)). Corpus proposal: [evaluation-corpus/](evaluation-corpus/README.md).
 
 Protocol digest (SHA-256, self-excluding): `0000000000000000000000000000000000000000000000000000000000000000` (all zeros: **not frozen**). At the freeze, the digest is the SHA-256 of this file's bytes with those 64 hex digits replaced by 64 zeros; `freeze.json` (§8) repeats it.
 
 This is a research protocol. It changes nothing in `spec/`, `schemas/`, `profiles/` or `test-vectors/`, and it decides nothing the roadmap reserves for the owner. Every owner decision it needs is listed in [§14](#14-decisions-that-need-the-owner) with options; none is assumed.
 
 It fixes, before any result exists, what is measured and how each pass/fail becomes an exit code or a count. Where this draft leaves a number open, the number is chosen by a stated mechanical rule on the tuning split, never by looking at held-out data.
+
+**Changes from `m3-eval-draft-2`**, resolving the review's [confirmation pass](../reviews/evaluation-protocol-review.md#confirmation-pass-m3-eval-draft-2) (commit `1df11d3`):
+- Go `rename` takes a name after `func` only from the unit's own head `func`, so a function literal's parameter types are never bindings (§6.3);
+- an inserted Go `;` is never a run start, and `}` followed by an inserted `;` is one statement end, which removes byte-identical duplicate runs (§6.1);
+- eligibility cannot hide alarms: the acquisition lexer commit must equal the frozen lexing commit, excluded files are counted per repository and reason in `counts.json`, the metrics and beside the verdict, and more than 5% excluded is an error, not a verdict (§3.4, §10, §12);
+- the report states that Rust `rename` renames types and variants and misses inner pattern bindings (§6.3);
+- Go function units whose body `{` follows `struct` or `interface` are skipped (§6.1);
+- §14.1 presents both budget recommendations, and §14.4 the cost of 100 repositories per language.
 
 **Changes from `m3-eval-draft-1`**, resolving the [non-author review](../reviews/evaluation-protocol-review.md) (commit `b7282bf`); each is listed with its finding in [§17](#17-review-dispositions):
 - case generation is purely lexical and fully specified, so a second implementer regenerates byte-identical cases (F1);
@@ -145,6 +153,11 @@ The classifier is a screening rule, not a legal opinion. It checks the root lice
 2. **Lexing:** the profile's tokenizer (extraction §4–§5, `maxInputBytes` 1,048,576) returns `error` → `lex-error`.
 3. **Too short:** fewer than 16 tokens → `under-16-tokens`.
 
+**Eligibility cannot hide alarms.** Rules 2 and 3 remove files that would otherwise give `not-compared` pairs, which count as alarms (§1). So:
+- the lexer used at acquisition is the implementation's lexer at a recorded commit (the **acquisition lexing commit**, written into the split file's companion `eval/acquisition.json`), and it must equal the lexing commit frozen in `freeze.json` (§8); a difference is an M3.3 failure;
+- excluded files are counted per repository and per reason (`generated`, `lex-error`, `under-16-tokens`, `oversize`, and the path rules), with the repository's eligible-path count as denominator, in `counts.json`, in the metrics (§10) and beside the M3.6 verdict (§12);
+- **bound:** if, over the held-out split of a language, `lex-error` plus `under-16-tokens` exclusions exceed **5%** of the files passing the path and generated rules, or exceed 25% in any single held-out repository, M3.6 is an error, not a verdict.
+
 Symbolic links, submodules and non-UTF-8 paths are excluded. Inline Rust `#[cfg(test)]` modules stay in, because removing them needs a parser; this is stated in every Rust result.
 
 ### 3.5 Exclusions
@@ -262,11 +275,11 @@ All case generation is **lexical**: it uses only the token stream that the profi
 Write *tokens* for the exact stream of a file. **Depth** of a token is the number of unclosed `{` before it; `(`/`[` depth likewise, counted separately.
 
 - **Function unit.**
-  - **Go:** a `func` token at `{`-depth 0 and `(`-depth 0. Its body opens at the first later `{` with `(`-depth and `[`-depth equal to those at `func`; the unit ends at the matching `}`. A `func` token with no such `{` before the next `;` at `{`-depth 0 is skipped.
+  - **Go:** a `func` token at `{`-depth 0 and `(`-depth 0. Its body opens at the first later `{` with `(`-depth and `[`-depth equal to those at `func`; the unit ends at the matching `}`. A `func` token with no such `{` before the next `;` at `{`-depth 0 is skipped, and so is one whose chosen `{` is immediately preceded by `struct` or `interface` (a struct or interface type in the signature, rare; skipping is deterministic).
   - **Rust:** a `fn` token immediately followed by an `ident`, at any `{`-depth (so methods in `impl` blocks count). Its body opens at the first later `{` with `(`-depth and `[`-depth equal to those at `fn`; if a `;` with those depths comes first, it is a declaration and skipped. The unit starts at the `fn` token extended backwards over the longest run of immediately preceding tokens from {`pub`, `(`, `)`, `crate`, `super`, `self`, `in`, `async`, `const`, `unsafe`, `extern`, `default`, a `string` token}; it ends at the matching `}`. Nested function units inside a unit are not separate candidates.
   - The unit's bytes are from the first byte of its first token to the last byte of its last token.
-- **Statement end.** A `;` token (Go: explicit or inserted; Rust: explicit) or a `}` token, whose `{`-depth after it is ≥ 1 (that is, inside some block).
-- **Partial unit.** Inside a function unit's body, a token run [*i*, *j*] such that: token *i* is the first token after a `{` or after a statement end; token *j* is a statement end; `{`, `(` and `[` are each balanced over [*i*, *j*]; and every token in [*i*, *j*] has `{`-depth at least that of token *i*. The candidate list for a (file, bucket) is **every** such run whose token count is in the bucket, sorted by (path bytes, start offset, end offset). For an inserted Go `;` the end offset is the end of the preceding token.
+- **Statement end.** A `;` token (Go: explicit or inserted; Rust: explicit) or a `}` token, whose `{`-depth after it is ≥ 1 (that is, inside some block). **Go:** a `}` immediately followed by an inserted `;` is not itself a statement end; the inserted `;` is, so the pair counts once.
+- **Partial unit.** Inside a function unit's body, a token run [*i*, *j*] such that: token *i* is the first token after a `{` or after a statement end; token *j* is a statement end; `{`, `(` and `[` are each balanced over [*i*, *j*]; and every token in [*i*, *j*] has `{`-depth at least that of token *i*. The candidate list for a (file, bucket) is **every** such run whose token count is in the bucket, sorted by (path bytes, start offset, end offset). **Go:** token *i* is never an inserted `;` (the run starts at the next real token), so every run starts at a real token's first byte. For an inserted Go `;` as token *j*, the end offset is the end of the preceding token. Together with the statement-end rule, a run ending at `}` and the same run ending at its inserted `;` cannot both occur, so no two candidates are byte-identical.
 - **File unit.** A whole eligible file.
 - **Top-level boundary** (host insertion for function and file units). The byte after the first `\n` at or after the end of a token that ends a top-level item: Go, a `;` at `{`-depth 0 (explicit or inserted); Rust, a `;` or `}` after which the `{`-depth is 0. End of file counts as a boundary.
 - **Statement boundary** (host insertion for partial units). The byte after the first `\n` at or after the end of a statement end inside a function unit.
@@ -294,12 +307,14 @@ Every choice uses `u(id, j) = uint64be(SHA-256("tw-m3-gen-v1|" || namespace || "
 | `comments-strip` | all | Every comment is replaced by `""` (line comments, whose span excludes the line break) or by `" "`, or by `"\n"` when a Go general comment contains a line break. Token stream identical (Rust doc comments are trivia in the profile) |
 | `comments-add` | all | After tokens 9, 19, 29, … (0-based) insert ` /* tw */ ` at the start of the following gap. Token stream identical |
 | `fmt` | **Rust only** | After placement, run `rustfmt --edition 2024 --config max_width=50,tab_spaces=2` (pinned version) on the whole host file, the unit wrapped in `/*tw-begin*/` and `/*tw-end*/` comments. Edition 2024 matches the `rust2024-tokens` profile; the crate's declared edition is ignored. The ground truth is the byte range between the markers after formatting; then both markers are deleted and spans adjusted. A non-zero exit or a lost, duplicated or reordered marker is `generation-failed`. If the bytes between the markers equal the pre-format unit bytes, the case is kept and flagged `identity`; identity cases are reported as their own count and recall is reported with and without them |
-| `rename` | all | **Bindings** are collected from the unit's tokens. Go: every `ident` in a maximal run `ident (, ident)*` immediately followed by `:=`; every `ident` immediately after `var` or `const`; and, for function units, the `ident` immediately after `func` or after the receiver's closing `)`. Rust: every `ident` immediately after `let`, `let mut`, `fn`, `for`, `mut` or `ref`. The texts `_`, `self` and `Self` are never bindings. Bindings are numbered in order of first occurrence and renamed `tw_v1`, `tw_v2`, …. **Occurrences:** every `ident` token in the unit whose exact text equals a binding is renamed, except one immediately preceded by `.`, or (Rust) by `::`. Tokens inside macro invocations are renamed like any others; string and character literals (including Rust format strings) and comments are never changed. A unit with no binding, or containing an `ident` that starts with `tw_v`, is `generation-failed` |
+| `rename` | all | **Bindings** are collected from the unit's tokens. Go: every `ident` in a maximal run `ident (, ident)*` immediately followed by `:=`; every `ident` immediately after `var` or `const`; and, for function units only, the name of the unit itself: the `ident` immediately after the unit's **first** token `func`, or, if that `func` is followed by a receiver `( … )`, the `ident` immediately after the receiver's closing `)`. Later `func` tokens in the unit (function literals such as `g := func(x int) int {…}`) contribute no binding, so a type name is never a binding. Rust: every `ident` immediately after `let`, `let mut`, `fn`, `for`, `mut` or `ref`. The texts `_`, `self` and `Self` are never bindings. Bindings are numbered in order of first occurrence and renamed `tw_v1`, `tw_v2`, …. **Occurrences:** every `ident` token in the unit whose exact text equals a binding is renamed, except one immediately preceded by `.`, or (Rust) by `::`. Tokens inside macro invocations are renamed like any others; string and character literals (including Rust format strings) and comments are never changed. A unit with no binding, or containing an `ident` that starts with `tw_v`, is `generation-failed` |
 | `reorder` | file | **Segments:** the file is cut after each top-level boundary (§6.1); a segment is the bytes from one cut to the next, so leading comments and attributes travel with the item after them. Segments whose first token is `package` or `import` (Go), or `use`, `mod`, `extern` or `#` followed by `!` (Rust), stay in place at the start; the other segments are written in reverse order. Ground truth is one segment per moved segment. Fewer than 2 moved segments is not applicable |
 | `split-mix` | function, partial | Let *n* be the unit's token count and the **cut candidates** its statement ends with at least one token before and after them. Cut after the candidate *b* minimizing \|*b* − ⌊*n*/2⌋\| (token index), **ties to the smaller *b***. The two halves are inserted at two different boundaries of the host file (§6.2). Two ground-truth segments. No candidate is not applicable |
 | `compound` | function, partial | Rust: `comments-strip`, then `rename`, then `fmt`. Go: `comments-strip`, then `rename`, then `ws` |
 
 **Go formatting, dropped as a cell.** Go has one canonical format and most Go repositories are gofmt-clean, so a `gofmt` run over an inserted gofmt-clean unit almost never changes it, and `gofmt -s` changes only the few units it can simplify. A cell made of those would be small and self-selected. Layout changes that leave tokens intact are covered by `ws` and `comments-*`; the Go formatter is not used. The report states that Go has no formatter cell.
+
+**Rust `rename` is coarse, stated in the report.** The rule takes the token after `let`, `mut`, `for` or `ref`. In `let Some(n) = v` it collects `Some` and misses `n`; in `&mut Vec<u8>` it collects `Vec`. Types and enum variants can therefore be renamed and inner pattern bindings left alone. The rule stays as written, because it is mechanical; the report says so beside every Rust `rename` and `compound` figure.
 
 **Not compilable.** `comments-strip` removes Go `//go:build`, `//go:embed` and cgo preambles; `reorder` can break Rust `macro_rules!` textual order; `split-mix` leaves unbalanced braces; `rename` can break field shorthand, struct literal keys, format-string captures and shadowing. The lexers accept all of these. Recall describes lexical robustness only.
 
@@ -338,7 +353,7 @@ The **freeze commit** in the implementation repository adds `eval/freeze.json` c
 - the manifest digest and the M3.2 split digest;
 - per language: the extraction configuration bytes (Base64) and SHA-256; the comparison configuration bytes and SHA-256, including `minRegionDistinctHashes`, `mergeGap`, both caps and `suppressionCatalogueSha256`; the suppression catalogue SHA-256 and *T*;
 - the M3.0 budget as a rational `numerator/denominator`, and the spec-repository commit that recorded it;
-- the implementation commit used for lexing, extraction and comparison; the generator commit; the `rustfmt` version string;
+- the implementation commit used for lexing, extraction and comparison, which must equal the acquisition lexing commit of `eval/acquisition.json` (§3.4); the generator commit; the `rustfmt` version string;
 - the pilot record digest and any grid reduction (§5.5); the run-time estimates;
 - the M3.5 tolerance (§13).
 
@@ -351,8 +366,10 @@ FIRST=$(git log --reverse --format=%H -- eval/results/heldout | head -n 1)
 FREEZE=$(git log --reverse --format=%H -- eval/freeze.json | head -n 1)
 SPLIT=$(git log --reverse --format=%H -- eval/splits.tsv | head -n 1)
 git merge-base --is-ancestor "$FREEZE" "$FIRST" && git merge-base --is-ancestor "$SPLIT" "$FIRST"
-git diff --quiet "$FREEZE" "$FIRST" -- eval/freeze.json eval/splits.tsv eval/manifest.json
+git diff --quiet "$FREEZE" "$FIRST" -- eval/freeze.json eval/splits.tsv eval/manifest.json eval/acquisition.json
 ```
+
+and a script check that the lexing commit in `freeze.json` equals the one in `eval/acquisition.json` (exit 0).
 
 M3.3 is met when every command exits 0. Timestamps are never consulted.
 
@@ -377,6 +394,7 @@ Resource measurement: every extraction batch and every comparison runs under `/u
 | Repositories in alarms | distinct repositories appearing in alarmed negative searches | held-out repositories | language |
 | Pair-level false matches | negative file pairs with any alarm reason | compared negative file pairs | language; reason; mode |
 | Abstentions | pairs or pair-modes per abstention code | pairs or compared pair-modes | language; negative versus positive comparisons |
+| Excluded files | files per exclusion reason (path rules, `generated`, `lex-error`, `under-16-tokens`, `oversize`) | paths with the language's extension | language; repository; split; checked against the §3.4 bound |
 | Extraction outcomes | files per status/error code | eligible files | language; repository |
 | Candidate volume | `match` pairs and reportable regions | comparisons (negative; positive) | mean, median, 95th percentile, maximum |
 | Spurious matches in positive comparisons | positive comparisons with a `match` outside ground truth | positive comparisons | language |
@@ -411,9 +429,9 @@ Inputs: `counts.json` (held-out), the budget `p/q` from the M3.0 record named in
 
 - `A` = unordered negative searches with an alarm (§1); `N` = unordered negative searches.
 - **met** when `A × q ≤ p × N` (exact integer arithmetic); **negative-result** otherwise.
-- `N = 0`, a missing or mismatched freeze, a failed M3.3 check, a non-zero symmetry or caching difference, or an aborted run is an error, not a verdict.
+- `N = 0`, a missing or mismatched freeze, a failed M3.3 check (including the lexing-commit equality), exclusions above the §3.4 bound, a non-zero symmetry or caching difference, or an aborted run is an error, not a verdict.
 
-The script exits 0 for met, 3 for negative-result, 2 for an error. No recall floor is applied; recall is reported without a pass line. The verdict uses the point estimate, as M3.6 states; the intervals of §11 and the operating characteristics of §14.1 are printed beside it and do not change it.
+The script exits 0 for met, 3 for negative-result, 2 for an error. No recall floor is applied; recall is reported without a pass line. The verdict uses the point estimate, as M3.6 states; the intervals of §11, the operating characteristics of §14.1 and the excluded-file counts per repository and reason are printed beside it and do not change it.
 
 ## 13. Reproduction (M3.5)
 
@@ -458,7 +476,19 @@ Each alarm costs a person a review of localized evidence (UC-1, UC-2).
 - **B** is a usable operator target (about one review per 100 candidates) and is decided by a count (at most 1 alarmed pair of 132), but it separates ½× from 2× only moderately (0.86 against 0.26), and a single noisy repository can decide it.
 - **C** is what a registry sweep would want, but on this corpus the verdict means little: it is met with probability 0.77 even when the true rate is twice the budget, and the corpus cannot bound a rate near 1/1000.
 
-**Recommendation: B**, with the operating characteristics printed beside the verdict. If the owner wants a verdict that luck is unlikely to pass, choose **A**, or keep B and raise the scale (§14.4). Whatever is chosen is recorded as an exact fraction before tuning starts (§2 step 1). On the tuning fold every option means zero alarms (§5.4), so the choice does not change tuning.
+**Two recommendations; the owner chooses.**
+- **Author: B**, with the operating characteristics printed beside the verdict. It is the operator target that matters (about one review per 100 candidate repositories) and is still decided by a count. Its weakness at this size is stated: it separates ½× from 2× the budget only moderately (0.86 against 0.26), and one noisy repository can decide it.
+- **Reviewer (confirmation pass): A at this corpus size, or B only with about 100 repositories per language.** If M3.6 is meant as evidence, the verdict should be unlikely to come out "met" when the true rate is twice the budget; A does that here (0.018), B does not (0.257).
+
+**The same options on a 100-per-language corpus** (about 50 held-out repositories and 1,225 unordered searches per language, 2,450 in all; same assumptions):
+
+| Option | M3.6 met iff alarms ≤ | One-sided 95% upper bound at that count | P(met) if true rate = ½ budget | = budget | = 2 × budget |
+| --- | --- | --- | --- | --- | --- |
+| A `1/20` | 122 | 0.058 | 1.000 | 0.506 | 0.000 |
+| B `1/100` | 24 | 0.014 | 0.999 | 0.513 | 0.000 |
+| C `1/1000` | 2 | 0.0026 | 0.874 | 0.557 | 0.133 |
+
+At that size B separates ½× from 2× as sharply as A does at 48 repositories. Its cost is in §14.4. Whatever is chosen is recorded as an exact fraction before tuning starts (§2 step 1). On the tuning fold every option means zero alarms at 24 per language (§5.4), so the choice does not change tuning there.
 
 ### 14.2 Acquisition approval (M3.1)
 
@@ -473,7 +503,19 @@ Outside every repository and every version-controlled working tree (contract B1 
 
 ### 14.4 Corpus scale and licence allowlist
 
-- **Scale.** 24 per language (proposed) gives 132 unordered negative searches and the figures above. 100 per language would give about 50 held-out repositories and 1,225 unordered searches per language, and a 50-search disjoint bound in all (0.058 at zero alarms), at roughly four times the acquisition and, for the pair counts, about seventeen times the comparison work. **Recommendation:** start at 24, because M3.6 is decidable at that size and the pool and walk extend mechanically.
+- **Scale.** 24 per language (proposed) gives 132 unordered negative searches and the figures in §14.1. 100 per language gives about 50 held-out repositories and 1,225 unordered searches per language, and a 50-search disjoint bound in all (0.058 at zero alarms). Its cost, scaled from the proposed manifest under the §5.5 model (averages per repository; nothing measured):
+
+  | | 24 per language (proposed) | 100 per language |
+  | --- | --- | --- |
+  | GitHub size including history (upper bound on download) | 607 MiB | about 2.5 GiB |
+  | Eligible source | 56 MiB | about 235 MiB |
+  | Held-out negative file pairs | 1.65 M | about 31 M (×18.6, from 66 to 1,225 searches per language) |
+  | Fold-E negative file pairs per (`k`, `window`) | 0.43 M | about 8.6 M (25 instead of 6 groups per language) |
+  | Pair comparisons in all (positives about the same) | about 8.9 M | about 112 M |
+  | Runtime at the review's assumed 1 ms per pair | about 2.5 h | about 31 h (held-out about 9 h, tuning about 22 h) |
+  | Derived private data | 4–5 GB | about 17–20 GB |
+
+  At 100 per language the tuning estimate approaches the 24-hour budget of §5.5, so the grid would likely shrink by its fixed rule. The pool would also need to grow: the first 100 search results per language yielded 24 acceptances from 29 (Go) and 39 (Rust) visits, so 100 acceptances need about the first 300 results per language (three search pages), a change to §3.1 that needs a new snapshot. **Author recommendation:** start at 24 and choose A, or approve 100 per language with B; do not combine B with 24 if M3.6 is meant as evidence.
 - **Allowlist.** The permissive list of §3.2 only. Adding MPL-2.0 or CC0-1.0 would admit a few more pool repositories (for example a CC0 Rust command runner); copyleft is excluded because the project does not want to argue use conditions for corpus code. **Recommendation:** keep as proposed.
 
 ### 14.5 Already decided elsewhere, restated
@@ -518,6 +560,12 @@ No push or publication; the manifest and results live in the implementation repo
 | F6 cost | Pair-count model, seed sharing with a byte-identical check, timing pilot on fold S only, 24-hour budget with a fixed grid reduction, abort rules (§5.3, §5.5) |
 | F7 lenient hit | Covered fraction reported per cell (§1, §10) |
 | F8 ancestry | Limit stated; refusals and the runner identity record in the first result commit (§8) |
+| Confirmation (1) Go `rename` scope | Unit head `func` only (§6.3) |
+| Confirmation (2) inserted Go `;` | Never a run start; `}` + inserted `;` is one statement end (§6.1) |
+| Confirmation (3) eligibility dodge | Lexing-commit equality, excluded counts per repository and reason, 5% / 25% bound (§3.4, §8, §10, §12) |
+| Confirmation (a) Rust `rename` | Coarseness stated in the report rules (§6.3) |
+| Confirmation (b) Go struct/interface braces | Such units skipped (§6.1) |
+| Confirmation (c) budget | Both recommendations and the 100-per-language figures and cost (§14.1, §14.4) |
 | M5 licence values | Acquisition recomputes SHA-256 and reruns the classifier, exit 1 and stop on difference (§3.6); `verify_manifest.py --licence-dir` implements it |
 | Low: protocol digest | Self-excluding digest line, filled at the freeze (header, §8) |
 | Low: replacement facts | Rejected-at-acquisition repositories carry facts in the walk; the checker requires them (§3.1) |

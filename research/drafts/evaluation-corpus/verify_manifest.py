@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the M3 corpus manifest (protocol m3-eval-draft-2). Standard library only.
+"""Check the M3 corpus manifest (protocol m3-eval-draft-3). Standard library only.
 
 Usage:
   python3 -I verify_manifest.py [MANIFEST] [--schema SCHEMA]   exit 0 valid, 1 invalid, 2 usage or I/O error
@@ -560,6 +560,7 @@ def mutations(m):
         w["linkedTo"] = first_accepted["fullName"]
     yield mut("acquisition rejections above the replacement limit", "E-REPLACEMENTS", too_many_replacements)
     yield mut("older manifest version", "E-SCHEMA", lambda b: b.update(manifestVersion="traceweave-m3-corpus-manifest-draft-1"))
+    yield mut("older protocol version", "E-SCHEMA", lambda b: b.update(protocolVersion="m3-eval-draft-2"))
     yield mut("ordered search unit", "E-SCHEMA", lambda b: b["acquisition"].update(searchUnit="ordered repository pair"))
     yield mut("replacement limit above 8", "E-SCHEMA", lambda b: b["acquisition"].update(replacementLimitPerLanguage=9))
 

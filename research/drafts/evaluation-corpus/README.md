@@ -2,7 +2,7 @@
 
 Status: **proposed, not acquired, 2026-11-22.** Nothing listed here has been downloaded, cloned or extracted. Acquisition needs the owner's approval (roadmap M3.1, [protocol §14.2](../evaluation-protocol.md#142-acquisition-approval-m31)).
 
-These files accompany the [evaluation protocol](../evaluation-protocol.md) (`m3-eval-draft-2`). They are research material and change nothing normative.
+These files accompany the [evaluation protocol](../evaluation-protocol.md) (`m3-eval-draft-3`). They are research material and change nothing normative.
 
 ## Files
 
@@ -29,7 +29,7 @@ The first exits 0 when the manifest is valid, 1 when it is not (printing the fir
 - the split assignment, recomputed from the hash rule, and the split digest;
 - size limits and totals.
 
-`--self-test` first requires the manifest to pass, then generates 41 broken manifests from it, one rule broken in each, and 4 broken licence-text cases built from synthetic licence texts (no third-party text is shipped), and requires every one to be rejected with its expected error code. It exits 0 only if all 45 are rejected.
+`--self-test` first requires the manifest to pass, then generates 42 broken manifests from it, one rule broken in each, and 4 broken licence-text cases built from synthetic licence texts (no third-party text is shipped), and requires every one to be rejected with its expected error code. It exits 0 only if all 46 are rejected.
 
 `--licence-dir DIR` is the acquisition-time licence recheck (protocol §3.6, review item M5). For every entry it reads `DIR/<owner>/<repo>/<path>` for each recorded licence file, recomputes the SHA-256 and length, and reruns the licence classifier `m3-licence-classifier-v1`. Any missing file or difference exits 1. Run on 2026-11-22 against the 55 licence files re-fetched at the pinned revisions, it passed (exit 0).
 
@@ -53,3 +53,7 @@ The entries, revisions, licence files, walk, sizes and split digest (`146acfc2�
 - a new `acquisition` block records the replacement limit (8 per language), what approval covers, the fail-closed licence recheck, and the search unit (unordered repository pair);
 - walk records may carry `linkedTo` for `dependency-linked` and `duplicate-content` rejections, and `dependencyEdges` record the manifest file that declares each edge;
 - the checker counts searches as unordered pairs (132, was 264 ordered; 10 same-domain, was 20), adds the licence recheck, and its self-test grew from 34 to 45 rejected cases.
+
+## Changes for draft-3
+
+Only `protocolVersion`, now `m3-eval-draft-3`. The draft-3 changes (Go `rename` scope, inserted-`;` statement ends, the lexing-commit pin and excluded-file bound, struct/interface braces) apply at acquisition and case generation, so the entries, walk and split digest are unchanged and the checker's rules are unchanged.
