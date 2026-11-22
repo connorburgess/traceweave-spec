@@ -29,15 +29,18 @@ PY
 zero=0000000000000000000000000000000000000000
 while read -r local_ref local_sha remote_ref remote_sha; do
   [ "$local_sha" = "$zero" ] && continue
-  case "$local_ref" in refs/heads/*) ;; *) continue ;; esac
-  # 2. descends from every published public tip
-  while read -r floor; do
-    [ -z "$floor" ] && continue
-    if ! git merge-base --is-ancestor "$floor" "$local_sha" 2>/dev/null; then
-      echo "pre-push: $local_ref is not a descendant of the published public tip $floor; refusing to push" >&2
-      exit 1
-    fi
-  done < "$work/floor"
+  # 2. branches descend from every published public tip (the destination decides, not the source expression)
+  case "$remote_ref" in
+    refs/heads/*)
+      while read -r floor; do
+        [ -z "$floor" ] && continue
+        if ! git merge-base --is-ancestor "$floor" "$local_sha" 2>/dev/null; then
+          echo "pre-push: $local_ref is not a descendant of the published public tip $floor; refusing to push" >&2
+          exit 1
+        fi
+      done < "$work/floor"
+      ;;
+  esac
   if [ "$remote_sha" = "$zero" ]; then base=origin/main; else base="$remote_sha"; fi
   # 3. rule-bearing tool versions
   if git rev-list --objects "$local_sha" "^$base" | awk '{print $1}' | grep -F -x -q -f "$work/blobs"; then
