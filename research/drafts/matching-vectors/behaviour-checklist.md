@@ -1,6 +1,6 @@
 # Behavioural conformance checklist (amendment A6)
 
-Status: draft, 2026-11-22, amended by A7. Companion to [catalogue-report-contract.md](../catalogue-report-contract.md) §6.8 (rules B1–B13; B10 as refined by A8). Item numbers are stable: A7 rewords items 36, 37, 43 and 46 and appends items 47–58; A8 rewords item 55 and appends items 59–60; A9 rewords items 42, 46 and 47 and appends item 61. These behaviours cannot be pinned by vectors. Each item is one command with an observable outcome: an exit status, files present or absent, file modes, or output bytes. Both implementations should script every item. The I2 probe `xcheck/probes/i2_behaviour.py` on `merge-i2` is the current executable record.
+Status: draft, 2026-11-22, amended by A7. Companion to [catalogue-report-contract.md](../catalogue-report-contract.md) §6.8 (rules B1–B13; B10 as refined by A8). Item numbers are stable: A7 rewords items 36, 37, 43 and 46 and appends items 47–58; A8 rewords item 55 and appends items 59–60; A9 rewords items 42, 46 and 47 and appends item 61; A10 appends items 62–64. These behaviours cannot be pinned by vectors. Each item is one command with an observable outcome: an exit status, files present or absent, file modes, or output bytes. Both implementations should script every item. The I2 probe `xcheck/probes/i2_behaviour.py` on `merge-i2` is the current executable record.
 
 ## Operations
 
@@ -123,4 +123,18 @@ Exit statuses are the B3 classes: **0** result, **1** refused input, **2** usage
 
     In every faulted case, nothing exists at `OUT`.
 
-**Item count: 61.** Items 16–24 are nine marker items.
+### Provenance by content (A10: B10)
+
+In each item, the "edit" changes one compiled source file so that the `go-identical` body differs from `bodySha256`. For example, it flips the rightmost-minimum tie rule. The build then uses the implementation's documented verifying build step, in a clean clone of its own repository.
+
+62. **Index flags (review P1).** Edit the file, then run `git update-index --assume-unchanged FILE`, then build. Repeat with `--skip-worktree` instead. `git status --porcelain` is empty both times. In both cases the build either refuses to stamp, or the binary gives `DOC` exit 2 with no document. `BODY` exit 0 is allowed, with the edited body. A document naming the clone's commit with a body that differs from `bodySha256` fails the item.
+63. **Toolchain environment (review P2).** Leave the tree unedited. Supply the edited file through toolchain configuration outside the tree: for Go, a `GOENV` file containing `GOFLAGS=-overlay=<json mapping the file to an edited copy>`; for Rust, a user-level `.cargo/config.toml` that patches a workspace crate, or a `RUSTC_WRAPPER` that swaps the file. Then build. Either the build stamps and `DOC` gives the unedited body (equal to `bodySha256`) with the clone's commit, which shows the overlay was neutralized, or no document is produced (`DOC` exit 2). A document naming the commit with the edited body fails the item.
+64. **Other routes (generic).** For each route below, set it up, then build:
+    - a replace ref (`git replace`) or graft that makes the clone's commit id show other content;
+    - an `info/exclude` entry hiding an untracked file that the build compiles (for example an extra source file in the package);
+    - a sparse checkout leaving a committed file absent;
+    - `go.work` or a Cargo `paths` override pointing outside the tree.
+
+    The outcome is the same as in item 62 or 63: a document exists only if its body equals what the recorded commit's content produces (`bodySha256` for an unedited effect). Otherwise there is no document, `DOC` exit 2. An implementation records which routes its toolchain cannot express (for example `go.work` for the Rust lane), and those sub-cases are "not applicable".
+
+**Item count: 64.** Items 16–24 are nine marker items.

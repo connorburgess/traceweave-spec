@@ -13,7 +13,7 @@ Status: draft for review, 2026-11-22. These vectors accompany the [catalogue and
 | `comparison-config-negative.json` | 22 configurations that MUST be rejected |
 | `extraction-go.json`, `extraction-rust.json` | 17 new synthetic inputs (15 Go, 2 Rust) in the [extraction vector](../extraction-vectors/README.md) format, with the shipped 1 MiB configurations |
 | `matching.json` | 76 matching vectors |
-| `behaviour-checklist.md` | A6–A9: 61 numbered behavioural conformance items (working-tree markers, override scope, exit statuses, location values, stdout, provenance, atomic writes and temporaries, symbolic links, per-platform default location, message hygiene), each an observable command outcome, for implementations to script |
+| `behaviour-checklist.md` | A6–A10: 64 numbered behavioural conformance items (working-tree markers, override scope, exit statuses, location values, stdout, provenance, atomic writes and temporaries, symbolic links, per-platform default location, message hygiene), each an observable command outcome, for implementations to script |
 | `comparison-config-bounds.json` | A5: 4 configurations above the seed and region bounds (MUST be rejected) and 4 at or just below them (MUST be accepted) |
 | `config-three-channel-test.json`, `extraction-go-classes.json` | Amendment A3: the TEST-ONLY three-channel profile's configuration, and two Go inputs with equal class sequences |
 | `comparison-config-negative-channels.json` | 5 channel-list configurations that MUST be rejected (A3; the text list was removed in A4 when `text-plain` was registered) |

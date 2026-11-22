@@ -1,6 +1,6 @@
 # Draft catalogue and comparison-report contract: token-fingerprint baseline
 
-Status: **draft for review, revision draft-2 with amendments A1 (extraction record), A2 (normalized-stream exclusions), A3 (declared channel lists), A4 (registered text-plain and ts-tokens), A5 (I2 cross-check rulings), A6 (behavioural rulings), A7 (behavioural follow-ups), A8 (verified provenance stamp) and A9 (fault-injection values), 2026-11-22.** Roadmap item TW-03. Gates: [roadmap](../../ROADMAP.md) M1.3 (catalogue and report schemas) and M2.6 (hand-derived matching vectors). This contract also fixes what I2 in the [implementation plan](../../docs/implementation-repo-plan.md#milestones) must reproduce for M2.4 and M2.5. It builds on the reviewed [extraction contract](extraction-contract.md) and changes nothing in it.
+Status: **draft for review, revision draft-2 with amendments A1 (extraction record), A2 (normalized-stream exclusions), A3 (declared channel lists), A4 (registered text-plain and ts-tokens), A5 (I2 cross-check rulings), A6 (behavioural rulings), A7 (behavioural follow-ups), A8 (verified provenance stamp), A9 (fault-injection values) and A10 (provenance by content), 2026-11-22.** Roadmap item TW-03. Gates: [roadmap](../../ROADMAP.md) M1.3 (catalogue and report schemas) and M2.6 (hand-derived matching vectors). This contract also fixes what I2 in the [implementation plan](../../docs/implementation-repo-plan.md#milestones) must reproduce for M2.4 and M2.5. It builds on the reviewed [extraction contract](extraction-contract.md) and changes nothing in it.
 
 This revision resolves the [clean-room review](../reviews/catalogue-report-contract-review.md) Part 1 findings 1–10 and guesses G1–G6, plus the non-blocking additions of its confirmation pass (G7, invariance, cap and suppression-order vectors). Every disposition is in [§13](#13-review-dispositions). Draft-2 changes formats: catalogue `traceweave-catalogue-draft-2`, comparison `traceweave-seed-merge-draft-2`, report `traceweave-report-draft-2`. Draft-1 identifiers are no longer accepted.
 
@@ -466,7 +466,7 @@ It contains no source text and no fingerprint hashes. Publishing a report is a s
 
 ### 6.8 Behavioural rules (A6, decided in draft, pending owner confirmation)
 
-These rules come from the I2 behavioural run (77 scenarios across both CLIs, `xcheck/REPORT-I2.md` §3 on `merge-i2`). They bind any implementation that writes private output or report documents, or offers a command line. Vectors cannot pin them. The [behavioural conformance checklist](matching-vectors/behaviour-checklist.md) turns each rule into numbered commands with observable outcomes (61 items).
+These rules come from the I2 behavioural run (77 scenarios across both CLIs, `xcheck/REPORT-I2.md` §3 on `merge-i2`). They bind any implementation that writes private output or report documents, or offers a command line. Vectors cannot pin them. The [behavioural conformance checklist](matching-vectors/behaviour-checklist.md) turns each rule into numbered commands with observable outcomes (64 items).
 
 - **B1 Working-tree markers.** A directory is inside a version-controlled working tree if it, or any ancestor up to the filesystem root, contains an entry named:
   - `.git` (directory or file: worktrees and submodules use a file);
@@ -500,7 +500,25 @@ These rules come from the I2 behavioural run (77 scenarios across both CLIs, `xc
 - **B9 Depth and strictness for report documents.** The §3.6 step-1 rules (nesting depth 64, strict JSON, duplicate keys, Unicode scalar values) apply to report documents and bodies read back for validation, as they do to catalogues, configurations and records. A valid body nests 9 deep.
 - **B10 Build-time commit only, and only when verified** (refined by A8). See §6.6: a stamped, clean build writes documents; every other build writes bodies only; a run-time commit is never accepted. A provenance commit is **valid only if the build itself verified both of the following** before recording it:
   1. **The version-control root is the root of the tree being built.** The repository whose commit is recorded must be the implementation's own repository. Its working-tree root (for example `git rev-parse --show-toplevel`) is the documented root of the implementation's source tree, the directory holding the implementation's top-level build manifest. Every source file compiled into the binary is a tracked path of that repository at the recorded commit, and none of them is ignored.
-  2. **That tree is clean:** no modified, staged, untracked or ignored-but-compiled files under it (for git, an empty `git status --porcelain`, and the build manifest tracked per `git ls-files --error-unmatch`).
+  2. **That tree is clean, by content** (A10). The content of **every file that can affect the build** equals the committed content at the recorded commit. That set includes:
+     - every compiled source file;
+     - build manifests and lock files;
+     - build scripts;
+     - vendored code;
+     - embedded data;
+     - toolchain configuration files inside the tree.
+
+     The build verifies this by **comparing content**: for example, it hashes each file and compares it with the blob of the commit (`git hash-object` against `git ls-tree -r <commit>`), or it builds from a fresh export of the commit. It never relies on index or status flags alone. No file outside that committed set may be compiled or read by the build.
+  3. **The build environment cannot substitute sources** (A10). Nothing outside the committed tree may redirect, replace, overlay or patch what is compiled: no environment variable, user or system configuration file, or tool wrapper. The verifying step either neutralizes such inputs (for example `GOENV=off` with `GOFLAGS` empty; `RUSTC_WRAPPER` and `RUSTFLAGS` unset; user-level `.cargo/config.toml` ignored) or refuses to stamp when any is present.
+
+  **Known routes that defeat flag- or status-based checks.** These are examples; the principle above governs:
+  - index flags `git update-index --assume-unchanged` and `--skip-worktree`, which hide edits from `git status` (review P1, both lanes);
+  - replace refs and grafts (`refs/replace/`, `info/grafts`), which change what a commit id appears to contain;
+  - `info/exclude` and `.gitignore` entries that hide an untracked or ignored file which is then compiled;
+  - sparse checkout, which leaves committed files absent while status reports clean;
+  - toolchain overlay, patch or wrapper configuration: Go `GOENV` files with `GOFLAGS=-overlay=…` (review P2) and `go.work`; Cargo `[patch]` or `paths` overrides in user-level or parent `.cargo/config.toml`, `RUSTC_WRAPPER`, and `build.rustflags`.
+
+  **Out of scope.** A deliberately forged local build defeats any check that runs inside that build: hand-injected linker flags (`-ldflags -X` typed by the person building), a modified compiler or toolchain, an edited build script, or a patched binary. Provenance is **evidence about cooperative builds**, made so that an honest operator cannot produce a document whose commit does not describe the code by mistake or through ordinary tool state. It is **not a security boundary**. Binding a report to verified code against an adversarial builder needs signed build attestation, which is milestone M4.
 
   **A toolchain-provided stamp that cannot prove (1) and (2) is treated as unstamped.** An example is Go's `vcs.revision` and `vcs.modified` build information, which records neither the repository root nor whether the compiled files belong to that repository. An implementation whose toolchain cannot verify the root MUST inject the commit through a **documented build step that performs both checks** (for example a build script that runs them and then passes the commit with `-ldflags -X`, or a `build.rs` that runs them). Every other build, including the toolchain's plain build command, writes bodies only. This closes the Go lane's D5 case: an archive export unpacked into an **ignored** folder of another repository gets that repository's HEAD as a clean toolchain stamp, yet it is unstamped under this rule. An archive export unpacked anywhere is unstamped, ignored or not, because it is not the root of a repository (items 55, 59 and 60).
 - **B11 Default private location per platform.** So that both implementations agree, the default private directory (used when no explicit output path and no `TRACEWEAVE_PRIVATE_DIR` are given) is:
@@ -642,6 +660,8 @@ Draft-1 said `match` here. The rule changed (§5.6), not the arithmetic.
 
 **Amendment A9 (fault-injection values), decided in draft, pending owner confirmation:** OD-C57 `TRACEWEAVE_TEST_FAULT` takes exactly `before-temp-open`, `after-partial-write` (SIGKILL after a partial write) or `rename-fails`; any other value is a usage error (B6). The Rust lane's names were adopted because they say where the fault occurs, and `after-partial-write` names the point rather than the mechanism.
 
+**Amendment A10 (provenance by content), decided in draft, pending owner confirmation:** OD-C58 "clean" means that every file that can affect the build equals the committed content, verified by content comparison and never by index or status flags alone, and that the build environment cannot substitute sources; deliberately forged builds are out of scope, and signed attestation is M4 (B10).
+
 **Still open:**
 - **OD-C17, parameter tuning** (TW-05). Each choice is a new configuration digest.
 - **OD-C18, gap-tolerant region formation** (OD-C3 (b)/(c)) as a future comparison id. It needs its own tie rule and vectors.
@@ -691,6 +711,7 @@ All checks are in [check_matching.py](matching-vectors/check_matching.py) unless
 | Part 3 item 1 (M2.9 index) | §1 and §7: no index or rank field. The candidate set is identified by `inputs.candidateCatalogueSha256`, and canonical id ordering makes input order irrelevant. Recording how candidates were generated (exhaustive, or a digest of the selected id set) is left to M2.9's own record; the body records only the resulting catalogue digest |
 | Part 3 item 2 (M2.7 origin links) | §1, §5.5 region key and §7: origin links live in a separate record that references `bodySha256` and the region key |
 | Parts 2 and 3, other items | Outside this lane's files (use-case plans, roadmap) |
+| **A10** provenance by content (`research/reviews/implementation-merge-i2-review.md`, "Confirmation: post-i2", fad444d: P1 index flags hide edits in both CLIs; P2 a Go `GOENV` overlay swaps sources) | §6.8 B10 points 2 and 3 rewritten with the content principle, the known routes as examples, and the out-of-scope statement. Checklist items 62 (P1), 63 (P2) and 64 (generic routes) added, 64 in total. No vector bytes changed |
 | **A9** fault-injection values (the two CLIs shared `TRACEWEAVE_TEST_FAULT` but used different values) | §6.8 B6: the three values above, their outcomes, and every other value a usage error. Checklist items 42, 46 and 47 reworded; item 61 added (61 in total). No vector bytes changed |
 | **A8** verified provenance stamp (Go lane D5 on `i2-go`: an export unpacked into an ignored folder of another repository received that repository's HEAD as a clean stamp and wrote a document, exit 0) | §6.8 B10 rewritten: the build must verify the repository root and cleanliness, toolchain stamps that cannot are unstamped, and a documented verifying build step is required. Checklist item 55 reworded; items 59 (ignored folder) and 60 (plain toolchain build without the verifying step) added, 60 in total. No vector bytes changed |
 | **A7** behavioural follow-ups (both lanes pass all 46 items; recorded ambiguities; `research/reviews/implementation-merge-i2-review.md` F3 and its spec nit) | §6.8 B4, B6, B7, B8, B10 refined; B11–B13 added. Checklist items 36, 37, 43 and 46 reworded and items 47–58 added (58 in total). §2b now says five channel negatives (the file has 5). No vector bytes changed |
