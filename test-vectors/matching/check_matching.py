@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independent checker for the draft matching vectors (catalogue-report-contract.md, draft-2).
+"""Independent checker for the draft matching vectors (spec/catalogue-report.md, draft-2).
 
 Standard library only. It does not import build_vectors.py. For every vector it:
 
@@ -7,7 +7,7 @@ Standard library only. It does not import build_vectors.py. For every vector it:
    k-gram hash, window selection and fingerprint from the recorded tokens (contract §2);
 2. rebuilds each catalogue from those records, serializes it with its own canonical-JSON
    writer, and checks the recorded catalogue object and SHA-256 (contract §3);
-3. validates catalogues and report bodies against catalogue.schema.json / report.schema.json
+3. validates catalogues and report bodies against schemas/catalogue.schema.json / schemas/report.schema.json
    with its own interpreter for the schema keywords used, plus the contract's ordering,
    count and consistency rules, which a schema cannot express;
 4. recomputes the comparison from the recorded fingerprints (contract §4–§5) and requires the
@@ -33,6 +33,7 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+SCHEMAS = HERE.parent.parent / "schemas"  # canonical copies of the three JSON Schemas
 CHANNELS = ("exact", "normalized")
 KGRAM_DOMAIN = b"traceweave/token-kgram/draft-1"
 CATALOGUE_VERSION = "traceweave-catalogue-draft-2"
@@ -428,7 +429,7 @@ class Sources:
         fname, vid = ref.split("#", 1)
         if fname not in self.files:
             path = (HERE / fname).resolve()
-            need(path.is_relative_to(HERE.parent), f"source {fname} outside research/drafts")
+            need(path.is_relative_to(HERE.parent), f"source {fname} outside test-vectors")
             d = strict_loads(path.read_bytes())
             raw = (path.parent / d["configFile"]).read_bytes()
             need(sha(raw) == d["configSha256"], f"{fname}: config digest")
@@ -1010,9 +1011,9 @@ def check_hand(v, body, texts):
 
 class Context:
     def __init__(self):
-        self.cat_schema = strict_loads((HERE / "catalogue.schema.json").read_bytes())
-        self.rep_schema = strict_loads((HERE / "report.schema.json").read_bytes())
-        self.rec_schema = strict_loads((HERE / "record.schema.json").read_bytes())
+        self.cat_schema = strict_loads((SCHEMAS / "catalogue.schema.json").read_bytes())
+        self.rep_schema = strict_loads((SCHEMAS / "report.schema.json").read_bytes())
+        self.rec_schema = strict_loads((SCHEMAS / "record.schema.json").read_bytes())
         self.records = {r["id"]: r for r in strict_loads((HERE / "records.json").read_bytes())["records"]}
         self.external = {}
         audit_schema(self.cat_schema)
@@ -1824,7 +1825,7 @@ def resolve_record(ref, ctx):
         return ctx.records[ref]
     path, rid = ref.split("#", 1)
     full = (HERE / path).resolve()
-    need(full.is_relative_to(HERE.parent), "record file outside research/drafts")
+    need(full.is_relative_to(HERE.parent), "record file outside test-vectors")
     if path not in ctx.external:
         ctx.external[path] = {r["id"]: r for r in strict_loads(full.read_bytes())["records"]}
     return ctx.external[path][rid]
@@ -1918,7 +1919,7 @@ def catalogue_from_records(cfg_raw, items, rec_schema):
 def check_records(rdoc, mdoc, ctx):
     need(rdoc["recordVersion"] == RECORD_VERSION, "records.json recordVersion")
     stats = {"records": 0, "nullInput": 0, "catalogues": 0, "rejections": 0}
-    stats["textRecords"], stats["textKgrams"] = check_external_records("../extraction-vectors-text/records-text-plain.json", ctx)
+    stats["textRecords"], stats["textKgrams"] = check_external_records("../extraction-text/records-text-plain.json", ctx)
     by_id, codes = {}, set()
     for v in rdoc["records"]:
         try:
@@ -2099,8 +2100,8 @@ def record_corruptions(rdoc):
     d["records"][0].pop("configFile")
     yield "config-not-named", d
     d = copy.deepcopy(rdoc)
-    d["records"][0]["configFile"] = "../extraction-vectors/config-rust.json"
-    d["records"][0]["configSha256"] = sha((HERE / "../extraction-vectors/config-rust.json").read_bytes())
+    d["records"][0]["configFile"] = "../extraction/config-rust.json"
+    d["records"][0]["configSha256"] = sha((HERE / "../extraction/config-rust.json").read_bytes())
     yield "config-file-wrong", d
     d = copy.deepcopy(rdoc)
     d["records"][0]["configSha256"] = "0" * 64
@@ -2185,7 +2186,7 @@ def main(argv):
             rec_results.append((name, str(exc)))
     for name, msg in rec_results:
         print(f"  record corruption {name}: {'REJECTED: ' + msg if msg else 'ACCEPTED (checker defect)'}")
-    TP = "../extraction-vectors-text/records-text-plain.json"
+    TP = "../extraction-text/records-text-plain.json"
     tdoc = strict_loads((HERE / TP).read_bytes())
 
     def tmut(rid, fn):
@@ -2223,7 +2224,7 @@ def main(argv):
           f"{len(rec_results) - len(rec_missed)}/{len(rec_results)}")
     missed += rec_missed
     print("Scope: recomputes extraction from recorded tokens and matching from recorded fingerprints; it does not lex. "
-          "Token streams are validated by ../extraction-vectors/check_vectors.py.")
+          "Token streams are validated by ../extraction/check_vectors.py.")
     return 1 if missed else 0
 
 

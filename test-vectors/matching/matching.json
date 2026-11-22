@@ -3136,7 +3136,7 @@
     "artifacts": [
      {
       "id": "a.go",
-      "source": "../extraction-vectors/go.json#go-format-a"
+      "source": "../extraction/go.json#go-format-a"
      }
     ],
     "sha256": "74ea0ef4fcdc6fc942306eb87882d7dfac2c48211e4b4a1a1d77c1caa0d2f164",
@@ -3261,7 +3261,7 @@
     "artifacts": [
      {
       "id": "b.go",
-      "source": "../extraction-vectors/go.json#go-format-b"
+      "source": "../extraction/go.json#go-format-b"
      }
     ],
     "sha256": "f0c4a0be2d16d289643e590873e9e3cb58a8c4a40279b146b4fa726db3bde899",
@@ -3609,7 +3609,7 @@
     "artifacts": [
      {
       "id": "a.go",
-      "source": "../extraction-vectors/go.json#go-rename-a"
+      "source": "../extraction/go.json#go-rename-a"
      }
     ],
     "sha256": "20b84aa3810c524ed90bf74687b165a3b7f9df9796bbdf8287b34d183d3369c5",
@@ -3726,7 +3726,7 @@
     "artifacts": [
      {
       "id": "b.go",
-      "source": "../extraction-vectors/go.json#go-rename-b"
+      "source": "../extraction/go.json#go-rename-b"
      }
     ],
     "sha256": "a46179edf724f6375d5eaf9faca3a801d8fe68fd8b3c289274c218f5c14766ea",
@@ -4884,7 +4884,7 @@
     "artifacts": [
      {
       "id": "short.go",
-      "source": "../extraction-vectors/go.json#go-short"
+      "source": "../extraction/go.json#go-short"
      }
     ],
     "sha256": "e2843a4390c53e13817a3e308efb293dc48ec56640f5ab99cbb8df639bf4f65a",
@@ -5312,7 +5312,7 @@
     "artifacts": [
      {
       "id": "bad.go",
-      "source": "../extraction-vectors/go.json#go-err-unterminated-string"
+      "source": "../extraction/go.json#go-err-unterminated-string"
      }
     ],
     "sha256": "059073b8f9068ad25deac95f77c26cd8fd1da2682e01110e3c3c03676bf7c502",
@@ -8134,7 +8134,7 @@
     "artifacts": [
      {
       "id": "x.go",
-      "source": "../extraction-vectors/go.json#go-equal-minimum"
+      "source": "../extraction/go.json#go-equal-minimum"
      }
     ],
     "sha256": "23db97b255aee42b68e5fc1e414d00927c70c13cbd84d9b491dcdfe0f5ae5fb5",
@@ -8227,7 +8227,7 @@
     "artifacts": [
      {
       "id": "y.go",
-      "source": "../extraction-vectors/go.json#go-equal-minimum"
+      "source": "../extraction/go.json#go-equal-minimum"
      }
     ],
     "sha256": "cd1416eaa5e85e5d3088edf374a8ab51b7e0471a8799496513e405c2928c65b9",
@@ -9030,7 +9030,7 @@
     "artifacts": [
      {
       "id": "tiny.go",
-      "source": "../extraction-vectors/limits-go.json#go-limit-exact"
+      "source": "../extraction/limits-go.json#go-limit-exact"
      }
     ],
     "sha256": "c719df9129a54c8c79dc6634ac9eeaa629ad788e5115002cbe87316fe3129aef",
@@ -11434,7 +11434,7 @@
     "artifacts": [
      {
       "id": "a.rs",
-      "source": "../extraction-vectors/rust.json#rust-format-a"
+      "source": "../extraction/rust.json#rust-format-a"
      }
     ],
     "sha256": "1770d2355b89a85e796eeac2fca0fd47c5a2f05e330b563dec1f6eb8107dadce",
@@ -11567,7 +11567,7 @@
     "artifacts": [
      {
       "id": "b.rs",
-      "source": "../extraction-vectors/rust.json#rust-format-b"
+      "source": "../extraction/rust.json#rust-format-b"
      }
     ],
     "sha256": "9f27bb352fe9b34933cc545cdd80a7777769b103451576328a23c958bdfec78c",
@@ -11928,7 +11928,7 @@
     "artifacts": [
      {
       "id": "a.rs",
-      "source": "../extraction-vectors/rust.json#rust-rename-a"
+      "source": "../extraction/rust.json#rust-rename-a"
      }
     ],
     "sha256": "556949b4736e396636679fdcf15c0cba4ec044cc46ae08875266c7e586732a3f",
@@ -12061,7 +12061,7 @@
     "artifacts": [
      {
       "id": "b.rs",
-      "source": "../extraction-vectors/rust.json#rust-rename-b"
+      "source": "../extraction/rust.json#rust-rename-b"
      }
     ],
     "sha256": "cee632f49ed1dfb9a06c0bbc04c6de43dd734191143c19fb071bf1c8e28245b6",
@@ -13688,7 +13688,7 @@
     "artifacts": [
      {
       "id": "l.rs",
-      "source": "../extraction-vectors/rust.json#rust-lifetimes-chars"
+      "source": "../extraction/rust.json#rust-lifetimes-chars"
      }
     ],
     "sha256": "6572dbfb4f44e41cd97452609db0d95ef440aada1ce67d436de06e51adcbc9b2",
@@ -13861,7 +13861,7 @@
     "artifacts": [
      {
       "id": "m.rs",
-      "source": "../extraction-vectors/rust.json#rust-lifetimes-chars"
+      "source": "../extraction/rust.json#rust-lifetimes-chars"
      }
     ],
     "sha256": "049dfc64732e8d3cf50d12bacd96c48dbbfb98200735f2f2096f2eb3499d8499",
@@ -19806,7 +19806,7 @@
     "artifacts": [
      {
       "id": "tiny.go",
-      "source": "../extraction-vectors/limits-go.json#go-limit-exact"
+      "source": "../extraction/limits-go.json#go-limit-exact"
      }
     ],
     "sha256": "c719df9129a54c8c79dc6634ac9eeaa629ad788e5115002cbe87316fe3129aef",
@@ -21828,11 +21828,11 @@
     "artifacts": [
      {
       "id": "bad.go",
-      "source": "../extraction-vectors/go.json#go-err-unterminated-string"
+      "source": "../extraction/go.json#go-err-unterminated-string"
      },
      {
       "id": "short.go",
-      "source": "../extraction-vectors/go.json#go-short"
+      "source": "../extraction/go.json#go-short"
      },
      {
       "id": "sum.go",
@@ -22166,7 +22166,7 @@
     "artifacts": [
      {
       "id": "cbad.go",
-      "source": "../extraction-vectors/go.json#go-err-unterminated-comment"
+      "source": "../extraction/go.json#go-err-unterminated-comment"
      },
      {
       "id": "copy.go",
@@ -23246,7 +23246,7 @@
     "artifacts": [
      {
       "id": "x.go",
-      "source": "../extraction-vectors/go.json#go-equal-minimum"
+      "source": "../extraction/go.json#go-equal-minimum"
      }
     ],
     "sha256": "23db97b255aee42b68e5fc1e414d00927c70c13cbd84d9b491dcdfe0f5ae5fb5",
@@ -23339,7 +23339,7 @@
     "artifacts": [
      {
       "id": "y.go",
-      "source": "../extraction-vectors/go.json#go-equal-minimum"
+      "source": "../extraction/go.json#go-equal-minimum"
      }
     ],
     "sha256": "cd1416eaa5e85e5d3088edf374a8ab51b7e0471a8799496513e405c2928c65b9",
@@ -23651,7 +23651,7 @@
     "artifacts": [
      {
       "id": "x.go",
-      "source": "../extraction-vectors/go.json#go-equal-minimum"
+      "source": "../extraction/go.json#go-equal-minimum"
      }
     ],
     "sha256": "23db97b255aee42b68e5fc1e414d00927c70c13cbd84d9b491dcdfe0f5ae5fb5",
@@ -31234,7 +31234,7 @@
     "artifacts": [
      {
       "id": "x.go",
-      "source": "../extraction-vectors/go.json#go-equal-minimum"
+      "source": "../extraction/go.json#go-equal-minimum"
      }
     ],
     "sha256": "23db97b255aee42b68e5fc1e414d00927c70c13cbd84d9b491dcdfe0f5ae5fb5",
@@ -40183,11 +40183,11 @@
      },
      {
       "id": "bad.go",
-      "source": "../extraction-vectors/go.json#go-err-unterminated-string"
+      "source": "../extraction/go.json#go-err-unterminated-string"
      },
      {
       "id": "short.go",
-      "source": "../extraction-vectors/go.json#go-short"
+      "source": "../extraction/go.json#go-short"
      }
     ],
     "sha256": "b071ea2bebb73f91d920c61a1a509f09c3a9a956ffb5602e12c9bbd858cdefeb",
@@ -45525,7 +45525,7 @@
     "artifacts": [
      {
       "id": "tiny.go",
-      "source": "../extraction-vectors/limits-go.json#go-limit-exact"
+      "source": "../extraction/limits-go.json#go-limit-exact"
      }
     ],
     "sha256": "c719df9129a54c8c79dc6634ac9eeaa629ad788e5115002cbe87316fe3129aef",
@@ -45594,7 +45594,7 @@
     "artifacts": [
      {
       "id": "tiny.go",
-      "source": "../extraction-vectors/limits-go.json#go-limit-exact"
+      "source": "../extraction/limits-go.json#go-limit-exact"
      }
     ],
     "sha256": "c719df9129a54c8c79dc6634ac9eeaa629ad788e5115002cbe87316fe3129aef",
@@ -45960,7 +45960,7 @@
     "artifacts": [
      {
       "id": "tiny.go",
-      "source": "../extraction-vectors/limits-go.json#go-limit-exact"
+      "source": "../extraction/limits-go.json#go-limit-exact"
      }
     ],
     "sha256": "c719df9129a54c8c79dc6634ac9eeaa629ad788e5115002cbe87316fe3129aef",
@@ -46350,7 +46350,7 @@
     "artifacts": [
      {
       "id": "tiny.go",
-      "source": "../extraction-vectors/limits-go.json#go-limit-exact"
+      "source": "../extraction/limits-go.json#go-limit-exact"
      }
     ],
     "sha256": "c719df9129a54c8c79dc6634ac9eeaa629ad788e5115002cbe87316fe3129aef",
@@ -46419,15 +46419,15 @@
     "artifacts": [
      {
       "id": "copy.go",
-      "source": "../extraction-vectors/limits-go.json#go-limit-exact"
+      "source": "../extraction/limits-go.json#go-limit-exact"
      },
      {
       "id": "over.go",
-      "source": "../extraction-vectors/limits-go.json#go-limit-over"
+      "source": "../extraction/limits-go.json#go-limit-over"
      },
      {
       "id": "prec.go",
-      "source": "../extraction-vectors/limits-go.json#go-limit-precedence"
+      "source": "../extraction/limits-go.json#go-limit-precedence"
      }
     ],
     "sha256": "e025138c287c255f69d99503ba085c6b9532fdd7d07314f2c83de75fbec2a226",
@@ -48681,7 +48681,7 @@
     "artifacts": [
      {
       "id": "a.go",
-      "source": "../extraction-vectors/go.json#go-format-a"
+      "source": "../extraction/go.json#go-format-a"
      }
     ],
     "sha256": "74ea0ef4fcdc6fc942306eb87882d7dfac2c48211e4b4a1a1d77c1caa0d2f164",
@@ -48806,7 +48806,7 @@
     "artifacts": [
      {
       "id": "b.go",
-      "source": "../extraction-vectors/go.json#go-format-b"
+      "source": "../extraction/go.json#go-format-b"
      }
     ],
     "sha256": "f0c4a0be2d16d289643e590873e9e3cb58a8c4a40279b146b4fa726db3bde899",
@@ -49354,15 +49354,15 @@
    },
    "reference": {
     "fromRecords": {
-     "extractionConfigFile": "../extraction-vectors-text/config-text-plain.json",
+     "extractionConfigFile": "../extraction-text/config-text-plain.json",
      "artifacts": [
       {
        "id": "latin.txt",
-       "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-confusable-latin"
+       "record": "../extraction-text/records-text-plain.json#rec-plain-confusable-latin"
       },
       {
        "id": "src.txt",
-       "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-reflow-a"
+       "record": "../extraction-text/records-text-plain.json#rec-plain-reflow-a"
       }
      ]
     },
@@ -49552,23 +49552,23 @@
    },
    "candidate": {
     "fromRecords": {
-     "extractionConfigFile": "../extraction-vectors-text/config-text-plain.json",
+     "extractionConfigFile": "../extraction-text/config-text-plain.json",
      "artifacts": [
       {
        "id": "copy.txt",
-       "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-reflow-a"
+       "record": "../extraction-text/records-text-plain.json#rec-plain-reflow-a"
       },
       {
        "id": "cyr.txt",
-       "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-confusable-cyrillic"
+       "record": "../extraction-text/records-text-plain.json#rec-plain-confusable-cyrillic"
       },
       {
        "id": "reflow.txt",
-       "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-reflow-b"
+       "record": "../extraction-text/records-text-plain.json#rec-plain-reflow-b"
       },
       {
        "id": "unrel.txt",
-       "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-numbers"
+       "record": "../extraction-text/records-text-plain.json#rec-plain-numbers"
       }
      ]
     },
@@ -51409,7 +51409,7 @@
     "artifacts": [
      {
       "id": "bad.go",
-      "source": "../extraction-vectors/go.json#go-err-unterminated-string"
+      "source": "../extraction/go.json#go-err-unterminated-string"
      }
     ],
     "sha256": "297951f71f8a393045397e3131ae91ec0f1e9b3d78dd33e882c43d3ec6731b59",
@@ -52059,7 +52059,7 @@
     "artifacts": [
      {
       "id": "bad.go",
-      "source": "../extraction-vectors/go.json#go-err-unterminated-string"
+      "source": "../extraction/go.json#go-err-unterminated-string"
      }
     ],
     "sha256": "fd1c532f756bc3a577098a265784a0f9b29a12b87f797095b9c3bff260040800",
@@ -52106,7 +52106,7 @@
     "artifacts": [
      {
       "id": "bad.go",
-      "source": "../extraction-vectors/go.json#go-err-unterminated-string"
+      "source": "../extraction/go.json#go-err-unterminated-string"
      }
     ],
     "sha256": "c02b0e18eace31391b49d67b9aa4da321f0b5fc5c3028291d59f699ed0f930b6",
@@ -52152,7 +52152,7 @@
     "artifacts": [
      {
       "id": "bad2.go",
-      "source": "../extraction-vectors/go.json#go-err-unterminated-comment"
+      "source": "../extraction/go.json#go-err-unterminated-comment"
      }
     ],
     "sha256": "8f88d61cfb14b40f43d17cd8d0e00eea9af1a0c95ff0422bce8e96878d3162d9",

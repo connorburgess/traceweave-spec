@@ -1,8 +1,10 @@
 # Independent review: draft extraction contract and vectors
 
+> Path note: the contract and vectors reviewed here were promoted on 2026-11-23 to [spec/extraction.md](../../spec/extraction.md) and [test-vectors/extraction/](../../test-vectors/extraction/README.md); the review text below keeps the paths of the time (`research/drafts/...`). See the [promotion map](../promotion-map.md).
+
 > Note: the contract and vectors reviewed here remain drafts in `research/drafts/`, pending promotion to normative locations, which needs the owner.
 
-Reviewed 2026-11-22: [extraction-contract.md](../drafts/extraction-contract.md) and [extraction-vectors/](../drafts/extraction-vectors/). I wrote none of these files, and I re-ran everything rather than relying on their self-reported verification. Scratch programs lived in `$TMPDIR` only. Toolchains used: go1.27.3, rustc 1.97.1, proc-macro2 1.0.107 built `--offline` from the local cargo cache, and Python 3.
+Reviewed 2026-11-22: [extraction-contract.md](../../spec/extraction.md) and [extraction-vectors/](../../test-vectors/extraction/). I wrote none of these files, and I re-ran everything rather than relying on their self-reported verification. Scratch programs lived in `$TMPDIR` only. Toolchains used: go1.27.3, rustc 1.97.1, proc-macro2 1.0.107 built `--offline` from the local cargo cache, and Python 3.
 
 ## 1. Clean-room recomputation (done before reading check_vectors.py)
 

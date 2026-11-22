@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the draft matching vectors (catalogue-report-contract.md, revision draft-2).
+"""Build the draft matching vectors (spec/catalogue-report.md, revision draft-2).
 
 Standard library only. Writes, next to this file:
   extraction-go.json, extraction-rust.json   new synthetic inputs, check_vectors.py format
@@ -26,7 +26,7 @@ import re
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-EXV = HERE.parent / "extraction-vectors"
+EXV = HERE.parent / "extraction"
 DOMAIN = b"traceweave/token-kgram/draft-1"
 CATALOGUE_VERSION = "traceweave-catalogue-draft-2"
 REPORT_VERSION = "traceweave-report-draft-2"
@@ -45,7 +45,7 @@ CONFIG_3CH = (b'{"contract":"traceweave-token-winnow-draft-1","profile":"go-toke
 
 # ------------------------------------------------------------------ mini lexers
 # Only the constructs used by the new synthetic inputs. Their output is validated
-# by ../extraction-vectors/check_vectors.py, not trusted.
+# by ../extraction/check_vectors.py, not trusted.
 
 GO_KW = set("break case chan const continue default defer else fallthrough for func go goto if import "
             "interface map package range return select struct switch type var".split())
@@ -355,9 +355,9 @@ NEW_GO_CLASSES = [
     ("mv-go-classes-b", ["classes"], "Same classes as mv-go-classes-a with other keywords and operators.",
      "defer y - g(2)\ncontinue\ny--\n"),
 ]
-NG_ = "../extraction-vectors/go.json"
-TEXT_RECORDS = "../extraction-vectors-text/records-text-plain.json"
-TEXT_CFG = "../extraction-vectors-text/config-text-plain.json"
+NG_ = "../extraction/go.json"
+TEXT_RECORDS = "../extraction-text/records-text-plain.json"
+TEXT_CFG = "../extraction-text/config-text-plain.json"
 
 
 def text_record(rid):
@@ -787,10 +787,10 @@ def main():
 
     def ext_file(name, cfgfile, cfg_raw, cfg, lang, items):
         d = {"contract": cfg["contract"], "profile": cfg["profile"], "profileVersion": cfg["profileVersion"],
-             "configFile": f"../extraction-vectors/{cfgfile}", "configSha256": sha(cfg_raw),
+             "configFile": f"../extraction/{cfgfile}", "configSha256": sha(cfg_raw),
              "k": cfg["k"], "window": cfg["window"], "requiredCoverage": False,
              "lexingCheck": "New synthetic inputs for the matching vectors. Token streams are produced by build_vectors.py "
-                            "and validated by ../extraction-vectors/check_vectors.py; see README.md.",
+                            "and validated by ../extraction/check_vectors.py; see README.md.",
              "vectors": [extraction_record(i, t, ds, tx, cfg, lang) for i, t, ds, tx in items]}
         (HERE / name).write_text(json.dumps(d, indent=1, ensure_ascii=False) + "\n")
 
@@ -801,9 +801,9 @@ def main():
     cfg3 = json.loads(CONFIG_3CH)
 
     sources = {}
-    for f in ["extraction-go.json", "extraction-rust.json", "../extraction-vectors/go.json",
-              "../extraction-vectors/rust.json", "../extraction-vectors/limits-go.json",
-              "../extraction-vectors/exclusion-rule.json", "extraction-go-classes.json"]:
+    for f in ["extraction-go.json", "extraction-rust.json", "../extraction/go.json",
+              "../extraction/rust.json", "../extraction/limits-go.json",
+              "../extraction/exclusion-rule.json", "extraction-go-classes.json"]:
         d, raw, cfg = load_extraction(HERE / f)
         for v in d["vectors"]:
             sources[f"{f}#{v['id']}"] = (v, raw, cfg)
@@ -867,8 +867,8 @@ def main():
     (HERE / "comparison-config-negative.json").write_text(json.dumps(
         [{"id": i, "reason": r, "bytesBase64": base64.b64encode(b).decode()} for i, b, r in negatives], indent=1) + "\n")
 
-    GO, RU, NG = "extraction-go.json", "extraction-rust.json", "../extraction-vectors/go.json"
-    RX, LG = "../extraction-vectors/rust.json", "../extraction-vectors/limits-go.json"
+    GO, RU, NG = "extraction-go.json", "extraction-rust.json", "../extraction/go.json"
+    RX, LG = "../extraction/rust.json", "../extraction/limits-go.json"
     V = []
 
     def vec(vid, tags, desc, ref, cand, hand, cc=None, supp=None, overrides=None):
@@ -1577,7 +1577,7 @@ def catalogue_from_records(cfg_raw, items, allow_test=True):
 def build_records(sources, matching_out):
     neg = json.loads((EXV / "config-negative.json").read_text())["negatives"]
     negs = {n["id"]: n for n in neg}
-    NG, NR, LG = "../extraction-vectors/go.json", "../extraction-vectors/rust.json", "../extraction-vectors/limits-go.json"
+    NG, NR, LG = "../extraction/go.json", "../extraction/rust.json", "../extraction/limits-go.json"
     GO = "extraction-go.json"
     specs = [
         ("rec-go-ok", ["ok"], f"{NG}#go-format-a", "ok result (Go): inserted semicolons carry inserted:true."),
@@ -1592,13 +1592,13 @@ def build_records(sources, matching_out):
         ("rec-go-over-limit", ["error", "input-too-large"], f"{LG}#go-limit-over", "input-too-large: inputSha256 and inputLength null, offset 0 (Q10)."),
         ("rec-go-over-limit-precedence", ["error", "input-too-large"], f"{LG}#go-limit-precedence", "Over the limit and invalid UTF-8: input-too-large, nulls."),
         ("rec-go-limit-exact", ["ok"], f"{LG}#go-limit-exact", "Exactly maxInputBytes (16): ok."),
-        ("rec-unsupported-config", ["error", "unsupported-config"], "../extraction-vectors/config-negative.json#cfg-whitespace",
+        ("rec-unsupported-config", ["error", "unsupported-config"], "../extraction/config-negative.json#cfg-whitespace",
          "unsupported-config: profile, profileVersion, inputSha256, inputLength and offset null; configSha256 over the bytes supplied."),
-        ("rec-unsupported-config-2", ["error", "unsupported-config"], "../extraction-vectors/config-negative.json#" + neg[1]["id"],
+        ("rec-unsupported-config-2", ["error", "unsupported-config"], "../extraction/config-negative.json#" + neg[1]["id"],
          "A second unsupported-config record (" + neg[1]["reason"] + ")."),
         ("rec-rust-ok", ["ok"], f"{NR}#rust-literals", "Rust ok result: token text with quotes and backslashes is escaped as \\\" and \\\\."),
         ("rec-rust-lexical-error", ["error", "lexical-error"], f"{NR}#rust-err-unbalanced", "Rust lexical error."),
-    ] + [(f"rec-{vid}", ["exclusions", "test-only-profile"], f"../extraction-vectors/exclusion-rule.json#{vid}",
+    ] + [(f"rec-{vid}", ["exclusions", "test-only-profile"], f"../extraction/exclusion-rule.json#{vid}",
           f"TEST-ONLY profile go-tokens-exclusion-test (extraction OD-23): normalized channel with tokenIndices; {why}.")
          for vid, why in (("excl-semi-newlines", "inserted semicolons excluded from normalized"),
                           ("excl-semi-explicit", "explicit semicolons excluded too"),
@@ -1632,7 +1632,7 @@ def build_records(sources, matching_out):
             data, result = base64.b64decode(rec["inputBase64"]), rec["result"]
             fname = src.split("#")[0]
             cfg_file = str(Path(fname).parent / json.loads((HERE / fname).read_text())["configFile"])
-            cfg_file = "../extraction-vectors/" + Path(cfg_file).name if "extraction-vectors" in cfg_file else cfg_file
+            cfg_file = "../extraction/" + Path(cfg_file).name if "extraction" in cfg_file else cfg_file
             assert (HERE / cfg_file).read_bytes() == cfg_raw
             entry = {"configFile": cfg_file, "configSha256": sha(cfg_raw), "inputBase64": rec["inputBase64"]}
         rb = record_bytes(cfg_raw, data, result)
@@ -1653,7 +1653,7 @@ def build_records(sources, matching_out):
         cfg_raw = (EXV / cfgname).read_bytes()
         cb = catalogue_from_records(cfg_raw, [(a, by_id[r][0]) for a, r in items])
         assert sha(cb) == m[vid][side]["sha256"], cid
-        cats.append({"id": cid, "extractionConfigFile": f"../extraction-vectors/{cfgname}",
+        cats.append({"id": cid, "extractionConfigFile": f"../extraction/{cfgname}",
                      "artifacts": [{"id": a, "record": r} for a, r in items],
                      "expectedCatalogueSha256": sha(cb), "sameAs": f"matching.json#{vid}/{side}"})
     excl = [("e1.go", "rec-excl-semi-newlines"), ("e2.go", "rec-excl-semi-explicit"), ("e3.go", "rec-excl-ok-normalized-empty"),
@@ -1661,7 +1661,7 @@ def build_records(sources, matching_out):
     cfg_raw = (EXV / "config-exclusion-test.json").read_bytes()
     cb = catalogue_from_records(cfg_raw, [(a, by_id[r][0]) for a, r in excl])
     cats.append({"id": "cat-exclusion-test", "testOnlyProfile": True,
-                 "extractionConfigFile": "../extraction-vectors/config-exclusion-test.json",
+                 "extractionConfigFile": "../extraction/config-exclusion-test.json",
                  "artifacts": [{"id": a, "record": r} for a, r in excl], "expectedCatalogueSha256": sha(cb),
                  "note": "TEST-ONLY profile: per-channel kgramCount max(0, n_C - k + 1); the normalized channel of e3.go is "
                          "empty although its status is ok. Checked against a catalogue rebuilt from the extraction vectors."})
@@ -1703,7 +1703,7 @@ def build_records(sources, matching_out):
             g["hash"] = "0123456789abcdef"
     altered = (json.dumps(r0, separators=(",", ":"), ensure_ascii=False) + "\n").encode("utf-8")
     cb = catalogue_from_records(go_cfg_raw, [("a.go", altered)])
-    cats.append({"id": "cat-builder-hash-not-rederived", "extractionConfigFile": "../extraction-vectors/config-go.json",
+    cats.append({"id": "cat-builder-hash-not-rederived", "extractionConfigFile": "../extraction/config-go.json",
                  "artifacts": [{"id": "a.go", "recordText": altered.decode("utf-8")}], "expectedCatalogueSha256": sha(cb),
                  "note": "§3.8 step 2: rec-go-ok with its first exact fingerprint hash replaced by 0123456789abcdef in both "
                          "kgrams and fingerprints. The record is canonical and structurally consistent, so the builder ACCEPTS it: "
@@ -1725,7 +1725,7 @@ def build_records(sources, matching_out):
             raise SystemExit(f"builder accepted {rid}")
         except ValueError:
             pass
-        extra_rej.append({"id": rid, "extractionConfigFile": f"../extraction-vectors/{cfgname}",
+        extra_rej.append({"id": rid, "extractionConfigFile": f"../extraction/{cfgname}",
                           "artifacts": [({"id": a, "record": r} if r else {"id": a, "recordText": txt}) for a, r, txt in items],
                           "reason": reason})
     rej = []
@@ -1735,7 +1735,7 @@ def build_records(sources, matching_out):
             raise SystemExit(f"builder accepted {rid}")
         except ValueError:
             pass
-        rej.append({"id": rid, "extractionConfigFile": f"../extraction-vectors/{cfgname}",
+        rej.append({"id": rid, "extractionConfigFile": f"../extraction/{cfgname}",
                     "artifacts": [{"id": a, "record": r} for a, r in items], "reason": reason})
     doc = {"recordVersion": RECORD_VERSION,
            "note": "Expected canonical extraction records (contract §2a). Every record names its extraction configuration "

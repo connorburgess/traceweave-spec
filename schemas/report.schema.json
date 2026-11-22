@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/connorburgess/traceweave-spec/blob/main/research/drafts/matching-vectors/report.schema.json",
+  "$id": "https://github.com/connorburgess/traceweave-spec/blob/main/schemas/report.schema.json",
   "title": "Traceweave draft comparison report (traceweave-report-draft-2)",
-  "description": "Draft research schema, not a file in schemas/. A report document is a canonical body plus a separate provenance block. The body holds comparison results only: no signature, trust, time, exact-subject, rights, origin, dependency, ranking or index result, and no score, probability or ownership field. No field accepts free text. Ordering, count and outcome consistency rules are in catalogue-report-contract.md sections 5 and 6 and are enforced by check_matching.py. Mode keys follow comparison.modes, which equals the compared profile's channel list (contract section 2b).",
+  "description": "Experimental draft schema. A report document is a canonical body plus a separate provenance block. The body holds comparison results only: no signature, trust, time, exact-subject, rights, origin, dependency, ranking or index result, and no score, probability or ownership field. No field accepts free text. Ordering, count and outcome consistency rules are in spec/catalogue-report.md sections 5 and 6 and are enforced by check_matching.py. Mode keys follow comparison.modes, which equals the compared profile's channel list (contract section 2b).",
   "type": "object",
   "additionalProperties": false,
   "required": [

@@ -5,7 +5,7 @@ This adds spans, k-grams, hashes and winnowing to hand-derived token streams.
 It does not lex: a token's span is the first occurrence of its hand-written
 text at or after the previous token's end. Standard library only.
 
-Usage: python3 -I harness/build_vectors.py   (from extraction-vectors-typescript/)
+Usage: python3 -I harness/build_vectors.py   (from extraction-typescript/)
 """
 import base64
 import hashlib

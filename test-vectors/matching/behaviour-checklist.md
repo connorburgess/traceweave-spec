@@ -1,6 +1,6 @@
 # Behavioural conformance checklist (amendment A6)
 
-Status: draft, 2026-11-22, amended by A7. Companion to [catalogue-report-contract.md](../catalogue-report-contract.md) §6.8 (rules B1–B13; B10 as refined by A8). Item numbers are stable: A7 rewords items 36, 37, 43 and 46 and appends items 47–58; A8 rewords item 55 and appends items 59–60; A9 rewords items 42, 46 and 47 and appends item 61; A10 appends items 62–64; A11 appends item 65. These behaviours cannot be pinned by vectors. Each item is one command with an observable outcome: an exit status, files present or absent, file modes, or output bytes. Both implementations should script every item. The I2 probe `xcheck/probes/i2_behaviour.py` on `merge-i2` is the current executable record.
+Status: draft, 2026-11-22, amended by A7. Companion to [spec/catalogue-report.md](../../spec/catalogue-report.md) §6.8 (rules B1–B13; B10 as refined by A8). Item numbers are stable: A7 rewords items 36, 37, 43 and 46 and appends items 47–58; A8 rewords item 55 and appends items 59–60; A9 rewords items 42, 46 and 47 and appends item 61; A10 appends items 62–64; A11 appends item 65. These behaviours cannot be pinned by vectors. Each item is one command with an observable outcome: an exit status, files present or absent, file modes, or output bytes. Both implementations should script every item. The I2 probe `xcheck/probes/i2_behaviour.py` on `merge-i2` is the current executable record.
 
 ## Operations
 
@@ -23,7 +23,7 @@ Exit statuses are the B3 classes: **0** result, **1** refused input, **2** usage
 - `H = T/home`: the fake `HOME` for every item. `TRACEWEAVE_PRIVATE_DIR` and `XDG_DATA_HOME` are unset unless an item sets them.
 - `G = T/g`: `git init`, one commit; `G/out` and `G/other` exist.
 - For each marker `M` in B1: `T/m-M/` containing `M`. `.git`, `.hg`, `.svn`, `.jj`, `.bzr` and `_darcs` are directories; `.git` is also tested as a file (`gitdir: x`); `.fslckout` and `_FOSSIL_` are empty files. Each has a subdirectory `sub/`.
-- Inputs come from `matching-vectors/` and `extraction-vectors/`. "Expected bytes" means the vector's recorded bytes or digest.
+- Inputs come from `matching/` and `extraction/`. "Expected bytes" means the vector's recorded bytes or digest.
 - Builds:
   - **stamped**: built from a clean clone by the implementation's normal build;
   - **dirty-src**: the same clone with one source file changed before building;

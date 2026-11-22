@@ -1027,8 +1027,8 @@ def run_record_corruptions(doc):
 
 def matching_checker_records(doc):
     """Optional: the catalogue/report contract's own record validator (written by another author)."""
-    path = HERE.parent / "matching-vectors" / "check_matching.py"
-    schema = HERE.parent / "matching-vectors" / "record.schema.json"
+    path = HERE.parent / "matching" / "check_matching.py"
+    schema = HERE.parent.parent / "schemas" / "record.schema.json"
     if not path.exists() or not schema.exists():
         return None
     import importlib.util
@@ -1154,7 +1154,7 @@ def main(argv):
     ok = ok and not rf
     mc = matching_checker_records(rdoc)
     if mc is None:
-        print("SKIP matching-vectors/check_matching.py not found; record bytes not validated by it")
+        print("SKIP matching/check_matching.py not found; record bytes not validated by it")
     else:
         # check_matching.py has no text-plain profile entry, so its closed-error-code lookup refuses every
         # text-plain error record. That refusal is reported, not counted as a record defect.
@@ -1162,7 +1162,7 @@ def main(argv):
         other = [e for e in mc[2] if e not in unreg]
         for e in other:
             print(f"FAIL matching checker: {e}")
-        print(f"{'PASS' if not other else 'FAIL'} record bytes accepted by matching-vectors/check_matching.py "
+        print(f"{'PASS' if not other else 'FAIL'} record bytes accepted by matching/check_matching.py "
               f"check_record_bytes + record.schema.json: {mc[0]}/{mc[1]}; refused only because that checker has no "
               f"text-plain profile registered (error-code lookup): {len(unreg)}; other refusals: {len(other)}")
         ok = ok and not other

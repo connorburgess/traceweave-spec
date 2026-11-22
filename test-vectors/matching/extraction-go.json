@@ -2,12 +2,12 @@
  "contract": "traceweave-token-winnow-draft-1",
  "profile": "go-tokens",
  "profileVersion": "draft-1",
- "configFile": "../extraction-vectors/config-go.json",
+ "configFile": "../extraction/config-go.json",
  "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
  "k": 5,
  "window": 4,
  "requiredCoverage": false,
- "lexingCheck": "New synthetic inputs for the matching vectors. Token streams are produced by build_vectors.py and validated by ../extraction-vectors/check_vectors.py; see README.md.",
+ "lexingCheck": "New synthetic inputs for the matching vectors. Token streams are produced by build_vectors.py and validated by ../extraction/check_vectors.py; see README.md.",
  "vectors": [
   {
    "id": "mv-go-sum",

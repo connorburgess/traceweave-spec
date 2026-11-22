@@ -6,7 +6,7 @@ Usage: python3 -I harness/derive_deltas.py UCD_DIR
 Checks that ID_Start minus XID_Start, ID_Continue minus XID_Continue, XID minus ID
 (must be empty) and General_Category Zs equal the constants in tslex.py.
 UCD_DIR needs UnicodeData.txt and DerivedCoreProperties.txt with the digests
-pinned in extraction-contract.md §3a. Standard library only.
+pinned in spec/extraction.md §3a. Standard library only.
 """
 import hashlib
 import sys

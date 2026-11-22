@@ -9,7 +9,7 @@
     "test-only-profile"
    ],
    "description": "TEST-ONLY three-channel profile go-tokens-three-channel-test (contract §2b): the token stream of the source vector, re-derived under channels exact, normalized, classes.",
-   "source": "../extraction-vectors/go.json#go-format-a",
+   "source": "../extraction/go.json#go-format-a",
    "rederivedFromTokens": true,
    "derivation": "hand",
    "configFile": "config-three-channel-test.json",
@@ -25,7 +25,7 @@
     "test-only-profile"
    ],
    "description": "TEST-ONLY three-channel profile go-tokens-three-channel-test (contract §2b): the token stream of the source vector, re-derived under channels exact, normalized, classes.",
-   "source": "../extraction-vectors/go.json#go-format-b",
+   "source": "../extraction/go.json#go-format-b",
    "rederivedFromTokens": true,
    "derivation": "hand",
    "configFile": "config-three-channel-test.json",
@@ -41,7 +41,7 @@
     "test-only-profile"
    ],
    "description": "TEST-ONLY three-channel profile go-tokens-three-channel-test (contract §2b): the token stream of the source vector, re-derived under channels exact, normalized, classes.",
-   "source": "../extraction-vectors/go.json#go-rename-a",
+   "source": "../extraction/go.json#go-rename-a",
    "rederivedFromTokens": true,
    "derivation": "hand",
    "configFile": "config-three-channel-test.json",
@@ -57,7 +57,7 @@
     "test-only-profile"
    ],
    "description": "TEST-ONLY three-channel profile go-tokens-three-channel-test (contract §2b): the token stream of the source vector, re-derived under channels exact, normalized, classes.",
-   "source": "../extraction-vectors/go.json#go-rename-b",
+   "source": "../extraction/go.json#go-rename-b",
    "rederivedFromTokens": true,
    "derivation": "hand",
    "configFile": "config-three-channel-test.json",
@@ -105,7 +105,7 @@
     "test-only-profile"
    ],
    "description": "TEST-ONLY three-channel profile go-tokens-three-channel-test (contract §2b): the token stream of the source vector, re-derived under channels exact, normalized, classes.",
-   "source": "../extraction-vectors/go.json#go-short",
+   "source": "../extraction/go.json#go-short",
    "rederivedFromTokens": true,
    "derivation": "hand",
    "configFile": "config-three-channel-test.json",
@@ -121,7 +121,7 @@
     "test-only-profile"
    ],
    "description": "TEST-ONLY three-channel profile go-tokens-three-channel-test (contract §2b): the token stream of the source vector, re-derived under channels exact, normalized, classes.",
-   "source": "../extraction-vectors/go.json#go-err-unterminated-string",
+   "source": "../extraction/go.json#go-err-unterminated-string",
    "rederivedFromTokens": true,
    "derivation": "hand",
    "configFile": "config-three-channel-test.json",
@@ -136,9 +136,9 @@
     "ok"
    ],
    "description": "ok result (Go): inserted semicolons carry inserted:true.",
-   "source": "../extraction-vectors/go.json#go-format-a",
+   "source": "../extraction/go.json#go-format-a",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-go.json",
+   "configFile": "../extraction/config-go.json",
    "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
    "inputBase64": "ZnVuYyBhZGQoYSwgYiBpbnQpIGludCB7CglyZXR1cm4gYSArIGIKfQo=",
    "expectedRecordSha256": "14652fc3cc218808f7378b6a81065dcfaf010bfacd21ce812f2af8063784b030",
@@ -151,9 +151,9 @@
     "non-ascii"
    ],
    "description": "Non-ASCII token text is written as raw UTF-8, never as \\u escapes.",
-   "source": "../extraction-vectors/go.json#go-unicode",
+   "source": "../extraction/go.json#go-unicode",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-go.json",
+   "configFile": "../extraction/config-go.json",
    "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
    "inputBase64": "cMOkaXbDpCA6PSAiaMOpbGxvLCDkuJbnlYwiICsg5ZCN5YmNICsgc3RyaW5nKCfimIMnKQo=",
    "expectedRecordSha256": "c42f31ce0d4ae3cfc3caaa75f8229c2e9752851f13f5b2ea487cc73ce91dc75a",
@@ -166,9 +166,9 @@
     "escape"
    ],
    "description": "A raw string containing CR LF: written as \\r\\n.",
-   "source": "../extraction-vectors/go.json#go-raw-string-cr",
+   "source": "../extraction/go.json#go-raw-string-cr",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-go.json",
+   "configFile": "../extraction/config-go.json",
    "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
    "inputBase64": "cyA6PSBgYQ0KYmAgKyB0Cg==",
    "expectedRecordSha256": "1feaf308ba58e458d6f0de1cacd3c1d6950255484cd1cc417a4565a7e7379e14",
@@ -181,9 +181,9 @@
     "escape"
    ],
    "description": "A raw string containing U+000B: written as \\u000b (lowercase hex).",
-   "source": "../extraction-vectors/go.json#go-escapes-vt-raw",
+   "source": "../extraction/go.json#go-escapes-vt-raw",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-go.json",
+   "configFile": "../extraction/config-go.json",
    "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
    "inputBase64": "cyA6PSAiXHg0MSIgKyBgYQtiYAo=",
    "expectedRecordSha256": "cdaf2fafe562e5d270775679d3f289026b1a5c1e004169845d52c3cad6178005",
@@ -197,7 +197,7 @@
    "description": "ok result for GO_SUM (used by the catalogue-from-records vector).",
    "source": "extraction-go.json#mv-go-sum",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-go.json",
+   "configFile": "../extraction/config-go.json",
    "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
    "inputBase64": "ZnVuYyBzdW1Qb3NpdGl2ZSh2YWx1ZXMgW11pbnQpIGludCB7Cgl0b3RhbCA6PSAwCglmb3IgXywgdiA6PSByYW5nZSB2YWx1ZXMgewoJCWlmIHYgPiAwIHsKCQkJdG90YWwgKz0gdgoJCX0KCX0KCXJldHVybiB0b3RhbAp9Cg==",
    "expectedRecordSha256": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
@@ -209,9 +209,9 @@
     "insufficient-tokens"
    ],
    "description": "insufficient-tokens: tokens and values present, k-gram lists empty.",
-   "source": "../extraction-vectors/go.json#go-short",
+   "source": "../extraction/go.json#go-short",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-go.json",
+   "configFile": "../extraction/config-go.json",
    "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
    "inputBase64": "eCA6PSAxCg==",
    "expectedRecordSha256": "29807a720e0fe07d1a83032e0023aa8e7dd38912b1a31ead1803e7056069e407",
@@ -223,9 +223,9 @@
     "insufficient-tokens"
    ],
    "description": "Empty input: zero tokens, empty arrays.",
-   "source": "../extraction-vectors/go.json#go-empty",
+   "source": "../extraction/go.json#go-empty",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-go.json",
+   "configFile": "../extraction/config-go.json",
    "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
    "inputBase64": "",
    "expectedRecordSha256": "ecf9bf02fcc0351b2a0bc0c4489752f3a6699f136e9a25d6de0e204207178169",
@@ -238,9 +238,9 @@
     "lexical-error"
    ],
    "description": "Lexical error: input digest and length present, integer offset.",
-   "source": "../extraction-vectors/go.json#go-err-unterminated-string",
+   "source": "../extraction/go.json#go-err-unterminated-string",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-go.json",
+   "configFile": "../extraction/config-go.json",
    "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
    "inputBase64": "cyA6PSAiYWJjCnQgOj0gMQo=",
    "expectedRecordSha256": "fb57beda4eb8a4ebf7f6024dc40a37c30ce02400b44dc48a42dbf6d3327d6412",
@@ -252,9 +252,9 @@
     "error"
    ],
    "description": "Invalid UTF-8 input: the record is still UTF-8 (no token text).",
-   "source": "../extraction-vectors/go.json#go-err-invalid-utf8",
+   "source": "../extraction/go.json#go-err-invalid-utf8",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-go.json",
+   "configFile": "../extraction/config-go.json",
    "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
    "inputBase64": "eCA6PSAiYf9iIgo=",
    "expectedRecordSha256": "345617a6aadcff14a604fbb698873faa0d8189eb383d17a2eb050ca7abe8ae90",
@@ -267,9 +267,9 @@
     "input-too-large"
    ],
    "description": "input-too-large: inputSha256 and inputLength null, offset 0 (Q10).",
-   "source": "../extraction-vectors/limits-go.json#go-limit-over",
+   "source": "../extraction/limits-go.json#go-limit-over",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-go-limit16.json",
+   "configFile": "../extraction/config-go-limit16.json",
    "configSha256": "aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8",
    "inputBase64": "eHl6IDo9IDEgKyAyICsgMwo=",
    "expectedRecordSha256": "0dc73031f9013b7df72f303b5a9233d50efd4263490e52e3a6cb4e59bcf0799d",
@@ -282,9 +282,9 @@
     "input-too-large"
    ],
    "description": "Over the limit and invalid UTF-8: input-too-large, nulls.",
-   "source": "../extraction-vectors/limits-go.json#go-limit-precedence",
+   "source": "../extraction/limits-go.json#go-limit-precedence",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-go-limit16.json",
+   "configFile": "../extraction/config-go-limit16.json",
    "configSha256": "aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8",
    "inputBase64": "eCA6PSAi/yIgKyAxICsgMjMK",
    "expectedRecordSha256": "0dc73031f9013b7df72f303b5a9233d50efd4263490e52e3a6cb4e59bcf0799d",
@@ -296,9 +296,9 @@
     "ok"
    ],
    "description": "Exactly maxInputBytes (16): ok.",
-   "source": "../extraction-vectors/limits-go.json#go-limit-exact",
+   "source": "../extraction/limits-go.json#go-limit-exact",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-go-limit16.json",
+   "configFile": "../extraction/config-go-limit16.json",
    "configSha256": "aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8",
    "inputBase64": "eHkgOj0gMSArIDIgKyAzCg==",
    "expectedRecordSha256": "fda58e83172721604881600984db0d9f3a5d8636b780575d611dd28dc27ed807",
@@ -311,7 +311,7 @@
     "unsupported-config"
    ],
    "description": "unsupported-config: profile, profileVersion, inputSha256, inputLength and offset null; configSha256 over the bytes supplied.",
-   "source": "../extraction-vectors/config-negative.json#cfg-whitespace",
+   "source": "../extraction/config-negative.json#cfg-whitespace",
    "derivation": "hand",
    "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCAicHJvZmlsZSI6ImdvLXRva2VucyIsInByb2ZpbGVWZXJzaW9uIjoiZHJhZnQtMSIsImNoYW5uZWxzIjpbImV4YWN0Iiwibm9ybWFsaXplZCJdLCJrIjo1LCJ3aW5kb3ciOjQsImhhc2giOiJzaGEyNTYtZmlyc3Q4LXU2NGJlIiwibWF4SW5wdXRCeXRlcyI6MTA0ODU3Nn0K",
    "configSha256": "f9e6a6dd870173c676f3efbc0a2831a127a7a132e0b1010972b2fa30e03a5e8d",
@@ -326,7 +326,7 @@
     "unsupported-config"
    ],
    "description": "A second unsupported-config record (keys reordered).",
-   "source": "../extraction-vectors/config-negative.json#cfg-key-order",
+   "source": "../extraction/config-negative.json#cfg-key-order",
    "derivation": "hand",
    "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sIndpbmRvdyI6NCwiayI6NSwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo=",
    "configSha256": "95b9170902e0a5ae78489cd420d7c3a6a4c93c241265ebff2d1927cd8890c6fc",
@@ -340,9 +340,9 @@
     "ok"
    ],
    "description": "Rust ok result: token text with quotes and backslashes is escaped as \\\" and \\\\.",
-   "source": "../extraction-vectors/rust.json#rust-literals",
+   "source": "../extraction/rust.json#rust-literals",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-rust.json",
+   "configFile": "../extraction/config-rust.json",
    "configSha256": "64b34335e4a61383ada1403a2df97c2e45dba987bbf0c8ec21385e04104d1277",
    "inputBase64": "bGV0IHYgPSBbMHhGRl91OCwgMV8wMDAsIDBvMTcsIDBiMTAxMCwgMS41ZTMsIDIuLCAzZjMyXTsKbGV0IHMgPSByIyJyYXcgInEiIiM7IGxldCBiID0gYidcbic7IGxldCBicyA9IGJyIlxkIjsgbGV0IGMgPSBjImhpIjsKbGV0IHQgPSBwLjAuMTsK",
    "expectedRecordSha256": "6917fe9d9097e755e77f77aa3efeebd04faafdbf65becfeb69ac05ba15d0dbd6",
@@ -355,9 +355,9 @@
     "lexical-error"
    ],
    "description": "Rust lexical error.",
-   "source": "../extraction-vectors/rust.json#rust-err-unbalanced",
+   "source": "../extraction/rust.json#rust-err-unbalanced",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-rust.json",
+   "configFile": "../extraction/config-rust.json",
    "configSha256": "64b34335e4a61383ada1403a2df97c2e45dba987bbf0c8ec21385e04104d1277",
    "inputBase64": "Zm4gZigpIHsgKDEgfQ==",
    "expectedRecordSha256": "68f1392df1ad61dc0ad56fd27ad31073d832c1df0a6751f7d64a2b35740ee8ad",
@@ -370,9 +370,9 @@
     "test-only-profile"
    ],
    "description": "TEST-ONLY profile go-tokens-exclusion-test (extraction OD-23): normalized channel with tokenIndices; inserted semicolons excluded from normalized.",
-   "source": "../extraction-vectors/exclusion-rule.json#excl-semi-newlines",
+   "source": "../extraction/exclusion-rule.json#excl-semi-newlines",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-exclusion-test.json",
+   "configFile": "../extraction/config-exclusion-test.json",
    "configSha256": "65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464",
    "inputBase64": "YSA6PSBiCmMgOj0gZAo=",
    "expectedRecordSha256": "4cd0ba44cacaef16097d0d9d5b201c1c7a241924eff79a4633ac405254759a33",
@@ -385,9 +385,9 @@
     "test-only-profile"
    ],
    "description": "TEST-ONLY profile go-tokens-exclusion-test (extraction OD-23): normalized channel with tokenIndices; explicit semicolons excluded too.",
-   "source": "../extraction-vectors/exclusion-rule.json#excl-semi-explicit",
+   "source": "../extraction/exclusion-rule.json#excl-semi-explicit",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-exclusion-test.json",
+   "configFile": "../extraction/config-exclusion-test.json",
    "configSha256": "65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464",
    "inputBase64": "YSA6PSBiOyBjIDo9IGQ7Ow==",
    "expectedRecordSha256": "a8b63e359d04410d3ab082cadc4102548a784901157ba2cbb3c5dfff488d6f5b",
@@ -400,9 +400,9 @@
     "test-only-profile"
    ],
    "description": "TEST-ONLY profile go-tokens-exclusion-test (extraction OD-23): normalized channel with tokenIndices; ok status with an empty normalized channel.",
-   "source": "../extraction-vectors/exclusion-rule.json#excl-ok-normalized-empty",
+   "source": "../extraction/exclusion-rule.json#excl-ok-normalized-empty",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-exclusion-test.json",
+   "configFile": "../extraction/config-exclusion-test.json",
    "configSha256": "65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464",
    "inputBase64": "YTs7Ozs=",
    "expectedRecordSha256": "cb5daa49d2c142f93de2686bacbff89873ccb65c4f81a5097e3f5eaaa0904d6a",
@@ -415,9 +415,9 @@
     "test-only-profile"
    ],
    "description": "TEST-ONLY profile go-tokens-exclusion-test (extraction OD-23): normalized channel with tokenIndices; insufficient-tokens decided by the exact count.",
-   "source": "../extraction-vectors/exclusion-rule.json#excl-insufficient",
+   "source": "../extraction/exclusion-rule.json#excl-insufficient",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-exclusion-test.json",
+   "configFile": "../extraction/config-exclusion-test.json",
    "configSha256": "65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464",
    "inputBase64": "eDt5",
    "expectedRecordSha256": "4c1d2f0e63d27c73cadb4d79252cada3bfdce1920b3a183985d04472e9b60741",
@@ -430,9 +430,9 @@
     "test-only-profile"
    ],
    "description": "TEST-ONLY profile go-tokens-exclusion-test (extraction OD-23): normalized channel with tokenIndices; normalized partial window while exact is full.",
-   "source": "../extraction-vectors/exclusion-rule.json#excl-partial-window",
+   "source": "../extraction/exclusion-rule.json#excl-partial-window",
    "derivation": "hand",
-   "configFile": "../extraction-vectors/config-exclusion-test.json",
+   "configFile": "../extraction/config-exclusion-test.json",
    "configSha256": "65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464",
    "inputBase64": "ZihhKTtnKGIp",
    "expectedRecordSha256": "da532e999b910b02a8aa42d19fe6a3fd16118bdf220323470b6acff172a9e038",
@@ -442,7 +442,7 @@
  "cataloguesFromRecords": [
   {
    "id": "cat-go-reference-side-failures",
-   "extractionConfigFile": "../extraction-vectors/config-go.json",
+   "extractionConfigFile": "../extraction/config-go.json",
    "artifacts": [
     {
      "id": "bad.go",
@@ -462,7 +462,7 @@
   },
   {
    "id": "cat-go-input-too-large",
-   "extractionConfigFile": "../extraction-vectors/config-go-limit16.json",
+   "extractionConfigFile": "../extraction/config-go-limit16.json",
    "artifacts": [
     {
      "id": "copy.go",
@@ -483,7 +483,7 @@
   {
    "id": "cat-exclusion-test",
    "testOnlyProfile": true,
-   "extractionConfigFile": "../extraction-vectors/config-exclusion-test.json",
+   "extractionConfigFile": "../extraction/config-exclusion-test.json",
    "artifacts": [
     {
      "id": "e1.go",
@@ -532,19 +532,19 @@
   },
   {
    "id": "cat-text-plain",
-   "extractionConfigFile": "../extraction-vectors-text/config-text-plain.json",
+   "extractionConfigFile": "../extraction-text/config-text-plain.json",
    "artifacts": [
     {
      "id": "err.txt",
-     "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-err-nul"
+     "record": "../extraction-text/records-text-plain.json#rec-plain-err-nul"
     },
     {
      "id": "short.txt",
-     "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-short"
+     "record": "../extraction-text/records-text-plain.json#rec-plain-short"
     },
     {
      "id": "src.txt",
-     "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-reflow-a"
+     "record": "../extraction-text/records-text-plain.json#rec-plain-reflow-a"
     }
    ],
    "expectedCatalogueSha256": "df6bd5544bc0140c077fdded0561924729700cd105941bc01c0dd70a90f52aa7",
@@ -552,15 +552,15 @@
   },
   {
    "id": "cat-k2-text-plain-registered",
-   "extractionConfigFile": "../extraction-vectors-text/config-text-plain.json",
+   "extractionConfigFile": "../extraction-text/config-text-plain.json",
    "artifacts": [
     {
      "id": "latin.txt",
-     "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-confusable-latin"
+     "record": "../extraction-text/records-text-plain.json#rec-plain-confusable-latin"
     },
     {
      "id": "thai.txt",
-     "record": "../extraction-vectors-text/records-text-plain.json#rec-plain-thai"
+     "record": "../extraction-text/records-text-plain.json#rec-plain-thai"
     }
    ],
    "expectedCatalogueSha256": "82c171c771a3842b2608784edb094b1560ba5b5368b41007c74276e7859a77fc",
@@ -568,7 +568,7 @@
   },
   {
    "id": "cat-builder-hash-not-rederived",
-   "extractionConfigFile": "../extraction-vectors/config-go.json",
+   "extractionConfigFile": "../extraction/config-go.json",
    "artifacts": [
     {
      "id": "a.go",
@@ -582,7 +582,7 @@
  "catalogueBuildRejections": [
   {
    "id": "build-mixed-configurations",
-   "extractionConfigFile": "../extraction-vectors/config-go.json",
+   "extractionConfigFile": "../extraction/config-go.json",
    "artifacts": [
     {
      "id": "a.go",
@@ -597,7 +597,7 @@
   },
   {
    "id": "build-unsupported-config-record",
-   "extractionConfigFile": "../extraction-vectors/config-go.json",
+   "extractionConfigFile": "../extraction/config-go.json",
    "artifacts": [
     {
      "id": "a.go",
@@ -612,7 +612,7 @@
   },
   {
    "id": "build-wrong-config-bytes",
-   "extractionConfigFile": "../extraction-vectors/config-go-limit16.json",
+   "extractionConfigFile": "../extraction/config-go-limit16.json",
    "artifacts": [
     {
      "id": "a.go",
@@ -623,7 +623,7 @@
   },
   {
    "id": "build-tokencount-mismatch",
-   "extractionConfigFile": "../extraction-vectors/config-go.json",
+   "extractionConfigFile": "../extraction/config-go.json",
    "artifacts": [
     {
      "id": "a.go",
@@ -634,7 +634,7 @@
   },
   {
    "id": "build-unregistered-profile",
-   "extractionConfigFile": "../extraction-vectors/config-exclusion-test.json",
+   "extractionConfigFile": "../extraction/config-exclusion-test.json",
    "artifacts": [
     {
      "id": "e1.go",
@@ -645,7 +645,7 @@
   },
   {
    "id": "build-empty-artifact-list",
-   "extractionConfigFile": "../extraction-vectors/config-go.json",
+   "extractionConfigFile": "../extraction/config-go.json",
    "artifacts": [],
    "reason": "a catalogue has at least one artifact"
   }

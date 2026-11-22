@@ -6,6 +6,8 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import subprocess
+import sys
 from urllib.parse import unquote, urlsplit
 
 from jsonschema import Draft202012Validator, FormatChecker
@@ -70,11 +72,15 @@ def schema_validator():
 
 def check_links():
     files = list(ROOT.glob("*.md"))
-    for directory in ("spec", "profiles", "docs", "schemas", "examples"):
+    for directory in ("spec", "profiles", "docs", "schemas", "examples", "test-vectors"):
         files.extend((ROOT / directory).rglob("*.md"))
     failures = []
     for path in files:
-        for target in re.findall(r"\]\(([^)]+)\)", path.read_text(encoding="utf-8")):
+        text = path.read_text(encoding="utf-8")
+        # Examples inside fenced blocks and inline code are not links.
+        text = re.sub(r"```.*?```", "", text, flags=re.S)
+        text = re.sub(r"(`+)(?:(?!\1).)+?\1", "", text)
+        for target in re.findall(r"\]\(([^)\s]+)\)", text):
             target = target.strip("<>")
             parsed = urlsplit(target)
             if parsed.scheme or not parsed.path:
@@ -86,7 +92,49 @@ def check_links():
         raise ValueError("Broken local links:\n" + "\n".join(failures))
 
 
-def validate_repository():
+# Independent checkers for the promoted experimental vector sets. Each is run in
+# isolated mode (-I) from the repository root and must exit 0. They validate
+# recorded outputs; none is an extractor, matcher or verifier.
+VECTOR_CHECKERS = (
+    ("extraction", ("test-vectors/extraction/check_vectors.py",)),
+    ("extraction (matching-vector token files)", (
+        "test-vectors/extraction/check_vectors.py",
+        "test-vectors/matching/extraction-go.json",
+        "test-vectors/matching/extraction-rust.json",
+    )),
+    ("matching (with self-tests)", ("test-vectors/matching/check_matching.py",)),
+    ("typescript", ("test-vectors/extraction-typescript/check_vectors.py",)),
+    ("text", ("test-vectors/extraction-text/check_text_vectors.py",)),
+)
+PROMOTED_SCHEMAS = ("catalogue", "report", "record")
+
+
+def run_checker(arguments, cwd=ROOT):
+    """Run one promoted checker; returns (exit code, combined output)."""
+    completed = subprocess.run(
+        [sys.executable, "-I", *arguments],
+        cwd=cwd, capture_output=True, text=True, check=False,
+    )
+    return completed.returncode, completed.stdout + completed.stderr
+
+
+def check_promoted_schemas():
+    for name in PROMOTED_SCHEMAS:
+        path = ROOT / "schemas" / f"{name}.schema.json"
+        Draft202012Validator.check_schema(read_json(path))
+
+
+def check_vector_checkers():
+    failures = []
+    for label, arguments in VECTOR_CHECKERS:
+        code, output = run_checker(arguments)
+        if code != 0:
+            failures.append(f"{label}: exit {code}\n{output[-2000:]}")
+    if failures:
+        raise ValueError("Vector checker failures:\n" + "\n".join(failures))
+
+
+def validate_repository(run_checkers=True):
     statement = read_json(ROOT / "examples/statement.json")
     schema_validator().validate(statement)
     predicate = statement["predicate"]
@@ -112,10 +160,13 @@ def validate_repository():
         actual = dsse_pae(vector["type"].encode("utf-8"), vector["body"].encode("utf-8"))
         if actual != vector["expectedUtf8"].encode("utf-8"):
             raise ValueError("DSSE PAE vector mismatch")
+    check_promoted_schemas()
     check_links()
+    if run_checkers:
+        check_vector_checkers()
 
 
 if __name__ == "__main__":
     validate_repository()
-    print("PASS: draft schemas, synthetic examples, fixture digests, commitment and DSSE framing vectors, local links")
+    print("PASS: draft schemas, synthetic examples, fixture digests, commitment and DSSE framing vectors, local links, promoted schemas and vector checkers")
     print("No signature, timestamp authority, fingerprint detector, or rights claim was verified.")

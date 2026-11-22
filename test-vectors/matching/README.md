@@ -2,18 +2,18 @@
 
 Status: experimental draft, normative for conformance of this draft version; decided-in-draft items confirmed by the owner's delegation on 2026-11-23.
 
-Revision status: draft for review, 2026-11-22. These vectors accompany the [catalogue and report contract](../catalogue-report-contract.md) (TW-03; roadmap-v2 gates M1.3 and M2.6), revised after the [clean-room review](../../reviews/catalogue-report-contract-review.md) and its confirmation pass. They are research fixtures, not files in `test-vectors/` or `schemas/`. They make no detection-accuracy claim, and every parameter is experimental. The M2.6 gate is **not met** yet: the vendor control class is missing (contract OD-C19), and the vectors are not in `test-vectors/` (OD-C10).
+Revision status (before promotion): draft for review, 2026-11-22. These vectors accompany the [catalogue and report contract](../../spec/catalogue-report.md) (TW-03; roadmap-v2 gates M1.3 and M2.6), revised after the [clean-room review](../../research/reviews/catalogue-report-contract-review.md) and its confirmation pass. They are research fixtures, not files in `test-vectors/` or `schemas/`. They make no detection-accuracy claim, and every parameter is experimental. The M2.6 gate is **not met** yet: the vendor control class is missing (contract OD-C19), and the vectors are not in `test-vectors/` (OD-C10).
 
 ## Files
 
 | File | Contents |
 | --- | --- |
-| `record.schema.json` | Draft schema of the canonical extraction record (contract §2a, amendment A1) |
+| `../../schemas/record.schema.json` | Canonical copy of the draft schema of the canonical extraction record (contract §2a, amendment A1) |
 | `records.json` | 29 expected records (bytes and SHA-256), 7 catalogues built from records (two from the text lane's `text-plain` records, one from an inline record whose hash was altered consistently, which a builder accepts), 6 refused builds |
-| `catalogue.schema.json`, `report.schema.json` | Draft JSON Schema 2020-12 (draft-2). They use only the keywords `check_matching.py` interprets |
+| `../../schemas/catalogue.schema.json`, `../../schemas/report.schema.json` | Canonical copies of the draft JSON Schema 2020-12 (draft-2). They use only the keywords `check_matching.py` interprets |
 | `comparison-config.json` | Exact comparison configuration bytes (contract §4), SHA-256 `39345e9c…147333` |
 | `comparison-config-negative.json` | 22 configurations that MUST be rejected |
-| `extraction-go.json`, `extraction-rust.json` | 17 new synthetic inputs (15 Go, 2 Rust) in the [extraction vector](../extraction-vectors/README.md) format, with the shipped 1 MiB configurations |
+| `extraction-go.json`, `extraction-rust.json` | 17 new synthetic inputs (15 Go, 2 Rust) in the [extraction vector](../extraction/README.md) format, with the shipped 1 MiB configurations |
 | `matching.json` | 76 matching vectors |
 | `behaviour-checklist.md` | A6–A11: 65 numbered behavioural conformance items (working-tree markers, override scope, exit statuses, location values, stdout, provenance, atomic writes and temporaries, symbolic links, per-platform default location, message hygiene), each an observable command outcome, for implementations to script |
 | `comparison-config-bounds.json` | A5: 4 configurations above the seed and region bounds (MUST be rejected) and 4 at or just below them (MUST be accepted) |
@@ -67,7 +67,7 @@ The checker rejects a corrupted copy that relabels a `computed-then-reviewed` mo
 | Precedence (synthetic) | `rv-match-over-ambiguous`, `-mirror`; `rv-ambiguous-over-below`, `-mirror`; `rv-below-over-common`, `-reversed` |
 | Suppression arithmetic (synthetic) | `rv-common-reduces-evidence`, `-2`, `-unsuppressed` |
 | Channel lists (A3, TEST-ONLY profile `go-tokens-three-channel-test`, channels `exact`, `normalized`, `classes`) | `tc-rename` (exact no match; normalized and classes match), `tc-classes-only` (only `classes` matches), `tc-format-suppressed` (suppression per mode, three `distinctHashes` keys), `tc-mode-mismatch-three-on-two`, `tc-mode-mismatch-two-on-three` |
-| Real `text-plain` (A4; records from `../extraction-vectors-text/records-text-plain.json`, modes `exact`, `folded`, `skeleton`, `minRegionDistinctHashes` 1, `mergeGap` 8) | `text-plain-three-modes`: identical and reflowed copies match in all three modes; the Cyrillic homoglyph variant matches only in `skeleton` (seed (7,7)); unrelated text shares nothing. Expectations derived by hand from the recorded fingerprints |
+| Real `text-plain` (A4; records from `../extraction-text/records-text-plain.json`, modes `exact`, `folded`, `skeleton`, `minRegionDistinctHashes` 1, `mergeGap` 8) | `text-plain-three-modes`: identical and reflowed copies match in all three modes; the Cyrillic homoglyph variant matches only in `skeleton` (seed (7,7)); unrelated text shares nothing. Expectations derived by hand from the recorded fingerprints |
 | I2 rulings (A5) | `k1-extraction-bounds-k17`, `k1-extraction-bounds-max-input` (out-of-bound `extractionConfig` with a correct digest: `malformed-catalogue`), `k1-extraction-bounds-at-bound` (k 16, window 128 accepted); `k3-lone-surrogate`, `k3-non-integer-number` (`malformed-catalogue` at step 1); `k4-depth-64` (within the limit: `unsupported-catalogue`), `k4-depth-65` (`malformed-catalogue`); `bounds-seeds-above`, `bounds-regions-above` (rejected), `bounds-at-limits` (accepted). In `records.json`: `cat-k2-text-plain-registered`, `cat-builder-hash-not-rederived`, `build-tokencount-mismatch`, `build-unregistered-profile`, `build-empty-artifact-list` |
 | Caps | `go-output-caps`, `go-output-caps-2` (region truncation with uncapped counts; seed limit at and above the limit); `go-cap-straddles-ambiguous`, `-mirror` (a listed region stays ambiguous when its partner is truncated) |
 | Invariance | `go-invariance-three-references`, `go-invariance-plus-unrelated` (3 ok references sharing the copied loop; adding an unrelated reference changes no pair; checked as an invariance group) |
@@ -88,21 +88,21 @@ Body digests and outcomes per vector are in `matching.json`. `build_vectors.py` 
 | `rec-go-over-limit`, `rec-go-over-limit-precedence` | input-too-large: `inputSha256`/`inputLength` null; both records are byte-identical |
 | `rec-unsupported-config`, `rec-unsupported-config-2` | profile, version, input fields and offset null |
 | `rec-3ch-*` (8) | A3: Go token streams re-derived under the TEST-ONLY three-channel profile (`rederivedFromTokens: true`); `classes` has `values` all `""`. The checker recomputes every channel block from the tokens itself |
-| `rec-excl-semi-newlines`, `-semi-explicit`, `-ok-normalized-empty`, `-insufficient`, `-partial-window` | Amendment A2: TEST-ONLY profile `go-tokens-exclusion-test` from `../extraction-vectors/exclusion-rule.json` (extraction OD-23). The normalized channel starts with `tokenIndices`, and `values` lists kept tokens only; an `ok` record can have an empty normalized channel. Go and Rust records never carry `tokenIndices` |
+| `rec-excl-semi-newlines`, `-semi-explicit`, `-ok-normalized-empty`, `-insufficient`, `-partial-window` | Amendment A2: TEST-ONLY profile `go-tokens-exclusion-test` from `../extraction/exclusion-rule.json` (extraction OD-23). The normalized channel starts with `tokenIndices`, and `values` lists kept tokens only; an `ok` record can have an empty normalized channel. Go and Rust records never carry `tokenIndices` |
 
 `cataloguesFromRecords` builds the `go-reference-side-failures` reference catalogue and the `go-input-too-large` candidate catalogue from records (contract §3.8); both equal the `matching.json` catalogues byte for byte. A third, `cat-exclusion-test` (TEST-ONLY profile), equals the catalogue the checker rebuilds from `exclusion-rule.json`, and shows a normalized `kgramCount` below the exact one, including an `ok` entry with an empty normalized channel. `catalogueBuildRejections` lists three builds the builder must refuse.
 
 **Against the current implementations** (2026-11-22, the M1.4 cross-check worktree: Rust `target/release/traceweave`, Go `traceweave-go` built into `$TMPDIR`): for all 16 records, both CLIs' `result` bytes equal the expected ones. After the envelope change in contract OD-C21 (Rust: replace the leading `"contract":…` member with `"recordVersion":…`, rename `inputBytes` to `inputLength`; Go: insert `"recordVersion":…` first) both equal all 16 records byte for byte. Neither implementation was modified.
 
-**Text-plain records (A4).** `check_matching.py` validates all 60 frozen records of `../extraction-vectors-text/records-text-plain.json` (owned by the text lane): named configuration and digests, canonical bytes, schema, declared channel order, closed error codes, Q10 nulls, input digests, and all 1,023 k-gram hashes and window selections recomputed from the recorded values. How the `folded` and `skeleton` values are derived is checked by the text lane's own checker, not here.
+**Text-plain records (A4).** `check_matching.py` validates all 60 frozen records of `../extraction-text/records-text-plain.json` (owned by the text lane): named configuration and digests, canonical bytes, schema, declared channel order, closed error codes, Q10 nulls, input digests, and all 1,023 k-gram hashes and window selections recomputed from the recorded values. How the `folded` and `skeleton` values are derived is checked by the text lane's own checker, not here.
 
 ## Checking
 
 ```
-python3 -I research/drafts/matching-vectors/check_matching.py
-python3 -I research/drafts/extraction-vectors/check_vectors.py \
-    research/drafts/matching-vectors/extraction-go.json research/drafts/matching-vectors/extraction-rust.json
-python3 -I research/drafts/matching-vectors/build_vectors.py   # regenerates every file byte for byte
+python3 -I test-vectors/matching/check_matching.py
+python3 -I test-vectors/extraction/check_vectors.py \
+    test-vectors/matching/extraction-go.json test-vectors/matching/extraction-rust.json
+python3 -I test-vectors/matching/build_vectors.py   # regenerates every file byte for byte
 ```
 
 `check_matching.py` output on 2026-11-22 (Python 3.14.6), with per-item lines omitted:
@@ -203,7 +203,7 @@ These are re-implementations from the review's descriptions. The reviewer's `cor
 The reviewer's own scripts (`variants.py`, `cleanroom.py` in their scratch directory) target draft-1 formats and cannot run against draft-2. The 13 variants above are re-implemented inside the checker.
 
 **Other verification run on 2026-11-22.**
-- `extraction-vectors/check_vectors.py` accepts both new extraction files, and the default run on the shipped extraction vectors still passes; those files were not modified.
+- `extraction/check_vectors.py` accepts both new extraction files, and the default run on the shipped extraction vectors still passes; those files were not modified.
 - A scratch script reused `harness/crosscheck.py` functions:
   - go/scanner agrees token for token on all 15 Go inputs, including the non-ASCII ones (run before the confirmation-pass additions, which added no new inputs);
   - proc-macro2 agrees on both Rust inputs, and rustc 1.97.1 accepts them;

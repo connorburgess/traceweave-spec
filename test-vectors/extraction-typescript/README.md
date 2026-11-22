@@ -4,7 +4,7 @@ Status: experimental draft, normative for conformance of this draft version; dec
 
 Vector status: **`ts-tokens` vectors are frozen** (draft-2). **`tsx-tokens` vectors (`tsx.json`, `config-tsx.json`) are a deferred draft and are not normative.**
 
-Revision status: draft for review, 2026-11-22, **draft-2**. Draft-2 resolves the [review](../../reviews/extraction-profile-typescript-review.md) of draft-1, and the changes are listed in [profile §16](../extraction-profile-typescript.md#16-changes-from-draft-1-to-draft-2). These vectors go with the [draft TypeScript/JavaScript profile](../extraction-profile-typescript.md), which plugs into the [extraction contract](../extraction-contract.md). **`ts-tokens` (`ts.json`, `limits-ts.json`) is stage 1 and frozen for stage-1 implementation, pending owner confirmation of the decided-in-draft items. The digests are in [profile §17](../extraction-profile-typescript.md#17-freeze-record-ts-tokens-draft-2). `tsx-tokens` (`tsx.json`) is deferred:** it is kept as a draft and is not to be frozen yet (profile TSOD-1). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
+Revision status (before promotion): draft for review, 2026-11-22, **draft-2**. Draft-2 resolves the [review](../../research/reviews/extraction-profile-typescript-review.md) of draft-1, and the changes are listed in [profile §16](../../profiles/typescript.md#16-changes-from-draft-1-to-draft-2). These vectors go with the [draft TypeScript/JavaScript profile](../../profiles/typescript.md), which plugs into the [extraction contract](../../spec/extraction.md). **`ts-tokens` (`ts.json`, `limits-ts.json`) is stage 1 and frozen for stage-1 implementation, pending owner confirmation of the decided-in-draft items. The digests are in [profile §17](../../profiles/typescript.md#17-freeze-record-ts-tokens-draft-2). `tsx-tokens` (`tsx.json`) is deferred:** it is kept as a draft and is not to be frozen yet (profile TSOD-1). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
 
 ## Files
 
@@ -25,9 +25,9 @@ Revision status: draft for review, 2026-11-22, **draft-2**. Draft-2 resolves the
 | `harness/semi_survival.py` | Measures normalized-fingerprint survival of a semi→no-semi reformat (profile §4.10) |
 | `harness/package.json`, `harness/package-lock.json` | Pin `typescript@6.0.3` for the cross-check. `node_modules/` is git-ignored |
 
-The Unicode identifier table is the shared, read-only [unicode-17.0.0-tables.json](../extraction-vectors/unicode-17.0.0-tables.json) (SHA-256 `9363b97e…3ac29f`), which `tslex.py` checks by digest.
+The Unicode identifier table is the shared, read-only [unicode-17.0.0-tables.json](../extraction/unicode-17.0.0-tables.json) (SHA-256 `9363b97e…3ac29f`), which `tslex.py` checks by digest.
 
-**Vector format.** The format is the same as the [Go/Rust vectors](../extraction-vectors/README.md). Each vector has these fields:
+**Vector format.** The format is the same as the [Go/Rust vectors](../extraction/README.md). Each vector has these fields:
 - `id`, `derivation: "hand"`, `tags` and `description`;
 - `inputBase64` (authoritative) and `inputText`;
 - a `result`: either `status: "error"` with `error.code` and `error.offset`, or `status: "ok"` / `"insufficient-tokens"` with `tokens` (class, text, byte span) and the `exact` and `normalized` channels (k-grams, `windowSelections`, `partialWindow`, fingerprints, and normalized `values`).
@@ -60,7 +60,7 @@ Every accepted vector names a `pairedRejection`: an error vector that exercises 
 ## 1. Checker
 
 ```
-python3 -I research/drafts/extraction-vectors-typescript/check_vectors.py
+python3 -I test-vectors/extraction-typescript/check_vectors.py
 ```
 
 Output on 2026-11-22 (Python 3.14.6):
@@ -116,7 +116,7 @@ All 15 are rejected, each by the vector added for it. `WExtendsComment` is shipp
 ## 2. Cross-check against TypeScript 6.0.3
 
 ```
-cd research/drafts/extraction-vectors-typescript/harness
+cd test-vectors/extraction-typescript/harness
 npm ci --ignore-scripts          # installs typescript@6.0.3 into ./node_modules (git-ignored)
 node crosscheck.js --corpus --probes [--json OUT]
 ```
@@ -146,7 +146,7 @@ Run on 2026-11-22, draft-2 (Node 22.23.2, TypeScript 6.0.3). Vectors tagged `dep
 | first 42,043 tokens (the review's size; the review reports 61.1%) | 62.5% (1,769/2,831) | 100% (3,077/3,077) |
 | whole file, 874,387 tokens | 67.3% (7,782/11,557) | 100% (14,177/14,177) |
 
-**Deliberate divergences** are listed with reasons in [profile §9](../extraction-profile-typescript.md#9-deliberate-divergences) (D-1 to D-16), and every one that a probe can show is a probe in `crosscheck.js`.
+**Deliberate divergences** are listed with reasons in [profile §9](../../profiles/typescript.md#9-deliberate-divergences) (D-1 to D-16), and every one that a probe can show is a probe in `crosscheck.js`.
 
 **Harness defects found and fixed during this run:**
 - Zero-width `OmittedExpression` nodes (array holes) were first reported as divergences in `_tsc.js` and `typescript.js`. They are now skipped.

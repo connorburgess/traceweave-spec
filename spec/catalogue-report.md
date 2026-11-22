@@ -2,17 +2,17 @@
 
 Status: experimental draft, normative for conformance of this draft version; decided-in-draft items confirmed by the owner's delegation on 2026-11-23.
 
-Revision status: **draft for review, revision draft-2 with amendments A1 (extraction record), A2 (normalized-stream exclusions), A3 (declared channel lists), A4 (registered text-plain and ts-tokens), A5 (I2 cross-check rulings), A6 (behavioural rulings), A7 (behavioural follow-ups), A8 (verified provenance stamp), A9 (fault-injection values), A10 (provenance by content) and A11 (commit resolved once), 2026-11-23.** Roadmap item TW-03. Gates: [roadmap](../../ROADMAP.md) M1.3 (catalogue and report schemas) and M2.6 (hand-derived matching vectors). This contract also fixes what I2 in the [implementation plan](../../docs/implementation-repo-plan.md#milestones) must reproduce for M2.4 and M2.5. It builds on the reviewed [extraction contract](extraction-contract.md) and changes nothing in it.
+Revision status (before promotion): **draft for review, revision draft-2 with amendments A1 (extraction record), A2 (normalized-stream exclusions), A3 (declared channel lists), A4 (registered text-plain and ts-tokens), A5 (I2 cross-check rulings), A6 (behavioural rulings), A7 (behavioural follow-ups), A8 (verified provenance stamp), A9 (fault-injection values), A10 (provenance by content) and A11 (commit resolved once), 2026-11-23.** Roadmap item TW-03. Gates: [roadmap](../ROADMAP.md) M1.3 (catalogue and report schemas) and M2.6 (hand-derived matching vectors). This contract also fixes what I2 in the [implementation plan](../docs/implementation-repo-plan.md#milestones) must reproduce for M2.4 and M2.5. It builds on the reviewed [extraction contract](extraction.md) and changes nothing in it.
 
-This revision resolves the [clean-room review](../reviews/catalogue-report-contract-review.md) Part 1 findings 1–10 and guesses G1–G6, plus the non-blocking additions of its confirmation pass (G7, invariance, cap and suppression-order vectors). Every disposition is in [§13](#13-review-dispositions). Draft-2 changes formats: catalogue `traceweave-catalogue-draft-2`, comparison `traceweave-seed-merge-draft-2`, report `traceweave-report-draft-2`. Draft-1 identifiers are no longer accepted.
+This revision resolves the [clean-room review](../research/reviews/catalogue-report-contract-review.md) Part 1 findings 1–10 and guesses G1–G6, plus the non-blocking additions of its confirmation pass (G7, invariance, cap and suppression-order vectors). Every disposition is in [§13](#13-review-dispositions). Draft-2 changes formats: catalogue `traceweave-catalogue-draft-2`, comparison `traceweave-seed-merge-draft-2`, report `traceweave-report-draft-2`. Draft-1 identifiers are no longer accepted.
 
 **Amendment A1** (§2a, §3.8) fixes the single canonical extraction record `traceweave-extraction-record-draft-1`, which the extraction contract §9 and its Q10 leave to TW-03. It also brings `input-too-large` catalogue entries into line with Q10 (null input digest and length). **No existing catalogue or report byte changed.** All 59 earlier vectors are byte-identical, and catalogue, comparison and report identifiers stay at draft-2. The details and the one rule change are in §13, A1.
 
 **Amendment A2** follows extraction OD-23 (normalized-stream exclusions): per-channel token counts n_C (§2, §3.6, §3.8) and an optional `tokenIndices` in the record's normalized channel (§2a), present only for profiles that declare exclusions. Go and Rust declare none, so **no Go/Rust record, catalogue or report byte changed**. Details are in §13, A2.
 
-**Amendment A3** (§2b) replaces the hard-coded pair `exact`, `normalized` with **the profile's declared, ordered channel list** in records, catalogues, comparison modes and reports, as the [text-profile review](../reviews/extraction-profile-text-review.md) §4 recommends (no renaming). Go, Rust and TypeScript declare exactly `["exact","normalized"]`, so **no existing record, catalogue, report, digest or vector changed** (only the three schemas were extended). A synthetic TEST-ONLY three-channel profile pins the rule. Details are in §13, A3.
+**Amendment A3** (§2b) replaces the hard-coded pair `exact`, `normalized` with **the profile's declared, ordered channel list** in records, catalogues, comparison modes and reports, as the [text-profile review](../research/reviews/extraction-profile-text-review.md) §4 recommends (no renaming). Go, Rust and TypeScript declare exactly `["exact","normalized"]`, so **no existing record, catalogue, report, digest or vector changed** (only the three schemas were extended). A synthetic TEST-ONLY three-channel profile pins the rule. Details are in §13, A3.
 
-This is research material, not a normative change. It does not modify [core](../../spec/core.md), [attestations](../../spec/attestations.md), [conformance](../../spec/conformance.md), `schemas/`, `profiles/` or `test-vectors/`. "MUST" describes what this draft proposes for an implementation claiming to follow it. The draft schemas and vectors are in [matching-vectors/](matching-vectors/README.md). Nothing here is a registered algorithm. No parameter is tuned or calibrated.
+This document is normative for conformance of this draft version, as stated in its status line. "MUST" describes what this draft proposes for an implementation claiming to follow it. The draft schemas and vectors are in [matching/](../test-vectors/matching/README.md). Nothing here is a registered algorithm. No parameter is tuned or calibrated.
 
 Every choice an implementation could otherwise make differently is fixed below. Decisions that change bytes are listed in [§11](#11-decisions) as "decided in draft, pending owner confirmation", with the reason. Questions still open are listed there too.
 
@@ -47,7 +47,7 @@ For each artifact, the catalogue uses these extraction contract §9 fields:
 
 ## 2a. Extraction record (`traceweave-extraction-record-draft-1`)
 
-One extraction (configuration bytes + input bytes) produces one record. The record's canonical bytes are the **normative output of extraction** for conformance level 4: two implementations MUST emit identical record bytes for the same configuration and input bytes. Schema: [record.schema.json](matching-vectors/record.schema.json) (structure only). Vectors: [records.json](matching-vectors/records.json).
+One extraction (configuration bytes + input bytes) produces one record. The record's canonical bytes are the **normative output of extraction** for conformance level 4: two implementations MUST emit identical record bytes for the same configuration and input bytes. Schema: [record.schema.json](../schemas/record.schema.json) (structure only). Vectors: [records.json](../test-vectors/matching/records.json).
 
 **Envelope fields, in this order:**
 
@@ -74,7 +74,7 @@ There is no `contract` key: the configuration's `contract` is bound through `con
 
 **Record vectors name their configuration.** A record is a function of (configuration bytes, input bytes), so every entry in `records.json` states its configuration explicitly: `configFile` (path relative to `records.json`) or `configBase64` (the exact bytes, for rejected configurations), plus `configSha256`, which must equal the digest of those bytes and the record's own `configSha256`. The configuration is never left implicit in a source vector.
 
-These are exactly the extraction vectors' `result` objects (extraction §9 and the [vector README](extraction-vectors/README.md)), so record vectors are derived from extraction vectors without new hand work.
+These are exactly the extraction vectors' `result` objects (extraction §9 and the [vector README](../test-vectors/extraction/README.md)), so record vectors are derived from extraction vectors without new hand work.
 
 **Canonical serialization:**
 1. Objects use the key order given above, **not** sorted order. No other keys exist.
@@ -102,20 +102,20 @@ Records differ from catalogues and report bodies (sorted keys, no final LF, §3.
 - **Comparison (§4, §5):** `modes` MUST equal the channel list of a profile the implementation supports, so it is validated before any catalogue is read; after the catalogues pass, `modes` MUST equal the compared catalogues' `extractionConfig.channels`, otherwise `mode-mismatch` (§5.1 step 8). Each mode runs on the channel of the same name (§5.3).
 - **Report (§6):** `comparison.modes` echoes the list in order; each compared pair's `modes` and `suppression.distinctHashes` have exactly one key per mode.
 
-**Declared lists:** `go-tokens`, `rust2024-tokens` and `ts-tokens`/`tsx-tokens` declare `["exact","normalized"]`. Their bytes are unchanged by A3. `text-plain` declares `["exact","folded","skeleton"]` and is registered (A4, §3.6 step 5). `text-plain`/`text-markdown` would declare `["exact","folded","skeleton"]` (§13, A3, for what the text profile must still say). The synthetic **TEST-ONLY** profile `go-tokens-three-channel-test`/`draft-1` declares `["exact","normalized","classes"]`: Go lexing, where `classes` gives every token the value `""`, so only the class sequence counts ([config-three-channel-test.json](matching-vectors/config-three-channel-test.json)). It is accepted only for vectors flagged `testOnlyProfile` and is never a supported comparison profile.
+**Declared lists:** `go-tokens`, `rust2024-tokens` and `ts-tokens`/`tsx-tokens` declare `["exact","normalized"]`. Their bytes are unchanged by A3. `text-plain` declares `["exact","folded","skeleton"]` and is registered (A4, §3.6 step 5). `text-plain`/`text-markdown` would declare `["exact","folded","skeleton"]` (§13, A3, for what the text profile must still say). The synthetic **TEST-ONLY** profile `go-tokens-three-channel-test`/`draft-1` declares `["exact","normalized","classes"]`: Go lexing, where `classes` gives every token the value `""`, so only the class sequence counts ([config-three-channel-test.json](../test-vectors/matching/config-three-channel-test.json)). It is accepted only for vectors flagged `testOnlyProfile` and is never a supported comparison profile.
 
 **Not allowed:** a subset of a profile's channels as `modes` (e.g. `["exact"]`), or a reordered list. Both stay rejected at the configuration step, exactly as before A3 (`comparison-config-negative.json` is unchanged; five further negatives are in `comparison-config-negative-channels.json`). Comparing a subset is OD-C27.
 
 ## 3. Catalogue record (`traceweave-catalogue-draft-2`)
 
-Schema: [catalogue.schema.json](matching-vectors/catalogue.schema.json) (structure only). §3.3–§3.6 are part of the contract, and [check_matching.py](matching-vectors/check_matching.py) enforces them.
+Schema: [catalogue.schema.json](../schemas/catalogue.schema.json) (structure only). §3.3–§3.6 are part of the contract, and [check_matching.py](../test-vectors/matching/check_matching.py) enforces them.
 
 ### 3.1 Fields
 
 | Field | Content |
 | --- | --- |
 | `catalogueVersion` | `traceweave-catalogue-draft-2` |
-| `profile` | `{configSha256, id, version}`: the core profile triple ([core](../../spec/core.md#claims-and-records)). It equals the extraction configuration's `profile` and `profileVersion`, and the SHA-256 of its exact bytes (extraction §10) |
+| `profile` | `{configSha256, id, version}`: the core profile triple ([core](core.md#claims-and-records)). It equals the extraction configuration's `profile` and `profileVersion`, and the SHA-256 of its exact bytes (extraction §10) |
 | `extractionConfig` | The eight parsed values of the extraction configuration. Re-serialized in extraction §10 canonical form (fixed key order, final LF), they MUST hash to `profile.configSha256` |
 | `artifacts` | One or more entries (§3.2) |
 
@@ -185,8 +185,8 @@ Steps in order. The first failure decides the code:
    | --- | --- | --- | --- |
    | `go-tokens` / `draft-1` | `traceweave-token-winnow-draft-1` | `exact`, `normalized` | `invalid-utf8`, `bom`, `nul`, `input-too-large`, `illegal-character`, `unterminated-comment`, `unterminated-literal`, `malformed-literal` |
    | `rust2024-tokens` / `draft-1` | `traceweave-token-winnow-draft-1` | `exact`, `normalized` | Go's list plus `isolated-cr`, `reserved-token`, `unbalanced-delimiter`, `non-nfc-identifier`, `malformed-identifier` |
-   | `ts-tokens` / `draft-2` (A4; normalized excludes `punct` `;`, extraction OD-23) | `traceweave-token-winnow-draft-1` | `exact`, `normalized` | `invalid-utf8`, `bom`, `nul`, `input-too-large`, `illegal-character`, `unterminated-comment`, `unterminated-literal`, `malformed-literal`, `malformed-identifier`, `unbalanced-delimiter` ([TypeScript profile](extraction-profile-typescript.md)) |
-   | `text-plain` / `draft-1` (A4) | `traceweave-text-winnow-draft-1` | `exact`, `folded`, `skeleton` | `invalid-utf8`, `nul`, `input-too-large` ([text profile](extraction-profile-text.md)) |
+   | `ts-tokens` / `draft-2` (A4; normalized excludes `punct` `;`, extraction OD-23) | `traceweave-token-winnow-draft-1` | `exact`, `normalized` | `invalid-utf8`, `bom`, `nul`, `input-too-large`, `illegal-character`, `unterminated-comment`, `unterminated-literal`, `malformed-literal`, `malformed-identifier`, `unbalanced-delimiter` ([TypeScript profile](../profiles/typescript.md)) |
+   | `text-plain` / `draft-1` (A4) | `traceweave-text-winnow-draft-1` | `exact`, `folded`, `skeleton` | `invalid-utf8`, `nul`, `input-too-large` ([text profile](../profiles/text.md)) |
 
    `tsx-tokens` and `text-markdown` are not registered: they are not frozen for stage 1. The TEST-ONLY profiles (`go-tokens-exclusion-test`, `go-tokens-three-channel-test`) are accepted only in vectors flagged as such and are never registered. Registering a profile adds lists to the set `modes` may name (§4 step 4); it changes no existing byte.
 6. Semantic rules hold. Otherwise: `malformed-catalogue`.
@@ -207,7 +207,7 @@ The canonical bytes are the exact `C` of core's `sha256-salted-catalogue-v1` com
 - confirm a guessed whole file through `sha256`;
 - read file structure from the spans.
 
-Exchanging catalogues for a comparison discloses all of this to the other party. Handle a catalogue like source code ([core privacy defaults](../../spec/core.md#privacy-defaults)).
+Exchanging catalogues for a comparison discloses all of this to the other party. Handle a catalogue like source code ([core privacy defaults](core.md#privacy-defaults)).
 
 ### 3.8 Building a catalogue from records
 
@@ -225,7 +225,7 @@ Any failure refuses the whole catalogue; the builder never drops a record silent
 
 ## 4. Comparison configuration
 
-Exact shipped bytes ([comparison-config.json](matching-vectors/comparison-config.json), SHA-256 `39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333`), one line ending in LF:
+Exact shipped bytes ([comparison-config.json](../test-vectors/matching/comparison-config.json), SHA-256 `39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333`), one line ending in LF:
 
 ```
 {"comparison":"traceweave-seed-merge-draft-2","modes":["exact","normalized"],"minRegionDistinctHashes":2,"mergeGap":4,"maxSeedsPerMode":100000,"maxRegionsPerMode":1000,"suppressionCatalogueSha256":"none"}
@@ -237,11 +237,11 @@ Validation, in order. Any failure is `unsupported-comparison-config`:
 2. Strict JSON. Duplicate keys are rejected during parsing, and non-integer numbers and constants are rejected.
 3. A top-level object with exactly these seven keys in this order.
 4. `comparison` is `traceweave-seed-merge-draft-2`, and `modes` equals the channel list of a profile the implementation supports (§2b). For every shipped vector outside the TEST-ONLY ones, that is exactly `["exact","normalized"]`.
-5. `minRegionDistinctHashes`, `mergeGap`, `maxSeedsPerMode` and `maxRegionsPerMode` are integers in 1 … 2³² − 1, written in decimal with no sign, leading zero or exponent; in addition **`maxSeedsPerMode` ≤ 10,000,000 and `maxRegionsPerMode` ≤ 100,000** (A5, decided in draft, pending owner confirmation; OD-C33). Vectors: `bounds-seeds-above`, `bounds-regions-above` (rejected), `bounds-at-limits` (accepted), and [comparison-config-bounds.json](matching-vectors/comparison-config-bounds.json) (4 negatives at bound + 1 and 2³² − 1, 4 positives at the bounds and one below).
+5. `minRegionDistinctHashes`, `mergeGap`, `maxSeedsPerMode` and `maxRegionsPerMode` are integers in 1 … 2³² − 1, written in decimal with no sign, leading zero or exponent; in addition **`maxSeedsPerMode` ≤ 10,000,000 and `maxRegionsPerMode` ≤ 100,000** (A5, decided in draft, pending owner confirmation; OD-C33). Vectors: `bounds-seeds-above`, `bounds-regions-above` (rejected), `bounds-at-limits` (accepted), and [comparison-config-bounds.json](../test-vectors/matching/comparison-config-bounds.json) (4 negatives at bound + 1 and 2³² − 1, 4 positives at the bounds and one below).
 6. `suppressionCatalogueSha256` is `"none"` or 64 lowercase hexadecimal digits.
 7. Re-serialization reproduces the bytes.
 
-[comparison-config-negative.json](matching-vectors/comparison-config-negative.json) lists 22 configurations that MUST be rejected.
+[comparison-config-negative.json](../test-vectors/matching/comparison-config-negative.json) lists 22 configurations that MUST be rejected.
 
 **Parameters** (experimental; reports say `"parameterStatus": "experimental"`):
 
@@ -366,7 +366,7 @@ Evaluated in order:
 5. Some region is `below-minimum-evidence`: `no-match` / `below-minimum-evidence`. This ranks above `common-only` (`rv-below-over-common`, `-reversed`).
 6. Otherwise: `no-match` / `common-only`.
 
-`no-match` means insufficient matching evidence under these parameters ([core interpretation](../../spec/core.md#interpretation)). It does not mean that no reuse occurred.
+`no-match` means insufficient matching evidence under these parameters ([core interpretation](core.md#interpretation)). It does not mean that no reuse occurred.
 
 ### 5.9 Containment and similarity
 
@@ -379,7 +379,7 @@ Each is an integer pair of raw counts, never reduced (§3.3 rule 5). They are se
 
 ## 6. Report (`traceweave-report-draft-2`)
 
-Schema: [report.schema.json](matching-vectors/report.schema.json).
+Schema: [report.schema.json](../schemas/report.schema.json).
 
 ### 6.1 Document
 
@@ -452,7 +452,7 @@ The list is closed. The schema pins every class, code and side combination.
 
 **Report document bytes are not normative.** Both implementations write RFC 8785 of `{"body", "provenance"}`; a consumer MUST NOT hash or compare the document bytes, only `bodySha256` and the provenance fields.
 
-The block has **no free-text field**. Draft-1's `note` is removed, and the `name`/`version` patterns cannot hold spaces, quotes, braces or operators, so provenance cannot carry source text (finding 5). It holds no signature and no trust or time result. [example-report.json](matching-vectors/example-report.json) shows the form with placeholder commits.
+The block has **no free-text field**. Draft-1's `note` is removed, and the `name`/`version` patterns cannot hold spaces, quotes, braces or operators, so provenance cannot carry source text (finding 5). It holds no signature and no trust or time result. [example-report.json](../test-vectors/matching/example-report.json) shows the form with placeholder commits.
 
 **Private outputs** (A5, M2.8; made precise by A6, §6.8 B1–B7). The default private location for catalogues and reports is implementation-defined. An implementation MUST refuse (exit 2) to write private output to a directory inside a version-controlled working tree (B1), whether the directory was chosen by default, by environment variable or by option. The one exception is an explicit override naming exactly that directory (B2). Writes are atomic (temporary file then rename) with owner-only permissions. The refusal covers paths the implementation opens itself; stdout is the operator's destination (B7).
 
@@ -468,7 +468,7 @@ It contains no source text and no fingerprint hashes. Publishing a report is a s
 
 ### 6.8 Behavioural rules (A6, decided in draft, pending owner confirmation)
 
-These rules come from the I2 behavioural run (77 scenarios across both CLIs, `xcheck/REPORT-I2.md` §3 on `merge-i2`). They bind any implementation that writes private output or report documents, or offers a command line. Vectors cannot pin them. The [behavioural conformance checklist](matching-vectors/behaviour-checklist.md) turns each rule into numbered commands with observable outcomes (65 items).
+These rules come from the I2 behavioural run (77 scenarios across both CLIs, `xcheck/REPORT-I2.md` §3 on `merge-i2`). They bind any implementation that writes private output or report documents, or offers a command line. Vectors cannot pin them. The [behavioural conformance checklist](../test-vectors/matching/behaviour-checklist.md) turns each rule into numbered commands with observable outcomes (65 items).
 
 - **B1 Working-tree markers.** A directory is inside a version-controlled working tree if it, or any ancestor up to the filesystem root, contains an entry named:
   - `.git` (directory or file: worktrees and submodules use a file);
@@ -543,7 +543,7 @@ These rules come from the I2 behavioural run (77 scenarios across both CLIs, `xc
 ## 7. Separation from other results
 
 The body holds fingerprint comparison results only. `additionalProperties: false` makes each of the following a schema violation; the checker corruptions cover a rank field, an origin field, `ownership` and `signatureValid`:
-- exact-subject digest verification, signature validity, signer trust, timestamp verification, rights or licence assessment ([core interpretation](../../spec/core.md#interpretation), [attestations](../../spec/attestations.md), ROADMAP TW-03);
+- exact-subject digest verification, signature validity, signer trust, timestamp verification, rights or licence assessment ([core interpretation](core.md#interpretation), [attestations](attestations.md), ROADMAP TW-03);
 - **index, rank or candidate-selection results**;
 - **origin, dependency or licence links**.
 
@@ -555,7 +555,7 @@ A report, and any rendering of one, MUST NOT state or imply any of the following
 
 - **Ownership, authorship, permission or infringement.** A region is a run of shared token fingerprints.
 - **Ancestry or direction of copying.** `reference` and `candidate` are query roles. Boilerplate and independently written same-task code can match (`go-boilerplate-unsuppressed`, `go-independent-same-task`).
-- **A calibrated false-alert rate, p-value, probability or confidence.** Any later rate must be calibrated over the complete search ([lane 07](../lanes/07-evidence-review.md)). The schema has no score field.
+- **A calibrated false-alert rate, p-value, probability or confidence.** Any later rate must be calibrated over the complete search ([lane 07](../research/lanes/07-evidence-review.md)). The schema has no score field.
 - **Absence of reuse** on `no-match`, or **a unique location** on `ambiguous`.
 - **Scope-aware or semantic equivalence.** `go-shadowing` shows the normalized mode cannot tell a shadowed variable from a fresh one.
 - **Suppression as a guarantee.** Suppression is advisory (§5.2).
@@ -676,13 +676,13 @@ Draft-1 said `match` here. The rule changed (§5.6), not the arithmetic.
 
 ## 12. Requirement-to-check map
 
-All checks are in [check_matching.py](matching-vectors/check_matching.py) unless noted.
+All checks are in [check_matching.py](../test-vectors/matching/check_matching.py) unless noted.
 
 | Requirement | Check |
 | --- | --- |
 | §3.1–§3.5: content, binding, canonical bytes, ordering, nothing extra | Every source-backed catalogue is rebuilt from extraction records and compared, and its digest is recomputed with the checker's own JCS writer. Synthetic catalogues must pass §3.6. Corruptions cover hash, span, order, source text, config digest and catalogue digest |
 | §3.6: consumer order and rules, including duplicate keys first and the k = 1 empty span | Rule self-test, 24 cases: 23 single-defect catalogues plus one valid k = 1 catalogue, with no extraction records. Vectors `go-malformed-catalogue`, `go-duplicate-key-catalogue`, `go-unsupported-catalogue`, `go-unsupported-profile` |
-| Extraction inputs | Hashes and selections are recomputed from tokens. Tokens are checked by `extraction-vectors/check_vectors.py`; the new inputs were also compared with go/scanner, proc-macro2 and rustc (README) |
+| Extraction inputs | Hashes and selections are recomputed from tokens. Tokens are checked by `extraction/check_vectors.py`; the new inputs were also compared with go/scanner, proc-macro2 and rustc (README) |
 | §4 | Shipped bytes and digest; 22 negatives; `go-unsupported-comparison-config` |
 | §5 | Independent recomputation must equal every body. Two or more vectors are required per recognized situation: merge join at the gap and split at gap + 1; span overlap without a shared position; match over ambiguous; ambiguous over weaker; below-minimum over common-only; repeated hash in a region; mixed common region; truncation; seed limit; an ambiguous region listed while its partner is truncated. Wrong-implementation self-test: 27 variants (the reviewer's 13, 5 of my own, the confirmation pass's 6, and 3 for channel lists: modes hard-coded to exact/normalized, a mode mismatch intersected instead of rejected, modes echoed sorted) must each change at least one body. An invariance-group check covers adding an unrelated reference file |
 | §6 | Schema interpreter and keyword audit; `bodySha256`; report rule layer for order, cap, counts, ambiguity and outcome; corruptions for outcome, class, side, rank, origin, ownership, signature, float and reduced fraction; provenance note, source text in the name, and provenance config digest |
@@ -722,10 +722,10 @@ All checks are in [check_matching.py](matching-vectors/check_matching.py) unless
 | **A9** fault-injection values (the two CLIs shared `TRACEWEAVE_TEST_FAULT` but used different values) | §6.8 B6: the three values above, their outcomes, and every other value a usage error. Checklist items 42, 46 and 47 reworded; item 61 added (61 in total). No vector bytes changed |
 | **A8** verified provenance stamp (Go lane D5 on `i2-go`: an export unpacked into an ignored folder of another repository received that repository's HEAD as a clean stamp and wrote a document, exit 0) | §6.8 B10 rewritten: the build must verify the repository root and cleanliness, toolchain stamps that cannot are unstamped, and a documented verifying build step is required. Checklist item 55 reworded; items 59 (ignored folder) and 60 (plain toolchain build without the verifying step) added, 60 in total. No vector bytes changed |
 | **A7** behavioural follow-ups (both lanes pass all 46 items; recorded ambiguities; `research/reviews/implementation-merge-i2-review.md` F3 and its spec nit) | §6.8 B4, B6, B7, B8, B10 refined; B11–B13 added. Checklist items 36, 37, 43 and 46 reworded and items 47–58 added (58 in total). §2b now says five channel negatives (the file has 5). No vector bytes changed |
-| **A6** I2 behavioural rulings (`xcheck/REPORT-I2.md` §3 and §5 on `merge-i2`; Rust lane A5-Q1–Q3, Go lane C7–C9) | §6.8 B1–B10, §6.6 (commit fixed at build time; the A5 run-time allowance withdrawn after Go lane C8 showed the gap), §3.6 step 1 (report documents), §2a. Answers: A5-Q1 and C9 (exact-directory override), B2; A5-Q2 (records to stdout), B7; A5-Q3 (report depth), B9; C7 (`configOverride`), now documented in the [vectors README](matching-vectors/README.md) and enforced by the checker; C8 (run-time commit), B10. New: [behaviour-checklist.md](matching-vectors/behaviour-checklist.md) (46 items); checker: 6 `configOverride` corruptions and 3 report-document step-1 cases. **No vector bytes changed** |
+| **A6** I2 behavioural rulings (`xcheck/REPORT-I2.md` §3 and §5 on `merge-i2`; Rust lane A5-Q1–Q3, Go lane C7–C9) | §6.8 B1–B10, §6.6 (commit fixed at build time; the A5 run-time allowance withdrawn after Go lane C8 showed the gap), §3.6 step 1 (report documents), §2a. Answers: A5-Q1 and C9 (exact-directory override), B2; A5-Q2 (records to stdout), B7; A5-Q3 (report depth), B9; C7 (`configOverride`), now documented in the [vectors README](../test-vectors/matching/README.md) and enforced by the checker; C8 (run-time commit), B10. New: [behaviour-checklist.md](../test-vectors/matching/behaviour-checklist.md) (46 items); checker: 6 `configOverride` corruptions and 3 report-document step-1 cases. **No vector bytes changed** |
 | **A5** I2 cross-check (`xcheck/REPORT-I2.md` on `merge-i2`; Rust `i2-rust` 9bd3bbf, Go `i2-go` c1b105c) | K1–K4 and the other reconciled questions ruled as OD-C29–C38 (§3.6 steps 1 and 6, §3.8, §4 step 5, §5.7, §2a, §6.6). New vectors: 10 matching (`k1-*` 3, `k3-*` 2, `k4-*` 2, `bounds-*` 3), 2 catalogues from records (`cat-k2-text-plain-registered`, `cat-builder-hash-not-rederived`), 3 refused builds (`build-tokencount-mismatch`, `build-unregistered-profile`, `build-empty-artifact-list`), and `comparison-config-bounds.json` (8). Checker: step-1 depth and scalar-value checks for catalogues, configurations and records; K1 bounds; builder depth; 6 wrong-implementation variants (one per reading, plus an off-by-one depth and ignored bounds), 3 wrong builders, 4 corruptions, 3 rule cases. **No existing expected output changed**: every earlier vector, record, catalogue, report and digest is byte-identical, so no version bump |
-| **A4** register `text-plain` and `ts-tokens` (coordinator; text profile frozen at commit 794f1fe, TypeScript profile frozen for stage 1) | §3.6 step 5 table (contract, channel list, closed error codes); §2b. `check_matching.py` validates all 60 frozen `text-plain` records from `extraction-vectors-text/records-text-plain.json`: named configuration and digests, canonical bytes, schema, declared channel order, closed codes, Q10 nulls, input digests, and all 1,023 k-gram hashes and window selections recomputed from the recorded values (the shared hashing layer; folding and skeleton derivations remain the text checker's). New: catalogue `cat-text-plain` from text records (ok, insufficient, `nul` error), matching vector `text-plain-three-modes` on real inputs (identical and reflowed copies match in all three modes; the Cyrillic homoglyph variant matches only in `skeleton`; unrelated shares nothing), with hand expectations derived from the recorded fingerprints; it uses `minRegionDistinctHashes` 1 (the homoglyph pair shares exactly one skeleton fingerprint) and `mergeGap` 8 (the text window). **Nothing in the text records contradicts A3**: all 60 have the §2a shape and the declared channel order. One A3 file changed: the negative `modes-text-list-unimplemented` was removed from `comparison-config-negative-channels.json`, because its stated reason (no text profile registered) no longer holds. Every other existing byte is identical |
-| **A3** declared channel lists (coordinator, from the text-profile review §4, commit c6e8f2a) | §2b; §2a, §4 step 4, §5.1 step 8, §5.3 rule 4, §6.4. Schemas: channel and mode objects keyed by the declared list (`exact` required, other keys by `additionalProperties`), `extractionConfig.contract` enum gains `traceweave-text-winnow-draft-1`, channel lists are arrays, new code `mode-mismatch`. New: TEST-ONLY profile `go-tokens-three-channel-test` ([config](matching-vectors/config-three-channel-test.json)), 8 re-derived records, 1 catalogue from records, 5 matching vectors (`tc-*`), 5 channel-list negatives (6 at A3; A4 removed the text list when `text-plain` was registered). Unchanged (checked byte for byte against the previous files): every existing record, catalogue, report body and digest, `comparison-config.json`, `comparison-config-negative.json`, `example-report.json`, `extraction-go.json`, `extraction-rust.json`. **What the shared extraction contract must say** (not edited here): §10 step 6 becomes "`channels` equals the profile's declared channel list; `exact` is first", §6–§8 run per listed channel with the channel name in the hash input (already so in §7), and §9 lists "per listed channel". **What the text profile must say:** it declares `["exact","folded","skeleton"]`; its records use the §2a shape (token `class` `word`, `tokenCount`, no per-token `folded`/`skeleton`, which are the channels' `values`); `text-markdown`'s `masked` needs a declared place in the record (proposed: after `tokens`, before `channels`), which A3 does not yet define; the catalogue profile list and error codes (`invalid-utf8`, `nul`, `input-too-large`) are added when a text profile is implemented |
+| **A4** register `text-plain` and `ts-tokens` (coordinator; text profile frozen at commit 794f1fe, TypeScript profile frozen for stage 1) | §3.6 step 5 table (contract, channel list, closed error codes); §2b. `check_matching.py` validates all 60 frozen `text-plain` records from `extraction-text/records-text-plain.json`: named configuration and digests, canonical bytes, schema, declared channel order, closed codes, Q10 nulls, input digests, and all 1,023 k-gram hashes and window selections recomputed from the recorded values (the shared hashing layer; folding and skeleton derivations remain the text checker's). New: catalogue `cat-text-plain` from text records (ok, insufficient, `nul` error), matching vector `text-plain-three-modes` on real inputs (identical and reflowed copies match in all three modes; the Cyrillic homoglyph variant matches only in `skeleton`; unrelated shares nothing), with hand expectations derived from the recorded fingerprints; it uses `minRegionDistinctHashes` 1 (the homoglyph pair shares exactly one skeleton fingerprint) and `mergeGap` 8 (the text window). **Nothing in the text records contradicts A3**: all 60 have the §2a shape and the declared channel order. One A3 file changed: the negative `modes-text-list-unimplemented` was removed from `comparison-config-negative-channels.json`, because its stated reason (no text profile registered) no longer holds. Every other existing byte is identical |
+| **A3** declared channel lists (coordinator, from the text-profile review §4, commit c6e8f2a) | §2b; §2a, §4 step 4, §5.1 step 8, §5.3 rule 4, §6.4. Schemas: channel and mode objects keyed by the declared list (`exact` required, other keys by `additionalProperties`), `extractionConfig.contract` enum gains `traceweave-text-winnow-draft-1`, channel lists are arrays, new code `mode-mismatch`. New: TEST-ONLY profile `go-tokens-three-channel-test` ([config](../test-vectors/matching/config-three-channel-test.json)), 8 re-derived records, 1 catalogue from records, 5 matching vectors (`tc-*`), 5 channel-list negatives (6 at A3; A4 removed the text list when `text-plain` was registered). Unchanged (checked byte for byte against the previous files): every existing record, catalogue, report body and digest, `comparison-config.json`, `comparison-config-negative.json`, `example-report.json`, `extraction-go.json`, `extraction-rust.json`. **What the shared extraction contract must say** (not edited here): §10 step 6 becomes "`channels` equals the profile's declared channel list; `exact` is first", §6–§8 run per listed channel with the channel name in the hash input (already so in §7), and §9 lists "per listed channel". **What the text profile must say:** it declares `["exact","folded","skeleton"]`; its records use the §2a shape (token `class` `word`, `tokenCount`, no per-token `folded`/`skeleton`, which are the channels' `values`); `text-markdown`'s `masked` needs a declared place in the record (proposed: after `tokens`, before `channels`), which A3 does not yet define; the catalogue profile list and error codes (`invalid-utf8`, `nul`, `input-too-large`) are added when a text profile is implemented |
 | **A2** extraction OD-23 normalized-stream exclusions (commit c81be10) | §2 per-channel n_C; §2a normalized channel order (`tokenIndices` only with exclusions, then `values`, `kgrams`, `windowSelections`, `partialWindow`, `fingerprints`), `values` for kept tokens only; §3.6 normalized `kgramCount` rule; §3.8 per-channel `kgramCount`; `record.schema.json` (optional `tokenIndices`) and `catalogue.schema.json` (empty normalized channel allowed for `ok`, enforced per profile). §2a citation fixed: the `input-too-large` offset of 0 comes from extraction §2. Unchanged: every Go/Rust record, catalogue and report byte (checked against the previous files) |
 | **A1** extraction record (coordinator, from the M1.4 cross-check REPORT and extraction Q10) | §2a, §3.8, OD-C21–C25. Changed: §3.2, §3.3 rule 1 and §3.6 for `input-too-large` entries (null digest and length instead of `byteLength > maxInputBytes`); `catalogue.schema.json` gains a `tooLargeArtifact` variant; `report.schema.json` allows a `null` artifact digest. New: `record.schema.json`, `records.json`, vector `go-input-too-large`. Unchanged: every byte of the 59 earlier vectors (catalogues, bodies, digests) and every identifier. Measured against the current CLIs: both emit `result` bytes identical to all 16 record vectors; after the OD-C21 envelope change (Rust: `contract` → `recordVersion` first, `inputBytes` → `inputLength`; Go: add `recordVersion` first) both equal all 16 records byte for byte |
 | Confirmation pass G7 | §6.2 defines `artifactCount`. Vector `go-suppression-artifact-count` (ok, insufficient-tokens and error entries) |

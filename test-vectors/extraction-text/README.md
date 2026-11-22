@@ -4,7 +4,7 @@ Status: experimental draft, normative for conformance of this draft version; dec
 
 Vector status: **`text-plain` vectors are frozen** (draft-1). **`text-markdown` vectors (`text-markdown.json`, `config-text-markdown.json`) are a draft and are not normative.**
 
-Revision status: revised after the [clean-room review](../../reviews/extraction-profile-text-review.md), 2026-11-22. `text-plain` draft-1 is frozen for stage-1 implementation (profile §17: digests listed there); `text-markdown` draft-2 is still a draft. These are the hand-derived vectors (roadmap gate TXT.2) for the [draft text extraction profile](../extraction-profile-text.md). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
+Revision status (before promotion): revised after the [clean-room review](../../research/reviews/extraction-profile-text-review.md), 2026-11-22. `text-plain` draft-1 is frozen for stage-1 implementation (profile §17: digests listed there); `text-markdown` draft-2 is still a draft. These are the hand-derived vectors (roadmap gate TXT.2) for the [draft text extraction profile](../../profiles/text.md). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
 
 ## Files
 
@@ -24,7 +24,7 @@ Revision status: revised after the [clean-room review](../../reviews/extraction-
 | `harness/build_vectors.py` | Writes every vector, configuration and rejection file from the hand-written expectations |
 | `harness/crosscheck_text.py`, `harness/go/`, `harness/rust/` | Cross-check against Go x/text and Rust Unicode crates, offline, with `go.sum` and `Cargo.lock` |
 
-**Record shape.** Each vector's `result` is the `result` of the canonical extraction record ([contract §2a](../catalogue-report-contract.md#2a-extraction-record-traceweave-extraction-record-draft-1)), with the declared channel list `exact`, `folded`, `skeleton` ([§2b, A3](../catalogue-report-contract.md#2b-declared-channel-lists-amendment-a3)). For `text-plain`, the full record bytes are in `records-text-plain.json`. For `text-markdown`, `masked` sits after `tokens` as a proposed placement, which is open for its re-review (profile §10), so no Markdown records are given.
+**Record shape.** Each vector's `result` is the `result` of the canonical extraction record ([contract §2a](../../spec/catalogue-report.md#2a-extraction-record-traceweave-extraction-record-draft-1)), with the declared channel list `exact`, `folded`, `skeleton` ([§2b, A3](../../spec/catalogue-report.md#2b-declared-channel-lists-amendment-a3)). For `text-plain`, the full record bytes are in `records-text-plain.json`. For `text-markdown`, `masked` sits after `tokens` as a proposed placement, which is open for its re-review (profile §10), so no Markdown records are given.
 
 **Vector fields.** Every vector has `id`, `tags` (its `class:` labels), `description`, `derivation` (always `hand`), `config` (the file whose bytes apply), `inputBase64` (the authoritative bytes) and `inputText`. `inputText` is `null` when the bytes are not UTF-8; `inputDisplay` then gives an escaped form. The `result` is one of these:
 - **`status: "error"`** with `error.code` and `error.offset`, and nothing else.
@@ -89,7 +89,7 @@ All three were fixed, two in the hand values and one in the builder. The 8 vecto
 ## 1. Checker
 
 ```
-python3 -I research/drafts/extraction-vectors-text/check_text_vectors.py [--normalization-test PATH/NormalizationTest.txt]
+python3 -I test-vectors/extraction-text/check_text_vectors.py [--normalization-test PATH/NormalizationTest.txt]
 ```
 
 Output on 2026-11-22, with `--normalization-test` pointing at the UCD 17.0.0 file (SHA-256 `5019ffd5…8c64dd`). The 14 per-variant lines of the wrong-implementation self-test are omitted here:
@@ -104,7 +104,7 @@ PASS rejections.json: 70/70 corruptions rejected at their declared layer (error=
 PASS wrong-implementation self-test: rejected 14/14
 PASS records-text-plain.json: 60 text-plain records recomputed byte for byte from (configuration, input) with SHA-256; 58 equal their source vector's result
 PASS record corruption self-test: rejected 12/12
-PASS record bytes accepted by matching-vectors/check_matching.py check_record_bytes + record.schema.json: 51/60; refused only because that checker has no text-plain profile registered (error-code lookup): 9; other refusals: 0
+PASS record bytes accepted by matching/check_matching.py check_record_bytes + record.schema.json: 51/60; refused only because that checker has no text-plain profile registered (error-code lookup): 9; other refusals: 0
 PASS NormalizationTest.txt (17.0.0): NFC and NFD checks 120204/120204
 ```
 
@@ -119,7 +119,7 @@ PASS NormalizationTest.txt (17.0.0): NFC and NFD checks 120204/120204
 ## 2. Tables
 
 ```
-python3 -I research/drafts/extraction-vectors-text/harness/gen_text_tables.py UCD_AND_SECURITY_DIR OUT.json
+python3 -I test-vectors/extraction-text/harness/gen_text_tables.py UCD_AND_SECURITY_DIR OUT.json
 ```
 
 The directory must contain `UnicodeData.txt`, `DerivedCoreProperties.txt`, `DerivedNormalizationProps.txt`, `CompositionExclusions.txt` and `PropList.txt` from `Public/17.0.0/ucd/`, and `confusables.txt` from `Public/17.0.0/security/`, with the digests in profile §4. A rerun on 2026-11-22 reproduced the committed table byte for byte.
@@ -127,7 +127,7 @@ The directory must contain `UnicodeData.txt`, `DerivedCoreProperties.txt`, `Deri
 ## 3. Cross-check
 
 ```
-python3 -I research/drafts/extraction-vectors-text/harness/crosscheck_text.py PATH/NormalizationTest.txt [--build-dir DIR]
+python3 -I test-vectors/extraction-text/harness/crosscheck_text.py PATH/NormalizationTest.txt [--build-dir DIR]
 ```
 
 It builds offline (`GOPROXY=off`, `cargo --offline --locked`) with:
@@ -159,4 +159,6 @@ UAX #29 word spans equal to profile token spans (informative, not required): 33/
 
 ## Scope of these files
 
-Nothing here is normative. Promoting the profile or vectors into `profiles/` or `test-vectors/` needs the owner. `text-tables-17.0.0.json` is derived from Unicode, Inc. data files whose headers point to the [Unicode terms of use](https://www.unicode.org/terms_of_use.html). Whether derived tables may be committed under those terms is not settled here, and the owner should confirm it together with the existing [extraction table](../extraction-vectors/unicode-17.0.0-tables.json).
+Nothing here is normative. Promoting the profile or vectors into `profiles/` or `test-vectors/` needs the owner. `text-tables-17.0.0.json` is derived from Unicode, Inc. data files whose headers point to the [Unicode terms of use](https://www.unicode.org/terms_of_use.html). Whether derived tables may be committed under those terms is not settled here, and the owner should confirm it together with the existing [extraction table](../extraction/unicode-17.0.0-tables.json).
+
+Note on paths after promotion: the `profileDraft` field inside `text-plain.json`, `text-markdown.json` and `limits-text.json` still reads `research/drafts/extraction-profile-text.md`. It is a historical label that no checker reads; it was left unchanged so the frozen vector bytes and digests do not change. The profile is [profiles/text.md](../../profiles/text.md).

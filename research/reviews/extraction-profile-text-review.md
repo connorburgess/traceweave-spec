@@ -1,6 +1,8 @@
 # Review: text extraction profile (`text-plain`, `text-markdown`, draft-1)
 
-Status: independent clean-room review, 2026-11-22, of [extraction-profile-text.md](../drafts/extraction-profile-text.md) and [extraction-vectors-text/](../drafts/extraction-vectors-text/README.md) at commit `6fbf11b` (branch `roadmap-v2`). I wrote neither and did not trust their self-reported checks. Scratch code (`clean.py`, `variants.py`, `runvar.py`) is in `$TMPDIR/tx/`, not in the repository.
+> Path note: the profile and vectors reviewed here were promoted on 2026-11-23 to [profiles/text.md](../../profiles/text.md) and [test-vectors/extraction-text/](../../test-vectors/extraction-text/README.md); the review text below keeps the paths of the time (`research/drafts/...`). See the [promotion map](../promotion-map.md).
+
+Status: independent clean-room review, 2026-11-22, of [extraction-profile-text.md](../../profiles/text.md) and [extraction-vectors-text/](../../test-vectors/extraction-text/README.md) at commit `6fbf11b` (branch `roadmap-v2`). I wrote neither and did not trust their self-reported checks. Scratch code (`clean.py`, `variants.py`, `runvar.py`) is in `$TMPDIR/tx/`, not in the repository.
 
 **Verdict: ready after listed fixes.** Implement `text-plain` first. `text-markdown` needs the list-item fence decision (M1) before implementation. Neither profile can enter a catalogue or report until the contract amendment in §4 exists.
 
@@ -59,7 +61,7 @@ Each variant's results replaced every vector result in a copy of the vector dire
 
 ## 4. Three values against the shared contract and the canonical record
 
-It does **not** fit without amendment. The catalogue and report contract (draft-2 with A1, [catalogue-report-contract.md](../drafts/catalogue-report-contract.md)) hard-codes the code channels:
+It does **not** fit without amendment. The catalogue and report contract (draft-2 with A1, [catalogue-report-contract.md](../../spec/catalogue-report.md)) hard-codes the code channels:
 - **Record (A1):** "`channels` is `exact` then `normalized` … the normalized channel has `values` first". Tokens are `class`, `text`, `span`, and `tokenCount` is required. The text vectors have top-level channel blocks, no `tokenCount`, no `class`, extra per-token `folded`/`skeleton` and, for Markdown, `masked`. So A1 records cannot be derived from them "without new hand work".
 - **Catalogue §3.2 and `catalogue.schema.json`:** `channels` must hold exactly `exact` and `normalized`; `extractionConfig.channels` and `.contract` are constants; the §3.6 step 5 profile list has only the two code profiles; error codes follow extraction §4.8/§5.9.
 - **Comparison config §4 and report schema:** `modes` is exactly `["exact","normalized"]`, and the mode object keys and `suppression.distinctHashes` keys are fixed.

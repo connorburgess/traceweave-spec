@@ -1,6 +1,8 @@
 # Independent review: TypeScript/JavaScript token profile (`ts-tokens`, `tsx-tokens`)
 
-Reviewed 2026-11-22 at commit fb09039: [extraction-profile-typescript.md](../drafts/extraction-profile-typescript.md) and [extraction-vectors-typescript/](../drafts/extraction-vectors-typescript/). I wrote none of it and re-ran everything myself. Scratch code lived in `$TMPDIR` only. Tools: Python 3.14.6, Node 22.23.2, and TypeScript 6.0.3 from the harness's pinned `node_modules`.
+> Path note: the profile and vectors reviewed here were promoted on 2026-11-23 to [profiles/typescript.md](../../profiles/typescript.md) and [test-vectors/extraction-typescript/](../../test-vectors/extraction-typescript/README.md); the review text below keeps the paths of the time (`research/drafts/...`). See the [promotion map](../promotion-map.md).
+
+Reviewed 2026-11-22 at commit fb09039: [extraction-profile-typescript.md](../../profiles/typescript.md) and [extraction-vectors-typescript/](../../test-vectors/extraction-typescript/). I wrote none of it and re-ran everything myself. Scratch code lived in `$TMPDIR` only. Tools: Python 3.14.6, Node 22.23.2, and TypeScript 6.0.3 from the harness's pinned `node_modules`.
 
 ## 1. Clean room (before reading `check_vectors.py` or `tslex.py`)
 

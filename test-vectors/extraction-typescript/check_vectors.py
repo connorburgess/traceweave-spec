@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Checker for the draft ts-tokens / tsx-tokens vectors (draft-2).
 
-    python3 -I research/drafts/extraction-vectors-typescript/check_vectors.py
+    python3 -I test-vectors/extraction-typescript/check_vectors.py
 
 Standard library only. For every vector it:
   * validates the configuration bytes (contract §10) and rejects the negatives;

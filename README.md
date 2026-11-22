@@ -26,9 +26,13 @@ Read the [use cases](docs/use-cases.md), [delivery roadmap](ROADMAP.md), [implem
 | [Attestations](spec/attestations.md) | DSSE/in-toto integration and verification boundaries |
 | [Threat model](spec/threat-model.md) | Adversaries, privacy, false claims, and failure cases |
 | [Conformance](spec/conformance.md) | What the checks establish and what remains unimplemented |
+| [Extraction contract](spec/extraction.md) | Token-fingerprint extraction, including the Go and Rust token profiles (experimental draft, normative for this draft version) |
+| [Catalogue and report contract](spec/catalogue-report.md) | Catalogues, comparison and reports (experimental draft, normative for this draft version) |
 | [Code profile](profiles/code.md) | First fingerprinting experiment and reproducibility requirements |
+| [TypeScript/JavaScript profile](profiles/typescript.md) and [text profile](profiles/text.md) | Stage-1 profiles `ts-tokens` and `text-plain` (frozen), with `tsx-tokens` and `text-markdown` as drafts |
 | [Other content profiles](profiles/README.md) | Text, image, audio, and binary research scope |
 | [Schemas](schemas/README.md) | Machine-readable draft formats |
+| [Test vectors](test-vectors/README.md) | Commitment and DSSE vectors, and the extraction, matching, TypeScript and text vectors with their checkers |
 | [Examples](examples/README.md) | Synthetic, unsigned records with known artifact bytes |
 | [Evaluation](docs/evaluation.md) | Attack matrix and false-positive calibration |
 | [Roadmap](ROADMAP.md) | Implementation gates and open decisions |
@@ -45,7 +49,7 @@ python3 -m venv .venv
 .venv/bin/python -m unittest discover -s tests -v
 ```
 
-The validator checks schema structure, synthetic examples, exact fixture digests, commitment openings, DSSE framing vectors, and local Markdown links. It does **not** authenticate a signer, validate a timestamp authority, measure clone detection, or establish a false-positive rate. It performs no network requests.
+The validator checks schema structure, synthetic examples, exact fixture digests, commitment openings, DSSE framing vectors, the extraction, matching, TypeScript and text vector checkers (each must exit 0), and local Markdown links. It does **not** authenticate a signer, validate a timestamp authority, measure clone detection, or establish a false-positive rate. It performs no network requests.
 
 ## Contribute and reuse
 

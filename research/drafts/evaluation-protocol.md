@@ -35,12 +35,12 @@ It fixes, before any result exists, what is measured and how each pass/fail beco
 ## 0. What is measured
 
 The system under test is the token-fingerprint baseline:
-- extraction per the [extraction contract](extraction-contract.md) (profiles `go-tokens` and `rust2024-tokens`, `draft-1`; channels `exact` and `normalized`);
-- catalogues and comparison per the [catalogue and report contract](catalogue-report-contract.md) (`traceweave-catalogue-draft-2`, `traceweave-seed-merge-draft-2`, `traceweave-report-draft-2`): seeds, regions, minimum evidence counted in distinct non-common hashes (§5.6), the suppression catalogue bound by digest (§5.2), the closed outcome codes (§6.4), and the caps `maxSeedsPerMode` and `maxRegionsPerMode` (§5.4, §5.7).
+- extraction per the [extraction contract](../../spec/extraction.md) (profiles `go-tokens` and `rust2024-tokens`, `draft-1`; channels `exact` and `normalized`);
+- catalogues and comparison per the [catalogue and report contract](../../spec/catalogue-report.md) (`traceweave-catalogue-draft-2`, `traceweave-seed-merge-draft-2`, `traceweave-report-draft-2`): seeds, regions, minimum evidence counted in distinct non-common hashes (§5.6), the suppression catalogue bound by digest (§5.2), the closed outcome codes (§6.4), and the caps `maxSeedsPerMode` and `maxRegionsPerMode` (§5.4, §5.7).
 
 The question is the one M3 states: which transformations does this baseline detect, at what fragment sizes, and at what cost in false alarms, abstentions, candidate volume, runtime and memory. Embedded marks are out of scope here; M2E.7 later reuses the same held-out cases and the same budget.
 
-The baseline is not a calibrated detector ([extraction §12](extraction-contract.md#12-what-the-baseline-does-not-claim), [report §8](catalogue-report-contract.md#8-what-the-report-must-not-claim)). This protocol measures it; it does not turn a measured rate into a probability for a single result. Generated cases are **not compilable copies** (§6.3); recall here describes lexical robustness only.
+The baseline is not a calibrated detector ([extraction §12](../../spec/extraction.md#12-what-the-baseline-does-not-claim), [report §8](../../spec/catalogue-report.md#8-what-the-report-must-not-claim)). This protocol measures it; it does not turn a measured rate into a probability for a single result. Generated cases are **not compilable copies** (§6.3); recall here describes lexical robustness only.
 
 ## 1. Units
 
@@ -270,7 +270,7 @@ Pair caching (§9) makes positives cheap: a positive comparison differs from an 
 
 **Abort rules.** Tuning or the held-out run stops with exit 2 and **no verdict** if: its wall time exceeds 3 times its recorded estimate; any process exceeds 75% of the machine's physical memory; or a seed-sharing or pair-caching check differs. An aborted held-out run is reported as aborted; resuming requires a protocol revision.
 
-For orientation only: I2 measured 8 M seeds at 1.9 s and 1.4 GiB (Rust lane) and 4.2 s and 3.1 GiB (Go lane) per mode, worst-case periodic input ([contract §5.7](catalogue-report-contract.md#57-ambiguity-and-the-output-cap)). No real-file per-pair cost has been measured; the review's 1 ms per pair assumption gives about 1 hour for held-out negatives and 2 hours for the shared-seed tuning grid. The pilot replaces that assumption with a measurement.
+For orientation only: I2 measured 8 M seeds at 1.9 s and 1.4 GiB (Rust lane) and 4.2 s and 3.1 GiB (Go lane) per mode, worst-case periodic input ([contract §5.7](../../spec/catalogue-report.md#57-ambiguity-and-the-output-cap)). No real-file per-pair cost has been measured; the review's 1 ms per pair assumption gives about 1 hour for held-out negatives and 2 hours for the shared-seed tuning grid. The pilot replaces that assumption with a measurement.
 
 ## 6. Positive set (held-out sources, generated after the freeze)
 

@@ -5,7 +5,8 @@ The shared core handles exact subjects, private commitments, extraction configur
 | Profile | Status | Questions before implementation |
 | --- | --- | --- |
 | [Code](code.md) | First planned experiment | Scope normalization, partial fragments, generated code, AI refactoring |
-| Text | Research only | Unicode policy, language, quotations, translations, paraphrases, partial passages |
+| [TypeScript/JavaScript](typescript.md) | `ts-tokens` frozen; `tsx-tokens` deferred draft | Open decisions are listed in the profile |
+| [Text](text.md) | `text-plain` frozen; `text-markdown` draft | Open decisions are listed in the profile; translations and paraphrases remain research only |
 | Image | Research only | Decoding, orientation, crops, resizing, composites, near-identical independent images |
 | Audio | Research only | Decoding, sample rate, channel mixing, alignment, short excerpts, pitch/speed changes |
 | Binary | Research only | Architecture, compiler, packing, sections, relocation, shared runtime code |

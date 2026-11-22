@@ -2,7 +2,7 @@
 
 Prepared 2026-11-22. **NotebookLM report audit: pending; no exported report was supplied.** This is an eight-source-family review for the coordinator, not the external synthesis, a replication or an adopted profile. No model, dataset, corpus or private application was acquired or run. Author repositories were inspected read-only through the GitHub API and raw files at pinned commits; no external code was executed.
 
-Repository context: branch `roadmap-v2`, HEAD `c57fc22623028f2ffc72f493c2caa3769e5cd0eb`, with other lanes' uncommitted work in the checkout. Read: the [lane brief](../prompts/09-text-profile.md), the [lanes 06–08 checkpoint](../research-06-08-checkpoint.md), the [06](06-evidence-review.md), [07](07-evidence-review.md) and [08](08-evidence-review.md) reviews, the [roadmap](../../ROADMAP.md) media-profile gates, the [use cases](../../docs/use-cases.md) and the [draft extraction contract](../drafts/extraction-contract.md). Only this file belongs to this lane.
+Repository context: branch `roadmap-v2`, HEAD `c57fc22623028f2ffc72f493c2caa3769e5cd0eb`, with other lanes' uncommitted work in the checkout. Read: the [lane brief](../prompts/09-text-profile.md), the [lanes 06–08 checkpoint](../research-06-08-checkpoint.md), the [06](06-evidence-review.md), [07](07-evidence-review.md) and [08](08-evidence-review.md) reviews, the [roadmap](../../ROADMAP.md) media-profile gates, the [use cases](../../docs/use-cases.md) and the [draft extraction contract](../../spec/extraction.md). Only this file belongs to this lane.
 
 ## Decision support
 
@@ -31,7 +31,7 @@ Ledger IDs are in the [source ledger](#source-ledger). "Author" marks author-run
 
 **Paraphrase and translation limits.** No reviewed source measures winnowing or shingling recall under paraphrase or translation. K shows BM25 lexical retrieval with ≥ 50-token queries still finds model-paraphrased passages in a catalogue of the originals, and fails below ~20 words; that is retrieval scored by unigram overlap, a weaker requirement than a shared winnowed k-gram. P's corpus validation shows longer word n-gram similarity falling for obfuscated cases (Fig. 1). **Inference:** a k-gram profile should be expected to miss heavy paraphrase and all translation; a bag-of-words or retrieval channel would be a separate, later profile. Cross-language matching needs translation or multilingual models and is out of scope for a CPU-only, no-download profile.
 
-**Common-phrase and boilerplate suppression.** W §5.1 finds the most frequent k-grams are menus, legal boilerplate and repetitive strings; W §5.2 suppresses boilerplate by fingerprinting it under a special document ID. This is the explicit-catalogue suppression of the [draft catalogue contract](../drafts/catalogue-report-contract.md) (OD-C5 option b, roadmap M2.10). For prose, licence texts, front matter, Markdown tables of contents and quoted standards text are the obvious boilerplate classes.
+**Common-phrase and boilerplate suppression.** W §5.1 finds the most frequent k-grams are menus, legal boilerplate and repetitive strings; W §5.2 suppresses boilerplate by fingerprinting it under a special document ID. This is the explicit-catalogue suppression of the [draft catalogue contract](../../spec/catalogue-report.md) (OD-C5 option b, roadmap M2.10). For prose, licence texts, front matter, Markdown tables of contents and quoted standards text are the obvious boilerplate classes.
 
 **Calibration evidence.** None of W, B or M gives a false-alert rate with a negative-set denominator. M's 0.75 precision/recall is per sampled pair on web pages. K's 1% FPR is chosen on the evaluation scores. P supplies negative documents and graded obfuscation, but the 2010 paper reports corpus construction, not detector error. Per the [lane 07 review](07-evidence-review.md), any rate must be computed over the full query (all windows and catalogue entries), with thresholds frozen before held-out data.
 
@@ -56,7 +56,7 @@ Ledger IDs are in the [source ledger](#source-ledger). "Author" marks author-run
 
 ## How the extraction contract could host a text profile
 
-The [draft contract](../drafts/extraction-contract.md) already separates lexing (§§4–5) from serialization, hashing and winnowing (§§6–8) and pins Unicode 17.0.0 tables (§3a). A text profile would add one lexer section and reuse the rest. It would have to specify, with no TBDs:
+The [draft contract](../../spec/extraction.md) already separates lexing (§§4–5) from serialization, hashing and winnowing (§§6–8) and pins Unicode 17.0.0 tables (§3a). A text profile would add one lexer section and reuse the rest. It would have to specify, with no TBDs:
 
 - **Input and format front end.** UTF-8 rules of §3; whether a BOM is rejected (as now) or skipped, since text editors write BOMs routinely; a `format` value (`plain` or `markdown`) with a pinned CommonMark version if Markdown syntax is dropped, as MOSS keeps front ends separate (W §5.2).
 - **Fold.** An exact pipeline over the pinned 17.0.0 files: NFKC, full case folding, delete Default_Ignorable_Code_Point, map White_Space to a separator, and optionally a confusable channel with a pinned `confusables.txt` digest (UTS #39 §4 warns the data changes). Name the Unicode version in the profile, not the runtime's: N reports Python's library used Unicode 14.0 data.

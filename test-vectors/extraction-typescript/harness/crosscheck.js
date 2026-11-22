@@ -2,7 +2,7 @@
 // Cross-check the draft ts-tokens / tsx-tokens vectors against the TypeScript
 // 6.0.3 parser and scanner (project-local node_modules, pinned by package-lock.json).
 //
-//   cd research/drafts/extraction-vectors-typescript/harness
+//   cd test-vectors/extraction-typescript/harness
 //   npm ci --ignore-scripts      # once; installs typescript@6.0.3 locally
 //   node crosscheck.js [--json OUT]
 //
@@ -31,7 +31,7 @@ const FILES = [["ts.json", ts.ScriptKind.TS, "x.ts"], ["tsx.json", ts.ScriptKind
 const PRE_LEX = new Set(["input-too-large", "invalid-utf8", "bom", "nul"]);
 
 // ---------------------------------------------------------------- profile Unicode data
-const TABLES = JSON.parse(fs.readFileSync(path.join(DIR, "..", "extraction-vectors", "unicode-17.0.0-tables.json")));
+const TABLES = JSON.parse(fs.readFileSync(path.join(DIR, "..", "extraction", "unicode-17.0.0-tables.json")));
 const ID_START_EXTRA = new Set([0x037A, 0x0E33, 0x0EB3, 0x309B, 0x309C, 0xFC5E, 0xFC5F, 0xFC60, 0xFC61, 0xFC62,
   0xFC63, 0xFDFA, 0xFDFB, 0xFE70, 0xFE72, 0xFE74, 0xFE76, 0xFE78, 0xFE7A, 0xFE7C, 0xFE7E, 0xFF9E, 0xFF9F]);
 const ID_CONTINUE_EXTRA = new Set([0x037A, 0x309B, 0x309C, 0xFC5E, 0xFC5F, 0xFC60, 0xFC61, 0xFC62, 0xFC63, 0xFDFA,

@@ -1,6 +1,8 @@
 # Non-author review: M3 evaluation protocol `m3-eval-draft-1` and corpus proposal
 
-Reviewed 2026-11-22 at commit `067be17` on `roadmap-v2`: [evaluation-protocol.md](../drafts/evaluation-protocol.md) and [evaluation-corpus/](../drafts/evaluation-corpus/README.md). Read against ROADMAP M3.0–M3.6, [lane 07](../lanes/07-evidence-review.md), the [catalogue and report contract](../drafts/catalogue-report-contract.md) and the implementation at `<implementation repo>` `main` (`82b02ab`). I did not write any of them.
+> Path note: the extraction contract, vectors and profiles that this review cites were promoted on 2026-11-23 (see the [promotion map](../promotion-map.md)); the review text keeps the paths of the time, and only link targets were updated.
+
+Reviewed 2026-11-22 at commit `067be17` on `roadmap-v2`: [evaluation-protocol.md](../drafts/evaluation-protocol.md) and [evaluation-corpus/](../drafts/evaluation-corpus/README.md). Read against ROADMAP M3.0–M3.6, [lane 07](../lanes/07-evidence-review.md), the [catalogue and report contract](../../spec/catalogue-report.md) and the implementation at `<implementation repo>` `main` (`82b02ab`). I did not write any of them.
 
 Network use was read-only GitHub API metadata (12 root-tree requests). I downloaded and cloned nothing, and fetched no source or licence text. Scripts are in `$TMPDIR/m3/`.
 

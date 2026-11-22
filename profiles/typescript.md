@@ -4,13 +4,13 @@ Status: experimental draft, normative for conformance of this draft version; dec
 
 Profiles in this document: **`ts-tokens` is frozen for implementation** (draft-2). **`tsx-tokens` is a deferred draft and is not normative**: no implementation is expected to support it until it is reviewed and frozen.
 
-Revision status: **draft for review, revision draft-2, 2026-11-22.** Roadmap items TS.1 and TS.2. TS.3 (two implementations) and TS.4 (own M3 split) are implementation gates and are not claimed here. Draft-2 resolves the [clean-room review](../reviews/extraction-profile-typescript-review.md) of draft-1 (F1–F6, A1–A6). The dispositions are in §15 and the output changes in §16.
+Revision status (before promotion): **draft for review, revision draft-2, 2026-11-22.** Roadmap items TS.1 and TS.2. TS.3 (two implementations) and TS.4 (own M3 split) are implementation gates and are not claimed here. Draft-2 resolves the [clean-room review](../research/reviews/extraction-profile-typescript-review.md) of draft-1 (F1–F6, A1–A6). The dispositions are in §15 and the output changes in §16.
 
 **`ts-tokens` `draft-2` is frozen for stage-1 implementation, pending owner confirmation of the decided-in-draft items** (§17 lists the frozen files and digests).
 
 **Staging** (decided in draft, pending owner confirmation, TSOD-1): **`ts-tokens` is stage 1** and is the frozen profile. It also takes plain `.js`, `.mjs` and `.cjs`. **`tsx-tokens` is deferred.** §5 and its vectors are kept as a draft, but they are not frozen until a real `.tsx`/`.jsx` corpus measures TSOD-8.
 
-This is research material, not a normative change. It does not modify `spec/`, `schemas/`, `profiles/`, `test-vectors/` or the [extraction contract](extraction-contract.md). "MUST" describes what this draft proposes for an implementation claiming to follow it. Nothing here is a registered algorithm.
+This document is normative for conformance of this draft version, as stated in its status line. It plugs into the [extraction contract](../spec/extraction.md) and does not modify it. "MUST" describes what this draft proposes for an implementation claiming to follow it. Nothing here is a registered algorithm.
 
 **How it plugs in.** This document adds two profile sections in the shape of contract §4 (Go) and §5 (Rust). Every shared part of the contract applies unchanged. The profile also uses the contract's normalized-stream exclusion rule (contract §6, OD-23) to drop `;` from the normalized stream (§6 below, TSOD-5b). The shared parts are:
 - §2 outcomes, the no-repair rule and the error-offset rules;
@@ -19,7 +19,7 @@ This is research material, not a normative change. It does not modify `spec/`, `
 - §6 serializations, with `normalizedExclusions` declared in §6 below; §7 k-gram hashing, §8 winnowing and §9 record fields;
 - §10 configuration bytes and validation. This profile only adds two `(profile, profileVersion)` pairs (§10 below).
 
-The vectors are in [extraction-vectors-typescript/](extraction-vectors-typescript/README.md). Decisions are in §12. Items marked "decided in draft" are pending owner confirmation.
+The vectors are in [extraction-typescript/](../test-vectors/extraction-typescript/README.md). Decisions are in §12. Items marked "decided in draft" are pending owner confirmation.
 
 ## 1. Authority and pins
 
@@ -30,7 +30,7 @@ The vectors are in [extraction-vectors-typescript/](extraction-vectors-typescrip
   - §12.10 automatic semicolon insertion, and Annex B.1.1 HTML-like comments.
 
   Where this profile restates ECMA-262, ECMA-262 governs, and a conflict is a profile defect. Every deliberate departure is listed in §9.
-- **TypeScript.** No current TypeScript language specification exists: the last published one describes TypeScript 1.8 and is no longer maintained. For the four TypeScript-only lexical points, this profile's text is the authority: type-argument `<`/`>`, non-null `!`, the decorator `@` and the `.tsx` generic-arrow rule. **TypeScript 6.0.3** is the cross-check oracle (npm `typescript@6.0.3`, integrity `sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==`, pinned in [harness/package-lock.json](extraction-vectors-typescript/harness/package-lock.json)).
+- **TypeScript.** No current TypeScript language specification exists: the last published one describes TypeScript 1.8 and is no longer maintained. For the four TypeScript-only lexical points, this profile's text is the authority: type-argument `<`/`>`, non-null `!`, the decorator `@` and the `.tsx` generic-arrow rule. **TypeScript 6.0.3** is the cross-check oracle (npm `typescript@6.0.3`, integrity `sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==`, pinned in [harness/package-lock.json](../test-vectors/extraction-typescript/harness/package-lock.json)).
   - 6.0.3 is the last release built on the JavaScript compiler with the public `createScanner`/`createSourceFile` API. The npm `latest` tag is 7.0.2, the native port, which does not ship that API in the package.
   - When TypeScript 7 exposes a scanner or parser API, re-run the cross-check (contract §10 versioning).
 - **Unicode.** 17.0.0, per contract §3a.
@@ -71,7 +71,7 @@ ECMA-262 2026: IdentifierStartChar is UnicodeIDStart, `$` or `_`, and Identifier
 - `id_start` = `xid_start` ∪ {U+037A, U+0E33, U+0EB3, U+309B, U+309C, U+FC5E–U+FC63, U+FDFA, U+FDFB, U+FE70, U+FE72, U+FE74, U+FE76, U+FE78, U+FE7A, U+FE7C, U+FE7E, U+FF9E, U+FF9F} (23 code points);
 - `id_continue` = `xid_continue` ∪ {U+037A, U+309B, U+309C, U+FC5E–U+FC63, U+FDFA, U+FDFB, U+FE70, U+FE72, U+FE74, U+FE76, U+FE78, U+FE7A, U+FE7C, U+FE7E} (19 code points).
 
-These are exactly ID_Start − XID_Start and ID_Continue − XID_Continue in the digest-pinned UCD 17.0.0 `DerivedCoreProperties.txt`. In that file, XID ⊂ ID holds, U+200C/U+200D are in ID_Continue, and Zs is as listed in §3.1. [harness/derive_deltas.py](extraction-vectors-typescript/harness/derive_deltas.py) re-derives all of this and refuses other file digests. The library rule of contract §3a applies: an implementation MUST NOT use a runtime's `\p{ID_Start}` or the TypeScript scanner's tables unless they are shown identical. TypeScript 6.0.3's tables differ on 8,949 start and 9,132 part code points, all of them characters newer than its tables (§11).
+These are exactly ID_Start − XID_Start and ID_Continue − XID_Continue in the digest-pinned UCD 17.0.0 `DerivedCoreProperties.txt`. In that file, XID ⊂ ID holds, U+200C/U+200D are in ID_Continue, and Zs is as listed in §3.1. [harness/derive_deltas.py](../test-vectors/extraction-typescript/harness/derive_deltas.py) re-derives all of this and refuses other file digests. The library rule of contract §3a applies: an implementation MUST NOT use a runtime's `\p{ID_Start}` or the TypeScript scanner's tables unless they are shown identical. TypeScript 6.0.3's tables differ on 8,949 start and 9,132 part code points, all of them characters newer than its tables (§11).
 
 **No NFC check.** ECMAScript does not normalize identifiers, so precomposed and decomposed `é` are different names. Unlike the Rust profile, there is no `non-nfc-identifier` error.
 
@@ -250,7 +250,7 @@ A parser-free rule that tells a statement-level `}` (block, function or class de
 
 Measurements, with each `;` that is followed by spaces or tabs and then a line terminator deleted:
 - **The review:** 61.1% of normalized fingerprints survive on 42,043 tokens of TypeScript 6.0.3's `lib/_tsc.js` when `;` stays, and 100% when it is dropped.
-- **This revision**, using [harness/semi_survival.py](extraction-vectors-typescript/harness/semi_survival.py) and counting distinct fingerprint hashes:
+- **This revision**, using [harness/semi_survival.py](../test-vectors/extraction-typescript/harness/semi_survival.py) and counting distinct fingerprint hashes:
   - the same 42,043-token prefix: 62.5% (1,769/2,831) under draft-1 and 100% (3,077/3,077) under draft-2;
   - the whole file (874,387 tokens, 49,866 `;` removed): 67.3% and 100%.
 
@@ -415,7 +415,7 @@ Contract §10 applies, including the draft-2 bounds of contract §10a (k ≤ 16,
 - `tsx-tokens` (the same bytes with `"profile":"tsx-tokens"`): `4f121891d73b98b51032e4f3bcb823a215b3edc6afaee6493ea9025a2a8564e6`;
 - `ts-tokens` with `maxInputBytes` 16: `94403dd3e71a8105a9dcec894fc0d05d09cb771efaada28802dcf43ecd08f8d6`.
 
-`draft-1` is no longer accepted. [config-negative-typescript.json](extraction-vectors-typescript/config-negative-typescript.json) lists 19 rejections, among them both superseded `draft-1` pairs, `typescript-tokens`, `js-tokens`, one value just above each contract bound, and an escaped profile string. k = 5 and w = 4 are contract OD-10.
+`draft-1` is no longer accepted. [config-negative-typescript.json](../test-vectors/extraction-typescript/config-negative-typescript.json) lists 19 rejections, among them both superseded `draft-1` pairs, `typescript-tokens`, `js-tokens`, one value just above each contract bound, and an escaped profile string. k = 5 and w = 4 are contract OD-10.
 
 ## 11. Requirement-to-check map and verification
 
@@ -423,7 +423,7 @@ Contract §10 applies, including the draft-2 bounds of contract §10a (k ≤ 16,
 | --- | --- |
 | Config bytes, pairs and bounds (§10) | Checker validates three configs and rejects 19 negatives |
 | Contract §3 order | `ts-err-invalid-utf8`, `-bom`, `-nul`, `ts-limit-*`; recomputed by the checker |
-| Every token: class, text, byte span; every error: code and offset | Checker re-lexes each input with [tslex.py](extraction-vectors-typescript/tslex.py) and requires identity |
+| Every token: class, text, byte span; every error: code and offset | Checker re-lexes each input with [tslex.py](../test-vectors/extraction-typescript/tslex.py) and requires identity |
 | Keyword list, property and JSX positions, escapes (§4.1, §5.3) | Checker invariants plus re-lex; `ts-contextual-keywords`, `ts-property-keywords`, `ts-unicode-escape-ident`, `tsx-attr-keyword-names`; corruptions: `return` as ident, `type`, `.catch`, `\u0069f` and JSX `class` as keyword |
 | Longest match and `?.` (§4.4) | Checker invariant; `ts-shift-ops`, `ts-generics-gt`, `ts-optional-chaining`; corruptions: `>>` split in an expression and in generics, `?.5` as `?.` `5` |
 | Numbers (§4.5) | `ts-numbers`, `ts-bigint`, `ts-legacy-octal`, `ts-nonoctal-separators`, 7 error vectors; corruption `07.5` as one number; wrong lexers V26, WNonOctalSep |
@@ -435,7 +435,7 @@ Contract §10 applies, including the draft-2 bounds of contract §10a (k ≤ 16,
 | Unicode (§3.1, §3.2) | `ts-unicode-boundary`, `ts-err-u2e2f`, `-u180e`, `tsx-nbsp-text`; `derive_deltas.py` against UCD 17.0.0; crosscheck table sweep; corruption: U+309B rejected |
 | Errors and precedence (§7) | 45 error vectors with exact offsets; corruptions: invented code, moved offset, malformed before unterminated |
 | Hash, winnowing, ties, pairs | Checker recomputation; 22 tie windows; format, rename and semi pairs; corruptions: leftmost tie, flipped hash bit |
-| Toolchain agreement | [harness/crosscheck.js](extraction-vectors-typescript/harness/crosscheck.js): parser oracle, corpus, probes, table sweep |
+| Toolchain agreement | [harness/crosscheck.js](../test-vectors/extraction-typescript/harness/crosscheck.js): parser oracle, corpus, probes, table sweep |
 
 **Results, draft-2, 2026-11-22** (Python 3.14.6, Node 22.23.2, TypeScript 6.0.3).
 
@@ -506,7 +506,7 @@ The risk is concentrated in JSX, where the profile admits a known gap (TSOD-8) a
 
 The vectors are already split by profile, so stage 1 can freeze `ts.json` and `limits-ts.json` without touching `tsx.json`. Before TS.3, extend the M1.4-style differential: random token streams with mutations, and the `exprEnd`, template and JSX state spaces in particular.
 
-## 14. "Before registering a profile" checklist ([profiles/code.md](../../profiles/code.md))
+## 14. "Before registering a profile" checklist ([profiles/code.md](code.md))
 
 | Item | Where |
 | --- | --- |
@@ -524,7 +524,7 @@ The vectors are already split by profile, so stage 1 can freeze `ts.json` and `l
 
 ## 15. Review dispositions
 
-The [clean-room review](../reviews/extraction-profile-typescript-review.md) of draft-1 (commit fb09039) found:
+The [clean-room review](../research/reviews/extraction-profile-typescript-review.md) of draft-1 (commit fb09039) found:
 
 | Finding | Resolution |
 | --- | --- |
@@ -570,13 +570,13 @@ N2 adds one vector and changes no existing output, so `profileVersion` stays `dr
 
 **Frozen for stage-1 implementation, pending owner confirmation of the decided-in-draft items** (§12: TSOD-1 to TSOD-10 and TSOD-2b). Implementations target these exact bytes. Any change to them needs a new `profileVersion` (contract §10 versioning). `tsx.json`, `config-tsx.json` and §5 are **not** frozen (deferred, TSOD-8).
 
-| File (in [extraction-vectors-typescript/](extraction-vectors-typescript/README.md)) | SHA-256 |
+| File (in [extraction-typescript/](../test-vectors/extraction-typescript/README.md)) | SHA-256 |
 | --- | --- |
 | `ts.json` (77 vectors) | `be290174a694e3124c510518203220ab6675ac5d44081f89980c08b594f4dc81` |
 | `limits-ts.json` (3 vectors) | `b9db6d79758873db321cee28b7b5161465337666b4c3db18e1efd390f018eb9f` |
 | `config-ts.json` (= `configSha256`) | `aeeed14177cd3be8fea69e453c825e74f2fd301d03babbf49329bde0cc4754de` |
 | `config-ts-limit16.json` | `94403dd3e71a8105a9dcec894fc0d05d09cb771efaada28802dcf43ecd08f8d6` |
 | `config-negative-typescript.json` (19 negatives) | `3965135bae03ab40e244a604e0393247fb750ba326c12eeb68be880f947a291c` |
-| `../extraction-vectors/unicode-17.0.0-tables.json` (shared, contract §3a) | `9363b97eb849cb236c786098f017728ad04688782f07c2969afddf93b03ac29f` |
+| `../extraction/unicode-17.0.0-tables.json` (shared, contract §3a) | `9363b97eb849cb236c786098f017728ad04688782f07c2969afddf93b03ac29f` |
 
 **The normative text** is this document's §1–§4, §6, §7, §9 and §10, with `normalizedExclusions` `punct` `;`. Its digest is the git blob at the commit that adds this record. The checker (`check_vectors.py`) and `tslex.py` are verification tooling, not frozen artifacts. They may change without a version bump as long as the frozen bytes above still pass.

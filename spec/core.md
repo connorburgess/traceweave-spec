@@ -12,7 +12,7 @@ These objects have different meanings. A valid signature does not establish the 
 
 The core evidence predicate records `specVersion`, `contentKind`, an extraction profile, and a private catalogue commitment. An optional in-toto adapter binds the predicate to one exact subject using SHA-256. Other content profiles can reuse the predicate without assuming a Git repository exists.
 
-The profile includes `id`, `version`, and `configSha256`. The configuration digest binds exact configuration bytes; parameter order or whitespace changes those bytes. An implementation MUST retain them. A matching implementation MUST reject unknown profile/version combinations rather than silently apply another algorithm.
+Extraction is specified in the [extraction contract](extraction.md) and catalogues, comparison and reports in the [catalogue and report contract](catalogue-report.md); both are experimental drafts. The profile includes `id`, `version`, and `configSha256`. The configuration digest binds exact configuration bytes; parameter order or whitespace changes those bytes. An implementation MUST retain them. A matching implementation MUST reject unknown profile/version combinations rather than silently apply another algorithm.
 
 `recordedAt` is an optional claimed time only. No timestamp token or identity proof is represented by that string. `contentKind` is a coarse Traceweave category, not a MIME type.
 

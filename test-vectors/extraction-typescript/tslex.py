@@ -1,12 +1,12 @@
 """Reference lexer for the draft ts-tokens / tsx-tokens profiles (draft-2).
 
-Written from the profile text (extraction-profile-typescript.md §3-§6) for the
+Written from the profile text (profiles/typescript.md §3-§6) for the
 checker. It is NOT how the vectors were made: their token streams are
 hand-written in harness/vector_sources.py and only hashed by
 harness/build_vectors.py. check_vectors.py compares the two derivations.
 
 Standard library only. Unicode data comes from the shared pinned table
-(../extraction-vectors/unicode-17.0.0-tables.json, read only) plus the two
+(../extraction/unicode-17.0.0-tables.json, read only) plus the two
 explicit deltas below, which harness/derive_deltas.py re-derives from the
 digest-pinned UCD 17.0.0 DerivedCoreProperties.txt.
 """
@@ -15,7 +15,7 @@ import hashlib
 import json
 from pathlib import Path
 
-TABLES_FILE = Path(__file__).resolve().parent.parent / "extraction-vectors" / "unicode-17.0.0-tables.json"
+TABLES_FILE = Path(__file__).resolve().parent.parent / "extraction" / "unicode-17.0.0-tables.json"
 TABLES_SHA256 = "9363b97eb849cb236c786098f017728ad04688782f07c2969afddf93b03ac29f"
 
 # ID_Start minus XID_Start, and ID_Continue minus XID_Continue, Unicode 17.0.0 (profile §3.2).

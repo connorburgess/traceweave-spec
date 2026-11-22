@@ -19,7 +19,7 @@ Updated 2026-11-22 after the I1 and I2 integrations. Implementation repository: 
 | --- | --- | --- |
 | I1 (M1.4, M1.6) | Go and Rust extractors, hand-written lexers | Merged; [I1 review](reviews/implementation-merge-i1-review.md) `9c03c95`. Waiting on approved actions not yet executed: the push of `roadmap-v2` after a hygiene check, and draft promotion (in progress) ([owner decisions of 2026-11-23](../ROADMAP.md#owner-decisions-2026-11-23)) |
 | I2 (M2.1–M2.11) | Catalogue, comparison and report, two implementations | Merged at `82b02ab`; [I2 review](reviews/implementation-merge-i2-review.md) `de9a5b7`. M2.5 and M2.8 met |
-| Post-I2 integration | The A6 behavioural rules B1–B10 ([contract](drafts/catalogue-report-contract.md) §6.8) and the [behaviour checklist](drafts/matching-vectors/behaviour-checklist.md) | In progress on implementation branches (`i2-rust` and others); not yet on `main` or reviewed. Next engineering for M2:<br>- `scripts/offline` wrapper (M2.1)<br>- frozen fixture manifest (M2.2)<br>- vendor control class (M2.3, M2.6; OD-C19)<br>- B10 rebuild-from-clean-clone check (M2.4)<br>- review packets (M2.7, not started)<br>- candidate-generation record keyed by `bodySha256` (M2.9)<br>- the I2 review's follow-ups F1–F4 |
+| Post-I2 integration | The A6 behavioural rules B1–B10 ([contract](../spec/catalogue-report.md) §6.8) and the [behaviour checklist](../test-vectors/matching/behaviour-checklist.md) | In progress on implementation branches (`i2-rust` and others); not yet on `main` or reviewed. Next engineering for M2:<br>- `scripts/offline` wrapper (M2.1)<br>- frozen fixture manifest (M2.2)<br>- vendor control class (M2.3, M2.6; OD-C19)<br>- B10 rebuild-from-clean-clone check (M2.4)<br>- review packets (M2.7, not started)<br>- candidate-generation record keyed by `bodySha256` (M2.9)<br>- the I2 review's follow-ups F1–F4 |
 | Behavioural follow-up rulings | A5–A8 rules, including OD-C39–OD-C47 | Confirmed 2026-11-23 by the coordinator under the owner's delegation ([owner decisions of 2026-11-23](../ROADMAP.md#owner-decisions-2026-11-23)) |
 | M1.1, M1.5 | Item map against `profiles/code.md`; requirement map of MUSTs to failing checks | Open, engineering |
 | M3.1–M3.3 | M3 evaluation protocol (`m3-eval-draft-3`) and corpus acquisition | M3.0 met: 1 in 20, met at 132 searches if alarms ≤ 6. Acquisition of the 48 repositories into `~/traceweave-eval` is approved, with the licence recheck failing closed. Next: acquire, freeze splits and config, run ([owner decisions of 2026-11-23](../ROADMAP.md#owner-decisions-2026-11-23)) |
@@ -41,9 +41,9 @@ Closed with evidence: M0.1–M0.4, M2.5, M2.8, M2.10, M2.11, M3.0, M4.1, M4.2, a
 
 These are the SYN research records and M0/M4 evidence in the roadmap, not completion of any milestone. Existing carriers fail cheap normalization; no robust identity payload or population error claim follows.
 
-## Drafts pending the owner
+## Promoted contracts
 
-[Extraction contract and vectors](drafts/extraction-contract.md) and the [catalogue and report contract with matching vectors](drafts/catalogue-report-contract.md) stay in `research/drafts/` until the owner approves promotion to `spec/`, `schemas/`, `profiles/` or `test-vectors/`.
+On 2026-11-23 the owner approved promoting the reviewed contracts: [extraction contract](../spec/extraction.md), [catalogue and report contract](../spec/catalogue-report.md), [TypeScript profile](../profiles/typescript.md) and [text profile](../profiles/text.md), with their vectors under `test-vectors/` and the three schemas under `schemas/`. See the [promotion map](promotion-map.md). The image profile, image protocol and evaluation protocol remain drafts in `research/drafts/`.
 
 ## Operating rules
 

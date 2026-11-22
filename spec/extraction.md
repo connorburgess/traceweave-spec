@@ -2,19 +2,19 @@
 
 Status: experimental draft, normative for conformance of this draft version; decided-in-draft items confirmed by the owner's delegation on 2026-11-23.
 
-Revision status: **draft for review, revision draft-1 (amended), 2026-11-22.** Roadmap item TW-02, gating M1. This revision resolves the findings of the [clean-room review](../reviews/extraction-contract-review.md) (F1–F8, A1–A4). The amendment rules on the contract questions from the two-implementation cross-check (Rust and Go lanes, 9.9 M differential cases), bounds `k`, `window` and `maxInputBytes`, and states the required complexity. Every disposition is listed in [§15](#15-review-dispositions).
+Revision status (before promotion): **draft for review, revision draft-1 (amended), 2026-11-22.** Roadmap item TW-02, gating M1. This revision resolves the findings of the [clean-room review](../research/reviews/extraction-contract-review.md) (F1–F8, A1–A4). The amendment rules on the contract questions from the two-implementation cross-check (Rust and Go lanes, 9.9 M differential cases), bounds `k`, `window` and `maxInputBytes`, and states the required complexity. Every disposition is listed in [§15](#15-review-dispositions).
 
 A second amendment (§6, OD-23) lets a profile exclude named tokens from the normalized stream; Go and Rust declare none.
 
 **Identifiers are unchanged.** No previously shipped expected output changed: every existing vector's result is byte-identical. So the profile version stays `draft-1` and the configuration digests stay as they were. The amendment does narrow the set of valid configurations (§10 step 5); whether that alone warrants a new `contract` identifier is listed as OD-20.
 
-This is research material, not a normative change. It does not modify [core](../../spec/core.md), [conformance](../../spec/conformance.md), [the code profile](../../profiles/code.md), schemas or test vectors. "MUST" and "MUST NOT" describe what this draft proposes for an implementation claiming to follow it. Profile versions are `draft-1`, and nothing here is a registered algorithm.
+This document is normative for conformance of this draft version, as stated in its status line. "MUST" and "MUST NOT" describe what this draft proposes for an implementation claiming to follow it. Profile versions are `draft-1`, and nothing here is a registered algorithm.
 
-The contract is meant to be complete enough that someone in another repository can implement it and reproduce the [vectors](extraction-vectors/README.md) byte for byte. Decisions the repository could not settle are recorded in [§14](#14-decisions). Each is either "decided in draft, pending owner confirmation", with the reason, or still open, with options.
+The contract is meant to be complete enough that someone in another repository can implement it and reproduce the [vectors](../test-vectors/extraction/README.md) byte for byte. Decisions the repository could not settle are recorded in [§14](#14-decisions). Each is either "decided in draft, pending owner confirmation", with the reason, or still open, with options.
 
 ## 1. What the baseline is
 
-This is a comparison control, following the [public-census checkpoint](../public-census-checkpoint.md): a deterministic, synthetic token-fingerprint extractor with exact and normalized channels and original UTF-8 spans. It does not embed or detect a mark, and it is not a calibrated detector. Extraction is the step `exact configuration bytes + input bytes → tokens, fingerprints, spans, or an explicit error`. Catalogue and report formats belong to TW-03. Comparison and scoring belong to M2.
+This is a comparison control, following the [public-census checkpoint](../research/public-census-checkpoint.md): a deterministic, synthetic token-fingerprint extractor with exact and normalized channels and original UTF-8 spans. It does not embed or detect a mark, and it is not a calibrated detector. Extraction is the step `exact configuration bytes + input bytes → tokens, fingerprints, spans, or an explicit error`. Catalogue and report formats belong to TW-03. Comparison and scoring belong to M2.
 
 Extraction is lexical only. No parser, type checker, macro expander or build runs. An input can be a fragment: a Go input needs no `package` clause, and Rust items need not be complete. Lexically valid input that would fail to parse is still fingerprinted. Lexically invalid input is rejected.
 
@@ -54,7 +54,7 @@ These checks run in order. The first failure decides the result.
 
 ## 3a. Unicode data
 
-Both profiles evaluate identifier character classes, and the Rust profile evaluates NFC, using **Unicode 17.0.0** data. This UCD data is the authority, and the [pinned tables](extraction-vectors/unicode-17.0.0-tables.json) are generated from it (SHA-256 `9363b97eb849cb236c786098f017728ad04688782f07c2969afddf93b03ac29f`):
+Both profiles evaluate identifier character classes, and the Rust profile evaluates NFC, using **Unicode 17.0.0** data. This UCD data is the authority, and the [pinned tables](../test-vectors/extraction/unicode-17.0.0-tables.json) are generated from it (SHA-256 `9363b97eb849cb236c786098f017728ad04688782f07c2969afddf93b03ac29f`):
 
 | UCD 17.0.0 file (from [unicode.org/Public/17.0.0/ucd](https://www.unicode.org/Public/17.0.0/ucd/)) | SHA-256 | Used for |
 | --- | --- | --- |
@@ -69,7 +69,7 @@ The derived table holds:
 - `xid_start` and `xid_continue`;
 - `assigned`: every code point not Cn. This property is **informative only** (Q9). No rule in this contract consults it: an unassigned code point is simply in no identifier class, so it is `illegal-character` (vectors `go-q9-unassigned`, `rust-q9-unassigned`). The checker uses it only to scope its NFC self-check.
 
-[`harness/gen_unicode_tables.py`](extraction-vectors/harness/gen_unicode_tables.py) regenerates it byte for byte from the four files and refuses inputs with other digests. NFC means Normalization Form C as defined in [UAX #15](https://www.unicode.org/reports/tr15/), computed from the 17.0.0 files above.
+[`harness/gen_unicode_tables.py`](../test-vectors/extraction/harness/gen_unicode_tables.py) regenerates it byte for byte from the four files and refuses inputs with other digests. NFC means Normalization Form C as defined in [UAX #15](https://www.unicode.org/reports/tr15/), computed from the 17.0.0 files above.
 
 An implementation MUST use tables generated from these files, or the committed derived table. It MUST NOT rely on a language runtime's or library's built-in Unicode data unless that data is shown to be identical. The crosscheck's `tables` comparison is one way to show this. The ecosystem already drifts:
 - Go 1.27's `unicode` package matches, and the shipped crosscheck verifies it.
@@ -142,7 +142,7 @@ The consumed text MUST match exactly one of the spec productions `int_lit`, `flo
 
 ## 5. Rust profile `rust2024-tokens`, version `draft-1`
 
-**Authority.** *The Rust Reference* as shipped with the rust-docs component of Rust 1.97.1 (`share/doc/rust/html/reference/`), edition 2024. It cites these chapters: Input format [input], Shebang [shebang], Whitespace [lex.whitespace], Comments [comments], Identifiers [ident], Keywords [lex.keywords] and Tokens [lex.token]. Page digests are in the [vector README](extraction-vectors/README.md#pinned-sources), and the online copy is [doc.rust-lang.org/1.97.1/reference](https://doc.rust-lang.org/1.97.1/reference/tokens.html). Identifier classes and NFC follow §3a. proc-macro2 1.0.107 (with unicode-ident 1.0.24) and rustc 1.97.1 are cross-check oracles.
+**Authority.** *The Rust Reference* as shipped with the rust-docs component of Rust 1.97.1 (`share/doc/rust/html/reference/`), edition 2024. It cites these chapters: Input format [input], Shebang [shebang], Whitespace [lex.whitespace], Comments [comments], Identifiers [ident], Keywords [lex.keywords] and Tokens [lex.token]. Page digests are in the [vector README](../test-vectors/extraction/README.md#pinned-sources), and the online copy is [doc.rust-lang.org/1.97.1/reference](https://doc.rust-lang.org/1.97.1/reference/tokens.html). Identifier classes and NFC follow §3a. proc-macro2 1.0.107 (with unicode-ident 1.0.24) and rustc 1.97.1 are cross-check oracles.
 
 Deliberate deviations from the Reference: NUL and isolated CR are rejected (§3); non-NFC identifiers are rejected, not normalized; punctuation is single characters; doc comments are dropped (OD-2 to OD-5). rustc 1.97.1 also accepts U+200D in identifiers with only a lint, contrary to [ident.zero-width-chars]. This contract follows the Reference (OD-19).
 
@@ -258,9 +258,9 @@ The class is always kept, so a normalized identifier (`ident`, `""`) differs fro
 - **Counts.** A channel with n_C tokens has `max(0, n_C − k + 1)` k-grams. For the exact channel n_C = `tokenCount`. For the normalized channel it is the number of tokens not excluded. An `ok` input can therefore have an empty normalized channel: no k-grams, `windowSelections` `[]` and `partialWindow` `false`.
 - **Recording.** When, and only when, the profile declares exclusions, the normalized channel records `tokenIndices` before `values`: the ascending indices into the token list of the kept tokens. `values` lists the kept tokens' normalized values only. A profile without exclusions MUST NOT emit `tokenIndices`.
 
-**The Go and Rust profiles declare no exclusions** (`normalizedExclusions` is empty). For them both channels contain every token, and every existing Go/Rust vector, record and configuration digest is byte-identical to before this rule. The TypeScript profile `ts-tokens`/`tsx-tokens` `draft-2` declares `punct` `;`. The checker recomputes every accepted TypeScript vector under this rule with no differences. [exclusion-rule.json](extraction-vectors/exclusion-rule.json) pins the shared arithmetic with a synthetic, test-only profile, `go-tokens-exclusion-test`: Go lexing with `punct` `;` excluded, so explicit and inserted semicolons are both dropped. No implementation is expected to support it as a profile.
+**The Go and Rust profiles declare no exclusions** (`normalizedExclusions` is empty). For them both channels contain every token, and every existing Go/Rust vector, record and configuration digest is byte-identical to before this rule. The TypeScript profile `ts-tokens`/`tsx-tokens` `draft-2` declares `punct` `;`. The checker recomputes every accepted TypeScript vector under this rule with no differences. [exclusion-rule.json](../test-vectors/extraction/exclusion-rule.json) pins the shared arithmetic with a synthetic, test-only profile, `go-tokens-exclusion-test`: Go lexing with `punct` `;` excluded, so explicit and inserted semicolons are both dropped. No implementation is expected to support it as a profile.
 
-**Why.** The exact channel preserves literals and names. The normalized channel survives renaming and literal edits, which is the usual purpose of a token-normalized baseline and is needed for the rename vectors. [profiles/code.md](../../profiles/code.md) warns against erasing every identifier and literal in the *sole* representation, so the exact channel always runs alongside. The normalized channel is **not scope-aware** (see §12). Keywords and punctuation carry the remaining structure. An empty value cannot collide with real token text.
+**Why.** The exact channel preserves literals and names. The normalized channel survives renaming and literal edits, which is the usual purpose of a token-normalized baseline and is needed for the rename vectors. [profiles/code.md](../profiles/code.md) warns against erasing every identifier and literal in the *sole* representation, so the exact channel always runs alongside. The normalized channel is **not scope-aware** (see §12). Keywords and punctuation carry the remaining structure. An empty value cannot collide with real token text.
 
 ## 7. k-grams and hashing
 
@@ -288,7 +288,7 @@ The algorithm follows Schleimer, Wilkerson and Aiken, [*Winnowing*](https://theo
 
 The procedure runs independently for each listed channel.
 
-**Vector example (`go-equal-minimum`, exact channel).** The window starting at 2 spans positions 2–5 and holds `1d99e08d…` at both 2 and 5. Position 5 is selected. The selections are `[2, 2, 5, 5, 5]` and the fingerprints are at `[2, 5]`. The [implementation-patterns](../../docs/implementation-patterns.md) example `[8, 4, 4, 7, 2]` with `w = 3` gives fingerprints at `[2, 4]`.
+**Vector example (`go-equal-minimum`, exact channel).** The window starting at 2 spans positions 2–5 and holds `1d99e08d…` at both 2 and 5. Position 5 is selected. The selections are `[2, 2, 5, 5, 5]` and the fingerprints are at `[2, 5]`. The [implementation-patterns](../docs/implementation-patterns.md) example `[8, 4, 4, 7, 2]` with `w = 3` gives fingerprints at `[2, 4]`.
 
 **Locality.** In each channel, an unchanged run of at least `k + w − 1` tokens of that channel's own stream (§6; for a normalized channel with exclusions, kept tokens only) yields at least one shared fingerprint in that channel under identical configuration bytes. That is the paper's guarantee restated, not a detection rate.
 
@@ -310,7 +310,7 @@ K-gram lists and `windowSelections` are required in vectors and optional in prod
 - For `unsupported-config`, `profile` and `profileVersion` are `null`, because an unvalidated configuration names nothing. `configSha256` is the SHA-256 of the bytes supplied. The input SHA-256 and length are `null`, because the input is not examined (§3 step 0). The error offset is `null`.
 - For `input-too-large`, the input SHA-256 and length are `null`, because the input is not read past the limit (§3 step 1).
 
-The two implementations currently disagree on envelope names (`inputBytes` versus `inputLength`, and a constant `contract` key), and that choice is TW-03's. The extraction vectors carry `result` objects only. [config-negative.json](extraction-vectors/config-negative.json) gives the expected `unsupported-config` result for each negative configuration.
+The two implementations currently disagree on envelope names (`inputBytes` versus `inputLength`, and a constant `contract` key), and that choice is TW-03's. The extraction vectors carry `result` objects only. [config-negative.json](../test-vectors/extraction/config-negative.json) gives the expected `unsupported-config` result for each negative configuration.
 
 ## 10. Configuration record
 
@@ -333,11 +333,11 @@ The Rust configuration differs only in `"profile":"rust2024-tokens"`. Digests: G
 3. The top level is an object with exactly the keys above, in that order.
 4. `contract`, `profile`, `profileVersion` and `hash` are strings matching `[a-z0-9.-]+`. No escapes are possible.
 5. `k` is an integer in `1 … 16`, `window` in `1 … 128` and `maxInputBytes` in `1 … 8388608` (8 MiB), each written in decimal without a sign, leading zeros or exponent (bounds: §10a).
-6. `channels` equals the profile's declared, ordered channel list, whose first entry is `exact` ([catalogue-report contract §2b](catalogue-report-contract.md#2b-declared-channel-lists-amendment-a3)). Go, Rust and TypeScript declare exactly `["exact","normalized"]`. Subsets and other orders are rejected.
+6. `channels` equals the profile's declared, ordered channel list, whose first entry is `exact` ([catalogue-report contract §2b](catalogue-report.md#2b-declared-channel-lists-amendment-a3)). Go, Rust and TypeScript declare exactly `["exact","normalized"]`. Subsets and other orders are rejected.
 7. `contract` is `traceweave-token-winnow-draft-1`, `(profile, profileVersion)` is a pair the implementation implements, and `hash` is `sha256-first8-u64be`.
 8. Re-serializing the parsed values in canonical form reproduces the bytes exactly.
 
-An implementation MUST NOT fall back to another profile. [config-negative.json](extraction-vectors/config-negative.json) lists 28 configurations that MUST be rejected, including one just above each bound, and 3 `boundaryPositives` at the bounds that MUST be accepted. Any `k`, `window` and `maxInputBytes` within bounds is a valid configuration with its own digest. The extraction vectors exercise k = 5, w = 4 and `maxInputBytes` of 1 MiB and 16.
+An implementation MUST NOT fall back to another profile. [config-negative.json](../test-vectors/extraction/config-negative.json) lists 28 configurations that MUST be rejected, including one just above each bound, and 3 `boundaryPositives` at the bounds that MUST be accepted. Any `k`, `window` and `maxInputBytes` within bounds is a valid configuration with its own digest. The extraction vectors exercise k = 5, w = 4 and `maxInputBytes` of 1 MiB and 16.
 
 ## 10a. Resource bounds and complexity
 
@@ -374,14 +374,14 @@ An implementation MUST NOT fall back to another profile. [config-negative.json](
 
 They were chosen because they keep the vectors small enough to check by hand, and because eight tokens is roughly one short statement or signature, which suits localizing fragment copies in M2. In exchange, short k-grams are expected to collide on common code such as `if err != nil { return`. M2 must keep such matches visible.
 
-**These are not accuracy promises.** No recall, false-alarm rate or threshold is implied. Other values are new configurations with new digests. Tuning follows [evaluation](../../docs/evaluation.md) and TW-05: choose on development data and freeze before held-out evaluation.
+**These are not accuracy promises.** No recall, false-alarm rate or threshold is implied. Other values are new configurations with new digests. Tuning follows [evaluation](../docs/evaluation.md) and TW-05: choose on development data and freeze before held-out evaluation.
 
 ## 12. What the baseline does not claim
 
 - **No ownership or authorship inference.** A shared fingerprint is a shared normalized token run. It shows nothing about authorship, permission, infringement, training membership or direction of copying.
-- **No calibrated false-alert rate.** Nothing has been measured. Following the [lane 07 evidence review](../lanes/07-evidence-review.md), any later rate must be calibrated over the complete search, not per k-gram.
+- **No calibrated false-alert rate.** Nothing has been measured. Following the [lane 07 evidence review](../research/lanes/07-evidence-review.md), any later rate must be calibrated over the complete search, not per k-gram.
 - **No embedded mark or detector.** This is a control for M2/M2E comparisons.
-- **Not scope-aware, and no semantic equivalence.** [profiles/code.md](../../profiles/code.md) plans a *scope-aware* identifier-normalized channel. This baseline's normalized channel erases names lexically and is weaker. It cannot distinguish shadowed bindings, and it collapses distinct identifiers. No resilience to reordering, inlining or structural rewrites is claimed, and no match means "insufficient evidence".
+- **Not scope-aware, and no semantic equivalence.** [profiles/code.md](../profiles/code.md) plans a *scope-aware* identifier-normalized channel. This baseline's normalized channel erases names lexically and is weaker. It cannot distinguish shadowed bindings, and it collapses distinct identifiers. No resilience to reordering, inlining or structural rewrites is claimed, and no match means "insufficient evidence".
 - **No parser agreement.** Lexically valid but syntactically invalid fragments are fingerprinted.
 - **No keyed or private fingerprints.** The hash is unkeyed (§7).
 - **Lexing is verified only as far as §13 states.**
@@ -389,8 +389,8 @@ They were chosen because they keep the vectors small enough to check by hand, an
 ## 13. Requirement-to-check map
 
 Two tools check the vectors:
-- **checker:** [`check_vectors.py`](extraction-vectors/check_vectors.py), standard library only;
-- **crosscheck:** [`harness/crosscheck.py`](extraction-vectors/harness/crosscheck.py), which compares against go/scanner, proc-macro2 and rustc, offline.
+- **checker:** [`check_vectors.py`](../test-vectors/extraction/check_vectors.py), standard library only;
+- **crosscheck:** [`harness/crosscheck.py`](../test-vectors/extraction/harness/crosscheck.py), which compares against go/scanner, proc-macro2 and rustc, offline.
 
 | Requirement | Check |
 | --- | --- |
@@ -436,7 +436,7 @@ Two tools check the vectors:
 | OD-11 | (a) SHA-256 truncated to 64 bits, **unkeyed** and labelled as such | Standard and widely implemented |
 | OD-12 | (a) Unicode 17.0.0, bound to UCD file digests (§3a) | Go 1.27 and the Reference agree; library drift is excluded |
 | OD-13 | (a) Lexical errors report the token start | Already encoded by `go-err-malformed-number` and `go-err-invalid-escape` |
-| OD-15 | Yes: harnesses shipped in `extraction-vectors/harness/` | Coordinator decision; needed for the F1 byte-agreement claim |
+| OD-15 | Yes: harnesses shipped in `extraction/harness/` | Coordinator decision; needed for the F1 byte-agreement claim |
 | OD-16 | (a) Keep every selected position | Multiplicity semantics belong to M2 |
 | OD-17 | (a) Accept any lexically valid suffix, with the Reference `_` cut (F2) | Matches the Reference lexer and rustc |
 | OD-18 | (a) `maxInputBytes` in the configuration, 1 MiB in the shipped configurations | Bounded; covered by the limit vectors |
@@ -449,10 +449,10 @@ Two tools check the vectors:
 **Still open:**
 
 - **OD-10 tuning.** Which values follow 5/4, chosen on development data (TW-05). Each choice is a new configuration digest.
-- **OD-11 keyed variant.** Options: (a) none; (b) HMAC-SHA-256 under a separate hash identifier. This waits for the keyed-selection gate in the [roadmap](../../ROADMAP.md).
+- **OD-11 keyed variant.** Options: (a) none; (b) HMAC-SHA-256 under a separate hash identifier. This waits for the keyed-selection gate in the [roadmap](../ROADMAP.md).
 - **OD-14 eligible files.** Generated, vendor, test, `build.rs` and macro-heavy files. Belongs to TW-01/TW-03.
 - **OD-20 Contract identifier after the bounds change** (new). Options:
-  - (a) Keep `traceweave-token-winnow-draft-1` (current). No shipped expected output changed, and [matching-vectors](matching-vectors/README.md) pins the draft-1 configuration digests.
+  - (a) Keep `traceweave-token-winnow-draft-1` (current). No shipped expected output changed, and [matching vectors](../test-vectors/matching/README.md) pins the draft-1 configuration digests.
   - (b) Bump to `draft-2`. Configurations accepted by draft-1 but now rejected (k > 16, window > 128, `maxInputBytes` > 8 MiB) would then never meet two different outcomes under one identifier. All configuration digests would change, and the matching vectors would need regenerating.
 - **OD-19 U+200D/U+200C in Rust identifiers** (new). Options:
   - (a) Follow the Reference [ident.zero-width-chars] and reject them (current draft).
@@ -464,7 +464,7 @@ Two tools check the vectors:
 
 | Finding | Resolution |
 | --- | --- |
-| F1 | Harnesses shipped (`harness/go`, `harness/rust` with `Cargo.lock`, `harness/crosscheck.py`; offline run command in the [README](extraction-vectors/README.md)). The checker now recomputes Go semicolon insertion, enforces closed code lists and keyword classes, and checks identifiers, operators, numbers and literal suffixes. It rejects the reviewer's five corruptions plus six more per language |
+| F1 | Harnesses shipped (`harness/go`, `harness/rust` with `Cargo.lock`, `harness/crosscheck.py`; offline run command in the [README](../test-vectors/extraction/README.md)). The checker now recomputes Go semicolon insertion, enforces closed code lists and keyword classes, and checks identifiers, operators, numbers and literal suffixes. It rejects the reviewer's five corruptions plus six more per language |
 | F2 | §5.4 and §5.5 now use the Reference SUFFIX with the `_` cut. Vectors `rust-err-string-underscore-suffix`, `rust-err-char-underscore-suffix` and `rust-literal-suffixes` |
 | F3 | §3a binds the UCD 17.0.0 files and the derived table by digest, forbids library defaults, and is backed by boundary vectors for U+2160, U+00B7, U+0345, U+2E2F, U+200D and U+0660, plus non-NFC suffix and raw-identifier vectors |
 | F4 | Catch-all removed (§2). `unsupported-config` added, with ordering (§3 step 0), validation steps, bounds, charset and channel rule (§10). A1 and A4 resolved in §8 |

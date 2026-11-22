@@ -15,7 +15,7 @@ Any other difference, or an expected divergence that no longer occurs, makes
 the run fail.
 
 Usage:
-  python3 -I research/drafts/extraction-vectors/harness/crosscheck.py [--build-dir DIR]
+  python3 -I test-vectors/extraction/harness/crosscheck.py [--build-dir DIR]
 
 Requirements: go 1.27.x, cargo/rustc 1.97.x, and proc-macro2 1.0.107 plus
 unicode-ident 1.0.24 already present in the local cargo registry cache.

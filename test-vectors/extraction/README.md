@@ -2,7 +2,7 @@
 
 Status: experimental draft, normative for conformance of this draft version; decided-in-draft items confirmed by the owner's delegation on 2026-11-23.
 
-Revision status: draft for review, 2026-11-22. These vectors accompany the [draft extraction contract](../extraction-contract.md), revised after the [clean-room review](../../reviews/extraction-contract-review.md). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
+Revision status (before promotion): draft for review, 2026-11-22. These vectors accompany the [draft extraction contract](../../spec/extraction.md), revised after the [clean-room review](../../research/reviews/extraction-contract-review.md). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
 
 ## Files
 
@@ -90,7 +90,7 @@ The table shows which case each vector covers:
 ## 1. Checker: `check_vectors.py`
 
 ```
-python3 -I research/drafts/extraction-vectors/check_vectors.py
+python3 -I test-vectors/extraction/check_vectors.py
 ```
 
 Output on 2026-11-22 (Python 3.14.6, `unicodedata` 16.0.0):
@@ -180,7 +180,7 @@ Some wrong tokenizations in those areas would still pass. The crosscheck covers 
 ## 2. Toolchain cross-check: `harness/crosscheck.py`
 
 ```
-python3 -I research/drafts/extraction-vectors/harness/crosscheck.py [--build-dir DIR]
+python3 -I test-vectors/extraction/harness/crosscheck.py [--build-dir DIR]
 ```
 
 **Requirements.** go 1.27.x and cargo/rustc 1.97.x on PATH. proc-macro2 1.0.107 and unicode-ident 1.0.24 must already be in the local cargo registry cache.
@@ -261,7 +261,7 @@ The first, unshipped cross-check resolved proc-macro2's `unicode-ident` dependen
 ## 3. Unicode tables: `harness/gen_unicode_tables.py`
 
 ```
-python3 -I research/drafts/extraction-vectors/harness/gen_unicode_tables.py UCD_DIR OUT.json
+python3 -I test-vectors/extraction/harness/gen_unicode_tables.py UCD_DIR OUT.json
 ```
 
 `UCD_DIR` must contain the four UCD 17.0.0 files named in contract §3a, downloaded from <https://www.unicode.org/Public/17.0.0/ucd/>. The script refuses any file whose SHA-256 differs. On 2026-11-22 it reproduced `unicode-17.0.0-tables.json` byte for byte. The UCD files are not committed: they are public and pinned by digest.

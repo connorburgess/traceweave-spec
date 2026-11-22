@@ -17,3 +17,7 @@ Exact normalized subtree hashes can survive moving an unchanged subtree. Loop in
 Store region origins and historical license evidence independently of detection scores. Include mixed-history files, imports from older branches, dependencies, templates, and third-party contributions. No universal token/subtree count establishes copying or legality.
 
 The synthetic `exact-bytes-fixture` profile in examples is a format demonstration only. It is not this code profile and makes no transformation-resilience claim.
+
+## Go and Rust token profiles
+
+The normative definitions of the Go token profile `go-tokens` (version `draft-1`, [section 4](../spec/extraction.md#4-go-profile-go-tokens-version-draft-1)) and the Rust token profile `rust2024-tokens` (version `draft-1`, [section 5](../spec/extraction.md#5-rust-profile-rust2024-tokens-version-draft-1)) are inside the [extraction contract](../spec/extraction.md), which also defines serializations, k-grams, winnowing, the extraction record and the configuration record. Their vectors are in [test-vectors/extraction](../test-vectors/extraction/README.md). The catalogue, comparison and report layers are in the [catalogue and report contract](../spec/catalogue-report.md). This pointer adds no requirement.

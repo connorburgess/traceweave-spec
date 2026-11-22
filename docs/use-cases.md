@@ -14,7 +14,7 @@ Today the repo supplies draft formats, synthetic fixtures and validation tools. 
 
 ## Verification plans
 
-Each capability carries a verification plan: what is checked, by which gate, what counts as pass or fail, what runs today, and what cannot be verified. Gate IDs refer to the [roadmap](../ROADMAP.md). Matching terms follow the [draft catalogue and report contract](../research/drafts/catalogue-report-contract.md). No threshold is set here. A number marked **freeze first** must be measured and committed under the named gate before any pass/fail is read.
+Each capability carries a verification plan: what is checked, by which gate, what counts as pass or fail, what runs today, and what cannot be verified. Gate IDs refer to the [roadmap](../ROADMAP.md). Matching terms follow the [draft catalogue and report contract](../spec/catalogue-report.md). No threshold is set here. A number marked **freeze first** must be measured and committed under the named gate before any pass/fail is read.
 
 Execution key: **Today** = runs now with existing files. **Needs X** = depends on unbuilt pieces. Two commands run today (rerun 2026-11-22): `.venv/bin/python tools/validate.py` (exit 0, prints PASS) and `.venv/bin/python -m unittest discover -s tests` (6 tests, OK). Both check formats, commitment, DSSE framing and contract rejections only. The validate output itself says no signature, timestamp, detector or rights claim was verified. No detector exists, so no similarity or mark-detection plan runs today.
 

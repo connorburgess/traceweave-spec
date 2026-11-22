@@ -6,8 +6,8 @@ import unittest
 from jsonschema import ValidationError
 
 from tools.validate import (
-    ROOT, catalogue_commitment, dsse_pae, read_json,
-    schema_validator, validate_repository,
+    PROMOTED_SCHEMAS, ROOT, VECTOR_CHECKERS, catalogue_commitment, dsse_pae,
+    read_json, run_checker, schema_validator, validate_repository,
 )
 
 
@@ -17,7 +17,35 @@ class ContractTests(unittest.TestCase):
         self.validator = schema_validator()
 
     def test_repository_vectors(self):
-        validate_repository()
+        validate_repository(run_checkers=False)
+
+    def test_promoted_vector_checkers_exit_zero(self):
+        for label, arguments in VECTOR_CHECKERS:
+            with self.subTest(checker=label):
+                code, output = run_checker(arguments)
+                self.assertEqual(code, 0, output[-2000:])
+
+    def test_promoted_schemas_are_canonical_and_valid(self):
+        from jsonschema import Draft202012Validator
+        for name in PROMOTED_SCHEMAS:
+            with self.subTest(schema=name):
+                schema = read_json(ROOT / "schemas" / f"{name}.schema.json")
+                Draft202012Validator.check_schema(schema)
+                self.assertFalse((ROOT / "test-vectors/matching" / f"{name}.schema.json").exists())
+
+    def test_extraction_checker_rejects_a_tampered_vector(self):
+        import json
+        import shutil
+        with tempfile.TemporaryDirectory() as directory:
+            copy = Path(directory) / "extraction"
+            shutil.copytree(ROOT / "test-vectors/extraction", copy, ignore=shutil.ignore_patterns("harness"))
+            path = copy / "go.json"
+            data = json.loads(path.read_text(encoding="utf-8"))
+            vector = next(v for v in data["vectors"] if v["result"].get("tokens"))
+            vector["result"]["tokens"][0]["span"][1] += 1
+            path.write_text(json.dumps(data, indent=1), encoding="utf-8")
+            code, _ = run_checker([str(copy / "check_vectors.py")], cwd=copy)
+            self.assertNotEqual(code, 0)
 
     def test_invalid_statement_contracts(self):
         cases = []

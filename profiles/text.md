@@ -4,24 +4,24 @@ Status: experimental draft, normative for conformance of this draft version; dec
 
 Profiles in this document: **`text-plain` is frozen for stage-1 implementation** (draft-1). **`text-markdown` is a draft and is not normative** until it is re-reviewed.
 
-Revision status: **revised after the [clean-room review](../reviews/extraction-profile-text-review.md), 2026-11-22. `text-plain` is version `draft-1`, staged first and frozen for stage-1 implementation (§17); `text-markdown` is version `draft-2` and stays a draft until it is re-reviewed.** Both are decided in draft, pending owner confirmation. Roadmap gates TXT.1 (profile) and TXT.2 (hand-derived vectors), started under the 2026-11-22 owner override for fingerprint-only text work. It serves the proposed [UC-8](../../docs/use-cases.md#proposed-uc-8-find-reused-passages-in-prose), whose wording still awaits the owner (TXT.0). The evidence comes from [lane 09](../lanes/09-evidence-review.md).
+Revision status (before promotion): **revised after the [clean-room review](../research/reviews/extraction-profile-text-review.md), 2026-11-22. `text-plain` is version `draft-1`, staged first and frozen for stage-1 implementation (§17); `text-markdown` is version `draft-2` and stays a draft until it is re-reviewed.** Both are decided in draft, pending owner confirmation. Roadmap gates TXT.1 (profile) and TXT.2 (hand-derived vectors), started under the 2026-11-22 owner override for fingerprint-only text work. It serves the proposed [UC-8](../docs/use-cases.md#proposed-uc-8-find-reused-passages-in-prose), whose wording still awaits the owner (TXT.0). The evidence comes from [lane 09](../research/lanes/09-evidence-review.md).
 
-This is research material, not a normative change. It does not modify `spec/`, `schemas/`, `profiles/` or `test-vectors/`. "MUST" describes what this draft proposes for an implementation claiming to follow it. Nothing here is a registered algorithm. The vectors, checker, tables and cross-check are in [extraction-vectors-text/](extraction-vectors-text/README.md).
+This document is normative for conformance of this draft version, as stated in its status line. "MUST" describes what this draft proposes for an implementation claiming to follow it. Nothing here is a registered algorithm. The vectors, checker, tables and cross-check are in [extraction-text/](../test-vectors/extraction-text/README.md).
 
 **What it is.** A deterministic extractor that turns UTF-8 prose into word tokens, gives each token an exact value, a folded value and a confusable skeleton, and winnows k-grams of each channel. Every token carries the half-open byte span of its **original** bytes. It extracts a fingerprint and does not embed or detect a mark. Lane 09 found no text mark ready to test.
 
 ## 1. Relation to the draft extraction contract
 
-The profile is a new lexer front end hosted by the [draft extraction contract](extraction-contract.md) (revision draft-1, amended). Lane 09 [listed](../lanes/09-evidence-review.md#how-the-extraction-contract-could-host-a-text-profile) what such a front end must specify.
+The profile is a new lexer front end hosted by the [draft extraction contract](../spec/extraction.md) (revision draft-1, amended). Lane 09 [listed](../research/lanes/09-evidence-review.md#how-the-extraction-contract-could-host-a-text-profile) what such a front end must specify.
 
 **Reused unchanged:**
-- **Outcomes** ([§2](extraction-contract.md#2-outcomes)): `ok` (at least k tokens), `insufficient-tokens` (abstention, not an error) and `error`. There are no partial results and no repair, and no catch-all error code exists.
-- **Processing order and error offsets** ([§2](extraction-contract.md#2-outcomes), [§3](extraction-contract.md#3-processing-order-and-input-bytes)): configuration, then size, then strict UTF-8 (Unicode 17.0.0 D92), then forbidden code points, then tokens. The size check happens before reading where possible.
+- **Outcomes** ([§2](../spec/extraction.md#2-outcomes)): `ok` (at least k tokens), `insufficient-tokens` (abstention, not an error) and `error`. There are no partial results and no repair, and no catch-all error code exists.
+- **Processing order and error offsets** ([§2](../spec/extraction.md#2-outcomes), [§3](../spec/extraction.md#3-processing-order-and-input-bytes)): configuration, then size, then strict UTF-8 (Unicode 17.0.0 D92), then forbidden code points, then tokens. The size check happens before reading where possible.
 - **Spans:** half-open `[start, end)` byte offsets into the original input, never splitting a UTF-8 sequence.
-- **k-gram hashing** ([§7](extraction-contract.md#7-k-grams-and-hashing)): the same length-prefixed layout and `sha256-first8-u64be`, unkeyed. Only the domain string and the class string differ (§9).
-- **Winnowing** ([§8](extraction-contract.md#8-winnowing-selection)): rightmost minimum, a partial window when 1 ≤ m < w, every selected position kept.
-- **The record's logical fields** ([§9](extraction-contract.md#9-extraction-record-logical-fields)), including the `null` rules for `unsupported-config` and `input-too-large`. The record bytes are the catalogue and report contract's canonical extraction record ([§2a](catalogue-report-contract.md#2a-extraction-record-traceweave-extraction-record-draft-1)) with this profile's declared channel list ([§2b, amendment A3](catalogue-report-contract.md#2b-declared-channel-lists-amendment-a3)); see §10.
-- **Configuration bytes, validation steps 1–5 and 8, and bounds** ([§10](extraction-contract.md#10-configuration-record), [§10a](extraction-contract.md#10a-resource-bounds-and-complexity)): `k ≤ 16`, `window ≤ 128`, `maxInputBytes ≤ 8 MiB`, linear time and memory.
+- **k-gram hashing** ([§7](../spec/extraction.md#7-k-grams-and-hashing)): the same length-prefixed layout and `sha256-first8-u64be`, unkeyed. Only the domain string and the class string differ (§9).
+- **Winnowing** ([§8](../spec/extraction.md#8-winnowing-selection)): rightmost minimum, a partial window when 1 ≤ m < w, every selected position kept.
+- **The record's logical fields** ([§9](../spec/extraction.md#9-extraction-record-logical-fields)), including the `null` rules for `unsupported-config` and `input-too-large`. The record bytes are the catalogue and report contract's canonical extraction record ([§2a](../spec/catalogue-report.md#2a-extraction-record-traceweave-extraction-record-draft-1)) with this profile's declared channel list ([§2b, amendment A3](../spec/catalogue-report.md#2b-declared-channel-lists-amendment-a3)); see §10.
+- **Configuration bytes, validation steps 1–5 and 8, and bounds** ([§10](../spec/extraction.md#10-configuration-record), [§10a](../spec/extraction.md#10a-resource-bounds-and-complexity)): `k ≤ 16`, `window ≤ 128`, `maxInputBytes ≤ 8 MiB`, linear time and memory.
 
 **Different from the code profiles, deliberately:**
 - A BOM is accepted (§3).
@@ -74,7 +74,7 @@ Everything is evaluated with **Unicode 17.0.0** data, the version the contract p
 
 The UCD files are under [unicode.org/Public/17.0.0/ucd](https://www.unicode.org/Public/17.0.0/ucd/), and `confusables.txt` is under [unicode.org/Public/17.0.0/security](https://www.unicode.org/Public/17.0.0/security/). The second copy of `confusables.txt` at `Public/security/latest/` already differs (dated 2026-08-06, SHA-256 `6ed3ee96…`). That is the data instability UTS #39 §4 warns about, and the reason the version and digest are pinned rather than "latest".
 
-[`harness/gen_text_tables.py`](extraction-vectors-text/harness/gen_text_tables.py) refuses files with other digests and derives [`text-tables-17.0.0.json`](extraction-vectors-text/text-tables-17.0.0.json) byte for byte (SHA-256 `49eb0304ece1f9351f4db79ddf853fdc3bce353d4a833f7c4f9424bf80ae53f4`). It holds the three class sets, White_Space, combining classes, canonical decompositions, Full_Composition_Exclusion, the NFKC_CF mapping and the confusable prototypes.
+[`harness/gen_text_tables.py`](../test-vectors/extraction-text/harness/gen_text_tables.py) refuses files with other digests and derives [`text-tables-17.0.0.json`](../test-vectors/extraction-text/text-tables-17.0.0.json) byte for byte (SHA-256 `49eb0304ece1f9351f4db79ddf853fdc3bce353d4a833f7c4f9424bf80ae53f4`). It holds the three class sets, White_Space, combining classes, canonical decompositions, Full_Composition_Exclusion, the NFKC_CF mapping and the confusable prototypes.
 
 An implementation MUST use tables generated from these files, or the committed derived table. **It MUST NOT use a runtime's or library's case folding or normalization unless that is shown to equal these tables.** The cross-check (§14) found:
 - **golang.org/x/text v0.39.0 `cases.Fold` differs from NFKC_CF on all 86 Cherokee small letters**, U+13F8–U+13FD and U+AB70–U+ABBF. UCD 17.0.0 folds them to the capitals; x/text leaves them unchanged. Vector `plain-cherokee` pins this.
@@ -119,7 +119,7 @@ The masks are applied in this order:
 - Indented code blocks are not recognized (`md-indented-code`).
 - HTML blocks are masked only tag by tag, so text between tags remains (`md-html-block`). CommonMark hides the whole block through the next blank line; this profile keeps prose that sits between tags.
 - Front matter is not CommonMark at all. pulldown-cmark's metadata extension does not recognize it after a BOM, while MD-1 does (`md-bom-front-matter`).
-- Code-span contents are not literal: in `` `&amp;` ``, `` `<b>` `` and `` `[x](y)` `` the entity, tag and destination are masked (review M3).
+- Code-span contents are not literal: in `` `&amp;` ``, `` `<b>` `` and `` `[x](../research/drafts/y)` `` the entity, tag and destination are masked (review M3).
 - `<script>` and `<style>` bodies are tokenized; only the tags are masked.
 - Fences inside block quotes (`> ````) are not recognized.
 - `<!-->` and `<!--->` are not complete comments: the `-->` search starts 4 bytes after `<`. CommonMark 0.31.2 accepts them.
@@ -254,7 +254,7 @@ Winnowing, `windowSelections`, `partialWindow` and the fingerprints follow contr
 
 **Declared channel list (catalogue and report contract §2b, A3): `["exact","folded","skeleton"]`, in that order, for both profiles.** The configuration's `channels` equals it, which binds it into `configSha256`. Comparisons run on all three channels. Comparing a subset, for example `folded` only, is not allowed yet: that is the contract's OD-C27, so OD-T5′ resolves to (a), three channels.
 
-**Record bytes (`text-plain`).** The canonical record is contract [§2a](catalogue-report-contract.md#2a-extraction-record-traceweave-extraction-record-draft-1) with no profile-specific fields:
+**Record bytes (`text-plain`).** The canonical record is contract [§2a](../spec/catalogue-report.md#2a-extraction-record-traceweave-extraction-record-draft-1) with no profile-specific fields:
 - **Envelope:** `recordVersion` `traceweave-extraction-record-draft-1`, `profile`, `profileVersion`, `configSha256`, `inputSha256`, `inputLength`, `result`.
 - **`result`:**
   - Errors are `{"status":"error","error":{"code","offset"}}`.
@@ -263,7 +263,7 @@ Winnowing, `windowSelections`, `partialWindow` and the fingerprints follow contr
 - **Channels:** `channels` has the blocks `exact` (`kgrams`, `windowSelections`, `partialWindow`, `fingerprints`), then `folded` and `skeleton` (each `values` first, then the same four keys). `values` has one entry per token; this profile declares no exclusions, so there is no `tokenIndices`.
 - **Serialization:** contract §2a: fixed key order, no insignificant whitespace, raw UTF-8 for non-ASCII, one final LF.
 
-[`records-text-plain.json`](extraction-vectors-text/records-text-plain.json) gives the expected record bytes and their SHA-256 for every `text-plain` and limit vector, plus 2 `unsupported-config` records: 60 records. The vector files carry the same `result` objects.
+[`records-text-plain.json`](../test-vectors/extraction-text/records-text-plain.json) gives the expected record bytes and their SHA-256 for every `text-plain` and limit vector, plus 2 `unsupported-config` records: 60 records. The vector files carry the same `result` objects.
 
 **Unchanged by alignment.** k-gram hashing already used the class string `word` (§9) and the same values, so no hash, selection or fingerprint changed. All 79 vectors' tokens, spans, values, k-grams and fingerprints are identical to the previous commit, so the profile versions stay (`text-plain` `draft-1`, `text-markdown` `draft-2`).
 
@@ -287,7 +287,7 @@ Validation is contract §10 steps 1–4 and 8 unchanged, and the steps below. `c
 - **6.** `channels` is exactly `["exact","folded","skeleton"]`.
 - **7.** `contract` is `traceweave-text-winnow-draft-1`, `hash` is `sha256-first8-u64be`, and `(profile, profileVersion)` is `(text-plain, draft-1)` or `(text-markdown, draft-2)`.
 
-There is no `format` key: the front end is the profile. [`config-negative-text.json`](extraction-vectors-text/config-negative-text.json) has 13 configurations that MUST be rejected, each with its `expectedResult`. They include the code channels, two channels, reordered channels, the code contract string, `text-html`, `text-plain`/`draft-2`, the superseded `text-markdown`/`draft-1`, k = 17, `window` = 0, the size bound plus 1, whitespace, a missing LF and an extra `format` key. It also has 2 boundary configurations that MUST be accepted.
+There is no `format` key: the front end is the profile. [`config-negative-text.json`](../test-vectors/extraction-text/config-negative-text.json) has 13 configurations that MUST be rejected, each with its `expectedResult`. They include the code channels, two channels, reordered channels, the code contract string, `text-html`, `text-plain`/`draft-2`, the superseded `text-markdown`/`draft-1`, k = 17, `window` = 0, the size bound plus 1, whitespace, a missing LF and an extra `format` key. It also has 2 boundary configurations that MUST be accepted.
 
 A new `profileVersion` is minted on any change to any channel's bytes for some input, as the amended contract §10 now says: classes, the fold, the skeleton data or procedure, the masks, the token rule, errors or tables. That includes any move to Unicode 18.0.0. This is why the draft-1 → draft-2 Markdown changes give `text-markdown` a new version, even though no previously shipped Markdown vector's tokens or masks changed (§18).
 
@@ -350,7 +350,7 @@ TXT.7 requires a citation for each limit. Those below cite a vector or a lane 09
 - **Typography that NFKC does not unify.** Examples: U+02BC (a letter) against U+2019 (punctuation) as an apostrophe; non-ASCII digits against ASCII digits; vulgar fractions against `1/2` (`plain-nfkc-compat`: `½` gives `12`, `1/2` gives `1`, `2`).
 - **Markdown deviations** (§5): entities are not decoded, list numbers and reference labels are kept, indented code is tokenized, text inside HTML blocks and `<script>`/`<style>` bodies is tokenized, and code-span contents are not literal.
 - **Homoglyphs not listed in the pinned `confusables.txt`** survive the skeleton. The skeleton also merges distinct words across scripts, for example Greek `σοφοσ` and Latin `ooɸoo`-like strings, so skeleton matches need the exact or folded channel as context (UTS #39 §4; `plain-greek`).
-- **Common phrases and boilerplate match.** Licence text, front matter that is not masked, and stock phrases are expected matches unless suppressed by an explicit boilerplate catalogue (lane 09, citing W §5.1–5.2; [catalogue contract](catalogue-report-contract.md) OD-C5 (b); roadmap M2.10). Suppression is advisory and selection-dependent.
+- **Common phrases and boilerplate match.** Licence text, front matter that is not masked, and stock phrases are expected matches unless suppressed by an explicit boilerplate catalogue (lane 09, citing W §5.1–5.2; [catalogue contract](../spec/catalogue-report.md) OD-C5 (b); roadmap M2.10). Suppression is advisory and selection-dependent.
 - **No ownership, authorship, permission or direction-of-copying inference.** A shared fingerprint is a shared folded word run, nothing more (UC-8; contract §12).
 - **No calibrated false-alert or detection rate.** Nothing has been measured. Any later rate must be computed over the whole search, all windows and catalogue entries, with thresholds frozen before held-out data (lane 07 review; TXT.6: 0/200 bounds a rate only below about 1.5%).
 - **No absence claim.** No match means insufficient evidence, not absence.
@@ -359,9 +359,9 @@ TXT.7 requires a citation for each limit. Those below cite a vector or a lane 09
 
 ## 14. Checks and cross-checks
 
-The tools are in [extraction-vectors-text/](extraction-vectors-text/README.md):
-- **[`check_text_vectors.py`](extraction-vectors-text/check_text_vectors.py):** standard library only, reading only the pinned table.
-- **[`harness/crosscheck_text.py`](extraction-vectors-text/harness/crosscheck_text.py):** a Go oracle and a Rust oracle, built offline.
+The tools are in [extraction-text/](../test-vectors/extraction-text/README.md):
+- **[`check_text_vectors.py`](../test-vectors/extraction-text/check_text_vectors.py):** standard library only, reading only the pinned table.
+- **[`harness/crosscheck_text.py`](../test-vectors/extraction-text/harness/crosscheck_text.py):** a Go oracle and a Rust oracle, built offline.
 
 **Checker, run 2026-11-22.** It recomputes every result from the input bytes:
 - configuration validation;
@@ -393,7 +393,7 @@ PASS rejections.json: 70/70 corruptions rejected at their declared layer (error=
 PASS wrong-implementation self-test: rejected 14/14
 PASS records-text-plain.json: 60 text-plain records recomputed byte for byte from (configuration, input) with SHA-256; 58 equal their source vector's result
 PASS record corruption self-test: rejected 12/12
-PASS record bytes accepted by matching-vectors/check_matching.py check_record_bytes + record.schema.json: 51/60; refused only because that checker has no text-plain profile registered (error-code lookup): 9; other refusals: 0
+PASS record bytes accepted by matching/check_matching.py check_record_bytes + record.schema.json: 51/60; refused only because that checker has no text-plain profile registered (error-code lookup): 9; other refusals: 0
 PASS NormalizationTest.txt (17.0.0): NFC and NFD checks 120204/120204
 ```
 

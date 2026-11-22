@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Write the text-profile vector, configuration and rejection files.
 
-Usage: python3 -I harness/build_vectors.py   (from extraction-vectors-text/)
+Usage: python3 -I harness/build_vectors.py   (from extraction-text/)
 
 Derivation (`derivation: hand`): for every vector the expected token texts,
 folded values and skeleton values below were written by hand from the profile

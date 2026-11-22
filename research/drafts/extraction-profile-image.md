@@ -178,7 +178,7 @@ Run by `check_vectors.py`; results in `vectors/check-results.json`. The inputs a
 
 ### 8.1 Catalogue (`traceweave-image-catalogue-draft-1`)
 
-The conventions are those of the [catalogue contract](catalogue-report-contract.md) §3:
+The conventions are those of the [catalogue contract](../../spec/catalogue-report.md) §3:
 - canonical JSON: sorted keys, no insignificant whitespace, no trailing newline;
 - integers, strings and booleans only;
 - artifacts sorted by `id`, unique ids and unique artifact bytes;
