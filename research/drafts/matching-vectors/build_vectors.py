@@ -698,7 +698,8 @@ def main():
 
     sources = {}
     for f in ["extraction-go.json", "extraction-rust.json", "../extraction-vectors/go.json",
-              "../extraction-vectors/rust.json", "../extraction-vectors/limits-go.json"]:
+              "../extraction-vectors/rust.json", "../extraction-vectors/limits-go.json",
+              "../extraction-vectors/exclusion-rule.json"]:
         d, raw, cfg = load_extraction(HERE / f)
         for v in d["vectors"]:
             sources[f"{f}#{v['id']}"] = (v, raw, cfg)
@@ -1244,7 +1245,8 @@ def record_bytes(cfg_raw, data, result):
             return {"position": g["position"], "hash": g["hash"], "span": list(g["span"])}
 
         def chan(c, values):
-            o = {"values": list(c["values"])} if values else {}
+            o = {"tokenIndices": list(c["tokenIndices"])} if "tokenIndices" in c else {}   # only profiles with exclusions
+            o.update({"values": list(c["values"])} if values else {})
             o.update({"kgrams": [kg(g) for g in c["kgrams"]], "windowSelections": list(c["windowSelections"]),
                       "partialWindow": c["partialWindow"], "fingerprints": [kg(g) for g in c["fingerprints"]]})
             return o
@@ -1279,7 +1281,7 @@ def catalogue_from_records(cfg_raw, items):
             e["tokenCount"] = res["tokenCount"]
             e["channels"] = {ch: {"fingerprints": [{"hash": f["hash"], "position": f["position"], "span": f["span"]}
                                                    for f in res["channels"][ch]["fingerprints"]],
-                                  "kgramCount": max(0, res["tokenCount"] - cfg["k"] + 1),
+                                  "kgramCount": max(0, len(res["channels"][ch].get("tokenIndices", res["tokens"])) - cfg["k"] + 1),
                                   "partialWindow": res["channels"][ch]["partialWindow"]} for ch in CHANNELS}
         entries.append(e)
     return canonical(build_catalogue(cfg_raw, cfg, entries))
@@ -1309,7 +1311,13 @@ def build_records(sources, matching_out):
          "A second unsupported-config record (" + neg[1]["reason"] + ")."),
         ("rec-rust-ok", ["ok"], f"{NR}#rust-literals", "Rust ok result: token text with quotes and backslashes is escaped as \\\" and \\\\."),
         ("rec-rust-lexical-error", ["error", "lexical-error"], f"{NR}#rust-err-unbalanced", "Rust lexical error."),
-    ]
+    ] + [(f"rec-{vid}", ["exclusions", "test-only-profile"], f"../extraction-vectors/exclusion-rule.json#{vid}",
+          f"TEST-ONLY profile go-tokens-exclusion-test (extraction OD-23): normalized channel with tokenIndices; {why}.")
+         for vid, why in (("excl-semi-newlines", "inserted semicolons excluded from normalized"),
+                          ("excl-semi-explicit", "explicit semicolons excluded too"),
+                          ("excl-ok-normalized-empty", "ok status with an empty normalized channel"),
+                          ("excl-insufficient", "insufficient-tokens decided by the exact count"),
+                          ("excl-partial-window", "normalized partial window while exact is full"))]
     go_cfg_raw = (EXV / "config-go.json").read_bytes()
     UC_INPUT = b"x := 1\n"
     records, by_id = [], {}
@@ -1348,6 +1356,15 @@ def build_records(sources, matching_out):
         cats.append({"id": cid, "extractionConfigFile": f"../extraction-vectors/{cfgname}",
                      "artifacts": [{"id": a, "record": r} for a, r in items],
                      "expectedCatalogueSha256": sha(cb), "sameAs": f"matching.json#{vid}/{side}"})
+    excl = [("e1.go", "rec-excl-semi-newlines"), ("e2.go", "rec-excl-semi-explicit"), ("e3.go", "rec-excl-ok-normalized-empty"),
+            ("e4.go", "rec-excl-insufficient"), ("e5.go", "rec-excl-partial-window")]
+    cfg_raw = (EXV / "config-exclusion-test.json").read_bytes()
+    cb = catalogue_from_records(cfg_raw, [(a, by_id[r][0]) for a, r in excl])
+    cats.append({"id": "cat-exclusion-test", "testOnlyProfile": True,
+                 "extractionConfigFile": "../extraction-vectors/config-exclusion-test.json",
+                 "artifacts": [{"id": a, "record": r} for a, r in excl], "expectedCatalogueSha256": sha(cb),
+                 "note": "TEST-ONLY profile: per-channel kgramCount max(0, n_C - k + 1); the normalized channel of e3.go is "
+                         "empty although its status is ok. Checked against a catalogue rebuilt from the extraction vectors."})
     rejections = [
         ("build-mixed-configurations", "config-go.json", [("a.go", "rec-go-ok"), ("tiny.go", "rec-go-limit-exact")],
          "records under two different configurations cannot form one catalogue"),

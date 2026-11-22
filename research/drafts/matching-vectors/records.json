@@ -234,6 +234,81 @@
    "inputBase64": "Zm4gZigpIHsgKDEgfQ==",
    "expectedRecordSha256": "68f1392df1ad61dc0ad56fd27ad31073d832c1df0a6751f7d64a2b35740ee8ad",
    "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"rust2024-tokens\",\"profileVersion\":\"draft-1\",\"configSha256\":\"64b34335e4a61383ada1403a2df97c2e45dba987bbf0c8ec21385e04104d1277\",\"inputSha256\":\"87202e45604ceb9dbeacc2b27e644e547f809b183996f5fb30700c20dd63fd04\",\"inputLength\":13,\"result\":{\"status\":\"error\",\"error\":{\"code\":\"unbalanced-delimiter\",\"offset\":12}}}\n"
+  },
+  {
+   "id": "rec-excl-semi-newlines",
+   "tags": [
+    "exclusions",
+    "test-only-profile"
+   ],
+   "description": "TEST-ONLY profile go-tokens-exclusion-test (extraction OD-23): normalized channel with tokenIndices; inserted semicolons excluded from normalized.",
+   "source": "../extraction-vectors/exclusion-rule.json#excl-semi-newlines",
+   "derivation": "hand",
+   "configFile": "../extraction-vectors/config-exclusion-test.json",
+   "configSha256": "65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464",
+   "inputBase64": "YSA6PSBiCmMgOj0gZAo=",
+   "expectedRecordSha256": "4cd0ba44cacaef16097d0d9d5b201c1c7a241924eff79a4633ac405254759a33",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens-exclusion-test\",\"profileVersion\":\"draft-1\",\"configSha256\":\"65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464\",\"inputSha256\":\"93b2be6c0cd0ef6c88034679cfcb7be998db4834f71875cb65ee7ea2173ed299\",\"inputLength\":14,\"result\":{\"status\":\"ok\",\"tokenCount\":8,\"tokens\":[{\"class\":\"ident\",\"text\":\"a\",\"span\":[0,1]},{\"class\":\"punct\",\"text\":\":=\",\"span\":[2,4]},{\"class\":\"ident\",\"text\":\"b\",\"span\":[5,6]},{\"class\":\"punct\",\"text\":\";\",\"span\":[6,6],\"inserted\":true},{\"class\":\"ident\",\"text\":\"c\",\"span\":[7,8]},{\"class\":\"punct\",\"text\":\":=\",\"span\":[9,11]},{\"class\":\"ident\",\"text\":\"d\",\"span\":[12,13]},{\"class\":\"punct\",\"text\":\";\",\"span\":[13,13],\"inserted\":true}],\"channels\":{\"exact\":{\"kgrams\":[{\"position\":0,\"hash\":\"fac28ae6b2825087\",\"span\":[0,8]},{\"position\":1,\"hash\":\"447de3fb6b4a276f\",\"span\":[2,11]},{\"position\":2,\"hash\":\"6edf22335cd36830\",\"span\":[5,13]},{\"position\":3,\"hash\":\"bac454e6f38f8c5e\",\"span\":[6,13]}],\"windowSelections\":[1],\"partialWindow\":false,\"fingerprints\":[{\"position\":1,\"hash\":\"447de3fb6b4a276f\",\"span\":[2,11]}]},\"normalized\":{\"tokenIndices\":[0,1,2,4,5,6],\"values\":[\"\",\":=\",\"\",\"\",\":=\",\"\"],\"kgrams\":[{\"position\":0,\"hash\":\"bc429841087c8e9b\",\"span\":[0,11]},{\"position\":1,\"hash\":\"71e782a69a89ad90\",\"span\":[2,13]}],\"windowSelections\":[1],\"partialWindow\":true,\"fingerprints\":[{\"position\":1,\"hash\":\"71e782a69a89ad90\",\"span\":[2,13]}]}}}}\n"
+  },
+  {
+   "id": "rec-excl-semi-explicit",
+   "tags": [
+    "exclusions",
+    "test-only-profile"
+   ],
+   "description": "TEST-ONLY profile go-tokens-exclusion-test (extraction OD-23): normalized channel with tokenIndices; explicit semicolons excluded too.",
+   "source": "../extraction-vectors/exclusion-rule.json#excl-semi-explicit",
+   "derivation": "hand",
+   "configFile": "../extraction-vectors/config-exclusion-test.json",
+   "configSha256": "65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464",
+   "inputBase64": "YSA6PSBiOyBjIDo9IGQ7Ow==",
+   "expectedRecordSha256": "a8b63e359d04410d3ab082cadc4102548a784901157ba2cbb3c5dfff488d6f5b",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens-exclusion-test\",\"profileVersion\":\"draft-1\",\"configSha256\":\"65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464\",\"inputSha256\":\"291036596cfb49f175aed0e8bd8b3f38697a43cce1ffdd42ddba710e6ac74910\",\"inputLength\":16,\"result\":{\"status\":\"ok\",\"tokenCount\":9,\"tokens\":[{\"class\":\"ident\",\"text\":\"a\",\"span\":[0,1]},{\"class\":\"punct\",\"text\":\":=\",\"span\":[2,4]},{\"class\":\"ident\",\"text\":\"b\",\"span\":[5,6]},{\"class\":\"punct\",\"text\":\";\",\"span\":[6,7]},{\"class\":\"ident\",\"text\":\"c\",\"span\":[8,9]},{\"class\":\"punct\",\"text\":\":=\",\"span\":[10,12]},{\"class\":\"ident\",\"text\":\"d\",\"span\":[13,14]},{\"class\":\"punct\",\"text\":\";\",\"span\":[14,15]},{\"class\":\"punct\",\"text\":\";\",\"span\":[15,16]}],\"channels\":{\"exact\":{\"kgrams\":[{\"position\":0,\"hash\":\"fac28ae6b2825087\",\"span\":[0,9]},{\"position\":1,\"hash\":\"447de3fb6b4a276f\",\"span\":[2,12]},{\"position\":2,\"hash\":\"6edf22335cd36830\",\"span\":[5,14]},{\"position\":3,\"hash\":\"bac454e6f38f8c5e\",\"span\":[6,15]},{\"position\":4,\"hash\":\"0b2dbfd462071932\",\"span\":[8,16]}],\"windowSelections\":[1,4],\"partialWindow\":false,\"fingerprints\":[{\"position\":1,\"hash\":\"447de3fb6b4a276f\",\"span\":[2,12]},{\"position\":4,\"hash\":\"0b2dbfd462071932\",\"span\":[8,16]}]},\"normalized\":{\"tokenIndices\":[0,1,2,4,5,6],\"values\":[\"\",\":=\",\"\",\"\",\":=\",\"\"],\"kgrams\":[{\"position\":0,\"hash\":\"bc429841087c8e9b\",\"span\":[0,12]},{\"position\":1,\"hash\":\"71e782a69a89ad90\",\"span\":[2,14]}],\"windowSelections\":[1],\"partialWindow\":true,\"fingerprints\":[{\"position\":1,\"hash\":\"71e782a69a89ad90\",\"span\":[2,14]}]}}}}\n"
+  },
+  {
+   "id": "rec-excl-ok-normalized-empty",
+   "tags": [
+    "exclusions",
+    "test-only-profile"
+   ],
+   "description": "TEST-ONLY profile go-tokens-exclusion-test (extraction OD-23): normalized channel with tokenIndices; ok status with an empty normalized channel.",
+   "source": "../extraction-vectors/exclusion-rule.json#excl-ok-normalized-empty",
+   "derivation": "hand",
+   "configFile": "../extraction-vectors/config-exclusion-test.json",
+   "configSha256": "65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464",
+   "inputBase64": "YTs7Ozs=",
+   "expectedRecordSha256": "cb5daa49d2c142f93de2686bacbff89873ccb65c4f81a5097e3f5eaaa0904d6a",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens-exclusion-test\",\"profileVersion\":\"draft-1\",\"configSha256\":\"65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464\",\"inputSha256\":\"533a876be89413c80ef9d7cb9984b75f70da7e895a06fbd05ca4a33d1b3296a0\",\"inputLength\":5,\"result\":{\"status\":\"ok\",\"tokenCount\":5,\"tokens\":[{\"class\":\"ident\",\"text\":\"a\",\"span\":[0,1]},{\"class\":\"punct\",\"text\":\";\",\"span\":[1,2]},{\"class\":\"punct\",\"text\":\";\",\"span\":[2,3]},{\"class\":\"punct\",\"text\":\";\",\"span\":[3,4]},{\"class\":\"punct\",\"text\":\";\",\"span\":[4,5]}],\"channels\":{\"exact\":{\"kgrams\":[{\"position\":0,\"hash\":\"ecf8d14192f3318a\",\"span\":[0,5]}],\"windowSelections\":[0],\"partialWindow\":true,\"fingerprints\":[{\"position\":0,\"hash\":\"ecf8d14192f3318a\",\"span\":[0,5]}]},\"normalized\":{\"tokenIndices\":[0],\"values\":[\"\"],\"kgrams\":[],\"windowSelections\":[],\"partialWindow\":false,\"fingerprints\":[]}}}}\n"
+  },
+  {
+   "id": "rec-excl-insufficient",
+   "tags": [
+    "exclusions",
+    "test-only-profile"
+   ],
+   "description": "TEST-ONLY profile go-tokens-exclusion-test (extraction OD-23): normalized channel with tokenIndices; insufficient-tokens decided by the exact count.",
+   "source": "../extraction-vectors/exclusion-rule.json#excl-insufficient",
+   "derivation": "hand",
+   "configFile": "../extraction-vectors/config-exclusion-test.json",
+   "configSha256": "65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464",
+   "inputBase64": "eDt5",
+   "expectedRecordSha256": "4c1d2f0e63d27c73cadb4d79252cada3bfdce1920b3a183985d04472e9b60741",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens-exclusion-test\",\"profileVersion\":\"draft-1\",\"configSha256\":\"65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464\",\"inputSha256\":\"c440f871b8309859b60db2255d8bd390d220babe10c1f6c5d33b49dd2ce4158b\",\"inputLength\":3,\"result\":{\"status\":\"insufficient-tokens\",\"tokenCount\":4,\"tokens\":[{\"class\":\"ident\",\"text\":\"x\",\"span\":[0,1]},{\"class\":\"punct\",\"text\":\";\",\"span\":[1,2]},{\"class\":\"ident\",\"text\":\"y\",\"span\":[2,3]},{\"class\":\"punct\",\"text\":\";\",\"span\":[3,3],\"inserted\":true}],\"channels\":{\"exact\":{\"kgrams\":[],\"windowSelections\":[],\"partialWindow\":false,\"fingerprints\":[]},\"normalized\":{\"tokenIndices\":[0,2],\"values\":[\"\",\"\"],\"kgrams\":[],\"windowSelections\":[],\"partialWindow\":false,\"fingerprints\":[]}}}}\n"
+  },
+  {
+   "id": "rec-excl-partial-window",
+   "tags": [
+    "exclusions",
+    "test-only-profile"
+   ],
+   "description": "TEST-ONLY profile go-tokens-exclusion-test (extraction OD-23): normalized channel with tokenIndices; normalized partial window while exact is full.",
+   "source": "../extraction-vectors/exclusion-rule.json#excl-partial-window",
+   "derivation": "hand",
+   "configFile": "../extraction-vectors/config-exclusion-test.json",
+   "configSha256": "65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464",
+   "inputBase64": "ZihhKTtnKGIp",
+   "expectedRecordSha256": "da532e999b910b02a8aa42d19fe6a3fd16118bdf220323470b6acff172a9e038",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens-exclusion-test\",\"profileVersion\":\"draft-1\",\"configSha256\":\"65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464\",\"inputSha256\":\"badeaab798a6540fa358e820ebc34b5e4811402a97f9ab25cd3de3a7c5a006cd\",\"inputLength\":9,\"result\":{\"status\":\"ok\",\"tokenCount\":10,\"tokens\":[{\"class\":\"ident\",\"text\":\"f\",\"span\":[0,1]},{\"class\":\"punct\",\"text\":\"(\",\"span\":[1,2]},{\"class\":\"ident\",\"text\":\"a\",\"span\":[2,3]},{\"class\":\"punct\",\"text\":\")\",\"span\":[3,4]},{\"class\":\"punct\",\"text\":\";\",\"span\":[4,5]},{\"class\":\"ident\",\"text\":\"g\",\"span\":[5,6]},{\"class\":\"punct\",\"text\":\"(\",\"span\":[6,7]},{\"class\":\"ident\",\"text\":\"b\",\"span\":[7,8]},{\"class\":\"punct\",\"text\":\")\",\"span\":[8,9]},{\"class\":\"punct\",\"text\":\";\",\"span\":[9,9],\"inserted\":true}],\"channels\":{\"exact\":{\"kgrams\":[{\"position\":0,\"hash\":\"5ab8df92c77b8865\",\"span\":[0,5]},{\"position\":1,\"hash\":\"10c739a900488f1d\",\"span\":[1,6]},{\"position\":2,\"hash\":\"a3c9d87f12a74181\",\"span\":[2,7]},{\"position\":3,\"hash\":\"2d00cf1ed795c3d3\",\"span\":[3,8]},{\"position\":4,\"hash\":\"6086f908e14fc45d\",\"span\":[4,9]},{\"position\":5,\"hash\":\"b3eebc018b774be9\",\"span\":[5,9]}],\"windowSelections\":[1,1,3],\"partialWindow\":false,\"fingerprints\":[{\"position\":1,\"hash\":\"10c739a900488f1d\",\"span\":[1,6]},{\"position\":3,\"hash\":\"2d00cf1ed795c3d3\",\"span\":[3,8]}]},\"normalized\":{\"tokenIndices\":[0,1,2,3,5,6,7,8],\"values\":[\"\",\"(\",\"\",\")\",\"\",\"(\",\"\",\")\"],\"kgrams\":[{\"position\":0,\"hash\":\"ed8851dba5a2ec62\",\"span\":[0,6]},{\"position\":1,\"hash\":\"96bd53fd5e2793a4\",\"span\":[1,7]},{\"position\":2,\"hash\":\"5c27a9599b85a264\",\"span\":[2,8]},{\"position\":3,\"hash\":\"97d7f0c8dd1811b5\",\"span\":[3,9]}],\"windowSelections\":[2],\"partialWindow\":false,\"fingerprints\":[{\"position\":2,\"hash\":\"5c27a9599b85a264\",\"span\":[2,8]}]}}}}\n"
   }
  ],
  "cataloguesFromRecords": [
@@ -276,6 +351,35 @@
    ],
    "expectedCatalogueSha256": "e025138c287c255f69d99503ba085c6b9532fdd7d07314f2c83de75fbec2a226",
    "sameAs": "matching.json#go-input-too-large/candidate"
+  },
+  {
+   "id": "cat-exclusion-test",
+   "testOnlyProfile": true,
+   "extractionConfigFile": "../extraction-vectors/config-exclusion-test.json",
+   "artifacts": [
+    {
+     "id": "e1.go",
+     "record": "rec-excl-semi-newlines"
+    },
+    {
+     "id": "e2.go",
+     "record": "rec-excl-semi-explicit"
+    },
+    {
+     "id": "e3.go",
+     "record": "rec-excl-ok-normalized-empty"
+    },
+    {
+     "id": "e4.go",
+     "record": "rec-excl-insufficient"
+    },
+    {
+     "id": "e5.go",
+     "record": "rec-excl-partial-window"
+    }
+   ],
+   "expectedCatalogueSha256": "07dae731cbf45790559ebf3c7fc9e10f6d5ac7049a418866370f12faa40a4c5f",
+   "note": "TEST-ONLY profile: per-channel kgramCount max(0, n_C - k + 1); the normalized channel of e3.go is empty although its status is ok. Checked against a catalogue rebuilt from the extraction vectors."
   }
  ],
  "catalogueBuildRejections": [

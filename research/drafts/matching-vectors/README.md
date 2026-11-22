@@ -7,7 +7,7 @@ Status: draft for review, 2026-11-22. These vectors accompany the [catalogue and
 | File | Contents |
 | --- | --- |
 | `record.schema.json` | Draft schema of the canonical extraction record (contract §2a, amendment A1) |
-| `records.json` | 16 expected records (bytes and SHA-256), 2 catalogues built from records, 3 refused builds |
+| `records.json` | 21 expected records (bytes and SHA-256), 3 catalogues built from records, 3 refused builds |
 | `catalogue.schema.json`, `report.schema.json` | Draft JSON Schema 2020-12 (draft-2). They use only the keywords `check_matching.py` interprets |
 | `comparison-config.json` | Exact comparison configuration bytes (contract §4), SHA-256 `39345e9c…147333` |
 | `comparison-config-negative.json` | 22 configurations that MUST be rejected |
@@ -77,8 +77,9 @@ Body digests and outcomes per vector are in `matching.json`. `build_vectors.py` 
 | `rec-go-lexical-error`, `rec-rust-lexical-error`, `rec-go-encoding-error` | lexical and encoding errors |
 | `rec-go-over-limit`, `rec-go-over-limit-precedence` | input-too-large: `inputSha256`/`inputLength` null; both records are byte-identical |
 | `rec-unsupported-config`, `rec-unsupported-config-2` | profile, version, input fields and offset null |
+| `rec-excl-semi-newlines`, `-semi-explicit`, `-ok-normalized-empty`, `-insufficient`, `-partial-window` | Amendment A2: TEST-ONLY profile `go-tokens-exclusion-test` from `../extraction-vectors/exclusion-rule.json` (extraction OD-23). The normalized channel starts with `tokenIndices`, and `values` lists kept tokens only; an `ok` record can have an empty normalized channel. Go and Rust records never carry `tokenIndices` |
 
-`cataloguesFromRecords` builds the `go-reference-side-failures` reference catalogue and the `go-input-too-large` candidate catalogue from records (contract §3.8); both equal the `matching.json` catalogues byte for byte. `catalogueBuildRejections` lists three builds the builder must refuse.
+`cataloguesFromRecords` builds the `go-reference-side-failures` reference catalogue and the `go-input-too-large` candidate catalogue from records (contract §3.8); both equal the `matching.json` catalogues byte for byte. A third, `cat-exclusion-test` (TEST-ONLY profile), equals the catalogue the checker rebuilds from `exclusion-rule.json`, and shows a normalized `kgramCount` below the exact one, including an `ok` entry with an empty normalized channel. `catalogueBuildRejections` lists three builds the builder must refuse.
 
 **Against the current implementations** (2026-11-22, the M1.4 cross-check worktree: Rust `target/release/traceweave`, Go `traceweave-go` built into `$TMPDIR`): for all 16 records, both CLIs' `result` bytes equal the expected ones. After the envelope change in contract OD-C21 (Rust: replace the leading `"contract":…` member with `"recordVersion":…`, rename `inputBytes` to `inputLength`; Go: insert `"recordVersion":…` first) both equal all 16 records byte for byte. Neither implementation was modified.
 
@@ -97,11 +98,11 @@ python3 -I research/drafts/matching-vectors/build_vectors.py   # regenerates eve
 PASS matching.json: vectors=60 catalogues-rebuilt=96 synthetic-catalogues=30 fabricated-catalogues=9 pairs=58 regions=155 reportable=84 rejected-reports=17 comparison-config-negatives=22/22 rejected; example-report.json valid
   rule situations (vectors each, minimum 2): match-over-ambiguous=2, match-over-weaker=2, ambiguous-over-weaker=2, below-over-common=3, region-repeats-hash=4, mixed-common-region=2, merge-split-at-gap-plus-one=2, merge-join-at-gap=18, span-overlap-without-shared-position=3, truncated=4, seed-limit=2, ambiguity-before-cap=2
 PASS corruption self-test: rejected 50/50
-PASS catalogue rule self-test (no extraction records used): 27/27 as stated
+PASS catalogue rule self-test (no extraction records used): 31/31 as stated
 PASS required-field self-test: 706/706 single-field deletions handled (required fields rejected, optional provenance field accepted)
 PASS wrong-implementation self-test: rejected 24/24
-PASS records.json: records=16 (null input fields: 4) catalogues-from-records=2 (equal to matching.json catalogues) build-rejections=3
-PASS record corruption self-test: rejected 34/34
+PASS records.json: records=21 (null input fields: 4) catalogues-from-records=3 (2 equal to matching.json catalogues, 1 to a rebuild from extraction vectors) build-rejections=3
+PASS record corruption self-test: rejected 41/41
 ```
 
 **What the checker does.** For each vector it:
@@ -130,9 +131,9 @@ Two corrupted files were also written to `$TMPDIR` and passed to the CLI. Both f
 - an extra seed `[5,5]` in the first `rv-gap-boundary` region (`seedCount below listed seeds`);
 - `inputs.suppressionCatalogueSha256` set to `none` in `go-boilerplate-suppressed` (`comparison.suppressionCatalogueSha256 differs from inputs`).
 
-**Record checks.** The checker has its own record writer (fixed key order, ECMAScript escaping). For every record it requires strict JSON, the record schema, byte equality with its own canonical re-serialization, and byte equality with the record it derives from the source vector (whose hashes it recomputes from tokens). It rebuilds the two catalogues from record bytes alone and runs the three refused builds. **Configuration rule.** The checker requires exactly one of `configFile`/`configBase64`, requires those bytes to equal the source vector's configuration, and requires `configSha256` to equal their digest and the record's `configSha256`. **Record corruption self-test** (34 cases, all rejected): configuration not named; wrong configuration file; wrong configuration digest; `inputBytes` field name; extra `contract` key; missing `recordVersion`; envelope or result keys reordered; JCS-sorted keys; no final LF; CRLF; insignificant whitespace; non-ASCII escaped; uppercase hex escape; raw control character; unnecessary `\u0061` escape; non-null input digest, profile or offset for unsupported-config; non-null length for input-too-large; null offset for a lexical error; k-grams, window selections or values omitted; `inserted:false`; wrong or float `tokenCount`; duplicate key; wrong input digest; changed fingerprint hash; wrong record digest; wrong catalogue-from-records digest; a refused build made valid; input-too-large coverage dropped.
+**Record checks.** The checker has its own record writer (fixed key order, ECMAScript escaping). For every record it requires strict JSON, the record schema, byte equality with its own canonical re-serialization, and byte equality with the record it derives from the source vector (whose hashes it recomputes from tokens). It rebuilds the two catalogues from record bytes alone and runs the three refused builds. **Configuration rule.** The checker requires exactly one of `configFile`/`configBase64`, requires those bytes to equal the source vector's configuration, and requires `configSha256` to equal their digest and the record's `configSha256`. **Record corruption self-test** (41 cases, all rejected): `tokenIndices` on a Go record; `tokenIndices` omitted, or after `values`, on an exclusion record; `values` including excluded tokens; exclusions ignored; normalized positions taken from the exact channel; wrong exclusion-catalogue digest; configuration not named; wrong configuration file; wrong configuration digest; `inputBytes` field name; extra `contract` key; missing `recordVersion`; envelope or result keys reordered; JCS-sorted keys; no final LF; CRLF; insignificant whitespace; non-ASCII escaped; uppercase hex escape; raw control character; unnecessary `\u0061` escape; non-null input digest, profile or offset for unsupported-config; non-null length for input-too-large; null offset for a lexical error; k-grams, window selections or values omitted; `inserted:false`; wrong or float `tokenCount`; duplicate key; wrong input digest; changed fingerprint hash; wrong record digest; wrong catalogue-from-records digest; a refused build made valid; input-too-large coverage dropped.
 
-**Catalogue rule self-test** (27 cases, no extraction records, as a consumer has). It covers:
+**Catalogue rule self-test** (31 cases, no extraction records, as a consumer has). It covers:
 - ordering and identity: unsorted artifacts; duplicate id or digest;
 - forbidden fields: source-text and token-list fields;
 - binding: config digest; profile triple;
@@ -141,6 +142,7 @@ Two corrupted files were also written to `$TMPDIR` and passed to the CLI. Both f
 - versions: unknown catalogue version (draft-1 now); unknown profile version;
 - bytes: non-canonical bytes; duplicate `catalogueVersion` (rejected before the version is read);
 - **a valid k = 1 catalogue with an empty span at end of input, which must be accepted**;
+- A2: a Go entry whose normalized `kgramCount` differs from the exact one (rejected); on the TEST-ONLY exclusion profile, an `ok` entry with an empty normalized channel (accepted), a normalized `kgramCount` above the exact one (rejected), and the test-only profile treated as unsupported for comparison;
 - A1: `input-too-large` with a length (rejected), a lexical error with a null digest (rejected), and `input-too-large` with null digest and length (accepted).
 
 **Required-field self-test** (M1.3, 706 deletions). Each single-field deletion must be rejected, except `provenance.generatedAt`, which must be accepted. The instances are a catalogue with ok, insufficient and error entries, 3 compared bodies, 4 rejected bodies and the report document.
@@ -191,7 +193,7 @@ The reviewer's own scripts (`variants.py`, `cleanroom.py` in their scratch direc
   - go/scanner agrees token for token on all 15 Go inputs, including the non-ASCII ones (run before the confirmation-pass additions, which added no new inputs);
   - proc-macro2 agrees on both Rust inputs, and rustc 1.97.1 accepts them;
   - toolchains: go1.27.3 and rustc 1.97.1.
-- The `jsonschema` library in `.venv` validated all 203 valid instances: 126 catalogues, 60 bodies, 16 records and the report document. It rejected 4 record corruptions (`inputBytes`, `contract` key, `inserted:false`, missing `kgrams`) in addition to the earlier body corruptions below. It rejected 8 structural corruptions: extra field, rank, origin, float, class/code mismatch, draft-1 region field, provenance note, and source text in the implementation name.
+- The `jsonschema` library in `.venv` validated all 208 valid instances: 126 catalogues, 60 bodies, 21 records and the report document. It rejected 4 record corruptions (`inputBytes`, `contract` key, `inserted:false`, missing `kgrams`) in addition to the earlier body corruptions below. It rejected 8 structural corruptions: extra field, rank, origin, float, class/code mismatch, draft-1 region field, provenance note, and source text in the implementation name.
 
 **What the checker cannot do.**
 - It does not lex. Token streams rest on `check_vectors.py` and the toolchain comparison above.

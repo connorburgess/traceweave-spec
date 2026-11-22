@@ -1,10 +1,12 @@
 # Draft catalogue and comparison-report contract: token-fingerprint baseline
 
-Status: **draft for review, revision draft-2 with amendment A1 (extraction record), 2026-11-22.** Roadmap item TW-03. Gates: [roadmap](../../ROADMAP.md) M1.3 (catalogue and report schemas) and M2.6 (hand-derived matching vectors). This contract also fixes what I2 in the [implementation plan](../../docs/implementation-repo-plan.md#milestones) must reproduce for M2.4 and M2.5. It builds on the reviewed [extraction contract](extraction-contract.md) and changes nothing in it.
+Status: **draft for review, revision draft-2 with amendments A1 (extraction record) and A2 (normalized-stream exclusions), 2026-11-22.** Roadmap item TW-03. Gates: [roadmap](../../ROADMAP.md) M1.3 (catalogue and report schemas) and M2.6 (hand-derived matching vectors). This contract also fixes what I2 in the [implementation plan](../../docs/implementation-repo-plan.md#milestones) must reproduce for M2.4 and M2.5. It builds on the reviewed [extraction contract](extraction-contract.md) and changes nothing in it.
 
 This revision resolves the [clean-room review](../reviews/catalogue-report-contract-review.md) Part 1 findings 1–10 and guesses G1–G6, plus the non-blocking additions of its confirmation pass (G7, invariance, cap and suppression-order vectors). Every disposition is in [§13](#13-review-dispositions). Draft-2 changes formats: catalogue `traceweave-catalogue-draft-2`, comparison `traceweave-seed-merge-draft-2`, report `traceweave-report-draft-2`. Draft-1 identifiers are no longer accepted.
 
 **Amendment A1** (§2a, §3.8) fixes the single canonical extraction record `traceweave-extraction-record-draft-1`, which the extraction contract §9 and its Q10 leave to TW-03. It also brings `input-too-large` catalogue entries into line with Q10 (null input digest and length). **No existing catalogue or report byte changed.** All 59 earlier vectors are byte-identical, and catalogue, comparison and report identifiers stay at draft-2. The details and the one rule change are in §13, A1.
+
+**Amendment A2** follows extraction OD-23 (normalized-stream exclusions): per-channel token counts n_C (§2, §3.6, §3.8) and an optional `tokenIndices` in the record's normalized channel (§2a), present only for profiles that declare exclusions. Go and Rust declare none, so **no Go/Rust record, catalogue or report byte changed**. Details are in §13, A2.
 
 This is research material, not a normative change. It does not modify [core](../../spec/core.md), [attestations](../../spec/attestations.md), [conformance](../../spec/conformance.md), `schemas/`, `profiles/` or `test-vectors/`. "MUST" describes what this draft proposes for an implementation claiming to follow it. The draft schemas and vectors are in [matching-vectors/](matching-vectors/README.md). Nothing here is a registered algorithm. No parameter is tuned or calibrated.
 
@@ -35,9 +37,9 @@ For each artifact, the catalogue uses these extraction contract §9 fields:
 - `status`;
 - for errors, `error.code` and `error.offset`;
 - `tokenCount`;
-- per channel, `partialWindow` and the fingerprints (position, hash, span).
+- per channel, `partialWindow` and the fingerprints (position, hash, span), and for the normalized channel of a profile that declares exclusions, `tokenIndices` (extraction §6, OD-23).
 
-`kgramCount` is defined as `max(0, tokenCount − k + 1)` and is computed from `tokenCount`, because extraction §9 makes k-gram lists optional in production (G6). The catalogue uses no tokens, token text, k-gram lists, window selections or normalized values.
+`kgramCount` is defined **per channel** as `max(0, n_C − k + 1)` (G6; extraction §6–§7). For the exact channel, n_C = `tokenCount`. For the normalized channel, n_C = `tokenCount` when the profile declares no `normalizedExclusions` (Go and Rust), and otherwise the number of kept tokens, which is the length of the record's `tokenIndices`. It is computed from these counts, not from k-gram lists, because extraction §9 makes k-gram lists optional in production. The catalogue uses no tokens, token text, k-gram lists, window selections or normalized values.
 
 ## 2a. Extraction record (`traceweave-extraction-record-draft-1`)
 
@@ -58,10 +60,11 @@ One extraction (configuration bytes + input bytes) produces one record. The reco
 There is no `contract` key: the configuration's `contract` is bound through `configSha256`, and `recordVersion` identifies the record format. The name is `inputLength`, not `inputBytes`.
 
 **`result`, in this order:**
-- **Error** (`status` `"error"`): `{"status":"error","error":{"code":…,"offset":…}}`. `offset` is an integer, except `null` for `unsupported-config`; it is 0 for `input-too-large` (extraction Q10). `code` is from the profile's closed list (extraction §4.8/§5.9) or `unsupported-config`.
+- **Error** (`status` `"error"`): `{"status":"error","error":{"code":…,"offset":…}}`. `offset` is an integer, except `null` for `unsupported-config`; it is 0 for `input-too-large` (extraction §2, error offsets). `code` is from the profile's closed list (extraction §4.8/§5.9) or `unsupported-config`.
 - **`ok` or `insufficient-tokens`**: `status`, `tokenCount`, `tokens`, `channels`.
   - Each token is `class`, `text`, `span`, then `inserted` (the literal `true`) **only** for Go inserted semicolons. `inserted` is never `false`.
-  - `channels` is `exact` then `normalized`. A channel is `kgrams`, `windowSelections`, `partialWindow`, `fingerprints`. The normalized channel has `values` first.
+  - `channels` is `exact` then `normalized`. The exact channel is `kgrams`, `windowSelections`, `partialWindow`, `fingerprints`. The normalized channel is `tokenIndices` (**only** when the profile declares `normalizedExclusions`, extraction OD-23), then `values`, `kgrams`, `windowSelections`, `partialWindow`, `fingerprints`.
+  - `values` lists the normalized values of the **kept** tokens only, in stream order. `tokenIndices` lists the ascending indices of the kept tokens in `tokens`. A profile without exclusions MUST NOT emit `tokenIndices`; for Go and Rust it is always absent and `values` has one entry per token. Normalized k-gram positions, `windowSelections` and fingerprint positions index the normalized stream; spans stay original bytes.
   - Each k-gram and fingerprint is `position`, `hash`, `span`.
   - k-gram lists, `windowSelections` and `values` are **always present** in the canonical record (empty arrays for `insufficient-tokens`). Extraction §9 calls them optional "in production output"; an implementation MAY offer other outputs, but only this record is canonical.
 
@@ -111,7 +114,7 @@ Every examined artifact gets an entry, including failures:
 | `insufficient-tokens` | The same, with `kgramCount` 0, `partialWindow` false and `fingerprints` `[]` |
 | `error` | `byteLength`, `error: {code, offset}`, `id`, `sha256`, `status`. No channels. `code` is a lexical or input code from the profile's closed list (extraction §4.8/§5.9) |
 
-- **`input-too-large` entries** have `sha256` `null` and `byteLength` `null`, with offset 0: the input is not read past the limit (extraction Q10). This is the only place `null` appears in a catalogue. Such entries are excluded from the digest-uniqueness rule.
+- **`input-too-large` entries** have offset 0 (extraction §2) and `sha256` `null` and `byteLength` `null`, because the input is not read past the limit (extraction Q10). This is the only place `null` appears in a catalogue. Such entries are excluded from the digest-uniqueness rule.
 - **`unsupported-config` never appears in a catalogue (G4).** An extraction that fails with `unsupported-config` has no valid configuration to bind, so it yields no catalogue at all, and the schema's integer `offset` cannot hold its `null`.
 - **`id`** is a caller-chosen opaque label matching `^[a-z0-9][a-z0-9._-]{0,63}$`, unique within the catalogue. Ids appear in reports, so a path-like id discloses the path.
 - **`sha256`** is over the **original artifact bytes**. Two entries in one catalogue MUST NOT share a `sha256`.
@@ -155,7 +158,7 @@ Steps in order. The first failure decides the code:
 6. Semantic rules hold. Otherwise: `malformed-catalogue`.
    - **Binding.** `profile` matches `extractionConfig`, and `configSha256` is the digest of its canonical bytes. Ids are strictly ordered, and digests are unique.
    - **Error entries.** The code is in the profile's closed list. An `input-too-large` entry has `sha256` and `byteLength` `null` and offset 0 (A1; draft-2 before A1 required `byteLength > maxInputBytes`, which a Q10 record cannot supply). Every other error entry has a digest, `byteLength ≤ maxInputBytes` and offset at most `byteLength`.
-   - **Other entries.** `byteLength ≤ maxInputBytes`. `status` is `ok` exactly when `tokenCount ≥ k`. `kgramCount = max(0, tokenCount − k + 1)`. `partialWindow` is true exactly when `1 ≤ kgramCount < window`, and a partial window has exactly one fingerprint.
+   - **Other entries.** `byteLength ≤ maxInputBytes`. `status` is `ok` exactly when `tokenCount ≥ k` (the exact count decides status). Exact `kgramCount = max(0, tokenCount − k + 1)`. Normalized `kgramCount`: for a profile without exclusions it equals the exact `kgramCount`; for a profile that declares exclusions, n_N is not stored, so the rule is `0 ≤ kgramCount ≤` the exact `kgramCount`, and an `ok` entry may have an empty normalized channel (`kgramCount` 0, no fingerprints, `partialWindow` false). In each channel, `partialWindow` is true exactly when `1 ≤ kgramCount < window`, and a partial window has exactly one fingerprint.
    - **Fingerprints.** Each position is below `kgramCount`, with `0 ≤ start ≤ end ≤ byteLength` (finding 9). The span may be empty: with k = 1, a Go inserted `;` k-gram has span `[e, e)`, and `e` can equal `byteLength`. Positions and span starts strictly increase, and span ends never decrease. When `kgramCount ≥ window`: consecutive positions differ by at most `window`, the first position is below `window`, the last is at least `kgramCount − window`, and the count lies between ⌈(m − w + 1)/w⌉ and m − w + 1.
 
 Step 6 checks only that the fingerprints have the shape winnowing produces. Their *correctness* needs the sources, and is checked in the vectors by re-extraction.
@@ -180,7 +183,7 @@ Inputs: the extraction configuration bytes, and a list of `(id, record bytes)`. 
 3. Maps each record to an entry:
    - `id` from the caller; `sha256` = `inputSha256`; `byteLength` = `inputLength` (both `null` only for `input-too-large`); `status` = `result.status`;
    - for errors, `error` = `result.error`;
-   - otherwise `tokenCount`, and per channel `fingerprints` (each `{hash, position, span}` from the record's fingerprint), `kgramCount` = max(0, `tokenCount` − k + 1), and `partialWindow`.
+   - otherwise `tokenCount`, and per channel `fingerprints` (each `{hash, position, span}` from the record's fingerprint), `kgramCount` = max(0, n_C − k + 1) with n_C = `tokenCount` for exact, and for normalized the length of `tokenIndices` when present, else `tokenCount`; and `partialWindow`.
 4. Sorts entries by id, adds `catalogueVersion`, `extractionConfig` (the eight configuration values) and `profile`, and serializes per §3.3.
 
 Any failure refuses the whole catalogue; the builder never drops a record silently. Tokens, token text, k-gram lists, window selections and normalized values are discarded (§3.5). Vectors: two catalogues built from records equal the corresponding `matching.json` catalogues byte for byte, and three refused builds (mixed configurations, an `unsupported-config` record, wrong configuration bytes).
@@ -523,8 +526,9 @@ All checks are in [check_matching.py](matching-vectors/check_matching.py) unless
 | §6 | Schema interpreter and keyword audit; `bodySha256`; report rule layer for order, cap, counts, ambiguity and outcome; corruptions for outcome, class, side, rank, origin, ownership, signature, float and reduced fraction; provenance note, source text in the name, and provenance config digest |
 | M1.3 | Required-field self-test: every single-field deletion in a catalogue, 3 compared bodies, 4 rejected bodies and the report document |
 | M2.5 | A `large-host` vector with complete containment and partial Jaccard |
-| §2a record bytes | `records.json`: 16 records (ok, Unicode, CR, U+000B, insufficient, empty, lexical error, encoding error, input-too-large ×2, at-limit ok, unsupported-config ×2, Rust ok with quotes and backslashes, Rust error), each derived from an extraction vector and compared with the checker's own record writer; strict parse, schema and canonical round trip. Record corruption self-test, 34 cases, including an unnamed configuration, a wrong configuration file and a wrong configuration digest |
-| §3.8 catalogue from records | Two catalogues built from records equal the `matching.json` catalogues; three refused builds |
+| §2a record bytes | `records.json`: 16 records (ok, Unicode, CR, U+000B, insufficient, empty, lexical error, encoding error, input-too-large ×2, at-limit ok, unsupported-config ×2, Rust ok with quotes and backslashes, Rust error), each derived from an extraction vector and compared with the checker's own record writer; strict parse, schema and canonical round trip. Record corruption self-test, 41 cases, including an unnamed configuration, a wrong configuration file and a wrong configuration digest |
+| §3.8 catalogue from records | Two catalogues built from records equal the `matching.json` catalogues; a TEST-ONLY exclusion-profile catalogue equals one rebuilt from `exclusion-rule.json`; three refused builds |
+| A2 normalized exclusions (§2, §2a, §3.6, §3.8) | Five records from `exclusion-rule.json` (`rec-excl-*`, TEST-ONLY profile `go-tokens-exclusion-test`); the checker recomputes the normalized stream from the declared exclusions. Record corruptions: `tokenIndices` on Go, omitted, after `values`, `values` including excluded tokens, exclusions ignored, normalized positions from exact. Catalogue rules: Go normalized `kgramCount` ≠ exact (rejected), exclusion profile with an empty normalized `ok` channel (accepted), normalized above exact (rejected), test-only profile unsupported for comparison |
 | Hand derivation | Codes, counts, seeds, ambiguity flags, excerpt bounds and byte shifts, with a `derivation` label per mode. A corruption that relabels a computed-then-reviewed mode as `hand` is rejected |
 
 **Limits.** The checker and `build_vectors.py` share an author. The hand layer and the wrong-implementation variants reduce, but do not remove, the risk of a shared misreading. The reviewer's draft-1 clean-room program reproduced all 23 draft-1 bodies. No independent implementation of draft-2 exists yet.
@@ -550,6 +554,7 @@ All checks are in [check_matching.py](matching-vectors/check_matching.py) unless
 | Part 3 item 1 (M2.9 index) | §1 and §7: no index or rank field. The candidate set is identified by `inputs.candidateCatalogueSha256`, and canonical id ordering makes input order irrelevant. Recording how candidates were generated (exhaustive, or a digest of the selected id set) is left to M2.9's own record; the body records only the resulting catalogue digest |
 | Part 3 item 2 (M2.7 origin links) | §1, §5.5 region key and §7: origin links live in a separate record that references `bodySha256` and the region key |
 | Parts 2 and 3, other items | Outside this lane's files (use-case plans, roadmap) |
+| **A2** extraction OD-23 normalized-stream exclusions (commit c81be10) | §2 per-channel n_C; §2a normalized channel order (`tokenIndices` only with exclusions, then `values`, `kgrams`, `windowSelections`, `partialWindow`, `fingerprints`), `values` for kept tokens only; §3.6 normalized `kgramCount` rule; §3.8 per-channel `kgramCount`; `record.schema.json` (optional `tokenIndices`) and `catalogue.schema.json` (empty normalized channel allowed for `ok`, enforced per profile). §2a citation fixed: the `input-too-large` offset of 0 comes from extraction §2. Unchanged: every Go/Rust record, catalogue and report byte (checked against the previous files) |
 | **A1** extraction record (coordinator, from the M1.4 cross-check REPORT and extraction Q10) | §2a, §3.8, OD-C21–C25. Changed: §3.2, §3.3 rule 1 and §3.6 for `input-too-large` entries (null digest and length instead of `byteLength > maxInputBytes`); `catalogue.schema.json` gains a `tooLargeArtifact` variant; `report.schema.json` allows a `null` artifact digest. New: `record.schema.json`, `records.json`, vector `go-input-too-large`. Unchanged: every byte of the 59 earlier vectors (catalogues, bodies, digests) and every identifier. Measured against the current CLIs: both emit `result` bytes identical to all 16 record vectors; after the OD-C21 envelope change (Rust: `contract` → `recordVersion` first, `inputBytes` → `inputLength`; Go: add `recordVersion` first) both equal all 16 records byte for byte |
 | Confirmation pass G7 | §6.2 defines `artifactCount`. Vector `go-suppression-artifact-count` (ok, insufficient-tokens and error entries) |
 | Confirmation (a): document frequency still applied | Invariance vectors (§5.2) and an invariance-group check in the checker |

@@ -45,14 +45,26 @@ EX_KEYS = ["contract", "profile", "profileVersion", "channels", "k", "window", "
 GO_CODES = {"invalid-utf8", "bom", "nul", "input-too-large", "illegal-character", "unterminated-comment",
             "unterminated-literal", "malformed-literal"}
 PROFILES = {
-    ("go-tokens", "draft-1"): {"lang": "go", "codes": GO_CODES,
+    ("go-tokens", "draft-1"): {"lang": "go", "codes": GO_CODES, "exclusions": (),
                                "literals": {"int", "float", "imag", "rune", "string"}},
     ("rust2024-tokens", "draft-1"): {"lang": "rust",
                                      "codes": GO_CODES | {"isolated-cr", "reserved-token", "unbalanced-delimiter",
                                                           "non-nfc-identifier", "malformed-identifier"},
+                                     "exclusions": (),
                                      "literals": {"int", "float", "char", "byte", "string", "rawstring", "bytestring",
                                                   "rawbytestring", "cstring", "rawcstring"}},
 }
+# TEST-ONLY synthetic profile of extraction OD-23 (exclusion-rule.json): Go lexing with punct ';' excluded from the
+# normalized stream. Accepted only where ALLOW_TEST_PROFILES is set (record vectors and the exclusion catalogue),
+# never as a supported catalogue profile for comparison.
+PROFILES[("go-tokens-exclusion-test", "draft-1")] = dict(PROFILES[("go-tokens", "draft-1")], exclusions=(("punct", ";"),),
+                                                         testOnly=True)
+ALLOW_TEST_PROFILES = [False]
+
+
+def supported(pid, ver):
+    prof = PROFILES.get((pid, ver))
+    return prof if prof is not None and (not prof.get("testOnly") or ALLOW_TEST_PROFILES[0]) else None
 U32 = 2**32 - 1
 MAX_INT = 2**53 - 1
 
@@ -262,12 +274,23 @@ def recompute_record(rec, cfg, prof):
             need(data[s:e] == t["text"].encode("utf-8"), f"{rec['id']}: token text != input[span]")
     out = {}
     for ch in CHANNELS:
-        m = max(0, len(toks) - k + 1)
-        hashes = [kgram_hash(cfg, ch, toks[i:i + k], prof["literals"]) for i in range(m)]
-        spans = [[toks[i]["span"][0], toks[i + k - 1]["span"][1]] for i in range(m)]
+        # Extraction OD-23: the normalized stream omits tokens matching the profile's exclusions; positions index
+        # the channel's own stream, spans stay original bytes, n_C = stream length.
+        idx = [i for i, t in enumerate(toks) if ch == "exact" or not any(
+            t["class"] == c and (x is None or t["text"] == x) for c, x in prof["exclusions"])]
+        stream = [toks[i] for i in idx]
+        rc = res["channels"][ch]
+        if ch == "normalized":
+            if prof["exclusions"]:
+                need(rc.get("tokenIndices") == idx, f"{rec['id']}: tokenIndices differ from the declared exclusions")
+            else:
+                need("tokenIndices" not in rc, f"{rec['id']}: tokenIndices on a profile without exclusions")
+            need(len(rc["values"]) == len(stream), f"{rec['id']}: values must list kept tokens only")
+        m = max(0, len(stream) - k + 1)
+        hashes = [kgram_hash(cfg, ch, stream[i:i + k], prof["literals"]) for i in range(m)]
+        spans = [[stream[i]["span"][0], stream[i + k - 1]["span"][1]] for i in range(m)]
         picks, partial = winnow(hashes, cfg["window"])
         fps = [{"hash": hashes[p], "position": p, "span": spans[p]} for p in sorted(set(picks))]
-        rc = res["channels"][ch]
         need([g["hash"] for g in rc["kgrams"]] == hashes, f"{rec['id']}: recorded {ch} k-gram hashes differ from recomputation")
         need(rc["windowSelections"] == picks and rc["partialWindow"] == partial, f"{rec['id']}: {ch} selection differs")
         need([{"hash": f["hash"], "position": f["position"], "span": f["span"]} for f in rc["fingerprints"]] == fps,
@@ -308,7 +331,7 @@ class Sources:
             need(sha(raw) == d["configSha256"], f"{fname}: config digest")
             cfg = parse_extraction_config(raw)
             prof = PROFILES.get((cfg["profile"], cfg["profileVersion"]))
-            need(prof is not None, f"{fname}: unknown profile")
+            need(prof is not None and (not prof.get("testOnly") or "exclusion-rule" in fname), f"{fname}: unknown profile")
             self.files[fname] = (d, raw, cfg, prof, {})
         d, raw, cfg, prof, cache = self.files[fname]
         if vid not in cache:
@@ -393,7 +416,7 @@ def catalogue_rejection(raw: bytes, schema):
             return None, "malformed-catalogue"
     except CheckError:
         return None, "malformed-catalogue"
-    prof = PROFILES.get((obj["profile"]["id"], obj["profile"]["version"]))
+    prof = supported(obj["profile"]["id"], obj["profile"]["version"])
     if prof is None:
         return None, "unsupported-profile"
     return (obj, None) if not catalogue_semantic_errors(obj, prof) else (None, "malformed-catalogue")
@@ -433,8 +456,12 @@ def catalogue_semantic_errors(cat, prof):
         for ch in CHANNELS:
             c = a["channels"][ch]
             m = c["kgramCount"]
-            if m != max(0, tc - k + 1):
-                errs.append(f"{a['id']}/{ch}: kgramCount != tokenCount-k+1")
+            exact_m = max(0, tc - k + 1)
+            if ch == "exact" or not prof["exclusions"]:
+                if m != exact_m:   # n_C = tokenCount
+                    errs.append(f"{a['id']}/{ch}: kgramCount != max(0, tokenCount-k+1)")
+            elif m > exact_m:      # profile with exclusions: n_N <= tokenCount, so 0 <= kgramCount <= exact's
+                errs.append(f"{a['id']}/{ch}: normalized kgramCount exceeds the exact channel's")
             if c["partialWindow"] != (1 <= m < w):
                 errs.append(f"{a['id']}/{ch}: partialWindow")
             fps = c["fingerprints"]
@@ -1220,6 +1247,8 @@ def catalogue_rule_self_test(doc, ctx):
         ("input-too-large-with-length", lambda c: art(c, "error").__setitem__("error", {"code": "input-too-large", "offset": 0}),
          "malformed-catalogue"),
         ("null-digest-on-lexical-error", lambda c: art(c, "error").__setitem__("sha256", None), "malformed-catalogue"),
+        ("go-normalized-kgramcount-differs", lambda c: ok(c, "normalized").__setitem__("kgramCount", ok(c, "normalized")["kgramCount"] - 1),
+         "malformed-catalogue"),
         ("input-too-large-nulls-accepted", lambda c: art(c, "error").update(
             {"error": {"code": "input-too-large", "offset": 0}, "byteLength": None, "sha256": None}), None),
     ]
@@ -1234,6 +1263,26 @@ def catalogue_rule_self_test(doc, ctx):
             raw = json.dumps(c, sort_keys=True, separators=(",", ":")).encode()
         got = catalogue_rejection(raw, ctx.cat_schema)[1]
         out.append((name, got == want, got))
+    # Profiles with exclusions (extraction OD-23), on the TEST-ONLY profile's catalogue built from records.
+    rdoc = strict_loads((HERE / "records.json").read_bytes())
+    ex = next(c for c in rdoc["cataloguesFromRecords"] if c["id"] == "cat-exclusion-test")
+    recs = {r["id"]: r["expectedRecordText"].encode("utf-8") for r in rdoc["records"]}
+    ALLOW_TEST_PROFILES[0] = True
+    try:
+        ebase = strict_loads(catalogue_from_records((HERE / ex["extractionConfigFile"]).read_bytes(),
+                                                    [(a["id"], recs[a["record"]]) for a in ex["artifacts"]], ctx.rec_schema))
+        e3 = next(a for a in ebase["artifacts"] if a["id"] == "e3.go")
+        out.append(("exclusion-ok-with-empty-normalized-accepted", catalogue_rejection(canon_bytes(ebase), ctx.cat_schema)[1] is None
+                    and e3["status"] == "ok" and e3["channels"]["normalized"]["kgramCount"] == 0, "accepted"))
+        bad = copy.deepcopy(ebase)
+        e1 = next(a for a in bad["artifacts"] if a["id"] == "e1.go")
+        e1["channels"]["normalized"]["kgramCount"] = e1["channels"]["exact"]["kgramCount"] + 1
+        out.append(("exclusion-normalized-exceeds-exact", catalogue_rejection(canon_bytes(bad), ctx.cat_schema)[1] == "malformed-catalogue",
+                    "malformed-catalogue"))
+    finally:
+        ALLOW_TEST_PROFILES[0] = False
+    out.append(("test-only-profile-unsupported-for-comparison",
+                catalogue_rejection(canon_bytes(ebase), ctx.cat_schema)[1] == "unsupported-profile", "unsupported-profile"))
     pretty = json.dumps(base, sort_keys=True, indent=1).encode()
     out.append(("non-canonical-bytes", catalogue_rejection(pretty, ctx.cat_schema)[1] == "malformed-catalogue", "pretty-printed"))
     dup = canon_bytes(base)[:-1] + b',"catalogueVersion":"traceweave-catalogue-draft-9"}'
@@ -1358,14 +1407,17 @@ def write_record(r):
                        ["position", "hash", "span"]) if set(g) == {"position", "hash", "span"} else need(False, "k-gram keys")
 
     def chan(c, values):
-        keys = (["values"] if values else []) + ["kgrams", "windowSelections", "partialWindow", "fingerprints"]
-        need(list(c) == keys or set(c) == set(keys), "channel keys")
+        keys = (["tokenIndices"] if values and "tokenIndices" in c else []) + (["values"] if values else []) + \
+            ["kgrams", "windowSelections", "partialWindow", "fingerprints"]
+        need(set(c) == set(keys), "channel keys")
         o = {"kgrams": "[" + ",".join(kg(g) for g in c["kgrams"]) + "]",
              "windowSelections": "[" + ",".join(rec_val(p) for p in c["windowSelections"]) + "]",
              "partialWindow": rec_val(c["partialWindow"]),
              "fingerprints": "[" + ",".join(kg(g) for g in c["fingerprints"]) + "]"}
         if values:
             o["values"] = "[" + ",".join(rec_val(v) for v in c["values"]) + "]"
+            if "tokenIndices" in c:
+                o["tokenIndices"] = "[" + ",".join(rec_val(i) for i in c["tokenIndices"]) + "]"
         need(set(c) == set(o), "channel keys")
         return rec_obj(o, keys)
 
@@ -1426,6 +1478,14 @@ def check_record_bytes(rb, rec_schema):
         need(prof is not None and res["error"]["code"] in prof["codes"], "error code not in the profile's closed list")
     if res["status"] != "error":
         need(res["tokenCount"] == len(res["tokens"]), "tokenCount != number of tokens")
+        prof = PROFILES.get((r["profile"], r["profileVersion"]))
+        norm = res["channels"]["normalized"]
+        if prof is not None:
+            need(("tokenIndices" in norm) == bool(prof["exclusions"]),
+                 "tokenIndices present exactly when the profile declares exclusions (extraction OD-23)")
+        kept = norm.get("tokenIndices", list(range(len(res["tokens"]))))
+        need(kept == sorted(set(kept)) and all(0 <= i < len(res["tokens"]) for i in kept), "tokenIndices ascending and in range")
+        need(len(norm["values"]) == len(kept), "normalized values list the kept tokens only")
         need((res["status"] == "ok") == bool(res["channels"]["exact"]["kgrams"]), "status inconsistent with k-grams")
     return r
 
@@ -1433,7 +1493,7 @@ def check_record_bytes(rb, rec_schema):
 def catalogue_from_records(cfg_raw, items, rec_schema):
     """Contract §3.8: build catalogue bytes from (id, record bytes) pairs, or raise CheckError."""
     cfg = parse_extraction_config(cfg_raw)
-    need(PROFILES.get((cfg["profile"], cfg["profileVersion"])) is not None, "unsupported profile")
+    need(supported(cfg["profile"], cfg["profileVersion"]) is not None, "unsupported profile")
     entries = []
     for aid, rb in items:
         r = check_record_bytes(rb, rec_schema)
@@ -1449,7 +1509,8 @@ def catalogue_from_records(cfg_raw, items, rec_schema):
             e["tokenCount"] = res["tokenCount"]
             e["channels"] = {ch: {"fingerprints": [{"hash": f["hash"], "position": f["position"], "span": f["span"]}
                                                    for f in res["channels"][ch]["fingerprints"]],
-                                  "kgramCount": max(0, res["tokenCount"] - cfg["k"] + 1),
+                                  # n_C: tokenCount, or the number of kept tokens (tokenIndices) for normalized
+                                  "kgramCount": max(0, len(res["channels"][ch].get("tokenIndices", res["tokens"])) - cfg["k"] + 1),
                                   "partialWindow": res["channels"][ch]["partialWindow"]} for ch in CHANNELS}
         entries.append(e)
     return canon_bytes({"artifacts": sorted(entries, key=lambda e: e["id"].encode()), "catalogueVersion": CATALOGUE_VERSION,
@@ -1496,11 +1557,21 @@ def check_records(rdoc, mdoc, ctx):
          "record vectors must cover ok, insufficient-tokens, a lexical error, unsupported-config and input-too-large")
     mvec = {v["id"]: v for v in mdoc["vectors"]}
     for c in rdoc["cataloguesFromRecords"]:
-        cb = catalogue_from_records((HERE / c["extractionConfigFile"]).read_bytes(),
-                                    [(a["id"], by_id[a["record"]]) for a in c["artifacts"]], ctx.rec_schema)
-        need(sha(cb) == c["expectedCatalogueSha256"], f"{c['id']}: catalogue from records digest")
-        vid, side = c["sameAs"].split("#", 1)[1].split("/")
-        need(sha(cb) == mvec[vid][side]["sha256"], f"{c['id']}: differs from the catalogue in {c['sameAs']}")
+        ALLOW_TEST_PROFILES[0] = bool(c.get("testOnlyProfile"))
+        try:
+            cb = catalogue_from_records((HERE / c["extractionConfigFile"]).read_bytes(),
+                                        [(a["id"], by_id[a["record"]]) for a in c["artifacts"]], ctx.rec_schema)
+            need(sha(cb) == c["expectedCatalogueSha256"], f"{c['id']}: catalogue from records digest")
+            need(catalogue_rejection(cb, ctx.cat_schema)[1] is None, f"{c['id']}: catalogue fails the §3.6 rules")
+            if "sameAs" in c:
+                vid, side = c["sameAs"].split("#", 1)[1].split("/")
+                need(sha(cb) == mvec[vid][side]["sha256"], f"{c['id']}: differs from the catalogue in {c['sameAs']}")
+            else:   # rebuild from the extraction vectors behind the records
+                src = {"artifacts": [{"id": a["id"], "source": next(r["source"] for r in rdoc["records"] if r["id"] == a["record"])}
+                                     for a in c["artifacts"]]}
+                need(canon_bytes(build_catalogue(src, ctx.sources)) == cb, f"{c['id']}: differs from the catalogue built from extraction vectors")
+        finally:
+            ALLOW_TEST_PROFILES[0] = False
         stats["catalogues"] += 1
     for c in rdoc["catalogueBuildRejections"]:
         try:
@@ -1572,6 +1643,21 @@ def record_corruptions(rdoc):
     d = copy.deepcopy(rdoc)
     d["records"][0]["expectedRecordSha256"] = "0" * 64
     yield "record-digest-wrong", d
+    yield "tokenIndices-on-go", edit("rec-go-ok", sub('"normalized":{"values":', '"normalized":{"tokenIndices":[0],"values":'))
+    yield "tokenIndices-omitted", edit("rec-excl-semi-newlines", lambda t: re.sub(r'"tokenIndices":\[[0-9,]*\],', '', t))
+    yield "tokenIndices-after-values", edit("rec-excl-semi-newlines", reparse(lambda r: r["result"]["channels"].__setitem__(
+        "normalized", {"values": r["result"]["channels"]["normalized"]["values"],
+                       **{k: v for k, v in r["result"]["channels"]["normalized"].items() if k != "values"}})))
+    yield "values-include-excluded", edit("rec-excl-semi-newlines", reparse(lambda r: r["result"]["channels"]["normalized"].__setitem__(
+        "values", r["result"]["channels"]["normalized"]["values"] + [";", ";"])))
+    yield "exclusions-ignored", edit("rec-excl-semi-newlines", reparse(lambda r: r["result"]["channels"]["normalized"].__setitem__(
+        "tokenIndices", list(range(r["result"]["tokenCount"])))))
+    yield "normalized-positions-from-exact", edit("rec-excl-partial-window", reparse(lambda r: r["result"]["channels"]["normalized"].__setitem__(
+        "fingerprints", r["result"]["channels"]["exact"]["fingerprints"])))
+    d = copy.deepcopy(rdoc)
+    c = next(x for x in d["cataloguesFromRecords"] if x["id"] == "cat-exclusion-test")
+    c["expectedCatalogueSha256"] = "0" * 64
+    yield "exclusion-catalogue-digest-wrong", d
     d = copy.deepcopy(rdoc)
     d["records"][0].pop("configFile")
     yield "config-not-named", d
@@ -1647,7 +1733,7 @@ def main(argv):
         rdoc = strict_loads((HERE / "records.json").read_bytes())
         rs = check_records(rdoc, doc, ctx)
         print(f"PASS records.json: records={rs['records']} (null input fields: {rs['nullInput']}) "
-              f"catalogues-from-records={rs['catalogues']} (equal to matching.json catalogues) build-rejections={rs['rejections']}")
+              f"catalogues-from-records={rs["catalogues"]} (2 equal to matching.json catalogues, 1 to a rebuild from extraction vectors) build-rejections={rs['rejections']}")
     except CheckError as exc:
         print(f"FAIL records.json: {exc}")
         return 1

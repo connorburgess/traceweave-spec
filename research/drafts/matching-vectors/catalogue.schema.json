@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/connorburgess/traceweave-spec/blob/main/research/drafts/matching-vectors/catalogue.schema.json",
   "title": "Traceweave draft fingerprint catalogue (traceweave-catalogue-draft-2)",
-  "description": "Draft research schema, not a file in schemas/. Structure only: canonical bytes, ordering, digest consistency and count rules are in catalogue-report-contract.md section 3 and are enforced by check_matching.py. Every string is restricted to the canonical character set, so no JSON escape can occur. An input-too-large entry has null sha256 and byteLength (extraction Q10); null appears nowhere else.",
+  "description": "Draft research schema, not a file in schemas/. Structure only: canonical bytes, ordering, digest consistency and count rules are in catalogue-report-contract.md section 3 and are enforced by check_matching.py. Every string is restricted to the canonical character set, so no JSON escape can occur. An input-too-large entry has null sha256 and byteLength (extraction Q10); null appears nowhere else. The normalized channel of an ok entry may be empty only for profiles that declare normalized-stream exclusions (extraction OD-23); check_matching.py enforces that.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -232,7 +232,14 @@
               "$ref": "#/$defs/okChannel"
             },
             "normalized": {
-              "$ref": "#/$defs/okChannel"
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/okChannel"
+                },
+                {
+                  "$ref": "#/$defs/emptyChannel"
+                }
+              ]
             }
           }
         },
