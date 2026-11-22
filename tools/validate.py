@@ -70,10 +70,21 @@ def schema_validator():
     )
 
 
-def check_links():
-    files = list(ROOT.glob("*.md"))
-    for directory in ("spec", "profiles", "docs", "schemas", "examples", "test-vectors"):
-        files.extend((ROOT / directory).rglob("*.md"))
+SKIPPED_DIRECTORIES = {".git", ".venv", "node_modules", "target", "__pycache__"}
+
+
+def check_links(all_markdown=False):
+    """Check local Markdown links. By default the core directories; with
+    all_markdown=True every Markdown file in the repository (research included)."""
+    if all_markdown:
+        files = [
+            path for path in ROOT.rglob("*.md")
+            if not SKIPPED_DIRECTORIES.intersection(path.relative_to(ROOT).parts)
+        ]
+    else:
+        files = list(ROOT.glob("*.md"))
+        for directory in ("spec", "profiles", "docs", "schemas", "examples", "test-vectors"):
+            files.extend((ROOT / directory).rglob("*.md"))
     failures = []
     for path in files:
         text = path.read_text(encoding="utf-8")
@@ -167,6 +178,10 @@ def validate_repository(run_checkers=True):
 
 
 if __name__ == "__main__":
+    if "--links-all" in sys.argv[1:]:
+        check_links(all_markdown=True)
+        print("PASS: local Markdown links in every Markdown file")
+        raise SystemExit(0)
     validate_repository()
     print("PASS: draft schemas, synthetic examples, fixture digests, commitment and DSSE framing vectors, local links, promoted schemas and vector checkers")
     print("No signature, timestamp authority, fingerprint detector, or rights claim was verified.")

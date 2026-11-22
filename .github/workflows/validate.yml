@@ -7,14 +7,57 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   contract:
+    name: validate (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      # Full history so the hygiene step can read the pushed commit messages.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          python-version: '3.12'
-      - run: python -m pip install -r requirements-dev.txt
-      - run: python tools/validate.py
-      - run: python -m unittest discover -s tests -v
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install pinned development dependencies
+        run: python -m pip install --require-hashes -r requirements-dev.txt
+      - name: Validate schemas, fixtures, promoted vector checkers and core links
+        run: python tools/validate.py
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Check Markdown links in every Markdown file
+        run: python tools/validate.py --links-all
+      - name: Rebuild every vector set and require no differences
+        run: |
+          python -I test-vectors/extraction/harness/build_vectors.py
+          python -I test-vectors/matching/build_vectors.py
+          python -I test-vectors/extraction-typescript/harness/build_vectors.py
+          python -I test-vectors/extraction-text/harness/build_vectors.py
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
+      - name: Hygiene (home-directory paths, thread identifiers, AI-attribution trailers)
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          PUSH_AFTER: ${{ github.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            range="$PR_BASE..$PR_HEAD"
+          elif [ -n "$PUSH_BEFORE" ] && ! printf '%s' "$PUSH_BEFORE" | grep -Eq '^0+$'; then
+            range="$PUSH_BEFORE..$PUSH_AFTER"
+          else
+            range=new
+          fi
+          python tools/check_hygiene.py --messages "$range"
