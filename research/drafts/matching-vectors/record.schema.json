@@ -1,0 +1,411 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/connorburgess/traceweave-spec/blob/main/research/drafts/matching-vectors/record.schema.json",
+  "title": "Traceweave draft extraction record (traceweave-extraction-record-draft-1)",
+  "description": "Draft research schema, not a file in schemas/. One canonical record per extraction (catalogue-report-contract.md section 2a). Structure only: key order, string escaping, the final LF and value consistency are enforced by check_matching.py. Lexical error codes are checked against the profile's closed list there; the enum here is the union of both profiles.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/examined"
+    },
+    {
+      "$ref": "#/$defs/inputTooLarge"
+    },
+    {
+      "$ref": "#/$defs/unsupportedConfig"
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9.-]+$",
+      "maxLength": 64
+    },
+    "span": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "$ref": "#/$defs/count"
+      }
+    },
+    "kgram": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hash",
+        "position",
+        "span"
+      ],
+      "properties": {
+        "hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{16}$"
+        },
+        "position": {
+          "$ref": "#/$defs/count"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        }
+      }
+    },
+    "channel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fingerprints",
+        "kgrams",
+        "partialWindow",
+        "windowSelections"
+      ],
+      "properties": {
+        "kgrams": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/kgram"
+          }
+        },
+        "partialWindow": {
+          "type": "boolean"
+        },
+        "windowSelections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/count"
+          }
+        },
+        "fingerprints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/kgram"
+          }
+        }
+      }
+    },
+    "normalizedChannel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fingerprints",
+        "kgrams",
+        "partialWindow",
+        "values",
+        "windowSelections"
+      ],
+      "properties": {
+        "kgrams": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/kgram"
+          }
+        },
+        "partialWindow": {
+          "type": "boolean"
+        },
+        "windowSelections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/count"
+          }
+        },
+        "fingerprints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/kgram"
+          }
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "token": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "class",
+        "span",
+        "text"
+      ],
+      "properties": {
+        "class": {
+          "type": "string",
+          "pattern": "^[a-z]+$"
+        },
+        "text": {
+          "type": "string"
+        },
+        "span": {
+          "$ref": "#/$defs/span"
+        },
+        "inserted": {
+          "const": true
+        }
+      }
+    },
+    "extractedResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "channels",
+        "status",
+        "tokenCount",
+        "tokens"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "insufficient-tokens"
+          ]
+        },
+        "tokenCount": {
+          "$ref": "#/$defs/count"
+        },
+        "tokens": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/token"
+          }
+        },
+        "channels": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "exact",
+            "normalized"
+          ],
+          "properties": {
+            "exact": {
+              "$ref": "#/$defs/channel"
+            },
+            "normalized": {
+              "$ref": "#/$defs/normalizedChannel"
+            }
+          }
+        }
+      }
+    },
+    "lexicalErrorResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "error",
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "const": "error"
+        },
+        "error": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "code",
+            "offset"
+          ],
+          "properties": {
+            "code": {
+              "enum": [
+                "invalid-utf8",
+                "bom",
+                "nul",
+                "isolated-cr",
+                "illegal-character",
+                "unterminated-comment",
+                "unterminated-literal",
+                "malformed-literal",
+                "reserved-token",
+                "unbalanced-delimiter",
+                "non-nfc-identifier",
+                "malformed-identifier"
+              ]
+            },
+            "offset": {
+              "$ref": "#/$defs/count"
+            }
+          }
+        }
+      }
+    },
+    "examined": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "configSha256",
+        "inputLength",
+        "inputSha256",
+        "profile",
+        "profileVersion",
+        "recordVersion",
+        "result"
+      ],
+      "properties": {
+        "recordVersion": {
+          "const": "traceweave-extraction-record-draft-1"
+        },
+        "profile": {
+          "$ref": "#/$defs/name"
+        },
+        "profileVersion": {
+          "$ref": "#/$defs/name"
+        },
+        "configSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "inputSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "inputLength": {
+          "$ref": "#/$defs/count"
+        },
+        "result": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/extractedResult"
+            },
+            {
+              "$ref": "#/$defs/lexicalErrorResult"
+            }
+          ]
+        }
+      }
+    },
+    "inputTooLarge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "configSha256",
+        "inputLength",
+        "inputSha256",
+        "profile",
+        "profileVersion",
+        "recordVersion",
+        "result"
+      ],
+      "properties": {
+        "recordVersion": {
+          "const": "traceweave-extraction-record-draft-1"
+        },
+        "profile": {
+          "$ref": "#/$defs/name"
+        },
+        "profileVersion": {
+          "$ref": "#/$defs/name"
+        },
+        "configSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "inputSha256": {
+          "const": null
+        },
+        "inputLength": {
+          "const": null
+        },
+        "result": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "error",
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "const": "error"
+            },
+            "error": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "code",
+                "offset"
+              ],
+              "properties": {
+                "code": {
+                  "const": "input-too-large"
+                },
+                "offset": {
+                  "const": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "unsupportedConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "configSha256",
+        "inputLength",
+        "inputSha256",
+        "profile",
+        "profileVersion",
+        "recordVersion",
+        "result"
+      ],
+      "properties": {
+        "recordVersion": {
+          "const": "traceweave-extraction-record-draft-1"
+        },
+        "profile": {
+          "const": null
+        },
+        "profileVersion": {
+          "const": null
+        },
+        "configSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "inputSha256": {
+          "const": null
+        },
+        "inputLength": {
+          "const": null
+        },
+        "result": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "error",
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "const": "error"
+            },
+            "error": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "code",
+                "offset"
+              ],
+              "properties": {
+                "code": {
+                  "const": "unsupported-config"
+                },
+                "offset": {
+                  "const": null
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

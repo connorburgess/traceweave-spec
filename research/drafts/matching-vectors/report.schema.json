@@ -87,7 +87,14 @@
           "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
         },
         "sha256": {
-          "$ref": "#/$defs/sha256"
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "const": null
+            }
+          ]
         }
       }
     },

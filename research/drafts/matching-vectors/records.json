@@ -1,0 +1,294 @@
+{
+ "recordVersion": "traceweave-extraction-record-draft-1",
+ "note": "Expected canonical extraction records (contract §2a). expectedRecordText is the UTF-8 decoding of the exact record bytes, including the final LF; expectedRecordSha256 is over those bytes.",
+ "records": [
+  {
+   "id": "rec-go-ok",
+   "tags": [
+    "ok"
+   ],
+   "description": "ok result (Go): inserted semicolons carry inserted:true.",
+   "source": "../extraction-vectors/go.json#go-format-a",
+   "derivation": "hand",
+   "inputBase64": "ZnVuYyBhZGQoYSwgYiBpbnQpIGludCB7CglyZXR1cm4gYSArIGIKfQo=",
+   "expectedRecordSha256": "14652fc3cc218808f7378b6a81065dcfaf010bfacd21ce812f2af8063784b030",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens\",\"profileVersion\":\"draft-1\",\"configSha256\":\"dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2\",\"inputSha256\":\"66b27e4b006c89b0f66411d35fd02d6159cdfae0eb1ea64093679757f7bdb57e\",\"inputLength\":41,\"result\":{\"status\":\"ok\",\"tokenCount\":17,\"tokens\":[{\"class\":\"keyword\",\"text\":\"func\",\"span\":[0,4]},{\"class\":\"ident\",\"text\":\"add\",\"span\":[5,8]},{\"class\":\"punct\",\"text\":\"(\",\"span\":[8,9]},{\"class\":\"ident\",\"text\":\"a\",\"span\":[9,10]},{\"class\":\"punct\",\"text\":\",\",\"span\":[10,11]},{\"class\":\"ident\",\"text\":\"b\",\"span\":[12,13]},{\"class\":\"ident\",\"text\":\"int\",\"span\":[14,17]},{\"class\":\"punct\",\"text\":\")\",\"span\":[17,18]},{\"class\":\"ident\",\"text\":\"int\",\"span\":[19,22]},{\"class\":\"punct\",\"text\":\"{\",\"span\":[23,24]},{\"class\":\"keyword\",\"text\":\"return\",\"span\":[26,32]},{\"class\":\"ident\",\"text\":\"a\",\"span\":[33,34]},{\"class\":\"punct\",\"text\":\"+\",\"span\":[35,36]},{\"class\":\"ident\",\"text\":\"b\",\"span\":[37,38]},{\"class\":\"punct\",\"text\":\";\",\"span\":[38,38],\"inserted\":true},{\"class\":\"punct\",\"text\":\"}\",\"span\":[39,40]},{\"class\":\"punct\",\"text\":\";\",\"span\":[40,40],\"inserted\":true}],\"channels\":{\"exact\":{\"kgrams\":[{\"position\":0,\"hash\":\"cd271166e1bc7b44\",\"span\":[0,11]},{\"position\":1,\"hash\":\"67961df97caa2439\",\"span\":[5,13]},{\"position\":2,\"hash\":\"a63bac5f07a88510\",\"span\":[8,17]},{\"position\":3,\"hash\":\"d7fa8f131a78964c\",\"span\":[9,18]},{\"position\":4,\"hash\":\"0dada62e34aa91f9\",\"span\":[10,22]},{\"position\":5,\"hash\":\"20ac96beed28cc03\",\"span\":[12,24]},{\"position\":6,\"hash\":\"98d347bed6f435ca\",\"span\":[14,32]},{\"position\":7,\"hash\":\"ad6c3a04658ef8d6\",\"span\":[17,34]},{\"position\":8,\"hash\":\"232b8fa7b06e08de\",\"span\":[19,36]},{\"position\":9,\"hash\":\"c65a9d25fbd3fe4f\",\"span\":[23,38]},{\"position\":10,\"hash\":\"83851b3a22ebd3f8\",\"span\":[26,38]},{\"position\":11,\"hash\":\"bd91bf35982cd9ed\",\"span\":[33,40]},{\"position\":12,\"hash\":\"08c771e25647f35f\",\"span\":[35,40]}],\"windowSelections\":[1,4,4,4,4,5,8,8,8,12],\"partialWindow\":false,\"fingerprints\":[{\"position\":1,\"hash\":\"67961df97caa2439\",\"span\":[5,13]},{\"position\":4,\"hash\":\"0dada62e34aa91f9\",\"span\":[10,22]},{\"position\":5,\"hash\":\"20ac96beed28cc03\",\"span\":[12,24]},{\"position\":8,\"hash\":\"232b8fa7b06e08de\",\"span\":[19,36]},{\"position\":12,\"hash\":\"08c771e25647f35f\",\"span\":[35,40]}]},\"normalized\":{\"values\":[\"func\",\"\",\"(\",\"\",\",\",\"\",\"\",\")\",\"\",\"{\",\"return\",\"\",\"+\",\"\",\";\",\"}\",\";\"],\"kgrams\":[{\"position\":0,\"hash\":\"5a0bb21d2f40f669\",\"span\":[0,11]},{\"position\":1,\"hash\":\"41eca3755b91bc20\",\"span\":[5,13]},{\"position\":2,\"hash\":\"22641673c2f08ccb\",\"span\":[8,17]},{\"position\":3,\"hash\":\"6e3b75adcca33712\",\"span\":[9,18]},{\"position\":4,\"hash\":\"1b78a516202f7860\",\"span\":[10,22]},{\"position\":5,\"hash\":\"c5bd51446b773c13\",\"span\":[12,24]},{\"position\":6,\"hash\":\"9abaa12781e9d6ac\",\"span\":[14,32]},{\"position\":7,\"hash\":\"80b8029a7bc9895d\",\"span\":[17,34]},{\"position\":8,\"hash\":\"953839ea8c3da2df\",\"span\":[19,36]},{\"position\":9,\"hash\":\"2349273c2f66e02d\",\"span\":[23,38]},{\"position\":10,\"hash\":\"f5a754c25e21130b\",\"span\":[26,38]},{\"position\":11,\"hash\":\"a5b7e35d72b278aa\",\"span\":[33,40]},{\"position\":12,\"hash\":\"85adbe4d292bf2e6\",\"span\":[35,40]}],\"windowSelections\":[2,4,4,4,4,7,9,9,9,9],\"partialWindow\":false,\"fingerprints\":[{\"position\":2,\"hash\":\"22641673c2f08ccb\",\"span\":[8,17]},{\"position\":4,\"hash\":\"1b78a516202f7860\",\"span\":[10,22]},{\"position\":7,\"hash\":\"80b8029a7bc9895d\",\"span\":[17,34]},{\"position\":9,\"hash\":\"2349273c2f66e02d\",\"span\":[23,38]}]}}}}\n"
+  },
+  {
+   "id": "rec-go-ok-unicode",
+   "tags": [
+    "ok",
+    "non-ascii"
+   ],
+   "description": "Non-ASCII token text is written as raw UTF-8, never as \\u escapes.",
+   "source": "../extraction-vectors/go.json#go-unicode",
+   "derivation": "hand",
+   "inputBase64": "cMOkaXbDpCA6PSAiaMOpbGxvLCDkuJbnlYwiICsg5ZCN5YmNICsgc3RyaW5nKCfimIMnKQo=",
+   "expectedRecordSha256": "c42f31ce0d4ae3cfc3caaa75f8229c2e9752851f13f5b2ea487cc73ce91dc75a",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens\",\"profileVersion\":\"draft-1\",\"configSha256\":\"dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2\",\"inputSha256\":\"77a1e084183496040c36c98c7f5f79e6f0984f616aff6743cb498d6e1bf4eee1\",\"inputLength\":53,\"result\":{\"status\":\"ok\",\"tokenCount\":11,\"tokens\":[{\"class\":\"ident\",\"text\":\"päivä\",\"span\":[0,7]},{\"class\":\"punct\",\"text\":\":=\",\"span\":[8,10]},{\"class\":\"string\",\"text\":\"\\\"héllo, 世界\\\"\",\"span\":[11,27]},{\"class\":\"punct\",\"text\":\"+\",\"span\":[28,29]},{\"class\":\"ident\",\"text\":\"名前\",\"span\":[30,36]},{\"class\":\"punct\",\"text\":\"+\",\"span\":[37,38]},{\"class\":\"ident\",\"text\":\"string\",\"span\":[39,45]},{\"class\":\"punct\",\"text\":\"(\",\"span\":[45,46]},{\"class\":\"rune\",\"text\":\"'☃'\",\"span\":[46,51]},{\"class\":\"punct\",\"text\":\")\",\"span\":[51,52]},{\"class\":\"punct\",\"text\":\";\",\"span\":[52,52],\"inserted\":true}],\"channels\":{\"exact\":{\"kgrams\":[{\"position\":0,\"hash\":\"65ca4372e737e0cd\",\"span\":[0,36]},{\"position\":1,\"hash\":\"dfde9bbcc458ae85\",\"span\":[8,38]},{\"position\":2,\"hash\":\"495768414ffa35ff\",\"span\":[11,45]},{\"position\":3,\"hash\":\"6931cf5269bf705e\",\"span\":[28,46]},{\"position\":4,\"hash\":\"5265837c6ff40802\",\"span\":[30,51]},{\"position\":5,\"hash\":\"47a8628e8adb95e5\",\"span\":[37,52]},{\"position\":6,\"hash\":\"c8d6e8bc479391a3\",\"span\":[39,52]}],\"windowSelections\":[2,2,5,5],\"partialWindow\":false,\"fingerprints\":[{\"position\":2,\"hash\":\"495768414ffa35ff\",\"span\":[11,45]},{\"position\":5,\"hash\":\"47a8628e8adb95e5\",\"span\":[37,52]}]},\"normalized\":{\"values\":[\"\",\":=\",\"\",\"+\",\"\",\"+\",\"\",\"(\",\"\",\")\",\";\"],\"kgrams\":[{\"position\":0,\"hash\":\"dba62112c4d2b7be\",\"span\":[0,36]},{\"position\":1,\"hash\":\"723f9b2fdc701e81\",\"span\":[8,38]},{\"position\":2,\"hash\":\"6559c2c53b16cd72\",\"span\":[11,45]},{\"position\":3,\"hash\":\"158a1e27c0c022d8\",\"span\":[28,46]},{\"position\":4,\"hash\":\"dfb19584192e914a\",\"span\":[30,51]},{\"position\":5,\"hash\":\"84b1a2fef937b769\",\"span\":[37,52]},{\"position\":6,\"hash\":\"bf3b99a838a8abb0\",\"span\":[39,52]}],\"windowSelections\":[3,3,3,3],\"partialWindow\":false,\"fingerprints\":[{\"position\":3,\"hash\":\"158a1e27c0c022d8\",\"span\":[28,46]}]}}}}\n"
+  },
+  {
+   "id": "rec-go-ok-raw-cr",
+   "tags": [
+    "ok",
+    "escape"
+   ],
+   "description": "A raw string containing CR LF: written as \\r\\n.",
+   "source": "../extraction-vectors/go.json#go-raw-string-cr",
+   "derivation": "hand",
+   "inputBase64": "cyA6PSBgYQ0KYmAgKyB0Cg==",
+   "expectedRecordSha256": "1feaf308ba58e458d6f0de1cacd3c1d6950255484cd1cc417a4565a7e7379e14",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens\",\"profileVersion\":\"draft-1\",\"configSha256\":\"dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2\",\"inputSha256\":\"d13815c1c96426cce81fe565f793f92ab8eeb9b44b327c9f498116d6ccc6e43a\",\"inputLength\":16,\"result\":{\"status\":\"ok\",\"tokenCount\":6,\"tokens\":[{\"class\":\"ident\",\"text\":\"s\",\"span\":[0,1]},{\"class\":\"punct\",\"text\":\":=\",\"span\":[2,4]},{\"class\":\"string\",\"text\":\"`a\\r\\nb`\",\"span\":[5,11]},{\"class\":\"punct\",\"text\":\"+\",\"span\":[12,13]},{\"class\":\"ident\",\"text\":\"t\",\"span\":[14,15]},{\"class\":\"punct\",\"text\":\";\",\"span\":[15,15],\"inserted\":true}],\"channels\":{\"exact\":{\"kgrams\":[{\"position\":0,\"hash\":\"d809c37e47d9e69d\",\"span\":[0,15]},{\"position\":1,\"hash\":\"f9cd0cb92f193638\",\"span\":[2,15]}],\"windowSelections\":[0],\"partialWindow\":true,\"fingerprints\":[{\"position\":0,\"hash\":\"d809c37e47d9e69d\",\"span\":[0,15]}]},\"normalized\":{\"values\":[\"\",\":=\",\"\",\"+\",\"\",\";\"],\"kgrams\":[{\"position\":0,\"hash\":\"dba62112c4d2b7be\",\"span\":[0,15]},{\"position\":1,\"hash\":\"ad74efa0d0044d39\",\"span\":[2,15]}],\"windowSelections\":[1],\"partialWindow\":true,\"fingerprints\":[{\"position\":1,\"hash\":\"ad74efa0d0044d39\",\"span\":[2,15]}]}}}}\n"
+  },
+  {
+   "id": "rec-go-ok-vt",
+   "tags": [
+    "ok",
+    "escape"
+   ],
+   "description": "A raw string containing U+000B: written as \\u000b (lowercase hex).",
+   "source": "../extraction-vectors/go.json#go-escapes-vt-raw",
+   "derivation": "hand",
+   "inputBase64": "cyA6PSAiXHg0MSIgKyBgYQtiYAo=",
+   "expectedRecordSha256": "cdaf2fafe562e5d270775679d3f289026b1a5c1e004169845d52c3cad6178005",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens\",\"profileVersion\":\"draft-1\",\"configSha256\":\"dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2\",\"inputSha256\":\"f369cc0b138508d0bf04483354e5bc230674b71a78df17e1eaa2e211d559f090\",\"inputLength\":20,\"result\":{\"status\":\"ok\",\"tokenCount\":6,\"tokens\":[{\"class\":\"ident\",\"text\":\"s\",\"span\":[0,1]},{\"class\":\"punct\",\"text\":\":=\",\"span\":[2,4]},{\"class\":\"string\",\"text\":\"\\\"\\\\x41\\\"\",\"span\":[5,11]},{\"class\":\"punct\",\"text\":\"+\",\"span\":[12,13]},{\"class\":\"string\",\"text\":\"`a\\u000bb`\",\"span\":[14,19]},{\"class\":\"punct\",\"text\":\";\",\"span\":[19,19],\"inserted\":true}],\"channels\":{\"exact\":{\"kgrams\":[{\"position\":0,\"hash\":\"f005ddbc9d62296c\",\"span\":[0,19]},{\"position\":1,\"hash\":\"b554152874158a5e\",\"span\":[2,19]}],\"windowSelections\":[1],\"partialWindow\":true,\"fingerprints\":[{\"position\":1,\"hash\":\"b554152874158a5e\",\"span\":[2,19]}]},\"normalized\":{\"values\":[\"\",\":=\",\"\",\"+\",\"\",\";\"],\"kgrams\":[{\"position\":0,\"hash\":\"a97b7eb673c78947\",\"span\":[0,19]},{\"position\":1,\"hash\":\"48e828f63ff10eff\",\"span\":[2,19]}],\"windowSelections\":[1],\"partialWindow\":true,\"fingerprints\":[{\"position\":1,\"hash\":\"48e828f63ff10eff\",\"span\":[2,19]}]}}}}\n"
+  },
+  {
+   "id": "rec-go-ok-sum",
+   "tags": [
+    "ok"
+   ],
+   "description": "ok result for GO_SUM (used by the catalogue-from-records vector).",
+   "source": "extraction-go.json#mv-go-sum",
+   "derivation": "hand",
+   "inputBase64": "ZnVuYyBzdW1Qb3NpdGl2ZSh2YWx1ZXMgW11pbnQpIGludCB7Cgl0b3RhbCA6PSAwCglmb3IgXywgdiA6PSByYW5nZSB2YWx1ZXMgewoJCWlmIHYgPiAwIHsKCQkJdG90YWwgKz0gdgoJCX0KCX0KCXJldHVybiB0b3RhbAp9Cg==",
+   "expectedRecordSha256": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens\",\"profileVersion\":\"draft-1\",\"configSha256\":\"dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2\",\"inputSha256\":\"974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c\",\"inputLength\":127,\"result\":{\"status\":\"ok\",\"tokenCount\":40,\"tokens\":[{\"class\":\"keyword\",\"text\":\"func\",\"span\":[0,4]},{\"class\":\"ident\",\"text\":\"sumPositive\",\"span\":[5,16]},{\"class\":\"punct\",\"text\":\"(\",\"span\":[16,17]},{\"class\":\"ident\",\"text\":\"values\",\"span\":[17,23]},{\"class\":\"punct\",\"text\":\"[\",\"span\":[24,25]},{\"class\":\"punct\",\"text\":\"]\",\"span\":[25,26]},{\"class\":\"ident\",\"text\":\"int\",\"span\":[26,29]},{\"class\":\"punct\",\"text\":\")\",\"span\":[29,30]},{\"class\":\"ident\",\"text\":\"int\",\"span\":[31,34]},{\"class\":\"punct\",\"text\":\"{\",\"span\":[35,36]},{\"class\":\"ident\",\"text\":\"total\",\"span\":[38,43]},{\"class\":\"punct\",\"text\":\":=\",\"span\":[44,46]},{\"class\":\"int\",\"text\":\"0\",\"span\":[47,48]},{\"class\":\"punct\",\"text\":\";\",\"span\":[48,48],\"inserted\":true},{\"class\":\"keyword\",\"text\":\"for\",\"span\":[50,53]},{\"class\":\"ident\",\"text\":\"_\",\"span\":[54,55]},{\"class\":\"punct\",\"text\":\",\",\"span\":[55,56]},{\"class\":\"ident\",\"text\":\"v\",\"span\":[57,58]},{\"class\":\"punct\",\"text\":\":=\",\"span\":[59,61]},{\"class\":\"keyword\",\"text\":\"range\",\"span\":[62,67]},{\"class\":\"ident\",\"text\":\"values\",\"span\":[68,74]},{\"class\":\"punct\",\"text\":\"{\",\"span\":[75,76]},{\"class\":\"keyword\",\"text\":\"if\",\"span\":[79,81]},{\"class\":\"ident\",\"text\":\"v\",\"span\":[82,83]},{\"class\":\"punct\",\"text\":\">\",\"span\":[84,85]},{\"class\":\"int\",\"text\":\"0\",\"span\":[86,87]},{\"class\":\"punct\",\"text\":\"{\",\"span\":[88,89]},{\"class\":\"ident\",\"text\":\"total\",\"span\":[93,98]},{\"class\":\"punct\",\"text\":\"+=\",\"span\":[99,101]},{\"class\":\"ident\",\"text\":\"v\",\"span\":[102,103]},{\"class\":\"punct\",\"text\":\";\",\"span\":[103,103],\"inserted\":true},{\"class\":\"punct\",\"text\":\"}\",\"span\":[106,107]},{\"class\":\"punct\",\"text\":\";\",\"span\":[107,107],\"inserted\":true},{\"class\":\"punct\",\"text\":\"}\",\"span\":[109,110]},{\"class\":\"punct\",\"text\":\";\",\"span\":[110,110],\"inserted\":true},{\"class\":\"keyword\",\"text\":\"return\",\"span\":[112,118]},{\"class\":\"ident\",\"text\":\"total\",\"span\":[119,124]},{\"class\":\"punct\",\"text\":\";\",\"span\":[124,124],\"inserted\":true},{\"class\":\"punct\",\"text\":\"}\",\"span\":[125,126]},{\"class\":\"punct\",\"text\":\";\",\"span\":[126,126],\"inserted\":true}],\"channels\":{\"exact\":{\"kgrams\":[{\"position\":0,\"hash\":\"2dd70cf38f6046d9\",\"span\":[0,25]},{\"position\":1,\"hash\":\"9e2978c2ce69cdda\",\"span\":[5,26]},{\"position\":2,\"hash\":\"13c53975ffd60dcc\",\"span\":[16,29]},{\"position\":3,\"hash\":\"330210cd0c3466ab\",\"span\":[17,30]},{\"position\":4,\"hash\":\"54db48ff93892f67\",\"span\":[24,34]},{\"position\":5,\"hash\":\"3d497652a23fceab\",\"span\":[25,36]},{\"position\":6,\"hash\":\"d756b70dce844d54\",\"span\":[26,43]},{\"position\":7,\"hash\":\"5099ca4608281bdb\",\"span\":[29,46]},{\"position\":8,\"hash\":\"3c56878685555e32\",\"span\":[31,48]},{\"position\":9,\"hash\":\"8abd010e26557668\",\"span\":[35,48]},{\"position\":10,\"hash\":\"70e3bf47bf7b4971\",\"span\":[38,53]},{\"position\":11,\"hash\":\"f4768f3c6740bae5\",\"span\":[44,55]},{\"position\":12,\"hash\":\"2f8f40a61dcfae85\",\"span\":[47,56]},{\"position\":13,\"hash\":\"f400f7549e830644\",\"span\":[48,58]},{\"position\":14,\"hash\":\"d40cdf6545f112ae\",\"span\":[50,61]},{\"position\":15,\"hash\":\"56d0b01fbd749df5\",\"span\":[54,67]},{\"position\":16,\"hash\":\"423c6c9d5d7a23e7\",\"span\":[55,74]},{\"position\":17,\"hash\":\"e550d164e1f4aa63\",\"span\":[57,76]},{\"position\":18,\"hash\":\"d3ae829b9c070235\",\"span\":[59,81]},{\"position\":19,\"hash\":\"02937060fc62470c\",\"span\":[62,83]},{\"position\":20,\"hash\":\"6d8eac8c7178bbe6\",\"span\":[68,85]},{\"position\":21,\"hash\":\"08bdc1a417005230\",\"span\":[75,87]},{\"position\":22,\"hash\":\"233116908c1f7fdf\",\"span\":[79,89]},{\"position\":23,\"hash\":\"ed760a5519322ae1\",\"span\":[82,98]},{\"position\":24,\"hash\":\"79a8f5e4448bba08\",\"span\":[84,101]},{\"position\":25,\"hash\":\"e19e76de263aca07\",\"span\":[86,103]},{\"position\":26,\"hash\":\"f2204b346bc2f387\",\"span\":[88,103]},{\"position\":27,\"hash\":\"a036c4dd8fd8dddf\",\"span\":[93,107]},{\"position\":28,\"hash\":\"f22cdeb9e7674877\",\"span\":[99,107]},{\"position\":29,\"hash\":\"725af00bf2abe7a3\",\"span\":[102,110]},{\"position\":30,\"hash\":\"5c344617045cf67d\",\"span\":[103,110]},{\"position\":31,\"hash\":\"ef9e8499ef165dbe\",\"span\":[106,118]},{\"position\":32,\"hash\":\"a770f186a5db444b\",\"span\":[107,124]},{\"position\":33,\"hash\":\"76a6eecc8c7a8901\",\"span\":[109,124]},{\"position\":34,\"hash\":\"95e19b9eaf8e7980\",\"span\":[110,126]},{\"position\":35,\"hash\":\"cc17f27384ebf48d\",\"span\":[112,126]}],\"windowSelections\":[2,2,2,3,5,8,8,8,8,12,12,12,12,16,16,16,19,19,19,19,21,21,22,24,24,27,29,30,30,30,30,33,33],\"partialWindow\":false,\"fingerprints\":[{\"position\":2,\"hash\":\"13c53975ffd60dcc\",\"span\":[16,29]},{\"position\":3,\"hash\":\"330210cd0c3466ab\",\"span\":[17,30]},{\"position\":5,\"hash\":\"3d497652a23fceab\",\"span\":[25,36]},{\"position\":8,\"hash\":\"3c56878685555e32\",\"span\":[31,48]},{\"position\":12,\"hash\":\"2f8f40a61dcfae85\",\"span\":[47,56]},{\"position\":16,\"hash\":\"423c6c9d5d7a23e7\",\"span\":[55,74]},{\"position\":19,\"hash\":\"02937060fc62470c\",\"span\":[62,83]},{\"position\":21,\"hash\":\"08bdc1a417005230\",\"span\":[75,87]},{\"position\":22,\"hash\":\"233116908c1f7fdf\",\"span\":[79,89]},{\"position\":24,\"hash\":\"79a8f5e4448bba08\",\"span\":[84,101]},{\"position\":27,\"hash\":\"a036c4dd8fd8dddf\",\"span\":[93,107]},{\"position\":29,\"hash\":\"725af00bf2abe7a3\",\"span\":[102,110]},{\"position\":30,\"hash\":\"5c344617045cf67d\",\"span\":[103,110]},{\"position\":33,\"hash\":\"76a6eecc8c7a8901\",\"span\":[109,124]}]},\"normalized\":{\"values\":[\"func\",\"\",\"(\",\"\",\"[\",\"]\",\"\",\")\",\"\",\"{\",\"\",\":=\",\"\",\";\",\"for\",\"\",\",\",\"\",\":=\",\"range\",\"\",\"{\",\"if\",\"\",\">\",\"\",\"{\",\"\",\"+=\",\"\",\";\",\"}\",\";\",\"}\",\";\",\"return\",\"\",\";\",\"}\",\";\"],\"kgrams\":[{\"position\":0,\"hash\":\"18da42eca06cd4a1\",\"span\":[0,25]},{\"position\":1,\"hash\":\"ddfcae499de46fa8\",\"span\":[5,26]},{\"position\":2,\"hash\":\"88b31580f58c8d30\",\"span\":[16,29]},{\"position\":3,\"hash\":\"dd70b9974bfa58ed\",\"span\":[17,30]},{\"position\":4,\"hash\":\"31d938568ab36b20\",\"span\":[24,34]},{\"position\":5,\"hash\":\"41e331b14d1a9877\",\"span\":[25,36]},{\"position\":6,\"hash\":\"1beb73344cd06447\",\"span\":[26,43]},{\"position\":7,\"hash\":\"13515a9361cb6941\",\"span\":[29,46]},{\"position\":8,\"hash\":\"38ecb2aa93d2dc60\",\"span\":[31,48]},{\"position\":9,\"hash\":\"5b464df2df0f81f9\",\"span\":[35,48]},{\"position\":10,\"hash\":\"91c4632deae1e20f\",\"span\":[38,53]},{\"position\":11,\"hash\":\"db011d717a31c766\",\"span\":[44,55]},{\"position\":12,\"hash\":\"a57c5c8f31f2d43d\",\"span\":[47,56]},{\"position\":13,\"hash\":\"c1cb1b2a8cf3df51\",\"span\":[48,58]},{\"position\":14,\"hash\":\"43d309ceb22374c8\",\"span\":[50,61]},{\"position\":15,\"hash\":\"233ab16433c2d8fb\",\"span\":[54,67]},{\"position\":16,\"hash\":\"9d299d8f075ecf26\",\"span\":[55,74]},{\"position\":17,\"hash\":\"a3d7ad9d487bc5d7\",\"span\":[57,76]},{\"position\":18,\"hash\":\"538093b29a561332\",\"span\":[59,81]},{\"position\":19,\"hash\":\"dcdebf733b546c0c\",\"span\":[62,83]},{\"position\":20,\"hash\":\"cfac24f790b11425\",\"span\":[68,85]},{\"position\":21,\"hash\":\"1e71d06c4e29e3eb\",\"span\":[75,87]},{\"position\":22,\"hash\":\"b5d3d6d8dda8eebd\",\"span\":[79,89]},{\"position\":23,\"hash\":\"fa55a0a4766d860a\",\"span\":[82,98]},{\"position\":24,\"hash\":\"8a63ddb2158c3d26\",\"span\":[84,101]},{\"position\":25,\"hash\":\"3f23472de367053b\",\"span\":[86,103]},{\"position\":26,\"hash\":\"345ab877317b6271\",\"span\":[88,103]},{\"position\":27,\"hash\":\"2ea7cfbedf6a3813\",\"span\":[93,107]},{\"position\":28,\"hash\":\"1a900123cb5873b4\",\"span\":[99,107]},{\"position\":29,\"hash\":\"668fb2e160809d0e\",\"span\":[102,110]},{\"position\":30,\"hash\":\"81eead64663d4705\",\"span\":[103,110]},{\"position\":31,\"hash\":\"402552fde1fd906a\",\"span\":[106,118]},{\"position\":32,\"hash\":\"2d2dd98d75a840f9\",\"span\":[107,124]},{\"position\":33,\"hash\":\"6924ed5b6ec7fa34\",\"span\":[109,124]},{\"position\":34,\"hash\":\"933db60a111306e4\",\"span\":[110,126]},{\"position\":35,\"hash\":\"23d66ee0192f35a1\",\"span\":[112,126]}],\"windowSelections\":[0,4,4,6,7,7,7,7,8,9,10,14,15,15,15,15,18,18,21,21,21,21,25,26,27,28,28,28,28,32,32,32,35],\"partialWindow\":false,\"fingerprints\":[{\"position\":0,\"hash\":\"18da42eca06cd4a1\",\"span\":[0,25]},{\"position\":4,\"hash\":\"31d938568ab36b20\",\"span\":[24,34]},{\"position\":6,\"hash\":\"1beb73344cd06447\",\"span\":[26,43]},{\"position\":7,\"hash\":\"13515a9361cb6941\",\"span\":[29,46]},{\"position\":8,\"hash\":\"38ecb2aa93d2dc60\",\"span\":[31,48]},{\"position\":9,\"hash\":\"5b464df2df0f81f9\",\"span\":[35,48]},{\"position\":10,\"hash\":\"91c4632deae1e20f\",\"span\":[38,53]},{\"position\":14,\"hash\":\"43d309ceb22374c8\",\"span\":[50,61]},{\"position\":15,\"hash\":\"233ab16433c2d8fb\",\"span\":[54,67]},{\"position\":18,\"hash\":\"538093b29a561332\",\"span\":[59,81]},{\"position\":21,\"hash\":\"1e71d06c4e29e3eb\",\"span\":[75,87]},{\"position\":25,\"hash\":\"3f23472de367053b\",\"span\":[86,103]},{\"position\":26,\"hash\":\"345ab877317b6271\",\"span\":[88,103]},{\"position\":27,\"hash\":\"2ea7cfbedf6a3813\",\"span\":[93,107]},{\"position\":28,\"hash\":\"1a900123cb5873b4\",\"span\":[99,107]},{\"position\":32,\"hash\":\"2d2dd98d75a840f9\",\"span\":[107,124]},{\"position\":35,\"hash\":\"23d66ee0192f35a1\",\"span\":[112,126]}]}}}}\n"
+  },
+  {
+   "id": "rec-go-insufficient",
+   "tags": [
+    "insufficient-tokens"
+   ],
+   "description": "insufficient-tokens: tokens and values present, k-gram lists empty.",
+   "source": "../extraction-vectors/go.json#go-short",
+   "derivation": "hand",
+   "inputBase64": "eCA6PSAxCg==",
+   "expectedRecordSha256": "29807a720e0fe07d1a83032e0023aa8e7dd38912b1a31ead1803e7056069e407",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens\",\"profileVersion\":\"draft-1\",\"configSha256\":\"dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2\",\"inputSha256\":\"e4068c3a09bf6ddfe5e9922da6984961d90a5f7dad3d5436a201b1888e2e84d8\",\"inputLength\":7,\"result\":{\"status\":\"insufficient-tokens\",\"tokenCount\":4,\"tokens\":[{\"class\":\"ident\",\"text\":\"x\",\"span\":[0,1]},{\"class\":\"punct\",\"text\":\":=\",\"span\":[2,4]},{\"class\":\"int\",\"text\":\"1\",\"span\":[5,6]},{\"class\":\"punct\",\"text\":\";\",\"span\":[6,6],\"inserted\":true}],\"channels\":{\"exact\":{\"kgrams\":[],\"windowSelections\":[],\"partialWindow\":false,\"fingerprints\":[]},\"normalized\":{\"values\":[\"\",\":=\",\"\",\";\"],\"kgrams\":[],\"windowSelections\":[],\"partialWindow\":false,\"fingerprints\":[]}}}}\n"
+  },
+  {
+   "id": "rec-go-empty",
+   "tags": [
+    "insufficient-tokens"
+   ],
+   "description": "Empty input: zero tokens, empty arrays.",
+   "source": "../extraction-vectors/go.json#go-empty",
+   "derivation": "hand",
+   "inputBase64": "",
+   "expectedRecordSha256": "ecf9bf02fcc0351b2a0bc0c4489752f3a6699f136e9a25d6de0e204207178169",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens\",\"profileVersion\":\"draft-1\",\"configSha256\":\"dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2\",\"inputSha256\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\"inputLength\":0,\"result\":{\"status\":\"insufficient-tokens\",\"tokenCount\":0,\"tokens\":[],\"channels\":{\"exact\":{\"kgrams\":[],\"windowSelections\":[],\"partialWindow\":false,\"fingerprints\":[]},\"normalized\":{\"values\":[],\"kgrams\":[],\"windowSelections\":[],\"partialWindow\":false,\"fingerprints\":[]}}}}\n"
+  },
+  {
+   "id": "rec-go-lexical-error",
+   "tags": [
+    "error",
+    "lexical-error"
+   ],
+   "description": "Lexical error: input digest and length present, integer offset.",
+   "source": "../extraction-vectors/go.json#go-err-unterminated-string",
+   "derivation": "hand",
+   "inputBase64": "cyA6PSAiYWJjCnQgOj0gMQo=",
+   "expectedRecordSha256": "fb57beda4eb8a4ebf7f6024dc40a37c30ce02400b44dc48a42dbf6d3327d6412",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens\",\"profileVersion\":\"draft-1\",\"configSha256\":\"dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2\",\"inputSha256\":\"447418540ed690fbcd943b1be6787f54a26bce99362c36fe0906d7d3362bdb83\",\"inputLength\":17,\"result\":{\"status\":\"error\",\"error\":{\"code\":\"unterminated-literal\",\"offset\":5}}}\n"
+  },
+  {
+   "id": "rec-go-encoding-error",
+   "tags": [
+    "error"
+   ],
+   "description": "Invalid UTF-8 input: the record is still UTF-8 (no token text).",
+   "source": "../extraction-vectors/go.json#go-err-invalid-utf8",
+   "derivation": "hand",
+   "inputBase64": "eCA6PSAiYf9iIgo=",
+   "expectedRecordSha256": "345617a6aadcff14a604fbb698873faa0d8189eb383d17a2eb050ca7abe8ae90",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens\",\"profileVersion\":\"draft-1\",\"configSha256\":\"dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2\",\"inputSha256\":\"2d2437f75c42f048c5d283aecddcec252c7a0d3e7b48233d566bca1bae74b598\",\"inputLength\":11,\"result\":{\"status\":\"error\",\"error\":{\"code\":\"invalid-utf8\",\"offset\":7}}}\n"
+  },
+  {
+   "id": "rec-go-over-limit",
+   "tags": [
+    "error",
+    "input-too-large"
+   ],
+   "description": "input-too-large: inputSha256 and inputLength null, offset 0 (Q10).",
+   "source": "../extraction-vectors/limits-go.json#go-limit-over",
+   "derivation": "hand",
+   "inputBase64": "eHl6IDo9IDEgKyAyICsgMwo=",
+   "expectedRecordSha256": "0dc73031f9013b7df72f303b5a9233d50efd4263490e52e3a6cb4e59bcf0799d",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens\",\"profileVersion\":\"draft-1\",\"configSha256\":\"aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8\",\"inputSha256\":null,\"inputLength\":null,\"result\":{\"status\":\"error\",\"error\":{\"code\":\"input-too-large\",\"offset\":0}}}\n"
+  },
+  {
+   "id": "rec-go-over-limit-precedence",
+   "tags": [
+    "error",
+    "input-too-large"
+   ],
+   "description": "Over the limit and invalid UTF-8: input-too-large, nulls.",
+   "source": "../extraction-vectors/limits-go.json#go-limit-precedence",
+   "derivation": "hand",
+   "inputBase64": "eCA6PSAi/yIgKyAxICsgMjMK",
+   "expectedRecordSha256": "0dc73031f9013b7df72f303b5a9233d50efd4263490e52e3a6cb4e59bcf0799d",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens\",\"profileVersion\":\"draft-1\",\"configSha256\":\"aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8\",\"inputSha256\":null,\"inputLength\":null,\"result\":{\"status\":\"error\",\"error\":{\"code\":\"input-too-large\",\"offset\":0}}}\n"
+  },
+  {
+   "id": "rec-go-limit-exact",
+   "tags": [
+    "ok"
+   ],
+   "description": "Exactly maxInputBytes (16): ok.",
+   "source": "../extraction-vectors/limits-go.json#go-limit-exact",
+   "derivation": "hand",
+   "inputBase64": "eHkgOj0gMSArIDIgKyAzCg==",
+   "expectedRecordSha256": "fda58e83172721604881600984db0d9f3a5d8636b780575d611dd28dc27ed807",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"go-tokens\",\"profileVersion\":\"draft-1\",\"configSha256\":\"aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8\",\"inputSha256\":\"e25f566856fe504a0db5b94d9a1e41d8fecfd95682a9aac88393cdfde89cb3a0\",\"inputLength\":16,\"result\":{\"status\":\"ok\",\"tokenCount\":8,\"tokens\":[{\"class\":\"ident\",\"text\":\"xy\",\"span\":[0,2]},{\"class\":\"punct\",\"text\":\":=\",\"span\":[3,5]},{\"class\":\"int\",\"text\":\"1\",\"span\":[6,7]},{\"class\":\"punct\",\"text\":\"+\",\"span\":[8,9]},{\"class\":\"int\",\"text\":\"2\",\"span\":[10,11]},{\"class\":\"punct\",\"text\":\"+\",\"span\":[12,13]},{\"class\":\"int\",\"text\":\"3\",\"span\":[14,15]},{\"class\":\"punct\",\"text\":\";\",\"span\":[15,15],\"inserted\":true}],\"channels\":{\"exact\":{\"kgrams\":[{\"position\":0,\"hash\":\"7dda1e3b7c235c54\",\"span\":[0,11]},{\"position\":1,\"hash\":\"0804884ba6e64ef2\",\"span\":[3,13]},{\"position\":2,\"hash\":\"730b582f65c7e678\",\"span\":[6,15]},{\"position\":3,\"hash\":\"ef0c0d6fb5ca808a\",\"span\":[8,15]}],\"windowSelections\":[1],\"partialWindow\":false,\"fingerprints\":[{\"position\":1,\"hash\":\"0804884ba6e64ef2\",\"span\":[3,13]}]},\"normalized\":{\"values\":[\"\",\":=\",\"\",\"+\",\"\",\"+\",\"\",\";\"],\"kgrams\":[{\"position\":0,\"hash\":\"afdcf57ebbc7074e\",\"span\":[0,11]},{\"position\":1,\"hash\":\"e6d5c54c9f5d7107\",\"span\":[3,13]},{\"position\":2,\"hash\":\"d4d47e3429c0b42d\",\"span\":[6,15]},{\"position\":3,\"hash\":\"d68489da29883961\",\"span\":[8,15]}],\"windowSelections\":[0],\"partialWindow\":false,\"fingerprints\":[{\"position\":0,\"hash\":\"afdcf57ebbc7074e\",\"span\":[0,11]}]}}}}\n"
+  },
+  {
+   "id": "rec-unsupported-config",
+   "tags": [
+    "error",
+    "unsupported-config"
+   ],
+   "description": "unsupported-config: profile, profileVersion, inputSha256, inputLength and offset null; configSha256 over the bytes supplied.",
+   "source": "../extraction-vectors/config-negative.json#cfg-whitespace",
+   "derivation": "hand",
+   "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCAicHJvZmlsZSI6ImdvLXRva2VucyIsInByb2ZpbGVWZXJzaW9uIjoiZHJhZnQtMSIsImNoYW5uZWxzIjpbImV4YWN0Iiwibm9ybWFsaXplZCJdLCJrIjo1LCJ3aW5kb3ciOjQsImhhc2giOiJzaGEyNTYtZmlyc3Q4LXU2NGJlIiwibWF4SW5wdXRCeXRlcyI6MTA0ODU3Nn0K",
+   "inputBase64": "eCA6PSAxCg==",
+   "expectedRecordSha256": "f66e21fe321e870cf90c942b14c04700aa9a27dec9bb2729016e27d8993fc14f",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":null,\"profileVersion\":null,\"configSha256\":\"f9e6a6dd870173c676f3efbc0a2831a127a7a132e0b1010972b2fa30e03a5e8d\",\"inputSha256\":null,\"inputLength\":null,\"result\":{\"status\":\"error\",\"error\":{\"code\":\"unsupported-config\",\"offset\":null}}}\n"
+  },
+  {
+   "id": "rec-unsupported-config-2",
+   "tags": [
+    "error",
+    "unsupported-config"
+   ],
+   "description": "A second unsupported-config record (keys reordered).",
+   "source": "../extraction-vectors/config-negative.json#cfg-key-order",
+   "derivation": "hand",
+   "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sIndpbmRvdyI6NCwiayI6NSwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo=",
+   "inputBase64": "eCA6PSAxCg==",
+   "expectedRecordSha256": "f7c3ed286efab18d82c36fd283949b543707430fb13ab29fbf32feb969ba6db3",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":null,\"profileVersion\":null,\"configSha256\":\"95b9170902e0a5ae78489cd420d7c3a6a4c93c241265ebff2d1927cd8890c6fc\",\"inputSha256\":null,\"inputLength\":null,\"result\":{\"status\":\"error\",\"error\":{\"code\":\"unsupported-config\",\"offset\":null}}}\n"
+  },
+  {
+   "id": "rec-rust-ok",
+   "tags": [
+    "ok"
+   ],
+   "description": "Rust ok result: token text with quotes and backslashes is escaped as \\\" and \\\\.",
+   "source": "../extraction-vectors/rust.json#rust-literals",
+   "derivation": "hand",
+   "inputBase64": "bGV0IHYgPSBbMHhGRl91OCwgMV8wMDAsIDBvMTcsIDBiMTAxMCwgMS41ZTMsIDIuLCAzZjMyXTsKbGV0IHMgPSByIyJyYXcgInEiIiM7IGxldCBiID0gYidcbic7IGxldCBicyA9IGJyIlxkIjsgbGV0IGMgPSBjImhpIjsKbGV0IHQgPSBwLjAuMTsK",
+   "expectedRecordSha256": "6917fe9d9097e755e77f77aa3efeebd04faafdbf65becfeb69ac05ba15d0dbd6",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"rust2024-tokens\",\"profileVersion\":\"draft-1\",\"configSha256\":\"64b34335e4a61383ada1403a2df97c2e45dba987bbf0c8ec21385e04104d1277\",\"inputSha256\":\"a7b3c002239ece39376305a39c94f361a0cfb44afc8f979ee585e4dd232dbdc8\",\"inputLength\":141,\"result\":{\"status\":\"ok\",\"tokenCount\":46,\"tokens\":[{\"class\":\"keyword\",\"text\":\"let\",\"span\":[0,3]},{\"class\":\"ident\",\"text\":\"v\",\"span\":[4,5]},{\"class\":\"punct\",\"text\":\"=\",\"span\":[6,7]},{\"class\":\"punct\",\"text\":\"[\",\"span\":[8,9]},{\"class\":\"int\",\"text\":\"0xFF_u8\",\"span\":[9,16]},{\"class\":\"punct\",\"text\":\",\",\"span\":[16,17]},{\"class\":\"int\",\"text\":\"1_000\",\"span\":[18,23]},{\"class\":\"punct\",\"text\":\",\",\"span\":[23,24]},{\"class\":\"int\",\"text\":\"0o17\",\"span\":[25,29]},{\"class\":\"punct\",\"text\":\",\",\"span\":[29,30]},{\"class\":\"int\",\"text\":\"0b1010\",\"span\":[31,37]},{\"class\":\"punct\",\"text\":\",\",\"span\":[37,38]},{\"class\":\"float\",\"text\":\"1.5e3\",\"span\":[39,44]},{\"class\":\"punct\",\"text\":\",\",\"span\":[44,45]},{\"class\":\"float\",\"text\":\"2.\",\"span\":[46,48]},{\"class\":\"punct\",\"text\":\",\",\"span\":[48,49]},{\"class\":\"int\",\"text\":\"3f32\",\"span\":[50,54]},{\"class\":\"punct\",\"text\":\"]\",\"span\":[54,55]},{\"class\":\"punct\",\"text\":\";\",\"span\":[55,56]},{\"class\":\"keyword\",\"text\":\"let\",\"span\":[57,60]},{\"class\":\"ident\",\"text\":\"s\",\"span\":[61,62]},{\"class\":\"punct\",\"text\":\"=\",\"span\":[63,64]},{\"class\":\"rawstring\",\"text\":\"r#\\\"raw \\\"q\\\"\\\"#\",\"span\":[65,77]},{\"class\":\"punct\",\"text\":\";\",\"span\":[77,78]},{\"class\":\"keyword\",\"text\":\"let\",\"span\":[79,82]},{\"class\":\"ident\",\"text\":\"b\",\"span\":[83,84]},{\"class\":\"punct\",\"text\":\"=\",\"span\":[85,86]},{\"class\":\"byte\",\"text\":\"b'\\\\n'\",\"span\":[87,92]},{\"class\":\"punct\",\"text\":\";\",\"span\":[92,93]},{\"class\":\"keyword\",\"text\":\"let\",\"span\":[94,97]},{\"class\":\"ident\",\"text\":\"bs\",\"span\":[98,100]},{\"class\":\"punct\",\"text\":\"=\",\"span\":[101,102]},{\"class\":\"rawbytestring\",\"text\":\"br\\\"\\\\d\\\"\",\"span\":[103,109]},{\"class\":\"punct\",\"text\":\";\",\"span\":[109,110]},{\"class\":\"keyword\",\"text\":\"let\",\"span\":[111,114]},{\"class\":\"ident\",\"text\":\"c\",\"span\":[115,116]},{\"class\":\"punct\",\"text\":\"=\",\"span\":[117,118]},{\"class\":\"cstring\",\"text\":\"c\\\"hi\\\"\",\"span\":[119,124]},{\"class\":\"punct\",\"text\":\";\",\"span\":[124,125]},{\"class\":\"keyword\",\"text\":\"let\",\"span\":[126,129]},{\"class\":\"ident\",\"text\":\"t\",\"span\":[130,131]},{\"class\":\"punct\",\"text\":\"=\",\"span\":[132,133]},{\"class\":\"ident\",\"text\":\"p\",\"span\":[134,135]},{\"class\":\"punct\",\"text\":\".\",\"span\":[135,136]},{\"class\":\"float\",\"text\":\"0.1\",\"span\":[136,139]},{\"class\":\"punct\",\"text\":\";\",\"span\":[139,140]}],\"channels\":{\"exact\":{\"kgrams\":[{\"position\":0,\"hash\":\"3c704de56d9b88be\",\"span\":[0,16]},{\"position\":1,\"hash\":\"650f5b61ec7920db\",\"span\":[4,17]},{\"position\":2,\"hash\":\"44aced9f36398431\",\"span\":[6,23]},{\"position\":3,\"hash\":\"7c204c2ac7ba7ca8\",\"span\":[8,24]},{\"position\":4,\"hash\":\"2ba70bb8c668c7fa\",\"span\":[9,29]},{\"position\":5,\"hash\":\"22e51055d5db91dd\",\"span\":[16,30]},{\"position\":6,\"hash\":\"56f7b00c8b4fba35\",\"span\":[18,37]},{\"position\":7,\"hash\":\"852589d89a5b0957\",\"span\":[23,38]},{\"position\":8,\"hash\":\"afe436bd00f97e6e\",\"span\":[25,44]},{\"position\":9,\"hash\":\"aab061b291f8367b\",\"span\":[29,45]},{\"position\":10,\"hash\":\"40c231ceb60866f2\",\"span\":[31,48]},{\"position\":11,\"hash\":\"725f7dc9cf55ba84\",\"span\":[37,49]},{\"position\":12,\"hash\":\"61aa40b399426efd\",\"span\":[39,54]},{\"position\":13,\"hash\":\"d7a8e48b4311145a\",\"span\":[44,55]},{\"position\":14,\"hash\":\"b59b0fef7303e257\",\"span\":[46,56]},{\"position\":15,\"hash\":\"7a43e2bc9d177b29\",\"span\":[48,60]},{\"position\":16,\"hash\":\"dfcf3442c3a205e6\",\"span\":[50,62]},{\"position\":17,\"hash\":\"b0dbe56dcd1f37e6\",\"span\":[54,64]},{\"position\":18,\"hash\":\"bf0a90ae33e55a4e\",\"span\":[55,77]},{\"position\":19,\"hash\":\"b46fff46c9768425\",\"span\":[57,78]},{\"position\":20,\"hash\":\"8dc3eb252a07c40b\",\"span\":[61,82]},{\"position\":21,\"hash\":\"b271468d6828de63\",\"span\":[63,84]},{\"position\":22,\"hash\":\"99a716a08f322976\",\"span\":[65,86]},{\"position\":23,\"hash\":\"19343c9c701256d2\",\"span\":[77,92]},{\"position\":24,\"hash\":\"bbd123ad1ac7961a\",\"span\":[79,93]},{\"position\":25,\"hash\":\"184c65b37bad228e\",\"span\":[83,97]},{\"position\":26,\"hash\":\"bd1da5b50f9cc9ab\",\"span\":[85,100]},{\"position\":27,\"hash\":\"b1311fbe77bf80f6\",\"span\":[87,102]},{\"position\":28,\"hash\":\"26b8f6d00e008513\",\"span\":[92,109]},{\"position\":29,\"hash\":\"a41741db53f6e6e5\",\"span\":[94,110]},{\"position\":30,\"hash\":\"1e2a89f8dfbb6bde\",\"span\":[98,114]},{\"position\":31,\"hash\":\"4e4860adc6fae862\",\"span\":[101,116]},{\"position\":32,\"hash\":\"c23dd48c75e16997\",\"span\":[103,118]},{\"position\":33,\"hash\":\"0f5519c5ed77eec1\",\"span\":[109,124]},{\"position\":34,\"hash\":\"37fb082d6a192088\",\"span\":[111,125]},{\"position\":35,\"hash\":\"8f2d4270cd853187\",\"span\":[115,129]},{\"position\":36,\"hash\":\"fd57aab2dd2bc056\",\"span\":[117,131]},{\"position\":37,\"hash\":\"f597e0df45d064b8\",\"span\":[119,133]},{\"position\":38,\"hash\":\"7ed58d6da645bb21\",\"span\":[124,135]},{\"position\":39,\"hash\":\"042b0b6405d1f9f4\",\"span\":[126,136]},{\"position\":40,\"hash\":\"f4a04a2e4503795d\",\"span\":[130,139]},{\"position\":41,\"hash\":\"1ed37d1a2f53c0fb\",\"span\":[132,140]}],\"windowSelections\":[0,4,5,5,5,5,6,10,10,10,10,12,12,15,15,15,17,20,20,20,23,23,25,25,25,25,28,30,30,30,33,33,33,33,34,38,39,39,39],\"partialWindow\":false,\"fingerprints\":[{\"position\":0,\"hash\":\"3c704de56d9b88be\",\"span\":[0,16]},{\"position\":4,\"hash\":\"2ba70bb8c668c7fa\",\"span\":[9,29]},{\"position\":5,\"hash\":\"22e51055d5db91dd\",\"span\":[16,30]},{\"position\":6,\"hash\":\"56f7b00c8b4fba35\",\"span\":[18,37]},{\"position\":10,\"hash\":\"40c231ceb60866f2\",\"span\":[31,48]},{\"position\":12,\"hash\":\"61aa40b399426efd\",\"span\":[39,54]},{\"position\":15,\"hash\":\"7a43e2bc9d177b29\",\"span\":[48,60]},{\"position\":17,\"hash\":\"b0dbe56dcd1f37e6\",\"span\":[54,64]},{\"position\":20,\"hash\":\"8dc3eb252a07c40b\",\"span\":[61,82]},{\"position\":23,\"hash\":\"19343c9c701256d2\",\"span\":[77,92]},{\"position\":25,\"hash\":\"184c65b37bad228e\",\"span\":[83,97]},{\"position\":28,\"hash\":\"26b8f6d00e008513\",\"span\":[92,109]},{\"position\":30,\"hash\":\"1e2a89f8dfbb6bde\",\"span\":[98,114]},{\"position\":33,\"hash\":\"0f5519c5ed77eec1\",\"span\":[109,124]},{\"position\":34,\"hash\":\"37fb082d6a192088\",\"span\":[111,125]},{\"position\":38,\"hash\":\"7ed58d6da645bb21\",\"span\":[124,135]},{\"position\":39,\"hash\":\"042b0b6405d1f9f4\",\"span\":[126,136]}]},\"normalized\":{\"values\":[\"let\",\"\",\"=\",\"[\",\"\",\",\",\"\",\",\",\"\",\",\",\"\",\",\",\"\",\",\",\"\",\",\",\"\",\"]\",\";\",\"let\",\"\",\"=\",\"\",\";\",\"let\",\"\",\"=\",\"\",\";\",\"let\",\"\",\"=\",\"\",\";\",\"let\",\"\",\"=\",\"\",\";\",\"let\",\"\",\"=\",\"\",\".\",\"\",\";\"],\"kgrams\":[{\"position\":0,\"hash\":\"5969289069740cf7\",\"span\":[0,16]},{\"position\":1,\"hash\":\"42bd24e619af7ea9\",\"span\":[4,17]},{\"position\":2,\"hash\":\"b22bccba8567b716\",\"span\":[6,23]},{\"position\":3,\"hash\":\"e7eeaf69a7042980\",\"span\":[8,24]},{\"position\":4,\"hash\":\"04a97049c64677d6\",\"span\":[9,29]},{\"position\":5,\"hash\":\"5cf7ec698161fe8b\",\"span\":[16,30]},{\"position\":6,\"hash\":\"04a97049c64677d6\",\"span\":[18,37]},{\"position\":7,\"hash\":\"5cf7ec698161fe8b\",\"span\":[23,38]},{\"position\":8,\"hash\":\"77ab43031d9f3fc8\",\"span\":[25,44]},{\"position\":9,\"hash\":\"5e2f161f661738b4\",\"span\":[29,45]},{\"position\":10,\"hash\":\"ccb46767bd62a1bf\",\"span\":[31,48]},{\"position\":11,\"hash\":\"558fdc913d457ccf\",\"span\":[37,49]},{\"position\":12,\"hash\":\"6610849d4e5db11e\",\"span\":[39,54]},{\"position\":13,\"hash\":\"0c4d87130c9950e9\",\"span\":[44,55]},{\"position\":14,\"hash\":\"143ac0cc918dfe68\",\"span\":[46,56]},{\"position\":15,\"hash\":\"1dab253019d41005\",\"span\":[48,60]},{\"position\":16,\"hash\":\"0e1591ddc10345f3\",\"span\":[50,62]},{\"position\":17,\"hash\":\"9d7cdac4ddae6c43\",\"span\":[54,64]},{\"position\":18,\"hash\":\"c957b32fbdae827d\",\"span\":[55,77]},{\"position\":19,\"hash\":\"c86679751215ca4f\",\"span\":[57,78]},{\"position\":20,\"hash\":\"971e6f992e29f73c\",\"span\":[61,82]},{\"position\":21,\"hash\":\"107590b192661ebe\",\"span\":[63,84]},{\"position\":22,\"hash\":\"c1dc60067ce8b295\",\"span\":[65,86]},{\"position\":23,\"hash\":\"94569a04a35d6ddf\",\"span\":[77,92]},{\"position\":24,\"hash\":\"b9741994844d6cb8\",\"span\":[79,93]},{\"position\":25,\"hash\":\"e8bdf6d7fd6f14ee\",\"span\":[83,97]},{\"position\":26,\"hash\":\"ab5104cdeb2f1dcd\",\"span\":[85,100]},{\"position\":27,\"hash\":\"a35e20d564c5ca79\",\"span\":[87,102]},{\"position\":28,\"hash\":\"606dc721b4faa3fa\",\"span\":[92,109]},{\"position\":29,\"hash\":\"d0a694b9c888ae52\",\"span\":[94,110]},{\"position\":30,\"hash\":\"5ccf97209cdc7bc4\",\"span\":[98,114]},{\"position\":31,\"hash\":\"367865a07cc006d6\",\"span\":[101,116]},{\"position\":32,\"hash\":\"14a097c9da07deca\",\"span\":[103,118]},{\"position\":33,\"hash\":\"3b8edee4a064b88a\",\"span\":[109,124]},{\"position\":34,\"hash\":\"9be054f3bc4d73bb\",\"span\":[111,125]},{\"position\":35,\"hash\":\"29d1f29eabca360d\",\"span\":[115,129]},{\"position\":36,\"hash\":\"0e173a07526c5aba\",\"span\":[117,131]},{\"position\":37,\"hash\":\"e410cc61373c35fc\",\"span\":[119,133]},{\"position\":38,\"hash\":\"ba744ddb124e29c7\",\"span\":[124,135]},{\"position\":39,\"hash\":\"ed350dd562a9891b\",\"span\":[126,136]},{\"position\":40,\"hash\":\"fcb3fefbf13d057f\",\"span\":[130,139]},{\"position\":41,\"hash\":\"62f0b7d10f605e05\",\"span\":[132,140]}],\"windowSelections\":[1,4,4,6,6,6,6,7,11,11,13,13,13,13,16,16,16,20,21,21,21,21,23,23,27,28,28,30,31,32,32,32,32,36,36,36,36,38,41],\"partialWindow\":false,\"fingerprints\":[{\"position\":1,\"hash\":\"42bd24e619af7ea9\",\"span\":[4,17]},{\"position\":4,\"hash\":\"04a97049c64677d6\",\"span\":[9,29]},{\"position\":6,\"hash\":\"04a97049c64677d6\",\"span\":[18,37]},{\"position\":7,\"hash\":\"5cf7ec698161fe8b\",\"span\":[23,38]},{\"position\":11,\"hash\":\"558fdc913d457ccf\",\"span\":[37,49]},{\"position\":13,\"hash\":\"0c4d87130c9950e9\",\"span\":[44,55]},{\"position\":16,\"hash\":\"0e1591ddc10345f3\",\"span\":[50,62]},{\"position\":20,\"hash\":\"971e6f992e29f73c\",\"span\":[61,82]},{\"position\":21,\"hash\":\"107590b192661ebe\",\"span\":[63,84]},{\"position\":23,\"hash\":\"94569a04a35d6ddf\",\"span\":[77,92]},{\"position\":27,\"hash\":\"a35e20d564c5ca79\",\"span\":[87,102]},{\"position\":28,\"hash\":\"606dc721b4faa3fa\",\"span\":[92,109]},{\"position\":30,\"hash\":\"5ccf97209cdc7bc4\",\"span\":[98,114]},{\"position\":31,\"hash\":\"367865a07cc006d6\",\"span\":[101,116]},{\"position\":32,\"hash\":\"14a097c9da07deca\",\"span\":[103,118]},{\"position\":36,\"hash\":\"0e173a07526c5aba\",\"span\":[117,131]},{\"position\":38,\"hash\":\"ba744ddb124e29c7\",\"span\":[124,135]},{\"position\":41,\"hash\":\"62f0b7d10f605e05\",\"span\":[132,140]}]}}}}\n"
+  },
+  {
+   "id": "rec-rust-lexical-error",
+   "tags": [
+    "error",
+    "lexical-error"
+   ],
+   "description": "Rust lexical error.",
+   "source": "../extraction-vectors/rust.json#rust-err-unbalanced",
+   "derivation": "hand",
+   "inputBase64": "Zm4gZigpIHsgKDEgfQ==",
+   "expectedRecordSha256": "68f1392df1ad61dc0ad56fd27ad31073d832c1df0a6751f7d64a2b35740ee8ad",
+   "expectedRecordText": "{\"recordVersion\":\"traceweave-extraction-record-draft-1\",\"profile\":\"rust2024-tokens\",\"profileVersion\":\"draft-1\",\"configSha256\":\"64b34335e4a61383ada1403a2df97c2e45dba987bbf0c8ec21385e04104d1277\",\"inputSha256\":\"87202e45604ceb9dbeacc2b27e644e547f809b183996f5fb30700c20dd63fd04\",\"inputLength\":13,\"result\":{\"status\":\"error\",\"error\":{\"code\":\"unbalanced-delimiter\",\"offset\":12}}}\n"
+  }
+ ],
+ "cataloguesFromRecords": [
+  {
+   "id": "cat-go-reference-side-failures",
+   "extractionConfigFile": "../extraction-vectors/config-go.json",
+   "artifacts": [
+    {
+     "id": "bad.go",
+     "record": "rec-go-lexical-error"
+    },
+    {
+     "id": "short.go",
+     "record": "rec-go-insufficient"
+    },
+    {
+     "id": "sum.go",
+     "record": "rec-go-ok-sum"
+    }
+   ],
+   "expectedCatalogueSha256": "d357d6f8325e5ba981188f830d5e3e661cc6330ec1e4554cd608e85a7896a192",
+   "sameAs": "matching.json#go-reference-side-failures/reference"
+  },
+  {
+   "id": "cat-go-input-too-large",
+   "extractionConfigFile": "../extraction-vectors/config-go-limit16.json",
+   "artifacts": [
+    {
+     "id": "copy.go",
+     "record": "rec-go-limit-exact"
+    },
+    {
+     "id": "over.go",
+     "record": "rec-go-over-limit"
+    },
+    {
+     "id": "prec.go",
+     "record": "rec-go-over-limit-precedence"
+    }
+   ],
+   "expectedCatalogueSha256": "e025138c287c255f69d99503ba085c6b9532fdd7d07314f2c83de75fbec2a226",
+   "sameAs": "matching.json#go-input-too-large/candidate"
+  }
+ ],
+ "catalogueBuildRejections": [
+  {
+   "id": "build-mixed-configurations",
+   "extractionConfigFile": "../extraction-vectors/config-go.json",
+   "artifacts": [
+    {
+     "id": "a.go",
+     "record": "rec-go-ok"
+    },
+    {
+     "id": "tiny.go",
+     "record": "rec-go-limit-exact"
+    }
+   ],
+   "reason": "records under two different configurations cannot form one catalogue"
+  },
+  {
+   "id": "build-unsupported-config-record",
+   "extractionConfigFile": "../extraction-vectors/config-go.json",
+   "artifacts": [
+    {
+     "id": "a.go",
+     "record": "rec-go-ok"
+    },
+    {
+     "id": "bad.cfg",
+     "record": "rec-unsupported-config"
+    }
+   ],
+   "reason": "an unsupported-config record yields no catalogue entry, and its configuration is not the catalogue's"
+  },
+  {
+   "id": "build-wrong-config-bytes",
+   "extractionConfigFile": "../extraction-vectors/config-go-limit16.json",
+   "artifacts": [
+    {
+     "id": "a.go",
+     "record": "rec-go-ok"
+    }
+   ],
+   "reason": "the record's configSha256 is not the digest of the configuration supplied to the builder"
+  }
+ ]
+}

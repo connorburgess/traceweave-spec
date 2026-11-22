@@ -16,6 +16,7 @@
   "function-in-host",
   "identical",
   "independent-same-task",
+  "input-too-large",
   "insufficient-tokens",
   "invariance",
   "large-host",
@@ -46324,6 +46325,410 @@
       "side": "suppression"
      },
      "status": "rejected"
+    }
+   }
+  },
+  {
+   "id": "go-input-too-large",
+   "tags": [
+    "input-too-large",
+    "malformed-candidate"
+   ],
+   "description": "Catalogues under the maxInputBytes-16 configuration. Two candidate inputs exceed the limit: their catalogue entries carry null sha256 and byteLength (extraction Q10), the pairs are candidate-extraction-error, and the report references them with a null sha256. The in-limit copy shares one fingerprint (below minimum evidence).",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "file": "comparison-config.json"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "tiny.go",
+      "source": "../extraction-vectors/limits-go.json#go-limit-exact"
+     }
+    ],
+    "sha256": "c719df9129a54c8c79dc6634ac9eeaa629ad788e5115002cbe87316fe3129aef",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 16,
+       "id": "tiny.go",
+       "sha256": "e25f566856fe504a0db5b94d9a1e41d8fecfd95682a9aac88393cdfde89cb3a0",
+       "status": "ok",
+       "tokenCount": 8,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "0804884ba6e64ef2",
+           "position": 1,
+           "span": [
+            3,
+            13
+           ]
+          }
+         ],
+         "kgramCount": 4,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "afdcf57ebbc7074e",
+           "position": 0,
+           "span": [
+            0,
+            11
+           ]
+          }
+         ],
+         "kgramCount": 4,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 16
+     },
+     "profile": {
+      "configSha256": "aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "copy.go",
+      "source": "../extraction-vectors/limits-go.json#go-limit-exact"
+     },
+     {
+      "id": "over.go",
+      "source": "../extraction-vectors/limits-go.json#go-limit-over"
+     },
+     {
+      "id": "prec.go",
+      "source": "../extraction-vectors/limits-go.json#go-limit-precedence"
+     }
+    ],
+    "sha256": "e025138c287c255f69d99503ba085c6b9532fdd7d07314f2c83de75fbec2a226",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 16,
+       "id": "copy.go",
+       "sha256": "e25f566856fe504a0db5b94d9a1e41d8fecfd95682a9aac88393cdfde89cb3a0",
+       "status": "ok",
+       "tokenCount": 8,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "0804884ba6e64ef2",
+           "position": 1,
+           "span": [
+            3,
+            13
+           ]
+          }
+         ],
+         "kgramCount": 4,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "afdcf57ebbc7074e",
+           "position": 0,
+           "span": [
+            0,
+            11
+           ]
+          }
+         ],
+         "kgramCount": 4,
+         "partialWindow": false
+        }
+       }
+      },
+      {
+       "byteLength": null,
+       "id": "over.go",
+       "sha256": null,
+       "status": "error",
+       "error": {
+        "code": "input-too-large",
+        "offset": 0
+       }
+      },
+      {
+       "byteLength": null,
+       "id": "prec.go",
+       "sha256": null,
+       "status": "error",
+       "error": {
+        "code": "input-too-large",
+        "offset": 0
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 16
+     },
+     "profile": {
+      "configSha256": "aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "compared",
+    "pairs": [
+     {
+      "reference": "tiny.go",
+      "candidate": "copy.go",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "below-minimum-evidence"
+        ],
+        "reportable": 0,
+        "regions": 1,
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "below-minimum-evidence"
+        ],
+        "reportable": 0,
+        "regions": 1,
+        "derivation": "hand"
+       }
+      }
+     },
+     {
+      "reference": "tiny.go",
+      "candidate": "over.go",
+      "status": "not-compared",
+      "outcomeCode": "candidate-extraction-error"
+     },
+     {
+      "reference": "tiny.go",
+      "candidate": "prec.go",
+      "status": "not-compared",
+      "outcomeCode": "candidate-extraction-error"
+     }
+    ]
+   },
+   "expectedReport": {
+    "bodySha256": "29d002f917c3a4d54a1db44e12a1fae45e5f00aed786674846fb34485fbc1991",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "e025138c287c255f69d99503ba085c6b9532fdd7d07314f2c83de75fbec2a226",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceCatalogueSha256": "c719df9129a54c8c79dc6634ac9eeaa629ad788e5115002cbe87316fe3129aef",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "candidateArtifactCount": 3,
+     "comparison": {
+      "comparison": "traceweave-seed-merge-draft-2",
+      "modes": [
+       "exact",
+       "normalized"
+      ],
+      "minRegionDistinctHashes": 2,
+      "mergeGap": 4,
+      "maxSeedsPerMode": 100000,
+      "maxRegionsPerMode": 1000,
+      "suppressionCatalogueSha256": "none",
+      "parameterStatus": "experimental"
+     },
+     "pairs": [
+      {
+       "candidate": {
+        "id": "copy.go",
+        "sha256": "e25f566856fe504a0db5b94d9a1e41d8fecfd95682a9aac88393cdfde89cb3a0"
+       },
+       "reference": {
+        "id": "tiny.go",
+        "sha256": "e25f566856fe504a0db5b94d9a1e41d8fecfd95682a9aac88393cdfde89cb3a0"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 1,
+           "numerator": 1
+          },
+          "referenceInCandidate": {
+           "denominator": 1,
+           "numerator": 1
+          }
+         },
+         "seedCount": 1,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 1,
+           "numerator": 1
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "below-minimum-evidence"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            3,
+            13
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 1,
+           "referenceSpan": [
+            3,
+            13
+           ],
+           "seeds": [
+            [
+             1,
+             1
+            ]
+           ],
+           "status": "below-minimum-evidence"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 1,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 1,
+           "numerator": 1
+          },
+          "referenceInCandidate": {
+           "denominator": 1,
+           "numerator": 1
+          }
+         },
+         "seedCount": 1,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 1,
+           "numerator": 1
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "below-minimum-evidence"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            0,
+            11
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 1,
+           "referenceSpan": [
+            0,
+            11
+           ],
+           "seeds": [
+            [
+             0,
+             0
+            ]
+           ],
+           "status": "below-minimum-evidence"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 1,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      },
+      {
+       "candidate": {
+        "id": "over.go",
+        "sha256": null
+       },
+       "reference": {
+        "id": "tiny.go",
+        "sha256": "e25f566856fe504a0db5b94d9a1e41d8fecfd95682a9aac88393cdfde89cb3a0"
+       },
+       "outcome": {
+        "class": "unsupported-input",
+        "code": "candidate-extraction-error"
+       },
+       "status": "not-compared"
+      },
+      {
+       "candidate": {
+        "id": "prec.go",
+        "sha256": null
+       },
+       "reference": {
+        "id": "tiny.go",
+        "sha256": "e25f566856fe504a0db5b94d9a1e41d8fecfd95682a9aac88393cdfde89cb3a0"
+       },
+       "outcome": {
+        "class": "unsupported-input",
+        "code": "candidate-extraction-error"
+       },
+       "status": "not-compared"
+      }
+     ],
+     "profile": {
+      "configSha256": "aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8",
+      "id": "go-tokens",
+      "version": "draft-1"
+     },
+     "referenceArtifactCount": 1,
+     "status": "compared",
+     "suppression": {
+      "status": "none"
+     }
     }
    }
   }

@@ -91,7 +91,10 @@ def strict_loads(raw: bytes):
 
 
 def canon(x) -> str:
-    """Contract §3.3: RFC 8785 restricted to objects, arrays, safe ASCII strings, integers 0..2^53-1, booleans."""
+    """Contract §3.3: RFC 8785 restricted to objects, arrays, safe ASCII strings, integers 0..2^53-1, booleans,
+    and null only where the schemas allow it (input-too-large entries)."""
+    if x is None:
+        return "null"
     if x is True:
         return "true"
     if x is False:
@@ -323,6 +326,8 @@ def build_catalogue(side, sources):
         need(cfg_raw is None or raw == cfg_raw, "artifacts of one catalogue must share configuration bytes")
         cfg_raw, cfg = raw, c
         e = {"byteLength": len(data), "id": a["id"], "sha256": sha(data), "status": rec["result"]["status"]}
+        if chans is None and rec["result"]["error"]["code"] == "input-too-large":
+            e["byteLength"], e["sha256"] = None, None          # extraction Q10
         if chans is None:
             e["error"] = dict(rec["result"]["error"])
         else:
@@ -405,7 +410,8 @@ def catalogue_semantic_errors(cat, prof):
     ids = [a["id"].encode() for a in cat["artifacts"]]
     if ids != sorted(set(ids)) or len(ids) != len(set(ids)):
         errs.append("artifacts not strictly ordered by id")
-    if len({a["sha256"] for a in cat["artifacts"]}) != len(ids):
+    digests = [a["sha256"] for a in cat["artifacts"] if a["sha256"] is not None]
+    if len(set(digests)) != len(digests):
         errs.append("two artifacts with the same sha256")
     for a in cat["artifacts"]:
         n = a["byteLength"]
@@ -413,7 +419,10 @@ def catalogue_semantic_errors(cat, prof):
             code, off = a["error"]["code"], a["error"]["offset"]
             if code not in prof["codes"]:
                 errs.append(f"{a['id']}: error code {code} not in the profile's closed list")
-            if (n > cap) != (code == "input-too-large") or (code == "input-too-large" and off != 0) or off > n:
+            if code == "input-too-large":
+                if not (n is None and a["sha256"] is None and off == 0):
+                    errs.append(f"{a['id']}: input-too-large has null sha256 and byteLength and offset 0")
+            elif n is None or a["sha256"] is None or n > cap or off > n:
                 errs.append(f"{a['id']}: error offset/size inconsistent")
             continue
         if n > cap:
@@ -832,8 +841,10 @@ class Context:
     def __init__(self):
         self.cat_schema = strict_loads((HERE / "catalogue.schema.json").read_bytes())
         self.rep_schema = strict_loads((HERE / "report.schema.json").read_bytes())
+        self.rec_schema = strict_loads((HERE / "record.schema.json").read_bytes())
         audit_schema(self.cat_schema)
         audit_schema(self.rep_schema)
+        audit_schema(self.rec_schema)
         self.sources = Sources()
 
 
@@ -1206,6 +1217,11 @@ def catalogue_rule_self_test(doc, ctx):
         ("unknown-profile-version", lambda c: (c["profile"].__setitem__("version", "draft-9"),
                                                c["extractionConfig"].__setitem__("profileVersion", "draft-9")), "unsupported-profile"),
         ("k1-empty-span-at-end-accepted", k1, None),
+        ("input-too-large-with-length", lambda c: art(c, "error").__setitem__("error", {"code": "input-too-large", "offset": 0}),
+         "malformed-catalogue"),
+        ("null-digest-on-lexical-error", lambda c: art(c, "error").__setitem__("sha256", None), "malformed-catalogue"),
+        ("input-too-large-nulls-accepted", lambda c: art(c, "error").update(
+            {"error": {"code": "input-too-large", "offset": 0}, "byteLength": None, "sha256": None}), None),
     ]
     out = []
     need(catalogue_rejection(canon_bytes(base), ctx.cat_schema)[1] is None, "rule self-test base catalogue rejected")
@@ -1287,6 +1303,280 @@ def wrong_implementation_self_test(doc, ctx):
     return results
 
 
+# ------------------------------------------------------------------ extraction records (contract §2a)
+
+RECORD_VERSION = "traceweave-extraction-record-draft-1"
+ENVELOPE_KEYS = ["recordVersion", "profile", "profileVersion", "configSha256", "inputSha256", "inputLength", "result"]
+
+
+def rec_str(s):
+    """ECMAScript JSON.stringify / RFC 8785 string escaping; everything else is written as raw UTF-8."""
+    out = ['"']
+    for ch in s:
+        o = ord(ch)
+        if ch == '"':
+            out.append('\\"')
+        elif ch == "\\":
+            out.append("\\\\")
+        elif ch in "\b\f\n\r\t":
+            out.append({"\b": "\\b", "\f": "\\f", "\n": "\\n", "\r": "\\r", "\t": "\\t"}[ch])
+        elif o < 0x20:
+            out.append("\\u%04x" % o)
+        else:
+            out.append(ch)
+    out.append('"')
+    return "".join(out)
+
+
+def rec_val(x):
+    if x is None:
+        return "null"
+    if x is True or x is False:
+        return "true" if x else "false"
+    if type(x) is int:
+        need(0 <= x <= MAX_INT, "record integer out of range")
+        return str(x)
+    if type(x) is str:
+        return rec_str(x)
+    raise CheckError(f"unexpected record value {x!r}")
+
+
+def rec_obj(d, keys, optional=()):
+    """Write an object with exactly `keys` (plus present `optional` keys) in the given order."""
+    need(set(d) == set(keys) | (set(optional) & set(d)), f"record object keys {sorted(d)} != {keys}")
+    return "{" + ",".join(rec_str(k) + ":" + d[k] for k in keys + [k for k in optional if k in d]) + "}"
+
+
+def write_record(r):
+    """Canonical record text from a parsed record, in the fixed key order of contract §2a."""
+    def span(sp):
+        need(type(sp) is list and len(sp) == 2, "span")
+        return "[" + rec_val(sp[0]) + "," + rec_val(sp[1]) + "]"
+
+    def kg(g):
+        return rec_obj({"position": rec_val(g["position"]), "hash": rec_val(g["hash"]), "span": span(g["span"])},
+                       ["position", "hash", "span"]) if set(g) == {"position", "hash", "span"} else need(False, "k-gram keys")
+
+    def chan(c, values):
+        keys = (["values"] if values else []) + ["kgrams", "windowSelections", "partialWindow", "fingerprints"]
+        need(list(c) == keys or set(c) == set(keys), "channel keys")
+        o = {"kgrams": "[" + ",".join(kg(g) for g in c["kgrams"]) + "]",
+             "windowSelections": "[" + ",".join(rec_val(p) for p in c["windowSelections"]) + "]",
+             "partialWindow": rec_val(c["partialWindow"]),
+             "fingerprints": "[" + ",".join(kg(g) for g in c["fingerprints"]) + "]"}
+        if values:
+            o["values"] = "[" + ",".join(rec_val(v) for v in c["values"]) + "]"
+        need(set(c) == set(o), "channel keys")
+        return rec_obj(o, keys)
+
+    res = r["result"]
+    if res.get("status") == "error":
+        err = rec_obj({"code": rec_val(res["error"]["code"]), "offset": rec_val(res["error"]["offset"])}, ["code", "offset"]) \
+            if set(res["error"]) == {"code", "offset"} else need(False, "error keys")
+        result = rec_obj({"status": rec_val("error"), "error": err}, ["status", "error"]) \
+            if set(res) == {"status", "error"} else need(False, "error result keys")
+    else:
+        toks = []
+        for t in res["tokens"]:
+            o = {"class": rec_val(t["class"]), "text": rec_val(t["text"]), "span": span(t["span"])}
+            if "inserted" in t:
+                need(t["inserted"] is True, "inserted is true or absent")
+                o["inserted"] = "true"
+            need(set(t) == set(o), "token keys")
+            toks.append(rec_obj(o, ["class", "text", "span"], optional=["inserted"]))
+        chans = res["channels"]
+        need(set(chans) == {"exact", "normalized"}, "channel names")
+        cs = rec_obj({"exact": chan(chans["exact"], False), "normalized": chan(chans["normalized"], True)},
+                     ["exact", "normalized"])
+        result = rec_obj({"status": rec_val(res["status"]), "tokenCount": rec_val(res["tokenCount"]),
+                          "tokens": "[" + ",".join(toks) + "]", "channels": cs},
+                         ["status", "tokenCount", "tokens", "channels"])
+    env = {k: rec_val(r[k]) for k in ENVELOPE_KEYS[:-1] if k in r}
+    env["result"] = result
+    return rec_obj(env, ENVELOPE_KEYS) + "\n"
+
+
+def expected_record(cfg_raw, data, result):
+    """Contract §2a and extraction Q10, from (configuration bytes, input bytes, result)."""
+    code = result["error"]["code"] if result["status"] == "error" else None
+    if code == "unsupported-config":
+        prof, ver = None, None
+    else:
+        cfg = parse_extraction_config(cfg_raw)
+        prof, ver = cfg["profile"], cfg["profileVersion"]
+    unread = code in ("unsupported-config", "input-too-large")
+    return write_record({"recordVersion": RECORD_VERSION, "profile": prof, "profileVersion": ver,
+                         "configSha256": sha(cfg_raw), "inputSha256": None if unread else sha(data),
+                         "inputLength": None if unread else len(data), "result": result}).encode("utf-8")
+
+
+def check_record_bytes(rb, rec_schema):
+    """Consumer-side record validation (no source): framing, strict JSON, schema, canonical bytes, profile codes."""
+    need(rb.endswith(b"\n") and rb.count(b"\n") == 1, "a record is one line ending in exactly one LF")
+    need(b"\r" not in rb, "raw CR in a record")
+    try:
+        r = strict_loads(rb[:-1])
+    except (ValueError, UnicodeDecodeError) as exc:
+        raise CheckError(f"record is not strict UTF-8 JSON ({exc})") from None
+    schema_check(rec_schema, r, "record")
+    need(write_record(r).encode("utf-8") == rb, "record bytes are not canonical (key order, escaping or whitespace)")
+    res = r["result"]
+    if res["status"] == "error" and res["error"]["code"] not in ("unsupported-config", "input-too-large"):
+        prof = PROFILES.get((r["profile"], r["profileVersion"]))
+        need(prof is not None and res["error"]["code"] in prof["codes"], "error code not in the profile's closed list")
+    if res["status"] != "error":
+        need(res["tokenCount"] == len(res["tokens"]), "tokenCount != number of tokens")
+        need((res["status"] == "ok") == bool(res["channels"]["exact"]["kgrams"]), "status inconsistent with k-grams")
+    return r
+
+
+def catalogue_from_records(cfg_raw, items, rec_schema):
+    """Contract §3.8: build catalogue bytes from (id, record bytes) pairs, or raise CheckError."""
+    cfg = parse_extraction_config(cfg_raw)
+    need(PROFILES.get((cfg["profile"], cfg["profileVersion"])) is not None, "unsupported profile")
+    entries = []
+    for aid, rb in items:
+        r = check_record_bytes(rb, rec_schema)
+        res = r["result"]
+        need(not (res["status"] == "error" and res["error"]["code"] == "unsupported-config"),
+             "an unsupported-config record cannot enter a catalogue")
+        need(r["configSha256"] == sha(cfg_raw), "record configSha256 is not the digest of the catalogue configuration")
+        need([r["profile"], r["profileVersion"]] == [cfg["profile"], cfg["profileVersion"]], "record profile differs")
+        e = {"byteLength": r["inputLength"], "id": aid, "sha256": r["inputSha256"], "status": res["status"]}
+        if res["status"] == "error":
+            e["error"] = dict(res["error"])
+        else:
+            e["tokenCount"] = res["tokenCount"]
+            e["channels"] = {ch: {"fingerprints": [{"hash": f["hash"], "position": f["position"], "span": f["span"]}
+                                                   for f in res["channels"][ch]["fingerprints"]],
+                                  "kgramCount": max(0, res["tokenCount"] - cfg["k"] + 1),
+                                  "partialWindow": res["channels"][ch]["partialWindow"]} for ch in CHANNELS}
+        entries.append(e)
+    return canon_bytes({"artifacts": sorted(entries, key=lambda e: e["id"].encode()), "catalogueVersion": CATALOGUE_VERSION,
+                        "extractionConfig": {k: cfg[k] for k in EX_KEYS},
+                        "profile": {"configSha256": sha(cfg_raw), "id": cfg["profile"], "version": cfg["profileVersion"]}})
+
+
+def check_records(rdoc, mdoc, ctx):
+    need(rdoc["recordVersion"] == RECORD_VERSION, "records.json recordVersion")
+    stats = {"records": 0, "nullInput": 0, "catalogues": 0, "rejections": 0}
+    by_id, codes = {}, set()
+    for v in rdoc["records"]:
+        try:
+            need(v["id"] not in by_id, "duplicate record id")
+            fname, rid = v["source"].split("#", 1)
+            if fname.endswith("config-negative.json"):
+                neg = {n["id"]: n for n in strict_loads((HERE / fname).read_bytes())["negatives"]}[rid]
+                cfg_raw = base64.b64decode(neg["configBase64"], validate=True)
+                need(v["configBase64"] == neg["configBase64"], "configuration bytes differ from the negative")
+                data, result = base64.b64decode(v["inputBase64"], validate=True), neg["expectedResult"]
+            else:
+                rec, data, _, cfg_raw, _ = ctx.sources.get(v["source"])   # recomputes hashes from tokens
+                need(v["inputBase64"] == rec["inputBase64"], "input differs from the source vector")
+                result = rec["result"]
+            rb = v["expectedRecordText"].encode("utf-8")
+            need(sha(rb) == v["expectedRecordSha256"], "expectedRecordSha256 is not the digest of the record bytes")
+            r = check_record_bytes(rb, ctx.rec_schema)
+            need(rb == expected_record(cfg_raw, data, result), "record differs from the one derived from its source")
+            by_id[v["id"]] = rb
+            codes.add(r["result"]["status"] if r["result"]["status"] != "error" else r["result"]["error"]["code"])
+            stats["records"] += 1
+            stats["nullInput"] += r["inputSha256"] is None
+        except CheckError as exc:
+            raise CheckError(f"records.json:{v.get('id')}: {exc}") from None
+    need({"ok", "insufficient-tokens", "unsupported-config", "input-too-large"} <= codes
+         and codes - {"ok", "insufficient-tokens", "unsupported-config", "input-too-large"},
+         "record vectors must cover ok, insufficient-tokens, a lexical error, unsupported-config and input-too-large")
+    mvec = {v["id"]: v for v in mdoc["vectors"]}
+    for c in rdoc["cataloguesFromRecords"]:
+        cb = catalogue_from_records((HERE / c["extractionConfigFile"]).read_bytes(),
+                                    [(a["id"], by_id[a["record"]]) for a in c["artifacts"]], ctx.rec_schema)
+        need(sha(cb) == c["expectedCatalogueSha256"], f"{c['id']}: catalogue from records digest")
+        vid, side = c["sameAs"].split("#", 1)[1].split("/")
+        need(sha(cb) == mvec[vid][side]["sha256"], f"{c['id']}: differs from the catalogue in {c['sameAs']}")
+        stats["catalogues"] += 1
+    for c in rdoc["catalogueBuildRejections"]:
+        try:
+            catalogue_from_records((HERE / c["extractionConfigFile"]).read_bytes(),
+                                   [(a["id"], by_id[a["record"]]) for a in c["artifacts"]], ctx.rec_schema)
+        except CheckError:
+            stats["rejections"] += 1
+            continue
+        raise CheckError(f"{c['id']}: the catalogue builder accepted records it must refuse")
+    return stats
+
+
+def record_corruptions(rdoc):
+    """Yield (name, corrupted records doc). Record digests are refreshed unless the digest itself is the target."""
+    def edit(rid, fn, refresh=True):
+        d = copy.deepcopy(rdoc)
+        v = next(x for x in d["records"] if x["id"] == rid)
+        v["expectedRecordText"] = fn(v["expectedRecordText"])
+        if refresh:
+            v["expectedRecordSha256"] = sha(v["expectedRecordText"].encode("utf-8"))
+        return d
+
+    def sub(old, new, count=1):
+        def f(t):
+            need(old in t, f"corruption setup: {old!r} not in record")
+            return t.replace(old, new, count)
+        return f
+
+    def reparse(fn):
+        def f(t):
+            r = json.loads(t)
+            fn(r)
+            return json.dumps(r, separators=(",", ":"), ensure_ascii=False) + "\n"
+        return f
+
+    yield "field-inputBytes", edit("rec-go-ok", sub('"inputLength":', '"inputBytes":'))
+    yield "extra-contract-key", edit("rec-go-ok", sub('"profile":', '"contract":"traceweave-token-winnow-draft-1","profile":'))
+    yield "missing-recordVersion", edit("rec-go-ok", sub('"recordVersion":"traceweave-extraction-record-draft-1",', ''))
+    yield "envelope-order-swapped", edit("rec-go-ok", lambda t: t.replace('"profile":"go-tokens","profileVersion":"draft-1"',
+                                                                           '"profileVersion":"draft-1","profile":"go-tokens"'))
+    yield "result-order-swapped", edit("rec-go-ok", reparse(lambda r: r.__setitem__("result", {
+        "tokenCount": r["result"]["tokenCount"], "status": r["result"]["status"], "tokens": r["result"]["tokens"],
+        "channels": r["result"]["channels"]})))
+    yield "jcs-sorted-keys", edit("rec-go-ok", lambda t: json.dumps(json.loads(t), sort_keys=True, separators=(",", ":"),
+                                                                     ensure_ascii=False) + "\n")
+    yield "no-final-lf", edit("rec-go-ok", lambda t: t[:-1])
+    yield "crlf-ending", edit("rec-go-ok", lambda t: t[:-1] + "\r\n")
+    yield "insignificant-whitespace", edit("rec-go-ok", sub('","profile":', '", "profile":'))
+    yield "non-ascii-escaped", edit("rec-go-ok-unicode", lambda t: json.dumps(json.loads(t), separators=(",", ":"),
+                                                                              ensure_ascii=True) + "\n")
+    yield "uppercase-hex-escape", edit("rec-go-ok-vt", sub("\\u000b", "\\u000B", count=99))
+    yield "raw-control-character", edit("rec-go-ok-vt", sub("\\u000b", "\u000b", count=99))
+    yield "unnecessary-escape-in-text", edit("rec-go-ok", sub('"text":"add"', '"text":"\\u0061dd"'))
+    yield "unsupported-config-input-digest", edit("rec-unsupported-config", sub('"inputSha256":null', '"inputSha256":"' + "0" * 64 + '"'))
+    yield "unsupported-config-profile", edit("rec-unsupported-config", sub('"profile":null', '"profile":"go-tokens"'))
+    yield "unsupported-config-offset", edit("rec-unsupported-config", sub('"offset":null', '"offset":0'))
+    yield "over-limit-input-length", edit("rec-go-over-limit", sub('"inputLength":null', '"inputLength":17'))
+    yield "lexical-error-null-offset", edit("rec-go-lexical-error", lambda t: re.sub(r'"offset":\d+', '"offset":null', t))
+    yield "kgrams-omitted", edit("rec-go-ok", reparse(lambda r: [c.pop("kgrams") for c in r["result"]["channels"].values()]))
+    yield "windowSelections-omitted", edit("rec-go-ok", reparse(lambda r: r["result"]["channels"]["exact"].pop("windowSelections")))
+    yield "values-omitted", edit("rec-go-ok", reparse(lambda r: r["result"]["channels"]["normalized"].pop("values")))
+    yield "inserted-false", edit("rec-go-ok", sub('"span":[0,4]}', '"span":[0,4],"inserted":false}'))
+    yield "tokenCount-wrong", edit("rec-go-ok", lambda t: re.sub(r'"tokenCount":(\d+)', lambda m: f'"tokenCount":{int(m.group(1)) + 1}', t))
+    yield "tokenCount-float", edit("rec-go-ok", lambda t: re.sub(r'"tokenCount":(\d+)', r'"tokenCount":\1.0', t))
+    yield "duplicate-key", edit("rec-go-ok", sub('"inputLength":', '"inputLength":0,"inputLength":'))
+    yield "input-digest-wrong", edit("rec-go-lexical-error", lambda t: re.sub(r'"inputSha256":"[0-9a-f]{64}"', '"inputSha256":"' + "1" * 64 + '"', t))
+    yield "fingerprint-hash-changed", edit("rec-go-ok", reparse(lambda r: r["result"]["channels"]["exact"]["fingerprints"][0].__setitem__(
+        "hash", "0" * 16)))
+    d = copy.deepcopy(rdoc)
+    d["records"][0]["expectedRecordSha256"] = "0" * 64
+    yield "record-digest-wrong", d
+    d = copy.deepcopy(rdoc)
+    d["cataloguesFromRecords"][0]["expectedCatalogueSha256"] = "0" * 64
+    yield "catalogue-from-records-digest-wrong", d
+    d = copy.deepcopy(rdoc)
+    d["catalogueBuildRejections"][0]["artifacts"] = d["catalogueBuildRejections"][0]["artifacts"][:1]
+    yield "build-rejection-that-is-valid", d
+    d = copy.deepcopy(rdoc)
+    d["records"] = [r for r in d["records"] if "input-too-large" not in r["tags"]]
+    d["cataloguesFromRecords"] = d["cataloguesFromRecords"][:1]
+    yield "input-too-large-coverage-dropped", d
+
+
 def main(argv):
     path = Path(argv[0]) if argv else HERE / "matching.json"
     ctx = Context()
@@ -1336,6 +1626,27 @@ def main(argv):
     wrong_missed = [n for n, _, c in wrong if not c]
     print(f"{'PASS' if not wrong_missed else 'FAIL'} wrong-implementation self-test: rejected {len(wrong) - len(wrong_missed)}/{len(wrong)}")
     missed += wrong_missed
+    try:
+        rdoc = strict_loads((HERE / "records.json").read_bytes())
+        rs = check_records(rdoc, doc, ctx)
+        print(f"PASS records.json: records={rs['records']} (null input fields: {rs['nullInput']}) "
+              f"catalogues-from-records={rs['catalogues']} (equal to matching.json catalogues) build-rejections={rs['rejections']}")
+    except CheckError as exc:
+        print(f"FAIL records.json: {exc}")
+        return 1
+    rec_results = []
+    for name, d in record_corruptions(rdoc):
+        try:
+            check_records(d, doc, ctx)
+            rec_results.append((name, None))
+        except (CheckError, KeyError, ValueError, TypeError) as exc:
+            rec_results.append((name, str(exc)))
+    for name, msg in rec_results:
+        print(f"  record corruption {name}: {'REJECTED: ' + msg if msg else 'ACCEPTED (checker defect)'}")
+    rec_missed = [n for n, m in rec_results if m is None]
+    print(f"{'PASS' if not rec_missed else 'FAIL'} record corruption self-test: rejected "
+          f"{len(rec_results) - len(rec_missed)}/{len(rec_results)}")
+    missed += rec_missed
     print("Scope: recomputes extraction from recorded tokens and matching from recorded fingerprints; it does not lex. "
           "Token streams are validated by ../extraction-vectors/check_vectors.py.")
     return 1 if missed else 0

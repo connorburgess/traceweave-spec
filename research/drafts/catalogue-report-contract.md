@@ -1,8 +1,10 @@
 # Draft catalogue and comparison-report contract: token-fingerprint baseline
 
-Status: **draft for review, revision draft-2, 2026-11-22.** Roadmap item TW-03. Gates: [roadmap](../../ROADMAP.md) M1.3 (catalogue and report schemas) and M2.6 (hand-derived matching vectors). This contract also fixes what I2 in the [implementation plan](../../docs/implementation-repo-plan.md#milestones) must reproduce for M2.4 and M2.5. It builds on the reviewed [extraction contract](extraction-contract.md) and changes nothing in it.
+Status: **draft for review, revision draft-2 with amendment A1 (extraction record), 2026-11-22.** Roadmap item TW-03. Gates: [roadmap](../../ROADMAP.md) M1.3 (catalogue and report schemas) and M2.6 (hand-derived matching vectors). This contract also fixes what I2 in the [implementation plan](../../docs/implementation-repo-plan.md#milestones) must reproduce for M2.4 and M2.5. It builds on the reviewed [extraction contract](extraction-contract.md) and changes nothing in it.
 
 This revision resolves the [clean-room review](../reviews/catalogue-report-contract-review.md) Part 1 findings 1–10 and guesses G1–G6, plus the non-blocking additions of its confirmation pass (G7, invariance, cap and suppression-order vectors). Every disposition is in [§13](#13-review-dispositions). Draft-2 changes formats: catalogue `traceweave-catalogue-draft-2`, comparison `traceweave-seed-merge-draft-2`, report `traceweave-report-draft-2`. Draft-1 identifiers are no longer accepted.
+
+**Amendment A1** (§2a, §3.8) fixes the single canonical extraction record `traceweave-extraction-record-draft-1`, which the extraction contract §9 and its Q10 leave to TW-03. It also brings `input-too-large` catalogue entries into line with Q10 (null input digest and length). **No existing catalogue or report byte changed.** All 59 earlier vectors are byte-identical, and catalogue, comparison and report identifiers stay at draft-2. The details and the one rule change are in §13, A1.
 
 This is research material, not a normative change. It does not modify [core](../../spec/core.md), [attestations](../../spec/attestations.md), [conformance](../../spec/conformance.md), `schemas/`, `profiles/` or `test-vectors/`. "MUST" describes what this draft proposes for an implementation claiming to follow it. The draft schemas and vectors are in [matching-vectors/](matching-vectors/README.md). Nothing here is a registered algorithm. No parameter is tuned or calibrated.
 
@@ -12,7 +14,7 @@ Every choice an implementation could otherwise make differently is fixed below. 
 
 ```
 extraction config bytes + artifact bytes  ──extract (extraction contract)──►  extraction results
-extraction results + artifact ids         ──catalogue (§3)───────────────────►  catalogue bytes
+extraction records (§2a) + config bytes + artifact ids ──catalogue (§3.8)──►  catalogue bytes
 reference + candidate (+ optional suppression) catalogue bytes + comparison config bytes ──compare (§5)──► body (§6)
 body + provenance (§6.6)                  ──────────────────────────────────►  report document
 ```
@@ -36,6 +38,51 @@ For each artifact, the catalogue uses these extraction contract §9 fields:
 - per channel, `partialWindow` and the fingerprints (position, hash, span).
 
 `kgramCount` is defined as `max(0, tokenCount − k + 1)` and is computed from `tokenCount`, because extraction §9 makes k-gram lists optional in production (G6). The catalogue uses no tokens, token text, k-gram lists, window selections or normalized values.
+
+## 2a. Extraction record (`traceweave-extraction-record-draft-1`)
+
+One extraction (configuration bytes + input bytes) produces one record. The record's canonical bytes are the **normative output of extraction** for conformance level 4: two implementations MUST emit identical record bytes for the same configuration and input bytes. Schema: [record.schema.json](matching-vectors/record.schema.json) (structure only). Vectors: [records.json](matching-vectors/records.json).
+
+**Envelope fields, in this order:**
+
+| # | Key | Type | Value |
+| --- | --- | --- | --- |
+| 1 | `recordVersion` | string | `traceweave-extraction-record-draft-1` |
+| 2 | `profile` | string or `null` | The configuration's `profile`; `null` for `unsupported-config` |
+| 3 | `profileVersion` | string or `null` | The configuration's `profileVersion`; `null` for `unsupported-config` |
+| 4 | `configSha256` | string | SHA-256 of the configuration bytes **as supplied** (even when they are rejected), 64 lowercase hex digits |
+| 5 | `inputSha256` | string or `null` | SHA-256 of the input bytes; `null` for `unsupported-config` and `input-too-large` |
+| 6 | `inputLength` | integer or `null` | Input length in bytes; `null` for `unsupported-config` and `input-too-large` |
+| 7 | `result` | object | Below |
+
+There is no `contract` key: the configuration's `contract` is bound through `configSha256`, and `recordVersion` identifies the record format. The name is `inputLength`, not `inputBytes`.
+
+**`result`, in this order:**
+- **Error** (`status` `"error"`): `{"status":"error","error":{"code":…,"offset":…}}`. `offset` is an integer, except `null` for `unsupported-config`; it is 0 for `input-too-large` (extraction Q10). `code` is from the profile's closed list (extraction §4.8/§5.9) or `unsupported-config`.
+- **`ok` or `insufficient-tokens`**: `status`, `tokenCount`, `tokens`, `channels`.
+  - Each token is `class`, `text`, `span`, then `inserted` (the literal `true`) **only** for Go inserted semicolons. `inserted` is never `false`.
+  - `channels` is `exact` then `normalized`. A channel is `kgrams`, `windowSelections`, `partialWindow`, `fingerprints`. The normalized channel has `values` first.
+  - Each k-gram and fingerprint is `position`, `hash`, `span`.
+  - k-gram lists, `windowSelections` and `values` are **always present** in the canonical record (empty arrays for `insufficient-tokens`). Extraction §9 calls them optional "in production output"; an implementation MAY offer other outputs, but only this record is canonical.
+
+These are exactly the extraction vectors' `result` objects (extraction §9 and the [vector README](extraction-vectors/README.md)), so record vectors are derived from extraction vectors without new hand work.
+
+**Canonical serialization:**
+1. Objects use the key order given above, **not** sorted order. No other keys exist.
+2. No insignificant whitespace. The record ends with **exactly one LF** (U+000A) and contains no other raw LF or CR.
+3. Integers are plain decimal. `true`, `false` and `null` as in JSON. No floats.
+4. Strings use the ECMAScript `JSON.stringify` (RFC 8785 §3.2.2.2) escaping:
+   - `"` → `\"`, `\` → `\\`;
+   - U+0008, U+0009, U+000A, U+000C, U+000D → `\b`, `\t`, `\n`, `\f`, `\r`;
+   - every other code point below U+0020 → `\u00xx`, with **lowercase** hex;
+   - **everything else is written as raw UTF-8**: non-ASCII, U+007F, U+2028/U+2029 and `/` are never escaped.
+5. Token text is the input bytes at the token's span (extraction §3), so the record is valid UTF-8 even when the input is not: inputs that are not UTF-8 are errors and have no token text.
+
+Records differ from catalogues and report bodies (sorted keys, no final LF, §3.3) because a record is a stream unit: it reproduces the layout both current implementations already emit for `result`, and its final LF makes records concatenable.
+
+**Record streams and the CLI.** A sequence of records concatenated in input order is a valid JSON Lines stream, because each record is one line. That framing, the CLI's argument syntax, exit statuses and any `--pretty`/`--result-only` options are **not normative** (conformance: CLI names are optional interfaces). What is normative is (a) the bytes of each record and (b) the catalogue (§3), which is the persisted, committed artifact.
+
+**Not in the record.** The configuration bytes themselves (bound by `configSha256`), the input bytes, file names, timestamps and implementation identity. A record carries the token text, so it is as private as the source (it is source text).
 
 ## 3. Catalogue record (`traceweave-catalogue-draft-2`)
 
@@ -62,6 +109,7 @@ Every examined artifact gets an entry, including failures:
 | `insufficient-tokens` | The same, with `kgramCount` 0, `partialWindow` false and `fingerprints` `[]` |
 | `error` | `byteLength`, `error: {code, offset}`, `id`, `sha256`, `status`. No channels. `code` is a lexical or input code from the profile's closed list (extraction §4.8/§5.9) |
 
+- **`input-too-large` entries** have `sha256` `null` and `byteLength` `null`, with offset 0: the input is not read past the limit (extraction Q10). This is the only place `null` appears in a catalogue. Such entries are excluded from the digest-uniqueness rule.
 - **`unsupported-config` never appears in a catalogue (G4).** An extraction that fails with `unsupported-config` has no valid configuration to bind, so it yields no catalogue at all, and the schema's integer `offset` cannot hold its `null`.
 - **`id`** is a caller-chosen opaque label matching `^[a-z0-9][a-z0-9._-]{0,63}$`, unique within the catalogue. Ids appear in reports, so a path-like id discloses the path.
 - **`sha256`** is over the **original artifact bytes**. Two entries in one catalogue MUST NOT share a `sha256`.
@@ -71,7 +119,7 @@ Every examined artifact gets an entry, including failures:
 
 The rules below apply to catalogue bytes and to report body bytes alike. Both are [RFC 8785](https://www.rfc-editor.org/rfc/rfc8785) (JCS) serializations, restricted so that every JCS implementation agrees:
 
-1. Values are objects, arrays, strings, booleans and integers in `0 … 2⁵³ − 1`. There are no floats, negative numbers or `null`.
+1. Values are objects, arrays, strings, booleans and integers in `0 … 2⁵³ − 1`. There are no floats or negative numbers. `null` appears only where the schemas allow it: the `sha256` and `byteLength` of an `input-too-large` entry, and the `sha256` of a report artifact reference to such an entry.
 2. Every string consists of printable ASCII (U+0020–U+007E) other than `"` and `\`, so no escape sequence occurs. The schema patterns guarantee this for every field.
 3. Object members are sorted by key in code-unit order (plain ASCII order here). There is no insignificant whitespace. Integers are plain decimal.
 4. There is **no trailing newline**, and no byte-order mark.
@@ -104,7 +152,7 @@ Steps in order. The first failure decides the code:
 5. `(profile.id, profile.version)` is implemented (here `go-tokens`/`draft-1` and `rust2024-tokens`/`draft-1`). Otherwise: `unsupported-profile`.
 6. Semantic rules hold. Otherwise: `malformed-catalogue`.
    - **Binding.** `profile` matches `extractionConfig`, and `configSha256` is the digest of its canonical bytes. Ids are strictly ordered, and digests are unique.
-   - **Error entries.** The code is in the profile's closed list. `byteLength > maxInputBytes` holds exactly when the code is `input-too-large`, which has offset 0. Any other offset is at most `byteLength`.
+   - **Error entries.** The code is in the profile's closed list. An `input-too-large` entry has `sha256` and `byteLength` `null` and offset 0 (A1; draft-2 before A1 required `byteLength > maxInputBytes`, which a Q10 record cannot supply). Every other error entry has a digest, `byteLength ≤ maxInputBytes` and offset at most `byteLength`.
    - **Other entries.** `byteLength ≤ maxInputBytes`. `status` is `ok` exactly when `tokenCount ≥ k`. `kgramCount = max(0, tokenCount − k + 1)`. `partialWindow` is true exactly when `1 ≤ kgramCount < window`, and a partial window has exactly one fingerprint.
    - **Fingerprints.** Each position is below `kgramCount`, with `0 ≤ start ≤ end ≤ byteLength` (finding 9). The span may be empty: with k = 1, a Go inserted `;` k-gram has span `[e, e)`, and `e` can equal `byteLength`. Positions and span starts strictly increase, and span ends never decrease. When `kgramCount ≥ window`: consecutive positions differ by at most `window`, the first position is below `window`, the last is at least `kgramCount − window`, and the count lies between ⌈(m − w + 1)/w⌉ and m − w + 1.
 
@@ -120,6 +168,20 @@ The canonical bytes are the exact `C` of core's `sha256-salted-catalogue-v1` com
 - read file structure from the spans.
 
 Exchanging catalogues for a comparison discloses all of this to the other party. Handle a catalogue like source code ([core privacy defaults](../../spec/core.md#privacy-defaults)).
+
+### 3.8 Building a catalogue from records
+
+Inputs: the extraction configuration bytes, and a list of `(id, record bytes)`. Output: the catalogue bytes, or a refusal. The builder:
+
+1. Validates the configuration bytes (extraction §10) and requires an implemented profile.
+2. For each record: validates it as a canonical record (§2a), and requires `configSha256` = SHA-256 of the configuration bytes and `profile`/`profileVersion` equal to the configuration's. An `unsupported-config` record is refused (it has no catalogue entry, §3.2).
+3. Maps each record to an entry:
+   - `id` from the caller; `sha256` = `inputSha256`; `byteLength` = `inputLength` (both `null` only for `input-too-large`); `status` = `result.status`;
+   - for errors, `error` = `result.error`;
+   - otherwise `tokenCount`, and per channel `fingerprints` (each `{hash, position, span}` from the record's fingerprint), `kgramCount` = max(0, `tokenCount` − k + 1), and `partialWindow`.
+4. Sorts entries by id, adds `catalogueVersion`, `extractionConfig` (the eight configuration values) and `profile`, and serializes per §3.3.
+
+Any failure refuses the whole catalogue; the builder never drops a record silently. Tokens, token text, k-gram lists, window selections and normalized values are discarded (§3.5). Vectors: two catalogues built from records equal the corresponding `matching.json` catalogues byte for byte, and three refused builds (mixed configurations, an `unsupported-config` record, wrong configuration bytes).
 
 ## 4. Comparison configuration
 
@@ -288,7 +350,7 @@ A report document is `{"body": …, "provenance": …}`.
 | `suppression` | compared | `{"status":"none"}`, or `{"status":"supplied", "artifactCount": n, "distinctHashes": {"exact": n, "normalized": n}}`. The body thus states whether suppression could act, and over how many hashes. **`artifactCount` is the number of entries in the suppression catalogue, of every status (`ok`, `insufficient-tokens` and `error`)**, while `distinctHashes` counts the distinct fingerprint hashes of its `ok` entries only (G7, `go-suppression-artifact-count`) |
 | `profile` | compared | The shared profile triple `{configSha256, id, version}` |
 | `referenceArtifactCount`, `candidateArtifactCount` | compared | Catalogue sizes, including error and insufficient-tokens entries |
-| `pairs` | compared | §5.3 order. Each pair has `reference` and `candidate` `{id, sha256}`, `status`, and either `outcome` (not-compared) or `modes: {exact, normalized}` |
+| `pairs` | compared | §5.3 order. Each pair has `reference` and `candidate` `{id, sha256}` (`sha256` is `null` for an `input-too-large` entry), `status`, and either `outcome` (not-compared) or `modes: {exact, normalized}` |
 
 ### 6.3 Mode and region fields
 
@@ -429,6 +491,16 @@ Draft-1 said `match` here. The rule changed (§5.6), not the arithmetic.
 | OD-C15 | Duplicate keys are rejected during parsing, before any member is read (new, finding 6) | Lenient parsers would otherwise choose different codes |
 | OD-C16 | Empty fingerprint spans are allowed (`start ≤ end`) (new, finding 9) | k = 1 is a legal extraction configuration |
 
+**Amendment A1, decided in draft, pending owner confirmation:**
+
+| ID | Decision | Reason |
+| --- | --- | --- |
+| OD-C21 | One record format `traceweave-extraction-record-draft-1`: envelope `recordVersion, profile, profileVersion, configSha256, inputSha256, inputLength, result`; no `contract` key; `inputLength` | Both implementations already agree on everything else; this is one key added (Go) or one renamed and one replaced (Rust) |
+| OD-C22 | Fixed key order and a final LF for records; sorted keys and no LF for catalogues and bodies | Records are stream units and keep today's shared `result` layout; catalogues and bodies are hashed artifacts where JCS libraries help |
+| OD-C23 | Record bytes and catalogue bytes are normative; record-stream framing and the CLI are not | Conformance names CLIs optional; record bytes are what level 4 compares |
+| OD-C24 | k-gram lists, window selections and normalized values always present in the canonical record | One canonical form; a compact production output may exist but is not compared |
+| OD-C25 | `input-too-large` catalogue entries carry `null` digest and length (A1) | Required by extraction Q10; no existing vector changes. Bumping the catalogue identifier would change all 124 catalogue digests and every body digest for a rule no previous vector exercised, so it is not bumped; the owner may decide otherwise |
+
 **Still open:**
 - **OD-C17, parameter tuning** (TW-05). Each choice is a new configuration digest.
 - **OD-C18, gap-tolerant region formation** (OD-C3 (b)/(c)) as a future comparison id. It needs its own tie rule and vectors.
@@ -449,6 +521,8 @@ All checks are in [check_matching.py](matching-vectors/check_matching.py) unless
 | §6 | Schema interpreter and keyword audit; `bodySha256`; report rule layer for order, cap, counts, ambiguity and outcome; corruptions for outcome, class, side, rank, origin, ownership, signature, float and reduced fraction; provenance note, source text in the name, and provenance config digest |
 | M1.3 | Required-field self-test: every single-field deletion in a catalogue, 3 compared bodies, 4 rejected bodies and the report document |
 | M2.5 | A `large-host` vector with complete containment and partial Jaccard |
+| §2a record bytes | `records.json`: 16 records (ok, Unicode, CR, U+000B, insufficient, empty, lexical error, encoding error, input-too-large ×2, at-limit ok, unsupported-config ×2, Rust ok with quotes and backslashes, Rust error), each derived from an extraction vector and compared with the checker's own record writer; strict parse, schema and canonical round trip. Record corruption self-test, 31 cases |
+| §3.8 catalogue from records | Two catalogues built from records equal the `matching.json` catalogues; three refused builds |
 | Hand derivation | Codes, counts, seeds, ambiguity flags, excerpt bounds and byte shifts, with a `derivation` label per mode. A corruption that relabels a computed-then-reviewed mode as `hand` is rejected |
 
 **Limits.** The checker and `build_vectors.py` share an author. The hand layer and the wrong-implementation variants reduce, but do not remove, the risk of a shared misreading. The reviewer's draft-1 clean-room program reproduced all 23 draft-1 bodies. No independent implementation of draft-2 exists yet.
@@ -474,6 +548,7 @@ All checks are in [check_matching.py](matching-vectors/check_matching.py) unless
 | Part 3 item 1 (M2.9 index) | §1 and §7: no index or rank field. The candidate set is identified by `inputs.candidateCatalogueSha256`, and canonical id ordering makes input order irrelevant. Recording how candidates were generated (exhaustive, or a digest of the selected id set) is left to M2.9's own record; the body records only the resulting catalogue digest |
 | Part 3 item 2 (M2.7 origin links) | §1, §5.5 region key and §7: origin links live in a separate record that references `bodySha256` and the region key |
 | Parts 2 and 3, other items | Outside this lane's files (use-case plans, roadmap) |
+| **A1** extraction record (coordinator, from the M1.4 cross-check REPORT and extraction Q10) | §2a, §3.8, OD-C21–C25. Changed: §3.2, §3.3 rule 1 and §3.6 for `input-too-large` entries (null digest and length instead of `byteLength > maxInputBytes`); `catalogue.schema.json` gains a `tooLargeArtifact` variant; `report.schema.json` allows a `null` artifact digest. New: `record.schema.json`, `records.json`, vector `go-input-too-large`. Unchanged: every byte of the 59 earlier vectors (catalogues, bodies, digests) and every identifier. Measured against the current CLIs: both emit `result` bytes identical to all 16 record vectors; after the OD-C21 envelope change (Rust: `contract` → `recordVersion` first, `inputBytes` → `inputLength`; Go: add `recordVersion` first) both equal all 16 records byte for byte |
 | Confirmation pass G7 | §6.2 defines `artifactCount`. Vector `go-suppression-artifact-count` (ok, insufficient-tokens and error entries) |
 | Confirmation (a): document frequency still applied | Invariance vectors (§5.2) and an invariance-group check in the checker |
 | Confirmation (b): ambiguity among listed regions only | `go-cap-straddles-ambiguous`, `-mirror` (§5.7) |

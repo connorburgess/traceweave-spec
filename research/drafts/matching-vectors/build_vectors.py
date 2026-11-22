@@ -360,6 +360,8 @@ def catalogue_entry(aid, rec):
     data = base64.b64decode(rec["inputBase64"])
     res = rec["result"]
     e = {"byteLength": len(data), "id": aid, "sha256": sha(data), "status": res["status"]}
+    if res["status"] == "error" and res["error"]["code"] == "input-too-large":
+        e["byteLength"], e["sha256"] = None, None      # extraction Q10: input not read past the limit
     if res["status"] == "error":
         e["error"] = {"code": res["error"]["code"], "offset": res["error"]["offset"]}
         return e
@@ -1087,6 +1089,18 @@ def main():
         B1, [("tiny.go", f"{LG}#go-limit-exact")], rej("profile-mismatch", "suppression"),
         supp=[("sum.rs", f"{RU}#mv-rust-sum")], cc="suppress-supplied")
 
+    vec("go-input-too-large", ["input-too-large", "malformed-candidate"],
+        "Catalogues under the maxInputBytes-16 configuration. Two candidate inputs exceed the limit: their catalogue entries "
+        "carry null sha256 and byteLength (extraction Q10), the pairs are candidate-extraction-error, and the report "
+        "references them with a null sha256. The in-limit copy shares one fingerprint (below minimum evidence).",
+        [("tiny.go", f"{LG}#go-limit-exact")],
+        [("copy.go", f"{LG}#go-limit-exact"), ("over.go", f"{LG}#go-limit-over"), ("prec.go", f"{LG}#go-limit-precedence")],
+        {"status": "compared", "pairs": [
+            pair("tiny.go", "copy.go", both(ex(codeIn=["below-minimum-evidence"], reportable=0, regions=1))),
+            pair("tiny.go", "over.go", status="not-compared", code="candidate-extraction-error"),
+            pair("tiny.go", "prec.go", status="not-compared", code="candidate-extraction-error")]},
+        cc=None)
+
     cc_cache = {}
     out = []
     for v in V:
@@ -1110,7 +1124,7 @@ def main():
                 assert cfg_raw is None or raw == cfg_raw, "one configuration per catalogue"
                 cfg_raw, cfg = raw, c
                 entries.append(catalogue_entry(aid, rec))
-                texts[side][aid] = base64.b64decode(rec["inputBase64"]).decode("utf-8")
+                texts[side][aid] = base64.b64decode(rec["inputBase64"]).decode("utf-8", "replace")
             cat = build_catalogue(cfg_raw, cfg, entries)
             ov = v["overrides"].get(side)
             entry = {"artifacts": [{"id": a, "source": s} for a, s in arts]}
@@ -1177,9 +1191,10 @@ def main():
                                    "suppression-catalogue-mismatch", "independent-same-task", "shadowing",
                                    "pair-precedence", "match-over-ambiguous", "ambiguous-over-weaker",
                                    "below-over-common", "mixed-common-region", "invariance", "ambiguity-before-cap",
-                                   "suppression-artifact-count", "suppression-order"}),
+                                   "suppression-artifact-count", "suppression-order", "input-too-large"}),
            "vectors": out}
     (HERE / "matching.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
+    build_records(sources, out)
 
     ex_body = next(r for r in out if r["id"] == "go-function-in-host")["expectedReport"]
     report = {"body": ex_body["body"],
@@ -1201,6 +1216,156 @@ def main():
                            for ch, m in p["modes"].items()))) for p in b["pairs"])
         print(f"{r['id']}: {line}")
     print(f"wrote {len(out)} vectors")
+
+
+# ------------------------------------------------------------------ extraction records (contract §2a)
+
+RECORD_VERSION = "traceweave-extraction-record-draft-1"
+
+
+def record_bytes(cfg_raw, data, result):
+    """Canonical extraction record: fixed key order, compact, ECMAScript/JCS string escaping, final LF."""
+    try:
+        cfg = json.loads(cfg_raw)
+        valid = not (result["status"] == "error" and result["error"]["code"] == "unsupported-config")
+    except ValueError:
+        valid = False
+    unread = result["status"] == "error" and result["error"]["code"] in ("unsupported-config", "input-too-large")
+    rec = {"recordVersion": RECORD_VERSION,
+           "profile": cfg["profile"] if valid else None,
+           "profileVersion": cfg["profileVersion"] if valid else None,
+           "configSha256": sha(cfg_raw),
+           "inputSha256": None if unread else sha(data),
+           "inputLength": None if unread else len(data)}
+    if result["status"] == "error":
+        r = {"status": "error", "error": {"code": result["error"]["code"], "offset": result["error"]["offset"]}}
+    else:
+        def kg(g):
+            return {"position": g["position"], "hash": g["hash"], "span": list(g["span"])}
+
+        def chan(c, values):
+            o = {"values": list(c["values"])} if values else {}
+            o.update({"kgrams": [kg(g) for g in c["kgrams"]], "windowSelections": list(c["windowSelections"]),
+                      "partialWindow": c["partialWindow"], "fingerprints": [kg(g) for g in c["fingerprints"]]})
+            return o
+        toks = []
+        for t in result["tokens"]:
+            o = {"class": t["class"], "text": t["text"], "span": list(t["span"])}
+            if t.get("inserted"):
+                o["inserted"] = True
+            toks.append(o)
+        r = {"status": result["status"], "tokenCount": result["tokenCount"], "tokens": toks,
+             "channels": {"exact": chan(result["channels"]["exact"], False),
+                          "normalized": chan(result["channels"]["normalized"], True)}}
+    rec["result"] = r
+    return (json.dumps(rec, separators=(",", ":"), ensure_ascii=False) + "\n").encode("utf-8")
+
+
+def catalogue_from_records(cfg_raw, items):
+    """Contract §3.8: items = [(id, record bytes)]. Returns catalogue bytes, or raises ValueError."""
+    cfg = json.loads(cfg_raw)
+    entries = []
+    for aid, rb in items:
+        r = json.loads(rb)
+        if r["configSha256"] != sha(cfg_raw):
+            raise ValueError("record configuration differs from the catalogue configuration")
+        res = r["result"]
+        if res["status"] == "error" and res["error"]["code"] == "unsupported-config":
+            raise ValueError("unsupported-config records yield no catalogue entry")
+        e = {"byteLength": r["inputLength"], "id": aid, "sha256": r["inputSha256"], "status": res["status"]}
+        if res["status"] == "error":
+            e["error"] = dict(res["error"])
+        else:
+            e["tokenCount"] = res["tokenCount"]
+            e["channels"] = {ch: {"fingerprints": [{"hash": f["hash"], "position": f["position"], "span": f["span"]}
+                                                   for f in res["channels"][ch]["fingerprints"]],
+                                  "kgramCount": max(0, res["tokenCount"] - cfg["k"] + 1),
+                                  "partialWindow": res["channels"][ch]["partialWindow"]} for ch in CHANNELS}
+        entries.append(e)
+    return canonical(build_catalogue(cfg_raw, cfg, entries))
+
+
+def build_records(sources, matching_out):
+    neg = json.loads((EXV / "config-negative.json").read_text())["negatives"]
+    negs = {n["id"]: n for n in neg}
+    NG, NR, LG = "../extraction-vectors/go.json", "../extraction-vectors/rust.json", "../extraction-vectors/limits-go.json"
+    GO = "extraction-go.json"
+    specs = [
+        ("rec-go-ok", ["ok"], f"{NG}#go-format-a", "ok result (Go): inserted semicolons carry inserted:true."),
+        ("rec-go-ok-unicode", ["ok", "non-ascii"], f"{NG}#go-unicode", "Non-ASCII token text is written as raw UTF-8, never as \\u escapes."),
+        ("rec-go-ok-raw-cr", ["ok", "escape"], f"{NG}#go-raw-string-cr", "A raw string containing CR LF: written as \\r\\n."),
+        ("rec-go-ok-vt", ["ok", "escape"], f"{NG}#go-escapes-vt-raw", "A raw string containing U+000B: written as \\u000b (lowercase hex)."),
+        ("rec-go-ok-sum", ["ok"], f"{GO}#mv-go-sum", "ok result for GO_SUM (used by the catalogue-from-records vector)."),
+        ("rec-go-insufficient", ["insufficient-tokens"], f"{NG}#go-short", "insufficient-tokens: tokens and values present, k-gram lists empty."),
+        ("rec-go-empty", ["insufficient-tokens"], f"{NG}#go-empty", "Empty input: zero tokens, empty arrays."),
+        ("rec-go-lexical-error", ["error", "lexical-error"], f"{NG}#go-err-unterminated-string", "Lexical error: input digest and length present, integer offset."),
+        ("rec-go-encoding-error", ["error"], f"{NG}#go-err-invalid-utf8", "Invalid UTF-8 input: the record is still UTF-8 (no token text)."),
+        ("rec-go-over-limit", ["error", "input-too-large"], f"{LG}#go-limit-over", "input-too-large: inputSha256 and inputLength null, offset 0 (Q10)."),
+        ("rec-go-over-limit-precedence", ["error", "input-too-large"], f"{LG}#go-limit-precedence", "Over the limit and invalid UTF-8: input-too-large, nulls."),
+        ("rec-go-limit-exact", ["ok"], f"{LG}#go-limit-exact", "Exactly maxInputBytes (16): ok."),
+        ("rec-unsupported-config", ["error", "unsupported-config"], "../extraction-vectors/config-negative.json#cfg-whitespace",
+         "unsupported-config: profile, profileVersion, inputSha256, inputLength and offset null; configSha256 over the bytes supplied."),
+        ("rec-unsupported-config-2", ["error", "unsupported-config"], "../extraction-vectors/config-negative.json#" + neg[1]["id"],
+         "A second unsupported-config record (" + neg[1]["reason"] + ")."),
+        ("rec-rust-ok", ["ok"], f"{NR}#rust-literals", "Rust ok result: token text with quotes and backslashes is escaped as \\\" and \\\\."),
+        ("rec-rust-lexical-error", ["error", "lexical-error"], f"{NR}#rust-err-unbalanced", "Rust lexical error."),
+    ]
+    go_cfg_raw = (EXV / "config-go.json").read_bytes()
+    UC_INPUT = b"x := 1\n"
+    records, by_id = [], {}
+    for rid, tags, src, desc in specs:
+        if "config-negative.json" in src:
+            n = negs[src.split("#")[1]]
+            cfg_raw, data, result = base64.b64decode(n["configBase64"]), UC_INPUT, n["expectedResult"]
+            entry = {"configBase64": n["configBase64"], "inputBase64": base64.b64encode(data).decode()}
+        else:
+            rec, cfg_raw, _ = sources[src]
+            data, result = base64.b64decode(rec["inputBase64"]), rec["result"]
+            entry = {"inputBase64": rec["inputBase64"]}
+        rb = record_bytes(cfg_raw, data, result)
+        by_id[rid] = (rb, cfg_raw)
+        records.append({"id": rid, "tags": tags, "description": desc, "source": src, "derivation": "hand", **entry,
+                        "expectedRecordSha256": sha(rb), "expectedRecordText": rb.decode("utf-8")})
+    m = {v["id"]: v for v in matching_out}
+    builds = [
+        ("cat-go-reference-side-failures", "config-go.json",
+         [("bad.go", "rec-go-lexical-error"), ("short.go", "rec-go-insufficient"), ("sum.go", "rec-go-ok-sum")],
+         "go-reference-side-failures", "reference"),
+        ("cat-go-input-too-large", "config-go-limit16.json",
+         [("copy.go", "rec-go-limit-exact"), ("over.go", "rec-go-over-limit"), ("prec.go", "rec-go-over-limit-precedence")],
+         "go-input-too-large", "candidate"),
+    ]
+    cats = []
+    for cid, cfgname, items, vid, side in builds:
+        cfg_raw = (EXV / cfgname).read_bytes()
+        cb = catalogue_from_records(cfg_raw, [(a, by_id[r][0]) for a, r in items])
+        assert sha(cb) == m[vid][side]["sha256"], cid
+        cats.append({"id": cid, "extractionConfigFile": f"../extraction-vectors/{cfgname}",
+                     "artifacts": [{"id": a, "record": r} for a, r in items],
+                     "expectedCatalogueSha256": sha(cb), "sameAs": f"matching.json#{vid}/{side}"})
+    rejections = [
+        ("build-mixed-configurations", "config-go.json", [("a.go", "rec-go-ok"), ("tiny.go", "rec-go-limit-exact")],
+         "records under two different configurations cannot form one catalogue"),
+        ("build-unsupported-config-record", "config-go.json", [("a.go", "rec-go-ok"), ("bad.cfg", "rec-unsupported-config")],
+         "an unsupported-config record yields no catalogue entry, and its configuration is not the catalogue's"),
+        ("build-wrong-config-bytes", "config-go-limit16.json", [("a.go", "rec-go-ok")],
+         "the record's configSha256 is not the digest of the configuration supplied to the builder"),
+    ]
+    rej = []
+    for rid, cfgname, items, reason in rejections:
+        try:
+            catalogue_from_records((EXV / cfgname).read_bytes(), [(a, by_id[r][0]) for a, r in items])
+            raise SystemExit(f"builder accepted {rid}")
+        except ValueError:
+            pass
+        rej.append({"id": rid, "extractionConfigFile": f"../extraction-vectors/{cfgname}",
+                    "artifacts": [{"id": a, "record": r} for a, r in items], "reason": reason})
+    doc = {"recordVersion": RECORD_VERSION,
+           "note": "Expected canonical extraction records (contract §2a). expectedRecordText is the UTF-8 decoding of the "
+                   "exact record bytes, including the final LF; expectedRecordSha256 is over those bytes.",
+           "records": records, "cataloguesFromRecords": cats, "catalogueBuildRejections": rej}
+    (HERE / "records.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
+    print(f"wrote {len(records)} record vectors, {len(cats)} catalogue-from-records vectors, {len(rej)} build rejections")
 
 
 if __name__ == "__main__":
