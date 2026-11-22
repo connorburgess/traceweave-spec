@@ -73,8 +73,8 @@ The first embedding experiment must test unmarked controls, wrong marks or keys,
 
 - **Checked:** marks embed reproducibly; marked outputs still function; the mark is recovered; unmarked, wrong-key, removal, transplant and partial-fragment controls behave.
 - **By:** M2E.1 (frozen eligible subset, transformations, minimum net authenticated bits, behaviour checks, survival rates, owner-approved) then M2E.2, .3, .4, .5, .6; M2E.7 compares mark-only, fingerprint-only and combined detection. M2E.0 records select-or-omit. Existing synthetic evidence SYN.1–SYN.5 is for rejected candidates only.
-- **Pass:** every marked-output digest reproduces from recorded seeds (M2E.2); k/k functionality checks on marked outputs only (M2E.3); each control has a case and denominator (M2E.5); each declared transformation reaches its frozen survival rate, else negative-result (M2E.6). The minimum bit budget and survival rates are **freeze first**.
-- **Fail:** a rate below its frozen value, a transplant decoded as same-context evidence, or non-reproducible digests.
+- **Pass:** all of these hold, each decided by a command exit code or a count: the M2E.2 rerun exits 0 and reproduces every marked-output digest from the recorded seeds (0 differing digests); the M2E.3 checks pass k/k on marked outputs only; M2E.5 lists each of its 5 control classes (unmarked, wrong mark/key, removal by full cheap normalization, transplant, partial fragment) with at least 1 case and a denominator; the transplant fixtures give a count of 0 transplanted inputs decoded as same-context evidence; each declared transformation reaches the survival rate frozen in M2E.1(e) (count of transformations below it is 0), else M2E.6 records negative-result. The minimum bit budget and survival rates are **freeze first**; this plan sets none.
+- **Fail:** the M2E.2 rerun exits non-zero or any digest differs; any M2E.3 check fails; a control class has 0 cases or no denominator; the transplant count is above 0; a transformation below its frozen rate.
 - **Today:** only reruns of the existing research experiments (rerun by the independent review): `go test -count=1 -v ./...` in `research/experiments/go-carrier` and `python3 research/experiments/rust-carrier/experiment.py`. They show SYN.1 55/55 intentional insertions recover and SYN.3 55/55 reset under cheap canonicalization, so no candidate currently qualifies. **Needs** a selected carrier, the M2E.4 mark-record schema, a new owner-approved census protocol.
 - **Unverifiable:** survival under arbitrary rewrites; ownership or permission; behaviour on any carrier not yet chosen.
 
@@ -100,7 +100,7 @@ These filenames describe a proposed example; these three files and the detector 
 
 - **Checked:** reference → embed → validate → transform or extract → detect → inspect, with unmarked, independently marked and transplanted controls.
 - **By:** M2E.2–M2E.5 as one scripted run; the recipe comes from the M2E.1 freeze, not from the demo.
-- **Pass/fail:** as UC-6, plus every step's command exits 0 in order. **Needs** a selected carrier; **Today:** none. **Unverifiable:** any recipe not selected.
+- **Pass:** every step of the scripted M2E.2–M2E.5 run exits 0, in order, and the UC-6 Pass counts hold for its unmarked, independently marked and transplanted controls (each control class has at least 1 case, and the transplant count decoded as same-context evidence is 0). **Fail:** any step exits non-zero, a control class has 0 cases, or the transplant count is above 0. **Needs** a selected carrier; **Today:** none. **Unverifiable:** any recipe not selected.
 
 ### W-2 verification plan
 
