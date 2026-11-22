@@ -118,3 +118,34 @@ The checker rejects the other 18. Examples: no header marking, `!`/`++` reset th
 ## Verdict
 
 **Ready to implement after the listed fixes, staged: `ts-tokens` first.** The hash layer, the pre-checks and the lexing rules for `ts-tokens` are precise enough that my independent lexer reproduced all 89 vectors byte for byte. Before two implementations start: add the F1 vectors, correct the §4.9 list (F2), settle TSOD-5b as (c) and settle TSOD-3/-2b. `tsx-tokens` additionally needs F3 and a real `.tsx` corpus measurement for TSOD-8 before it is frozen.
+
+## Confirmation pass (draft-2: bdbc19d, d955ee6; contract OD-23: c81be10)
+
+**Method.** I updated my clean-room lexer from the draft-2 text only: arrow-body `{` marking and its `}` (profile lines 107, 112), a line terminator before `!`/`++`/`--` (line 114), and escape-free look-ahead names with an unterminated comment meaning JSX (275–285). I extended my hash code with the contract §6 exclusion rule, `tokenIndices` and per-channel counts. I read `check_vectors.py` and `tslex.py` only afterwards, to plug in the variants.
+
+**Reproduction: all 112 vectors match byte for byte** (tokens or error code and offset): ts.json 76/76, tsx.json 33/33, limits-ts.json 3/3. Hashes, windows, fingerprints, `tokenIndices` and the `tokenIndices`-before-`values` key order match for all 67 accepted vectors (45 + 21 + 1). The three config digests match §10. My unpatched draft-1 lexer fails exactly 3 vectors (`ts-arrow-body-regex`, `ts-newline-prefix-regex`, `tsx-err-lookahead-escape`), so each new rule is pinned. My one new guess: "the previous token" for the line-terminator rule when no token precedes. This is unobservable, because `exprEnd` is already false at the start of input.
+
+**Wrong lexers.** I ran the shipped checker with my lexer substituted, under 36 variants: the 26 earlier ones plus 10 suggested by draft-2 (arrow-body `}` followed by division; every `{…}` after `)` followed by a regex; block-comment line terminators ignored; the newline rule for `++`/`--` only; the newline rule counting LF only; `ts-tokens` rejecting `<`+name; `.js` lexed with JSX rules; a reserved-word check after `const`; `extends` as a prefix; escapes decoded in the look-ahead). **The checker rejects 35 of 36**, including all 8 that draft-1 accepted. **It still accepts W5: only LF counts as a line terminator before `!`/`++`/`--`**, because no vector puts CR, LS or PS there. My unpatched lexer still passes everything.
+
+**TypeScript 6.0.3 on the new rules.** 24 new probes: arrow bodies (`async`, single parameter, typed return, a function type returning `{…}`, inside a call), `a\n--/re/`, a line terminator inside `/* */`, CR, LS, `// c\n!`, `if (x)\n!/re/`, and JSX in `.js` under `ts-tokens`. Every probe agrees, except the documented D-16 shape (`<br/>`, `f(<br/>)`), where TypeScript in `.ts` mode reports syntax errors. On the original 536 runs, the lexical differences fall from 28 to 24, and every remaining one is in §4.9:223-233 or §9.
+
+**Earlier findings:**
+
+| Finding | Status | Where (profile line numbers) |
+| --- | --- | --- |
+| F1 unpinned rule choices | Resolved, apart from W5 (N2) | Vectors at 525; checker run above |
+| F2 departure list, corpus claim | Resolved | Rules 107/112/114; table 205–217; departures 223–235; claim qualified 237; D-10/D-15 391, 396 |
+| F3 / A1 look-ahead | Resolved (tsx, deferred) | 275–287, D-14 395 |
+| F4 `;` in normalized | Resolved | 243–251, 336–348; contract §6 |
+| F5 TSX limitation list | Resolved | 321–330 |
+| A2–A6 | Resolved | 156, 298, 296, 313, 291 |
+
+**New problems:**
+- **N1 (medium, contract): versioning skips normalized-only changes.** `extraction-contract.md:325` mints a new `profileVersion` "only when tokens, classes, errors or Unicode tables change". Draft-2 changed neither tokens nor classes; it changed `normalizedExclusions`, and with it every normalized hash. Read literally, that line would not require a new version. Add "normalized values or exclusions" to the list.
+- **N2 (low): no vector for a non-LF line terminator before a prefix operator.** Add one such as `a⏎++/re/.lastIndex` with LS, and `a⏎!/re/` with CR, to close W5.
+- **N3 (low): stale text.** Line 492 says "12-row table", but the table at 205–217 has 11 rows. Line 493 still makes the unqualified "never disagreed" claim. D-11 at line 392 lists only `=`, `:` and `{`, while §5.5 lists more positions. §7 at line 370 still says "16 of 33", which differs from §11 at line 445.
+- **N4 (low, file selection, not the extractor):** React projects often keep JSX in `.js`. Under stage 1 those files mostly fail, and text-free elements are fingerprinted as punctuators (D-16, line 40). TW-01/TW-03 should count such failures as "deferred to stage 2", not drop them silently.
+
+**Is OD-23 well defined?** Yes for what two implementations must agree on. Matching is by class and exact text, and Go's inserted `;` is pinned by `exclusion-rule.json`. Positions, windows and fingerprint positions index the filtered stream, and spans come from the first and last kept tokens (contract 253–257). Status comes from the exact count, and an empty normalized channel is defined (contract 256, 284). `tokenIndices` is emitted if and only if the profile declares exclusions. My independent recomputation agreed on every field. The only gaps are N1 and the locality sentence at contract line 291, which should say the run is counted in the channel's own stream (kept tokens for `normalized`).
+
+**Verdict for `ts-tokens` stage 1: ready to freeze and implement once N1 (a one-line contract fix) and N2 (two vectors) are done.** N3 and N4 do not block. The remaining condition is owner confirmation of the items marked "decided in draft".
