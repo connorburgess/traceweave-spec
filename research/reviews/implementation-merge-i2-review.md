@@ -149,3 +149,25 @@ Branch `post-i2` at `c05fe64` (B10 by content, spec `33e12f8`; checklist 64 item
 5. **Contract out-of-scope statement** (§6.8 B10, spec `33e12f8`): honest. It calls provenance "evidence about cooperative builds … not a security boundary" and defers adversarial binding to M4 attestation. It is not sufficient as worded: concurrent changes to repository state during the build are neither listed as out of scope nor closed in Go. Add them, or close G-R1 and say so.
    - **M2.4 as worded:** met for both CLIs on cooperative routes (a fresh clean clone of `c05fe64` gives an identical body, `bodySha256` and commit). It holds against the forgery routes except G-R1.
 6. **Commits:** the 10 commits `f955fc1..c05fe64` (single author; 24 files, +1,910/−271) carry no AI attribution, secrets or local paths.
+
+## Confirmation 3: post-i2
+
+Branch `post-i2` at `e5933a3` (verifying steps build a fresh export of the resolved commit; B10 points 1–4, spec `3319a3c`). Scratch clones only; probes `<scratch>/race4.sh`, `mmap_attack.py`, `go_export_attack.py`. **Verdict: listed fixes first.** Two cheap fixes close both new forgeries.
+
+1. **Re-runs:**
+   - **Go HEAD race, 100 attempts:** 27 honest (named Y, Y's body), 73 refused, **0 forged**. Closed.
+   - **Working-tree, index and HEAD flips:** `scripts/forgery-selftest --only flip` gives Rust 15 schedules each and Go 6 each, all honest or refused (exit 0). Closed.
+2. **New routes:** editing the private export during the build, after it is verified and before it is compiled. Both are FORGERY, and neither lane lists them.
+   - **N1 (Go, plain write, no test hook; 3/3):** `stampbuild` writes the export with mode 0644 under `$TMPDIR/stampbuild*/src` and never re-checks it after `go build` (`main.go:462`, `:604–612`). A script polling every 2 ms rewrote `go/compare/compare.go` (`<=` → `<`) as the export appeared. `stampbuild` exited 0 and the binary's document names **`e5933a3` with body `a6d7fd1c…`** (the clean code gives `998c64c2…`).
+   - **N2 (Rust, shared memory mapping; 1/1, timed with the documented `TRACEWEAVE_TEST_BUILD_PAUSE` points):** at `gate` I wrote the edit into the export's `compare.rs` through `mmap`; at `late` I restored it through the same mapping and closed the mapping only after `stamped-build` finished. On macOS a write through a shared mapping does not change ctime until the mapping is unmapped (measured), so the late ctime check passes. Result: exit 0, and a document naming **`e5933a3` with body `a6d7fd1c…`**. The control, the same edit with ordinary writes, is refused (exit 2, uncommitted changes).
+   - **Fix (cheap, both lanes), not a contract limit:**
+     - Create every export file read-only (mode 0444, directories 0555) from the moment it is written. Opening it for writing (needed for `mmap` too) then requires `chmod`, which changes ctime.
+     - In Go, add Rust's late check after `go build`: re-hash the export against the objects and refuse any ctime at or after the build start.
+     - Add N1 and N2 to `scripts/forgery-selftest`.
+   - **What remains as a known limit** for the out-of-scope statement: a process that can write the private build directory without changing ctime, for example by root or by defeating permissions. That is the same class as "a modified toolchain".
+3. **`scripts/offline scripts/check`:**
+   - From a fresh clone it **exits 0** (12 min 48 s; 65/65 checklist items in both CLIs).
+   - After that warm run, a same-size edit (`<=` → `>=`) with the mtime restored was caught by content freshness ("1 file changed by content"): Rust fails at `cargo test` (`sabotage.rs`, 3 tests), Go at the uncached `go test -count=1` (`TestWalkthrough`, `FuzzCompareSources`).
+   - My first edit (`<  `) failed only at `cargo fmt`.
+   - Cached results cannot satisfy the check.
+4. **M2.4 as worded:** met for both CLIs on every cooperative route, and against all 13 listed forgery routes plus my HEAD race. It fails only N1 and N2, which are adversarial edits of the build's own private directory during the build. Once those two fixes land, I know of no remaining route in scope.
