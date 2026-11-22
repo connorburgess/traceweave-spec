@@ -131,3 +131,48 @@ New problems introduced by the revision:
 Gate count check: R:23's figures of 41 counted gates, 5 met and 36 open are arithmetically correct (M0 4, M1 6, M2 5, M2E 8, M3 7, M4 6, M5 5). Correcting N3 gives 3 met and 38 open.
 
 **Verdict: not yet ready to adopt. N1 and N2 are the remaining blocking items.** Both are one-line criterion edits. The rest can follow adoption.
+
+## Adoption check
+
+Checked 2026-11-22 on local branch `roadmap-v2` (`80de674`). Line numbers refer to the adopted ROADMAP.md.
+
+**Commands I ran.**
+- `.venv/bin/python tools/validate.py`: PASS, exit 0. Its link check covers the root, `spec/`, `profiles/`, `docs/`, `schemas/` and `examples/`.
+- `.venv/bin/python -m unittest discover -s tests`: 6 tests, OK. My own relative-link check over `research/**/*.md` and the adopted docs found 0 broken links (anchors not checked).
+- Signing harnesses: I rebuilt the ignored `bin/go-dsse` from committed source (`GOPROXY=off go build -mod=readonly`). Replacing the existing ignored Rust binary was refused, so the pre-existing build ran; a fresh `cargo build --release --locked --offline` into `$TMPDIR` did compile. `run.py` passed 66 outcomes and `run_policy.py` passed 126. Both write only the ignored `last-*.json`, and no tracked file changed.
+- Nested `sandbox-exec` failed ("sandbox_apply: Operation not permitted"), so my reruns had `network_denied: false`. The no-network property rests on the committed `network_denied: true`.
+
+**1. N1–N7.** Resolved: N1 (L205), N2 (L107, L112), N3 (`0bc4e23`; L26, L131-132), N5 (L83), N6 (`docs/implementation-repo-plan.md:53`, `:135`), N7 (L68). **N4 is partly resolved (L143).** The exclusion list is now scripted, but "each claim sentence" still lets the author decide which remaining sentences count as claims. Fix: every non-excluded sentence maps, or appears in a committed non-claim list that the non-author approves.
+
+**2. New and reworded gates.**
+- M2.7 (L84), M2.8 (L85), M2.11 (L88) and M2.4 (L81) are checkable and not trivial. They match the contract: region key and `bodySha256` (§5.5); distinct-hash minimum evidence (§5.6, OD-C12); body and provenance split (:274-276, :332). In M2.8 the expected-catalogue digest blocks a "write nothing" pass.
+- **M2.9 (L86) contradicts H-3.** M2.9 and contract :25 and :353 keep candidate generation out of the body. The H-3 plan (`docs/implementation-patterns.md:31`) says "the body records `exhaustive` or the digest of the candidate-id set". Fix H-3.
+- **M2.10 (L87)** depends on OD-C5 option (b), still pending. Mark it conditional, and say "every pre-existing pair's outcome is unchanged", since adding a reference adds new pairs.
+- M0.1 (L58) is countable; "judgment words" is undefined, so I applied "exit code or count" strictly. M3.6 (L125) is computed rather than chosen, with no invented floor: sound.
+
+**3. M4.1 and M4.2 at `0bc4e23`: "met" is justified for these R gates.**
+- **M4.1:** `results.json` has 66 outcomes: 16 per pair for Go→Go, Go→Rust, Rust→Go and Rust→Rust, plus 2 not tied to a pair. It records `network_denied: true` and a 762-byte payload, and the pins are committed in `go.sum` and `Cargo.lock`. L131 should mention the 2 unpaired outcomes.
+- **M4.2:** in `policy-results.json`, Go and Rust both give `f4df04ab0045…` for the repository vector. Reserialization, catalogue bit flip, trailing whitespace and nonce bit flip each give a different digest, identical across Go and Rust. Nonce lengths 0, 1, 31, 33 and 64, and the over-1 MiB catalogue, give `accepted: false`. "Rejects changed openings" is enforced by `run_policy.py`'s mismatch assertions, which passed in my rerun. "Independent" means separate code, not separate authors (RC.2 leaves that to the owner).
+
+**4. M0.1 recount: 13 capabilities (grep counts 5 + 1 use cases, 2 walkthroughs, 6 − 1 headings, 13 index rows). Not met: 5 rows fail.**
+- **8 pass** by exit code or count: UC-1 to UC-5, W-2, H-2 and H-4.
+- **5 fail:**
+  - UC-6: its fail clause "transplant decoded as same-context evidence" has no code or count.
+  - W-1: it inherits UC-6.
+  - H-1: "never a single score" has no command or count, and there is no Fail line.
+  - H-3: it has no Pass/Fail lines and contradicts M2.9.
+  - H-5: it has no Pass line, and SK.1 "pass through unchanged" and C2PA.3 "no compatibility claim" have no command or count.
+- L58 also lists UC-3, UC-4, W-2, H-2 and H-4; I find those decidable.
+
+**5. Contradictions.** None with the owner constraints: embedding is first-class (L13, L48), there are no dates or guarantees (L3), Go and Rust come first, and media start after M3.4 (L167). The progress count is correct (47 = 4+6+11+8+7+6+5, plus 26 later gates). Problems I did find:
+- **I1 has started before I0 can close.** I1 extractors exist on local branches in `<implementation repo>` (`research/work-queue.md:18`). Their `spec.lock` has `"commit": null` (provisional). I0 needs `--strict`, which needs a pushed commit, and pushing is owner-only (L226). So the M1.4 precedence clause (L70) cannot pass for those commits, even though the vectors (`36d0293`) were vendored before the extractors (`9dd4368`). Fix: state whether a provisional digest pin, later matched byte-for-byte to a committed spec commit, satisfies precedence.
+- **M1.2 and M2.6 are owner-blocked.** Their vectors sit in `research/drafts/`, while the gates name `test-vectors/`, and promotion is owner-only (L228, OD-C10). Mark M1.2, M2.6 and M1.4 as owner-blocked in the work queue.
+- **Wrong direction word.** L220 says "a gate below"; the gate tables are above it.
+
+**6.** Validator, tests and link check pass (commands above).
+
+**Verdict: listed fixes required.** None changes a status. Fix before the next supervision loop:
+1. Make H-3 match M2.9.
+2. Settle the provisional-pin precedence rule for M1.4.
+3. Make UC-6, W-1, H-1, H-3 and H-5 decidable, then recount.
+4. Tighten M5.2 (N4).
