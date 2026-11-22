@@ -64,28 +64,28 @@ Owner column: **S** = spec repository; **I** = implementation repository (`trace
 
 | ID | Type | Verifiable criterion | Status | Owner |
 | --- | --- | --- | --- | --- |
-| M1.1 | E | A profile document answers every item in "Before registering a profile" in [profiles/code.md](profiles/code.md), with no TBDs. Token classes are defined independently of any lexer's token kinds: raw strings, nested comments, shebang, BOM, CRLF | open. (a) The draft [extraction contract](research/drafts/extraction-contract.md) is decided in draft and pending owner confirmation and promotion to `profiles/`. (b) No item map against the [profiles/code.md](profiles/code.md) list exists yet (my reading; neither review names it) | S |
-| M1.2 | E | At least these 7 vector classes per language: empty, below `k+w-1`, Unicode, malformed, repeated, equal-minimum ties, CRLF/BOM. Each vector carries `derivation: hand` metadata and its expected output. Each positive vector has a paired rejection vector. `validate` checks them | open. (a) The vectors are in `research/drafts/extraction-vectors/`; `validate` checks them only after promotion to `test-vectors/`. Both implementations reproduce them ([I1 review](research/reviews/implementation-merge-i1-review.md) `9c03c95`) | S |
-| M1.3 | E | Catalogue and report schemas bind profile ID, config digest and artifact digests. Each has at least 1 valid example and at least 1 rejection fixture per required field. `validate` passes | open. (a) The catalogue and report schemas are drafts under `research/drafts/`; they need promotion to `schemas/` | S |
-| M1.4 | E | Each of two implementations, using independent lexers, produces output equal to the **committed expected bytes** for every M1.2 vector. Ordering is enforced by `check-vector-precedence`. The implementation commit that first adds each extractor must carry a `spec.lock` whose recorded SHA-256 digests for every vendored vector file equal the digests of those files in the spec commit later pinned. A provisional pin satisfies the rule on that condition; the script verifies the digest equality. Any vector whose bytes changed after the extractor commit needs the recorded decision and re-run already required for pin updates ([plan](docs/implementation-repo-plan.md#how-it-references-the-spec)). Completion needs a pushed spec commit, which is owner-blocked | open. (a) A pushed spec commit for the strict pin: the pin is at local `15a4b2d`, `repository: null`. Satisfied: both implementations reproduce the vendored vectors; `scripts/check-vector-precedence` now exists; the 3 files changed at `2fa2b58` are additions only, with a recorded decision ([I1 review](research/reviews/implementation-merge-i1-review.md) `9c03c95`; [I2 review](research/reviews/implementation-merge-i2-review.md) `de9a5b7` §4) | I |
+| M1.1 | E | A profile document answers every item in "Before registering a profile" in [profiles/code.md](profiles/code.md), with no TBDs. Token classes are defined independently of any lexer's token kinds: raw strings, nested comments, shebang, BOM, CRLF | open. (a) The [extraction contract](research/drafts/extraction-contract.md)'s decided items are confirmed and its promotion to `profiles/` is approved; promotion is in progress. (b) No item map against the [profiles/code.md](profiles/code.md) list exists yet (my reading; neither review names it) | S |
+| M1.2 | E | At least these 7 vector classes per language: empty, below `k+w-1`, Unicode, malformed, repeated, equal-minimum ties, CRLF/BOM. Each vector carries `derivation: hand` metadata and its expected output. Each positive vector has a paired rejection vector. `validate` checks them | open. (a) Promotion from `research/drafts/extraction-vectors/` to `test-vectors/` is approved and in progress; `validate` checks the vectors only after it. Both implementations reproduce them ([I1 review](research/reviews/implementation-merge-i1-review.md) `9c03c95`) | S |
+| M1.3 | E | Catalogue and report schemas bind profile ID, config digest and artifact digests. Each has at least 1 valid example and at least 1 rejection fixture per required field. `validate` passes | open. (a) Promotion of the draft catalogue and report schemas to `schemas/` is approved and in progress | S |
+| M1.4 | E | Each of two implementations, using independent lexers, produces output equal to the **committed expected bytes** for every M1.2 vector. Ordering is enforced by `check-vector-precedence`. The implementation commit that first adds each extractor must carry a `spec.lock` whose recorded SHA-256 digests for every vendored vector file equal the digests of those files in the spec commit later pinned. A provisional pin satisfies the rule on that condition; the script verifies the digest equality. Any vector whose bytes changed after the extractor commit needs the recorded decision and re-run already required for pin updates ([plan](docs/implementation-repo-plan.md#how-it-references-the-spec)). Completion needs a pushed spec commit, which is owner-blocked | open. (a) A pushed spec commit for the strict pin. Pushing `roadmap-v2` as a branch is approved after a hygiene check but not yet done; the pin is at local `15a4b2d` with `repository: null`. Satisfied: both implementations reproduce the vendored vectors; `scripts/check-vector-precedence` now exists; the 3 files changed at `2fa2b58` are additions only, with a recorded decision ([I1 review](research/reviews/implementation-merge-i1-review.md) `9c03c95`; [I2 review](research/reviews/implementation-merge-i2-review.md) `de9a5b7` §4) | I |
 | M1.5 | E | A requirement map maps each MUST in the profile to a vector or test ID that **fails when the MUST is violated**, with at least 1 negative fixture per testable MUST. MUSTs that cannot be tested are listed, and someone else spot-checks them on a stated sample of at least 10 (all, if fewer). Unmapped: 0 | open. (b) A requirement map of each MUST to a failing vector or test has not been written. `scripts/vector-coverage` covers files and records, not MUSTs | S |
-| M1.6 | E | Unknown profile IDs and every M1.2 negative return the specified error code in both implementations | open. (a) "Every M1.2 negative" waits on M1.2's promotion. Satisfied today: every draft negative and all 28 config negatives return their codes in both implementations ([I1 review](research/reviews/implementation-merge-i1-review.md) `9c03c95` §5) | I |
+| M1.6 | E | Unknown profile IDs and every M1.2 negative return the specified error code in both implementations | open. (a) "Every M1.2 negative" waits on M1.2's promotion (approved, in progress). Satisfied today: every draft negative and all 28 config negatives return their codes in both implementations ([I1 review](research/reviews/implementation-merge-i1-review.md) `9c03c95` §5) | I |
 
 ### M2 — Local comparison
 
 | ID | Type | Verifiable criterion | Status | Owner |
 | --- | --- | --- | --- | --- |
 | M2.1 | E | The walkthrough (extract → catalogue → compare → report) passes under `scripts/offline`. The wrapper first proves network denial with a probe that must fail | open. (b) No `scripts/offline` wrapper or network-denial probe exists in the implementation repository; the walkthrough commands themselves work ([I2 review](research/reviews/implementation-merge-i2-review.md) `de9a5b7` §7) | I |
-| M2.2 | E | The frozen manifest has at least 1 positive case for each UC-1 example-matrix row: exact; formatted fragment in a large host; rename/shadowing; Unicode/repeated minima/tiny file. Passes only if every case's spans equal the expected UTF-8 byte spans (N/N) | open. (b) There is no frozen fixture manifest. (a) Its cases live in `research/drafts/` at an unpushed spec commit. Satisfied: one case per class, with spans N/N in both lanes ([I2 review](research/reviews/implementation-merge-i2-review.md) `de9a5b7` §7) | I |
+| M2.2 | E | The frozen manifest has at least 1 positive case for each UC-1 example-matrix row: exact; formatted fragment in a large host; rename/shadowing; Unicode/repeated minima/tiny file. Passes only if every case's spans equal the expected UTF-8 byte spans (N/N) | open. (b) There is no frozen fixture manifest. (a) Its cases live in `research/drafts/` at an unpushed spec commit; the promotion and the push are approved but not yet done. Satisfied: one case per class, with spans N/N in both lanes ([I2 review](research/reviews/implementation-merge-i2-review.md) `de9a5b7` §7) | I |
 | M2.3 | E | Control classes, each with at least 1 case: independent same-task, common boilerplate/vendor, unrelated, malformed/unsupported. Passes when every class appears in the report with its candidate count and denominator. No threshold is set before M3 | open. (b) The vendor control class is absent (contract OD-C19 open). Same-task, boilerplate, unrelated and malformed controls are present, with counts and denominators ([I2 review](research/reviews/implementation-merge-i2-review.md) `de9a5b7` §7) | I |
-| M2.4 | E | Two runs produce an identical **canonical report body**, which excludes the provenance block. The comparison-config digest is in the body inputs, as the [draft contract](research/drafts/catalogue-report-contract.md) places it. The provenance block is checked separately: implementation commit and spec pin present and correct | open. Satisfied in substance: two runs give identical bodies; the config digest is in `inputs`; provenance names `82b02ab` and `15a4b2d` ([I2 review](research/reviews/implementation-merge-i2-review.md) `de9a5b7` §7). (b) The rebuild-from-clean-clone check required by B10 ([contract](research/drafts/catalogue-report-contract.md) §6.6 and §6.8) is not yet run. (a) Pin correctness can only be checked against a pushed spec commit | I |
+| M2.4 | E | Two runs produce an identical **canonical report body**, which excludes the provenance block. The comparison-config digest is in the body inputs, as the [draft contract](research/drafts/catalogue-report-contract.md) places it. The provenance block is checked separately: implementation commit and spec pin present and correct | open. Satisfied in substance: two runs give identical bodies; the config digest is in `inputs`; provenance names `82b02ab` and `15a4b2d` ([I2 review](research/reviews/implementation-merge-i2-review.md) `de9a5b7` §7). (b) The rebuild-from-clean-clone check required by B10 ([contract](research/drafts/catalogue-report-contract.md) §6.6 and §6.8) is not yet run. (a) Pin correctness can only be checked against a pushed spec commit (push approved, not yet done) | I |
 | M2.5 | E | Fragment containment and whole-file similarity are separate fields, shown in a large-host fixture where they diverge | **met**: `go-function-in-host` gives reference-in-candidate 14/14 against Jaccard 14/39 in both implementations (implementation `82b02ab`; [I2 review](research/reviews/implementation-merge-i2-review.md) `de9a5b7` §7). The fixture is a draft vector; its promotion is tracked under M2.6 | S+I |
-| M2.6 | E | Hand-derived matching vectors in `test-vectors/` (`derivation: hand`). They cover at least the M2.2 positive classes and the M2.3 control classes, give expected spans, containment and similarity, and `validate` checks them. These are the vectors I2 uses to complete conformance level 4 | open. (a) The matching vectors need promotion from `research/drafts/matching-vectors/` to `test-vectors/`. (b) They do not yet cover the vendor control class (M2.3) | S |
+| M2.6 | E | Hand-derived matching vectors in `test-vectors/` (`derivation: hand`). They cover at least the M2.2 positive classes and the M2.3 control classes, give expected spans, containment and similarity, and `validate` checks them. These are the vectors I2 uses to complete conformance level 4 | open. (a) Promotion from `research/drafts/matching-vectors/` to `test-vectors/` is approved and in progress. (b) The vectors do not yet cover the vendor control class (M2.3) | S |
 | M2.7 | E | UC-2 origin and dependency links live in a **separate review-packet record**, never in the comparison report. The record references the report's `bodySha256` and a region key: reference id, candidate id, mode, first seed. A spec schema with at least 1 valid example and 1 rejection fixture per required field, checked by `validate`. A rejection fixture whose region key is absent from the referenced body fails the semantic check. At least 3 valid fixtures: own-origin region; vendored/dependency region with an archived licence-text digest; historical permitted copy. The record has no rights-verdict field | open. (b) Review packets are not started | S+I (I2) |
 | M2.8 | E | Storage boundary (P-3). With no path option, a fixture run inside a temporary git checkout writes 0 files under it. The catalogue written to the documented private default has the expected catalogue SHA-256, so writing nothing cannot pass. Fault injection, 3/3, each leaving the previous valid catalogue byte-identical and no partial file at the final path: (1) an injected error before the temporary file opens; (2) SIGKILL after a partial write of the temporary file; (3) an injected rename failure. Keys are added to this gate only when M4 produces any | **met** for both CLIs at implementation `82b02ab` ([I2 review](research/reviews/implementation-merge-i2-review.md) `de9a5b7` §5): 0 files under the checkout; the same catalogue SHA-256 at each default private location; faults 3/3 per lane | I (I2) |
 | M2.9 | E | Index ranking is not evidence (P-5). Candidate generation (`exhaustive`, or the SHA-256 of the selected candidate-id set) is recorded in a **separate record keyed by the report's `bodySha256`**, never in the report body. In at least 2 fixtures, a fixed candidate catalogue gives a byte-identical canonical body whatever retrieval path (exhaustive or one index) or order produced it. A different candidate set is expected to change the candidate catalogue digest, the candidate count and the pairs. A rejection fixture adding a rank, score or index field fails the report schema | open. (b) No candidate-generation record keyed by `bodySha256` exists, and no index, so the two-retrieval-path fixtures cannot run. Satisfied: both validators reject rank and score fields ([I2 review](research/reviews/implementation-merge-i2-review.md) `de9a5b7` §7) | S+I (I2) |
-| M2.10 | E | Common-code suppression uses an explicit boilerplate catalogue bound by its SHA-256 in the comparison config ([draft contract](research/drafts/catalogue-report-contract.md) OD-C5 option b, decided in the draft and pending owner confirmation, so this gate is **conditional on OD-C5**; if the owner chooses otherwise, it is rewritten). Vectors, at least 1 each: suppression driven only by the boilerplate catalogue; an invariance case whose starting reference set **already holds at least 2 files sharing the idiom**, where adding 1 more reference file (sharing the idiom, or unrelated) leaves every pre-existing pair's outcome unchanged (the added file adds new pairs), so document-frequency suppression fails it; a config whose boilerplate digest mismatches is rejected with its code. Both implementations match | open. (a) OD-C5 awaits owner confirmation. Satisfied: all vector clauses pass in both lanes, and sabotages are caught ([I2 review](research/reviews/implementation-merge-i2-review.md) `de9a5b7` §7) | S+I (I2) |
-| M2.11 | E | Minimum evidence counts **distinct** non-common hashes, not seeds (decision pending in the contract). At least 1 vector where one hash repeats in at least 2 seeds: below-minimum-evidence in both modes. At least 1 vector at exactly the minimum: match. Both implementations match | open. (a) The distinct-hash decision awaits owner confirmation. Satisfied: the repeated-hash and at-minimum vectors pass in both lanes ([I2 review](research/reviews/implementation-merge-i2-review.md) `de9a5b7` §7) | S+I (I2) |
+| M2.10 | E | Common-code suppression uses an explicit boilerplate catalogue bound by its SHA-256 in the comparison config ([draft contract](research/drafts/catalogue-report-contract.md) OD-C5 option b, decided in the draft and pending owner confirmation, so this gate is **conditional on OD-C5**; if the owner chooses otherwise, it is rewritten). Vectors, at least 1 each: suppression driven only by the boilerplate catalogue; an invariance case whose starting reference set **already holds at least 2 files sharing the idiom**, where adding 1 more reference file (sharing the idiom, or unrelated) leaves every pre-existing pair's outcome unchanged (the added file adds new pairs), so document-frequency suppression fails it; a config whose boilerplate digest mismatches is rejected with its code. Both implementations match | **met**. OD-C5 is confirmed ([owner decisions of 2026-11-23](#owner-decisions-2026-11-23)). Every vector clause passes in both implementations: suppression by catalogue, invariance from three references and from added unrelated files, and digest-mismatch rejection. The sabotages are caught (implementation `82b02ab`; [I2 review](research/reviews/implementation-merge-i2-review.md) `de9a5b7` §7). The vectors are draft vectors; their promotion is tracked under M2.6 | S+I (I2) |
+| M2.11 | E | Minimum evidence counts **distinct** non-common hashes, not seeds (decision pending in the contract). At least 1 vector where one hash repeats in at least 2 seeds: below-minimum-evidence in both modes. At least 1 vector at exactly the minimum: match. Both implementations match | **met**. The distinct-hash rule is confirmed ([owner decisions of 2026-11-23](#owner-decisions-2026-11-23)). `go-repeated-hash-self` gives below-minimum in both modes, and `rv-gap-equal` and 5 more vectors at exactly the minimum give match, in both implementations (implementation `82b02ab`; [I2 review](research/reviews/implementation-merge-i2-review.md) `de9a5b7` §7) | S+I (I2) |
 
 ### M2E — Embed and detect (per candidate carrier)
 
@@ -116,7 +116,7 @@ Owner column: **S** = spec repository; **I** = implementation repository (`trace
 
 | ID | Type | Verifiable criterion | Status | Owner |
 | --- | --- | --- | --- | --- |
-| M3.0 | O | Operational false-alarm budget and its unit (per repository search) recorded | open | S |
+| M3.0 | O | Operational false-alarm budget and its unit (per repository search) recorded | **met**: budget 1 in 20 per repository search. The unit is one unordered repository pair as defined in [m3-eval-draft-3](research/drafts/evaluation-protocol.md#141-m30-the-false-alarm-budget): 132 held-out negative searches, and M3.6 is met when alarms ≤ 6. Follow-up: 1 in 100 is tested on a larger corpus only if this passes. Decision record: [owner decisions of 2026-11-23](#owner-decisions-2026-11-23) | S |
 | M3.1 | E | Corpus manifest gives, per entry: pinned revision, licence, redistribution permission and split group. Excludes the census repositories. A script verifies every field | open | I |
 | M3.2 | E | Split file digest committed; groups disjoint (script check) | open | I |
 | M3.3 | E | The commits freezing thresholds/config and splits are **git ancestors** of the first held-out result commit. Ancestry is checked, not timestamps | open | I |
@@ -149,16 +149,33 @@ Owner column: **S** = spec repository; **I** = implementation repository (`trace
 
 These cannot close until the owner acts:
 
-- **M1.2, M1.6 and M2.6:** their vectors must be promoted from `research/drafts/` to `test-vectors/` (draft contract OD-C10).
-- **M1.1 and M1.3:** the extraction contract must be promoted to `profiles/`, and the schemas to `schemas/`.
-- **Strict spec pin, M1.4 completion, and pin correctness in M2.2 and M2.4:** need a pushed spec commit.
-- **M2.10 and M2.11:** OD-C5 and the distinct-hash rule, decided in draft, need confirmation. The A6 rulings (OD-C39–OD-C47) are also pending.
-- **M3.0:** the false-alarm budget.
 - **M2E.0:** select a carrier or omit embedding.
 - **IMG.0–IMG.5:** image mark study, UC-7 and the TrustMark weight download.
 - **IMGF.6:** any real image set for an at-scale false-match measurement.
 - **TXT.0, TXT.5 (and so TXT.6):** UC-8 wording; the PAN-PC-10 download.
 - **TXT.8:** any new text-mark experiment.
+
+Approved on 2026-11-23 and awaiting execution: promotion of the drafts (M1.1, M1.2, M1.3, M1.6, M2.6), in progress in another lane; the push of `roadmap-v2` after a hygiene check (M1.4; pin correctness in M2.2 and M2.4); corpus acquisition (M3.1). See the [decision records](#owner-decisions-2026-11-23).
+
+## Owner decisions, 2026-11-23
+
+On 2026-11-23 the coordinator put four decisions to the owner, with recommendations. The owner delegated these decisions to the coordinator. This record is as relayed by the coordinator. The recommendations, now decided:
+
+1. **False-alarm budget (M3.0, met).** 1 in 20 per repository search on the current 48-repository corpus. The unit is one unordered repository pair as defined in [`m3-eval-draft-3`](research/drafts/evaluation-protocol.md#141-m30-the-false-alarm-budget): 132 held-out negative searches, and M3.6 is met when alarms ≤ 6. Follow-up: 1 in 100 is tested on a larger corpus only if this passes.
+2. **Corpus acquisition (M3.1) approved.** This covers the 48 proposed repositories and their mechanical replacements under the protocol, cloned at depth 1. They are stored at `~/traceweave-eval` (`TRACEWEAVE_EVAL_DIR`), outside every working tree. The licence recheck fails closed. M3.1 itself stays open until its manifest criterion is met.
+3. **Promotion approved.** The reviewed contract drafts are promoted into `test-vectors/`, `schemas/` and `profiles/` on the local branch. Another lane is doing this; M1.2, M1.3, M1.6 and M2.6 are not marked until it lands.
+4. **Push approved.** `roadmap-v2` is pushed to `origin` as a branch, not `main`, after a hygiene check. Not yet done.
+5. **Decided-in-draft items confirmed** by the coordinator under the same delegation:
+   - extraction bounds (`k`, `window`, `maxInputBytes`);
+   - OD-C5, the boilerplate catalogue bound by digest;
+   - distinct-hash minimum evidence;
+   - comparison bounds;
+   - nesting depth 64;
+   - the A5–A8 behavioural rules;
+   - the `ts-tokens` stage-1 decisions;
+   - the `text-plain` stage-1 decisions.
+
+   M2.10 and M2.11 are met on that basis, with every other clause already satisfied according to the I2 review.
 
 ## Progress count
 
@@ -166,13 +183,16 @@ Counted on 2026-11-22 from the status columns above. In the later-profile table,
 
 | Gates | Total | Met | Negative-result | Open |
 | --- | --- | --- | --- | --- |
-| Core M0–M5 | 47 | 8 (M0.1, M0.2, M0.3, M0.4, M2.5, M2.8, M4.1, M4.2) | 0 | 39 |
+| Core M0–M5 | 47 | 11 (M0.1, M0.2, M0.3, M0.4, M2.5, M2.8, M2.10, M2.11, M3.0, M4.1, M4.2) | 0 | 36 |
 | Later profiles, EXT and RC | 41 | 3 (IMGF.2, IMGF.3, IMGF.4) | 0 | 38 |
 
 M0.1 is met on the second non-author recount (`3a640b3`). M2.5 and M2.8 are met on the [I2 review](research/reviews/implementation-merge-i2-review.md) (`de9a5b7`) of implementation `82b02ab`.
 
 **What the remaining M1/M2 gates wait for.** Each open M1/M2 status names its remaining clause:
-- **(a) Blocked only by the owner:** promotion of the drafts to `test-vectors/`, `schemas/` and `profiles/`; a pushed spec commit for the strict pin; confirmation of items decided in draft (OD-C5, distinct-hash evidence). Owner action alone would close M1.2, M1.3, M1.4, M1.6, M2.10 and M2.11.
+- **(a) Owner-approved, execution pending** ([owner decisions of 2026-11-23](#owner-decisions-2026-11-23)):
+  - promotion of the drafts to `test-vectors/`, `schemas/` and `profiles/` is in progress in another lane, and closes M1.2, M1.3 and M1.6;
+  - pushing `roadmap-v2` closes M1.4, once the hygiene check passes.
+  M2.10 and M2.11 are met.
 - **(b) Engineering still to do:**
   - the `scripts/offline` wrapper (M2.1);
   - the frozen fixture manifest (M2.2);
@@ -184,7 +204,9 @@ M0.1 is met on the second non-author recount (`3a640b3`). M2.5 and M2.8 are met 
   - the M1.1 item map.
 
   M1.1, M2.2, M2.4 and M2.6 also have an (a) clause.
-- **(c)** Nothing else. The SYN records are research records and are not counted. Evidence for M4.1 and M4.2 is committed in `0bc4e23`.
+- **(c)** Nothing else.
+
+The SYN records are research records and are not counted. Evidence for M4.1 and M4.2 is committed in `0bc4e23`.
 
 ## Later profiles and sequence
 
@@ -285,17 +307,17 @@ These are local backlog IDs, not published GitHub issues. The gate tables above 
 
 These stay with the owner. No agent or supervision loop decides them or does them unasked:
 
-- Pushing or publishing anything, including a spec commit for the implementation repository to pin.
+- Pushing or publishing anything beyond what is approved. Approved on 2026-11-23: `roadmap-v2` to `origin` as a branch (not `main`), after a hygiene check.
 - Creating GitHub repositories, and choosing their visibility. Also the Go module path.
-- Normative format changes, including promoting the draft extraction, catalogue and report contracts and their vectors from `research/drafts/` into `spec/`, `schemas/`, `profiles/` or `test-vectors/`.
+- Normative format changes beyond the approved promotion. Approved on 2026-11-23: promoting the reviewed extraction, catalogue and report drafts and their vectors into `schemas/`, `profiles/` and `test-vectors/`.
 - New diagrams.
 - Paid services.
-- Corpus acquisition (M3.1).
-- The false-alarm budget and its unit (M3.0).
+- Corpus acquisition beyond the approved 48 repositories and their mechanical replacements (approved 2026-11-23).
+- Any change to the false-alarm budget (M3.0 recorded 2026-11-23: 1 in 20; 1 in 100 only on a larger corpus if that passes).
 - Whether to omit embedding from the next release, or select a candidate (M2E.0). The M2E.1(c) payload minimum is also approved by the owner.
 - The post-hoc image mark study (IMG.0 and the protocol in the [lane 06–08 checkpoint](research/research-06-08-checkpoint.md)); any real image set (IMGF.6). The IMGF package install was approved on 2026-11-22.
 - Text: UC-8 wording (TXT.0), the PAN-PC-10 download (TXT.5) and any text-mark experiment (TXT.8). The 2026-11-22 override covers fingerprint-only TS, image and text work only.
-- Also: licence split, hosted CI, the EXT reviewers, whether implementers must be independent people, and the draft contract's pending options (OD-C5).
+- Also: licence split, hosted CI, the EXT reviewers, whether implementers must be independent people, and any contract option not yet decided (OD-C5 and the decided-in-draft items were confirmed 2026-11-23).
 
 ## How work is accepted
 
