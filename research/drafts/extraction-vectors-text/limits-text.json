@@ -1,0 +1,115 @@
+{
+ "profileDraft": "research/drafts/extraction-profile-text.md",
+ "vectors": [
+  {
+   "id": "limit-exact",
+   "tags": [
+    "class:limit-size"
+   ],
+   "description": "Exactly maxInputBytes = 16 bytes: accepted.",
+   "derivation": "hand",
+   "config": "config-text-plain-limit16.json",
+   "inputBase64": "c2l4dGVlbiBieXRlIHR4dA==",
+   "inputText": "sixteen byte txt",
+   "result": {
+    "status": "insufficient-tokens",
+    "tokens": [
+     {
+      "text": "sixteen",
+      "span": [
+       0,
+       7
+      ],
+      "folded": "sixteen",
+      "skeleton": "sixteen"
+     },
+     {
+      "text": "byte",
+      "span": [
+       8,
+       12
+      ],
+      "folded": "byte",
+      "skeleton": "byte"
+     },
+     {
+      "text": "txt",
+      "span": [
+       13,
+       16
+      ],
+      "folded": "txt",
+      "skeleton": "txt"
+     }
+    ],
+    "exact": {
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "folded": {
+     "values": [
+      "sixteen",
+      "byte",
+      "txt"
+     ],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "skeleton": {
+     "values": [
+      "sixteen",
+      "byte",
+      "txt"
+     ],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    }
+   }
+  },
+  {
+   "id": "limit-over",
+   "tags": [
+    "class:limit-size"
+   ],
+   "description": "17 bytes: input-too-large at 0.",
+   "derivation": "hand",
+   "config": "config-text-plain-limit16.json",
+   "inputBase64": "c2V2ZW50ZWVuIGJ5dGVzIHg=",
+   "inputText": "seventeen bytes x",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "input-too-large",
+     "offset": 0
+    }
+   }
+  },
+  {
+   "id": "limit-over-invalid",
+   "tags": [
+    "class:limit-size",
+    "class:invalid-utf8"
+   ],
+   "description": "17 bytes including an invalid byte: the size check runs first.",
+   "derivation": "hand",
+   "config": "config-text-plain-limit16.json",
+   "inputBase64": "c2l4dGVlbiBieXRlc/8uLi4=",
+   "inputText": null,
+   "inputDisplay": "sixteen bytes\\xff...",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "input-too-large",
+     "offset": 0
+    }
+   }
+  }
+ ],
+ "pairs": []
+}

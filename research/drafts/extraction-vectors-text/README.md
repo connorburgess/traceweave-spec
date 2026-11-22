@@ -1,0 +1,143 @@
+# Draft text-profile vectors (`text-plain` and `text-markdown`, `draft-1`)
+
+Status: draft for review, 2026-11-22. These are the hand-derived vectors (roadmap gate TXT.2) for the [draft text extraction profile](../extraction-profile-text.md). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
+
+## Files
+
+| File | Contents |
+| --- | --- |
+| `config-text-plain.json`, `config-text-markdown.json` | Exact configuration bytes (profile §11), k = 8, w = 8, 1 MiB. Do not reformat: the digest covers the trailing LF |
+| `config-text-plain-limit16.json` | `text-plain` with `maxInputBytes` 16, used by `limits-text.json` |
+| `config-negative-text.json` | 12 configurations that MUST be rejected, each with its `expectedResult`, and 2 boundary configurations that MUST be accepted |
+| `text-plain.json` | 50 vectors (43 accepted, 7 errors) and 15 pair relations |
+| `text-markdown.json` | 18 vectors (16 accepted, 2 errors) and 1 pair relation |
+| `limits-text.json` | 3 vectors: exactly the limit, over it, and over it with an invalid byte (the size check runs first) |
+| `rejections.json` | 64 paired rejections: one deliberately wrong expected result for each of the 60 accepted vectors, plus 4 for error vectors |
+| `text-tables-17.0.0.json` | Derived Unicode 17.0.0 data (profile §4), SHA-256 `49eb0304…80ae53f4` |
+| `check_text_vectors.py` | Independent checker, standard library only |
+| `harness/gen_text_tables.py` | Regenerates the table from the six pinned files and refuses any other digests |
+| `harness/build_vectors.py` | Writes every vector, configuration and rejection file from the hand-written expectations |
+| `harness/crosscheck_text.py`, `harness/go/`, `harness/rust/` | Cross-check against Go x/text and Rust Unicode crates, offline, with `go.sum` and `Cargo.lock` |
+
+**Vector fields.** Every vector has `id`, `tags` (its `class:` labels), `description`, `derivation` (always `hand`), `config` (the file whose bytes apply), `inputBase64` (the authoritative bytes) and `inputText`. `inputText` is `null` when the bytes are not UTF-8; `inputDisplay` then gives an escaped form. The `result` is one of these:
+- **`status: "error"`** with `error.code` and `error.offset`, and nothing else.
+- **`status: "ok"` or `"insufficient-tokens"`** with:
+  - `tokens`: each has `text` (exact), half-open byte `span` into the original input, `folded` and `skeleton`;
+  - for `text-markdown`, `masked`: the merged masked byte ranges;
+  - one block per channel, `exact`, `folded` and `skeleton`, each with `kgrams` (position, 16-hex-digit hash, span), `windowSelections`, `partialWindow` and `fingerprints`. `folded` and `skeleton` also list `values`.
+
+**Pairs.** Each pair names two vectors, a list of channels and a relation:
+- `identical-hashes`: equal, non-empty k-gram hash lists;
+- `different-hashes`: no k-gram hash in common;
+- `shares-fingerprint`: at least one fingerprint hash in common.
+
+**Rejections.** Each rejection names a vector, a declared `layer` and a `mutation`. The checker applies the mutation, recomputes k-grams, hashes and winnowing from the mutated tokens so that only the declared layer is wrong, and requires the checker to fail at exactly that layer. The layers are `segmentation`, `fold`, `skeleton`, `markdown`, `status`, `hash`, `winnow` and `error`. This is how TXT.2's "each positive vector has a paired rejection vector" is read (open decision OD-T12 in the profile).
+
+## How the expectations were derived
+
+`derivation: hand` means:
+- For every accepted vector, the token texts, folded values, skeleton values and Markdown masked substrings were written by hand in `harness/build_vectors.py`.
+- They follow the profile rules and per-character lookups of the NFKC_CF and `confusables.txt` rows for the non-ASCII characters used.
+
+`build_vectors.py` does **not** segment, fold or skeletonize. It does three things:
+1. It locates each hand-written token text in the input, left to right, skipping hand-listed masked ranges, to get its byte span.
+2. It computes k-gram hashes and winnowing.
+3. It writes JSON with every non-ASCII character escaped.
+
+The checker recomputes all of it independently from the input bytes.
+
+The checker's first run against these expectations reported 3 discrepancies:
+- a Devanagari vowel sign written as `l`;
+- a limit input that was 16 bytes, not 17;
+- a builder span-location defect: `an` was located inside a masked `</span>`.
+
+All three were fixed, two in the hand values and one in the builder. Before that run, re-reading had caught 6 missing `m` → `rn` skeleton mappings. No expectation was copied from checker output.
+
+## Coverage
+
+| Class (tag) | Vectors |
+| --- | --- |
+| `empty` | `plain-empty`, `plain-whitespace-only`, `plain-punctuation-only`, `md-empty`, `md-syntax-only` |
+| `short`, `below-kw1` | `plain-short` (5 tokens, insufficient); `plain-exact-k` (8, m = 1, partial); `plain-below-kw1` (12, partial); `plain-at-kw1` (15 = k + w − 1, one full window) |
+| `ties` | `plain-ties` (period-3 cycle), `plain-repeated` (all hashes equal) |
+| `reflow`, `crlf`, `bom` | `plain-reflow-a`, `plain-reflow-b`, `plain-crlf`, `plain-bom`: identical hashes in every channel; `md-front-matter-crlf` |
+| `case`, `casefold-expansion` | `plain-upper`, `plain-casefold-expansion` (U+00DF, U+1E9E), `plain-greek` (final sigma), `plain-cherokee` (small letters fold to capitals) |
+| `nfd`, `nfkc`, `combining` | `plain-nfc`/`plain-nfd`, `plain-hangul`/`plain-hangul-jamo`, `plain-nfkc-ligature` (U+FB01)/`plain-nfkc-ascii`, `plain-nfkc-compat`, `plain-combining-a`/`-b` |
+| `zero-width`, `default-ignorable` | `plain-zero-width`, `plain-zwsp-as-separator`, `plain-other-ignorable`, `plain-bidi` |
+| `confusable` | `plain-confusable-latin`/`plain-confusable-cyrillic`: skeleton identical, folded and exact share no hash |
+| `punctuation`, `numbers`, `hyphenation` | `plain-punct-a`/`-b` (identical in every channel), `plain-numbers`, `plain-hyphenation-wrap` |
+| `partial-copy` | `plain-partial-source`/`plain-partial-host`: 17 shared tokens, at least one shared folded and skeleton fingerprint |
+| `non-latin`, `no-spaces`, `bidi` | `plain-greek`, `plain-rtl-and-indic`, `plain-japanese`, `plain-chinese`, `plain-thai`, `plain-hangul`, `plain-cherokee`, `plain-numbers`, `plain-bidi` |
+| `markdown` | `md-syntax`/`md-stripped` (identical in every channel), `plain-md-syntax`, `md-fence`, `md-fence-unclosed`, `md-front-matter`, `md-front-matter-crlf`, `md-front-matter-unclosed`, `md-html-comment`, `md-html-comment-unclosed`, `md-link-reference`, `md-link-nested-parens`, `md-angle-brackets`, `md-entities`, `md-indented-code` |
+| `invalid-utf8`, `nul` | `plain-err-lone-continuation`, `-overlong`, `-surrogate`, `-truncated`, `-above-max`, `-nul`, `-nul-then-invalid`, `md-err-invalid-utf8`, `md-err-nul` |
+| `limit-size` | `limit-exact`, `limit-over`, `limit-over-invalid` |
+| `limit` (stated limits) | `plain-zwsp-as-separator`, `plain-hyphenation-wrap`, `plain-thai`, `md-entities`, `md-indented-code` |
+
+## 1. Checker
+
+```
+python3 -I research/drafts/extraction-vectors-text/check_text_vectors.py [--normalization-test PATH/NormalizationTest.txt]
+```
+
+Output on 2026-11-22, with `--normalization-test` pointing at the UCD 17.0.0 file (SHA-256 `5019ffd5…8c64dd`):
+
+```
+PASS config-negative-text.json: 12/12 invalid configurations rejected, 2/2 boundary configurations accepted; config-text-plain.json=35c1f63cc2f669a5, config-text-markdown.json=0be5e93c4c90b24c, config-text-plain-limit16.json=16d15b33a3b0a117
+PASS text-plain.json vectors=50 tokens=610 errors=7 masked-ranges=0 fingerprints(all channels)=227 partial-windows=57 tie-windows=48
+PASS text-markdown.json vectors=18 tokens=201 errors=2 masked-ranges=26 fingerprints(all channels)=69 partial-windows=21 tie-windows=0
+PASS limits-text.json vectors=3 tokens=3 errors=2 masked-ranges=0 fingerprints(all channels)=0 partial-windows=0 tie-windows=0
+PASS pairs=16 classes=27 total-vectors=71
+PASS rejections.json: 64/64 corruptions rejected at their declared layer (error=5, fold=14, hash=1, markdown=11, segmentation=23, skeleton=5, status=3, winnow=2); positive vectors with a paired rejection: 60/60
+PASS NormalizationTest.txt (17.0.0): NFC and NFD checks 120204/120204
+```
+
+**What it recomputes.** Everything is recomputed from the input bytes and the pinned table: configuration validation, the size, UTF-8 and NUL checks in order, the Markdown masks, character classes and the token rule, NFD, NFKC_CF, NFC, the separator filter, the skeleton, the k-gram bytes, the hashes, rightmost-minimum winnowing, partial windows, fingerprints, `input[span] == text` and the pair relations.
+
+**Python's `unicodedata` is not imported.** It is Unicode 16.0.0 in the interpreter used here. The checker's own NFD and NFC are verified against NormalizationTest.txt 17.0.0 when the file is supplied. That file is not committed (2,827,429 bytes); its digest is pinned in the checker.
+
+**Limits.** The checker and the builder were written by the same author from the same profile text, so a misreading of the profile shared by both would not be caught. The cross-check below compares the Unicode parts with independent library code. TXT.3 still needs two independent implementations.
+
+## 2. Tables
+
+```
+python3 -I research/drafts/extraction-vectors-text/harness/gen_text_tables.py UCD_AND_SECURITY_DIR OUT.json
+```
+
+The directory must contain `UnicodeData.txt`, `DerivedCoreProperties.txt`, `DerivedNormalizationProps.txt`, `CompositionExclusions.txt` and `PropList.txt` from `Public/17.0.0/ucd/`, and `confusables.txt` from `Public/17.0.0/security/`, with the digests in profile §4. A rerun on 2026-11-22 reproduced the committed table byte for byte.
+
+## 3. Cross-check
+
+```
+python3 -I research/drafts/extraction-vectors-text/harness/crosscheck_text.py PATH/NormalizationTest.txt [--build-dir DIR]
+```
+
+It builds offline (`GOPROXY=off`, `cargo --offline --locked`) with:
+- go1.27.3: `unicode` 17.0.0, golang.org/x/text v0.39.0 `norm` and `cases` 17.0.0;
+- Rust: unicode-normalization 0.1.25 (17.0.0), unicode-segmentation 1.13.3 (17.0.0) and pulldown-cmark 0.13.5.
+
+Results on 2026-11-22 (about 25 s):
+
+```
+classes W/C/I/S, every scalar value (Go unicode): 1112064/1112064 agree
+fold, every scalar value (Go x/text NFKC+cases.Fold+DI loop, then NFC): 1111978/1112064 DIFFER
+    attributed: 86 Cherokee small letters (U+13F8-13FD, U+AB70-ABBF): UCD NFKC_CF maps them to capitals, x/text cases.Fold leaves them; unexplained: 0
+token fold (with separator filter), every W/C scalar value: 149786/149872 DIFFER
+    attributed to Cherokee: 86; unexplained: 0
+fold, NormalizationTest.txt strings: 37671/37671 agree
+token fold, every vector token (Go): 813/814 DIFFER   (the Cherokee token of plain-cherokee)
+plain token rule + fold, every plain-profile vector (Go): 43/44 DIFFER   (plain-cherokee)
+NFC, every scalar value + NormalizationTest.txt strings (Rust unicode-normalization): 1149735/1149735 agree
+NFD, every scalar value + NormalizationTest.txt strings (Rust unicode-normalization): 1149735/1149735 agree
+Markdown masks vs CommonMark text content, folded token sequences (informative): 11/16 equal
+UAX #29 word spans equal to profile token spans (informative, not required): 31/44 plain vectors
+```
+
+**Reading the results.**
+- **Cherokee.** The only fold differences are the 86 Cherokee small letters. There, the pinned UCD 17.0.0 data (NFKC_CF, which follows CaseFolding.txt) and Go x/text `cases.Fold` disagree. The profile follows the UCD, and `plain-cherokee` makes the difference visible to any implementation.
+- **Rows marked informative** measure where the profile deliberately differs from UAX #29 and from a CommonMark parse (profile §5 and §7). They are not agreement checks.
+- **Unusable references.** Python `unicodedata` (16.0.0) and the Rust `caseless` crate 0.2.2 (16.0.0) were not used, because their Unicode version does not match.
+- **The skeleton** has no local reference implementation, so only the checker checks it.
+
+## Scope of these files
+
+Nothing here is normative. Promoting the profile or vectors into `profiles/` or `test-vectors/` needs the owner. `text-tables-17.0.0.json` is derived from Unicode, Inc. data files whose headers point to the [Unicode terms of use](https://www.unicode.org/terms_of_use.html). Whether derived tables may be committed under those terms is not settled here, and the owner should confirm it together with the existing [extraction table](../extraction-vectors/unicode-17.0.0-tables.json).

@@ -1,0 +1,219 @@
+{
+ "description": "Configurations that MUST be rejected with unsupported-config (profile section 11), and boundary configurations that MUST be accepted.",
+ "negatives": [
+  {
+   "id": "cfg-text-code-channels",
+   "description": "Code-profile channel names",
+   "configText": "{\"contract\":\"traceweave-text-winnow-draft-1\",\"profile\":\"text-plain\",\"profileVersion\":\"draft-1\",\"channels\":[\"exact\",\"normalized\"],\"k\":8,\"window\":8,\"hash\":\"sha256-first8-u64be\",\"maxInputBytes\":1048576}\n",
+   "expectedResult": {
+    "status": "error",
+    "error": {
+     "code": "unsupported-config",
+     "offset": null
+    },
+    "profile": null,
+    "profileVersion": null,
+    "configSha256": "7f1757375ad04068855513f4010a82c5a65166015a6334307299e3254a8cf85f",
+    "inputSha256": null,
+    "inputLength": null
+   }
+  },
+  {
+   "id": "cfg-text-two-channels",
+   "description": "Skeleton channel omitted (draft-1 requires all three)",
+   "configText": "{\"contract\":\"traceweave-text-winnow-draft-1\",\"profile\":\"text-plain\",\"profileVersion\":\"draft-1\",\"channels\":[\"exact\",\"folded\"],\"k\":8,\"window\":8,\"hash\":\"sha256-first8-u64be\",\"maxInputBytes\":1048576}\n",
+   "expectedResult": {
+    "status": "error",
+    "error": {
+     "code": "unsupported-config",
+     "offset": null
+    },
+    "profile": null,
+    "profileVersion": null,
+    "configSha256": "ef03677c1693b9bfed6bb26b01dafbae9b4515fb4b31c776d50c8a0778a79401",
+    "inputSha256": null,
+    "inputLength": null
+   }
+  },
+  {
+   "id": "cfg-text-channel-order",
+   "description": "Channels reordered",
+   "configText": "{\"contract\":\"traceweave-text-winnow-draft-1\",\"profile\":\"text-plain\",\"profileVersion\":\"draft-1\",\"channels\":[\"exact\",\"skeleton\",\"folded\"],\"k\":8,\"window\":8,\"hash\":\"sha256-first8-u64be\",\"maxInputBytes\":1048576}\n",
+   "expectedResult": {
+    "status": "error",
+    "error": {
+     "code": "unsupported-config",
+     "offset": null
+    },
+    "profile": null,
+    "profileVersion": null,
+    "configSha256": "2a6341d02d36188b12b7de8784d8b541be9be10b41825abf6eaed0429eebfc76",
+    "inputSha256": null,
+    "inputLength": null
+   }
+  },
+  {
+   "id": "cfg-text-token-contract",
+   "description": "Code contract identifier",
+   "configText": "{\"contract\":\"traceweave-token-winnow-draft-1\",\"profile\":\"text-plain\",\"profileVersion\":\"draft-1\",\"channels\":[\"exact\",\"folded\",\"skeleton\"],\"k\":8,\"window\":8,\"hash\":\"sha256-first8-u64be\",\"maxInputBytes\":1048576}\n",
+   "expectedResult": {
+    "status": "error",
+    "error": {
+     "code": "unsupported-config",
+     "offset": null
+    },
+    "profile": null,
+    "profileVersion": null,
+    "configSha256": "aaca7977ff4ff46855520e9a41d2b1a2d14f313dc2877958da60403afbaa4852",
+    "inputSha256": null,
+    "inputLength": null
+   }
+  },
+  {
+   "id": "cfg-text-unknown-format",
+   "description": "Unknown front end",
+   "configText": "{\"contract\":\"traceweave-text-winnow-draft-1\",\"profile\":\"text-html\",\"profileVersion\":\"draft-1\",\"channels\":[\"exact\",\"folded\",\"skeleton\"],\"k\":8,\"window\":8,\"hash\":\"sha256-first8-u64be\",\"maxInputBytes\":1048576}\n",
+   "expectedResult": {
+    "status": "error",
+    "error": {
+     "code": "unsupported-config",
+     "offset": null
+    },
+    "profile": null,
+    "profileVersion": null,
+    "configSha256": "7c945f5ec9060bda712474be28c997badde2fc5be0b4ba186478f6d1627065a9",
+    "inputSha256": null,
+    "inputLength": null
+   }
+  },
+  {
+   "id": "cfg-text-version",
+   "description": "Unknown profile version",
+   "configText": "{\"contract\":\"traceweave-text-winnow-draft-1\",\"profile\":\"text-plain\",\"profileVersion\":\"draft-2\",\"channels\":[\"exact\",\"folded\",\"skeleton\"],\"k\":8,\"window\":8,\"hash\":\"sha256-first8-u64be\",\"maxInputBytes\":1048576}\n",
+   "expectedResult": {
+    "status": "error",
+    "error": {
+     "code": "unsupported-config",
+     "offset": null
+    },
+    "profile": null,
+    "profileVersion": null,
+    "configSha256": "fe76263b1a82c2ae1feb26fcc251ec793d5cc0b9720c196f3e12b2c5a77a0a47",
+    "inputSha256": null,
+    "inputLength": null
+   }
+  },
+  {
+   "id": "cfg-text-k-above-bound",
+   "description": "k = 17",
+   "configText": "{\"contract\":\"traceweave-text-winnow-draft-1\",\"profile\":\"text-plain\",\"profileVersion\":\"draft-1\",\"channels\":[\"exact\",\"folded\",\"skeleton\"],\"k\":17,\"window\":8,\"hash\":\"sha256-first8-u64be\",\"maxInputBytes\":1048576}\n",
+   "expectedResult": {
+    "status": "error",
+    "error": {
+     "code": "unsupported-config",
+     "offset": null
+    },
+    "profile": null,
+    "profileVersion": null,
+    "configSha256": "3e30a74d8524d720ecccb689d7165af2beed0a6cafba051d2038191fa8c3b5fd",
+    "inputSha256": null,
+    "inputLength": null
+   }
+  },
+  {
+   "id": "cfg-text-window-zero",
+   "description": "window = 0",
+   "configText": "{\"contract\":\"traceweave-text-winnow-draft-1\",\"profile\":\"text-plain\",\"profileVersion\":\"draft-1\",\"channels\":[\"exact\",\"folded\",\"skeleton\"],\"k\":8,\"window\":0,\"hash\":\"sha256-first8-u64be\",\"maxInputBytes\":1048576}\n",
+   "expectedResult": {
+    "status": "error",
+    "error": {
+     "code": "unsupported-config",
+     "offset": null
+    },
+    "profile": null,
+    "profileVersion": null,
+    "configSha256": "9b39ec5e96eb2e52d811a8f93f3b012aafefaa5d9d83fe49acbc501e93938415",
+    "inputSha256": null,
+    "inputLength": null
+   }
+  },
+  {
+   "id": "cfg-text-max-above-bound",
+   "description": "maxInputBytes = 8388609",
+   "configText": "{\"contract\":\"traceweave-text-winnow-draft-1\",\"profile\":\"text-plain\",\"profileVersion\":\"draft-1\",\"channels\":[\"exact\",\"folded\",\"skeleton\"],\"k\":8,\"window\":8,\"hash\":\"sha256-first8-u64be\",\"maxInputBytes\":8388609}\n",
+   "expectedResult": {
+    "status": "error",
+    "error": {
+     "code": "unsupported-config",
+     "offset": null
+    },
+    "profile": null,
+    "profileVersion": null,
+    "configSha256": "fe78ef59368cd698a80d460b816adddb19f22f6807fdcadd0a265d6524f50a57",
+    "inputSha256": null,
+    "inputLength": null
+   }
+  },
+  {
+   "id": "cfg-text-whitespace",
+   "description": "Insignificant whitespace",
+   "configText": "{\"contract\": \"traceweave-text-winnow-draft-1\", \"profile\": \"text-plain\", \"profileVersion\": \"draft-1\", \"channels\": [\"exact\", \"folded\", \"skeleton\"], \"k\": 8, \"window\": 8, \"hash\": \"sha256-first8-u64be\", \"maxInputBytes\": 1048576}\n",
+   "expectedResult": {
+    "status": "error",
+    "error": {
+     "code": "unsupported-config",
+     "offset": null
+    },
+    "profile": null,
+    "profileVersion": null,
+    "configSha256": "3f0c7d15e88744f77d983351b1d2809e0135f05f1b85026bd53c049f64713ae4",
+    "inputSha256": null,
+    "inputLength": null
+   }
+  },
+  {
+   "id": "cfg-text-no-lf",
+   "description": "No trailing LF",
+   "configText": "{\"contract\":\"traceweave-text-winnow-draft-1\",\"profile\":\"text-plain\",\"profileVersion\":\"draft-1\",\"channels\":[\"exact\",\"folded\",\"skeleton\"],\"k\":8,\"window\":8,\"hash\":\"sha256-first8-u64be\",\"maxInputBytes\":1048576}",
+   "expectedResult": {
+    "status": "error",
+    "error": {
+     "code": "unsupported-config",
+     "offset": null
+    },
+    "profile": null,
+    "profileVersion": null,
+    "configSha256": "1d3dcbb67de68d2b9cdde7b36af01ff148a2b5cf80b9734c4ab5bb946185fd35",
+    "inputSha256": null,
+    "inputLength": null
+   }
+  },
+  {
+   "id": "cfg-text-extra-key",
+   "description": "Extra key (format)",
+   "configText": "{\"contract\":\"traceweave-text-winnow-draft-1\",\"profile\":\"text-plain\",\"profileVersion\":\"draft-1\",\"channels\":[\"exact\",\"folded\",\"skeleton\"],\"k\":8,\"window\":8,\"hash\":\"sha256-first8-u64be\",\"maxInputBytes\":1048576,\"format\":\"plain\"}\n",
+   "expectedResult": {
+    "status": "error",
+    "error": {
+     "code": "unsupported-config",
+     "offset": null
+    },
+    "profile": null,
+    "profileVersion": null,
+    "configSha256": "15a2a723768ce600302f0ada693d2e078917b2f171d1d75d913547891bddc944",
+    "inputSha256": null,
+    "inputLength": null
+   }
+  }
+ ],
+ "boundaryPositives": [
+  {
+   "id": "cfg-text-bounds-max",
+   "configText": "{\"contract\":\"traceweave-text-winnow-draft-1\",\"profile\":\"text-markdown\",\"profileVersion\":\"draft-1\",\"channels\":[\"exact\",\"folded\",\"skeleton\"],\"k\":16,\"window\":128,\"hash\":\"sha256-first8-u64be\",\"maxInputBytes\":8388608}\n"
+  },
+  {
+   "id": "cfg-text-bounds-min",
+   "configText": "{\"contract\":\"traceweave-text-winnow-draft-1\",\"profile\":\"text-plain\",\"profileVersion\":\"draft-1\",\"channels\":[\"exact\",\"folded\",\"skeleton\"],\"k\":1,\"window\":1,\"hash\":\"sha256-first8-u64be\",\"maxInputBytes\":1}\n"
+  }
+ ]
+}

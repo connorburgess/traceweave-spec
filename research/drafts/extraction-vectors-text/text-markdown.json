@@ -1,0 +1,6382 @@
+{
+ "profileDraft": "research/drafts/extraction-profile-text.md",
+ "vectors": [
+  {
+   "id": "md-syntax",
+   "tags": [
+    "class:markdown"
+   ],
+   "description": "Common Markdown: heading, emphasis, inline link with nested parentheses and a title, code span (kept), blockquote with inline HTML and an entity, table, ordered and bullet list, image, autolink. Masked: the link and image destinations, the two tags, the entity and the autolink.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "IyBTaGFyZWQgcGFzc2FnZXMKClNoYXJlZCAqcGFzc2FnZXMqIGNhbiAqKnN1cnZpdmUqKiB3aGVuIGEgd3JpdGVyIGNvcGllcyBhIFtwYXJhZ3JhcGhdKGh0dHBzOi8vZXhhbXBsZS5jb20vYV8oYikgInRpdGxlIikKaW50byBhbm90aGVyIGBkb2N1bWVudGAgYW5kIHRoZW4gcmVmbG93cyB0aGUgbGluZXMuCgo+IEEgcXVvdGUgd2l0aCA8c3BhbiBjbGFzcz0ieCI+aW5saW5lIEhUTUw8L3NwYW4+ICZhbXA7IGFuIGVudGl0eS4KCnwgbGVmdCB8IHJpZ2h0IHwKfCAtLS0tIHwgLS0tLS0gfAp8IG9uZSAgfCB0d28gICB8CgoxLiBGaXJzdCBpdGVtCi0gU2Vjb25kICFbYWx0IHRleHRdKGltZy9waWMucG5nKSBpdGVtIDxodHRwczovL2V4YW1wbGUub3JnL3g+Cg==",
+   "inputText": "# Shared passages\n\nShared *passages* can **survive** when a writer copies a [paragraph](https://example.com/a_(b) \"title\")\ninto another `document` and then reflows the lines.\n\n> A quote with <span class=\"x\">inline HTML</span> &amp; an entity.\n\n| left | right |\n| ---- | ----- |\n| one  | two   |\n\n1. First item\n- Second ![alt text](img/pic.png) item <https://example.org/x>\n",
+   "result": {
+    "status": "ok",
+    "masked": [
+     [
+      87,
+      122
+     ],
+     [
+      191,
+      207
+     ],
+     [
+      218,
+      225
+     ],
+     [
+      226,
+      231
+     ],
+     [
+      330,
+      343
+     ],
+     [
+      349,
+      372
+     ]
+    ],
+    "tokens": [
+     {
+      "text": "Shared",
+      "span": [
+       2,
+       8
+      ],
+      "folded": "shared",
+      "skeleton": "shared"
+     },
+     {
+      "text": "passages",
+      "span": [
+       9,
+       17
+      ],
+      "folded": "passages",
+      "skeleton": "passages"
+     },
+     {
+      "text": "Shared",
+      "span": [
+       19,
+       25
+      ],
+      "folded": "shared",
+      "skeleton": "shared"
+     },
+     {
+      "text": "passages",
+      "span": [
+       27,
+       35
+      ],
+      "folded": "passages",
+      "skeleton": "passages"
+     },
+     {
+      "text": "can",
+      "span": [
+       37,
+       40
+      ],
+      "folded": "can",
+      "skeleton": "can"
+     },
+     {
+      "text": "survive",
+      "span": [
+       43,
+       50
+      ],
+      "folded": "survive",
+      "skeleton": "survive"
+     },
+     {
+      "text": "when",
+      "span": [
+       53,
+       57
+      ],
+      "folded": "when",
+      "skeleton": "when"
+     },
+     {
+      "text": "a",
+      "span": [
+       58,
+       59
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "writer",
+      "span": [
+       60,
+       66
+      ],
+      "folded": "writer",
+      "skeleton": "writer"
+     },
+     {
+      "text": "copies",
+      "span": [
+       67,
+       73
+      ],
+      "folded": "copies",
+      "skeleton": "copies"
+     },
+     {
+      "text": "a",
+      "span": [
+       74,
+       75
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "paragraph",
+      "span": [
+       77,
+       86
+      ],
+      "folded": "paragraph",
+      "skeleton": "paragraph"
+     },
+     {
+      "text": "into",
+      "span": [
+       123,
+       127
+      ],
+      "folded": "into",
+      "skeleton": "into"
+     },
+     {
+      "text": "another",
+      "span": [
+       128,
+       135
+      ],
+      "folded": "another",
+      "skeleton": "another"
+     },
+     {
+      "text": "document",
+      "span": [
+       137,
+       145
+      ],
+      "folded": "document",
+      "skeleton": "docurnent"
+     },
+     {
+      "text": "and",
+      "span": [
+       147,
+       150
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "then",
+      "span": [
+       151,
+       155
+      ],
+      "folded": "then",
+      "skeleton": "then"
+     },
+     {
+      "text": "reflows",
+      "span": [
+       156,
+       163
+      ],
+      "folded": "reflows",
+      "skeleton": "reflows"
+     },
+     {
+      "text": "the",
+      "span": [
+       164,
+       167
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "lines",
+      "span": [
+       168,
+       173
+      ],
+      "folded": "lines",
+      "skeleton": "lines"
+     },
+     {
+      "text": "A",
+      "span": [
+       178,
+       179
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "quote",
+      "span": [
+       180,
+       185
+      ],
+      "folded": "quote",
+      "skeleton": "quote"
+     },
+     {
+      "text": "with",
+      "span": [
+       186,
+       190
+      ],
+      "folded": "with",
+      "skeleton": "with"
+     },
+     {
+      "text": "inline",
+      "span": [
+       207,
+       213
+      ],
+      "folded": "inline",
+      "skeleton": "inline"
+     },
+     {
+      "text": "HTML",
+      "span": [
+       214,
+       218
+      ],
+      "folded": "html",
+      "skeleton": "htrnl"
+     },
+     {
+      "text": "an",
+      "span": [
+       232,
+       234
+      ],
+      "folded": "an",
+      "skeleton": "an"
+     },
+     {
+      "text": "entity",
+      "span": [
+       235,
+       241
+      ],
+      "folded": "entity",
+      "skeleton": "entity"
+     },
+     {
+      "text": "left",
+      "span": [
+       246,
+       250
+      ],
+      "folded": "left",
+      "skeleton": "left"
+     },
+     {
+      "text": "right",
+      "span": [
+       253,
+       258
+      ],
+      "folded": "right",
+      "skeleton": "right"
+     },
+     {
+      "text": "one",
+      "span": [
+       280,
+       283
+      ],
+      "folded": "one",
+      "skeleton": "one"
+     },
+     {
+      "text": "two",
+      "span": [
+       287,
+       290
+      ],
+      "folded": "two",
+      "skeleton": "two"
+     },
+     {
+      "text": "1",
+      "span": [
+       296,
+       297
+      ],
+      "folded": "1",
+      "skeleton": "l"
+     },
+     {
+      "text": "First",
+      "span": [
+       299,
+       304
+      ],
+      "folded": "first",
+      "skeleton": "first"
+     },
+     {
+      "text": "item",
+      "span": [
+       305,
+       309
+      ],
+      "folded": "item",
+      "skeleton": "itern"
+     },
+     {
+      "text": "Second",
+      "span": [
+       312,
+       318
+      ],
+      "folded": "second",
+      "skeleton": "second"
+     },
+     {
+      "text": "alt",
+      "span": [
+       321,
+       324
+      ],
+      "folded": "alt",
+      "skeleton": "alt"
+     },
+     {
+      "text": "text",
+      "span": [
+       325,
+       329
+      ],
+      "folded": "text",
+      "skeleton": "text"
+     },
+     {
+      "text": "item",
+      "span": [
+       344,
+       348
+      ],
+      "folded": "item",
+      "skeleton": "itern"
+     }
+    ],
+    "exact": {
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "8aee69d4c7abd5dd",
+       "span": [
+        2,
+        59
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "ed230c324e3088f6",
+       "span": [
+        9,
+        66
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "824ade588d4d34d4",
+       "span": [
+        19,
+        73
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "58d89ea504e26322",
+       "span": [
+        27,
+        75
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "3c710bbf8bee0fd6",
+       "span": [
+        37,
+        86
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "171405397235fde2",
+       "span": [
+        43,
+        127
+       ]
+      },
+      {
+       "position": 6,
+       "hash": "791b62116c4e6b12",
+       "span": [
+        53,
+        135
+       ]
+      },
+      {
+       "position": 7,
+       "hash": "5f7ce5cc24e28d39",
+       "span": [
+        58,
+        145
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "60af8e82087b9fac",
+       "span": [
+        60,
+        150
+       ]
+      },
+      {
+       "position": 9,
+       "hash": "adfdb31deba47b14",
+       "span": [
+        67,
+        155
+       ]
+      },
+      {
+       "position": 10,
+       "hash": "0f1ccefbee712fb9",
+       "span": [
+        74,
+        163
+       ]
+      },
+      {
+       "position": 11,
+       "hash": "7b85e7d25e6a21e0",
+       "span": [
+        77,
+        167
+       ]
+      },
+      {
+       "position": 12,
+       "hash": "1dc96a015799bfba",
+       "span": [
+        123,
+        173
+       ]
+      },
+      {
+       "position": 13,
+       "hash": "cf2d6c9774ea3b4e",
+       "span": [
+        128,
+        179
+       ]
+      },
+      {
+       "position": 14,
+       "hash": "30f8232d5d083759",
+       "span": [
+        137,
+        185
+       ]
+      },
+      {
+       "position": 15,
+       "hash": "c309819ea837faf3",
+       "span": [
+        147,
+        190
+       ]
+      },
+      {
+       "position": 16,
+       "hash": "9723b06b0b753219",
+       "span": [
+        151,
+        213
+       ]
+      },
+      {
+       "position": 17,
+       "hash": "130795314c6244ba",
+       "span": [
+        156,
+        218
+       ]
+      },
+      {
+       "position": 18,
+       "hash": "6d8023fb5d671171",
+       "span": [
+        164,
+        234
+       ]
+      },
+      {
+       "position": 19,
+       "hash": "31404c8740d9d404",
+       "span": [
+        168,
+        241
+       ]
+      },
+      {
+       "position": 20,
+       "hash": "8458f087042faed6",
+       "span": [
+        178,
+        250
+       ]
+      },
+      {
+       "position": 21,
+       "hash": "58ef3b89c4f9e691",
+       "span": [
+        180,
+        258
+       ]
+      },
+      {
+       "position": 22,
+       "hash": "ad941bbe6775bb36",
+       "span": [
+        186,
+        283
+       ]
+      },
+      {
+       "position": 23,
+       "hash": "5ba850099200c2be",
+       "span": [
+        207,
+        290
+       ]
+      },
+      {
+       "position": 24,
+       "hash": "6bd03e6ef7889273",
+       "span": [
+        214,
+        297
+       ]
+      },
+      {
+       "position": 25,
+       "hash": "97c191cf6c51f82c",
+       "span": [
+        232,
+        304
+       ]
+      },
+      {
+       "position": 26,
+       "hash": "13ffe7d2d987eeb9",
+       "span": [
+        235,
+        309
+       ]
+      },
+      {
+       "position": 27,
+       "hash": "523b7600679eaa2e",
+       "span": [
+        246,
+        318
+       ]
+      },
+      {
+       "position": 28,
+       "hash": "07dbfedda75e0aac",
+       "span": [
+        253,
+        324
+       ]
+      },
+      {
+       "position": 29,
+       "hash": "d4b2e94835e76257",
+       "span": [
+        280,
+        329
+       ]
+      },
+      {
+       "position": 30,
+       "hash": "73cff00020f15c60",
+       "span": [
+        287,
+        348
+       ]
+      }
+     ],
+     "windowSelections": [
+      5,
+      5,
+      5,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      19,
+      26,
+      26,
+      28,
+      28,
+      28
+     ],
+     "partialWindow": false,
+     "fingerprints": [
+      {
+       "position": 5,
+       "hash": "171405397235fde2",
+       "span": [
+        43,
+        127
+       ]
+      },
+      {
+       "position": 10,
+       "hash": "0f1ccefbee712fb9",
+       "span": [
+        74,
+        163
+       ]
+      },
+      {
+       "position": 17,
+       "hash": "130795314c6244ba",
+       "span": [
+        156,
+        218
+       ]
+      },
+      {
+       "position": 19,
+       "hash": "31404c8740d9d404",
+       "span": [
+        168,
+        241
+       ]
+      },
+      {
+       "position": 26,
+       "hash": "13ffe7d2d987eeb9",
+       "span": [
+        235,
+        309
+       ]
+      },
+      {
+       "position": 28,
+       "hash": "07dbfedda75e0aac",
+       "span": [
+        253,
+        324
+       ]
+      }
+     ]
+    },
+    "folded": {
+     "values": [
+      "shared",
+      "passages",
+      "shared",
+      "passages",
+      "can",
+      "survive",
+      "when",
+      "a",
+      "writer",
+      "copies",
+      "a",
+      "paragraph",
+      "into",
+      "another",
+      "document",
+      "and",
+      "then",
+      "reflows",
+      "the",
+      "lines",
+      "a",
+      "quote",
+      "with",
+      "inline",
+      "html",
+      "an",
+      "entity",
+      "left",
+      "right",
+      "one",
+      "two",
+      "1",
+      "first",
+      "item",
+      "second",
+      "alt",
+      "text",
+      "item"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "97fc81005e29bec3",
+       "span": [
+        2,
+        59
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "83e4ff0f56437360",
+       "span": [
+        9,
+        66
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "9af69c9feee7b156",
+       "span": [
+        19,
+        73
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "d9dacc6ca82a398c",
+       "span": [
+        27,
+        75
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "6283acaf7b07c513",
+       "span": [
+        37,
+        86
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "11674748c5517f1c",
+       "span": [
+        43,
+        127
+       ]
+      },
+      {
+       "position": 6,
+       "hash": "fed288e0fe306e05",
+       "span": [
+        53,
+        135
+       ]
+      },
+      {
+       "position": 7,
+       "hash": "3861593f6bf48ad2",
+       "span": [
+        58,
+        145
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "025c0a3f46de969e",
+       "span": [
+        60,
+        150
+       ]
+      },
+      {
+       "position": 9,
+       "hash": "c56f1f211aaa30a7",
+       "span": [
+        67,
+        155
+       ]
+      },
+      {
+       "position": 10,
+       "hash": "095cb61c04a59a03",
+       "span": [
+        74,
+        163
+       ]
+      },
+      {
+       "position": 11,
+       "hash": "5862d2d5c3ef6ddd",
+       "span": [
+        77,
+        167
+       ]
+      },
+      {
+       "position": 12,
+       "hash": "5a4ac6322524f188",
+       "span": [
+        123,
+        173
+       ]
+      },
+      {
+       "position": 13,
+       "hash": "5809e0a0d33b4721",
+       "span": [
+        128,
+        179
+       ]
+      },
+      {
+       "position": 14,
+       "hash": "210b818bd2a9c4d9",
+       "span": [
+        137,
+        185
+       ]
+      },
+      {
+       "position": 15,
+       "hash": "f3a68cfb06f4d614",
+       "span": [
+        147,
+        190
+       ]
+      },
+      {
+       "position": 16,
+       "hash": "4bcd1a5cc97c5521",
+       "span": [
+        151,
+        213
+       ]
+      },
+      {
+       "position": 17,
+       "hash": "823cbf4e41b8616e",
+       "span": [
+        156,
+        218
+       ]
+      },
+      {
+       "position": 18,
+       "hash": "2adea75837b75611",
+       "span": [
+        164,
+        234
+       ]
+      },
+      {
+       "position": 19,
+       "hash": "1ef59456b43c6bd6",
+       "span": [
+        168,
+        241
+       ]
+      },
+      {
+       "position": 20,
+       "hash": "a510f8e0aa53c1f4",
+       "span": [
+        178,
+        250
+       ]
+      },
+      {
+       "position": 21,
+       "hash": "1b580b174e18d6b1",
+       "span": [
+        180,
+        258
+       ]
+      },
+      {
+       "position": 22,
+       "hash": "0127734145bde8cd",
+       "span": [
+        186,
+        283
+       ]
+      },
+      {
+       "position": 23,
+       "hash": "a0bb5c01883beda5",
+       "span": [
+        207,
+        290
+       ]
+      },
+      {
+       "position": 24,
+       "hash": "a0ce448bd4d8bb2c",
+       "span": [
+        214,
+        297
+       ]
+      },
+      {
+       "position": 25,
+       "hash": "6a02d1a39033a21b",
+       "span": [
+        232,
+        304
+       ]
+      },
+      {
+       "position": 26,
+       "hash": "f0dfc10d8e050be7",
+       "span": [
+        235,
+        309
+       ]
+      },
+      {
+       "position": 27,
+       "hash": "fe3c5ddb7f985afa",
+       "span": [
+        246,
+        318
+       ]
+      },
+      {
+       "position": 28,
+       "hash": "a4f01f3b488bf365",
+       "span": [
+        253,
+        324
+       ]
+      },
+      {
+       "position": 29,
+       "hash": "80d689a87669612c",
+       "span": [
+        280,
+        329
+       ]
+      },
+      {
+       "position": 30,
+       "hash": "1c8a327b0bb4265f",
+       "span": [
+        287,
+        348
+       ]
+      }
+     ],
+     "windowSelections": [
+      5,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      10,
+      10,
+      14,
+      19,
+      19,
+      21,
+      22,
+      22,
+      22,
+      22,
+      22,
+      22,
+      22,
+      22,
+      30
+     ],
+     "partialWindow": false,
+     "fingerprints": [
+      {
+       "position": 5,
+       "hash": "11674748c5517f1c",
+       "span": [
+        43,
+        127
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "025c0a3f46de969e",
+       "span": [
+        60,
+        150
+       ]
+      },
+      {
+       "position": 10,
+       "hash": "095cb61c04a59a03",
+       "span": [
+        74,
+        163
+       ]
+      },
+      {
+       "position": 14,
+       "hash": "210b818bd2a9c4d9",
+       "span": [
+        137,
+        185
+       ]
+      },
+      {
+       "position": 19,
+       "hash": "1ef59456b43c6bd6",
+       "span": [
+        168,
+        241
+       ]
+      },
+      {
+       "position": 21,
+       "hash": "1b580b174e18d6b1",
+       "span": [
+        180,
+        258
+       ]
+      },
+      {
+       "position": 22,
+       "hash": "0127734145bde8cd",
+       "span": [
+        186,
+        283
+       ]
+      },
+      {
+       "position": 30,
+       "hash": "1c8a327b0bb4265f",
+       "span": [
+        287,
+        348
+       ]
+      }
+     ]
+    },
+    "skeleton": {
+     "values": [
+      "shared",
+      "passages",
+      "shared",
+      "passages",
+      "can",
+      "survive",
+      "when",
+      "a",
+      "writer",
+      "copies",
+      "a",
+      "paragraph",
+      "into",
+      "another",
+      "docurnent",
+      "and",
+      "then",
+      "reflows",
+      "the",
+      "lines",
+      "a",
+      "quote",
+      "with",
+      "inline",
+      "htrnl",
+      "an",
+      "entity",
+      "left",
+      "right",
+      "one",
+      "two",
+      "l",
+      "first",
+      "itern",
+      "second",
+      "alt",
+      "text",
+      "itern"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "68f7e1f0deadbf1a",
+       "span": [
+        2,
+        59
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "2e92d0c366e17fec",
+       "span": [
+        9,
+        66
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "3c6ab89f78fd2d98",
+       "span": [
+        19,
+        73
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "5d5c02e7575472db",
+       "span": [
+        27,
+        75
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "116412144a3fdd44",
+       "span": [
+        37,
+        86
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "6e8c0b58d65f29d4",
+       "span": [
+        43,
+        127
+       ]
+      },
+      {
+       "position": 6,
+       "hash": "b054efa97f63de82",
+       "span": [
+        53,
+        135
+       ]
+      },
+      {
+       "position": 7,
+       "hash": "fa63cfe85932b2ef",
+       "span": [
+        58,
+        145
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "03022fb1401d7f4b",
+       "span": [
+        60,
+        150
+       ]
+      },
+      {
+       "position": 9,
+       "hash": "372b1241b981996b",
+       "span": [
+        67,
+        155
+       ]
+      },
+      {
+       "position": 10,
+       "hash": "5d35e455f979e299",
+       "span": [
+        74,
+        163
+       ]
+      },
+      {
+       "position": 11,
+       "hash": "6436ba689f715a9c",
+       "span": [
+        77,
+        167
+       ]
+      },
+      {
+       "position": 12,
+       "hash": "d08b0bdd9df7b2ff",
+       "span": [
+        123,
+        173
+       ]
+      },
+      {
+       "position": 13,
+       "hash": "15f597e20884d36e",
+       "span": [
+        128,
+        179
+       ]
+      },
+      {
+       "position": 14,
+       "hash": "fcb60e4a00f471b3",
+       "span": [
+        137,
+        185
+       ]
+      },
+      {
+       "position": 15,
+       "hash": "97f0b3ca7bc0ca01",
+       "span": [
+        147,
+        190
+       ]
+      },
+      {
+       "position": 16,
+       "hash": "68432379e29fbbf0",
+       "span": [
+        151,
+        213
+       ]
+      },
+      {
+       "position": 17,
+       "hash": "c5a65c15a0ca56f5",
+       "span": [
+        156,
+        218
+       ]
+      },
+      {
+       "position": 18,
+       "hash": "e74c403bd42abee6",
+       "span": [
+        164,
+        234
+       ]
+      },
+      {
+       "position": 19,
+       "hash": "d50310a412e1a180",
+       "span": [
+        168,
+        241
+       ]
+      },
+      {
+       "position": 20,
+       "hash": "9a802bf9a1c8e1de",
+       "span": [
+        178,
+        250
+       ]
+      },
+      {
+       "position": 21,
+       "hash": "b6a382973796a2d7",
+       "span": [
+        180,
+        258
+       ]
+      },
+      {
+       "position": 22,
+       "hash": "8b075cf41f3b9e7f",
+       "span": [
+        186,
+        283
+       ]
+      },
+      {
+       "position": 23,
+       "hash": "d05a3a9f37816118",
+       "span": [
+        207,
+        290
+       ]
+      },
+      {
+       "position": 24,
+       "hash": "420f607456f257bd",
+       "span": [
+        214,
+        297
+       ]
+      },
+      {
+       "position": 25,
+       "hash": "00e4703af4236172",
+       "span": [
+        232,
+        304
+       ]
+      },
+      {
+       "position": 26,
+       "hash": "cc495158edd4a400",
+       "span": [
+        235,
+        309
+       ]
+      },
+      {
+       "position": 27,
+       "hash": "a9dc0e4545036bd7",
+       "span": [
+        246,
+        318
+       ]
+      },
+      {
+       "position": 28,
+       "hash": "32653567497363b8",
+       "span": [
+        253,
+        324
+       ]
+      },
+      {
+       "position": 29,
+       "hash": "601a3ab4cfc684a4",
+       "span": [
+        280,
+        329
+       ]
+      },
+      {
+       "position": 30,
+       "hash": "e86339a5e2e057b2",
+       "span": [
+        287,
+        348
+       ]
+      }
+     ],
+     "windowSelections": [
+      4,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      13,
+      13,
+      13,
+      13,
+      13,
+      16,
+      16,
+      16,
+      24,
+      25,
+      25,
+      25,
+      25,
+      25,
+      25
+     ],
+     "partialWindow": false,
+     "fingerprints": [
+      {
+       "position": 4,
+       "hash": "116412144a3fdd44",
+       "span": [
+        37,
+        86
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "03022fb1401d7f4b",
+       "span": [
+        60,
+        150
+       ]
+      },
+      {
+       "position": 13,
+       "hash": "15f597e20884d36e",
+       "span": [
+        128,
+        179
+       ]
+      },
+      {
+       "position": 16,
+       "hash": "68432379e29fbbf0",
+       "span": [
+        151,
+        213
+       ]
+      },
+      {
+       "position": 24,
+       "hash": "420f607456f257bd",
+       "span": [
+        214,
+        297
+       ]
+      },
+      {
+       "position": 25,
+       "hash": "00e4703af4236172",
+       "span": [
+        232,
+        304
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "md-stripped",
+   "tags": [
+    "class:markdown"
+   ],
+   "description": "Plain rendering of md-syntax, extracted with text-markdown: identical hashes in every channel.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "U2hhcmVkIHBhc3NhZ2VzCgpTaGFyZWQgcGFzc2FnZXMgY2FuIHN1cnZpdmUgd2hlbiBhIHdyaXRlciBjb3BpZXMgYSBwYXJhZ3JhcGgKaW50byBhbm90aGVyIGRvY3VtZW50IGFuZCB0aGVuIHJlZmxvd3MgdGhlIGxpbmVzLgoKQSBxdW90ZSB3aXRoIGlubGluZSBIVE1MICYgYW4gZW50aXR5LgoKbGVmdCByaWdodApvbmUgdHdvCgoxLiBGaXJzdCBpdGVtClNlY29uZCBhbHQgdGV4dCBpdGVtCg==",
+   "inputText": "Shared passages\n\nShared passages can survive when a writer copies a paragraph\ninto another document and then reflows the lines.\n\nA quote with inline HTML & an entity.\n\nleft right\none two\n\n1. First item\nSecond alt text item\n",
+   "result": {
+    "status": "ok",
+    "masked": [],
+    "tokens": [
+     {
+      "text": "Shared",
+      "span": [
+       0,
+       6
+      ],
+      "folded": "shared",
+      "skeleton": "shared"
+     },
+     {
+      "text": "passages",
+      "span": [
+       7,
+       15
+      ],
+      "folded": "passages",
+      "skeleton": "passages"
+     },
+     {
+      "text": "Shared",
+      "span": [
+       17,
+       23
+      ],
+      "folded": "shared",
+      "skeleton": "shared"
+     },
+     {
+      "text": "passages",
+      "span": [
+       24,
+       32
+      ],
+      "folded": "passages",
+      "skeleton": "passages"
+     },
+     {
+      "text": "can",
+      "span": [
+       33,
+       36
+      ],
+      "folded": "can",
+      "skeleton": "can"
+     },
+     {
+      "text": "survive",
+      "span": [
+       37,
+       44
+      ],
+      "folded": "survive",
+      "skeleton": "survive"
+     },
+     {
+      "text": "when",
+      "span": [
+       45,
+       49
+      ],
+      "folded": "when",
+      "skeleton": "when"
+     },
+     {
+      "text": "a",
+      "span": [
+       50,
+       51
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "writer",
+      "span": [
+       52,
+       58
+      ],
+      "folded": "writer",
+      "skeleton": "writer"
+     },
+     {
+      "text": "copies",
+      "span": [
+       59,
+       65
+      ],
+      "folded": "copies",
+      "skeleton": "copies"
+     },
+     {
+      "text": "a",
+      "span": [
+       66,
+       67
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "paragraph",
+      "span": [
+       68,
+       77
+      ],
+      "folded": "paragraph",
+      "skeleton": "paragraph"
+     },
+     {
+      "text": "into",
+      "span": [
+       78,
+       82
+      ],
+      "folded": "into",
+      "skeleton": "into"
+     },
+     {
+      "text": "another",
+      "span": [
+       83,
+       90
+      ],
+      "folded": "another",
+      "skeleton": "another"
+     },
+     {
+      "text": "document",
+      "span": [
+       91,
+       99
+      ],
+      "folded": "document",
+      "skeleton": "docurnent"
+     },
+     {
+      "text": "and",
+      "span": [
+       100,
+       103
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "then",
+      "span": [
+       104,
+       108
+      ],
+      "folded": "then",
+      "skeleton": "then"
+     },
+     {
+      "text": "reflows",
+      "span": [
+       109,
+       116
+      ],
+      "folded": "reflows",
+      "skeleton": "reflows"
+     },
+     {
+      "text": "the",
+      "span": [
+       117,
+       120
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "lines",
+      "span": [
+       121,
+       126
+      ],
+      "folded": "lines",
+      "skeleton": "lines"
+     },
+     {
+      "text": "A",
+      "span": [
+       129,
+       130
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "quote",
+      "span": [
+       131,
+       136
+      ],
+      "folded": "quote",
+      "skeleton": "quote"
+     },
+     {
+      "text": "with",
+      "span": [
+       137,
+       141
+      ],
+      "folded": "with",
+      "skeleton": "with"
+     },
+     {
+      "text": "inline",
+      "span": [
+       142,
+       148
+      ],
+      "folded": "inline",
+      "skeleton": "inline"
+     },
+     {
+      "text": "HTML",
+      "span": [
+       149,
+       153
+      ],
+      "folded": "html",
+      "skeleton": "htrnl"
+     },
+     {
+      "text": "an",
+      "span": [
+       156,
+       158
+      ],
+      "folded": "an",
+      "skeleton": "an"
+     },
+     {
+      "text": "entity",
+      "span": [
+       159,
+       165
+      ],
+      "folded": "entity",
+      "skeleton": "entity"
+     },
+     {
+      "text": "left",
+      "span": [
+       168,
+       172
+      ],
+      "folded": "left",
+      "skeleton": "left"
+     },
+     {
+      "text": "right",
+      "span": [
+       173,
+       178
+      ],
+      "folded": "right",
+      "skeleton": "right"
+     },
+     {
+      "text": "one",
+      "span": [
+       179,
+       182
+      ],
+      "folded": "one",
+      "skeleton": "one"
+     },
+     {
+      "text": "two",
+      "span": [
+       183,
+       186
+      ],
+      "folded": "two",
+      "skeleton": "two"
+     },
+     {
+      "text": "1",
+      "span": [
+       188,
+       189
+      ],
+      "folded": "1",
+      "skeleton": "l"
+     },
+     {
+      "text": "First",
+      "span": [
+       191,
+       196
+      ],
+      "folded": "first",
+      "skeleton": "first"
+     },
+     {
+      "text": "item",
+      "span": [
+       197,
+       201
+      ],
+      "folded": "item",
+      "skeleton": "itern"
+     },
+     {
+      "text": "Second",
+      "span": [
+       202,
+       208
+      ],
+      "folded": "second",
+      "skeleton": "second"
+     },
+     {
+      "text": "alt",
+      "span": [
+       209,
+       212
+      ],
+      "folded": "alt",
+      "skeleton": "alt"
+     },
+     {
+      "text": "text",
+      "span": [
+       213,
+       217
+      ],
+      "folded": "text",
+      "skeleton": "text"
+     },
+     {
+      "text": "item",
+      "span": [
+       218,
+       222
+      ],
+      "folded": "item",
+      "skeleton": "itern"
+     }
+    ],
+    "exact": {
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "8aee69d4c7abd5dd",
+       "span": [
+        0,
+        51
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "ed230c324e3088f6",
+       "span": [
+        7,
+        58
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "824ade588d4d34d4",
+       "span": [
+        17,
+        65
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "58d89ea504e26322",
+       "span": [
+        24,
+        67
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "3c710bbf8bee0fd6",
+       "span": [
+        33,
+        77
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "171405397235fde2",
+       "span": [
+        37,
+        82
+       ]
+      },
+      {
+       "position": 6,
+       "hash": "791b62116c4e6b12",
+       "span": [
+        45,
+        90
+       ]
+      },
+      {
+       "position": 7,
+       "hash": "5f7ce5cc24e28d39",
+       "span": [
+        50,
+        99
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "60af8e82087b9fac",
+       "span": [
+        52,
+        103
+       ]
+      },
+      {
+       "position": 9,
+       "hash": "adfdb31deba47b14",
+       "span": [
+        59,
+        108
+       ]
+      },
+      {
+       "position": 10,
+       "hash": "0f1ccefbee712fb9",
+       "span": [
+        66,
+        116
+       ]
+      },
+      {
+       "position": 11,
+       "hash": "7b85e7d25e6a21e0",
+       "span": [
+        68,
+        120
+       ]
+      },
+      {
+       "position": 12,
+       "hash": "1dc96a015799bfba",
+       "span": [
+        78,
+        126
+       ]
+      },
+      {
+       "position": 13,
+       "hash": "cf2d6c9774ea3b4e",
+       "span": [
+        83,
+        130
+       ]
+      },
+      {
+       "position": 14,
+       "hash": "30f8232d5d083759",
+       "span": [
+        91,
+        136
+       ]
+      },
+      {
+       "position": 15,
+       "hash": "c309819ea837faf3",
+       "span": [
+        100,
+        141
+       ]
+      },
+      {
+       "position": 16,
+       "hash": "9723b06b0b753219",
+       "span": [
+        104,
+        148
+       ]
+      },
+      {
+       "position": 17,
+       "hash": "130795314c6244ba",
+       "span": [
+        109,
+        153
+       ]
+      },
+      {
+       "position": 18,
+       "hash": "6d8023fb5d671171",
+       "span": [
+        117,
+        158
+       ]
+      },
+      {
+       "position": 19,
+       "hash": "31404c8740d9d404",
+       "span": [
+        121,
+        165
+       ]
+      },
+      {
+       "position": 20,
+       "hash": "8458f087042faed6",
+       "span": [
+        129,
+        172
+       ]
+      },
+      {
+       "position": 21,
+       "hash": "58ef3b89c4f9e691",
+       "span": [
+        131,
+        178
+       ]
+      },
+      {
+       "position": 22,
+       "hash": "ad941bbe6775bb36",
+       "span": [
+        137,
+        182
+       ]
+      },
+      {
+       "position": 23,
+       "hash": "5ba850099200c2be",
+       "span": [
+        142,
+        186
+       ]
+      },
+      {
+       "position": 24,
+       "hash": "6bd03e6ef7889273",
+       "span": [
+        149,
+        189
+       ]
+      },
+      {
+       "position": 25,
+       "hash": "97c191cf6c51f82c",
+       "span": [
+        156,
+        196
+       ]
+      },
+      {
+       "position": 26,
+       "hash": "13ffe7d2d987eeb9",
+       "span": [
+        159,
+        201
+       ]
+      },
+      {
+       "position": 27,
+       "hash": "523b7600679eaa2e",
+       "span": [
+        168,
+        208
+       ]
+      },
+      {
+       "position": 28,
+       "hash": "07dbfedda75e0aac",
+       "span": [
+        173,
+        212
+       ]
+      },
+      {
+       "position": 29,
+       "hash": "d4b2e94835e76257",
+       "span": [
+        179,
+        217
+       ]
+      },
+      {
+       "position": 30,
+       "hash": "73cff00020f15c60",
+       "span": [
+        183,
+        222
+       ]
+      }
+     ],
+     "windowSelections": [
+      5,
+      5,
+      5,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      19,
+      26,
+      26,
+      28,
+      28,
+      28
+     ],
+     "partialWindow": false,
+     "fingerprints": [
+      {
+       "position": 5,
+       "hash": "171405397235fde2",
+       "span": [
+        37,
+        82
+       ]
+      },
+      {
+       "position": 10,
+       "hash": "0f1ccefbee712fb9",
+       "span": [
+        66,
+        116
+       ]
+      },
+      {
+       "position": 17,
+       "hash": "130795314c6244ba",
+       "span": [
+        109,
+        153
+       ]
+      },
+      {
+       "position": 19,
+       "hash": "31404c8740d9d404",
+       "span": [
+        121,
+        165
+       ]
+      },
+      {
+       "position": 26,
+       "hash": "13ffe7d2d987eeb9",
+       "span": [
+        159,
+        201
+       ]
+      },
+      {
+       "position": 28,
+       "hash": "07dbfedda75e0aac",
+       "span": [
+        173,
+        212
+       ]
+      }
+     ]
+    },
+    "folded": {
+     "values": [
+      "shared",
+      "passages",
+      "shared",
+      "passages",
+      "can",
+      "survive",
+      "when",
+      "a",
+      "writer",
+      "copies",
+      "a",
+      "paragraph",
+      "into",
+      "another",
+      "document",
+      "and",
+      "then",
+      "reflows",
+      "the",
+      "lines",
+      "a",
+      "quote",
+      "with",
+      "inline",
+      "html",
+      "an",
+      "entity",
+      "left",
+      "right",
+      "one",
+      "two",
+      "1",
+      "first",
+      "item",
+      "second",
+      "alt",
+      "text",
+      "item"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "97fc81005e29bec3",
+       "span": [
+        0,
+        51
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "83e4ff0f56437360",
+       "span": [
+        7,
+        58
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "9af69c9feee7b156",
+       "span": [
+        17,
+        65
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "d9dacc6ca82a398c",
+       "span": [
+        24,
+        67
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "6283acaf7b07c513",
+       "span": [
+        33,
+        77
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "11674748c5517f1c",
+       "span": [
+        37,
+        82
+       ]
+      },
+      {
+       "position": 6,
+       "hash": "fed288e0fe306e05",
+       "span": [
+        45,
+        90
+       ]
+      },
+      {
+       "position": 7,
+       "hash": "3861593f6bf48ad2",
+       "span": [
+        50,
+        99
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "025c0a3f46de969e",
+       "span": [
+        52,
+        103
+       ]
+      },
+      {
+       "position": 9,
+       "hash": "c56f1f211aaa30a7",
+       "span": [
+        59,
+        108
+       ]
+      },
+      {
+       "position": 10,
+       "hash": "095cb61c04a59a03",
+       "span": [
+        66,
+        116
+       ]
+      },
+      {
+       "position": 11,
+       "hash": "5862d2d5c3ef6ddd",
+       "span": [
+        68,
+        120
+       ]
+      },
+      {
+       "position": 12,
+       "hash": "5a4ac6322524f188",
+       "span": [
+        78,
+        126
+       ]
+      },
+      {
+       "position": 13,
+       "hash": "5809e0a0d33b4721",
+       "span": [
+        83,
+        130
+       ]
+      },
+      {
+       "position": 14,
+       "hash": "210b818bd2a9c4d9",
+       "span": [
+        91,
+        136
+       ]
+      },
+      {
+       "position": 15,
+       "hash": "f3a68cfb06f4d614",
+       "span": [
+        100,
+        141
+       ]
+      },
+      {
+       "position": 16,
+       "hash": "4bcd1a5cc97c5521",
+       "span": [
+        104,
+        148
+       ]
+      },
+      {
+       "position": 17,
+       "hash": "823cbf4e41b8616e",
+       "span": [
+        109,
+        153
+       ]
+      },
+      {
+       "position": 18,
+       "hash": "2adea75837b75611",
+       "span": [
+        117,
+        158
+       ]
+      },
+      {
+       "position": 19,
+       "hash": "1ef59456b43c6bd6",
+       "span": [
+        121,
+        165
+       ]
+      },
+      {
+       "position": 20,
+       "hash": "a510f8e0aa53c1f4",
+       "span": [
+        129,
+        172
+       ]
+      },
+      {
+       "position": 21,
+       "hash": "1b580b174e18d6b1",
+       "span": [
+        131,
+        178
+       ]
+      },
+      {
+       "position": 22,
+       "hash": "0127734145bde8cd",
+       "span": [
+        137,
+        182
+       ]
+      },
+      {
+       "position": 23,
+       "hash": "a0bb5c01883beda5",
+       "span": [
+        142,
+        186
+       ]
+      },
+      {
+       "position": 24,
+       "hash": "a0ce448bd4d8bb2c",
+       "span": [
+        149,
+        189
+       ]
+      },
+      {
+       "position": 25,
+       "hash": "6a02d1a39033a21b",
+       "span": [
+        156,
+        196
+       ]
+      },
+      {
+       "position": 26,
+       "hash": "f0dfc10d8e050be7",
+       "span": [
+        159,
+        201
+       ]
+      },
+      {
+       "position": 27,
+       "hash": "fe3c5ddb7f985afa",
+       "span": [
+        168,
+        208
+       ]
+      },
+      {
+       "position": 28,
+       "hash": "a4f01f3b488bf365",
+       "span": [
+        173,
+        212
+       ]
+      },
+      {
+       "position": 29,
+       "hash": "80d689a87669612c",
+       "span": [
+        179,
+        217
+       ]
+      },
+      {
+       "position": 30,
+       "hash": "1c8a327b0bb4265f",
+       "span": [
+        183,
+        222
+       ]
+      }
+     ],
+     "windowSelections": [
+      5,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      10,
+      10,
+      14,
+      19,
+      19,
+      21,
+      22,
+      22,
+      22,
+      22,
+      22,
+      22,
+      22,
+      22,
+      30
+     ],
+     "partialWindow": false,
+     "fingerprints": [
+      {
+       "position": 5,
+       "hash": "11674748c5517f1c",
+       "span": [
+        37,
+        82
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "025c0a3f46de969e",
+       "span": [
+        52,
+        103
+       ]
+      },
+      {
+       "position": 10,
+       "hash": "095cb61c04a59a03",
+       "span": [
+        66,
+        116
+       ]
+      },
+      {
+       "position": 14,
+       "hash": "210b818bd2a9c4d9",
+       "span": [
+        91,
+        136
+       ]
+      },
+      {
+       "position": 19,
+       "hash": "1ef59456b43c6bd6",
+       "span": [
+        121,
+        165
+       ]
+      },
+      {
+       "position": 21,
+       "hash": "1b580b174e18d6b1",
+       "span": [
+        131,
+        178
+       ]
+      },
+      {
+       "position": 22,
+       "hash": "0127734145bde8cd",
+       "span": [
+        137,
+        182
+       ]
+      },
+      {
+       "position": 30,
+       "hash": "1c8a327b0bb4265f",
+       "span": [
+        183,
+        222
+       ]
+      }
+     ]
+    },
+    "skeleton": {
+     "values": [
+      "shared",
+      "passages",
+      "shared",
+      "passages",
+      "can",
+      "survive",
+      "when",
+      "a",
+      "writer",
+      "copies",
+      "a",
+      "paragraph",
+      "into",
+      "another",
+      "docurnent",
+      "and",
+      "then",
+      "reflows",
+      "the",
+      "lines",
+      "a",
+      "quote",
+      "with",
+      "inline",
+      "htrnl",
+      "an",
+      "entity",
+      "left",
+      "right",
+      "one",
+      "two",
+      "l",
+      "first",
+      "itern",
+      "second",
+      "alt",
+      "text",
+      "itern"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "68f7e1f0deadbf1a",
+       "span": [
+        0,
+        51
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "2e92d0c366e17fec",
+       "span": [
+        7,
+        58
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "3c6ab89f78fd2d98",
+       "span": [
+        17,
+        65
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "5d5c02e7575472db",
+       "span": [
+        24,
+        67
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "116412144a3fdd44",
+       "span": [
+        33,
+        77
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "6e8c0b58d65f29d4",
+       "span": [
+        37,
+        82
+       ]
+      },
+      {
+       "position": 6,
+       "hash": "b054efa97f63de82",
+       "span": [
+        45,
+        90
+       ]
+      },
+      {
+       "position": 7,
+       "hash": "fa63cfe85932b2ef",
+       "span": [
+        50,
+        99
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "03022fb1401d7f4b",
+       "span": [
+        52,
+        103
+       ]
+      },
+      {
+       "position": 9,
+       "hash": "372b1241b981996b",
+       "span": [
+        59,
+        108
+       ]
+      },
+      {
+       "position": 10,
+       "hash": "5d35e455f979e299",
+       "span": [
+        66,
+        116
+       ]
+      },
+      {
+       "position": 11,
+       "hash": "6436ba689f715a9c",
+       "span": [
+        68,
+        120
+       ]
+      },
+      {
+       "position": 12,
+       "hash": "d08b0bdd9df7b2ff",
+       "span": [
+        78,
+        126
+       ]
+      },
+      {
+       "position": 13,
+       "hash": "15f597e20884d36e",
+       "span": [
+        83,
+        130
+       ]
+      },
+      {
+       "position": 14,
+       "hash": "fcb60e4a00f471b3",
+       "span": [
+        91,
+        136
+       ]
+      },
+      {
+       "position": 15,
+       "hash": "97f0b3ca7bc0ca01",
+       "span": [
+        100,
+        141
+       ]
+      },
+      {
+       "position": 16,
+       "hash": "68432379e29fbbf0",
+       "span": [
+        104,
+        148
+       ]
+      },
+      {
+       "position": 17,
+       "hash": "c5a65c15a0ca56f5",
+       "span": [
+        109,
+        153
+       ]
+      },
+      {
+       "position": 18,
+       "hash": "e74c403bd42abee6",
+       "span": [
+        117,
+        158
+       ]
+      },
+      {
+       "position": 19,
+       "hash": "d50310a412e1a180",
+       "span": [
+        121,
+        165
+       ]
+      },
+      {
+       "position": 20,
+       "hash": "9a802bf9a1c8e1de",
+       "span": [
+        129,
+        172
+       ]
+      },
+      {
+       "position": 21,
+       "hash": "b6a382973796a2d7",
+       "span": [
+        131,
+        178
+       ]
+      },
+      {
+       "position": 22,
+       "hash": "8b075cf41f3b9e7f",
+       "span": [
+        137,
+        182
+       ]
+      },
+      {
+       "position": 23,
+       "hash": "d05a3a9f37816118",
+       "span": [
+        142,
+        186
+       ]
+      },
+      {
+       "position": 24,
+       "hash": "420f607456f257bd",
+       "span": [
+        149,
+        189
+       ]
+      },
+      {
+       "position": 25,
+       "hash": "00e4703af4236172",
+       "span": [
+        156,
+        196
+       ]
+      },
+      {
+       "position": 26,
+       "hash": "cc495158edd4a400",
+       "span": [
+        159,
+        201
+       ]
+      },
+      {
+       "position": 27,
+       "hash": "a9dc0e4545036bd7",
+       "span": [
+        168,
+        208
+       ]
+      },
+      {
+       "position": 28,
+       "hash": "32653567497363b8",
+       "span": [
+        173,
+        212
+       ]
+      },
+      {
+       "position": 29,
+       "hash": "601a3ab4cfc684a4",
+       "span": [
+        179,
+        217
+       ]
+      },
+      {
+       "position": 30,
+       "hash": "e86339a5e2e057b2",
+       "span": [
+        183,
+        222
+       ]
+      }
+     ],
+     "windowSelections": [
+      4,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      13,
+      13,
+      13,
+      13,
+      13,
+      16,
+      16,
+      16,
+      24,
+      25,
+      25,
+      25,
+      25,
+      25,
+      25
+     ],
+     "partialWindow": false,
+     "fingerprints": [
+      {
+       "position": 4,
+       "hash": "116412144a3fdd44",
+       "span": [
+        33,
+        77
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "03022fb1401d7f4b",
+       "span": [
+        52,
+        103
+       ]
+      },
+      {
+       "position": 13,
+       "hash": "15f597e20884d36e",
+       "span": [
+        83,
+        130
+       ]
+      },
+      {
+       "position": 16,
+       "hash": "68432379e29fbbf0",
+       "span": [
+        104,
+        148
+       ]
+      },
+      {
+       "position": 24,
+       "hash": "420f607456f257bd",
+       "span": [
+        149,
+        189
+       ]
+      },
+      {
+       "position": 25,
+       "hash": "00e4703af4236172",
+       "span": [
+        156,
+        196
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "md-fence",
+   "tags": [
+    "class:markdown"
+   ],
+   "description": "A backtick fence with an info string and a tilde fence closed by a longer run: both masked line by line.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "QmVmb3JlIHRoZSBjb2RlIHdlIHdyaXRlIHByb3NlLgoKYGBgZ28KZnVuYyBtYWluKCkgeyBmbXQuUHJpbnRsbigiaGlkZGVuIikgfQpgYGAKCn5+fn4KdGlsZGUgZmVuY2UgYGBgCn5+fn5+CgpBZnRlciB0aGUgY29kZSBtb3JlIHByb3NlIGZvbGxvd3MgaGVyZS4K",
+   "inputText": "Before the code we write prose.\n\n```go\nfunc main() { fmt.Println(\"hidden\") }\n```\n\n~~~~\ntilde fence ```\n~~~~~\n\nAfter the code more prose follows here.\n",
+   "result": {
+    "status": "ok",
+    "masked": [
+     [
+      33,
+      38
+     ],
+     [
+      39,
+      76
+     ],
+     [
+      77,
+      80
+     ],
+     [
+      82,
+      86
+     ],
+     [
+      87,
+      102
+     ],
+     [
+      103,
+      108
+     ]
+    ],
+    "tokens": [
+     {
+      "text": "Before",
+      "span": [
+       0,
+       6
+      ],
+      "folded": "before",
+      "skeleton": "before"
+     },
+     {
+      "text": "the",
+      "span": [
+       7,
+       10
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "code",
+      "span": [
+       11,
+       15
+      ],
+      "folded": "code",
+      "skeleton": "code"
+     },
+     {
+      "text": "we",
+      "span": [
+       16,
+       18
+      ],
+      "folded": "we",
+      "skeleton": "we"
+     },
+     {
+      "text": "write",
+      "span": [
+       19,
+       24
+      ],
+      "folded": "write",
+      "skeleton": "write"
+     },
+     {
+      "text": "prose",
+      "span": [
+       25,
+       30
+      ],
+      "folded": "prose",
+      "skeleton": "prose"
+     },
+     {
+      "text": "After",
+      "span": [
+       110,
+       115
+      ],
+      "folded": "after",
+      "skeleton": "after"
+     },
+     {
+      "text": "the",
+      "span": [
+       116,
+       119
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "code",
+      "span": [
+       120,
+       124
+      ],
+      "folded": "code",
+      "skeleton": "code"
+     },
+     {
+      "text": "more",
+      "span": [
+       125,
+       129
+      ],
+      "folded": "more",
+      "skeleton": "rnore"
+     },
+     {
+      "text": "prose",
+      "span": [
+       130,
+       135
+      ],
+      "folded": "prose",
+      "skeleton": "prose"
+     },
+     {
+      "text": "follows",
+      "span": [
+       136,
+       143
+      ],
+      "folded": "follows",
+      "skeleton": "follows"
+     },
+     {
+      "text": "here",
+      "span": [
+       144,
+       148
+      ],
+      "folded": "here",
+      "skeleton": "here"
+     }
+    ],
+    "exact": {
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "236fee943e041c88",
+       "span": [
+        0,
+        119
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "f81c86fac3bef568",
+       "span": [
+        7,
+        124
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "7b55feaaba439a8a",
+       "span": [
+        11,
+        129
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "5cc1524527805d16",
+       "span": [
+        16,
+        135
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "ce71e766c53c4fc2",
+       "span": [
+        19,
+        143
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "740dee98fcb4e888",
+       "span": [
+        25,
+        148
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "236fee943e041c88",
+       "span": [
+        0,
+        119
+       ]
+      }
+     ]
+    },
+    "folded": {
+     "values": [
+      "before",
+      "the",
+      "code",
+      "we",
+      "write",
+      "prose",
+      "after",
+      "the",
+      "code",
+      "more",
+      "prose",
+      "follows",
+      "here"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "95d113337ab52e6f",
+       "span": [
+        0,
+        119
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "828801e009d926d7",
+       "span": [
+        7,
+        124
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "ae5fe3828d79e5f6",
+       "span": [
+        11,
+        129
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "d49802a019986dbc",
+       "span": [
+        16,
+        135
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "031d5e4a99ffbdb5",
+       "span": [
+        19,
+        143
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "29748a055d1c0bae",
+       "span": [
+        25,
+        148
+       ]
+      }
+     ],
+     "windowSelections": [
+      4
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 4,
+       "hash": "031d5e4a99ffbdb5",
+       "span": [
+        19,
+        143
+       ]
+      }
+     ]
+    },
+    "skeleton": {
+     "values": [
+      "before",
+      "the",
+      "code",
+      "we",
+      "write",
+      "prose",
+      "after",
+      "the",
+      "code",
+      "rnore",
+      "prose",
+      "follows",
+      "here"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "bfa61ef0cad58bb4",
+       "span": [
+        0,
+        119
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "148fa825bea06303",
+       "span": [
+        7,
+        124
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "070c1946877fa1a1",
+       "span": [
+        11,
+        129
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "949f7dc4ea4e1095",
+       "span": [
+        16,
+        135
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "f6602cfc6e4ee8a0",
+       "span": [
+        19,
+        143
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "0db05e021106d403",
+       "span": [
+        25,
+        148
+       ]
+      }
+     ],
+     "windowSelections": [
+      2
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 2,
+       "hash": "070c1946877fa1a1",
+       "span": [
+        11,
+        129
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "md-fence-unclosed",
+   "tags": [
+    "class:markdown"
+   ],
+   "description": "An unclosed fence masks to the end of input.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "UHJvc2UgYmVmb3JlIGFuIHVuY2xvc2VkIGZlbmNlLgoKYGBgCmNvZGUgdGhhdCBuZXZlciBjbG9zZXMKbW9yZSBjb2RlCg==",
+   "inputText": "Prose before an unclosed fence.\n\n```\ncode that never closes\nmore code\n",
+   "result": {
+    "status": "insufficient-tokens",
+    "masked": [
+     [
+      33,
+      36
+     ],
+     [
+      37,
+      59
+     ],
+     [
+      60,
+      69
+     ]
+    ],
+    "tokens": [
+     {
+      "text": "Prose",
+      "span": [
+       0,
+       5
+      ],
+      "folded": "prose",
+      "skeleton": "prose"
+     },
+     {
+      "text": "before",
+      "span": [
+       6,
+       12
+      ],
+      "folded": "before",
+      "skeleton": "before"
+     },
+     {
+      "text": "an",
+      "span": [
+       13,
+       15
+      ],
+      "folded": "an",
+      "skeleton": "an"
+     },
+     {
+      "text": "unclosed",
+      "span": [
+       16,
+       24
+      ],
+      "folded": "unclosed",
+      "skeleton": "unclosed"
+     },
+     {
+      "text": "fence",
+      "span": [
+       25,
+       30
+      ],
+      "folded": "fence",
+      "skeleton": "fence"
+     }
+    ],
+    "exact": {
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "folded": {
+     "values": [
+      "prose",
+      "before",
+      "an",
+      "unclosed",
+      "fence"
+     ],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "skeleton": {
+     "values": [
+      "prose",
+      "before",
+      "an",
+      "unclosed",
+      "fence"
+     ],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    }
+   }
+  },
+  {
+   "id": "md-front-matter",
+   "tags": [
+    "class:markdown"
+   ],
+   "description": "YAML front matter at offset 0 is masked through its closing line.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "LS0tCnRpdGxlOiBIaWRkZW4gdGl0bGUKdGFnczogW2EsIGJdCi0tLQpWaXNpYmxlIHByb3NlIHN0YXJ0cyBhZnRlciB0aGUgZnJvbnQgbWF0dGVyIGJsb2NrIGVuZHMuCg==",
+   "inputText": "---\ntitle: Hidden title\ntags: [a, b]\n---\nVisible prose starts after the front matter block ends.\n",
+   "result": {
+    "status": "ok",
+    "masked": [
+     [
+      0,
+      40
+     ]
+    ],
+    "tokens": [
+     {
+      "text": "Visible",
+      "span": [
+       41,
+       48
+      ],
+      "folded": "visible",
+      "skeleton": "visible"
+     },
+     {
+      "text": "prose",
+      "span": [
+       49,
+       54
+      ],
+      "folded": "prose",
+      "skeleton": "prose"
+     },
+     {
+      "text": "starts",
+      "span": [
+       55,
+       61
+      ],
+      "folded": "starts",
+      "skeleton": "starts"
+     },
+     {
+      "text": "after",
+      "span": [
+       62,
+       67
+      ],
+      "folded": "after",
+      "skeleton": "after"
+     },
+     {
+      "text": "the",
+      "span": [
+       68,
+       71
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "front",
+      "span": [
+       72,
+       77
+      ],
+      "folded": "front",
+      "skeleton": "front"
+     },
+     {
+      "text": "matter",
+      "span": [
+       78,
+       84
+      ],
+      "folded": "matter",
+      "skeleton": "rnatter"
+     },
+     {
+      "text": "block",
+      "span": [
+       85,
+       90
+      ],
+      "folded": "block",
+      "skeleton": "block"
+     },
+     {
+      "text": "ends",
+      "span": [
+       91,
+       95
+      ],
+      "folded": "ends",
+      "skeleton": "ends"
+     }
+    ],
+    "exact": {
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "082737afd98299ad",
+       "span": [
+        41,
+        90
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "98267d84992c77dc",
+       "span": [
+        49,
+        95
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "082737afd98299ad",
+       "span": [
+        41,
+        90
+       ]
+      }
+     ]
+    },
+    "folded": {
+     "values": [
+      "visible",
+      "prose",
+      "starts",
+      "after",
+      "the",
+      "front",
+      "matter",
+      "block",
+      "ends"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "2c2550ea0189412d",
+       "span": [
+        41,
+        90
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "7fa89c9b8f379766",
+       "span": [
+        49,
+        95
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "2c2550ea0189412d",
+       "span": [
+        41,
+        90
+       ]
+      }
+     ]
+    },
+    "skeleton": {
+     "values": [
+      "visible",
+      "prose",
+      "starts",
+      "after",
+      "the",
+      "front",
+      "rnatter",
+      "block",
+      "ends"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "2122b133a6c8de89",
+       "span": [
+        41,
+        90
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "66b83839af42275f",
+       "span": [
+        49,
+        95
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "2122b133a6c8de89",
+       "span": [
+        41,
+        90
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "md-front-matter-crlf",
+   "tags": [
+    "class:markdown",
+    "class:crlf"
+   ],
+   "description": "Front matter with CRLF line ends: the masked range ends after the closing line's CR, before its LF.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "LS0tDQp0aXRsZTogeA0KLS0tDQpWaXNpYmxlIHdvcmRzIGZvbGxvdyB0aGUgQ1JMRiBmcm9udCBtYXR0ZXIgaGVyZS4NCg==",
+   "inputText": "---\r\ntitle: x\r\n---\r\nVisible words follow the CRLF front matter here.\r\n",
+   "result": {
+    "status": "ok",
+    "masked": [
+     [
+      0,
+      19
+     ]
+    ],
+    "tokens": [
+     {
+      "text": "Visible",
+      "span": [
+       20,
+       27
+      ],
+      "folded": "visible",
+      "skeleton": "visible"
+     },
+     {
+      "text": "words",
+      "span": [
+       28,
+       33
+      ],
+      "folded": "words",
+      "skeleton": "words"
+     },
+     {
+      "text": "follow",
+      "span": [
+       34,
+       40
+      ],
+      "folded": "follow",
+      "skeleton": "follow"
+     },
+     {
+      "text": "the",
+      "span": [
+       41,
+       44
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "CRLF",
+      "span": [
+       45,
+       49
+      ],
+      "folded": "crlf",
+      "skeleton": "crlf"
+     },
+     {
+      "text": "front",
+      "span": [
+       50,
+       55
+      ],
+      "folded": "front",
+      "skeleton": "front"
+     },
+     {
+      "text": "matter",
+      "span": [
+       56,
+       62
+      ],
+      "folded": "matter",
+      "skeleton": "rnatter"
+     },
+     {
+      "text": "here",
+      "span": [
+       63,
+       67
+      ],
+      "folded": "here",
+      "skeleton": "here"
+     }
+    ],
+    "exact": {
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "93bd7f5bacf2f883",
+       "span": [
+        20,
+        67
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "93bd7f5bacf2f883",
+       "span": [
+        20,
+        67
+       ]
+      }
+     ]
+    },
+    "folded": {
+     "values": [
+      "visible",
+      "words",
+      "follow",
+      "the",
+      "crlf",
+      "front",
+      "matter",
+      "here"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "f3c89168d6adfe90",
+       "span": [
+        20,
+        67
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "f3c89168d6adfe90",
+       "span": [
+        20,
+        67
+       ]
+      }
+     ]
+    },
+    "skeleton": {
+     "values": [
+      "visible",
+      "words",
+      "follow",
+      "the",
+      "crlf",
+      "front",
+      "rnatter",
+      "here"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "66fac040b5ba6d4f",
+       "span": [
+        20,
+        67
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "66fac040b5ba6d4f",
+       "span": [
+        20,
+        67
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "md-front-matter-unclosed",
+   "tags": [
+    "class:markdown"
+   ],
+   "description": "Front matter without a closing line is not front matter: its words are tokens.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "LS0tCnRpdGxlOiBTaG93biB0aXRsZQpWaXNpYmxlIHByb3NlIGZvbGxvd3Mgd2l0aG91dCBhIGNsb3NpbmcgbGluZS4K",
+   "inputText": "---\ntitle: Shown title\nVisible prose follows without a closing line.\n",
+   "result": {
+    "status": "ok",
+    "masked": [],
+    "tokens": [
+     {
+      "text": "title",
+      "span": [
+       4,
+       9
+      ],
+      "folded": "title",
+      "skeleton": "title"
+     },
+     {
+      "text": "Shown",
+      "span": [
+       11,
+       16
+      ],
+      "folded": "shown",
+      "skeleton": "shown"
+     },
+     {
+      "text": "title",
+      "span": [
+       17,
+       22
+      ],
+      "folded": "title",
+      "skeleton": "title"
+     },
+     {
+      "text": "Visible",
+      "span": [
+       23,
+       30
+      ],
+      "folded": "visible",
+      "skeleton": "visible"
+     },
+     {
+      "text": "prose",
+      "span": [
+       31,
+       36
+      ],
+      "folded": "prose",
+      "skeleton": "prose"
+     },
+     {
+      "text": "follows",
+      "span": [
+       37,
+       44
+      ],
+      "folded": "follows",
+      "skeleton": "follows"
+     },
+     {
+      "text": "without",
+      "span": [
+       45,
+       52
+      ],
+      "folded": "without",
+      "skeleton": "without"
+     },
+     {
+      "text": "a",
+      "span": [
+       53,
+       54
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "closing",
+      "span": [
+       55,
+       62
+      ],
+      "folded": "closing",
+      "skeleton": "closing"
+     },
+     {
+      "text": "line",
+      "span": [
+       63,
+       67
+      ],
+      "folded": "line",
+      "skeleton": "line"
+     }
+    ],
+    "exact": {
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "9070bbf7381d3f36",
+       "span": [
+        4,
+        54
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "678368844d8247df",
+       "span": [
+        11,
+        62
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "d080ff44b45b7ae1",
+       "span": [
+        17,
+        67
+       ]
+      }
+     ],
+     "windowSelections": [
+      1
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 1,
+       "hash": "678368844d8247df",
+       "span": [
+        11,
+        62
+       ]
+      }
+     ]
+    },
+    "folded": {
+     "values": [
+      "title",
+      "shown",
+      "title",
+      "visible",
+      "prose",
+      "follows",
+      "without",
+      "a",
+      "closing",
+      "line"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "cbc093eaa469ed8e",
+       "span": [
+        4,
+        54
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "d58b8ff4e7eca263",
+       "span": [
+        11,
+        62
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "860e7a91a8e26531",
+       "span": [
+        17,
+        67
+       ]
+      }
+     ],
+     "windowSelections": [
+      2
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 2,
+       "hash": "860e7a91a8e26531",
+       "span": [
+        17,
+        67
+       ]
+      }
+     ]
+    },
+    "skeleton": {
+     "values": [
+      "title",
+      "shown",
+      "title",
+      "visible",
+      "prose",
+      "follows",
+      "without",
+      "a",
+      "closing",
+      "line"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "06822c8b27b2066e",
+       "span": [
+        4,
+        54
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "b82d23159ab3cb51",
+       "span": [
+        11,
+        62
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "a944009296483a5b",
+       "span": [
+        17,
+        67
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "06822c8b27b2066e",
+       "span": [
+        4,
+        54
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "md-html-comment",
+   "tags": [
+    "class:markdown"
+   ],
+   "description": "HTML comments, one spanning two lines; scanning resumes mid-line after -->.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "S2VlcCB0aGlzIDwhLS0gaGlkZGVuCmFjcm9zcyBsaW5lcyAtLT4gdmlzaWJsZSB0ZXh0IGFuZCA8IS0teC0tPiBtb3JlIHdvcmRzIGhlcmUuCg==",
+   "inputText": "Keep this <!-- hidden\nacross lines --> visible text and <!--x--> more words here.\n",
+   "result": {
+    "status": "ok",
+    "masked": [
+     [
+      10,
+      38
+     ],
+     [
+      56,
+      64
+     ]
+    ],
+    "tokens": [
+     {
+      "text": "Keep",
+      "span": [
+       0,
+       4
+      ],
+      "folded": "keep",
+      "skeleton": "keep"
+     },
+     {
+      "text": "this",
+      "span": [
+       5,
+       9
+      ],
+      "folded": "this",
+      "skeleton": "this"
+     },
+     {
+      "text": "visible",
+      "span": [
+       39,
+       46
+      ],
+      "folded": "visible",
+      "skeleton": "visible"
+     },
+     {
+      "text": "text",
+      "span": [
+       47,
+       51
+      ],
+      "folded": "text",
+      "skeleton": "text"
+     },
+     {
+      "text": "and",
+      "span": [
+       52,
+       55
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "more",
+      "span": [
+       65,
+       69
+      ],
+      "folded": "more",
+      "skeleton": "rnore"
+     },
+     {
+      "text": "words",
+      "span": [
+       70,
+       75
+      ],
+      "folded": "words",
+      "skeleton": "words"
+     },
+     {
+      "text": "here",
+      "span": [
+       76,
+       80
+      ],
+      "folded": "here",
+      "skeleton": "here"
+     }
+    ],
+    "exact": {
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "1d498fbcf19264b1",
+       "span": [
+        0,
+        80
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "1d498fbcf19264b1",
+       "span": [
+        0,
+        80
+       ]
+      }
+     ]
+    },
+    "folded": {
+     "values": [
+      "keep",
+      "this",
+      "visible",
+      "text",
+      "and",
+      "more",
+      "words",
+      "here"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "04ba071c7e8925f4",
+       "span": [
+        0,
+        80
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "04ba071c7e8925f4",
+       "span": [
+        0,
+        80
+       ]
+      }
+     ]
+    },
+    "skeleton": {
+     "values": [
+      "keep",
+      "this",
+      "visible",
+      "text",
+      "and",
+      "rnore",
+      "words",
+      "here"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "0990689eb9ec1048",
+       "span": [
+        0,
+        80
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "0990689eb9ec1048",
+       "span": [
+        0,
+        80
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "md-html-comment-unclosed",
+   "tags": [
+    "class:markdown"
+   ],
+   "description": "<!-- without --> is ordinary text.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "U3RhcnQgPCEtLSBuZXZlciBjbG9zZWQgc28gdGhlc2Ugd29yZHMgc3RheSB2aXNpYmxlIGluIHRoZSB0b2tlbiBzdHJlYW0K",
+   "inputText": "Start <!-- never closed so these words stay visible in the token stream\n",
+   "result": {
+    "status": "ok",
+    "masked": [],
+    "tokens": [
+     {
+      "text": "Start",
+      "span": [
+       0,
+       5
+      ],
+      "folded": "start",
+      "skeleton": "start"
+     },
+     {
+      "text": "never",
+      "span": [
+       11,
+       16
+      ],
+      "folded": "never",
+      "skeleton": "never"
+     },
+     {
+      "text": "closed",
+      "span": [
+       17,
+       23
+      ],
+      "folded": "closed",
+      "skeleton": "closed"
+     },
+     {
+      "text": "so",
+      "span": [
+       24,
+       26
+      ],
+      "folded": "so",
+      "skeleton": "so"
+     },
+     {
+      "text": "these",
+      "span": [
+       27,
+       32
+      ],
+      "folded": "these",
+      "skeleton": "these"
+     },
+     {
+      "text": "words",
+      "span": [
+       33,
+       38
+      ],
+      "folded": "words",
+      "skeleton": "words"
+     },
+     {
+      "text": "stay",
+      "span": [
+       39,
+       43
+      ],
+      "folded": "stay",
+      "skeleton": "stay"
+     },
+     {
+      "text": "visible",
+      "span": [
+       44,
+       51
+      ],
+      "folded": "visible",
+      "skeleton": "visible"
+     },
+     {
+      "text": "in",
+      "span": [
+       52,
+       54
+      ],
+      "folded": "in",
+      "skeleton": "in"
+     },
+     {
+      "text": "the",
+      "span": [
+       55,
+       58
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "token",
+      "span": [
+       59,
+       64
+      ],
+      "folded": "token",
+      "skeleton": "token"
+     },
+     {
+      "text": "stream",
+      "span": [
+       65,
+       71
+      ],
+      "folded": "stream",
+      "skeleton": "strearn"
+     }
+    ],
+    "exact": {
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "21506d9a083febc5",
+       "span": [
+        0,
+        51
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "8fdd00c9602cb696",
+       "span": [
+        11,
+        54
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "eb53266ff7b99e22",
+       "span": [
+        17,
+        58
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "45e2f8dd97232d5c",
+       "span": [
+        24,
+        64
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "b2cc50b66be826c0",
+       "span": [
+        27,
+        71
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "21506d9a083febc5",
+       "span": [
+        0,
+        51
+       ]
+      }
+     ]
+    },
+    "folded": {
+     "values": [
+      "start",
+      "never",
+      "closed",
+      "so",
+      "these",
+      "words",
+      "stay",
+      "visible",
+      "in",
+      "the",
+      "token",
+      "stream"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "581bc4684ae5e1cf",
+       "span": [
+        0,
+        51
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "72ef72dc04c5e8fb",
+       "span": [
+        11,
+        54
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "1e3c82a6825235db",
+       "span": [
+        17,
+        58
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "4ab7d77260e9d976",
+       "span": [
+        24,
+        64
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "2c398cb6f5a596f7",
+       "span": [
+        27,
+        71
+       ]
+      }
+     ],
+     "windowSelections": [
+      2
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 2,
+       "hash": "1e3c82a6825235db",
+       "span": [
+        17,
+        58
+       ]
+      }
+     ]
+    },
+    "skeleton": {
+     "values": [
+      "start",
+      "never",
+      "closed",
+      "so",
+      "these",
+      "words",
+      "stay",
+      "visible",
+      "in",
+      "the",
+      "token",
+      "strearn"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "e7cfbd22bb1f9f5d",
+       "span": [
+        0,
+        51
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "192612b9bdaff628",
+       "span": [
+        11,
+        54
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "9c5c437d75a1e5cc",
+       "span": [
+        17,
+        58
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "e96f895c94351a30",
+       "span": [
+        24,
+        64
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "d2fd1321f0793876",
+       "span": [
+        27,
+        71
+       ]
+      }
+     ],
+     "windowSelections": [
+      1
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 1,
+       "hash": "192612b9bdaff628",
+       "span": [
+        11,
+        54
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "md-link-reference",
+   "tags": [
+    "class:markdown"
+   ],
+   "description": "A link reference definition line is masked; a footnote definition ([^ label) is not.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "U2VlIHRoZSBbZ3VpZGVdW2ddIGFuZCB0aGUgZm9vdG5vdGUuW14xXQoKW2ddOiBodHRwczovL2V4YW1wbGUuY29tL2d1aWRlICJHdWlkZSB0aXRsZSIKW14xXTogRm9vdG5vdGUgcHJvc2UgcmVtYWlucyB2aXNpYmxlLgo=",
+   "inputText": "See the [guide][g] and the footnote.[^1]\n\n[g]: https://example.com/guide \"Guide title\"\n[^1]: Footnote prose remains visible.\n",
+   "result": {
+    "status": "ok",
+    "masked": [
+     [
+      42,
+      86
+     ]
+    ],
+    "tokens": [
+     {
+      "text": "See",
+      "span": [
+       0,
+       3
+      ],
+      "folded": "see",
+      "skeleton": "see"
+     },
+     {
+      "text": "the",
+      "span": [
+       4,
+       7
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "guide",
+      "span": [
+       9,
+       14
+      ],
+      "folded": "guide",
+      "skeleton": "guide"
+     },
+     {
+      "text": "g",
+      "span": [
+       16,
+       17
+      ],
+      "folded": "g",
+      "skeleton": "g"
+     },
+     {
+      "text": "and",
+      "span": [
+       19,
+       22
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "the",
+      "span": [
+       23,
+       26
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "footnote",
+      "span": [
+       27,
+       35
+      ],
+      "folded": "footnote",
+      "skeleton": "footnote"
+     },
+     {
+      "text": "1",
+      "span": [
+       38,
+       39
+      ],
+      "folded": "1",
+      "skeleton": "l"
+     },
+     {
+      "text": "1",
+      "span": [
+       89,
+       90
+      ],
+      "folded": "1",
+      "skeleton": "l"
+     },
+     {
+      "text": "Footnote",
+      "span": [
+       93,
+       101
+      ],
+      "folded": "footnote",
+      "skeleton": "footnote"
+     },
+     {
+      "text": "prose",
+      "span": [
+       102,
+       107
+      ],
+      "folded": "prose",
+      "skeleton": "prose"
+     },
+     {
+      "text": "remains",
+      "span": [
+       108,
+       115
+      ],
+      "folded": "remains",
+      "skeleton": "rernains"
+     },
+     {
+      "text": "visible",
+      "span": [
+       116,
+       123
+      ],
+      "folded": "visible",
+      "skeleton": "visible"
+     }
+    ],
+    "exact": {
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "80c4ca0a966f8c2b",
+       "span": [
+        0,
+        39
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "81ba438067a2100b",
+       "span": [
+        4,
+        90
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "3ad90990c6873650",
+       "span": [
+        9,
+        101
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "027c071a30d90706",
+       "span": [
+        16,
+        107
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "2d418cf6585e2cc3",
+       "span": [
+        19,
+        115
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "0436710a44a489f9",
+       "span": [
+        23,
+        123
+       ]
+      }
+     ],
+     "windowSelections": [
+      3
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 3,
+       "hash": "027c071a30d90706",
+       "span": [
+        16,
+        107
+       ]
+      }
+     ]
+    },
+    "folded": {
+     "values": [
+      "see",
+      "the",
+      "guide",
+      "g",
+      "and",
+      "the",
+      "footnote",
+      "1",
+      "1",
+      "footnote",
+      "prose",
+      "remains",
+      "visible"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "b13041933eba16c0",
+       "span": [
+        0,
+        39
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "6fcef075eb830ec6",
+       "span": [
+        4,
+        90
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "f62772bdc798c503",
+       "span": [
+        9,
+        101
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "a399b26ec06f7a46",
+       "span": [
+        16,
+        107
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "d9e98940c37c0996",
+       "span": [
+        19,
+        115
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "b1ccd895cfba1f70",
+       "span": [
+        23,
+        123
+       ]
+      }
+     ],
+     "windowSelections": [
+      1
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 1,
+       "hash": "6fcef075eb830ec6",
+       "span": [
+        4,
+        90
+       ]
+      }
+     ]
+    },
+    "skeleton": {
+     "values": [
+      "see",
+      "the",
+      "guide",
+      "g",
+      "and",
+      "the",
+      "footnote",
+      "l",
+      "l",
+      "footnote",
+      "prose",
+      "rernains",
+      "visible"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "ce1f32be0b3b8edb",
+       "span": [
+        0,
+        39
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "63c0baf8564235c4",
+       "span": [
+        4,
+        90
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "3e1b6e24b1024ca2",
+       "span": [
+        9,
+        101
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "8c3eda4819d6dbc0",
+       "span": [
+        16,
+        107
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "82c29616f98832bd",
+       "span": [
+        19,
+        115
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "419293fae9f498f0",
+       "span": [
+        23,
+        123
+       ]
+      }
+     ],
+     "windowSelections": [
+      2
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 2,
+       "hash": "3e1b6e24b1024ca2",
+       "span": [
+        9,
+        101
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "md-link-nested-parens",
+   "tags": [
+    "class:markdown"
+   ],
+   "description": "Balanced parentheses inside a destination; a destination not closed on its line is not masked.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "UmVhZCBbdGhlIGFydGljbGVdKGh0dHBzOi8vZW4ud2lraXBlZGlhLm9yZy93aWtpL0ZvbGRfKGhpZ2hlci1vcmRlcl9mdW5jdGlvbikpIGFib3V0IGZvbGRzLCB0aGVuIFticm9rZW5dKG5vIGNsb3NlIHBhcmVuIG9uIHRoaXMgbGluZQphbmQgY29udGludWUgcmVhZGluZy4K",
+   "inputText": "Read [the article](https://en.wikipedia.org/wiki/Fold_(higher-order_function)) about folds, then [broken](no close paren on this line\nand continue reading.\n",
+   "result": {
+    "status": "ok",
+    "masked": [
+     [
+      18,
+      78
+     ]
+    ],
+    "tokens": [
+     {
+      "text": "Read",
+      "span": [
+       0,
+       4
+      ],
+      "folded": "read",
+      "skeleton": "read"
+     },
+     {
+      "text": "the",
+      "span": [
+       6,
+       9
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "article",
+      "span": [
+       10,
+       17
+      ],
+      "folded": "article",
+      "skeleton": "article"
+     },
+     {
+      "text": "about",
+      "span": [
+       79,
+       84
+      ],
+      "folded": "about",
+      "skeleton": "about"
+     },
+     {
+      "text": "folds",
+      "span": [
+       85,
+       90
+      ],
+      "folded": "folds",
+      "skeleton": "folds"
+     },
+     {
+      "text": "then",
+      "span": [
+       92,
+       96
+      ],
+      "folded": "then",
+      "skeleton": "then"
+     },
+     {
+      "text": "broken",
+      "span": [
+       98,
+       104
+      ],
+      "folded": "broken",
+      "skeleton": "broken"
+     },
+     {
+      "text": "no",
+      "span": [
+       106,
+       108
+      ],
+      "folded": "no",
+      "skeleton": "no"
+     },
+     {
+      "text": "close",
+      "span": [
+       109,
+       114
+      ],
+      "folded": "close",
+      "skeleton": "close"
+     },
+     {
+      "text": "paren",
+      "span": [
+       115,
+       120
+      ],
+      "folded": "paren",
+      "skeleton": "paren"
+     },
+     {
+      "text": "on",
+      "span": [
+       121,
+       123
+      ],
+      "folded": "on",
+      "skeleton": "on"
+     },
+     {
+      "text": "this",
+      "span": [
+       124,
+       128
+      ],
+      "folded": "this",
+      "skeleton": "this"
+     },
+     {
+      "text": "line",
+      "span": [
+       129,
+       133
+      ],
+      "folded": "line",
+      "skeleton": "line"
+     },
+     {
+      "text": "and",
+      "span": [
+       134,
+       137
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "continue",
+      "span": [
+       138,
+       146
+      ],
+      "folded": "continue",
+      "skeleton": "continue"
+     },
+     {
+      "text": "reading",
+      "span": [
+       147,
+       154
+      ],
+      "folded": "reading",
+      "skeleton": "reading"
+     }
+    ],
+    "exact": {
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "e184ed9d834a881b",
+       "span": [
+        0,
+        108
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "e6239f51ec9ad53f",
+       "span": [
+        6,
+        114
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "2fe58383e58c754c",
+       "span": [
+        10,
+        120
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "caed5272cd26b092",
+       "span": [
+        79,
+        123
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "1a9cb28afc0f98d5",
+       "span": [
+        85,
+        128
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "aa0a9e3590233b19",
+       "span": [
+        92,
+        133
+       ]
+      },
+      {
+       "position": 6,
+       "hash": "f8f3e819d873c556",
+       "span": [
+        98,
+        137
+       ]
+      },
+      {
+       "position": 7,
+       "hash": "51b355899b9dba97",
+       "span": [
+        106,
+        146
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "0ef7d79be5b0d8ce",
+       "span": [
+        109,
+        154
+       ]
+      }
+     ],
+     "windowSelections": [
+      4,
+      8
+     ],
+     "partialWindow": false,
+     "fingerprints": [
+      {
+       "position": 4,
+       "hash": "1a9cb28afc0f98d5",
+       "span": [
+        85,
+        128
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "0ef7d79be5b0d8ce",
+       "span": [
+        109,
+        154
+       ]
+      }
+     ]
+    },
+    "folded": {
+     "values": [
+      "read",
+      "the",
+      "article",
+      "about",
+      "folds",
+      "then",
+      "broken",
+      "no",
+      "close",
+      "paren",
+      "on",
+      "this",
+      "line",
+      "and",
+      "continue",
+      "reading"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "e7e7b862c14c92a9",
+       "span": [
+        0,
+        108
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "301704b899a6fb2e",
+       "span": [
+        6,
+        114
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "f7ad1c1ec246abb8",
+       "span": [
+        10,
+        120
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "453d3279f014ce72",
+       "span": [
+        79,
+        123
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "32cb7ba7054443db",
+       "span": [
+        85,
+        128
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "d2c7ee3e25b42e3a",
+       "span": [
+        92,
+        133
+       ]
+      },
+      {
+       "position": 6,
+       "hash": "1b752c430136a716",
+       "span": [
+        98,
+        137
+       ]
+      },
+      {
+       "position": 7,
+       "hash": "24556a8e737edc43",
+       "span": [
+        106,
+        146
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "dacf277ff592dc1f",
+       "span": [
+        109,
+        154
+       ]
+      }
+     ],
+     "windowSelections": [
+      6,
+      6
+     ],
+     "partialWindow": false,
+     "fingerprints": [
+      {
+       "position": 6,
+       "hash": "1b752c430136a716",
+       "span": [
+        98,
+        137
+       ]
+      }
+     ]
+    },
+    "skeleton": {
+     "values": [
+      "read",
+      "the",
+      "article",
+      "about",
+      "folds",
+      "then",
+      "broken",
+      "no",
+      "close",
+      "paren",
+      "on",
+      "this",
+      "line",
+      "and",
+      "continue",
+      "reading"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "9c21a90dffc095ef",
+       "span": [
+        0,
+        108
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "8c47b05285f49899",
+       "span": [
+        6,
+        114
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "e07546bec88126f3",
+       "span": [
+        10,
+        120
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "ef79d45fb2819dc6",
+       "span": [
+        79,
+        123
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "3e3d94344367ae2d",
+       "span": [
+        85,
+        128
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "2cfc382b0cea41c0",
+       "span": [
+        92,
+        133
+       ]
+      },
+      {
+       "position": 6,
+       "hash": "eee463c3a8d8a7d3",
+       "span": [
+        98,
+        137
+       ]
+      },
+      {
+       "position": 7,
+       "hash": "a5ef019d19660951",
+       "span": [
+        106,
+        146
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "ff1ca38cc1c81e13",
+       "span": [
+        109,
+        154
+       ]
+      }
+     ],
+     "windowSelections": [
+      5,
+      5
+     ],
+     "partialWindow": false,
+     "fingerprints": [
+      {
+       "position": 5,
+       "hash": "2cfc382b0cea41c0",
+       "span": [
+        92,
+        133
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "md-angle-brackets",
+   "tags": [
+    "class:markdown"
+   ],
+   "description": "Only < [/] ASCII-letter ... > on one line, with no < in between, is a tag.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "SWYgYSA8IGIgYW5kIGMgPiBkIHRoZW4geDx5IGJ1dCAzIDw0IGFuZCA8VGFnIGF0dHI+IGlzIG1hc2tlZCB3aGlsZSA8MT4gc3RheXMuCg==",
+   "inputText": "If a < b and c > d then x<y but 3 <4 and <Tag attr> is masked while <1> stays.\n",
+   "result": {
+    "status": "ok",
+    "masked": [
+     [
+      41,
+      51
+     ]
+    ],
+    "tokens": [
+     {
+      "text": "If",
+      "span": [
+       0,
+       2
+      ],
+      "folded": "if",
+      "skeleton": "if"
+     },
+     {
+      "text": "a",
+      "span": [
+       3,
+       4
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "b",
+      "span": [
+       7,
+       8
+      ],
+      "folded": "b",
+      "skeleton": "b"
+     },
+     {
+      "text": "and",
+      "span": [
+       9,
+       12
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "c",
+      "span": [
+       13,
+       14
+      ],
+      "folded": "c",
+      "skeleton": "c"
+     },
+     {
+      "text": "d",
+      "span": [
+       17,
+       18
+      ],
+      "folded": "d",
+      "skeleton": "d"
+     },
+     {
+      "text": "then",
+      "span": [
+       19,
+       23
+      ],
+      "folded": "then",
+      "skeleton": "then"
+     },
+     {
+      "text": "x",
+      "span": [
+       24,
+       25
+      ],
+      "folded": "x",
+      "skeleton": "x"
+     },
+     {
+      "text": "y",
+      "span": [
+       26,
+       27
+      ],
+      "folded": "y",
+      "skeleton": "y"
+     },
+     {
+      "text": "but",
+      "span": [
+       28,
+       31
+      ],
+      "folded": "but",
+      "skeleton": "but"
+     },
+     {
+      "text": "3",
+      "span": [
+       32,
+       33
+      ],
+      "folded": "3",
+      "skeleton": "3"
+     },
+     {
+      "text": "4",
+      "span": [
+       35,
+       36
+      ],
+      "folded": "4",
+      "skeleton": "4"
+     },
+     {
+      "text": "and",
+      "span": [
+       37,
+       40
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "is",
+      "span": [
+       52,
+       54
+      ],
+      "folded": "is",
+      "skeleton": "is"
+     },
+     {
+      "text": "masked",
+      "span": [
+       55,
+       61
+      ],
+      "folded": "masked",
+      "skeleton": "rnasked"
+     },
+     {
+      "text": "while",
+      "span": [
+       62,
+       67
+      ],
+      "folded": "while",
+      "skeleton": "while"
+     },
+     {
+      "text": "1",
+      "span": [
+       69,
+       70
+      ],
+      "folded": "1",
+      "skeleton": "l"
+     },
+     {
+      "text": "stays",
+      "span": [
+       72,
+       77
+      ],
+      "folded": "stays",
+      "skeleton": "stays"
+     }
+    ],
+    "exact": {
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "52bccfb60485826e",
+       "span": [
+        0,
+        25
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "8fc15b70011f5871",
+       "span": [
+        3,
+        27
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "4c393cf46a93b4b5",
+       "span": [
+        7,
+        31
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "7cea731ca2e614fb",
+       "span": [
+        9,
+        33
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "13d334f5c99b6707",
+       "span": [
+        13,
+        36
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "9a69aa09c2e8d848",
+       "span": [
+        17,
+        40
+       ]
+      },
+      {
+       "position": 6,
+       "hash": "b19d0b43122ba8b5",
+       "span": [
+        19,
+        54
+       ]
+      },
+      {
+       "position": 7,
+       "hash": "cf7c0665169c00f2",
+       "span": [
+        24,
+        61
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "331e34ce16cac8c0",
+       "span": [
+        26,
+        67
+       ]
+      },
+      {
+       "position": 9,
+       "hash": "dbfc97420982f9e6",
+       "span": [
+        28,
+        70
+       ]
+      },
+      {
+       "position": 10,
+       "hash": "60aa9d5525e7ac7b",
+       "span": [
+        32,
+        77
+       ]
+      }
+     ],
+     "windowSelections": [
+      4,
+      4,
+      4,
+      4
+     ],
+     "partialWindow": false,
+     "fingerprints": [
+      {
+       "position": 4,
+       "hash": "13d334f5c99b6707",
+       "span": [
+        13,
+        36
+       ]
+      }
+     ]
+    },
+    "folded": {
+     "values": [
+      "if",
+      "a",
+      "b",
+      "and",
+      "c",
+      "d",
+      "then",
+      "x",
+      "y",
+      "but",
+      "3",
+      "4",
+      "and",
+      "is",
+      "masked",
+      "while",
+      "1",
+      "stays"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "45d619eebf845fa8",
+       "span": [
+        0,
+        25
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "c151aa22f8212c33",
+       "span": [
+        3,
+        27
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "0fbceb15180c0aa7",
+       "span": [
+        7,
+        31
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "25d112336def8e58",
+       "span": [
+        9,
+        33
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "dd11f463a271596e",
+       "span": [
+        13,
+        36
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "4de31d3ced38216c",
+       "span": [
+        17,
+        40
+       ]
+      },
+      {
+       "position": 6,
+       "hash": "3b37eda477f27730",
+       "span": [
+        19,
+        54
+       ]
+      },
+      {
+       "position": 7,
+       "hash": "b0127855baba6d69",
+       "span": [
+        24,
+        61
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "e70cb5a521c44890",
+       "span": [
+        26,
+        67
+       ]
+      },
+      {
+       "position": 9,
+       "hash": "5c49f71d3bdc8c79",
+       "span": [
+        28,
+        70
+       ]
+      },
+      {
+       "position": 10,
+       "hash": "71859d3dc87709c9",
+       "span": [
+        32,
+        77
+       ]
+      }
+     ],
+     "windowSelections": [
+      2,
+      2,
+      2,
+      3
+     ],
+     "partialWindow": false,
+     "fingerprints": [
+      {
+       "position": 2,
+       "hash": "0fbceb15180c0aa7",
+       "span": [
+        7,
+        31
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "25d112336def8e58",
+       "span": [
+        9,
+        33
+       ]
+      }
+     ]
+    },
+    "skeleton": {
+     "values": [
+      "if",
+      "a",
+      "b",
+      "and",
+      "c",
+      "d",
+      "then",
+      "x",
+      "y",
+      "but",
+      "3",
+      "4",
+      "and",
+      "is",
+      "rnasked",
+      "while",
+      "l",
+      "stays"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "3aad05d6beecdd02",
+       "span": [
+        0,
+        25
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "0e14320d77d7b5f1",
+       "span": [
+        3,
+        27
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "2ccff68ab16d8b31",
+       "span": [
+        7,
+        31
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "1d47e6d0f1fb8644",
+       "span": [
+        9,
+        33
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "075bb466ba180ddd",
+       "span": [
+        13,
+        36
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "b6bdf9da5ab4b8f1",
+       "span": [
+        17,
+        40
+       ]
+      },
+      {
+       "position": 6,
+       "hash": "0b6e3fac02777e33",
+       "span": [
+        19,
+        54
+       ]
+      },
+      {
+       "position": 7,
+       "hash": "6c647241993ed881",
+       "span": [
+        24,
+        61
+       ]
+      },
+      {
+       "position": 8,
+       "hash": "41eaefcd25d522d9",
+       "span": [
+        26,
+        67
+       ]
+      },
+      {
+       "position": 9,
+       "hash": "65ad9d64a5688e1b",
+       "span": [
+        28,
+        70
+       ]
+      },
+      {
+       "position": 10,
+       "hash": "8550d48aea3bd755",
+       "span": [
+        32,
+        77
+       ]
+      }
+     ],
+     "windowSelections": [
+      4,
+      4,
+      4,
+      4
+     ],
+     "partialWindow": false,
+     "fingerprints": [
+      {
+       "position": 4,
+       "hash": "075bb466ba180ddd",
+       "span": [
+        13,
+        36
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "md-entities",
+   "tags": [
+    "class:markdown",
+    "class:limit"
+   ],
+   "description": "Named, decimal and hex character references are masked as separators (not decoded): Caf&eacute; gives Caf.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "Q2FmJmVhY3V0ZTsgY29zdHMgJiMxNjM7MyAmYW1wOyB0ZWEgJiN4MjBBQzsyLCAmYm9ndXMgc3RheXMsICY7Cg==",
+   "inputText": "Caf&eacute; costs &#163;3 &amp; tea &#x20AC;2, &bogus stays, &;\n",
+   "result": {
+    "status": "insufficient-tokens",
+    "masked": [
+     [
+      3,
+      11
+     ],
+     [
+      18,
+      24
+     ],
+     [
+      26,
+      31
+     ],
+     [
+      36,
+      44
+     ]
+    ],
+    "tokens": [
+     {
+      "text": "Caf",
+      "span": [
+       0,
+       3
+      ],
+      "folded": "caf",
+      "skeleton": "caf"
+     },
+     {
+      "text": "costs",
+      "span": [
+       12,
+       17
+      ],
+      "folded": "costs",
+      "skeleton": "costs"
+     },
+     {
+      "text": "3",
+      "span": [
+       24,
+       25
+      ],
+      "folded": "3",
+      "skeleton": "3"
+     },
+     {
+      "text": "tea",
+      "span": [
+       32,
+       35
+      ],
+      "folded": "tea",
+      "skeleton": "tea"
+     },
+     {
+      "text": "2",
+      "span": [
+       44,
+       45
+      ],
+      "folded": "2",
+      "skeleton": "2"
+     },
+     {
+      "text": "bogus",
+      "span": [
+       48,
+       53
+      ],
+      "folded": "bogus",
+      "skeleton": "bogus"
+     },
+     {
+      "text": "stays",
+      "span": [
+       54,
+       59
+      ],
+      "folded": "stays",
+      "skeleton": "stays"
+     }
+    ],
+    "exact": {
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "folded": {
+     "values": [
+      "caf",
+      "costs",
+      "3",
+      "tea",
+      "2",
+      "bogus",
+      "stays"
+     ],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "skeleton": {
+     "values": [
+      "caf",
+      "costs",
+      "3",
+      "tea",
+      "2",
+      "bogus",
+      "stays"
+     ],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    }
+   }
+  },
+  {
+   "id": "md-indented-code",
+   "tags": [
+    "class:markdown",
+    "class:limit"
+   ],
+   "description": "Indented code blocks are not recognized (stated deviation from CommonMark).",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "UHJvc2UgbGluZS4KCiAgICBpbmRlbnRlZCBjb2RlIGlzIHRva2VuaXplZAo=",
+   "inputText": "Prose line.\n\n    indented code is tokenized\n",
+   "result": {
+    "status": "insufficient-tokens",
+    "masked": [],
+    "tokens": [
+     {
+      "text": "Prose",
+      "span": [
+       0,
+       5
+      ],
+      "folded": "prose",
+      "skeleton": "prose"
+     },
+     {
+      "text": "line",
+      "span": [
+       6,
+       10
+      ],
+      "folded": "line",
+      "skeleton": "line"
+     },
+     {
+      "text": "indented",
+      "span": [
+       17,
+       25
+      ],
+      "folded": "indented",
+      "skeleton": "indented"
+     },
+     {
+      "text": "code",
+      "span": [
+       26,
+       30
+      ],
+      "folded": "code",
+      "skeleton": "code"
+     },
+     {
+      "text": "is",
+      "span": [
+       31,
+       33
+      ],
+      "folded": "is",
+      "skeleton": "is"
+     },
+     {
+      "text": "tokenized",
+      "span": [
+       34,
+       43
+      ],
+      "folded": "tokenized",
+      "skeleton": "tokenized"
+     }
+    ],
+    "exact": {
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "folded": {
+     "values": [
+      "prose",
+      "line",
+      "indented",
+      "code",
+      "is",
+      "tokenized"
+     ],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "skeleton": {
+     "values": [
+      "prose",
+      "line",
+      "indented",
+      "code",
+      "is",
+      "tokenized"
+     ],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    }
+   }
+  },
+  {
+   "id": "md-syntax-only",
+   "tags": [
+    "class:markdown",
+    "class:empty"
+   ],
+   "description": "Markdown syntax with no words: an unclosed --- is not front matter, and every character is punctuation.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "LS0tCioqKgo+IAotIAp8IHwK",
+   "inputText": "---\n***\n> \n- \n| |\n",
+   "result": {
+    "status": "insufficient-tokens",
+    "masked": [],
+    "tokens": [],
+    "exact": {
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "folded": {
+     "values": [],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "skeleton": {
+     "values": [],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    }
+   }
+  },
+  {
+   "id": "md-empty",
+   "tags": [
+    "class:empty",
+    "class:markdown"
+   ],
+   "description": "Empty input under text-markdown.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "",
+   "inputText": "",
+   "result": {
+    "status": "insufficient-tokens",
+    "masked": [],
+    "tokens": [],
+    "exact": {
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "folded": {
+     "values": [],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "skeleton": {
+     "values": [],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    }
+   }
+  },
+  {
+   "id": "md-err-invalid-utf8",
+   "tags": [
+    "class:invalid-utf8",
+    "class:markdown"
+   ],
+   "description": "Invalid UTF-8 after a heading.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "IyBUwyg=",
+   "inputText": null,
+   "inputDisplay": "# T\\xc3(",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "invalid-utf8",
+     "offset": 3
+    }
+   }
+  },
+  {
+   "id": "md-err-nul",
+   "tags": [
+    "class:nul",
+    "class:markdown"
+   ],
+   "description": "NUL on the second line.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "IyBUaXRsZQoA",
+   "inputText": "# Title\n\u0000",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "nul",
+     "offset": 8
+    }
+   }
+  }
+ ],
+ "pairs": [
+  {
+   "a": "md-syntax",
+   "b": "md-stripped",
+   "channels": [
+    "exact",
+    "folded",
+    "skeleton"
+   ],
+   "relation": "identical-hashes"
+  }
+ ]
+}

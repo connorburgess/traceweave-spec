@@ -1,0 +1,3588 @@
+{
+ "description": "Paired rejections: deliberately wrong expected results. Hashes, selections and fingerprints are recomputed after the mutation so that only the declared layer is wrong. check_text_vectors.py MUST reject each at that layer.",
+ "rejections": [
+  {
+   "id": "rej-plain-empty",
+   "vector": "plain-empty",
+   "layer": "status",
+   "description": "Empty input reported as ok",
+   "mutation": {
+    "op": "status",
+    "status": "ok"
+   }
+  },
+  {
+   "id": "rej-plain-whitespace-only",
+   "vector": "plain-whitespace-only",
+   "layer": "segmentation",
+   "description": "NBSP treated as a word character",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "\u00a0",
+      "span": [
+       4,
+       6
+      ],
+      "folded": " ",
+      "skeleton": " "
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-punctuation-only",
+   "vector": "plain-punctuation-only",
+   "layer": "segmentation",
+   "description": "Underscore (Pc) treated as a word character",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "_",
+      "span": [
+       37,
+       38
+      ],
+      "folded": "_",
+      "skeleton": "_"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-short",
+   "vector": "plain-short",
+   "layer": "fold",
+   "description": "Folded channel keeps case",
+   "mutation": {
+    "op": "set",
+    "token": 0,
+    "field": "folded",
+    "value": "The"
+   }
+  },
+  {
+   "id": "rej-plain-exact-k",
+   "vector": "plain-exact-k",
+   "layer": "status",
+   "description": "Exactly k tokens reported as insufficient",
+   "mutation": {
+    "op": "status",
+    "status": "insufficient-tokens"
+   }
+  },
+  {
+   "id": "rej-plain-below-kw1",
+   "vector": "plain-below-kw1",
+   "layer": "skeleton",
+   "description": "Skeleton omits the listed confusable m -> rn",
+   "mutation": {
+    "op": "set",
+    "token": 1,
+    "field": "skeleton",
+    "value": "small"
+   }
+  },
+  {
+   "id": "rej-plain-at-kw1",
+   "vector": "plain-at-kw1",
+   "layer": "segmentation",
+   "description": "Final period kept in the last token",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "Fifteen",
+      "span": [
+       0,
+       7
+      ],
+      "folded": "fifteen",
+      "skeleton": "fifteen"
+     },
+     {
+      "text": "words",
+      "span": [
+       8,
+       13
+      ],
+      "folded": "words",
+      "skeleton": "words"
+     },
+     {
+      "text": "make",
+      "span": [
+       14,
+       18
+      ],
+      "folded": "make",
+      "skeleton": "rnake"
+     },
+     {
+      "text": "exactly",
+      "span": [
+       19,
+       26
+      ],
+      "folded": "exactly",
+      "skeleton": "exactly"
+     },
+     {
+      "text": "one",
+      "span": [
+       27,
+       30
+      ],
+      "folded": "one",
+      "skeleton": "one"
+     },
+     {
+      "text": "full",
+      "span": [
+       31,
+       35
+      ],
+      "folded": "full",
+      "skeleton": "full"
+     },
+     {
+      "text": "window",
+      "span": [
+       36,
+       42
+      ],
+      "folded": "window",
+      "skeleton": "window"
+     },
+     {
+      "text": "when",
+      "span": [
+       43,
+       47
+      ],
+      "folded": "when",
+      "skeleton": "when"
+     },
+     {
+      "text": "k",
+      "span": [
+       48,
+       49
+      ],
+      "folded": "k",
+      "skeleton": "k"
+     },
+     {
+      "text": "is",
+      "span": [
+       50,
+       52
+      ],
+      "folded": "is",
+      "skeleton": "is"
+     },
+     {
+      "text": "eight",
+      "span": [
+       53,
+       58
+      ],
+      "folded": "eight",
+      "skeleton": "eight"
+     },
+     {
+      "text": "and",
+      "span": [
+       59,
+       62
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "w",
+      "span": [
+       63,
+       64
+      ],
+      "folded": "w",
+      "skeleton": "w"
+     },
+     {
+      "text": "is",
+      "span": [
+       65,
+       67
+      ],
+      "folded": "is",
+      "skeleton": "is"
+     },
+     {
+      "text": "eight.",
+      "span": [
+       68,
+       74
+      ],
+      "folded": "eight",
+      "skeleton": "eight"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-ties",
+   "vector": "plain-ties",
+   "layer": "winnow",
+   "description": "Ties broken leftmost",
+   "mutation": {
+    "op": "leftmost-ties"
+   }
+  },
+  {
+   "id": "rej-plain-repeated",
+   "vector": "plain-repeated",
+   "layer": "winnow",
+   "description": "Ties broken leftmost",
+   "mutation": {
+    "op": "leftmost-ties"
+   }
+  },
+  {
+   "id": "rej-plain-reflow-a",
+   "vector": "plain-reflow-a",
+   "layer": "hash",
+   "description": "k omitted from the hashed bytes",
+   "mutation": {
+    "op": "hash-without-k"
+   }
+  },
+  {
+   "id": "rej-plain-reflow-b",
+   "vector": "plain-reflow-b",
+   "layer": "segmentation",
+   "description": "TAB treated as part of a word",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "Shared",
+      "span": [
+       0,
+       6
+      ],
+      "folded": "shared",
+      "skeleton": "shared"
+     },
+     {
+      "text": "passages",
+      "span": [
+       7,
+       15
+      ],
+      "folded": "passages",
+      "skeleton": "passages"
+     },
+     {
+      "text": "can",
+      "span": [
+       16,
+       19
+      ],
+      "folded": "can",
+      "skeleton": "can"
+     },
+     {
+      "text": "survive",
+      "span": [
+       20,
+       27
+      ],
+      "folded": "survive",
+      "skeleton": "survive"
+     },
+     {
+      "text": "when",
+      "span": [
+       28,
+       32
+      ],
+      "folded": "when",
+      "skeleton": "when"
+     },
+     {
+      "text": "a",
+      "span": [
+       33,
+       34
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "writer",
+      "span": [
+       35,
+       41
+      ],
+      "folded": "writer",
+      "skeleton": "writer"
+     },
+     {
+      "text": "copies",
+      "span": [
+       42,
+       48
+      ],
+      "folded": "copies",
+      "skeleton": "copies"
+     },
+     {
+      "text": "a",
+      "span": [
+       49,
+       50
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "paragraph",
+      "span": [
+       52,
+       61
+      ],
+      "folded": "paragraph",
+      "skeleton": "paragraph"
+     },
+     {
+      "text": "into",
+      "span": [
+       62,
+       66
+      ],
+      "folded": "into",
+      "skeleton": "into"
+     },
+     {
+      "text": "another\t",
+      "span": [
+       67,
+       75
+      ],
+      "folded": "another",
+      "skeleton": "another"
+     },
+     {
+      "text": "document",
+      "span": [
+       75,
+       83
+      ],
+      "folded": "document",
+      "skeleton": "docurnent"
+     },
+     {
+      "text": "and",
+      "span": [
+       84,
+       87
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "then",
+      "span": [
+       88,
+       92
+      ],
+      "folded": "then",
+      "skeleton": "then"
+     },
+     {
+      "text": "reflows",
+      "span": [
+       93,
+       100
+      ],
+      "folded": "reflows",
+      "skeleton": "reflows"
+     },
+     {
+      "text": "the",
+      "span": [
+       101,
+       104
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "lines",
+      "span": [
+       105,
+       110
+      ],
+      "folded": "lines",
+      "skeleton": "lines"
+     },
+     {
+      "text": "to",
+      "span": [
+       113,
+       115
+      ],
+      "folded": "to",
+      "skeleton": "to"
+     },
+     {
+      "text": "fit",
+      "span": [
+       116,
+       119
+      ],
+      "folded": "fit",
+      "skeleton": "fit"
+     },
+     {
+      "text": "a",
+      "span": [
+       120,
+       121
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "narrower",
+      "span": [
+       122,
+       130
+      ],
+      "folded": "narrower",
+      "skeleton": "narrower"
+     },
+     {
+      "text": "column",
+      "span": [
+       131,
+       137
+      ],
+      "folded": "column",
+      "skeleton": "colurnn"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-crlf",
+   "vector": "plain-crlf",
+   "layer": "segmentation",
+   "description": "CR kept at the end of the token before each line end",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "Shared",
+      "span": [
+       0,
+       6
+      ],
+      "folded": "shared",
+      "skeleton": "shared"
+     },
+     {
+      "text": "passages",
+      "span": [
+       7,
+       15
+      ],
+      "folded": "passages",
+      "skeleton": "passages"
+     },
+     {
+      "text": "can",
+      "span": [
+       16,
+       19
+      ],
+      "folded": "can",
+      "skeleton": "can"
+     },
+     {
+      "text": "survive",
+      "span": [
+       20,
+       27
+      ],
+      "folded": "survive",
+      "skeleton": "survive"
+     },
+     {
+      "text": "when",
+      "span": [
+       28,
+       32
+      ],
+      "folded": "when",
+      "skeleton": "when"
+     },
+     {
+      "text": "a",
+      "span": [
+       33,
+       34
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "writer",
+      "span": [
+       35,
+       41
+      ],
+      "folded": "writer",
+      "skeleton": "writer"
+     },
+     {
+      "text": "copies",
+      "span": [
+       42,
+       48
+      ],
+      "folded": "copies",
+      "skeleton": "copies"
+     },
+     {
+      "text": "a",
+      "span": [
+       49,
+       50
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "paragraph\r",
+      "span": [
+       51,
+       61
+      ],
+      "folded": "paragraph",
+      "skeleton": "paragraph"
+     },
+     {
+      "text": "into",
+      "span": [
+       62,
+       66
+      ],
+      "folded": "into",
+      "skeleton": "into"
+     },
+     {
+      "text": "another",
+      "span": [
+       67,
+       74
+      ],
+      "folded": "another",
+      "skeleton": "another"
+     },
+     {
+      "text": "document",
+      "span": [
+       75,
+       83
+      ],
+      "folded": "document",
+      "skeleton": "docurnent"
+     },
+     {
+      "text": "and",
+      "span": [
+       84,
+       87
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "then",
+      "span": [
+       88,
+       92
+      ],
+      "folded": "then",
+      "skeleton": "then"
+     },
+     {
+      "text": "reflows",
+      "span": [
+       93,
+       100
+      ],
+      "folded": "reflows",
+      "skeleton": "reflows"
+     },
+     {
+      "text": "the",
+      "span": [
+       101,
+       104
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "lines",
+      "span": [
+       105,
+       110
+      ],
+      "folded": "lines",
+      "skeleton": "lines"
+     },
+     {
+      "text": "to",
+      "span": [
+       111,
+       113
+      ],
+      "folded": "to",
+      "skeleton": "to"
+     },
+     {
+      "text": "fit\r",
+      "span": [
+       114,
+       118
+      ],
+      "folded": "fit",
+      "skeleton": "fit"
+     },
+     {
+      "text": "a",
+      "span": [
+       119,
+       120
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "narrower",
+      "span": [
+       121,
+       129
+      ],
+      "folded": "narrower",
+      "skeleton": "narrower"
+     },
+     {
+      "text": "column",
+      "span": [
+       130,
+       136
+      ],
+      "folded": "column",
+      "skeleton": "colurnn"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-bom",
+   "vector": "plain-bom",
+   "layer": "segmentation",
+   "description": "BOM included in the first token's span and text",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "\ufeffShared",
+      "span": [
+       0,
+       9
+      ],
+      "folded": "shared",
+      "skeleton": "shared"
+     },
+     {
+      "text": "passages",
+      "span": [
+       10,
+       18
+      ],
+      "folded": "passages",
+      "skeleton": "passages"
+     },
+     {
+      "text": "can",
+      "span": [
+       19,
+       22
+      ],
+      "folded": "can",
+      "skeleton": "can"
+     },
+     {
+      "text": "survive",
+      "span": [
+       23,
+       30
+      ],
+      "folded": "survive",
+      "skeleton": "survive"
+     },
+     {
+      "text": "when",
+      "span": [
+       31,
+       35
+      ],
+      "folded": "when",
+      "skeleton": "when"
+     },
+     {
+      "text": "a",
+      "span": [
+       36,
+       37
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "writer",
+      "span": [
+       38,
+       44
+      ],
+      "folded": "writer",
+      "skeleton": "writer"
+     },
+     {
+      "text": "copies",
+      "span": [
+       45,
+       51
+      ],
+      "folded": "copies",
+      "skeleton": "copies"
+     },
+     {
+      "text": "a",
+      "span": [
+       52,
+       53
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "paragraph",
+      "span": [
+       54,
+       63
+      ],
+      "folded": "paragraph",
+      "skeleton": "paragraph"
+     },
+     {
+      "text": "into",
+      "span": [
+       64,
+       68
+      ],
+      "folded": "into",
+      "skeleton": "into"
+     },
+     {
+      "text": "another",
+      "span": [
+       69,
+       76
+      ],
+      "folded": "another",
+      "skeleton": "another"
+     },
+     {
+      "text": "document",
+      "span": [
+       77,
+       85
+      ],
+      "folded": "document",
+      "skeleton": "docurnent"
+     },
+     {
+      "text": "and",
+      "span": [
+       86,
+       89
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "then",
+      "span": [
+       90,
+       94
+      ],
+      "folded": "then",
+      "skeleton": "then"
+     },
+     {
+      "text": "reflows",
+      "span": [
+       95,
+       102
+      ],
+      "folded": "reflows",
+      "skeleton": "reflows"
+     },
+     {
+      "text": "the",
+      "span": [
+       103,
+       106
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "lines",
+      "span": [
+       107,
+       112
+      ],
+      "folded": "lines",
+      "skeleton": "lines"
+     },
+     {
+      "text": "to",
+      "span": [
+       113,
+       115
+      ],
+      "folded": "to",
+      "skeleton": "to"
+     },
+     {
+      "text": "fit",
+      "span": [
+       116,
+       119
+      ],
+      "folded": "fit",
+      "skeleton": "fit"
+     },
+     {
+      "text": "a",
+      "span": [
+       120,
+       121
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "narrower",
+      "span": [
+       122,
+       130
+      ],
+      "folded": "narrower",
+      "skeleton": "narrower"
+     },
+     {
+      "text": "column",
+      "span": [
+       131,
+       137
+      ],
+      "folded": "column",
+      "skeleton": "colurnn"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-upper",
+   "vector": "plain-upper",
+   "layer": "fold",
+   "description": "Folded value keeps capitals (no case folding)",
+   "mutation": {
+    "op": "set",
+    "token": 3,
+    "field": "folded",
+    "value": "SURVIVE"
+   }
+  },
+  {
+   "id": "rej-plain-zero-width",
+   "vector": "plain-zero-width",
+   "layer": "segmentation",
+   "description": "ZWSP splits the word (WB-style break at Format characters not applied)",
+   "mutation": {
+    "op": "split",
+    "token": 1,
+    "at": 3,
+    "folded": [
+     "pas",
+     "sages"
+    ],
+    "skeleton": [
+     "pas",
+     "sages"
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-zwsp-as-separator",
+   "vector": "plain-zwsp-as-separator",
+   "layer": "segmentation",
+   "description": "ZWSP treated as a separator",
+   "mutation": {
+    "op": "split",
+    "token": 0,
+    "at": 5,
+    "folded": [
+     "alpha",
+     "beta"
+    ],
+    "skeleton": [
+     "alpha",
+     "beta"
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-other-ignorable",
+   "vector": "plain-other-ignorable",
+   "layer": "fold",
+   "description": "Variation selector kept in the folded value",
+   "mutation": {
+    "op": "set",
+    "token": 2,
+    "field": "folded",
+    "value": "emo\ufe0fji"
+   }
+  },
+  {
+   "id": "rej-plain-nfc",
+   "vector": "plain-nfc",
+   "layer": "skeleton",
+   "description": "Skeleton not decomposed (NFC prototype output)",
+   "mutation": {
+    "op": "set",
+    "token": 1,
+    "field": "skeleton",
+    "value": "caf\u00e9"
+   }
+  },
+  {
+   "id": "rej-plain-nfd",
+   "vector": "plain-nfd",
+   "layer": "fold",
+   "description": "Folded value left in NFD (no NFC after the mapping)",
+   "mutation": {
+    "op": "set",
+    "token": 1,
+    "field": "folded",
+    "value": "cafe\u0301"
+   }
+  },
+  {
+   "id": "rej-plain-nfkc-ligature",
+   "vector": "plain-nfkc-ligature",
+   "layer": "fold",
+   "description": "Canonical-only fold (NFC) keeps the ligature",
+   "mutation": {
+    "op": "set",
+    "token": 1,
+    "field": "folded",
+    "value": "\ufb01nal"
+   }
+  },
+  {
+   "id": "rej-plain-nfkc-ascii",
+   "vector": "plain-nfkc-ascii",
+   "layer": "segmentation",
+   "description": "Token dropped",
+   "mutation": {
+    "op": "drop",
+    "token": 2
+   }
+  },
+  {
+   "id": "rej-plain-nfkc-compat",
+   "vector": "plain-nfkc-compat",
+   "layer": "fold",
+   "description": "Separator from NFKC kept in the folded value (1/2 with FRACTION SLASH)",
+   "mutation": {
+    "op": "set",
+    "token": 6,
+    "field": "folded",
+    "value": "1\u20442"
+   }
+  },
+  {
+   "id": "rej-plain-casefold-expansion",
+   "vector": "plain-casefold-expansion",
+   "layer": "fold",
+   "description": "Simple case folding keeps U+00DF",
+   "mutation": {
+    "op": "set",
+    "token": 1,
+    "field": "folded",
+    "value": "stra\u00dfe"
+   }
+  },
+  {
+   "id": "rej-plain-confusable-latin",
+   "vector": "plain-confusable-latin",
+   "layer": "segmentation",
+   "description": "Two tokens merged across a space",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "The paper",
+      "span": [
+       0,
+       9
+      ],
+      "folded": "thepaper",
+      "skeleton": "thepaper"
+     },
+     {
+      "text": "copy",
+      "span": [
+       10,
+       14
+      ],
+      "folded": "copy",
+      "skeleton": "copy"
+     },
+     {
+      "text": "of",
+      "span": [
+       15,
+       17
+      ],
+      "folded": "of",
+      "skeleton": "of"
+     },
+     {
+      "text": "the",
+      "span": [
+       18,
+       21
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "essay",
+      "span": [
+       22,
+       27
+      ],
+      "folded": "essay",
+      "skeleton": "essay"
+     },
+     {
+      "text": "was",
+      "span": [
+       28,
+       31
+      ],
+      "folded": "was",
+      "skeleton": "was"
+     },
+     {
+      "text": "scanned",
+      "span": [
+       32,
+       39
+      ],
+      "folded": "scanned",
+      "skeleton": "scanned"
+     },
+     {
+      "text": "and",
+      "span": [
+       40,
+       43
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "posted",
+      "span": [
+       44,
+       50
+      ],
+      "folded": "posted",
+      "skeleton": "posted"
+     },
+     {
+      "text": "on",
+      "span": [
+       51,
+       53
+      ],
+      "folded": "on",
+      "skeleton": "on"
+     },
+     {
+      "text": "the",
+      "span": [
+       54,
+       57
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "course",
+      "span": [
+       58,
+       64
+      ],
+      "folded": "course",
+      "skeleton": "course"
+     },
+     {
+      "text": "page",
+      "span": [
+       65,
+       69
+      ],
+      "folded": "page",
+      "skeleton": "page"
+     },
+     {
+      "text": "for",
+      "span": [
+       70,
+       73
+      ],
+      "folded": "for",
+      "skeleton": "for"
+     },
+     {
+      "text": "every",
+      "span": [
+       74,
+       79
+      ],
+      "folded": "every",
+      "skeleton": "every"
+     },
+     {
+      "text": "reader",
+      "span": [
+       80,
+       86
+      ],
+      "folded": "reader",
+      "skeleton": "reader"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-confusable-cyrillic",
+   "vector": "plain-confusable-cyrillic",
+   "layer": "skeleton",
+   "description": "Skeleton keeps the Cyrillic letters (no confusable mapping)",
+   "mutation": {
+    "op": "set",
+    "token": 1,
+    "field": "skeleton",
+    "value": "\u0440\u0430per"
+   }
+  },
+  {
+   "id": "rej-plain-punct-a",
+   "vector": "plain-punct-a",
+   "layer": "segmentation",
+   "description": "Right single quotation mark kept inside it's (UAX #29 MidNumLet behaviour)",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "Well",
+      "span": [
+       0,
+       4
+      ],
+      "folded": "well",
+      "skeleton": "well"
+     },
+     {
+      "text": "it\u2019s",
+      "span": [
+       6,
+       12
+      ],
+      "folded": "it\u2019s",
+      "skeleton": "it\u2019s"
+     },
+     {
+      "text": "fine",
+      "span": [
+       16,
+       20
+      ],
+      "folded": "fine",
+      "skeleton": "fine"
+     },
+     {
+      "text": "isn",
+      "span": [
+       28,
+       31
+      ],
+      "folded": "isn",
+      "skeleton": "isn"
+     },
+     {
+      "text": "t",
+      "span": [
+       34,
+       35
+      ],
+      "folded": "t",
+      "skeleton": "t"
+     },
+     {
+      "text": "it",
+      "span": [
+       36,
+       38
+      ],
+      "folded": "it",
+      "skeleton": "it"
+     },
+     {
+      "text": "Yes",
+      "span": [
+       40,
+       43
+      ],
+      "folded": "yes",
+      "skeleton": "yes"
+     },
+     {
+      "text": "well",
+      "span": [
+       45,
+       49
+      ],
+      "folded": "well",
+      "skeleton": "well"
+     },
+     {
+      "text": "known",
+      "span": [
+       50,
+       55
+      ],
+      "folded": "known",
+      "skeleton": "known"
+     },
+     {
+      "text": "state",
+      "span": [
+       57,
+       62
+      ],
+      "folded": "state",
+      "skeleton": "state"
+     },
+     {
+      "text": "of",
+      "span": [
+       63,
+       65
+      ],
+      "folded": "of",
+      "skeleton": "of"
+     },
+     {
+      "text": "the",
+      "span": [
+       66,
+       69
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "art",
+      "span": [
+       70,
+       73
+      ],
+      "folded": "art",
+      "skeleton": "art"
+     },
+     {
+      "text": "rules",
+      "span": [
+       74,
+       79
+      ],
+      "folded": "rules",
+      "skeleton": "rules"
+     },
+     {
+      "text": "mostly",
+      "span": [
+       81,
+       87
+      ],
+      "folded": "mostly",
+      "skeleton": "rnostly"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-punct-b",
+   "vector": "plain-punct-b",
+   "layer": "fold",
+   "description": "Folded value keeps capital Y",
+   "mutation": {
+    "op": "set",
+    "token": 7,
+    "field": "folded",
+    "value": "Yes"
+   }
+  },
+  {
+   "id": "rej-plain-numbers",
+   "vector": "plain-numbers",
+   "layer": "segmentation",
+   "description": "3.14 kept as one token (UAX #29 MidNum behaviour)",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "Version",
+      "span": [
+       0,
+       7
+      ],
+      "folded": "version",
+      "skeleton": "version"
+     },
+     {
+      "text": "3.14",
+      "span": [
+       8,
+       12
+      ],
+      "folded": "3.14",
+      "skeleton": "3.l4"
+     },
+     {
+      "text": "shipped",
+      "span": [
+       13,
+       20
+      ],
+      "folded": "shipped",
+      "skeleton": "shipped"
+     },
+     {
+      "text": "on",
+      "span": [
+       21,
+       23
+      ],
+      "folded": "on",
+      "skeleton": "on"
+     },
+     {
+      "text": "2026",
+      "span": [
+       24,
+       28
+      ],
+      "folded": "2026",
+      "skeleton": "2O26"
+     },
+     {
+      "text": "11",
+      "span": [
+       29,
+       31
+      ],
+      "folded": "11",
+      "skeleton": "ll"
+     },
+     {
+      "text": "22",
+      "span": [
+       32,
+       34
+      ],
+      "folded": "22",
+      "skeleton": "22"
+     },
+     {
+      "text": "with",
+      "span": [
+       35,
+       39
+      ],
+      "folded": "with",
+      "skeleton": "with"
+     },
+     {
+      "text": "1",
+      "span": [
+       40,
+       41
+      ],
+      "folded": "1",
+      "skeleton": "l"
+     },
+     {
+      "text": "000",
+      "span": [
+       42,
+       45
+      ],
+      "folded": "000",
+      "skeleton": "OOO"
+     },
+     {
+      "text": "users",
+      "span": [
+       46,
+       51
+      ],
+      "folded": "users",
+      "skeleton": "users"
+     },
+     {
+      "text": "1",
+      "span": [
+       53,
+       54
+      ],
+      "folded": "1",
+      "skeleton": "l"
+     },
+     {
+      "text": "000",
+      "span": [
+       55,
+       58
+      ],
+      "folded": "000",
+      "skeleton": "OOO"
+     },
+     {
+      "text": "in",
+      "span": [
+       59,
+       61
+      ],
+      "folded": "in",
+      "skeleton": "in"
+     },
+     {
+      "text": "German",
+      "span": [
+       62,
+       68
+      ],
+      "folded": "german",
+      "skeleton": "gerrnan"
+     },
+     {
+      "text": "style",
+      "span": [
+       69,
+       74
+      ],
+      "folded": "style",
+      "skeleton": "style"
+     },
+     {
+      "text": "and",
+      "span": [
+       76,
+       79
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "\u0663\u0664",
+      "span": [
+       80,
+       84
+      ],
+      "folded": "\u0663\u0664",
+      "skeleton": "\u0663\u0664"
+     },
+     {
+      "text": "in",
+      "span": [
+       85,
+       87
+      ],
+      "folded": "in",
+      "skeleton": "in"
+     },
+     {
+      "text": "Arabic",
+      "span": [
+       88,
+       94
+      ],
+      "folded": "arabic",
+      "skeleton": "arabic"
+     },
+     {
+      "text": "Indic",
+      "span": [
+       95,
+       100
+      ],
+      "folded": "indic",
+      "skeleton": "indic"
+     },
+     {
+      "text": "digits",
+      "span": [
+       101,
+       107
+      ],
+      "folded": "digits",
+      "skeleton": "digits"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-hyphenation-wrap",
+   "vector": "plain-hyphenation-wrap",
+   "layer": "segmentation",
+   "description": "Hyphen plus newline joined into one word",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "The",
+      "span": [
+       0,
+       3
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "exam-\nple",
+      "span": [
+       4,
+       13
+      ],
+      "folded": "example",
+      "skeleton": "exarnple"
+     },
+     {
+      "text": "shows",
+      "span": [
+       14,
+       19
+      ],
+      "folded": "shows",
+      "skeleton": "shows"
+     },
+     {
+      "text": "line",
+      "span": [
+       20,
+       24
+      ],
+      "folded": "line",
+      "skeleton": "line"
+     },
+     {
+      "text": "end",
+      "span": [
+       25,
+       28
+      ],
+      "folded": "end",
+      "skeleton": "end"
+     },
+     {
+      "text": "hyphen",
+      "span": [
+       29,
+       35
+      ],
+      "folded": "hyphen",
+      "skeleton": "hyphen"
+     },
+     {
+      "text": "ation",
+      "span": [
+       37,
+       42
+      ],
+      "folded": "ation",
+      "skeleton": "ation"
+     },
+     {
+      "text": "in",
+      "span": [
+       43,
+       45
+      ],
+      "folded": "in",
+      "skeleton": "in"
+     },
+     {
+      "text": "wrapped",
+      "span": [
+       46,
+       53
+      ],
+      "folded": "wrapped",
+      "skeleton": "wrapped"
+     },
+     {
+      "text": "text",
+      "span": [
+       54,
+       58
+      ],
+      "folded": "text",
+      "skeleton": "text"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-partial-source",
+   "vector": "plain-partial-source",
+   "layer": "fold",
+   "description": "Folded value of a token replaced by its exact text",
+   "mutation": {
+    "op": "set",
+    "token": 0,
+    "field": "folded",
+    "value": "Winnowing"
+   }
+  },
+  {
+   "id": "rej-plain-partial-host",
+   "vector": "plain-partial-host",
+   "layer": "segmentation",
+   "description": "Token span shifted by one byte",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "Our",
+      "span": [
+       0,
+       3
+      ],
+      "folded": "our",
+      "skeleton": "our"
+     },
+     {
+      "text": "notes",
+      "span": [
+       4,
+       9
+      ],
+      "folded": "notes",
+      "skeleton": "notes"
+     },
+     {
+      "text": "begin",
+      "span": [
+       10,
+       15
+      ],
+      "folded": "begin",
+      "skeleton": "begin"
+     },
+     {
+      "text": "with",
+      "span": [
+       17,
+       21
+      ],
+      "folded": "with",
+      "skeleton": "with"
+     },
+     {
+      "text": "unrelated",
+      "span": [
+       21,
+       30
+      ],
+      "folded": "unrelated",
+      "skeleton": "unrelated"
+     },
+     {
+      "text": "remarks",
+      "span": [
+       31,
+       38
+      ],
+      "folded": "remarks",
+      "skeleton": "rernarks"
+     },
+     {
+      "text": "about",
+      "span": [
+       39,
+       44
+      ],
+      "folded": "about",
+      "skeleton": "about"
+     },
+     {
+      "text": "gardens",
+      "span": [
+       45,
+       52
+      ],
+      "folded": "gardens",
+      "skeleton": "gardens"
+     },
+     {
+      "text": "ONE",
+      "span": [
+       54,
+       57
+      ],
+      "folded": "one",
+      "skeleton": "one"
+     },
+     {
+      "text": "FINGERPRINT",
+      "span": [
+       58,
+       69
+      ],
+      "folded": "fingerprint",
+      "skeleton": "fingerprint"
+     },
+     {
+      "text": "FROM",
+      "span": [
+       70,
+       74
+      ],
+      "folded": "from",
+      "skeleton": "frorn"
+     },
+     {
+      "text": "EVERY",
+      "span": [
+       75,
+       80
+      ],
+      "folded": "every",
+      "skeleton": "every"
+     },
+     {
+      "text": "WINDOW",
+      "span": [
+       81,
+       87
+      ],
+      "folded": "window",
+      "skeleton": "window"
+     },
+     {
+      "text": "OF",
+      "span": [
+       88,
+       90
+      ],
+      "folded": "of",
+      "skeleton": "of"
+     },
+     {
+      "text": "HASHES",
+      "span": [
+       91,
+       97
+      ],
+      "folded": "hashes",
+      "skeleton": "hashes"
+     },
+     {
+      "text": "SO",
+      "span": [
+       99,
+       101
+      ],
+      "folded": "so",
+      "skeleton": "so"
+     },
+     {
+      "text": "A",
+      "span": [
+       102,
+       103
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "LONG",
+      "span": [
+       104,
+       108
+      ],
+      "folded": "long",
+      "skeleton": "long"
+     },
+     {
+      "text": "ENOUGH",
+      "span": [
+       109,
+       115
+      ],
+      "folded": "enough",
+      "skeleton": "enough"
+     },
+     {
+      "text": "SHARED",
+      "span": [
+       116,
+       122
+      ],
+      "folded": "shared",
+      "skeleton": "shared"
+     },
+     {
+      "text": "RUN",
+      "span": [
+       123,
+       126
+      ],
+      "folded": "run",
+      "skeleton": "run"
+     },
+     {
+      "text": "ALWAYS",
+      "span": [
+       127,
+       133
+      ],
+      "folded": "always",
+      "skeleton": "always"
+     },
+     {
+      "text": "LEAVES",
+      "span": [
+       134,
+       140
+      ],
+      "folded": "leaves",
+      "skeleton": "leaves"
+     },
+     {
+      "text": "A",
+      "span": [
+       141,
+       142
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "TRACE",
+      "span": [
+       143,
+       148
+      ],
+      "folded": "trace",
+      "skeleton": "trace"
+     },
+     {
+      "text": "was",
+      "span": [
+       149,
+       152
+      ],
+      "folded": "was",
+      "skeleton": "was"
+     },
+     {
+      "text": "quoted",
+      "span": [
+       153,
+       159
+      ],
+      "folded": "quoted",
+      "skeleton": "quoted"
+     },
+     {
+      "text": "then",
+      "span": [
+       161,
+       165
+      ],
+      "folded": "then",
+      "skeleton": "then"
+     },
+     {
+      "text": "the",
+      "span": [
+       166,
+       169
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "notes",
+      "span": [
+       170,
+       175
+      ],
+      "folded": "notes",
+      "skeleton": "notes"
+     },
+     {
+      "text": "return",
+      "span": [
+       176,
+       182
+      ],
+      "folded": "return",
+      "skeleton": "return"
+     },
+     {
+      "text": "to",
+      "span": [
+       183,
+       185
+      ],
+      "folded": "to",
+      "skeleton": "to"
+     },
+     {
+      "text": "gardens",
+      "span": [
+       186,
+       193
+      ],
+      "folded": "gardens",
+      "skeleton": "gardens"
+     },
+     {
+      "text": "and",
+      "span": [
+       194,
+       197
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "weather",
+      "span": [
+       198,
+       205
+      ],
+      "folded": "weather",
+      "skeleton": "weather"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-greek",
+   "vector": "plain-greek",
+   "layer": "fold",
+   "description": "Final sigma left unfolded",
+   "mutation": {
+    "op": "set",
+    "token": 4,
+    "field": "folded",
+    "value": "\u03bf\u03b4\u03cc\u03c2"
+   }
+  },
+  {
+   "id": "rej-plain-rtl-and-indic",
+   "vector": "plain-rtl-and-indic",
+   "layer": "segmentation",
+   "description": "Virama treated as a separator (marks not word characters)",
+   "mutation": {
+    "op": "split",
+    "token": 6,
+    "at": 3,
+    "folded": [
+     "\u0928\u092e\u0938",
+     "\u094d\u0924\u0947"
+    ],
+    "skeleton": [
+     "\u0928\u092e\u0938",
+     "\u094d\u0924\ud806\udf64"
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-japanese",
+   "vector": "plain-japanese",
+   "layer": "segmentation",
+   "description": "Ideographs grouped into one run (letters-only rule without the Ideographic class)",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "\u65e5\u672c\u8a9e",
+      "span": [
+       0,
+       9
+      ],
+      "folded": "\u65e5\u672c\u8a9e",
+      "skeleton": "\u65e5\u672c\u8a9e"
+     },
+     {
+      "text": "\u3092",
+      "span": [
+       9,
+       12
+      ],
+      "folded": "\u3092",
+      "skeleton": "\u3092"
+     },
+     {
+      "text": "\u52c9",
+      "span": [
+       12,
+       15
+      ],
+      "folded": "\u52c9",
+      "skeleton": "\u52c9"
+     },
+     {
+      "text": "\u5f37",
+      "span": [
+       15,
+       18
+      ],
+      "folded": "\u5f37",
+      "skeleton": "\u5f37"
+     },
+     {
+      "text": "\u3057\u3066\u3044\u307e\u3059",
+      "span": [
+       18,
+       33
+      ],
+      "folded": "\u3057\u3066\u3044\u307e\u3059",
+      "skeleton": "\u3057\u3066\u3044\u307e\u3059"
+     },
+     {
+      "text": "\u6f22",
+      "span": [
+       36,
+       39
+      ],
+      "folded": "\u6f22",
+      "skeleton": "\u6f22"
+     },
+     {
+      "text": "\u5b57",
+      "span": [
+       39,
+       42
+      ],
+      "folded": "\u5b57",
+      "skeleton": "\u5b57"
+     },
+     {
+      "text": "\u3068\u304b\u306a\u304c",
+      "span": [
+       42,
+       54
+      ],
+      "folded": "\u3068\u304b\u306a\u304c",
+      "skeleton": "\u3068\u304b\u306a\u304b\u3099"
+     },
+     {
+      "text": "\u6df7",
+      "span": [
+       54,
+       57
+      ],
+      "folded": "\u6df7",
+      "skeleton": "\u6df7"
+     },
+     {
+      "text": "\u3056\u308b",
+      "span": [
+       57,
+       63
+      ],
+      "folded": "\u3056\u308b",
+      "skeleton": "\u3055\u3099\u308b"
+     },
+     {
+      "text": "\u6587",
+      "span": [
+       63,
+       66
+      ],
+      "folded": "\u6587",
+      "skeleton": "\u6587"
+     },
+     {
+      "text": "\u3067\u3059",
+      "span": [
+       66,
+       72
+      ],
+      "folded": "\u3067\u3059",
+      "skeleton": "\u3066\u3099\u3059"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-chinese",
+   "vector": "plain-chinese",
+   "layer": "segmentation",
+   "description": "Two ideographs merged",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "\u6211\u4eec",
+      "span": [
+       0,
+       6
+      ],
+      "folded": "\u6211\u4eec",
+      "skeleton": "\u6211\u4eec"
+     },
+     {
+      "text": "\u5728",
+      "span": [
+       6,
+       9
+      ],
+      "folded": "\u5728",
+      "skeleton": "\u5728"
+     },
+     {
+      "text": "\u5317",
+      "span": [
+       9,
+       12
+      ],
+      "folded": "\u5317",
+      "skeleton": "\u5317"
+     },
+     {
+      "text": "\u4eac",
+      "span": [
+       12,
+       15
+      ],
+      "folded": "\u4eac",
+      "skeleton": "\u4eac"
+     },
+     {
+      "text": "\u5b66",
+      "span": [
+       15,
+       18
+      ],
+      "folded": "\u5b66",
+      "skeleton": "\u5b66"
+     },
+     {
+      "text": "\u4e60",
+      "span": [
+       18,
+       21
+      ],
+      "folded": "\u4e60",
+      "skeleton": "\u4e60"
+     },
+     {
+      "text": "\u4e2d",
+      "span": [
+       21,
+       24
+      ],
+      "folded": "\u4e2d",
+      "skeleton": "\u4e2d"
+     },
+     {
+      "text": "\u6587",
+      "span": [
+       24,
+       27
+      ],
+      "folded": "\u6587",
+      "skeleton": "\u6587"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-thai",
+   "vector": "plain-thai",
+   "layer": "segmentation",
+   "description": "Thai vowel sign treated as a separator",
+   "mutation": {
+    "op": "split",
+    "token": 0,
+    "at": 2,
+    "folded": [
+     "\u0e2a\u0e27",
+     "\u0e31\u0e2a\u0e14\u0e35\u0e04\u0e23\u0e31\u0e1a"
+    ],
+    "skeleton": [
+     "\u0e2a\u0e27",
+     "\u0e31\u0e2a\u0e04\u0e35\u0e04\u0e23\u0e31\u0e1a"
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-hangul",
+   "vector": "plain-hangul",
+   "layer": "skeleton",
+   "description": "Skeleton left precomposed (no final NFD)",
+   "mutation": {
+    "op": "set",
+    "token": 0,
+    "field": "skeleton",
+    "value": "\uac00"
+   }
+  },
+  {
+   "id": "rej-plain-hangul-jamo",
+   "vector": "plain-hangul-jamo",
+   "layer": "fold",
+   "description": "Jamo not recomposed (Hangul composition missing from NFC)",
+   "mutation": {
+    "op": "set",
+    "token": 0,
+    "field": "folded",
+    "value": "\u1100\u1161"
+   }
+  },
+  {
+   "id": "rej-plain-cherokee",
+   "vector": "plain-cherokee",
+   "layer": "fold",
+   "description": "Small letters left unfolded (golang.org/x/text cases.Fold behaviour)",
+   "mutation": {
+    "op": "set",
+    "token": 1,
+    "field": "folded",
+    "value": "\uabb3\uab83\uab79"
+   }
+  },
+  {
+   "id": "rej-plain-combining-a",
+   "vector": "plain-combining-a",
+   "layer": "fold",
+   "description": "Mapping applied before NFD (non-canonical order gives a different result)",
+   "mutation": {
+    "op": "set",
+    "token": 4,
+    "field": "folded",
+    "value": "\u03b1\u03af"
+   }
+  },
+  {
+   "id": "rej-plain-combining-b",
+   "vector": "plain-combining-b",
+   "layer": "skeleton",
+   "description": "Overlay marks mapped in the wrong order / not mapped",
+   "mutation": {
+    "op": "set",
+    "token": 6,
+    "field": "skeleton",
+    "value": "z\u0336\u0337a"
+   }
+  },
+  {
+   "id": "rej-plain-bidi",
+   "vector": "plain-bidi",
+   "layer": "segmentation",
+   "description": "Isolate characters included at the token edges",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "The",
+      "span": [
+       0,
+       3
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "word",
+      "span": [
+       4,
+       8
+      ],
+      "folded": "word",
+      "skeleton": "word"
+     },
+     {
+      "text": "\u2067\u05e9\u05dc\u05d5\u05dd\u2069",
+      "span": [
+       9,
+       23
+      ],
+      "folded": "\u05e9\u05dc\u05d5\u05dd",
+      "skeleton": "\u05e9\u05dcl\u05dd"
+     },
+     {
+      "text": "means",
+      "span": [
+       24,
+       29
+      ],
+      "folded": "means",
+      "skeleton": "rneans"
+     },
+     {
+      "text": "peace",
+      "span": [
+       30,
+       35
+      ],
+      "folded": "peace",
+      "skeleton": "peace"
+     },
+     {
+      "text": "\u0627\u0644\u0633\u0644\u0627\u0645",
+      "span": [
+       40,
+       52
+      ],
+      "folded": "\u0627\u0644\u0633\u0644\u0627\u0645",
+      "skeleton": "l\u0644\u0633\u0644l\u0645"
+     },
+     {
+      "text": "\u0639\u0644\u064a\u0643\u0645",
+      "span": [
+       56,
+       66
+      ],
+      "folded": "\u0639\u0644\u064a\u0643\u0645",
+      "skeleton": "\u0639\u0644\u0649\u0643\u0645"
+     },
+     {
+      "text": "is",
+      "span": [
+       67,
+       69
+      ],
+      "folded": "is",
+      "skeleton": "is"
+     },
+     {
+      "text": "a",
+      "span": [
+       70,
+       71
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "greeting",
+      "span": [
+       72,
+       80
+      ],
+      "folded": "greeting",
+      "skeleton": "greeting"
+     },
+     {
+      "text": "and",
+      "span": [
+       81,
+       84
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "ab\u202ecd",
+      "span": [
+       85,
+       92
+      ],
+      "folded": "abcd",
+      "skeleton": "abcd"
+     },
+     {
+      "text": "is",
+      "span": [
+       96,
+       98
+      ],
+      "folded": "is",
+      "skeleton": "is"
+     },
+     {
+      "text": "one",
+      "span": [
+       99,
+       102
+      ],
+      "folded": "one",
+      "skeleton": "one"
+     },
+     {
+      "text": "token",
+      "span": [
+       103,
+       108
+      ],
+      "folded": "token",
+      "skeleton": "token"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-err-nul",
+   "vector": "plain-err-nul",
+   "layer": "error",
+   "description": "NUL reported at the wrong offset",
+   "mutation": {
+    "op": "error",
+    "code": "nul",
+    "offset": 5
+   }
+  },
+  {
+   "id": "rej-plain-err-nul-then-invalid",
+   "vector": "plain-err-nul-then-invalid",
+   "layer": "error",
+   "description": "NUL reported before the encoding check",
+   "mutation": {
+    "op": "error",
+    "code": "nul",
+    "offset": 0
+   }
+  },
+  {
+   "id": "rej-plain-err-surrogate",
+   "vector": "plain-err-surrogate",
+   "layer": "error",
+   "description": "Invented error code",
+   "mutation": {
+    "op": "error",
+    "code": "surrogate",
+    "offset": 3
+   }
+  },
+  {
+   "id": "rej-limit-exact",
+   "vector": "limit-exact",
+   "layer": "error",
+   "description": "Input of exactly maxInputBytes rejected",
+   "mutation": {
+    "op": "error",
+    "code": "input-too-large",
+    "offset": 0
+   }
+  },
+  {
+   "id": "rej-md-syntax",
+   "vector": "md-syntax",
+   "layer": "markdown",
+   "description": "Link destination not masked (front end treats Markdown as plain text)",
+   "mutation": {
+    "op": "set-masked",
+    "masked": [
+     [
+      191,
+      207
+     ],
+     [
+      218,
+      225
+     ],
+     [
+      226,
+      231
+     ],
+     [
+      349,
+      372
+     ]
+    ]
+   }
+  },
+  {
+   "id": "rej-md-stripped",
+   "vector": "md-stripped",
+   "layer": "segmentation",
+   "description": "Ampersand made a token",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "Shared",
+      "span": [
+       0,
+       6
+      ],
+      "folded": "shared",
+      "skeleton": "shared"
+     },
+     {
+      "text": "passages",
+      "span": [
+       7,
+       15
+      ],
+      "folded": "passages",
+      "skeleton": "passages"
+     },
+     {
+      "text": "Shared",
+      "span": [
+       17,
+       23
+      ],
+      "folded": "shared",
+      "skeleton": "shared"
+     },
+     {
+      "text": "passages",
+      "span": [
+       24,
+       32
+      ],
+      "folded": "passages",
+      "skeleton": "passages"
+     },
+     {
+      "text": "can",
+      "span": [
+       33,
+       36
+      ],
+      "folded": "can",
+      "skeleton": "can"
+     },
+     {
+      "text": "survive",
+      "span": [
+       37,
+       44
+      ],
+      "folded": "survive",
+      "skeleton": "survive"
+     },
+     {
+      "text": "when",
+      "span": [
+       45,
+       49
+      ],
+      "folded": "when",
+      "skeleton": "when"
+     },
+     {
+      "text": "a",
+      "span": [
+       50,
+       51
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "writer",
+      "span": [
+       52,
+       58
+      ],
+      "folded": "writer",
+      "skeleton": "writer"
+     },
+     {
+      "text": "copies",
+      "span": [
+       59,
+       65
+      ],
+      "folded": "copies",
+      "skeleton": "copies"
+     },
+     {
+      "text": "a",
+      "span": [
+       66,
+       67
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "paragraph",
+      "span": [
+       68,
+       77
+      ],
+      "folded": "paragraph",
+      "skeleton": "paragraph"
+     },
+     {
+      "text": "into",
+      "span": [
+       78,
+       82
+      ],
+      "folded": "into",
+      "skeleton": "into"
+     },
+     {
+      "text": "another",
+      "span": [
+       83,
+       90
+      ],
+      "folded": "another",
+      "skeleton": "another"
+     },
+     {
+      "text": "document",
+      "span": [
+       91,
+       99
+      ],
+      "folded": "document",
+      "skeleton": "docurnent"
+     },
+     {
+      "text": "and",
+      "span": [
+       100,
+       103
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "then",
+      "span": [
+       104,
+       108
+      ],
+      "folded": "then",
+      "skeleton": "then"
+     },
+     {
+      "text": "reflows",
+      "span": [
+       109,
+       116
+      ],
+      "folded": "reflows",
+      "skeleton": "reflows"
+     },
+     {
+      "text": "the",
+      "span": [
+       117,
+       120
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "lines",
+      "span": [
+       121,
+       126
+      ],
+      "folded": "lines",
+      "skeleton": "lines"
+     },
+     {
+      "text": "A",
+      "span": [
+       129,
+       130
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "quote",
+      "span": [
+       131,
+       136
+      ],
+      "folded": "quote",
+      "skeleton": "quote"
+     },
+     {
+      "text": "with",
+      "span": [
+       137,
+       141
+      ],
+      "folded": "with",
+      "skeleton": "with"
+     },
+     {
+      "text": "&",
+      "span": [
+       0,
+       0
+      ],
+      "folded": "&",
+      "skeleton": "&"
+     },
+     {
+      "text": "inline",
+      "span": [
+       142,
+       148
+      ],
+      "folded": "inline",
+      "skeleton": "inline"
+     },
+     {
+      "text": "HTML",
+      "span": [
+       149,
+       153
+      ],
+      "folded": "html",
+      "skeleton": "htrnl"
+     },
+     {
+      "text": "an",
+      "span": [
+       156,
+       158
+      ],
+      "folded": "an",
+      "skeleton": "an"
+     },
+     {
+      "text": "entity",
+      "span": [
+       159,
+       165
+      ],
+      "folded": "entity",
+      "skeleton": "entity"
+     },
+     {
+      "text": "left",
+      "span": [
+       168,
+       172
+      ],
+      "folded": "left",
+      "skeleton": "left"
+     },
+     {
+      "text": "right",
+      "span": [
+       173,
+       178
+      ],
+      "folded": "right",
+      "skeleton": "right"
+     },
+     {
+      "text": "one",
+      "span": [
+       179,
+       182
+      ],
+      "folded": "one",
+      "skeleton": "one"
+     },
+     {
+      "text": "two",
+      "span": [
+       183,
+       186
+      ],
+      "folded": "two",
+      "skeleton": "two"
+     },
+     {
+      "text": "1",
+      "span": [
+       188,
+       189
+      ],
+      "folded": "1",
+      "skeleton": "l"
+     },
+     {
+      "text": "First",
+      "span": [
+       191,
+       196
+      ],
+      "folded": "first",
+      "skeleton": "first"
+     },
+     {
+      "text": "item",
+      "span": [
+       197,
+       201
+      ],
+      "folded": "item",
+      "skeleton": "itern"
+     },
+     {
+      "text": "Second",
+      "span": [
+       202,
+       208
+      ],
+      "folded": "second",
+      "skeleton": "second"
+     },
+     {
+      "text": "alt",
+      "span": [
+       209,
+       212
+      ],
+      "folded": "alt",
+      "skeleton": "alt"
+     },
+     {
+      "text": "text",
+      "span": [
+       213,
+       217
+      ],
+      "folded": "text",
+      "skeleton": "text"
+     },
+     {
+      "text": "item",
+      "span": [
+       218,
+       222
+      ],
+      "folded": "item",
+      "skeleton": "itern"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-md-syntax",
+   "vector": "plain-md-syntax",
+   "layer": "segmentation",
+   "description": "Markdown masks applied under text-plain",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "Shared",
+      "span": [
+       2,
+       8
+      ],
+      "folded": "shared",
+      "skeleton": "shared"
+     },
+     {
+      "text": "passages",
+      "span": [
+       9,
+       17
+      ],
+      "folded": "passages",
+      "skeleton": "passages"
+     },
+     {
+      "text": "Shared",
+      "span": [
+       19,
+       25
+      ],
+      "folded": "shared",
+      "skeleton": "shared"
+     },
+     {
+      "text": "passages",
+      "span": [
+       27,
+       35
+      ],
+      "folded": "passages",
+      "skeleton": "passages"
+     },
+     {
+      "text": "can",
+      "span": [
+       37,
+       40
+      ],
+      "folded": "can",
+      "skeleton": "can"
+     },
+     {
+      "text": "survive",
+      "span": [
+       43,
+       50
+      ],
+      "folded": "survive",
+      "skeleton": "survive"
+     },
+     {
+      "text": "when",
+      "span": [
+       53,
+       57
+      ],
+      "folded": "when",
+      "skeleton": "when"
+     },
+     {
+      "text": "a",
+      "span": [
+       58,
+       59
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "writer",
+      "span": [
+       60,
+       66
+      ],
+      "folded": "writer",
+      "skeleton": "writer"
+     },
+     {
+      "text": "copies",
+      "span": [
+       67,
+       73
+      ],
+      "folded": "copies",
+      "skeleton": "copies"
+     },
+     {
+      "text": "a",
+      "span": [
+       74,
+       75
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "paragraph",
+      "span": [
+       77,
+       86
+      ],
+      "folded": "paragraph",
+      "skeleton": "paragraph"
+     },
+     {
+      "text": "a",
+      "span": [
+       108,
+       109
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "into",
+      "span": [
+       123,
+       127
+      ],
+      "folded": "into",
+      "skeleton": "into"
+     },
+     {
+      "text": "another",
+      "span": [
+       128,
+       135
+      ],
+      "folded": "another",
+      "skeleton": "another"
+     },
+     {
+      "text": "document",
+      "span": [
+       137,
+       145
+      ],
+      "folded": "document",
+      "skeleton": "docurnent"
+     },
+     {
+      "text": "and",
+      "span": [
+       147,
+       150
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "then",
+      "span": [
+       151,
+       155
+      ],
+      "folded": "then",
+      "skeleton": "then"
+     },
+     {
+      "text": "reflows",
+      "span": [
+       156,
+       163
+      ],
+      "folded": "reflows",
+      "skeleton": "reflows"
+     },
+     {
+      "text": "the",
+      "span": [
+       164,
+       167
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "lines",
+      "span": [
+       168,
+       173
+      ],
+      "folded": "lines",
+      "skeleton": "lines"
+     },
+     {
+      "text": "A",
+      "span": [
+       178,
+       179
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "quote",
+      "span": [
+       180,
+       185
+      ],
+      "folded": "quote",
+      "skeleton": "quote"
+     },
+     {
+      "text": "with",
+      "span": [
+       186,
+       190
+      ],
+      "folded": "with",
+      "skeleton": "with"
+     },
+     {
+      "text": "inline",
+      "span": [
+       207,
+       213
+      ],
+      "folded": "inline",
+      "skeleton": "inline"
+     },
+     {
+      "text": "HTML",
+      "span": [
+       214,
+       218
+      ],
+      "folded": "html",
+      "skeleton": "htrnl"
+     },
+     {
+      "text": "an",
+      "span": [
+       232,
+       234
+      ],
+      "folded": "an",
+      "skeleton": "an"
+     },
+     {
+      "text": "entity",
+      "span": [
+       235,
+       241
+      ],
+      "folded": "entity",
+      "skeleton": "entity"
+     },
+     {
+      "text": "left",
+      "span": [
+       246,
+       250
+      ],
+      "folded": "left",
+      "skeleton": "left"
+     },
+     {
+      "text": "right",
+      "span": [
+       253,
+       258
+      ],
+      "folded": "right",
+      "skeleton": "right"
+     },
+     {
+      "text": "one",
+      "span": [
+       280,
+       283
+      ],
+      "folded": "one",
+      "skeleton": "one"
+     },
+     {
+      "text": "two",
+      "span": [
+       287,
+       290
+      ],
+      "folded": "two",
+      "skeleton": "two"
+     },
+     {
+      "text": "1",
+      "span": [
+       296,
+       297
+      ],
+      "folded": "1",
+      "skeleton": "l"
+     },
+     {
+      "text": "First",
+      "span": [
+       299,
+       304
+      ],
+      "folded": "first",
+      "skeleton": "first"
+     },
+     {
+      "text": "item",
+      "span": [
+       305,
+       309
+      ],
+      "folded": "item",
+      "skeleton": "itern"
+     },
+     {
+      "text": "Second",
+      "span": [
+       312,
+       318
+      ],
+      "folded": "second",
+      "skeleton": "second"
+     },
+     {
+      "text": "alt",
+      "span": [
+       321,
+       324
+      ],
+      "folded": "alt",
+      "skeleton": "alt"
+     },
+     {
+      "text": "text",
+      "span": [
+       325,
+       329
+      ],
+      "folded": "text",
+      "skeleton": "text"
+     },
+     {
+      "text": "item",
+      "span": [
+       344,
+       348
+      ],
+      "folded": "item",
+      "skeleton": "itern"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-md-fence",
+   "vector": "md-fence",
+   "layer": "markdown",
+   "description": "Closing fence line left unmasked (closing line not treated as part of the fence)",
+   "mutation": {
+    "op": "set-masked",
+    "masked": [
+     [
+      33,
+      38
+     ],
+     [
+      39,
+      76
+     ],
+     [
+      77,
+      80
+     ],
+     [
+      82,
+      86
+     ],
+     [
+      87,
+      102
+     ]
+    ]
+   }
+  },
+  {
+   "id": "rej-md-fence-unclosed",
+   "vector": "md-fence-unclosed",
+   "layer": "markdown",
+   "description": "Unclosed fence not masked",
+   "mutation": {
+    "op": "set-masked",
+    "masked": []
+   }
+  },
+  {
+   "id": "rej-md-front-matter",
+   "vector": "md-front-matter",
+   "layer": "markdown",
+   "description": "Front matter left unmasked",
+   "mutation": {
+    "op": "set-masked",
+    "masked": []
+   }
+  },
+  {
+   "id": "rej-md-front-matter-crlf",
+   "vector": "md-front-matter-crlf",
+   "layer": "markdown",
+   "description": "Masked range stops before the CR (content end instead of line end)",
+   "mutation": {
+    "op": "set-masked",
+    "masked": [
+     [
+      0,
+      18
+     ]
+    ]
+   }
+  },
+  {
+   "id": "rej-md-front-matter-unclosed",
+   "vector": "md-front-matter-unclosed",
+   "layer": "markdown",
+   "description": "Unclosed front matter masked to end of input",
+   "mutation": {
+    "op": "set-masked",
+    "masked": [
+     [
+      0,
+      68
+     ]
+    ]
+   }
+  },
+  {
+   "id": "rej-md-html-comment",
+   "vector": "md-html-comment",
+   "layer": "segmentation",
+   "description": "Comment body tokenized",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "Keep",
+      "span": [
+       0,
+       4
+      ],
+      "folded": "keep",
+      "skeleton": "keep"
+     },
+     {
+      "text": "this",
+      "span": [
+       5,
+       9
+      ],
+      "folded": "this",
+      "skeleton": "this"
+     },
+     {
+      "text": "hidden",
+      "span": [
+       15,
+       21
+      ],
+      "folded": "hidden",
+      "skeleton": "hidden"
+     },
+     {
+      "text": "visible",
+      "span": [
+       39,
+       46
+      ],
+      "folded": "visible",
+      "skeleton": "visible"
+     },
+     {
+      "text": "text",
+      "span": [
+       47,
+       51
+      ],
+      "folded": "text",
+      "skeleton": "text"
+     },
+     {
+      "text": "and",
+      "span": [
+       52,
+       55
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "more",
+      "span": [
+       65,
+       69
+      ],
+      "folded": "more",
+      "skeleton": "rnore"
+     },
+     {
+      "text": "words",
+      "span": [
+       70,
+       75
+      ],
+      "folded": "words",
+      "skeleton": "words"
+     },
+     {
+      "text": "here",
+      "span": [
+       76,
+       80
+      ],
+      "folded": "here",
+      "skeleton": "here"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-md-html-comment-unclosed",
+   "vector": "md-html-comment-unclosed",
+   "layer": "markdown",
+   "description": "Unclosed comment masked to end of input",
+   "mutation": {
+    "op": "set-masked",
+    "masked": [
+     [
+      6,
+      71
+     ]
+    ]
+   }
+  },
+  {
+   "id": "rej-md-link-reference",
+   "vector": "md-link-reference",
+   "layer": "markdown",
+   "description": "Footnote definition masked",
+   "mutation": {
+    "op": "set-masked",
+    "masked": [
+     [
+      42,
+      86
+     ],
+     [
+      87,
+      124
+     ]
+    ]
+   }
+  },
+  {
+   "id": "rej-md-link-nested-parens",
+   "vector": "md-link-nested-parens",
+   "layer": "markdown",
+   "description": "Destination ends at the first ) (no nesting)",
+   "mutation": {
+    "op": "set-masked",
+    "masked": [
+     [
+      18,
+      77
+     ]
+    ]
+   }
+  },
+  {
+   "id": "rej-md-angle-brackets",
+   "vector": "md-angle-brackets",
+   "layer": "markdown",
+   "description": "x<y ... > taken as a tag across the later <",
+   "mutation": {
+    "op": "set-masked",
+    "masked": [
+     [
+      25,
+      51
+     ]
+    ]
+   }
+  },
+  {
+   "id": "rej-md-entities",
+   "vector": "md-entities",
+   "layer": "fold",
+   "description": "Entity decoded into the token's folded value",
+   "mutation": {
+    "op": "set",
+    "token": 0,
+    "field": "folded",
+    "value": "caf\u00e9"
+   }
+  },
+  {
+   "id": "rej-md-indented-code",
+   "vector": "md-indented-code",
+   "layer": "segmentation",
+   "description": "Indented code dropped",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "Prose",
+      "span": [
+       0,
+       5
+      ],
+      "folded": "prose",
+      "skeleton": "prose"
+     },
+     {
+      "text": "line",
+      "span": [
+       6,
+       10
+      ],
+      "folded": "line",
+      "skeleton": "line"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-md-syntax-only",
+   "vector": "md-syntax-only",
+   "layer": "status",
+   "description": "Reported ok with no tokens",
+   "mutation": {
+    "op": "status",
+    "status": "ok"
+   }
+  },
+  {
+   "id": "rej-md-empty",
+   "vector": "md-empty",
+   "layer": "markdown",
+   "description": "Phantom masked range",
+   "mutation": {
+    "op": "set-masked",
+    "masked": [
+     [
+      0,
+      0
+     ]
+    ]
+   }
+  },
+  {
+   "id": "rej-md-err-nul",
+   "vector": "md-err-nul",
+   "layer": "error",
+   "description": "NUL ignored as a separator",
+   "mutation": {
+    "op": "error",
+    "code": "invalid-utf8",
+    "offset": 8
+   }
+  }
+ ]
+}
