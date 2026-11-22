@@ -13,3 +13,4 @@ __pycache__/
 # Imported research inputs stay local; publish reviewed conclusions instead.
 research/gemini/
 research/perplexity/
+
