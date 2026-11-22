@@ -1,0 +1,242 @@
+=== RUN   TestAllLiteralPermutations
+    carrier_test.go:102: 24/24 literal orders retain output; 24/24 retain order through go/format; canonical sorting collapses 24 orders to 1
+--- PASS: TestAllLiteralPermutations (0.67s)
+=== RUN   TestDistinctBindingsDoNotProveIndependence
+    carrier_test.go:124: different local destinations do not make calls safe to reorder
+--- PASS: TestDistinctBindingsDoNotProveIndependence (0.00s)
+=== RUN   TestSyntheticFragmentsAndTransplants
+=== RUN   TestSyntheticFragmentsAndTransplants/order/whole_function
+    fragment_test.go:362: outcome=recovered raw_state=5 span={Start:48 End:153} anchors=[{48 153}] symbols=[{{74 80} 2 0} {{87 93} 1 1} {{100 106} 0 2}] examined=2 supported=1 skipped=1
+=== RUN   TestSyntheticFragmentsAndTransplants/order/unicode_relocation
+    fragment_test.go:362: outcome=recovered raw_state=5 span={Start:80 End:183} anchors=[{80 183}] symbols=[{{104 110} 2 0} {{117 123} 1 1} {{130 136} 0 2}] examined=2 supported=1 skipped=1
+=== RUN   TestSyntheticFragmentsAndTransplants/order/changed_host_context
+    fragment_test.go:362: outcome=recovered raw_state=5 span={Start:51 End:156} anchors=[{51 156}] symbols=[{{77 83} 2 0} {{90 96} 1 1} {{103 109} 0 2}] examined=2 supported=1 skipped=1
+=== RUN   TestSyntheticFragmentsAndTransplants/order/missing_binding
+    fragment_test.go:362: outcome=host_type_error raw_state=-1 span={Start:0 End:0} anchors=[] symbols=[] examined=0 supported=0 skipped=0
+=== RUN   TestSyntheticFragmentsAndTransplants/order/statement_excerpt
+    fragment_test.go:362: outcome=host_parse_error raw_state=-1 span={Start:0 End:0} anchors=[] symbols=[] examined=0 supported=0 skipped=0
+=== RUN   TestSyntheticFragmentsAndTransplants/order/shortened_run
+    fragment_test.go:362: outcome=no_anchor raw_state=-1 span={Start:0 End:0} anchors=[] symbols=[] examined=1 supported=1 skipped=0
+=== RUN   TestSyntheticFragmentsAndTransplants/order/duplicate_anchor
+    fragment_test.go:362: outcome=ambiguous_anchor raw_state=-1 span={Start:0 End:0} anchors=[{13 116} {117 213}] symbols=[] examined=2 supported=2 skipped=0
+=== RUN   TestSyntheticFragmentsAndTransplants/order/changed_literal_context
+    fragment_test.go:362: outcome=no_anchor raw_state=-1 span={Start:0 End:0} anchors=[] symbols=[] examined=1 supported=1 skipped=0
+=== RUN   TestSyntheticFragmentsAndTransplants/order/independent_same_task
+    fragment_test.go:362: outcome=recovered raw_state=0 span={Start:13 End:114} anchors=[{13 114}] symbols=[{{42 46} 0 0} {{53 59} 1 1} {{66 71} 2 2}] examined=1 supported=1 skipped=0
+=== RUN   TestSyntheticFragmentsAndTransplants/order/signal_only_same_context
+    fragment_test.go:362: outcome=recovered raw_state=5 span={Start:48 End:149} anchors=[{48 149}] symbols=[{{76 81} 2 0} {{88 94} 1 1} {{101 105} 0 2}] examined=2 supported=1 skipped=1
+=== RUN   TestSyntheticFragmentsAndTransplants/order/signal_only_other_context
+    fragment_test.go:362: outcome=no_anchor raw_state=-1 span={Start:0 End:0} anchors=[] symbols=[] examined=1 supported=1 skipped=0
+=== RUN   TestSyntheticFragmentsAndTransplants/order/host_codebook_collision
+    fragment_test.go:362: outcome=recovered raw_state=5 span={Start:45 End:150} anchors=[{45 150}] symbols=[{{71 77} 2 0} {{84 90} 1 1} {{97 103} 0 2}] examined=2 supported=1 skipped=1
+=== NAME  TestSyntheticFragmentsAndTransplants
+    fragment_test.go:408: own_reference_signal family=order state=5 span={Start:13 End:117} symbols=[{{41 46} 2 0} {{54 60} 1 1} {{68 72} 0 2}]
+=== RUN   TestSyntheticFragmentsAndTransplants/names/whole_function
+    fragment_test.go:362: outcome=recovered raw_state=7 span={Start:48 End:151} anchors=[{48 151}] symbols=[{{73 79} 0 1} {{86 92} 1 1} {{99 105} 2 1}] examined=2 supported=1 skipped=1
+=== RUN   TestSyntheticFragmentsAndTransplants/names/unicode_relocation
+    fragment_test.go:362: outcome=recovered raw_state=7 span={Start:80 End:181} anchors=[{80 181}] symbols=[{{103 109} 0 1} {{116 122} 1 1} {{129 135} 2 1}] examined=2 supported=1 skipped=1
+=== RUN   TestSyntheticFragmentsAndTransplants/names/changed_host_context
+    fragment_test.go:362: outcome=recovered raw_state=7 span={Start:51 End:154} anchors=[{51 154}] symbols=[{{76 82} 0 1} {{89 95} 1 1} {{102 108} 2 1}] examined=2 supported=1 skipped=1
+=== RUN   TestSyntheticFragmentsAndTransplants/names/missing_binding
+    fragment_test.go:362: outcome=host_type_error raw_state=-1 span={Start:0 End:0} anchors=[] symbols=[] examined=0 supported=0 skipped=0
+=== RUN   TestSyntheticFragmentsAndTransplants/names/statement_excerpt
+    fragment_test.go:362: outcome=host_parse_error raw_state=-1 span={Start:0 End:0} anchors=[] symbols=[] examined=0 supported=0 skipped=0
+=== RUN   TestSyntheticFragmentsAndTransplants/names/shortened_run
+    fragment_test.go:362: outcome=no_anchor raw_state=-1 span={Start:0 End:0} anchors=[] symbols=[] examined=1 supported=1 skipped=0
+=== RUN   TestSyntheticFragmentsAndTransplants/names/duplicate_anchor
+    fragment_test.go:362: outcome=ambiguous_anchor raw_state=-1 span={Start:0 End:0} anchors=[{13 114} {115 211}] symbols=[] examined=2 supported=2 skipped=0
+=== RUN   TestSyntheticFragmentsAndTransplants/names/changed_literal_context
+    fragment_test.go:362: outcome=no_anchor raw_state=-1 span={Start:0 End:0} anchors=[] symbols=[] examined=1 supported=1 skipped=0
+=== RUN   TestSyntheticFragmentsAndTransplants/names/independent_same_task
+    fragment_test.go:362: outcome=raw_unavailable raw_state=-1 span={Start:13 End:114} anchors=[{13 114}] symbols=[] examined=1 supported=1 skipped=0
+=== RUN   TestSyntheticFragmentsAndTransplants/names/signal_only_same_context
+    fragment_test.go:362: outcome=recovered raw_state=7 span={Start:48 End:153} anchors=[{48 153}] symbols=[{{75 81} 0 1} {{88 94} 1 1} {{101 107} 2 1}] examined=2 supported=1 skipped=1
+=== RUN   TestSyntheticFragmentsAndTransplants/names/signal_only_other_context
+    fragment_test.go:362: outcome=no_anchor raw_state=-1 span={Start:0 End:0} anchors=[] symbols=[] examined=1 supported=1 skipped=0
+=== RUN   TestSyntheticFragmentsAndTransplants/names/host_codebook_collision
+    fragment_test.go:362: outcome=host_codebook_collision raw_state=-1 span={Start:45 End:148} anchors=[{45 148}] symbols=[] examined=2 supported=1 skipped=1
+=== NAME  TestSyntheticFragmentsAndTransplants
+    fragment_test.go:408: own_reference_signal family=names state=7 span={Start:13 End:121} symbols=[{{40 46} 0 1} {{54 60} 1 1} {{68 74} 2 1}]
+    fragment_test.go:421: main_queries=24 recovered=10 abstained=14 localized_definition_symbols=30 own_reference_controls=2 compiled_trusted_hosts=20 compiled_return_checks=22 aggregate_bytes=4511 elapsed=520.13625ms
+--- PASS: TestSyntheticFragmentsAndTransplants (0.52s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/order/whole_function (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/order/unicode_relocation (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/order/changed_host_context (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/order/missing_binding (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/order/statement_excerpt (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/order/shortened_run (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/order/duplicate_anchor (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/order/changed_literal_context (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/order/independent_same_task (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/order/signal_only_same_context (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/order/signal_only_other_context (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/order/host_codebook_collision (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/names/whole_function (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/names/unicode_relocation (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/names/changed_host_context (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/names/missing_binding (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/names/statement_excerpt (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/names/shortened_run (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/names/duplicate_anchor (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/names/changed_literal_context (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/names/independent_same_task (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/names/signal_only_same_context (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/names/signal_only_other_context (0.00s)
+    --- PASS: TestSyntheticFragmentsAndTransplants/names/host_codebook_collision (0.00s)
+=== RUN   TestSyntheticHostAlignmentGuards
+=== RUN   TestSyntheticHostAlignmentGuards/unknown_family
+=== RUN   TestSyntheticHostAlignmentGuards/directive
+=== RUN   TestSyntheticHostAlignmentGuards/compiler_directive
+=== RUN   TestSyntheticHostAlignmentGuards/line_directive
+=== RUN   TestSyntheticHostAlignmentGuards/import_boundary
+=== RUN   TestSyntheticHostAlignmentGuards/package_declaration
+=== RUN   TestSyntheticHostAlignmentGuards/body_comment
+=== RUN   TestSyntheticHostAlignmentGuards/zero_order
+=== RUN   TestSyntheticHostAlignmentGuards/zero_names
+=== NAME  TestSyntheticHostAlignmentGuards
+    fragment_test.go:466: guard_queries=12 abstentions=12 (9 boundary/zero-capacity plus 2 reversed duplicate anchors and 1 invalid reference)
+--- PASS: TestSyntheticHostAlignmentGuards (0.00s)
+    --- PASS: TestSyntheticHostAlignmentGuards/unknown_family (0.00s)
+    --- PASS: TestSyntheticHostAlignmentGuards/directive (0.00s)
+    --- PASS: TestSyntheticHostAlignmentGuards/compiler_directive (0.00s)
+    --- PASS: TestSyntheticHostAlignmentGuards/line_directive (0.00s)
+    --- PASS: TestSyntheticHostAlignmentGuards/import_boundary (0.00s)
+    --- PASS: TestSyntheticHostAlignmentGuards/package_declaration (0.00s)
+    --- PASS: TestSyntheticHostAlignmentGuards/body_comment (0.00s)
+    --- PASS: TestSyntheticHostAlignmentGuards/zero_order (0.00s)
+    --- PASS: TestSyntheticHostAlignmentGuards/zero_names (0.00s)
+=== RUN   TestSyntheticCarrierRoundTrips
+    synthetic_test.go:441: capacity family=order n=0 states=1 fixed_bits=0 identity_capacity=unavailable
+    synthetic_test.go:441: capacity family=order n=1 states=1 fixed_bits=0 identity_capacity=unavailable
+    synthetic_test.go:441: capacity family=order n=2 states=2 fixed_bits=1 identity_capacity=unavailable
+    synthetic_test.go:441: capacity family=order n=3 states=6 fixed_bits=2 identity_capacity=unavailable
+    synthetic_test.go:441: capacity family=order n=4 states=24 fixed_bits=4 identity_capacity=unavailable
+    synthetic_test.go:441: capacity family=names n=0 states=1 fixed_bits=0 identity_capacity=unavailable
+    synthetic_test.go:441: capacity family=names n=1 states=2 fixed_bits=1 identity_capacity=unavailable
+    synthetic_test.go:441: capacity family=names n=2 states=4 fixed_bits=2 identity_capacity=unavailable
+    synthetic_test.go:441: capacity family=names n=3 states=8 fixed_bits=3 identity_capacity=unavailable
+    synthetic_test.go:441: capacity family=names n=4 states=16 fixed_bits=4 identity_capacity=unavailable
+    synthetic_test.go:544: metrics family=order {requests:34 changed:29 matching:3 refused:2 recovered:32 formatted:32 canonicalValid:32 canonicalErased:29 canonicalMatching:3 directValid:32 directErased:32}
+    synthetic_test.go:544: metrics family=names {requests:31 changed:26 matching:4 refused:1 recovered:30 formatted:30 canonicalValid:30 canonicalErased:26 canonicalMatching:4 directValid:30 directErased:30}
+    synthetic_test.go:546: compiled_behavior_checks=248 source_bytes=40604 compile_run_elapsed=535.213ms total_elapsed=759.320458ms
+--- PASS: TestSyntheticCarrierRoundTrips (0.76s)
+=== RUN   TestSyntheticRefusalsAndControls
+=== RUN   TestSyntheticRefusalsAndControls/malformed/order
+=== RUN   TestSyntheticRefusalsAndControls/malformed/names
+=== RUN   TestSyntheticRefusalsAndControls/too_many_bindings/order
+=== RUN   TestSyntheticRefusalsAndControls/too_many_bindings/names
+=== RUN   TestSyntheticRefusalsAndControls/tag/order
+=== RUN   TestSyntheticRefusalsAndControls/tag/names
+=== RUN   TestSyntheticRefusalsAndControls/cgo/order
+=== RUN   TestSyntheticRefusalsAndControls/cgo/names
+=== RUN   TestSyntheticRefusalsAndControls/embed/order
+=== RUN   TestSyntheticRefusalsAndControls/embed/names
+=== RUN   TestSyntheticRefusalsAndControls/compiler_directive/order
+=== RUN   TestSyntheticRefusalsAndControls/compiler_directive/names
+=== RUN   TestSyntheticRefusalsAndControls/body_comment/order
+=== RUN   TestSyntheticRefusalsAndControls/body_comment/names
+=== RUN   TestSyntheticRefusalsAndControls/exported_local/order
+=== RUN   TestSyntheticRefusalsAndControls/exported_local/names
+=== RUN   TestSyntheticRefusalsAndControls/parameter/order
+=== RUN   TestSyntheticRefusalsAndControls/parameter/names
+=== RUN   TestSyntheticRefusalsAndControls/named_result/order
+=== RUN   TestSyntheticRefusalsAndControls/named_result/names
+=== RUN   TestSyntheticRefusalsAndControls/generic/order
+=== RUN   TestSyntheticRefusalsAndControls/generic/names
+=== RUN   TestSyntheticRefusalsAndControls/method/order
+=== RUN   TestSyntheticRefusalsAndControls/method/names
+=== RUN   TestSyntheticRefusalsAndControls/shadow/order
+=== RUN   TestSyntheticRefusalsAndControls/shadow/names
+=== RUN   TestSyntheticRefusalsAndControls/mixed_short/order
+=== RUN   TestSyntheticRefusalsAndControls/mixed_short/names
+=== RUN   TestSyntheticRefusalsAndControls/side_effect/order
+=== RUN   TestSyntheticRefusalsAndControls/side_effect/names
+=== RUN   TestSyntheticRefusalsAndControls/alias_type/order
+=== RUN   TestSyntheticRefusalsAndControls/alias_type/names
+=== RUN   TestSyntheticRefusalsAndControls/mutable_alias/order
+=== RUN   TestSyntheticRefusalsAndControls/mutable_alias/names
+=== RUN   TestSyntheticRefusalsAndControls/closure/order
+=== RUN   TestSyntheticRefusalsAndControls/closure/names
+=== RUN   TestSyntheticRefusalsAndControls/goroutine_capture/order
+=== RUN   TestSyntheticRefusalsAndControls/goroutine_capture/names
+=== RUN   TestSyntheticRefusalsAndControls/field/order
+=== RUN   TestSyntheticRefusalsAndControls/field/names
+=== RUN   TestSyntheticRefusalsAndControls/negative/order
+=== RUN   TestSyntheticRefusalsAndControls/negative/names
+=== RUN   TestSyntheticRefusalsAndControls/overflow/order
+=== RUN   TestSyntheticRefusalsAndControls/overflow/names
+=== RUN   TestSyntheticRefusalsAndControls/hex/order
+=== RUN   TestSyntheticRefusalsAndControls/hex/names
+=== RUN   TestSyntheticRefusalsAndControls/duplicate_return/order
+=== RUN   TestSyntheticRefusalsAndControls/duplicate_return/names
+=== NAME  TestSyntheticRefusalsAndControls
+    synthetic_test.go:643: grammar_refusal_inputs=24 requests=48 unchanged=48; names_collision_requests=4 unchanged=4; out_of_range_requests=4 unchanged=4; identity_wrong_key_false_alerts=unavailable
+--- PASS: TestSyntheticRefusalsAndControls (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/malformed/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/malformed/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/too_many_bindings/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/too_many_bindings/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/tag/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/tag/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/cgo/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/cgo/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/embed/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/embed/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/compiler_directive/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/compiler_directive/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/body_comment/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/body_comment/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/exported_local/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/exported_local/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/parameter/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/parameter/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/named_result/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/named_result/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/generic/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/generic/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/method/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/method/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/shadow/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/shadow/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/mixed_short/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/mixed_short/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/side_effect/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/side_effect/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/alias_type/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/alias_type/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/mutable_alias/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/mutable_alias/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/closure/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/closure/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/goroutine_capture/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/goroutine_capture/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/field/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/field/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/negative/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/negative/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/overflow/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/overflow/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/hex/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/hex/names (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/duplicate_return/order (0.00s)
+    --- PASS: TestSyntheticRefusalsAndControls/duplicate_return/names (0.00s)
+PASS
+ok  	traceweave.local/carrier-experiment	2.193s
+        2.71 real         0.45 user         0.64 sys
+           120717312  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               99634  page reclaims
+                7382  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                1212  signals received
+                3305  voluntary context switches
+               23768  involuntary context switches
+          1805280698  instructions retired
+          1173524331  cycles elapsed
+            20939376  peak memory footprint

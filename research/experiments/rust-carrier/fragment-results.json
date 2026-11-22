@@ -1,0 +1,2707 @@
+{
+  "boundary": {
+    "build_script": false,
+    "cfg_features": false,
+    "edition": "2021",
+    "generated_or_vendor": false,
+    "proc_macros": false,
+    "source_observers": false
+  },
+  "compilation": {
+    "checks_per_profile": 78,
+    "compiler": "rustc 1.97.1 (8bab26f4f 2026-07-14)\nbinary: rustc\ncommit-hash: 8bab26f4f68e0e26f0bb7960be334d5b520ea452\ncommit-date: 2026-07-14\nhost: aarch64-apple-darwin\nrelease: 1.97.1\nLLVM version: 22.1.6",
+    "generated_hosts_compiled": 66,
+    "profiles": [
+      "debug",
+      "release"
+    ],
+    "target": "aarch64-apple-darwin"
+  },
+  "identity_metrics": "unavailable",
+  "python": "3.14.6",
+  "records": [
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod copied {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "whole_copy",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": null,
+      "expected_reason": null,
+      "expected_state": 0,
+      "expected_values_by_context": {
+        "copied": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "1ae47fe886f62876ab91592e43af861b63d016ca20ef57d05bc45f06a616e7a3",
+        "context": "copied",
+        "function_span_bytes": [
+          56,
+          178
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 0,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "raw": 0,
+            "span_bytes": [
+              84,
+              163
+            ],
+            "unit": "permutation_rank"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod fragment {\nfn specimen() -> [u32; 3] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; [a, b, c] }\n}\n",
+      "category": "incomplete_run",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": null,
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "fragment": [
+          12,
+          23,
+          34
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "4ae30902b4e647a31c6f38742b0b4f94c7e40ccc2ebf515617c8dce0e3ea72b2",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; ",
+      "category": "cut_excerpt",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": null,
+      "expected_reason": "unsupported or duplicate host module",
+      "expected_state": null,
+      "expected_values_by_context": {},
+      "family": "order",
+      "result": {
+        "candidate_sha256": "8aa964a2ebc59f0d6b544b30f2b4f710dc4ebe45a4ed4946549276b0ee49d7eb",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "unsupported or duplicate host module",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod left {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\nmod right {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "duplicate_anchor",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": null,
+      "expected_reason": "ambiguous_reference_anchors",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "left": [
+          12,
+          23,
+          34,
+          45
+        ],
+        "right": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "7337f301ce1e8756c51ce779e58461d5b86f9708098cc4b8aefdac7bbcb6beb1",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 2,
+        "reason": "ambiguous_reference_anchors",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod left {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\nmod right {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let d: u32 = 45u32; let c: u32 = 34u32; [a, b, c, d] }\n}\n",
+      "category": "conflicting_duplicate",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": null,
+      "expected_reason": "ambiguous_reference_anchors",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "left": [
+          12,
+          23,
+          34,
+          45
+        ],
+        "right": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "07fee2abd7e1cecb17e261521d0827732606145336e8186f3a39580118836306",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 2,
+        "reason": "ambiguous_reference_anchors",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod moved {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "changed_context_open",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": null,
+      "expected_reason": null,
+      "expected_state": 0,
+      "expected_values_by_context": {
+        "moved": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "72a44a65cfd813022d17be4bd8fe0ca7cc522032a905e274130eef61a6dc15a1",
+        "context": "moved",
+        "function_span_bytes": [
+          55,
+          177
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 0,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "raw": 0,
+            "span_bytes": [
+              83,
+              162
+            ],
+            "unit": "permutation_rank"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod moved {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "changed_context_strict",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": "origin",
+      "expected_reason": "context_mismatch",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "moved": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "72a44a65cfd813022d17be4bd8fe0ca7cc522032a905e274130eef61a6dc15a1",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 1,
+        "reason": "context_mismatch",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet a: u32 = 12u32;\nlet b: u32 = 23u32;\nlet c: u32 = 34u32;\nlet d: u32 = 45u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "independent_same_task",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": "origin",
+      "expected_reason": null,
+      "expected_state": 0,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "8c5a92862c16d71d4aca8864e1635ec3485761594effbd3caee245b11f82b0cb",
+        "context": "origin",
+        "function_span_bytes": [
+          56,
+          175
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 0,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "raw": 0,
+            "span_bytes": [
+              84,
+              163
+            ],
+            "unit": "permutation_rank"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] { [12u32,23u32,34u32,45u32] }\n}\n",
+      "category": "independent_direct_return",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": null,
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "2e86abd74d3a39d7bef56da758c10191ade5ba433bd368170ee76e58ffb8f944",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet a: u32 = 12u32;\nlet b: u32 = 23u32;\nlet c: u32 = 34u32;\nlet d: u32 = 45u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "signal_only_transfer",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": "origin",
+      "expected_reason": null,
+      "expected_state": 0,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "8c5a92862c16d71d4aca8864e1635ec3485761594effbd3caee245b11f82b0cb",
+        "context": "origin",
+        "function_span_bytes": [
+          56,
+          175
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 0,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "raw": 0,
+            "span_bytes": [
+              84,
+              163
+            ],
+            "unit": "permutation_rank"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet a: u32 = 13u32;\nlet b: u32 = 24u32;\nlet c: u32 = 35u32;\nlet d: u32 = 46u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "signal_transfer_changed_values",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": "origin",
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          13,
+          24,
+          35,
+          46
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "faf4c9a37a963f5062670b2c1dd512ddbc839b49eaf61aff63842de305123295",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] { let a: u32 = 1__2u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "unexpected_spelling",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": null,
+      "expected_reason": "unexpected spelling",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "d21910a5b9def436dc0165739403f8fffc9593e9ec40323fde0a233e434c64a4",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "unexpected spelling",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod copied {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let d: u32 = 45u32; let c: u32 = 34u32; [a, b, c, d] }\n}\n",
+      "category": "whole_copy",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": null,
+      "expected_state": 1,
+      "expected_values_by_context": {
+        "copied": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "c0d1a851cf084538cfaef58bf6a2b864cd33fd9b22a1013159e9843a7ebf1a92",
+        "context": "copied",
+        "function_span_bytes": [
+          56,
+          178
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 1,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "raw": 1,
+            "span_bytes": [
+              84,
+              163
+            ],
+            "unit": "permutation_rank"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod fragment {\nfn specimen() -> [u32; 3] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; [a, b, c] }\n}\n",
+      "category": "incomplete_run",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "fragment": [
+          12,
+          23,
+          34
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "4ae30902b4e647a31c6f38742b0b4f94c7e40ccc2ebf515617c8dce0e3ea72b2",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "let a: u32 = 12u32; let b: u32 = 23u32; let d: u32 = 45u32; let c: u32 = 34u32; ",
+      "category": "cut_excerpt",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "unsupported or duplicate host module",
+      "expected_state": null,
+      "expected_values_by_context": {},
+      "family": "order",
+      "result": {
+        "candidate_sha256": "3f6078cac85644576cb449bf6e6fd4e89350322a1372195ada3a12f589246636",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "unsupported or duplicate host module",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod left {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let d: u32 = 45u32; let c: u32 = 34u32; [a, b, c, d] }\n}\nmod right {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let d: u32 = 45u32; let c: u32 = 34u32; [a, b, c, d] }\n}\n",
+      "category": "duplicate_anchor",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "ambiguous_reference_anchors",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "left": [
+          12,
+          23,
+          34,
+          45
+        ],
+        "right": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "3632099cc2f8ce867ae34a539c2acf6b3a8ad3d3d836666655d7eab3dc52566b",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 2,
+        "reason": "ambiguous_reference_anchors",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod left {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let d: u32 = 45u32; let c: u32 = 34u32; [a, b, c, d] }\n}\nmod right {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "conflicting_duplicate",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "ambiguous_reference_anchors",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "left": [
+          12,
+          23,
+          34,
+          45
+        ],
+        "right": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "55413c3f46e2d11c698b472af85ff7579054f81a869b648145cf340e47cf9947",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 2,
+        "reason": "ambiguous_reference_anchors",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod moved {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let d: u32 = 45u32; let c: u32 = 34u32; [a, b, c, d] }\n}\n",
+      "category": "changed_context_open",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": null,
+      "expected_state": 1,
+      "expected_values_by_context": {
+        "moved": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "04515262ddba82c8aeefddcfe0520ac71d8cc6e33e47defef94a12c1edd4221d",
+        "context": "moved",
+        "function_span_bytes": [
+          55,
+          177
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 1,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "raw": 1,
+            "span_bytes": [
+              83,
+              162
+            ],
+            "unit": "permutation_rank"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod moved {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let d: u32 = 45u32; let c: u32 = 34u32; [a, b, c, d] }\n}\n",
+      "category": "changed_context_strict",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": "origin",
+      "expected_reason": "context_mismatch",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "moved": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "04515262ddba82c8aeefddcfe0520ac71d8cc6e33e47defef94a12c1edd4221d",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 1,
+        "reason": "context_mismatch",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet a: u32 = 12u32;\nlet b: u32 = 23u32;\nlet c: u32 = 34u32;\nlet d: u32 = 45u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "independent_same_task",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": "origin",
+      "expected_reason": null,
+      "expected_state": 0,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "8c5a92862c16d71d4aca8864e1635ec3485761594effbd3caee245b11f82b0cb",
+        "context": "origin",
+        "function_span_bytes": [
+          56,
+          175
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 0,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "raw": 0,
+            "span_bytes": [
+              84,
+              163
+            ],
+            "unit": "permutation_rank"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] { [12u32,23u32,34u32,45u32] }\n}\n",
+      "category": "independent_direct_return",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "2e86abd74d3a39d7bef56da758c10191ade5ba433bd368170ee76e58ffb8f944",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet a: u32 = 12u32;\nlet b: u32 = 23u32;\nlet d: u32 = 45u32;\nlet c: u32 = 34u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "signal_only_transfer",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": "origin",
+      "expected_reason": null,
+      "expected_state": 1,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "8980d37e5347dd87d96c126027e4c24c6d2a0437643336910f6201a5d594510a",
+        "context": "origin",
+        "function_span_bytes": [
+          56,
+          175
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 1,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "raw": 1,
+            "span_bytes": [
+              84,
+              163
+            ],
+            "unit": "permutation_rank"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet a: u32 = 13u32;\nlet b: u32 = 24u32;\nlet d: u32 = 46u32;\nlet c: u32 = 35u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "signal_transfer_changed_values",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": "origin",
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          13,
+          24,
+          35,
+          46
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "09c5a600d9cafbb5799c7652d67ceaab4b504e69eb7d08e756a83a0a1823a718",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] { let a: u32 = 1__2u32; let b: u32 = 23u32; let d: u32 = 45u32; let c: u32 = 34u32; [a, b, c, d] }\n}\n",
+      "category": "unexpected_spelling",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "unexpected spelling",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "dab541383be6ea41dca75bdf65b761051259702b9f3acdb0b7df75c24acac46f",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "unexpected spelling",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod copied {\nfn specimen() -> [u32; 4] { let d: u32 = 45u32; let c: u32 = 34u32; let b: u32 = 23u32; let a: u32 = 12u32; [a, b, c, d] }\n}\n",
+      "category": "whole_copy",
+      "donor_state": 23,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": null,
+      "expected_state": 23,
+      "expected_values_by_context": {
+        "copied": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "d2397f4a9d1940c9a05dbdd496ad2f7565e31e36c5a963cd55537b79505f5700",
+        "context": "copied",
+        "function_span_bytes": [
+          56,
+          178
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 23,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "raw": 23,
+            "span_bytes": [
+              84,
+              163
+            ],
+            "unit": "permutation_rank"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod fragment {\nfn specimen() -> [u32; 3] { let c: u32 = 34u32; let b: u32 = 23u32; let a: u32 = 12u32; [a, b, c] }\n}\n",
+      "category": "incomplete_run",
+      "donor_state": 23,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "fragment": [
+          12,
+          23,
+          34
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "69750d43f242cb4c72a41ad4b145b667798b77ecc422244404a6a2e680355e85",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "let d: u32 = 45u32; let c: u32 = 34u32; let b: u32 = 23u32; let a: u32 = 12u32; ",
+      "category": "cut_excerpt",
+      "donor_state": 23,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "unsupported or duplicate host module",
+      "expected_state": null,
+      "expected_values_by_context": {},
+      "family": "order",
+      "result": {
+        "candidate_sha256": "e04e5bfed5837e96fdce78fac4e98eb3eee56723311f754ddeba62ce14a8512e",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "unsupported or duplicate host module",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod left {\nfn specimen() -> [u32; 4] { let d: u32 = 45u32; let c: u32 = 34u32; let b: u32 = 23u32; let a: u32 = 12u32; [a, b, c, d] }\n}\nmod right {\nfn specimen() -> [u32; 4] { let d: u32 = 45u32; let c: u32 = 34u32; let b: u32 = 23u32; let a: u32 = 12u32; [a, b, c, d] }\n}\n",
+      "category": "duplicate_anchor",
+      "donor_state": 23,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "ambiguous_reference_anchors",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "left": [
+          12,
+          23,
+          34,
+          45
+        ],
+        "right": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "0be6efafbc45c374af2311ff4145493de5d944718c5dde5df99794a14327986a",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 2,
+        "reason": "ambiguous_reference_anchors",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod left {\nfn specimen() -> [u32; 4] { let d: u32 = 45u32; let c: u32 = 34u32; let b: u32 = 23u32; let a: u32 = 12u32; [a, b, c, d] }\n}\nmod right {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "conflicting_duplicate",
+      "donor_state": 23,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "ambiguous_reference_anchors",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "left": [
+          12,
+          23,
+          34,
+          45
+        ],
+        "right": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "1b4790622e54677441f35171a138022960d8066d92a25287814677966155148c",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 2,
+        "reason": "ambiguous_reference_anchors",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod moved {\nfn specimen() -> [u32; 4] { let d: u32 = 45u32; let c: u32 = 34u32; let b: u32 = 23u32; let a: u32 = 12u32; [a, b, c, d] }\n}\n",
+      "category": "changed_context_open",
+      "donor_state": 23,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": null,
+      "expected_state": 23,
+      "expected_values_by_context": {
+        "moved": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "5c1777d61eef701306b1ce91faf2e6474fa4bea96e71716db83815bb7846ae29",
+        "context": "moved",
+        "function_span_bytes": [
+          55,
+          177
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 23,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "raw": 23,
+            "span_bytes": [
+              83,
+              162
+            ],
+            "unit": "permutation_rank"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod moved {\nfn specimen() -> [u32; 4] { let d: u32 = 45u32; let c: u32 = 34u32; let b: u32 = 23u32; let a: u32 = 12u32; [a, b, c, d] }\n}\n",
+      "category": "changed_context_strict",
+      "donor_state": 23,
+      "embedding_status": "changed",
+      "expected_context": "origin",
+      "expected_reason": "context_mismatch",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "moved": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "5c1777d61eef701306b1ce91faf2e6474fa4bea96e71716db83815bb7846ae29",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 1,
+        "reason": "context_mismatch",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet a: u32 = 12u32;\nlet b: u32 = 23u32;\nlet c: u32 = 34u32;\nlet d: u32 = 45u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "independent_same_task",
+      "donor_state": 23,
+      "embedding_status": "changed",
+      "expected_context": "origin",
+      "expected_reason": null,
+      "expected_state": 0,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "8c5a92862c16d71d4aca8864e1635ec3485761594effbd3caee245b11f82b0cb",
+        "context": "origin",
+        "function_span_bytes": [
+          56,
+          175
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 0,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "raw": 0,
+            "span_bytes": [
+              84,
+              163
+            ],
+            "unit": "permutation_rank"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] { [12u32,23u32,34u32,45u32] }\n}\n",
+      "category": "independent_direct_return",
+      "donor_state": 23,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "2e86abd74d3a39d7bef56da758c10191ade5ba433bd368170ee76e58ffb8f944",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet d: u32 = 45u32;\nlet c: u32 = 34u32;\nlet b: u32 = 23u32;\nlet a: u32 = 12u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "signal_only_transfer",
+      "donor_state": 23,
+      "embedding_status": "changed",
+      "expected_context": "origin",
+      "expected_reason": null,
+      "expected_state": 23,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "650bf3139b293f3acc2ffa9c640d2ffebabd1f0262b1760a9a604cda2b2ec984",
+        "context": "origin",
+        "function_span_bytes": [
+          56,
+          175
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 23,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "raw": 23,
+            "span_bytes": [
+              84,
+              163
+            ],
+            "unit": "permutation_rank"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet d: u32 = 46u32;\nlet c: u32 = 35u32;\nlet b: u32 = 24u32;\nlet a: u32 = 13u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "signal_transfer_changed_values",
+      "donor_state": 23,
+      "embedding_status": "changed",
+      "expected_context": "origin",
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          13,
+          24,
+          35,
+          46
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "6126dcef51482816f7e54144be9ee98a11e3f98dd8a606dce5f70a72e76995b4",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] { let d: u32 = 45u32; let c: u32 = 34u32; let b: u32 = 23u32; let a: u32 = 1__2u32; [a, b, c, d] }\n}\n",
+      "category": "unexpected_spelling",
+      "donor_state": 23,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "unexpected spelling",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "order",
+      "result": {
+        "candidate_sha256": "6525da11bc0dba7737a635678f52e9ba259fc1363be8c447431f30ed76ad69ab",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "unexpected spelling",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod copied {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "whole_copy",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": null,
+      "expected_reason": null,
+      "expected_state": 0,
+      "expected_values_by_context": {
+        "copied": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "1ae47fe886f62876ab91592e43af861b63d016ca20ef57d05bc45f06a616e7a3",
+        "context": "copied",
+        "function_span_bytes": [
+          56,
+          178
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 0,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "name": "a",
+            "raw": 0,
+            "span_bytes": [
+              97,
+              102
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "b",
+            "raw": 0,
+            "span_bytes": [
+              117,
+              122
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "c",
+            "raw": 0,
+            "span_bytes": [
+              137,
+              142
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "d",
+            "raw": 0,
+            "span_bytes": [
+              157,
+              162
+            ],
+            "unit": "spelling_bit"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod fragment {\nfn specimen() -> [u32; 3] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; [a, b, c] }\n}\n",
+      "category": "incomplete_run",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": null,
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "fragment": [
+          12,
+          23,
+          34
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "4ae30902b4e647a31c6f38742b0b4f94c7e40ccc2ebf515617c8dce0e3ea72b2",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; ",
+      "category": "cut_excerpt",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": null,
+      "expected_reason": "unsupported or duplicate host module",
+      "expected_state": null,
+      "expected_values_by_context": {},
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "8aa964a2ebc59f0d6b544b30f2b4f710dc4ebe45a4ed4946549276b0ee49d7eb",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "unsupported or duplicate host module",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod left {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\nmod right {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "duplicate_anchor",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": null,
+      "expected_reason": "ambiguous_reference_anchors",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "left": [
+          12,
+          23,
+          34,
+          45
+        ],
+        "right": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "7337f301ce1e8756c51ce779e58461d5b86f9708098cc4b8aefdac7bbcb6beb1",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 2,
+        "reason": "ambiguous_reference_anchors",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod left {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\nmod right {\nfn specimen() -> [u32; 4] { let a: u32 = 1_2u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "conflicting_duplicate",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": null,
+      "expected_reason": "ambiguous_reference_anchors",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "left": [
+          12,
+          23,
+          34,
+          45
+        ],
+        "right": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "cf35515b6aacd14227d074ea88d2819cdbc9c5234969c210df4831def334b4c4",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 2,
+        "reason": "ambiguous_reference_anchors",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod moved {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "changed_context_open",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": null,
+      "expected_reason": null,
+      "expected_state": 0,
+      "expected_values_by_context": {
+        "moved": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "72a44a65cfd813022d17be4bd8fe0ca7cc522032a905e274130eef61a6dc15a1",
+        "context": "moved",
+        "function_span_bytes": [
+          55,
+          177
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 0,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "name": "a",
+            "raw": 0,
+            "span_bytes": [
+              96,
+              101
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "b",
+            "raw": 0,
+            "span_bytes": [
+              116,
+              121
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "c",
+            "raw": 0,
+            "span_bytes": [
+              136,
+              141
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "d",
+            "raw": 0,
+            "span_bytes": [
+              156,
+              161
+            ],
+            "unit": "spelling_bit"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod moved {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "changed_context_strict",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": "origin",
+      "expected_reason": "context_mismatch",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "moved": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "72a44a65cfd813022d17be4bd8fe0ca7cc522032a905e274130eef61a6dc15a1",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 1,
+        "reason": "context_mismatch",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet a: u32 = 12u32;\nlet b: u32 = 23u32;\nlet c: u32 = 34u32;\nlet d: u32 = 45u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "independent_same_task",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": "origin",
+      "expected_reason": null,
+      "expected_state": 0,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "8c5a92862c16d71d4aca8864e1635ec3485761594effbd3caee245b11f82b0cb",
+        "context": "origin",
+        "function_span_bytes": [
+          56,
+          175
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 0,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "name": "a",
+            "raw": 0,
+            "span_bytes": [
+              97,
+              102
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "b",
+            "raw": 0,
+            "span_bytes": [
+              117,
+              122
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "c",
+            "raw": 0,
+            "span_bytes": [
+              137,
+              142
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "d",
+            "raw": 0,
+            "span_bytes": [
+              157,
+              162
+            ],
+            "unit": "spelling_bit"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] { [12u32,23u32,34u32,45u32] }\n}\n",
+      "category": "independent_direct_return",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": null,
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "2e86abd74d3a39d7bef56da758c10191ade5ba433bd368170ee76e58ffb8f944",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet a: u32 = 12u32;\nlet b: u32 = 23u32;\nlet c: u32 = 34u32;\nlet d: u32 = 45u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "signal_only_transfer",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": "origin",
+      "expected_reason": null,
+      "expected_state": 0,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "8c5a92862c16d71d4aca8864e1635ec3485761594effbd3caee245b11f82b0cb",
+        "context": "origin",
+        "function_span_bytes": [
+          56,
+          175
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 0,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "name": "a",
+            "raw": 0,
+            "span_bytes": [
+              97,
+              102
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "b",
+            "raw": 0,
+            "span_bytes": [
+              117,
+              122
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "c",
+            "raw": 0,
+            "span_bytes": [
+              137,
+              142
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "d",
+            "raw": 0,
+            "span_bytes": [
+              157,
+              162
+            ],
+            "unit": "spelling_bit"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet a: u32 = 13u32;\nlet b: u32 = 24u32;\nlet c: u32 = 35u32;\nlet d: u32 = 46u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "signal_transfer_changed_values",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": "origin",
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          13,
+          24,
+          35,
+          46
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "faf4c9a37a963f5062670b2c1dd512ddbc839b49eaf61aff63842de305123295",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] { let a: u32 = 1__2u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "unexpected_spelling",
+      "donor_state": 0,
+      "embedding_status": "already_matching",
+      "expected_context": null,
+      "expected_reason": "unexpected spelling",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "d21910a5b9def436dc0165739403f8fffc9593e9ec40323fde0a233e434c64a4",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "unexpected spelling",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod copied {\nfn specimen() -> [u32; 4] { let a: u32 = 1_2u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "whole_copy",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": null,
+      "expected_state": 1,
+      "expected_values_by_context": {
+        "copied": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "e6cc7e5914fa7cbe78b8af38fde3d7b87d7a5a88cdb451947fd0daefb1b54187",
+        "context": "copied",
+        "function_span_bytes": [
+          56,
+          179
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 1,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "name": "a",
+            "raw": 1,
+            "span_bytes": [
+              97,
+              103
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "b",
+            "raw": 0,
+            "span_bytes": [
+              118,
+              123
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "c",
+            "raw": 0,
+            "span_bytes": [
+              138,
+              143
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "d",
+            "raw": 0,
+            "span_bytes": [
+              158,
+              163
+            ],
+            "unit": "spelling_bit"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod fragment {\nfn specimen() -> [u32; 3] { let a: u32 = 1_2u32; let b: u32 = 23u32; let c: u32 = 34u32; [a, b, c] }\n}\n",
+      "category": "incomplete_run",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "fragment": [
+          12,
+          23,
+          34
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "ca841547573f29be6ec25b457373a8ced5eca51a332341a73af7a24de06f9b71",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "let a: u32 = 1_2u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; ",
+      "category": "cut_excerpt",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "unsupported or duplicate host module",
+      "expected_state": null,
+      "expected_values_by_context": {},
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "439bf3d69ba415c49ea07b2b95043c2590031d92ab616b3636472badea368e34",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "unsupported or duplicate host module",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod left {\nfn specimen() -> [u32; 4] { let a: u32 = 1_2u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\nmod right {\nfn specimen() -> [u32; 4] { let a: u32 = 1_2u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "duplicate_anchor",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "ambiguous_reference_anchors",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "left": [
+          12,
+          23,
+          34,
+          45
+        ],
+        "right": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "9d1faf891644786347ae7ae722911b167e923ec62a7e9f243c1d7e6236ad7561",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 2,
+        "reason": "ambiguous_reference_anchors",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod left {\nfn specimen() -> [u32; 4] { let a: u32 = 1_2u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\nmod right {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "conflicting_duplicate",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "ambiguous_reference_anchors",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "left": [
+          12,
+          23,
+          34,
+          45
+        ],
+        "right": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "c4ee71d55f47a0effdd7fa864c6da692ae42fe276d4be32dd045dfc07784062d",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 2,
+        "reason": "ambiguous_reference_anchors",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod moved {\nfn specimen() -> [u32; 4] { let a: u32 = 1_2u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "changed_context_open",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": null,
+      "expected_state": 1,
+      "expected_values_by_context": {
+        "moved": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "2fd82c74a3bff6699c1fab968179fbe7ad05d219251578727156ef2b6f74d230",
+        "context": "moved",
+        "function_span_bytes": [
+          55,
+          178
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 1,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "name": "a",
+            "raw": 1,
+            "span_bytes": [
+              96,
+              102
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "b",
+            "raw": 0,
+            "span_bytes": [
+              117,
+              122
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "c",
+            "raw": 0,
+            "span_bytes": [
+              137,
+              142
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "d",
+            "raw": 0,
+            "span_bytes": [
+              157,
+              162
+            ],
+            "unit": "spelling_bit"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod moved {\nfn specimen() -> [u32; 4] { let a: u32 = 1_2u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "changed_context_strict",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": "origin",
+      "expected_reason": "context_mismatch",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "moved": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "2fd82c74a3bff6699c1fab968179fbe7ad05d219251578727156ef2b6f74d230",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 1,
+        "reason": "context_mismatch",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet a: u32 = 12u32;\nlet b: u32 = 23u32;\nlet c: u32 = 34u32;\nlet d: u32 = 45u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "independent_same_task",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": "origin",
+      "expected_reason": null,
+      "expected_state": 0,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "8c5a92862c16d71d4aca8864e1635ec3485761594effbd3caee245b11f82b0cb",
+        "context": "origin",
+        "function_span_bytes": [
+          56,
+          175
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 0,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "name": "a",
+            "raw": 0,
+            "span_bytes": [
+              97,
+              102
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "b",
+            "raw": 0,
+            "span_bytes": [
+              117,
+              122
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "c",
+            "raw": 0,
+            "span_bytes": [
+              137,
+              142
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "d",
+            "raw": 0,
+            "span_bytes": [
+              157,
+              162
+            ],
+            "unit": "spelling_bit"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] { [12u32,23u32,34u32,45u32] }\n}\n",
+      "category": "independent_direct_return",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "2e86abd74d3a39d7bef56da758c10191ade5ba433bd368170ee76e58ffb8f944",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet a: u32 = 1_2u32;\nlet b: u32 = 23u32;\nlet c: u32 = 34u32;\nlet d: u32 = 45u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "signal_only_transfer",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": "origin",
+      "expected_reason": null,
+      "expected_state": 1,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "c987319cc05fe17ef57c12c92aba3732a8e71d0891f3b852820bcbdf3377f3db",
+        "context": "origin",
+        "function_span_bytes": [
+          56,
+          176
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 1,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "name": "a",
+            "raw": 1,
+            "span_bytes": [
+              97,
+              103
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "b",
+            "raw": 0,
+            "span_bytes": [
+              118,
+              123
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "c",
+            "raw": 0,
+            "span_bytes": [
+              138,
+              143
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "d",
+            "raw": 0,
+            "span_bytes": [
+              158,
+              163
+            ],
+            "unit": "spelling_bit"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet a: u32 = 1_3u32;\nlet b: u32 = 24u32;\nlet c: u32 = 35u32;\nlet d: u32 = 46u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "signal_transfer_changed_values",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": "origin",
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          13,
+          24,
+          35,
+          46
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "ab12b3b01797972bcd991e2023d5e235346c5975be7382f5cd7219c1c34697bd",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] { let a: u32 = 1__2u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "unexpected_spelling",
+      "donor_state": 1,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "unexpected spelling",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "d21910a5b9def436dc0165739403f8fffc9593e9ec40323fde0a233e434c64a4",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "unexpected spelling",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod copied {\nfn specimen() -> [u32; 4] { let a: u32 = 1_2u32; let b: u32 = 2_3u32; let c: u32 = 3_4u32; let d: u32 = 4_5u32; [a, b, c, d] }\n}\n",
+      "category": "whole_copy",
+      "donor_state": 15,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": null,
+      "expected_state": 15,
+      "expected_values_by_context": {
+        "copied": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "601a0d2eaebbd3a5c3f03542adf45f575766102f52b95407745b1645f2871be0",
+        "context": "copied",
+        "function_span_bytes": [
+          56,
+          182
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 15,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "name": "a",
+            "raw": 1,
+            "span_bytes": [
+              97,
+              103
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "b",
+            "raw": 1,
+            "span_bytes": [
+              118,
+              124
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "c",
+            "raw": 1,
+            "span_bytes": [
+              139,
+              145
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "d",
+            "raw": 1,
+            "span_bytes": [
+              160,
+              166
+            ],
+            "unit": "spelling_bit"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod fragment {\nfn specimen() -> [u32; 3] { let a: u32 = 1_2u32; let b: u32 = 2_3u32; let c: u32 = 3_4u32; [a, b, c] }\n}\n",
+      "category": "incomplete_run",
+      "donor_state": 15,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "fragment": [
+          12,
+          23,
+          34
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "b2089d49547a2fb47c3a47234e02280b5d6adac63fe27b7e132ecf8315dc2f5b",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "let a: u32 = 1_2u32; let b: u32 = 2_3u32; let c: u32 = 3_4u32; let d: u32 = 4_5u32; ",
+      "category": "cut_excerpt",
+      "donor_state": 15,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "unsupported or duplicate host module",
+      "expected_state": null,
+      "expected_values_by_context": {},
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "2c3e1ddfdeefa84a61f69dec1fc85be439f9f360fc5ef2553b09f0bc931f650c",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "unsupported or duplicate host module",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod left {\nfn specimen() -> [u32; 4] { let a: u32 = 1_2u32; let b: u32 = 2_3u32; let c: u32 = 3_4u32; let d: u32 = 4_5u32; [a, b, c, d] }\n}\nmod right {\nfn specimen() -> [u32; 4] { let a: u32 = 1_2u32; let b: u32 = 2_3u32; let c: u32 = 3_4u32; let d: u32 = 4_5u32; [a, b, c, d] }\n}\n",
+      "category": "duplicate_anchor",
+      "donor_state": 15,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "ambiguous_reference_anchors",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "left": [
+          12,
+          23,
+          34,
+          45
+        ],
+        "right": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "bca52b02df47bc3a994cada82ccf5612fc129ca19d7288369fa4ac45bd379aa6",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 2,
+        "reason": "ambiguous_reference_anchors",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod left {\nfn specimen() -> [u32; 4] { let a: u32 = 1_2u32; let b: u32 = 2_3u32; let c: u32 = 3_4u32; let d: u32 = 4_5u32; [a, b, c, d] }\n}\nmod right {\nfn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n}\n",
+      "category": "conflicting_duplicate",
+      "donor_state": 15,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "ambiguous_reference_anchors",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "left": [
+          12,
+          23,
+          34,
+          45
+        ],
+        "right": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "e97cce02ed07a14d859e4c884bf25ea75e14069815a15bf048523857f59ddce6",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 2,
+        "reason": "ambiguous_reference_anchors",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod moved {\nfn specimen() -> [u32; 4] { let a: u32 = 1_2u32; let b: u32 = 2_3u32; let c: u32 = 3_4u32; let d: u32 = 4_5u32; [a, b, c, d] }\n}\n",
+      "category": "changed_context_open",
+      "donor_state": 15,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": null,
+      "expected_state": 15,
+      "expected_values_by_context": {
+        "moved": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "84a25eb23fd71d6dc9561d17b11111691b3d82d33fc4ca13a1356feb1226b2d4",
+        "context": "moved",
+        "function_span_bytes": [
+          55,
+          181
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 15,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "name": "a",
+            "raw": 1,
+            "span_bytes": [
+              96,
+              102
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "b",
+            "raw": 1,
+            "span_bytes": [
+              117,
+              123
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "c",
+            "raw": 1,
+            "span_bytes": [
+              138,
+              144
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "d",
+            "raw": 1,
+            "span_bytes": [
+              159,
+              165
+            ],
+            "unit": "spelling_bit"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod moved {\nfn specimen() -> [u32; 4] { let a: u32 = 1_2u32; let b: u32 = 2_3u32; let c: u32 = 3_4u32; let d: u32 = 4_5u32; [a, b, c, d] }\n}\n",
+      "category": "changed_context_strict",
+      "donor_state": 15,
+      "embedding_status": "changed",
+      "expected_context": "origin",
+      "expected_reason": "context_mismatch",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "moved": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "84a25eb23fd71d6dc9561d17b11111691b3d82d33fc4ca13a1356feb1226b2d4",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 1,
+        "reason": "context_mismatch",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet a: u32 = 12u32;\nlet b: u32 = 23u32;\nlet c: u32 = 34u32;\nlet d: u32 = 45u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "independent_same_task",
+      "donor_state": 15,
+      "embedding_status": "changed",
+      "expected_context": "origin",
+      "expected_reason": null,
+      "expected_state": 0,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "8c5a92862c16d71d4aca8864e1635ec3485761594effbd3caee245b11f82b0cb",
+        "context": "origin",
+        "function_span_bytes": [
+          56,
+          175
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 0,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "name": "a",
+            "raw": 0,
+            "span_bytes": [
+              97,
+              102
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "b",
+            "raw": 0,
+            "span_bytes": [
+              117,
+              122
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "c",
+            "raw": 0,
+            "span_bytes": [
+              137,
+              142
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "d",
+            "raw": 0,
+            "span_bytes": [
+              157,
+              162
+            ],
+            "unit": "spelling_bit"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] { [12u32,23u32,34u32,45u32] }\n}\n",
+      "category": "independent_direct_return",
+      "donor_state": 15,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "2e86abd74d3a39d7bef56da758c10191ade5ba433bd368170ee76e58ffb8f944",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet a: u32 = 1_2u32;\nlet b: u32 = 2_3u32;\nlet c: u32 = 3_4u32;\nlet d: u32 = 4_5u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "signal_only_transfer",
+      "donor_state": 15,
+      "embedding_status": "changed",
+      "expected_context": "origin",
+      "expected_reason": null,
+      "expected_state": 15,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "36b9fe1fc15805bf06db703665870aa248cc593591cf66ff2d9011d774e06814",
+        "context": "origin",
+        "function_span_bytes": [
+          56,
+          179
+        ],
+        "matching_anchors": 1,
+        "reason": null,
+        "state": 15,
+        "status": "raw_state",
+        "symbols": [
+          {
+            "name": "a",
+            "raw": 1,
+            "span_bytes": [
+              97,
+              103
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "b",
+            "raw": 1,
+            "span_bytes": [
+              118,
+              124
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "c",
+            "raw": 1,
+            "span_bytes": [
+              139,
+              145
+            ],
+            "unit": "spelling_bit"
+          },
+          {
+            "name": "d",
+            "raw": 1,
+            "span_bytes": [
+              160,
+              166
+            ],
+            "unit": "spelling_bit"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] {\nlet a: u32 = 1_3u32;\nlet b: u32 = 2_4u32;\nlet c: u32 = 3_5u32;\nlet d: u32 = 4_6u32;\n[a,b,c,d]\n}\n}\n",
+      "category": "signal_transfer_changed_values",
+      "donor_state": 15,
+      "embedding_status": "changed",
+      "expected_context": "origin",
+      "expected_reason": "no_complete_reference_anchor",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          13,
+          24,
+          35,
+          46
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "f4301f0d3eeda95d30ea172927a24cc2db13b421dd3c8b8aa404a47cbbd5e96d",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "no_complete_reference_anchor",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    },
+    {
+      "candidate": "// caf\u00e9\nfn host_value() -> u32 { 999u32 }\nmod origin {\nfn specimen() -> [u32; 4] { let a: u32 = 1__2u32; let b: u32 = 2_3u32; let c: u32 = 3_4u32; let d: u32 = 4_5u32; [a, b, c, d] }\n}\n",
+      "category": "unexpected_spelling",
+      "donor_state": 15,
+      "embedding_status": "changed",
+      "expected_context": null,
+      "expected_reason": "unexpected spelling",
+      "expected_state": null,
+      "expected_values_by_context": {
+        "origin": [
+          12,
+          23,
+          34,
+          45
+        ]
+      },
+      "family": "spelling",
+      "result": {
+        "candidate_sha256": "4139531a0ac1ef3805afc6ccd46724f31970e68c1d11fa9e79c54b880d29b5a0",
+        "context": null,
+        "function_span_bytes": null,
+        "matching_anchors": 0,
+        "reason": "unexpected spelling",
+        "state": null,
+        "status": "abstain",
+        "symbols": []
+      }
+    }
+  ],
+  "reference_sha256": "45179ed933e89cb1c325946dbcea0db79944c254ef168364d19433011ad71de6",
+  "reference_source": "fn specimen() -> [u32; 4] { let a: u32 = 12u32; let b: u32 = 23u32; let c: u32 = 34u32; let d: u32 = 45u32; [a, b, c, d] }\n",
+  "totals": {
+    "order": {
+      "abstentions": 24,
+      "expected_results": 36,
+      "localized_symbols": 12,
+      "queries": 36,
+      "raw_states": 12
+    },
+    "spelling": {
+      "abstentions": 24,
+      "expected_results": 36,
+      "localized_symbols": 48,
+      "queries": 36,
+      "raw_states": 12
+    }
+  },
+  "wall_seconds": 1.248852
+}
