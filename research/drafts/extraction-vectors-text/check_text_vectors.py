@@ -579,11 +579,59 @@ def expected_result(T, cfg, data):
     return res
 
 
+RESULT_CHANNEL_KEYS = ["kgrams", "windowSelections", "partialWindow", "fingerprints"]
+
+
+def to_record_result(flat):
+    """Internal flat result -> contract section 2a `result` (A3 channel list exact, folded, skeleton)."""
+    if flat.get("status") == "error":
+        return flat
+    r = {"status": flat["status"], "tokenCount": len(flat["tokens"]),
+         "tokens": [{"class": "word", "text": t["text"], "span": t["span"]} for t in flat["tokens"]]}
+    if "masked" in flat:  # text-markdown only; placement after tokens is PROPOSED (open item, profile section 10)
+        r["masked"] = flat["masked"]
+    r["channels"] = {"exact": {k: flat["exact"][k] for k in RESULT_CHANNEL_KEYS}}
+    for ch in CHANNELS[1:]:
+        r["channels"][ch] = {"values": flat[ch]["values"], **{k: flat[ch][k] for k in RESULT_CHANNEL_KEYS}}
+    return r
+
+
+def to_flat(rec, where):
+    """Contract section 2a `result` -> internal flat form, checking its structure (layer `record`)."""
+    if rec.get("status") == "error":
+        require(list(rec) == ["status", "error"] and list(rec["error"]) == ["code", "offset"], "record",
+                f"{where}: error result keys")
+        return rec
+    keys = ["status", "tokenCount", "tokens"] + (["masked"] if "masked" in rec else []) + ["channels"]
+    require(list(rec) == keys, "record", f"{where}: result keys {list(rec)} != {keys}")
+    toks = rec["tokens"]
+    require(rec["tokenCount"] == len(toks), "record", f"{where}: tokenCount {rec['tokenCount']} != {len(toks)} tokens")
+    for i, t in enumerate(toks):
+        require(list(t) == ["class", "text", "span"] and t["class"] == "word", "record",
+                f"{where}: token {i} must be exactly class (word), text, span")
+    chans = rec["channels"]
+    require(list(chans) == CHANNELS, "record", f"{where}: channels {list(chans)} != declared list {CHANNELS}")
+    require(list(chans["exact"]) == RESULT_CHANNEL_KEYS, "record", f"{where}: exact channel keys")
+    for ch in CHANNELS[1:]:
+        require(list(chans[ch]) == ["values"] + RESULT_CHANNEL_KEYS, "record", f"{where}: {ch} channel keys")
+        require(len(chans[ch]["values"]) == len(toks), "record", f"{where}: {ch} has one value per token")
+    flat = {"status": rec["status"]}
+    if "masked" in rec:
+        flat["masked"] = rec["masked"]
+    flat["tokens"] = [{"text": t["text"], "span": t["span"], "folded": chans["folded"]["values"][i],
+                       "skeleton": chans["skeleton"]["values"][i]} for i, t in enumerate(toks)]
+    flat["exact"] = dict(chans["exact"])
+    for ch in CHANNELS[1:]:
+        flat[ch] = dict(chans[ch])
+    return flat
+
+
 def compare(exp, got, where):
-    """Compare recomputed vs recorded, naming the first differing layer."""
+    """Compare a recomputed (flat) result with a recorded section 2a result, naming the first differing layer."""
     if exp.get("status") == "error" or got.get("status") == "error":
         require(exp == got, "error", f"{where}: expected {exp.get('error') or exp['status']}, vector has {got.get('error') or got.get('status')}")
         return
+    got = to_flat(got, where)
     require(set(got) == set(exp), "record", f"{where}: result keys {sorted(got)} != {sorted(exp)}")
     if "masked" in exp:
         require(exp["masked"] == got["masked"], "markdown", f"{where}: masked {got['masked']} != {exp['masked']}")
@@ -630,10 +678,11 @@ def check_relation(T, files, pair):
                 f"pair {pair['a']} / {pair['b']}: not an accepted input paired with a rejected one")
         return
     for ch in pair["channels"]:
-        ha = [g["hash"] for g in a["result"][ch]["kgrams"]]
-        hb = [g["hash"] for g in b["result"][ch]["kgrams"]]
-        fa = {g["hash"] for g in a["result"][ch]["fingerprints"]}
-        fb = {g["hash"] for g in b["result"][ch]["fingerprints"]}
+        ca, cb = a["result"]["channels"][ch], b["result"]["channels"][ch]
+        ha = [g["hash"] for g in ca["kgrams"]]
+        hb = [g["hash"] for g in cb["kgrams"]]
+        fa = {g["hash"] for g in ca["fingerprints"]}
+        fb = {g["hash"] for g in cb["fingerprints"]}
         rel = pair["relation"]
         if rel == "identical-hashes":
             ok = ha == hb and len(ha) > 0
@@ -676,9 +725,9 @@ def check_file(T, name, doc, configs, all_vectors):
         stats["tokens"] += len(got["tokens"])
         stats["masked"] += len(got.get("masked", []))
         for ch in CHANNELS:
-            stats["fps"] += len(got[ch]["fingerprints"])
-            stats["partial"] += got[ch]["partialWindow"]
-            hs = [g["hash"] for g in got[ch]["kgrams"]]
+            stats["fps"] += len(got["channels"][ch]["fingerprints"])
+            stats["partial"] += got["channels"][ch]["partialWindow"]
+            hs = [g["hash"] for g in got["channels"][ch]["kgrams"]]
             w = cfg["window"]
             for s in range(max(0, len(hs) - w + 1)):
                 win = hs[s:s + w]
@@ -689,7 +738,13 @@ def check_file(T, name, doc, configs, all_vectors):
 
 
 def mutate(T, cfg, result, op):
-    r = copy.deepcopy(result)
+    """Apply a rejection's mutation to a section 2a result; returns a section 2a result."""
+    if op["op"] == "error":
+        return {"status": "error", "error": {"code": op["code"], "offset": op["offset"]}}
+    return to_record_result(_mutate_flat(T, cfg, to_flat(copy.deepcopy(result), "mutate"), op))
+
+
+def _mutate_flat(T, cfg, r, op):
     kind = op["op"]
     toks = r.get("tokens")
     if kind == "set":
@@ -817,6 +872,182 @@ def run_wrong_implementations(T, configs, vectors):
     return rows
 
 
+# ---------------------------------------------------------------- records (contract section 2a)
+
+RECORD_VERSION = "traceweave-extraction-record-draft-1"
+ENVELOPE = ["recordVersion", "profile", "profileVersion", "configSha256", "inputSha256", "inputLength", "result"]
+RECORDS_FILE = "records-text-plain.json"
+
+
+def rec_json(x):
+    """Canonical record serialization (contract section 2a rules 1-4), written independently."""
+    if x is None:
+        return "null"
+    if x is True:
+        return "true"
+    if x is False:
+        return "false"
+    if type(x) is int:
+        return str(x)
+    if type(x) is str:
+        out = []
+        for ch in x:
+            o = ord(ch)
+            if ch == '"':
+                out.append('\\"')
+            elif ch == "\\":
+                out.append("\\\\")
+            elif ch in "\b\t\n\f\r":
+                out.append({"\b": "\\b", "\t": "\\t", "\n": "\\n", "\f": "\\f", "\r": "\\r"}[ch])
+            elif o < 0x20:
+                out.append("\\u%04x" % o)
+            else:
+                out.append(ch)
+        return '"' + "".join(out) + '"'
+    if type(x) is list:
+        return "[" + ",".join(rec_json(v) for v in x) + "]"
+    if type(x) is dict:  # insertion order is the contract's key order
+        return "{" + ",".join(rec_json(k) + ":" + rec_json(v) for k, v in x.items()) + "}"
+    raise ValueError(f"not a record value: {x!r}")
+
+
+def expected_record(T, cfg_raw, data):
+    """Record bytes for (configuration bytes, input bytes): contract section 2a and extraction Q10."""
+    try:
+        cfg = validate_config(cfg_raw)
+    except ValueError:
+        env = {"recordVersion": RECORD_VERSION, "profile": None, "profileVersion": None,
+               "configSha256": hashlib.sha256(cfg_raw).hexdigest(), "inputSha256": None, "inputLength": None,
+               "result": {"status": "error", "error": {"code": "unsupported-config", "offset": None}}}
+        return (rec_json(env) + "\n").encode("utf-8")
+    res = to_record_result(expected_result(T, cfg, data))
+    unread = res["status"] == "error" and res["error"]["code"] == "input-too-large"
+    env = {"recordVersion": RECORD_VERSION, "profile": cfg["profile"], "profileVersion": cfg["profileVersion"],
+           "configSha256": hashlib.sha256(cfg_raw).hexdigest(),
+           "inputSha256": None if unread else hashlib.sha256(data).hexdigest(),
+           "inputLength": None if unread else len(data), "result": res}
+    return (rec_json(env) + "\n").encode("utf-8")
+
+
+def consumer_check(rb):
+    """Validate record bytes without the source: framing, strict JSON, canonical bytes, A3 structure."""
+    require(rb.endswith(b"\n") and rb.count(b"\n") == 1 and b"\r" not in rb, "record", "one line, one final LF")
+
+    def no_dupes(pairs):
+        require(len({k for k, _ in pairs}) == len(pairs), "record", "duplicate key")
+        return dict(pairs)
+    try:
+        r = json.loads(rb[:-1].decode("utf-8"), object_pairs_hook=no_dupes,
+                       parse_float=lambda x: (_ for _ in ()).throw(ValueError("float")))
+    except (ValueError, UnicodeDecodeError) as exc:
+        raise CheckError("record", f"not strict UTF-8 JSON ({exc})") from None
+    require(list(r) == ENVELOPE and r["recordVersion"] == RECORD_VERSION, "record", "envelope keys")
+    require((rec_json(r) + "\n").encode("utf-8") == rb, "record", "bytes are not canonical")
+    if r["profile"] is not None:
+        require(PROFILES.get(r["profile"]) == r["profileVersion"], "record", "profile/version not implemented")
+    res = r["result"]
+    to_flat(res, "record")
+    if res["status"] == "error":
+        code = res["error"]["code"]
+        require(code in ERROR_CODES | {"unsupported-config"}, "record", "error code outside the closed list")
+        require((r["inputSha256"] is None) == (code in ("unsupported-config", "input-too-large")), "record",
+                "inputSha256 is null exactly for unsupported-config and input-too-large")
+        require((r["profile"] is None) == (code == "unsupported-config"), "record", "profile null only for unsupported-config")
+    return r
+
+
+def check_records(T, vectors):
+    """records-text-plain.json: recompute every record from its configuration and input bytes."""
+    doc = json.loads((HERE / RECORDS_FILE).read_text(encoding="utf-8"))
+    n = 0
+    sources = 0
+    for e in doc["records"]:
+        where = f"{RECORDS_FILE}:{e['id']}"
+        cfg_raw = (HERE / e["configFile"]).read_bytes() if "configFile" in e else base64.b64decode(e["configBase64"])
+        require(hashlib.sha256(cfg_raw).hexdigest() == e["configSha256"], "record", f"{where}: configSha256")
+        data = base64.b64decode(e["inputBase64"])
+        rb = expected_record(T, cfg_raw, data)
+        require(rb == e["expectedRecordText"].encode("utf-8"), "record", f"{where}: record bytes differ from recomputation")
+        require(hashlib.sha256(rb).hexdigest() == e["expectedRecordSha256"], "record", f"{where}: record SHA-256")
+        r = consumer_check(rb)
+        require(r["configSha256"] == e["configSha256"], "record", f"{where}: record configSha256")
+        if e.get("source"):
+            v = vectors[e["source"].split("#", 1)[1]]
+            require(base64.b64decode(v["inputBase64"]) == data and r["result"] == v["result"], "record",
+                    f"{where}: result differs from its source vector")
+            sources += 1
+        n += 1
+    return n, sources, doc
+
+
+RECORD_CORRUPTIONS = [
+    # (id, function of the record text) -> must fail consumer_check
+    ("per-token-folded", lambda t: t.replace('"class":"word","text":"Shared","span":[0,6]}',
+                                             '"class":"word","text":"Shared","span":[0,6],"folded":"shared"}', 1)),
+    ("channels-reordered", lambda t: _swap_channels(t)),
+    ("tokenCount-off-by-one", lambda t: t.replace('"tokenCount":23', '"tokenCount":22', 1)),
+    ("class-not-word", lambda t: t.replace('"class":"word"', '"class":"WORD"', 1)),
+    ("values-in-exact", lambda t: t.replace('"exact":{"kgrams"', '"exact":{"values":[],"kgrams"', 1)),
+    ("skeleton-channel-dropped", lambda t: t[:t.index(',"skeleton":{')] + "}}}\n"),
+    ("non-ascii-escaped", lambda t: t.replace("\u00e9", "\\u00e9", 1)),
+    ("missing-final-lf", lambda t: t[:-1]),
+    ("pretty-whitespace", lambda t: t.replace('{"recordVersion":', '{ "recordVersion": ', 1)),
+    ("inputBytes-name", lambda t: t.replace('"inputLength":', '"inputBytes":', 1)),
+    ("sorted-keys", lambda t: json.dumps(json.loads(t), sort_keys=True, separators=(",", ":"), ensure_ascii=False) + "\n"),
+    ("unsupported-config-with-profile", lambda t: t.replace('"profile":null,"profileVersion":null',
+                                                            '"profile":"text-plain","profileVersion":"draft-1"', 1)),
+]
+
+
+def _swap_channels(t):
+    r = json.loads(t)
+    c = r["result"]["channels"]
+    r["result"]["channels"] = {"exact": c["exact"], "skeleton": c["skeleton"], "folded": c["folded"]}
+    return rec_json(r) + "\n"
+
+
+def run_record_corruptions(doc):
+    by_id = {e["id"]: e["expectedRecordText"] for e in doc["records"]}
+    targets = {"skeleton-channel-dropped": "rec-plain-reflow-a", "non-ascii-escaped": "rec-plain-nfc",
+               "unsupported-config-with-profile": "rec-cfg-text-two-channels"}
+    rejected, failures = 0, []
+    for cid, fn in RECORD_CORRUPTIONS:
+        text = by_id[targets.get(cid, "rec-plain-reflow-a")]
+        bad = fn(text)
+        if bad == text:
+            failures.append(f"{cid}: corruption did not change the record")
+            continue
+        try:
+            consumer_check(bad.encode("utf-8"))
+            failures.append(f"{cid}: corrupted record accepted")
+        except CheckError:
+            rejected += 1
+    return rejected, len(RECORD_CORRUPTIONS), failures
+
+
+def matching_checker_records(doc):
+    """Optional: the catalogue/report contract's own record validator (written by another author)."""
+    path = HERE.parent / "matching-vectors" / "check_matching.py"
+    schema = HERE.parent / "matching-vectors" / "record.schema.json"
+    if not path.exists() or not schema.exists():
+        return None
+    import importlib.util
+    sys.dont_write_bytecode = True
+    spec = importlib.util.spec_from_file_location("check_matching_ext", path)
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    rec_schema = json.loads(schema.read_text(encoding="utf-8"))
+    ok = 0
+    errs = []
+    for e in doc["records"]:
+        try:
+            m.check_record_bytes(e["expectedRecordText"].encode("utf-8"), rec_schema)
+            ok += 1
+        except Exception as exc:  # report, do not hide
+            errs.append(f"{e['id']}: {exc}")
+    return ok, len(doc["records"]), errs
+
+
 def normalization_test(T, path):
     raw = Path(path).read_bytes()
     digest = hashlib.sha256(raw).hexdigest()
@@ -913,6 +1144,28 @@ def main(argv):
     print(f"{wstatus} wrong-implementation self-test: rejected {len(caught)}/{len(applicable)}"
           + (f" ({len(rows) - len(applicable)} not applicable)" if len(rows) != len(applicable) else ""))
     ok = ok and wstatus == "PASS"
+    nrec, nsrc, rdoc = check_records(T, vectors)
+    print(f"PASS {RECORDS_FILE}: {nrec} text-plain records recomputed byte for byte from (configuration, input) "
+          f"with SHA-256; {nsrc} equal their source vector's result")
+    rr, rn, rf = run_record_corruptions(rdoc)
+    for f in rf:
+        print(f"FAIL record corruption {f}")
+    print(f"{'PASS' if not rf else 'FAIL'} record corruption self-test: rejected {rr}/{rn}")
+    ok = ok and not rf
+    mc = matching_checker_records(rdoc)
+    if mc is None:
+        print("SKIP matching-vectors/check_matching.py not found; record bytes not validated by it")
+    else:
+        # check_matching.py has no text-plain profile entry, so its closed-error-code lookup refuses every
+        # text-plain error record. That refusal is reported, not counted as a record defect.
+        unreg = [e for e in mc[2] if e.endswith("error code not in the profile's closed list")]
+        other = [e for e in mc[2] if e not in unreg]
+        for e in other:
+            print(f"FAIL matching checker: {e}")
+        print(f"{'PASS' if not other else 'FAIL'} record bytes accepted by matching-vectors/check_matching.py "
+              f"check_record_bytes + record.schema.json: {mc[0]}/{mc[1]}; refused only because that checker has no "
+              f"text-plain profile registered (error-code lookup): {len(unreg)}; other refusals: {len(other)}")
+        ok = ok and not other
     if "--normalization-test" in argv:
         n, bad = normalization_test(T, argv[argv.index("--normalization-test") + 1])
         print(f"{'PASS' if bad == 0 else 'FAIL'} NormalizationTest.txt (17.0.0): NFC and NFD checks {n - bad}/{n}")

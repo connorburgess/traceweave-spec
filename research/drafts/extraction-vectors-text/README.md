@@ -12,6 +12,7 @@ Status: revised after the [clean-room review](../../reviews/extraction-profile-t
 | `text-plain.json` | 55 vectors (46 accepted, 9 errors) and 17 pair relations |
 | `text-markdown.json` | 21 vectors (19 accepted, 2 errors) and 1 pair relation |
 | `limits-text.json` | 3 vectors: exactly the limit, over it, and over it with an invalid byte (the size check runs first) |
+| `records-text-plain.json` | 60 canonical extraction records (catalogue and report contract §2a, A3) with SHA-256: every `text-plain` and limit vector, plus 2 `unsupported-config` records. Each names its configuration (`configFile` or `configBase64`, plus `configSha256`) |
 | `rejections.json` | 70 paired rejections: one deliberately wrong expected result for each of the 66 accepted vectors, plus 4 for error vectors |
 | `text-tables-17.0.0.json` | Derived Unicode 17.0.0 data (profile §4), SHA-256 `49eb0304…80ae53f4` |
 | `check_text_vectors.py` | Independent checker, standard library only |
@@ -19,14 +20,15 @@ Status: revised after the [clean-room review](../../reviews/extraction-profile-t
 | `harness/build_vectors.py` | Writes every vector, configuration and rejection file from the hand-written expectations |
 | `harness/crosscheck_text.py`, `harness/go/`, `harness/rust/` | Cross-check against Go x/text and Rust Unicode crates, offline, with `go.sum` and `Cargo.lock` |
 
-**Fixture layout, not a record format.** The layout below is for these fixtures only. The canonical record for a three-channel profile is provisional until the catalogue and report contract's amendment lands (profile §10).
+**Record shape.** Each vector's `result` is the `result` of the canonical extraction record ([contract §2a](../catalogue-report-contract.md#2a-extraction-record-traceweave-extraction-record-draft-1)), with the declared channel list `exact`, `folded`, `skeleton` ([§2b, A3](../catalogue-report-contract.md#2b-declared-channel-lists-amendment-a3)). For `text-plain`, the full record bytes are in `records-text-plain.json`. For `text-markdown`, `masked` sits after `tokens` as a proposed placement, which is open for its re-review (profile §10), so no Markdown records are given.
 
 **Vector fields.** Every vector has `id`, `tags` (its `class:` labels), `description`, `derivation` (always `hand`), `config` (the file whose bytes apply), `inputBase64` (the authoritative bytes) and `inputText`. `inputText` is `null` when the bytes are not UTF-8; `inputDisplay` then gives an escaped form. The `result` is one of these:
 - **`status: "error"`** with `error.code` and `error.offset`, and nothing else.
 - **`status: "ok"` or `"insufficient-tokens"`** with:
-  - `tokens`: each has `text` (exact), half-open byte `span` into the original input, `folded` and `skeleton`;
-  - for `text-markdown`, `masked`: the merged masked byte ranges;
-  - one block per channel, `exact`, `folded` and `skeleton`, each with `kgrams` (position, 16-hex-digit hash, span), `windowSelections`, `partialWindow` and `fingerprints`. `folded` and `skeleton` also list `values`.
+  - `tokenCount`;
+  - `tokens`: each is `class` (always `word`), `text` (exact) and a half-open byte `span` into the original input;
+  - for `text-markdown` only, `masked`: the merged masked byte ranges (proposed placement);
+  - `channels`, in order `exact`, `folded`, `skeleton`. `exact` holds `kgrams` (position, 16-hex-digit hash, span), `windowSelections`, `partialWindow` and `fingerprints`. `folded` and `skeleton` put `values`, one per token, first and then the same four keys. The folded and skeleton value of token i is entry i of the channel's `values`.
 
 **Pairs.** Each pair names two vectors, a list of channels and a relation:
 - `identical-hashes`: equal, non-empty k-gram hash lists;
@@ -96,8 +98,13 @@ PASS limits-text.json vectors=3 tokens=3 errors=2 masked-ranges=0 fingerprints(a
 PASS pairs=18 classes=28 total-vectors=79
 PASS rejections.json: 70/70 corruptions rejected at their declared layer (error=5, fold=14, hash=1, markdown=14, segmentation=25, skeleton=6, status=3, winnow=2); positive vectors with a paired rejection: 66/66
 PASS wrong-implementation self-test: rejected 14/14
+PASS records-text-plain.json: 60 text-plain records recomputed byte for byte from (configuration, input) with SHA-256; 58 equal their source vector's result
+PASS record corruption self-test: rejected 12/12
+PASS record bytes accepted by matching-vectors/check_matching.py check_record_bytes + record.schema.json: 51/60; refused only because that checker has no text-plain profile registered (error-code lookup): 9; other refusals: 0
 PASS NormalizationTest.txt (17.0.0): NFC and NFD checks 120204/120204
 ```
+
+**Records.** Each record is recomputed from its configuration and input bytes, written with the checker's own serializer (the builder uses `json.dumps`), and compared with `expectedRecordText` and `expectedRecordSha256`. A consumer-side check (strict parse, canonical re-serialization, A3 structure and null rules) must reject 12 record corruptions. The records are also passed to the catalogue and report contract's `check_record_bytes` with `record.schema.json`. It refuses the 9 error records only because it has no `text-plain` profile registered for its error-code lookup; that refusal is reported, not hidden.
 
 **What it recomputes.** Everything is recomputed from the input bytes and the pinned table: configuration validation, the size, UTF-8 and NUL checks in order, the Markdown masks, character classes and the token rule, NFD, NFKC_CF, NFC, the separator filter, the skeleton, the k-gram bytes, the hashes, rightmost-minimum winnowing, partial windows, fingerprints, `input[span] == text` and the pair relations.
 

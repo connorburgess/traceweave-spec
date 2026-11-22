@@ -13,62 +13,62 @@
    "inputText": "sixteen byte txt",
    "result": {
     "status": "insufficient-tokens",
+    "tokenCount": 3,
     "tokens": [
      {
+      "class": "word",
       "text": "sixteen",
       "span": [
        0,
        7
-      ],
-      "folded": "sixteen",
-      "skeleton": "sixteen"
+      ]
      },
      {
+      "class": "word",
       "text": "byte",
       "span": [
        8,
        12
-      ],
-      "folded": "byte",
-      "skeleton": "byte"
+      ]
      },
      {
+      "class": "word",
       "text": "txt",
       "span": [
        13,
        16
-      ],
-      "folded": "txt",
-      "skeleton": "txt"
+      ]
      }
     ],
-    "exact": {
-     "kgrams": [],
-     "windowSelections": [],
-     "partialWindow": false,
-     "fingerprints": []
-    },
-    "folded": {
-     "values": [
-      "sixteen",
-      "byte",
-      "txt"
-     ],
-     "kgrams": [],
-     "windowSelections": [],
-     "partialWindow": false,
-     "fingerprints": []
-    },
-    "skeleton": {
-     "values": [
-      "sixteen",
-      "byte",
-      "txt"
-     ],
-     "kgrams": [],
-     "windowSelections": [],
-     "partialWindow": false,
-     "fingerprints": []
+    "channels": {
+     "exact": {
+      "kgrams": [],
+      "windowSelections": [],
+      "partialWindow": false,
+      "fingerprints": []
+     },
+     "folded": {
+      "values": [
+       "sixteen",
+       "byte",
+       "txt"
+      ],
+      "kgrams": [],
+      "windowSelections": [],
+      "partialWindow": false,
+      "fingerprints": []
+     },
+     "skeleton": {
+      "values": [
+       "sixteen",
+       "byte",
+       "txt"
+      ],
+      "kgrams": [],
+      "windowSelections": [],
+      "partialWindow": false,
+      "fingerprints": []
+     }
     }
    }
   },

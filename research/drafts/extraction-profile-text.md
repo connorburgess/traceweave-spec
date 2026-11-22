@@ -16,7 +16,7 @@ The profile is a new lexer front end hosted by the [draft extraction contract](e
 - **Spans:** half-open `[start, end)` byte offsets into the original input, never splitting a UTF-8 sequence.
 - **k-gram hashing** ([§7](extraction-contract.md#7-k-grams-and-hashing)): the same length-prefixed layout and `sha256-first8-u64be`, unkeyed. Only the domain string and the class string differ (§9).
 - **Winnowing** ([§8](extraction-contract.md#8-winnowing-selection)): rightmost minimum, a partial window when 1 ≤ m < w, every selected position kept.
-- **The record's logical fields** ([§9](extraction-contract.md#9-extraction-record-logical-fields)), including the `null` rules for `unsupported-config` and `input-too-large`. The wire layout for a three-channel profile is **provisional** (§10).
+- **The record's logical fields** ([§9](extraction-contract.md#9-extraction-record-logical-fields)), including the `null` rules for `unsupported-config` and `input-too-large`. The record bytes are the catalogue and report contract's canonical extraction record ([§2a](catalogue-report-contract.md#2a-extraction-record-traceweave-extraction-record-draft-1)) with this profile's declared channel list ([§2b, amendment A3](catalogue-report-contract.md#2b-declared-channel-lists-amendment-a3)); see §10.
 - **Configuration bytes, validation steps 1–5 and 8, and bounds** ([§10](extraction-contract.md#10-configuration-record), [§10a](extraction-contract.md#10a-resource-bounds-and-complexity)): `k ≤ 16`, `window ≤ 128`, `maxInputBytes ≤ 8 MiB`, linear time and memory.
 
 **Different from the code profiles, deliberately:**
@@ -248,9 +248,22 @@ Winnowing, `windowSelections`, `partialWindow` and the fingerprints follow contr
 
 ## 10. Record
 
-**The wire layout is provisional.** This profile fixes the *values* of contract §9's logical fields: status, error code and offset, each token's exact text and span, each channel's values, k-grams, selections, partial-window flag and fingerprints, and for `text-markdown` the masked byte ranges. It does **not** define a record layout. The catalogue and report contract's canonical record (A1) currently fixes exactly the channels `exact` and `normalized`. The amendment for profiles with more than two channels (review §4: channels in configuration order, tokens as `class`, `text`, `span` with class `word`, `tokenCount`, and `masked` for Markdown) is being made by that contract's author. This profile will align with it when it lands.
+**Declared channel list (catalogue and report contract §2b, A3): `["exact","folded","skeleton"]`, in that order, for both profiles.** The configuration's `channels` equals it, which binds it into `configSha256`. Comparisons run on all three channels. Comparing a subset, for example `folded` only, is not allowed yet: that is the contract's OD-C27, so OD-T5′ resolves to (a), three channels.
 
-Until then, the vector files use a **fixture layout only**: per-token `text`, `span`, `folded` and `skeleton`; top-level `exact`, `folded` and `skeleton` blocks; and `masked`. An implementation MUST NOT treat that layout as a record or catalogue format. The values in it are what the amended record will carry.
+**Record bytes (`text-plain`).** The canonical record is contract [§2a](catalogue-report-contract.md#2a-extraction-record-traceweave-extraction-record-draft-1) with no profile-specific fields:
+- **Envelope:** `recordVersion` `traceweave-extraction-record-draft-1`, `profile`, `profileVersion`, `configSha256`, `inputSha256`, `inputLength`, `result`.
+- **`result`:**
+  - Errors are `{"status":"error","error":{"code","offset"}}`.
+  - Otherwise the keys are `status`, `tokenCount`, `tokens` and `channels`.
+- **Tokens:** each token is `class`, `text`, `span`, and `class` is always `word`. There are no per-token folded or skeleton fields; those are the channel values.
+- **Channels:** `channels` has the blocks `exact` (`kgrams`, `windowSelections`, `partialWindow`, `fingerprints`), then `folded` and `skeleton` (each `values` first, then the same four keys). `values` has one entry per token; this profile declares no exclusions, so there is no `tokenIndices`.
+- **Serialization:** contract §2a: fixed key order, no insignificant whitespace, raw UTF-8 for non-ASCII, one final LF.
+
+[`records-text-plain.json`](extraction-vectors-text/records-text-plain.json) gives the expected record bytes and their SHA-256 for every `text-plain` and limit vector, plus 2 `unsupported-config` records: 60 records. The vector files carry the same `result` objects.
+
+**Unchanged by alignment.** k-gram hashing already used the class string `word` (§9) and the same values, so no hash, selection or fingerprint changed. All 79 vectors' tokens, spans, values, k-grams and fingerprints are identical to the previous commit, so the profile versions stay (`text-plain` `draft-1`, `text-markdown` `draft-2`).
+
+**`text-markdown`: `masked` placement is open, for its re-review.** Its vectors put `masked` (the merged masked byte ranges) in `result` after `tokens` and before `channels`, which is the proposed placement. Contract §2a has no such key yet, so no `text-markdown` record vectors are given.
 
 ## 11. Configuration
 
@@ -265,7 +278,7 @@ The configuration digests are:
 - `text-markdown` (differs in `profile` and `"profileVersion":"draft-2"`): `3bf7760a91297a5077f9fb0de3c119cb0a5d14b163190d640814a8735de23203`. The draft-1 digest, `0be5e93c…b7c4`, is superseded;
 - the limit-vector configuration (`text-plain` with `maxInputBytes` 16): `16d15b33a3b0a117a155d1919f4331e94fce37af7cfbf285952f20fc22f4ac2a`.
 
-Validation is contract §10 steps 1–4 and 8 unchanged, and these steps:
+Validation is contract §10 steps 1–4 and 8 unchanged, and the steps below. `channels` is the declared channel list of §10.
 - **5.** `k` is an integer in `1 … 16`, `window` in `1 … 128` and `maxInputBytes` in `1 … 8388608` (8 MiB), each written in decimal without a sign, leading zeros or exponent. These are contract §10a's bounds, restated here.
 - **6.** `channels` is exactly `["exact","folded","skeleton"]`.
 - **7.** `contract` is `traceweave-text-winnow-draft-1`, `hash` is `sha256-first8-u64be`, and `(profile, profileVersion)` is `(text-plain, draft-1)` or `(text-markdown, draft-2)`.
@@ -374,8 +387,29 @@ PASS limits-text.json vectors=3 tokens=3 errors=2 …
 PASS pairs=18 classes=28 total-vectors=79
 PASS rejections.json: 70/70 corruptions rejected at their declared layer (error=5, fold=14, hash=1, markdown=14, segmentation=25, skeleton=6, status=3, winnow=2); positive vectors with a paired rejection: 66/66
 PASS wrong-implementation self-test: rejected 14/14
+PASS records-text-plain.json: 60 text-plain records recomputed byte for byte from (configuration, input) with SHA-256; 58 equal their source vector's result
+PASS record corruption self-test: rejected 12/12
+PASS record bytes accepted by matching-vectors/check_matching.py check_record_bytes + record.schema.json: 51/60; refused only because that checker has no text-plain profile registered (error-code lookup): 9; other refusals: 0
 PASS NormalizationTest.txt (17.0.0): NFC and NFD checks 120204/120204
 ```
+
+**Records.** The checker writes each record with its own serializer and compares it with the bytes and SHA-256 in `records-text-plain.json`. The builder writes those with Python's `json.dumps`, a separate serializer. A consumer-side check then parses each record and re-serializes it. It also checks the A3 structure: the declared channel order, `class` `word`, `tokenCount`, one value per token, no `values` in `exact`, and the null rules.
+
+The 12 record corruptions must fail that check without the expected bytes:
+- per-token `folded`;
+- reordered channels;
+- a wrong `tokenCount`;
+- class not `word`;
+- `values` in `exact`;
+- a dropped `skeleton` channel;
+- escaped non-ASCII;
+- a missing final LF;
+- whitespace;
+- `inputBytes`;
+- sorted keys;
+- an `unsupported-config` record with a profile.
+
+The catalogue and report contract's own `check_record_bytes` and `record.schema.json`, written by another author, accept 51 of the 60 records. The 9 it refuses are exactly the `text-plain` error records, because that checker has no `text-plain` profile registered for its closed-error-code lookup. Registering it there is the catalogue and report contract author's change.
 
 **Cross-check, run 2026-11-22 on the revised vectors.** Versions read from the built binaries:
 - Go oracle: `unicode=17.0.0 norm=17.0.0 cases=17.0.0`.
@@ -416,7 +450,7 @@ The 8 vectors added in this revision matched the checker on the first run. One w
 | OD-T2 | (a) Ordered-list numbers and reference labels stay tokens; autolinks, destinations, tags, comments, entities, front matter and fences are masked | Fewest rules that make `md-stripped` equal `md-syntax` |
 | OD-T3′ | (a) One token per Ideographic code point; other scripts without spaces get no segmentation, a stated TXT.7 limit to be measured | Pinned property only; no dictionary data |
 | OD-T4′ | (a) Accept a BOM; it is ignorable; MD-1 skips it | Common in text files; offsets are unaffected |
-| OD-T5′ | (a) Always three channels, **provided** the catalogue/report amendment lets comparisons choose modes; otherwise (b) also allow `["exact","folded"]` | The homoglyph class needs the skeleton; comparison chooses channels |
+| OD-T5′ | (a) Always three channels, the declared list `exact`, `folded`, `skeleton` (contract §2b, A3). Comparing a subset waits for the contract's OD-C27 | The homoglyph class needs the skeleton. A3 defines records, catalogues, modes and reports over the declared list |
 | OD-T6 | (a) Domain `traceweave/text-kgram/draft-1`; class constant `word`; contract `traceweave-text-winnow-draft-1` | Keeps the §7 layout; an explicit family name |
 | OD-T7 | (a) k = 8, w = 8, experimental | §11 |
 | OD-T8′ | (a) Default_Ignorable code points, ZWSP included, are transparent inside words, plus the stated limit for non-ignorable format characters (§13) | Zero-width insertion must not split words; lane 09 transformation |
@@ -427,7 +461,7 @@ The 8 vectors added in this revision matched the checker on the first run. One w
 | Staging | `text-plain` first, frozen for stage-1 implementation (§17); `text-markdown` stays a draft until re-reviewed | Coordinator decision, following the review |
 
 **Still open, with options:**
-- **Record layout:** provisional until the catalogue/report contract's amendment for more than two channels lands (§10). Blocking for any catalogue or report.
+- **`text-markdown` record:** where `masked` goes in the contract §2a record. Proposed: in `result`, after `tokens` and before `channels`, as the vectors already have it. To be settled in its re-review, together with a contract §2a amendment.
 - **OD-T2′ Markdown details** (each is a one-rule change and a new version):
   - mask ordered-list markers;
   - mask reference labels;
@@ -496,12 +530,27 @@ The vectors also cover ties, reflow, case, punctuation, numbers, hyphenation, pa
 | `config-text-plain.json` | `35c1f63cc2f669a54acb5f9792614721431943b2fd626ffb88982e53bd37323e` |
 | `config-text-plain-limit16.json` | `16d15b33a3b0a117a155d1919f4331e94fce37af7cfbf285952f20fc22f4ac2a` |
 | `text-tables-17.0.0.json` | `49eb0304ece1f9351f4db79ddf853fdc3bce353d4a833f7c4f9424bf80ae53f4` |
-| `text-plain.json` (55 vectors) | `3888ee6f29f018b8449a518f4fa42494d8dcf50d5da21971ccda716e7f9cf599` |
-| `limits-text.json` (3 vectors) | `29ec0cc75ae0e3fe64328da672e605a61b24552a064ac6c4265f78f23bae98b8` |
+| `text-plain.json` (55 vectors, §2a `result` shape) | `8690f5aea12a26e37ba3aa944107671075edf0103cd72db640b437042e195cb8` |
+| `limits-text.json` (3 vectors) | `cb869b751ec98c4269fb517433e8f53dad665e6f40b09b541cdd9949dc99500e` |
+| `records-text-plain.json` (60 canonical records with SHA-256) | `4b58fba3ceaa8234e50db50a1a1bdcec2bfe2e7f465ed395fc3e638a77a78208` |
 
-The freeze covers values, not the record layout: an implementation emits the §10 values in the amended canonical record once that lands. Any change to a `text-plain` channel's bytes for any input needs `draft-2` and a new configuration digest. `text-markdown` draft-2 is **not** frozen: the review's M1 and M2 and the previously unlisted CommonMark differences are fixed or listed here, but they await re-review.
+The two vector-file digests changed from the previous freeze (`3888ee6f…`, `29ec0cc7…`) only because their `result` objects now use the contract §2a layout; no value or hash in them changed. The freeze now covers record bytes too: a stage-1 implementation MUST emit exactly the 60 records of `records-text-plain.json` for their configuration and input bytes. Any change to a `text-plain` channel's bytes for any input needs `draft-2` and a new configuration digest. `text-markdown` draft-2 is **not** frozen: the review's M1 and M2 and the previously unlisted CommonMark differences are fixed or listed here, but they await re-review.
 
 ## 18. Change log
+
+**Record alignment (catalogue and report contract A3, commit `51ba163`):**
+- **Layout:**
+  - The declared channel list is `exact`, `folded`, `skeleton`.
+  - Vector `result` objects now use the contract §2a shape: `tokenCount`, tokens as `class` `word`/`text`/`span`, and `folded`/`skeleton` values only in the channels.
+  - The provisional fixture layout is gone.
+- **New:** `records-text-plain.json`, 60 canonical records with SHA-256.
+- **Checker additions:**
+  - the record writer and the consumer-side record check;
+  - a record corruption self-test (12/12);
+  - validation of the records by the matching checker.
+- **Unchanged:** all hashes and values, and both profile versions.
+- **Changed digests:** `text-plain.json`, `limits-text.json` and `text-markdown.json`, for layout only.
+
 
 **This revision (after the clean-room review at `c6e8f2a`):**
 - **`text-plain` stays `draft-1`. No rule changed:**

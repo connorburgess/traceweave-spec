@@ -875,15 +875,77 @@ def config_negatives():
             "negatives": negs, "boundaryPositives": pos}
 
 
+def record_result(flat):
+    """Flat result -> catalogue/report contract section 2a `result` with the A3 channel list."""
+    if flat["status"] == "error":
+        return flat
+    r = {"status": flat["status"], "tokenCount": len(flat["tokens"]),
+         "tokens": [{"class": "word", "text": t["text"], "span": t["span"]} for t in flat["tokens"]]}
+    if "masked" in flat:  # text-markdown: placement after tokens is proposed, open for its re-review
+        r["masked"] = flat["masked"]
+    keys = ["kgrams", "windowSelections", "partialWindow", "fingerprints"]
+    r["channels"] = {"exact": {k: flat["exact"][k] for k in keys},
+                     "folded": {"values": flat["folded"]["values"], **{k: flat["folded"][k] for k in keys}},
+                     "skeleton": {"values": flat["skeleton"]["values"], **{k: flat["skeleton"][k] for k in keys}}}
+    return r
+
+
+def record_text(cfg_raw, data, result, valid=True):
+    """Canonical record (section 2a) via json.dumps, independent of the checker's hand-written writer."""
+    if valid:
+        cfg = json.loads(cfg_raw)
+        unread = result["status"] == "error" and result["error"]["code"] == "input-too-large"
+        env = {"recordVersion": "traceweave-extraction-record-draft-1", "profile": cfg["profile"],
+               "profileVersion": cfg["profileVersion"], "configSha256": hashlib.sha256(cfg_raw).hexdigest(),
+               "inputSha256": None if unread else hashlib.sha256(data).hexdigest(),
+               "inputLength": None if unread else len(data), "result": result}
+    else:
+        env = {"recordVersion": "traceweave-extraction-record-draft-1", "profile": None, "profileVersion": None,
+               "configSha256": hashlib.sha256(cfg_raw).hexdigest(), "inputSha256": None, "inputLength": None,
+               "result": {"status": "error", "error": {"code": "unsupported-config", "offset": None}}}
+    return json.dumps(env, separators=(",", ":"), ensure_ascii=False) + "\n"
+
+
+def records_doc(negs):
+    out = []
+    for fname in (P, L):
+        for v in VECTORS[fname]:
+            data = base64.b64decode(v["inputBase64"])
+            text = record_text(CONFIGS[v["config"]], data, v["result"])
+            out.append({"id": "rec-" + v["id"], "tags": v["tags"], "description": v["description"],
+                        "source": f"{fname}#{v['id']}", "derivation": "hand", "configFile": v["config"],
+                        "configSha256": hashlib.sha256(CONFIGS[v["config"]]).hexdigest(), "inputBase64": v["inputBase64"],
+                        "expectedRecordSha256": hashlib.sha256(text.encode()).hexdigest(), "expectedRecordText": text})
+    reflow = next(v for v in VECTORS[P] if v["id"] == "plain-reflow-a")
+    for nid in ("cfg-text-two-channels", "cfg-text-markdown-draft-1"):
+        raw = next(n for n in negs["negatives"] if n["id"] == nid)["configText"].encode()
+        text = record_text(raw, b"", None, valid=False)
+        out.append({"id": "rec-" + nid, "tags": ["unsupported-config"],
+                    "description": f"Rejected configuration {nid} with the plain-reflow-a input: unsupported-config, input not examined.",
+                    "source": None, "derivation": "hand", "configBase64": base64.b64encode(raw).decode(),
+                    "configSha256": hashlib.sha256(raw).hexdigest(), "inputBase64": reflow["inputBase64"],
+                    "expectedRecordSha256": hashlib.sha256(text.encode()).hexdigest(), "expectedRecordText": text})
+    return {"recordVersion": "traceweave-extraction-record-draft-1",
+            "note": "Canonical extraction records (catalogue/report contract section 2a, amendment A3) for text-plain draft-1 "
+                    "and its limit configuration, derived from the hand-derived vectors without new hand work. text-markdown "
+                    "records are deferred until its re-review settles where `masked` goes.",
+            "records": out}
+
+
 def main():
     resolve()
     for name, raw in CONFIGS.items():
         (OUT / name).write_bytes(raw)
+    for vs in VECTORS.values():
+        for v in vs:
+            v["result"] = record_result(v["result"])
+    negs = config_negatives()
+    dump(OUT / "records-text-plain.json", records_doc(negs))
     for name, vs in VECTORS.items():
         dump(OUT / name, {"profileDraft": "research/drafts/extraction-profile-text.md", "vectors": vs, "pairs": PAIRS[name]})
     dump(OUT / "rejections.json", {"description": "Paired rejections: deliberately wrong expected results. Hashes, selections and fingerprints are recomputed after the mutation so that only the declared layer is wrong. check_text_vectors.py MUST reject each at that layer.",
                                    "rejections": REJECTIONS})
-    dump(OUT / "config-negative-text.json", config_negatives())
+    dump(OUT / "config-negative-text.json", negs)
     n = sum(len(v) for v in VECTORS.values())
     print(f"wrote {n} vectors, {len(REJECTIONS)} rejections")
 

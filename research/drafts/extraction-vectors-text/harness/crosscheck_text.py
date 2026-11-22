@@ -136,7 +136,8 @@ def main(argv):
     vectors = []
     for name in C.VECTOR_FILES:
         vectors += json.loads((ROOT / name).read_text())["vectors"]
-    toks = [t for v in vectors if v["result"]["status"] != "error" for t in v["result"]["tokens"]]
+    flat = {v["id"]: C.to_flat(v["result"], v["id"]) for v in vectors}
+    toks = [t for v in vectors if v["result"]["status"] != "error" for t in flat[v["id"]]["tokens"]]
     gtf = ask(go, "tokenfold", [t["text"] for t in toks])
     bad = [f"{t['text']!r}: Go {unhex(h)!r} vector {t['folded']!r}" for t, h in zip(toks, gtf) if unhex(h) != t["folded"]]
     report("token fold, every vector token (Go)", len(toks), bad, 10)
@@ -148,7 +149,7 @@ def main(argv):
     for v, line in zip(plain, gt):
         got = [] if not line else [(int(p.split(":")[0].split("-")[0]), int(p.split(":")[0].split("-")[1]), unhex(p.split(":")[1]))
                                     for p in line.split(",")]
-        want = [(t["span"][0], t["span"][1], t["folded"]) for t in v["result"]["tokens"]]
+        want = [(t["span"][0], t["span"][1], t["folded"]) for t in flat[v["id"]]["tokens"]]
         if got != want:
             bad.append(v["id"] + (" (Cherokee)" if any(CHEROKEE(ord(x)) for x in inputs[plain.index(v)]) else ""))
     report("plain token rule + fold, every plain-profile vector (Go)", len(plain), bad, 20)
@@ -166,7 +167,7 @@ def main(argv):
     for v, h in zip(md, rendered):
         text = [ord(x) for x in unhex(h)]
         cm = [C.s_of(C.fold(T, text[a:b + 1])) for a, b in C.tokenize(T, text, [])]
-        if cm == [t["folded"] for t in v["result"]["tokens"]]:
+        if cm == [t["folded"] for t in flat[v["id"]]["tokens"]]:
             same += 1
         else:
             diff.append(v["id"])
