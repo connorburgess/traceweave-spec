@@ -1,6 +1,6 @@
 # Draft extraction vectors (revision draft-1)
 
-Status: draft for review, 2026-11-22. These vectors accompany the [draft extraction contract](../extraction-contract.md), revised after the [clean-room review](../extraction-contract-review.md). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
+Status: draft for review, 2026-11-22. These vectors accompany the [draft extraction contract](../extraction-contract.md), revised after the [clean-room review](../../reviews/extraction-contract-review.md). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
 
 ## Files
 

@@ -1,6 +1,6 @@
 # Draft matching vectors (revision draft-2)
 
-Status: draft for review, 2026-11-22. These vectors accompany the [catalogue and report contract](../catalogue-report-contract.md) (TW-03; roadmap-v2 gates M1.3 and M2.6), revised after the [clean-room review](../catalogue-report-contract-review.md) and its confirmation pass. They are research fixtures, not files in `test-vectors/` or `schemas/`. They make no detection-accuracy claim, and every parameter is experimental. The M2.6 gate is **not met** yet: the vendor control class is missing (contract OD-C19), and the vectors are not in `test-vectors/` (OD-C10).
+Status: draft for review, 2026-11-22. These vectors accompany the [catalogue and report contract](../catalogue-report-contract.md) (TW-03; roadmap-v2 gates M1.3 and M2.6), revised after the [clean-room review](../../reviews/catalogue-report-contract-review.md) and its confirmation pass. They are research fixtures, not files in `test-vectors/` or `schemas/`. They make no detection-accuracy claim, and every parameter is experimental. The M2.6 gate is **not met** yet: the vendor control class is missing (contract OD-C19), and the vectors are not in `test-vectors/` (OD-C10).
 
 ## Files
 

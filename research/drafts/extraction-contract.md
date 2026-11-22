@@ -1,6 +1,6 @@
 # Draft extraction contract: token-fingerprint comparison baseline
 
-Status: **draft for review, revision draft-1, 2026-11-22.** Roadmap item TW-02, gating M1. This revision resolves the findings of the [clean-room review](extraction-contract-review.md) (F1–F8, A1–A4). Every disposition is listed in [§15](#15-review-dispositions).
+Status: **draft for review, revision draft-1, 2026-11-22.** Roadmap item TW-02, gating M1. This revision resolves the findings of the [clean-room review](../reviews/extraction-contract-review.md) (F1–F8, A1–A4). Every disposition is listed in [§15](#15-review-dispositions).
 
 This is research material, not a normative change. It does not modify [core](../../spec/core.md), [conformance](../../spec/conformance.md), [the code profile](../../profiles/code.md), schemas or test vectors. "MUST" and "MUST NOT" describe what this draft proposes for an implementation claiming to follow it. Profile versions are `draft-1`, and nothing here is a registered algorithm.
 
