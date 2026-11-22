@@ -1,6 +1,6 @@
 # Behavioural conformance checklist (amendment A6)
 
-Status: draft, 2026-11-22. Companion to [catalogue-report-contract.md](../catalogue-report-contract.md) §6.8 (rules B1–B10). These behaviours cannot be pinned by vectors. Each item is one command with an observable outcome: an exit status, files present or absent, file modes, or output bytes. Both implementations should script every item. The I2 probe `xcheck/probes/i2_behaviour.py` on `merge-i2` is the current executable record.
+Status: draft, 2026-11-22, amended by A7. Companion to [catalogue-report-contract.md](../catalogue-report-contract.md) §6.8 (rules B1–B13). Item numbers are stable: A7 rewords items 36, 37, 43 and 46 and appends items 47–58. These behaviours cannot be pinned by vectors. Each item is one command with an observable outcome: an exit status, files present or absent, file modes, or output bytes. Both implementations should script every item. The I2 probe `xcheck/probes/i2_behaviour.py` on `merge-i2` is the current executable record.
 
 ## Operations
 
@@ -15,7 +15,7 @@ Each implementation maps these abstract operations to its own command line:
 | `VALIDATE KIND FILE` | Validate a catalogue, configuration, record or report document |
 | `OVERRIDE DIR` | The option that allows output into a working tree (B2) |
 
-Exit statuses are the B3 classes: **0** result, **1** refused input, **2** usage, environment, location, I/O or provenance refusal.
+Exit statuses are the B3 classes: **0** result, **1** refused input, **2** usage, environment, location, I/O or provenance refusal. A process killed by a fault hook's signal has no exit status; items that allow it say "or is terminated by the hook's signal". `TMP(OUT)` means the B8 temporary-file pattern for `OUT`: `.` + the output file name + `.tw-tmp-` + 1–32 characters from `[A-Za-z0-9]`, in `OUT`'s directory.
 
 ## Setup
 
@@ -72,8 +72,8 @@ Exit statuses are the B3 classes: **0** result, **1** refused input, **2** usage
 33. `TRACEWEAVE_PRIVATE_DIR=G/priv`, default output location: exit 2, nothing under `G`.
 34. `TRACEWEAVE_PRIVATE_DIR=rel/dir`: exit 2.
 35. `TRACEWEAVE_PRIVATE_DIR=` (empty): treated as unset. The default location under `H` is used, exit 0.
-36. `XDG_DATA_HOME=rel/dir` on an OS where the implementation consults it: exit 2. On an OS where it does not, the implementation's documentation says so and the item records "not consulted".
-37. `XDG_DATA_HOME=` (empty), where consulted: treated as unset, exit 0.
+36. `XDG_DATA_HOME=rel/dir`, default output location (B11): on Linux and other non-macOS Unix, exit 2. On macOS (and Windows), where it is not consulted, exit 0, and the file is written under `$HOME/Library/Application Support/traceweave/private` (macOS).
+37. `XDG_DATA_HOME=` (empty), default output location, on Linux: treated as unset, so the file is written under `H/.local/share/traceweave/private`, exit 0.
 38. `HOME` unset, with no `TRACEWEAVE_PRIVATE_DIR` and no explicit output path: exit 2.
 
 ### Stdout and options (B6, B7, B8)
@@ -85,9 +85,24 @@ Exit statuses are the B3 classes: **0** result, **1** refused input, **2** usage
 
 ### Provenance (B10)
 
-43. **Stamped:** `DOC` for `go-identical`: exit 0. `provenance.implementation.commit` equals the commit the binary was built from. `bodySha256` and `comparisonConfigSha256` equal the body's values. Any run-time option or variable that tries to set the commit: exit 2.
+43. **Stamped:** `DOC` for `go-identical`: exit 0. `provenance.implementation.commit` equals the commit the binary was built from. `bodySha256` and `comparisonConfigSha256` equal the body's values. A run-time **option** that tries to set the commit is an unknown option: exit 2 (B6). Environment variables that merely look like commit settings are not read; see item 54.
 44. **dirty-src** and **dirty-doc:** `DOC`: exit 2, no document written. `BODY`: exit 0, bytes identical to item 13. The same holds for `go run` in a dirty tree, except that the observable is "no document written" rather than an exit status.
 45. **Unstamped** (archive export; Go `-buildvcs=false`): `DOC`: exit 2, no document, with or without a run-time commit. `BODY`: exit 0, bytes identical to item 13.
-46. **Atomic writes:** for each fault hook the implementation documents, a `BUILD` that fails at the hook exits 2, leaves the previous `OUT` byte-identical, and leaves nothing at `OUT` if there was no previous file (only a dot-temporary file may remain).
+46. **Atomic writes:** for each fault hook the implementation documents, a `BUILD` that fails at the hook either exits 2 or is terminated by the hook's signal. It leaves the previous `OUT` byte-identical. If there was no previous file, nothing exists at `OUT`. When it exits 2, no `TMP(OUT)` file remains; when it is killed, at most one does (item 47).
 
-**Item count: 46.** Items 16–24 are nine marker items.
+### Temporaries, location consultation, links, stdout and messages (A7: B4, B6–B8, B10–B13)
+
+47. After a `BUILD` killed by a fault hook's signal: at most one file matching `TMP(OUT)` exists, with mode 0600. No other new file exists in `OUT`'s directory.
+48. Then a normal `BUILD` to the same `OUT`: exit 0. `OUT` holds the expected bytes and no `TMP(OUT)` file remains. A pre-existing `.other.json.tw-tmp-x` (another output's temporary) is left untouched.
+49. `TRACEWEAVE_PRIVATE_DIR=rel/dir` with `VALIDATE catalogue` (no location consulted): exit 0. With `BODY … -` to stdout: exit 0.
+50. `TRACEWEAVE_PRIVATE_DIR=rel/dir` and `XDG_DATA_HOME=rel/dir` with `BUILD … T/plain/c.json` (an explicit absolute path outside any working tree): exit 0, file written. Compare item 34, where the default location is consulted and the result is exit 2.
+51. `T/plain/c.json` is a symbolic link to `G/out/victim.json` (which holds known bytes): `BUILD … T/plain/c.json`: exit 0. `T/plain/c.json` is now a regular file holding the catalogue, and `G/out/victim.json` is byte-identical (B13).
+52. `T/link` is a symbolic link to `G/out`: `BUILD … T/link/c.json` with no override: exit 2, nothing written under `G` (B1, after resolving links).
+53. `OVERRIDE -` (`-` given to the directory option): exit 2, no file written (B7).
+54. **Stamped**, run with `TRACEWEAVE_BUILD_COMMIT=` and `TRACEWEAVE_IMPL_COMMIT=` both set to 40 hex digits of another commit: `DOC`: exit 0, and `provenance.implementation.commit` still equals the build commit (B6, B10).
+55. A `git archive` export **unpacked inside `G`** (another repository) and built there: `DOC`: exit 2, no document. `BODY`: exit 0, bytes identical to item 13 (B10).
+56. `XDG_DATA_HOME=T/xdg` (absolute), default output location: on Linux, the file is under `T/xdg/traceweave/private`; on macOS, it is under `$HOME/Library/Application Support/traceweave/private` and nothing is under `T/xdg`. With `TRACEWEAVE_PRIVATE_DIR=T/p` also set, it is under `T/p` on every platform (B11).
+57. `VALIDATE record` (and `BUILD` from that record) where the record has an extra key `zzCanaryKey7`: exit 1, and neither stdout nor stderr contains `zzCanary` (B12).
+58. `EXTRACT` (Go configuration) on the input `s := "zzCanaryText8` (an unterminated string): exit 0, an error record. Neither the record, stdout nor stderr contains `zzCanary`.
+
+**Item count: 58.** Items 16–24 are nine marker items.
