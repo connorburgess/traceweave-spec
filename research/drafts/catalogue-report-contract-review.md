@@ -1,6 +1,6 @@
 # Review: catalogue/report contract, matching vectors, use-case plans, roadmap gates M0.1 and M2.7–M2.9
 
-Status: independent review, 2026-11-22. Scope: [catalogue-report-contract.md](catalogue-report-contract.md) (draft-1), [matching-vectors/](matching-vectors/README.md), [use-cases-verification-plans.md](use-cases-verification-plans.md), and [roadmap-v2.md](roadmap-v2.md) M0.1 and M2.7–M2.9. I wrote none of these files and re-ran every check myself. Scratch code is in `$TMPDIR/cr/` and not in the repository: `cleanroom.py`, `variants.py` and `corrupt.py`.
+Status: independent review, 2026-11-22. Scope: [catalogue-report-contract.md](catalogue-report-contract.md) (draft-1), [matching-vectors/](matching-vectors/README.md), [use-cases-verification-plans.md](use-cases-verification-plans.md), and [roadmap-v2.md](../../ROADMAP.md) M0.1 and M2.7–M2.9. I wrote none of these files and re-ran every check myself. Scratch code is in `$TMPDIR/cr/` and not in the repository: `cleanroom.py`, `variants.py` and `corrupt.py`.
 
 **Verdicts.** Part 1: **ready after listed fixes.** Part 2: **ready after listed fixes.** Part 3: M2.8 and M0.1 are **ready after listed fixes**; M2.7 and M2.9 need **rework**.
 

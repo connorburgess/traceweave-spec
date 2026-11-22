@@ -1,6 +1,6 @@
 # Draft catalogue and comparison-report contract: token-fingerprint baseline
 
-Status: **draft for review, revision draft-2, 2026-11-22.** Roadmap item TW-03. Gates: [roadmap-v2](roadmap-v2.md) M1.3 (catalogue and report schemas) and M2.6 (hand-derived matching vectors). This contract also fixes what I2 in the [implementation plan](implementation-repo-plan.md#milestones) must reproduce for M2.4 and M2.5. It builds on the reviewed [extraction contract](extraction-contract.md) and changes nothing in it.
+Status: **draft for review, revision draft-2, 2026-11-22.** Roadmap item TW-03. Gates: [roadmap-v2](../../ROADMAP.md) M1.3 (catalogue and report schemas) and M2.6 (hand-derived matching vectors). This contract also fixes what I2 in the [implementation plan](implementation-repo-plan.md#milestones) must reproduce for M2.4 and M2.5. It builds on the reviewed [extraction contract](extraction-contract.md) and changes nothing in it.
 
 This revision resolves the [clean-room review](catalogue-report-contract-review.md) Part 1 findings 1–10 and guesses G1–G6, plus the non-blocking additions of its confirmation pass (G7, invariance, cap and suppression-order vectors). Every disposition is in [§13](#13-review-dispositions). Draft-2 changes formats: catalogue `traceweave-catalogue-draft-2`, comparison `traceweave-seed-merge-draft-2`, report `traceweave-report-draft-2`. Draft-1 identifiers are no longer accepted.
 

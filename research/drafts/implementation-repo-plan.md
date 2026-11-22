@@ -1,6 +1,6 @@
 # Draft plan: Traceweave implementation repository
 
-Status: **draft for owner review. Nothing has been created.** Revised after the [independent review](roadmap-v2-review.md). No repository, remote, directory or package exists yet. Companion: [roadmap v2 draft](roadmap-v2.md), whose gate IDs (M1.4, M2.1, …) are referenced below.
+Status: **draft for owner review. Nothing has been created.** Revised after the [independent review](../reviews/roadmap-v2-review.md). No repository, remote, directory or package exists yet. Companion: [roadmap v2 draft](../../ROADMAP.md), whose gate IDs (M1.4, M2.1, …) are referenced below.
 
 ## Name and location
 

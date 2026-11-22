@@ -1,6 +1,6 @@
 # Draft: verification plans for docs/use-cases.md (roadmap gate M0.1)
 
-Status: draft (revised after review Part 2) for later merge into [use-cases.md](../../docs/use-cases.md); that file is not edited. Gate IDs refer to [roadmap-v2.md](roadmap-v2.md). [Review H2](roadmap-v2-review.md) found the plan clause missing. Matching terms follow [catalogue-report-contract.md](catalogue-report-contract.md). No thresholds are set here. A number marked **freeze first** must be measured and committed under the named gate before any pass/fail is read.
+Status: draft (revised after review Part 2) for later merge into [use-cases.md](../../docs/use-cases.md); that file is not edited. Gate IDs refer to [roadmap-v2.md](../../ROADMAP.md). [Review H2](../reviews/roadmap-v2-review.md) found the plan clause missing. Matching terms follow [catalogue-report-contract.md](catalogue-report-contract.md). No thresholds are set here. A number marked **freeze first** must be measured and committed under the named gate before any pass/fail is read.
 
 Execution key: **Today** = runs now with existing files. **Needs X** = depends on unbuilt pieces. Two commands run today (rerun by me, 2026-11-22): `.venv/bin/python tools/validate.py` (exit 0, prints PASS) and `.venv/bin/python -m unittest discover -s tests` (6 tests, OK). Both check formats, commitment, DSSE framing and contract rejections only. The validate output itself says no signature, timestamp, detector or rights claim was verified. No detector exists, so no similarity or mark-detection plan runs today.
 
