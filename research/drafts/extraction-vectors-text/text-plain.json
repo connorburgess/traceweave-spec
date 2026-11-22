@@ -17009,6 +17009,325 @@
    }
   },
   {
+   "id": "plain-unicode17-new",
+   "tags": [
+    "class:unicode-version",
+    "class:non-latin",
+    "class:case"
+   ],
+   "description": "Code points new in Unicode 17.0.0: TELUGU LETTER NAKAARA POLLU (U+0C5C) inside a word, the new case pair U+A7CE/U+A7CF, and two CJK Extension J ideographs. Unicode 16.0 data has them unassigned, so a 16.0 library splits the first word and drops the rest.",
+   "derivation": "hand",
+   "config": "config-text-plain.json",
+   "inputBase64": "YWJj4LGcZGVmIOqfjuqfjyB4IPCyjrDwso6xIGVuZA==",
+   "inputText": "abc\u0c5cdef \ua7ce\ua7cf x \ud888\udfb0\ud888\udfb1 end",
+   "result": {
+    "status": "insufficient-tokens",
+    "tokens": [
+     {
+      "text": "abc\u0c5cdef",
+      "span": [
+       0,
+       9
+      ],
+      "folded": "abc\u0c5cdef",
+      "skeleton": "abc\u0c5cdef"
+     },
+     {
+      "text": "\ua7ce\ua7cf",
+      "span": [
+       10,
+       16
+      ],
+      "folded": "\ua7cf\ua7cf",
+      "skeleton": "\ua7ce\ua7ce"
+     },
+     {
+      "text": "x",
+      "span": [
+       17,
+       18
+      ],
+      "folded": "x",
+      "skeleton": "x"
+     },
+     {
+      "text": "\ud888\udfb0",
+      "span": [
+       19,
+       23
+      ],
+      "folded": "\ud888\udfb0",
+      "skeleton": "\ud888\udfb0"
+     },
+     {
+      "text": "\ud888\udfb1",
+      "span": [
+       23,
+       27
+      ],
+      "folded": "\ud888\udfb1",
+      "skeleton": "\ud888\udfb1"
+     },
+     {
+      "text": "end",
+      "span": [
+       28,
+       31
+      ],
+      "folded": "end",
+      "skeleton": "end"
+     }
+    ],
+    "exact": {
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "folded": {
+     "values": [
+      "abc\u0c5cdef",
+      "\ua7cf\ua7cf",
+      "x",
+      "\ud888\udfb0",
+      "\ud888\udfb1",
+      "end"
+     ],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "skeleton": {
+     "values": [
+      "abc\u0c5cdef",
+      "\ua7ce\ua7ce",
+      "x",
+      "\ud888\udfb0",
+      "\ud888\udfb1",
+      "end"
+     ],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    }
+   }
+  },
+  {
+   "id": "plain-skeleton-single-pass",
+   "tags": [
+    "class:confusable"
+   ],
+   "description": "U+048B folds to itself; its prototype is U+0439 U+0326, whose NFD is U+0438 U+0326 U+0306. The skeleton is applied once: U+0438 is not mapped again to U+1D0E.",
+   "derivation": "hand",
+   "config": "config-text-plain.json",
+   "inputBase64": "0LzQvtKL0LAg0os=",
+   "inputText": "\u043c\u043e\u048b\u0430 \u048b",
+   "result": {
+    "status": "insufficient-tokens",
+    "tokens": [
+     {
+      "text": "\u043c\u043e\u048b\u0430",
+      "span": [
+       0,
+       8
+      ],
+      "folded": "\u043c\u043e\u048b\u0430",
+      "skeleton": "\u028do\u0438\u0326\u0306a"
+     },
+     {
+      "text": "\u048b",
+      "span": [
+       9,
+       11
+      ],
+      "folded": "\u048b",
+      "skeleton": "\u0438\u0326\u0306"
+     }
+    ],
+    "exact": {
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "folded": {
+     "values": [
+      "\u043c\u043e\u048b\u0430",
+      "\u048b"
+     ],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "skeleton": {
+     "values": [
+      "\u028do\u0438\u0326\u0306a",
+      "\u0438\u0326\u0306"
+     ],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    }
+   }
+  },
+  {
+   "id": "plain-format-char-split",
+   "tags": [
+    "class:default-ignorable",
+    "class:limit"
+   ],
+   "description": "U+FFFB INTERLINEAR ANNOTATION TERMINATOR and U+0600 ARABIC NUMBER SIGN are format characters (Cf) but not Default_Ignorable, so they are separators and split a word (stated limit: 32 such code points can split words invisibly).",
+   "derivation": "hand",
+   "config": "config-text-plain.json",
+   "inputBase64": "cGFz77+7c2FnZXMgYW5kIHdh2IB0ZXIgc3BsaXQgaGVyZQ==",
+   "inputText": "pas\ufffbsages and wa\u0600ter split here",
+   "result": {
+    "status": "insufficient-tokens",
+    "tokens": [
+     {
+      "text": "pas",
+      "span": [
+       0,
+       3
+      ],
+      "folded": "pas",
+      "skeleton": "pas"
+     },
+     {
+      "text": "sages",
+      "span": [
+       6,
+       11
+      ],
+      "folded": "sages",
+      "skeleton": "sages"
+     },
+     {
+      "text": "and",
+      "span": [
+       12,
+       15
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "wa",
+      "span": [
+       16,
+       18
+      ],
+      "folded": "wa",
+      "skeleton": "wa"
+     },
+     {
+      "text": "ter",
+      "span": [
+       20,
+       23
+      ],
+      "folded": "ter",
+      "skeleton": "ter"
+     },
+     {
+      "text": "split",
+      "span": [
+       24,
+       29
+      ],
+      "folded": "split",
+      "skeleton": "split"
+     },
+     {
+      "text": "here",
+      "span": [
+       30,
+       34
+      ],
+      "folded": "here",
+      "skeleton": "here"
+     }
+    ],
+    "exact": {
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "folded": {
+     "values": [
+      "pas",
+      "sages",
+      "and",
+      "wa",
+      "ter",
+      "split",
+      "here"
+     ],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    },
+    "skeleton": {
+     "values": [
+      "pas",
+      "sages",
+      "and",
+      "wa",
+      "ter",
+      "split",
+      "here"
+     ],
+     "kgrams": [],
+     "windowSelections": [],
+     "partialWindow": false,
+     "fingerprints": []
+    }
+   }
+  },
+  {
+   "id": "plain-err-reflow-nul",
+   "tags": [
+    "class:nul"
+   ],
+   "description": "plain-reflow-a with its first space replaced by NUL: the paired rejected input.",
+   "derivation": "hand",
+   "config": "config-text-plain.json",
+   "inputBase64": "U2hhcmVkAHBhc3NhZ2VzIGNhbiBzdXJ2aXZlIHdoZW4gYSB3cml0ZXIgY29waWVzIGEgcGFyYWdyYXBoCmludG8gYW5vdGhlciBkb2N1bWVudCBhbmQgdGhlbiByZWZsb3dzIHRoZSBsaW5lcyB0byBmaXQKYSBuYXJyb3dlciBjb2x1bW4uCg==",
+   "inputText": "Shared\u0000passages can survive when a writer copies a paragraph\ninto another document and then reflows the lines to fit\na narrower column.\n",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "nul",
+     "offset": 6
+    }
+   }
+  },
+  {
+   "id": "plain-err-reflow-invalid",
+   "tags": [
+    "class:invalid-utf8"
+   ],
+   "description": "plain-reflow-a with its second space replaced by 0xFF: the paired rejected input.",
+   "derivation": "hand",
+   "config": "config-text-plain.json",
+   "inputBase64": "U2hhcmVkIHBhc3NhZ2Vz/2NhbiBzdXJ2aXZlIHdoZW4gYSB3cml0ZXIgY29waWVzIGEgcGFyYWdyYXBoCmludG8gYW5vdGhlciBkb2N1bWVudCBhbmQgdGhlbiByZWZsb3dzIHRoZSBsaW5lcyB0byBmaXQKYSBuYXJyb3dlciBjb2x1bW4uCg==",
+   "inputText": null,
+   "inputDisplay": "Shared passages\\xffcan survive when a writer copies a paragraph\\x0ainto another document and then reflows the lines to fit\\x0aa narrower column.\\x0a",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "invalid-utf8",
+     "offset": 15
+    }
+   }
+  },
+  {
    "id": "plain-err-lone-continuation",
    "tags": [
     "class:invalid-utf8"
@@ -19499,6 +19818,18 @@
     "skeleton"
    ],
    "relation": "identical-hashes"
+  },
+  {
+   "a": "plain-reflow-a",
+   "b": "plain-err-reflow-nul",
+   "channels": [],
+   "relation": "input-rejected"
+  },
+  {
+   "a": "plain-reflow-a",
+   "b": "plain-err-reflow-invalid",
+   "channels": [],
+   "relation": "input-rejected"
   }
  ]
 }

@@ -387,7 +387,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "8aee69d4c7abd5dd",
+       "hash": "7c66f92b95c8dbb9",
        "span": [
         2,
         59
@@ -395,7 +395,7 @@
       },
       {
        "position": 1,
-       "hash": "ed230c324e3088f6",
+       "hash": "220c6f142b21c9a4",
        "span": [
         9,
         66
@@ -403,7 +403,7 @@
       },
       {
        "position": 2,
-       "hash": "824ade588d4d34d4",
+       "hash": "10023ea934b5599c",
        "span": [
         19,
         73
@@ -411,7 +411,7 @@
       },
       {
        "position": 3,
-       "hash": "58d89ea504e26322",
+       "hash": "e15c748398826a67",
        "span": [
         27,
         75
@@ -419,7 +419,7 @@
       },
       {
        "position": 4,
-       "hash": "3c710bbf8bee0fd6",
+       "hash": "f729979f897a73ce",
        "span": [
         37,
         86
@@ -427,7 +427,7 @@
       },
       {
        "position": 5,
-       "hash": "171405397235fde2",
+       "hash": "f4b45c9f524d801f",
        "span": [
         43,
         127
@@ -435,7 +435,7 @@
       },
       {
        "position": 6,
-       "hash": "791b62116c4e6b12",
+       "hash": "aa310d32ca02b2ca",
        "span": [
         53,
         135
@@ -443,7 +443,7 @@
       },
       {
        "position": 7,
-       "hash": "5f7ce5cc24e28d39",
+       "hash": "e458d7dc21e31ea1",
        "span": [
         58,
         145
@@ -451,7 +451,7 @@
       },
       {
        "position": 8,
-       "hash": "60af8e82087b9fac",
+       "hash": "df5db6c092bd76a4",
        "span": [
         60,
         150
@@ -459,7 +459,7 @@
       },
       {
        "position": 9,
-       "hash": "adfdb31deba47b14",
+       "hash": "f1ac8852067bad7e",
        "span": [
         67,
         155
@@ -467,7 +467,7 @@
       },
       {
        "position": 10,
-       "hash": "0f1ccefbee712fb9",
+       "hash": "6ee7970a8e8d986a",
        "span": [
         74,
         163
@@ -475,7 +475,7 @@
       },
       {
        "position": 11,
-       "hash": "7b85e7d25e6a21e0",
+       "hash": "2fdc22bb8bed3bb9",
        "span": [
         77,
         167
@@ -483,7 +483,7 @@
       },
       {
        "position": 12,
-       "hash": "1dc96a015799bfba",
+       "hash": "ec175f713947dbda",
        "span": [
         123,
         173
@@ -491,7 +491,7 @@
       },
       {
        "position": 13,
-       "hash": "cf2d6c9774ea3b4e",
+       "hash": "dbbd30f786886a72",
        "span": [
         128,
         179
@@ -499,7 +499,7 @@
       },
       {
        "position": 14,
-       "hash": "30f8232d5d083759",
+       "hash": "ecec29096cb1135e",
        "span": [
         137,
         185
@@ -507,7 +507,7 @@
       },
       {
        "position": 15,
-       "hash": "c309819ea837faf3",
+       "hash": "ff1ab4e23a135cef",
        "span": [
         147,
         190
@@ -515,7 +515,7 @@
       },
       {
        "position": 16,
-       "hash": "9723b06b0b753219",
+       "hash": "60fd6cfa421ec4dc",
        "span": [
         151,
         213
@@ -523,7 +523,7 @@
       },
       {
        "position": 17,
-       "hash": "130795314c6244ba",
+       "hash": "541a2a7438042994",
        "span": [
         156,
         218
@@ -531,7 +531,7 @@
       },
       {
        "position": 18,
-       "hash": "6d8023fb5d671171",
+       "hash": "d10bd48d30883c55",
        "span": [
         164,
         234
@@ -539,7 +539,7 @@
       },
       {
        "position": 19,
-       "hash": "31404c8740d9d404",
+       "hash": "d759f06739594678",
        "span": [
         168,
         241
@@ -547,7 +547,7 @@
       },
       {
        "position": 20,
-       "hash": "8458f087042faed6",
+       "hash": "f2a6fce2b9ca03e6",
        "span": [
         178,
         250
@@ -555,7 +555,7 @@
       },
       {
        "position": 21,
-       "hash": "58ef3b89c4f9e691",
+       "hash": "5eb8b3ff2342afc5",
        "span": [
         180,
         258
@@ -563,7 +563,7 @@
       },
       {
        "position": 22,
-       "hash": "ad941bbe6775bb36",
+       "hash": "9d919664e8d8faf1",
        "span": [
         186,
         283
@@ -571,7 +571,7 @@
       },
       {
        "position": 23,
-       "hash": "5ba850099200c2be",
+       "hash": "434282cb926b58ed",
        "span": [
         207,
         290
@@ -579,7 +579,7 @@
       },
       {
        "position": 24,
-       "hash": "6bd03e6ef7889273",
+       "hash": "da67eca8ad40eb0c",
        "span": [
         214,
         297
@@ -587,7 +587,7 @@
       },
       {
        "position": 25,
-       "hash": "97c191cf6c51f82c",
+       "hash": "bc7f3c6060e16f50",
        "span": [
         232,
         304
@@ -595,7 +595,7 @@
       },
       {
        "position": 26,
-       "hash": "13ffe7d2d987eeb9",
+       "hash": "7c0e932849ecc347",
        "span": [
         235,
         309
@@ -603,7 +603,7 @@
       },
       {
        "position": 27,
-       "hash": "523b7600679eaa2e",
+       "hash": "454ba2b28cf9a7cd",
        "span": [
         246,
         318
@@ -611,7 +611,7 @@
       },
       {
        "position": 28,
-       "hash": "07dbfedda75e0aac",
+       "hash": "5e0eb7d4bc6f8ac9",
        "span": [
         253,
         324
@@ -619,7 +619,7 @@
       },
       {
        "position": 29,
-       "hash": "d4b2e94835e76257",
+       "hash": "b11599d539c31818",
        "span": [
         280,
         329
@@ -627,7 +627,7 @@
       },
       {
        "position": 30,
-       "hash": "73cff00020f15c60",
+       "hash": "c5d0b190f86d6141",
        "span": [
         287,
         348
@@ -635,79 +635,71 @@
       }
      ],
      "windowSelections": [
-      5,
-      5,
-      5,
+      2,
+      2,
+      2,
       10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
       17,
       17,
       17,
       17,
-      17,
-      17,
-      17,
-      19,
-      26,
-      26,
-      28,
-      28,
-      28
+      23,
+      23,
+      23,
+      23,
+      23,
+      23,
+      23,
+      23
      ],
      "partialWindow": false,
      "fingerprints": [
       {
-       "position": 5,
-       "hash": "171405397235fde2",
+       "position": 2,
+       "hash": "10023ea934b5599c",
        "span": [
-        43,
-        127
+        19,
+        73
        ]
       },
       {
        "position": 10,
-       "hash": "0f1ccefbee712fb9",
+       "hash": "6ee7970a8e8d986a",
        "span": [
         74,
         163
        ]
       },
       {
+       "position": 11,
+       "hash": "2fdc22bb8bed3bb9",
+       "span": [
+        77,
+        167
+       ]
+      },
+      {
        "position": 17,
-       "hash": "130795314c6244ba",
+       "hash": "541a2a7438042994",
        "span": [
         156,
         218
        ]
       },
       {
-       "position": 19,
-       "hash": "31404c8740d9d404",
+       "position": 23,
+       "hash": "434282cb926b58ed",
        "span": [
-        168,
-        241
-       ]
-      },
-      {
-       "position": 26,
-       "hash": "13ffe7d2d987eeb9",
-       "span": [
-        235,
-        309
-       ]
-      },
-      {
-       "position": 28,
-       "hash": "07dbfedda75e0aac",
-       "span": [
-        253,
-        324
+        207,
+        290
        ]
       }
      ]
@@ -756,7 +748,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "97fc81005e29bec3",
+       "hash": "8cbcb6b93ef91938",
        "span": [
         2,
         59
@@ -764,7 +756,7 @@
       },
       {
        "position": 1,
-       "hash": "83e4ff0f56437360",
+       "hash": "0d115689898422be",
        "span": [
         9,
         66
@@ -772,7 +764,7 @@
       },
       {
        "position": 2,
-       "hash": "9af69c9feee7b156",
+       "hash": "3f65e9fa5ec8f9af",
        "span": [
         19,
         73
@@ -780,7 +772,7 @@
       },
       {
        "position": 3,
-       "hash": "d9dacc6ca82a398c",
+       "hash": "e2975345df9ec016",
        "span": [
         27,
         75
@@ -788,7 +780,7 @@
       },
       {
        "position": 4,
-       "hash": "6283acaf7b07c513",
+       "hash": "d08b2ab5553ac0c2",
        "span": [
         37,
         86
@@ -796,7 +788,7 @@
       },
       {
        "position": 5,
-       "hash": "11674748c5517f1c",
+       "hash": "d0b38fa6988da4e0",
        "span": [
         43,
         127
@@ -804,7 +796,7 @@
       },
       {
        "position": 6,
-       "hash": "fed288e0fe306e05",
+       "hash": "c8aa82942fbb62fe",
        "span": [
         53,
         135
@@ -812,7 +804,7 @@
       },
       {
        "position": 7,
-       "hash": "3861593f6bf48ad2",
+       "hash": "d9f73fc52da18136",
        "span": [
         58,
         145
@@ -820,7 +812,7 @@
       },
       {
        "position": 8,
-       "hash": "025c0a3f46de969e",
+       "hash": "f5528e26090d1d3c",
        "span": [
         60,
         150
@@ -828,7 +820,7 @@
       },
       {
        "position": 9,
-       "hash": "c56f1f211aaa30a7",
+       "hash": "b80356f772a10efe",
        "span": [
         67,
         155
@@ -836,7 +828,7 @@
       },
       {
        "position": 10,
-       "hash": "095cb61c04a59a03",
+       "hash": "98d111c8a5e03a8a",
        "span": [
         74,
         163
@@ -844,7 +836,7 @@
       },
       {
        "position": 11,
-       "hash": "5862d2d5c3ef6ddd",
+       "hash": "d6e1b090ab6b79e8",
        "span": [
         77,
         167
@@ -852,7 +844,7 @@
       },
       {
        "position": 12,
-       "hash": "5a4ac6322524f188",
+       "hash": "9675c5e6dd83195a",
        "span": [
         123,
         173
@@ -860,7 +852,7 @@
       },
       {
        "position": 13,
-       "hash": "5809e0a0d33b4721",
+       "hash": "482b1679ccda1cc8",
        "span": [
         128,
         179
@@ -868,7 +860,7 @@
       },
       {
        "position": 14,
-       "hash": "210b818bd2a9c4d9",
+       "hash": "70f3fce027ecf4ed",
        "span": [
         137,
         185
@@ -876,7 +868,7 @@
       },
       {
        "position": 15,
-       "hash": "f3a68cfb06f4d614",
+       "hash": "d52deb643e90386a",
        "span": [
         147,
         190
@@ -884,7 +876,7 @@
       },
       {
        "position": 16,
-       "hash": "4bcd1a5cc97c5521",
+       "hash": "75df095bef51ceef",
        "span": [
         151,
         213
@@ -892,7 +884,7 @@
       },
       {
        "position": 17,
-       "hash": "823cbf4e41b8616e",
+       "hash": "9f3ff2d079dea9ab",
        "span": [
         156,
         218
@@ -900,7 +892,7 @@
       },
       {
        "position": 18,
-       "hash": "2adea75837b75611",
+       "hash": "e4d96859dcd096dc",
        "span": [
         164,
         234
@@ -908,7 +900,7 @@
       },
       {
        "position": 19,
-       "hash": "1ef59456b43c6bd6",
+       "hash": "46eefa63e0af5b96",
        "span": [
         168,
         241
@@ -916,7 +908,7 @@
       },
       {
        "position": 20,
-       "hash": "a510f8e0aa53c1f4",
+       "hash": "7ec26590c9f1e00a",
        "span": [
         178,
         250
@@ -924,7 +916,7 @@
       },
       {
        "position": 21,
-       "hash": "1b580b174e18d6b1",
+       "hash": "92474b372075efe0",
        "span": [
         180,
         258
@@ -932,7 +924,7 @@
       },
       {
        "position": 22,
-       "hash": "0127734145bde8cd",
+       "hash": "cb1d0a532ed8faa7",
        "span": [
         186,
         283
@@ -940,7 +932,7 @@
       },
       {
        "position": 23,
-       "hash": "a0bb5c01883beda5",
+       "hash": "53c5d3621296f97b",
        "span": [
         207,
         290
@@ -948,7 +940,7 @@
       },
       {
        "position": 24,
-       "hash": "a0ce448bd4d8bb2c",
+       "hash": "5bf9fd9fcc91c607",
        "span": [
         214,
         297
@@ -956,7 +948,7 @@
       },
       {
        "position": 25,
-       "hash": "6a02d1a39033a21b",
+       "hash": "8611e051621efbcb",
        "span": [
         232,
         304
@@ -964,7 +956,7 @@
       },
       {
        "position": 26,
-       "hash": "f0dfc10d8e050be7",
+       "hash": "4673be58b624bbc7",
        "span": [
         235,
         309
@@ -972,7 +964,7 @@
       },
       {
        "position": 27,
-       "hash": "fe3c5ddb7f985afa",
+       "hash": "9c245a93cbc0209d",
        "span": [
         246,
         318
@@ -980,7 +972,7 @@
       },
       {
        "position": 28,
-       "hash": "a4f01f3b488bf365",
+       "hash": "acd6273dd2d62fe5",
        "span": [
         253,
         324
@@ -988,7 +980,7 @@
       },
       {
        "position": 29,
-       "hash": "80d689a87669612c",
+       "hash": "4a5f782afb7f62bf",
        "span": [
         280,
         329
@@ -996,7 +988,7 @@
       },
       {
        "position": 30,
-       "hash": "1c8a327b0bb4265f",
+       "hash": "be6cffb67d3a5544",
        "span": [
         287,
         348
@@ -1004,95 +996,87 @@
       }
      ],
      "windowSelections": [
-      5,
-      8,
-      8,
-      8,
-      8,
-      8,
-      8,
-      8,
-      8,
+      1,
+      1,
+      2,
       10,
       10,
-      14,
+      12,
+      13,
+      13,
+      13,
+      13,
+      13,
+      13,
       19,
       19,
-      21,
-      22,
-      22,
-      22,
-      22,
-      22,
-      22,
-      22,
-      22,
-      30
+      19,
+      19,
+      19,
+      19,
+      19,
+      26,
+      26,
+      26,
+      26,
+      26
      ],
      "partialWindow": false,
      "fingerprints": [
       {
-       "position": 5,
-       "hash": "11674748c5517f1c",
+       "position": 1,
+       "hash": "0d115689898422be",
        "span": [
-        43,
-        127
+        9,
+        66
        ]
       },
       {
-       "position": 8,
-       "hash": "025c0a3f46de969e",
+       "position": 2,
+       "hash": "3f65e9fa5ec8f9af",
        "span": [
-        60,
-        150
+        19,
+        73
        ]
       },
       {
        "position": 10,
-       "hash": "095cb61c04a59a03",
+       "hash": "98d111c8a5e03a8a",
        "span": [
         74,
         163
        ]
       },
       {
-       "position": 14,
-       "hash": "210b818bd2a9c4d9",
+       "position": 12,
+       "hash": "9675c5e6dd83195a",
        "span": [
-        137,
-        185
+        123,
+        173
+       ]
+      },
+      {
+       "position": 13,
+       "hash": "482b1679ccda1cc8",
+       "span": [
+        128,
+        179
        ]
       },
       {
        "position": 19,
-       "hash": "1ef59456b43c6bd6",
+       "hash": "46eefa63e0af5b96",
        "span": [
         168,
         241
        ]
       },
       {
-       "position": 21,
-       "hash": "1b580b174e18d6b1",
+       "position": 26,
+       "hash": "4673be58b624bbc7",
        "span": [
-        180,
-        258
-       ]
-      },
-      {
-       "position": 22,
-       "hash": "0127734145bde8cd",
-       "span": [
-        186,
-        283
-       ]
-      },
-      {
-       "position": 30,
-       "hash": "1c8a327b0bb4265f",
-       "span": [
-        287,
-        348
+        235,
+        309
        ]
       }
      ]
@@ -1141,7 +1125,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "68f7e1f0deadbf1a",
+       "hash": "070aad5c80e152a8",
        "span": [
         2,
         59
@@ -1149,7 +1133,7 @@
       },
       {
        "position": 1,
-       "hash": "2e92d0c366e17fec",
+       "hash": "e21b296950b4f926",
        "span": [
         9,
         66
@@ -1157,7 +1141,7 @@
       },
       {
        "position": 2,
-       "hash": "3c6ab89f78fd2d98",
+       "hash": "63b75926d60a8d77",
        "span": [
         19,
         73
@@ -1165,7 +1149,7 @@
       },
       {
        "position": 3,
-       "hash": "5d5c02e7575472db",
+       "hash": "e540222b432bd51f",
        "span": [
         27,
         75
@@ -1173,7 +1157,7 @@
       },
       {
        "position": 4,
-       "hash": "116412144a3fdd44",
+       "hash": "fbc9258558425c18",
        "span": [
         37,
         86
@@ -1181,7 +1165,7 @@
       },
       {
        "position": 5,
-       "hash": "6e8c0b58d65f29d4",
+       "hash": "ee2c1ba8ad84eed0",
        "span": [
         43,
         127
@@ -1189,7 +1173,7 @@
       },
       {
        "position": 6,
-       "hash": "b054efa97f63de82",
+       "hash": "cee0cccb49455659",
        "span": [
         53,
         135
@@ -1197,7 +1181,7 @@
       },
       {
        "position": 7,
-       "hash": "fa63cfe85932b2ef",
+       "hash": "6b8499fbc3510d01",
        "span": [
         58,
         145
@@ -1205,7 +1189,7 @@
       },
       {
        "position": 8,
-       "hash": "03022fb1401d7f4b",
+       "hash": "2510c0f55d060712",
        "span": [
         60,
         150
@@ -1213,7 +1197,7 @@
       },
       {
        "position": 9,
-       "hash": "372b1241b981996b",
+       "hash": "b6f746c015312f4e",
        "span": [
         67,
         155
@@ -1221,7 +1205,7 @@
       },
       {
        "position": 10,
-       "hash": "5d35e455f979e299",
+       "hash": "5974f99ba335fded",
        "span": [
         74,
         163
@@ -1229,7 +1213,7 @@
       },
       {
        "position": 11,
-       "hash": "6436ba689f715a9c",
+       "hash": "814e5df589ec76b5",
        "span": [
         77,
         167
@@ -1237,7 +1221,7 @@
       },
       {
        "position": 12,
-       "hash": "d08b0bdd9df7b2ff",
+       "hash": "025806285b4e41d2",
        "span": [
         123,
         173
@@ -1245,7 +1229,7 @@
       },
       {
        "position": 13,
-       "hash": "15f597e20884d36e",
+       "hash": "b7b6d4c87c7eaca6",
        "span": [
         128,
         179
@@ -1253,7 +1237,7 @@
       },
       {
        "position": 14,
-       "hash": "fcb60e4a00f471b3",
+       "hash": "894a68007fc7cc6b",
        "span": [
         137,
         185
@@ -1261,7 +1245,7 @@
       },
       {
        "position": 15,
-       "hash": "97f0b3ca7bc0ca01",
+       "hash": "d6ee2520064fcd37",
        "span": [
         147,
         190
@@ -1269,7 +1253,7 @@
       },
       {
        "position": 16,
-       "hash": "68432379e29fbbf0",
+       "hash": "f4efab310c821922",
        "span": [
         151,
         213
@@ -1277,7 +1261,7 @@
       },
       {
        "position": 17,
-       "hash": "c5a65c15a0ca56f5",
+       "hash": "23833fa36d824b70",
        "span": [
         156,
         218
@@ -1285,7 +1269,7 @@
       },
       {
        "position": 18,
-       "hash": "e74c403bd42abee6",
+       "hash": "68698751f28eb585",
        "span": [
         164,
         234
@@ -1293,7 +1277,7 @@
       },
       {
        "position": 19,
-       "hash": "d50310a412e1a180",
+       "hash": "e14d8f698288e5b2",
        "span": [
         168,
         241
@@ -1301,7 +1285,7 @@
       },
       {
        "position": 20,
-       "hash": "9a802bf9a1c8e1de",
+       "hash": "acbde65dd1e43adc",
        "span": [
         178,
         250
@@ -1309,7 +1293,7 @@
       },
       {
        "position": 21,
-       "hash": "b6a382973796a2d7",
+       "hash": "1cfa1f935daa69bf",
        "span": [
         180,
         258
@@ -1317,7 +1301,7 @@
       },
       {
        "position": 22,
-       "hash": "8b075cf41f3b9e7f",
+       "hash": "9d43b13ba1998f93",
        "span": [
         186,
         283
@@ -1325,7 +1309,7 @@
       },
       {
        "position": 23,
-       "hash": "d05a3a9f37816118",
+       "hash": "57fa8eff70a3c54e",
        "span": [
         207,
         290
@@ -1333,7 +1317,7 @@
       },
       {
        "position": 24,
-       "hash": "420f607456f257bd",
+       "hash": "62d41fbb6f87bc2d",
        "span": [
         214,
         297
@@ -1341,7 +1325,7 @@
       },
       {
        "position": 25,
-       "hash": "00e4703af4236172",
+       "hash": "545cd6c399a7a449",
        "span": [
         232,
         304
@@ -1349,7 +1333,7 @@
       },
       {
        "position": 26,
-       "hash": "cc495158edd4a400",
+       "hash": "4f51728ddb678f9c",
        "span": [
         235,
         309
@@ -1357,7 +1341,7 @@
       },
       {
        "position": 27,
-       "hash": "a9dc0e4545036bd7",
+       "hash": "dde0f91620039b4f",
        "span": [
         246,
         318
@@ -1365,7 +1349,7 @@
       },
       {
        "position": 28,
-       "hash": "32653567497363b8",
+       "hash": "3c200aa54c69dee9",
        "span": [
         253,
         324
@@ -1373,7 +1357,7 @@
       },
       {
        "position": 29,
-       "hash": "601a3ab4cfc684a4",
+       "hash": "3a072232e4443787",
        "span": [
         280,
         329
@@ -1381,7 +1365,7 @@
       },
       {
        "position": 30,
-       "hash": "e86339a5e2e057b2",
+       "hash": "a5d804884cef3eae",
        "span": [
         287,
         348
@@ -1389,79 +1373,79 @@
       }
      ],
      "windowSelections": [
-      4,
+      0,
       8,
       8,
       8,
       8,
-      8,
-      8,
-      8,
-      8,
-      13,
-      13,
-      13,
-      13,
-      13,
-      16,
-      16,
-      16,
-      24,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      17,
+      21,
+      21,
+      21,
+      21,
+      21,
+      21,
+      21,
+      21,
+      29,
+      29
      ],
      "partialWindow": false,
      "fingerprints": [
       {
-       "position": 4,
-       "hash": "116412144a3fdd44",
+       "position": 0,
+       "hash": "070aad5c80e152a8",
        "span": [
-        37,
-        86
+        2,
+        59
        ]
       },
       {
        "position": 8,
-       "hash": "03022fb1401d7f4b",
+       "hash": "2510c0f55d060712",
        "span": [
         60,
         150
        ]
       },
       {
-       "position": 13,
-       "hash": "15f597e20884d36e",
+       "position": 12,
+       "hash": "025806285b4e41d2",
        "span": [
-        128,
-        179
+        123,
+        173
        ]
       },
       {
-       "position": 16,
-       "hash": "68432379e29fbbf0",
+       "position": 17,
+       "hash": "23833fa36d824b70",
        "span": [
-        151,
-        213
+        156,
+        218
        ]
       },
       {
-       "position": 24,
-       "hash": "420f607456f257bd",
+       "position": 21,
+       "hash": "1cfa1f935daa69bf",
        "span": [
-        214,
-        297
+        180,
+        258
        ]
       },
       {
-       "position": 25,
-       "hash": "00e4703af4236172",
+       "position": 29,
+       "hash": "3a072232e4443787",
        "span": [
-        232,
-        304
+        280,
+        329
        ]
       }
      ]
@@ -1829,7 +1813,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "8aee69d4c7abd5dd",
+       "hash": "7c66f92b95c8dbb9",
        "span": [
         0,
         51
@@ -1837,7 +1821,7 @@
       },
       {
        "position": 1,
-       "hash": "ed230c324e3088f6",
+       "hash": "220c6f142b21c9a4",
        "span": [
         7,
         58
@@ -1845,7 +1829,7 @@
       },
       {
        "position": 2,
-       "hash": "824ade588d4d34d4",
+       "hash": "10023ea934b5599c",
        "span": [
         17,
         65
@@ -1853,7 +1837,7 @@
       },
       {
        "position": 3,
-       "hash": "58d89ea504e26322",
+       "hash": "e15c748398826a67",
        "span": [
         24,
         67
@@ -1861,7 +1845,7 @@
       },
       {
        "position": 4,
-       "hash": "3c710bbf8bee0fd6",
+       "hash": "f729979f897a73ce",
        "span": [
         33,
         77
@@ -1869,7 +1853,7 @@
       },
       {
        "position": 5,
-       "hash": "171405397235fde2",
+       "hash": "f4b45c9f524d801f",
        "span": [
         37,
         82
@@ -1877,7 +1861,7 @@
       },
       {
        "position": 6,
-       "hash": "791b62116c4e6b12",
+       "hash": "aa310d32ca02b2ca",
        "span": [
         45,
         90
@@ -1885,7 +1869,7 @@
       },
       {
        "position": 7,
-       "hash": "5f7ce5cc24e28d39",
+       "hash": "e458d7dc21e31ea1",
        "span": [
         50,
         99
@@ -1893,7 +1877,7 @@
       },
       {
        "position": 8,
-       "hash": "60af8e82087b9fac",
+       "hash": "df5db6c092bd76a4",
        "span": [
         52,
         103
@@ -1901,7 +1885,7 @@
       },
       {
        "position": 9,
-       "hash": "adfdb31deba47b14",
+       "hash": "f1ac8852067bad7e",
        "span": [
         59,
         108
@@ -1909,7 +1893,7 @@
       },
       {
        "position": 10,
-       "hash": "0f1ccefbee712fb9",
+       "hash": "6ee7970a8e8d986a",
        "span": [
         66,
         116
@@ -1917,7 +1901,7 @@
       },
       {
        "position": 11,
-       "hash": "7b85e7d25e6a21e0",
+       "hash": "2fdc22bb8bed3bb9",
        "span": [
         68,
         120
@@ -1925,7 +1909,7 @@
       },
       {
        "position": 12,
-       "hash": "1dc96a015799bfba",
+       "hash": "ec175f713947dbda",
        "span": [
         78,
         126
@@ -1933,7 +1917,7 @@
       },
       {
        "position": 13,
-       "hash": "cf2d6c9774ea3b4e",
+       "hash": "dbbd30f786886a72",
        "span": [
         83,
         130
@@ -1941,7 +1925,7 @@
       },
       {
        "position": 14,
-       "hash": "30f8232d5d083759",
+       "hash": "ecec29096cb1135e",
        "span": [
         91,
         136
@@ -1949,7 +1933,7 @@
       },
       {
        "position": 15,
-       "hash": "c309819ea837faf3",
+       "hash": "ff1ab4e23a135cef",
        "span": [
         100,
         141
@@ -1957,7 +1941,7 @@
       },
       {
        "position": 16,
-       "hash": "9723b06b0b753219",
+       "hash": "60fd6cfa421ec4dc",
        "span": [
         104,
         148
@@ -1965,7 +1949,7 @@
       },
       {
        "position": 17,
-       "hash": "130795314c6244ba",
+       "hash": "541a2a7438042994",
        "span": [
         109,
         153
@@ -1973,7 +1957,7 @@
       },
       {
        "position": 18,
-       "hash": "6d8023fb5d671171",
+       "hash": "d10bd48d30883c55",
        "span": [
         117,
         158
@@ -1981,7 +1965,7 @@
       },
       {
        "position": 19,
-       "hash": "31404c8740d9d404",
+       "hash": "d759f06739594678",
        "span": [
         121,
         165
@@ -1989,7 +1973,7 @@
       },
       {
        "position": 20,
-       "hash": "8458f087042faed6",
+       "hash": "f2a6fce2b9ca03e6",
        "span": [
         129,
         172
@@ -1997,7 +1981,7 @@
       },
       {
        "position": 21,
-       "hash": "58ef3b89c4f9e691",
+       "hash": "5eb8b3ff2342afc5",
        "span": [
         131,
         178
@@ -2005,7 +1989,7 @@
       },
       {
        "position": 22,
-       "hash": "ad941bbe6775bb36",
+       "hash": "9d919664e8d8faf1",
        "span": [
         137,
         182
@@ -2013,7 +1997,7 @@
       },
       {
        "position": 23,
-       "hash": "5ba850099200c2be",
+       "hash": "434282cb926b58ed",
        "span": [
         142,
         186
@@ -2021,7 +2005,7 @@
       },
       {
        "position": 24,
-       "hash": "6bd03e6ef7889273",
+       "hash": "da67eca8ad40eb0c",
        "span": [
         149,
         189
@@ -2029,7 +2013,7 @@
       },
       {
        "position": 25,
-       "hash": "97c191cf6c51f82c",
+       "hash": "bc7f3c6060e16f50",
        "span": [
         156,
         196
@@ -2037,7 +2021,7 @@
       },
       {
        "position": 26,
-       "hash": "13ffe7d2d987eeb9",
+       "hash": "7c0e932849ecc347",
        "span": [
         159,
         201
@@ -2045,7 +2029,7 @@
       },
       {
        "position": 27,
-       "hash": "523b7600679eaa2e",
+       "hash": "454ba2b28cf9a7cd",
        "span": [
         168,
         208
@@ -2053,7 +2037,7 @@
       },
       {
        "position": 28,
-       "hash": "07dbfedda75e0aac",
+       "hash": "5e0eb7d4bc6f8ac9",
        "span": [
         173,
         212
@@ -2061,7 +2045,7 @@
       },
       {
        "position": 29,
-       "hash": "d4b2e94835e76257",
+       "hash": "b11599d539c31818",
        "span": [
         179,
         217
@@ -2069,7 +2053,7 @@
       },
       {
        "position": 30,
-       "hash": "73cff00020f15c60",
+       "hash": "c5d0b190f86d6141",
        "span": [
         183,
         222
@@ -2077,79 +2061,71 @@
       }
      ],
      "windowSelections": [
-      5,
-      5,
-      5,
+      2,
+      2,
+      2,
       10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
       17,
       17,
       17,
       17,
-      17,
-      17,
-      17,
-      19,
-      26,
-      26,
-      28,
-      28,
-      28
+      23,
+      23,
+      23,
+      23,
+      23,
+      23,
+      23,
+      23
      ],
      "partialWindow": false,
      "fingerprints": [
       {
-       "position": 5,
-       "hash": "171405397235fde2",
+       "position": 2,
+       "hash": "10023ea934b5599c",
        "span": [
-        37,
-        82
+        17,
+        65
        ]
       },
       {
        "position": 10,
-       "hash": "0f1ccefbee712fb9",
+       "hash": "6ee7970a8e8d986a",
        "span": [
         66,
         116
        ]
       },
       {
+       "position": 11,
+       "hash": "2fdc22bb8bed3bb9",
+       "span": [
+        68,
+        120
+       ]
+      },
+      {
        "position": 17,
-       "hash": "130795314c6244ba",
+       "hash": "541a2a7438042994",
        "span": [
         109,
         153
        ]
       },
       {
-       "position": 19,
-       "hash": "31404c8740d9d404",
+       "position": 23,
+       "hash": "434282cb926b58ed",
        "span": [
-        121,
-        165
-       ]
-      },
-      {
-       "position": 26,
-       "hash": "13ffe7d2d987eeb9",
-       "span": [
-        159,
-        201
-       ]
-      },
-      {
-       "position": 28,
-       "hash": "07dbfedda75e0aac",
-       "span": [
-        173,
-        212
+        142,
+        186
        ]
       }
      ]
@@ -2198,7 +2174,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "97fc81005e29bec3",
+       "hash": "8cbcb6b93ef91938",
        "span": [
         0,
         51
@@ -2206,7 +2182,7 @@
       },
       {
        "position": 1,
-       "hash": "83e4ff0f56437360",
+       "hash": "0d115689898422be",
        "span": [
         7,
         58
@@ -2214,7 +2190,7 @@
       },
       {
        "position": 2,
-       "hash": "9af69c9feee7b156",
+       "hash": "3f65e9fa5ec8f9af",
        "span": [
         17,
         65
@@ -2222,7 +2198,7 @@
       },
       {
        "position": 3,
-       "hash": "d9dacc6ca82a398c",
+       "hash": "e2975345df9ec016",
        "span": [
         24,
         67
@@ -2230,7 +2206,7 @@
       },
       {
        "position": 4,
-       "hash": "6283acaf7b07c513",
+       "hash": "d08b2ab5553ac0c2",
        "span": [
         33,
         77
@@ -2238,7 +2214,7 @@
       },
       {
        "position": 5,
-       "hash": "11674748c5517f1c",
+       "hash": "d0b38fa6988da4e0",
        "span": [
         37,
         82
@@ -2246,7 +2222,7 @@
       },
       {
        "position": 6,
-       "hash": "fed288e0fe306e05",
+       "hash": "c8aa82942fbb62fe",
        "span": [
         45,
         90
@@ -2254,7 +2230,7 @@
       },
       {
        "position": 7,
-       "hash": "3861593f6bf48ad2",
+       "hash": "d9f73fc52da18136",
        "span": [
         50,
         99
@@ -2262,7 +2238,7 @@
       },
       {
        "position": 8,
-       "hash": "025c0a3f46de969e",
+       "hash": "f5528e26090d1d3c",
        "span": [
         52,
         103
@@ -2270,7 +2246,7 @@
       },
       {
        "position": 9,
-       "hash": "c56f1f211aaa30a7",
+       "hash": "b80356f772a10efe",
        "span": [
         59,
         108
@@ -2278,7 +2254,7 @@
       },
       {
        "position": 10,
-       "hash": "095cb61c04a59a03",
+       "hash": "98d111c8a5e03a8a",
        "span": [
         66,
         116
@@ -2286,7 +2262,7 @@
       },
       {
        "position": 11,
-       "hash": "5862d2d5c3ef6ddd",
+       "hash": "d6e1b090ab6b79e8",
        "span": [
         68,
         120
@@ -2294,7 +2270,7 @@
       },
       {
        "position": 12,
-       "hash": "5a4ac6322524f188",
+       "hash": "9675c5e6dd83195a",
        "span": [
         78,
         126
@@ -2302,7 +2278,7 @@
       },
       {
        "position": 13,
-       "hash": "5809e0a0d33b4721",
+       "hash": "482b1679ccda1cc8",
        "span": [
         83,
         130
@@ -2310,7 +2286,7 @@
       },
       {
        "position": 14,
-       "hash": "210b818bd2a9c4d9",
+       "hash": "70f3fce027ecf4ed",
        "span": [
         91,
         136
@@ -2318,7 +2294,7 @@
       },
       {
        "position": 15,
-       "hash": "f3a68cfb06f4d614",
+       "hash": "d52deb643e90386a",
        "span": [
         100,
         141
@@ -2326,7 +2302,7 @@
       },
       {
        "position": 16,
-       "hash": "4bcd1a5cc97c5521",
+       "hash": "75df095bef51ceef",
        "span": [
         104,
         148
@@ -2334,7 +2310,7 @@
       },
       {
        "position": 17,
-       "hash": "823cbf4e41b8616e",
+       "hash": "9f3ff2d079dea9ab",
        "span": [
         109,
         153
@@ -2342,7 +2318,7 @@
       },
       {
        "position": 18,
-       "hash": "2adea75837b75611",
+       "hash": "e4d96859dcd096dc",
        "span": [
         117,
         158
@@ -2350,7 +2326,7 @@
       },
       {
        "position": 19,
-       "hash": "1ef59456b43c6bd6",
+       "hash": "46eefa63e0af5b96",
        "span": [
         121,
         165
@@ -2358,7 +2334,7 @@
       },
       {
        "position": 20,
-       "hash": "a510f8e0aa53c1f4",
+       "hash": "7ec26590c9f1e00a",
        "span": [
         129,
         172
@@ -2366,7 +2342,7 @@
       },
       {
        "position": 21,
-       "hash": "1b580b174e18d6b1",
+       "hash": "92474b372075efe0",
        "span": [
         131,
         178
@@ -2374,7 +2350,7 @@
       },
       {
        "position": 22,
-       "hash": "0127734145bde8cd",
+       "hash": "cb1d0a532ed8faa7",
        "span": [
         137,
         182
@@ -2382,7 +2358,7 @@
       },
       {
        "position": 23,
-       "hash": "a0bb5c01883beda5",
+       "hash": "53c5d3621296f97b",
        "span": [
         142,
         186
@@ -2390,7 +2366,7 @@
       },
       {
        "position": 24,
-       "hash": "a0ce448bd4d8bb2c",
+       "hash": "5bf9fd9fcc91c607",
        "span": [
         149,
         189
@@ -2398,7 +2374,7 @@
       },
       {
        "position": 25,
-       "hash": "6a02d1a39033a21b",
+       "hash": "8611e051621efbcb",
        "span": [
         156,
         196
@@ -2406,7 +2382,7 @@
       },
       {
        "position": 26,
-       "hash": "f0dfc10d8e050be7",
+       "hash": "4673be58b624bbc7",
        "span": [
         159,
         201
@@ -2414,7 +2390,7 @@
       },
       {
        "position": 27,
-       "hash": "fe3c5ddb7f985afa",
+       "hash": "9c245a93cbc0209d",
        "span": [
         168,
         208
@@ -2422,7 +2398,7 @@
       },
       {
        "position": 28,
-       "hash": "a4f01f3b488bf365",
+       "hash": "acd6273dd2d62fe5",
        "span": [
         173,
         212
@@ -2430,7 +2406,7 @@
       },
       {
        "position": 29,
-       "hash": "80d689a87669612c",
+       "hash": "4a5f782afb7f62bf",
        "span": [
         179,
         217
@@ -2438,7 +2414,7 @@
       },
       {
        "position": 30,
-       "hash": "1c8a327b0bb4265f",
+       "hash": "be6cffb67d3a5544",
        "span": [
         183,
         222
@@ -2446,95 +2422,87 @@
       }
      ],
      "windowSelections": [
-      5,
-      8,
-      8,
-      8,
-      8,
-      8,
-      8,
-      8,
-      8,
+      1,
+      1,
+      2,
       10,
       10,
-      14,
+      12,
+      13,
+      13,
+      13,
+      13,
+      13,
+      13,
       19,
       19,
-      21,
-      22,
-      22,
-      22,
-      22,
-      22,
-      22,
-      22,
-      22,
-      30
+      19,
+      19,
+      19,
+      19,
+      19,
+      26,
+      26,
+      26,
+      26,
+      26
      ],
      "partialWindow": false,
      "fingerprints": [
       {
-       "position": 5,
-       "hash": "11674748c5517f1c",
+       "position": 1,
+       "hash": "0d115689898422be",
        "span": [
-        37,
-        82
+        7,
+        58
        ]
       },
       {
-       "position": 8,
-       "hash": "025c0a3f46de969e",
+       "position": 2,
+       "hash": "3f65e9fa5ec8f9af",
        "span": [
-        52,
-        103
+        17,
+        65
        ]
       },
       {
        "position": 10,
-       "hash": "095cb61c04a59a03",
+       "hash": "98d111c8a5e03a8a",
        "span": [
         66,
         116
        ]
       },
       {
-       "position": 14,
-       "hash": "210b818bd2a9c4d9",
+       "position": 12,
+       "hash": "9675c5e6dd83195a",
        "span": [
-        91,
-        136
+        78,
+        126
+       ]
+      },
+      {
+       "position": 13,
+       "hash": "482b1679ccda1cc8",
+       "span": [
+        83,
+        130
        ]
       },
       {
        "position": 19,
-       "hash": "1ef59456b43c6bd6",
+       "hash": "46eefa63e0af5b96",
        "span": [
         121,
         165
        ]
       },
       {
-       "position": 21,
-       "hash": "1b580b174e18d6b1",
+       "position": 26,
+       "hash": "4673be58b624bbc7",
        "span": [
-        131,
-        178
-       ]
-      },
-      {
-       "position": 22,
-       "hash": "0127734145bde8cd",
-       "span": [
-        137,
-        182
-       ]
-      },
-      {
-       "position": 30,
-       "hash": "1c8a327b0bb4265f",
-       "span": [
-        183,
-        222
+        159,
+        201
        ]
       }
      ]
@@ -2583,7 +2551,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "68f7e1f0deadbf1a",
+       "hash": "070aad5c80e152a8",
        "span": [
         0,
         51
@@ -2591,7 +2559,7 @@
       },
       {
        "position": 1,
-       "hash": "2e92d0c366e17fec",
+       "hash": "e21b296950b4f926",
        "span": [
         7,
         58
@@ -2599,7 +2567,7 @@
       },
       {
        "position": 2,
-       "hash": "3c6ab89f78fd2d98",
+       "hash": "63b75926d60a8d77",
        "span": [
         17,
         65
@@ -2607,7 +2575,7 @@
       },
       {
        "position": 3,
-       "hash": "5d5c02e7575472db",
+       "hash": "e540222b432bd51f",
        "span": [
         24,
         67
@@ -2615,7 +2583,7 @@
       },
       {
        "position": 4,
-       "hash": "116412144a3fdd44",
+       "hash": "fbc9258558425c18",
        "span": [
         33,
         77
@@ -2623,7 +2591,7 @@
       },
       {
        "position": 5,
-       "hash": "6e8c0b58d65f29d4",
+       "hash": "ee2c1ba8ad84eed0",
        "span": [
         37,
         82
@@ -2631,7 +2599,7 @@
       },
       {
        "position": 6,
-       "hash": "b054efa97f63de82",
+       "hash": "cee0cccb49455659",
        "span": [
         45,
         90
@@ -2639,7 +2607,7 @@
       },
       {
        "position": 7,
-       "hash": "fa63cfe85932b2ef",
+       "hash": "6b8499fbc3510d01",
        "span": [
         50,
         99
@@ -2647,7 +2615,7 @@
       },
       {
        "position": 8,
-       "hash": "03022fb1401d7f4b",
+       "hash": "2510c0f55d060712",
        "span": [
         52,
         103
@@ -2655,7 +2623,7 @@
       },
       {
        "position": 9,
-       "hash": "372b1241b981996b",
+       "hash": "b6f746c015312f4e",
        "span": [
         59,
         108
@@ -2663,7 +2631,7 @@
       },
       {
        "position": 10,
-       "hash": "5d35e455f979e299",
+       "hash": "5974f99ba335fded",
        "span": [
         66,
         116
@@ -2671,7 +2639,7 @@
       },
       {
        "position": 11,
-       "hash": "6436ba689f715a9c",
+       "hash": "814e5df589ec76b5",
        "span": [
         68,
         120
@@ -2679,7 +2647,7 @@
       },
       {
        "position": 12,
-       "hash": "d08b0bdd9df7b2ff",
+       "hash": "025806285b4e41d2",
        "span": [
         78,
         126
@@ -2687,7 +2655,7 @@
       },
       {
        "position": 13,
-       "hash": "15f597e20884d36e",
+       "hash": "b7b6d4c87c7eaca6",
        "span": [
         83,
         130
@@ -2695,7 +2663,7 @@
       },
       {
        "position": 14,
-       "hash": "fcb60e4a00f471b3",
+       "hash": "894a68007fc7cc6b",
        "span": [
         91,
         136
@@ -2703,7 +2671,7 @@
       },
       {
        "position": 15,
-       "hash": "97f0b3ca7bc0ca01",
+       "hash": "d6ee2520064fcd37",
        "span": [
         100,
         141
@@ -2711,7 +2679,7 @@
       },
       {
        "position": 16,
-       "hash": "68432379e29fbbf0",
+       "hash": "f4efab310c821922",
        "span": [
         104,
         148
@@ -2719,7 +2687,7 @@
       },
       {
        "position": 17,
-       "hash": "c5a65c15a0ca56f5",
+       "hash": "23833fa36d824b70",
        "span": [
         109,
         153
@@ -2727,7 +2695,7 @@
       },
       {
        "position": 18,
-       "hash": "e74c403bd42abee6",
+       "hash": "68698751f28eb585",
        "span": [
         117,
         158
@@ -2735,7 +2703,7 @@
       },
       {
        "position": 19,
-       "hash": "d50310a412e1a180",
+       "hash": "e14d8f698288e5b2",
        "span": [
         121,
         165
@@ -2743,7 +2711,7 @@
       },
       {
        "position": 20,
-       "hash": "9a802bf9a1c8e1de",
+       "hash": "acbde65dd1e43adc",
        "span": [
         129,
         172
@@ -2751,7 +2719,7 @@
       },
       {
        "position": 21,
-       "hash": "b6a382973796a2d7",
+       "hash": "1cfa1f935daa69bf",
        "span": [
         131,
         178
@@ -2759,7 +2727,7 @@
       },
       {
        "position": 22,
-       "hash": "8b075cf41f3b9e7f",
+       "hash": "9d43b13ba1998f93",
        "span": [
         137,
         182
@@ -2767,7 +2735,7 @@
       },
       {
        "position": 23,
-       "hash": "d05a3a9f37816118",
+       "hash": "57fa8eff70a3c54e",
        "span": [
         142,
         186
@@ -2775,7 +2743,7 @@
       },
       {
        "position": 24,
-       "hash": "420f607456f257bd",
+       "hash": "62d41fbb6f87bc2d",
        "span": [
         149,
         189
@@ -2783,7 +2751,7 @@
       },
       {
        "position": 25,
-       "hash": "00e4703af4236172",
+       "hash": "545cd6c399a7a449",
        "span": [
         156,
         196
@@ -2791,7 +2759,7 @@
       },
       {
        "position": 26,
-       "hash": "cc495158edd4a400",
+       "hash": "4f51728ddb678f9c",
        "span": [
         159,
         201
@@ -2799,7 +2767,7 @@
       },
       {
        "position": 27,
-       "hash": "a9dc0e4545036bd7",
+       "hash": "dde0f91620039b4f",
        "span": [
         168,
         208
@@ -2807,7 +2775,7 @@
       },
       {
        "position": 28,
-       "hash": "32653567497363b8",
+       "hash": "3c200aa54c69dee9",
        "span": [
         173,
         212
@@ -2815,7 +2783,7 @@
       },
       {
        "position": 29,
-       "hash": "601a3ab4cfc684a4",
+       "hash": "3a072232e4443787",
        "span": [
         179,
         217
@@ -2823,7 +2791,7 @@
       },
       {
        "position": 30,
-       "hash": "e86339a5e2e057b2",
+       "hash": "a5d804884cef3eae",
        "span": [
         183,
         222
@@ -2831,79 +2799,79 @@
       }
      ],
      "windowSelections": [
-      4,
+      0,
       8,
       8,
       8,
       8,
-      8,
-      8,
-      8,
-      8,
-      13,
-      13,
-      13,
-      13,
-      13,
-      16,
-      16,
-      16,
-      24,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      17,
+      21,
+      21,
+      21,
+      21,
+      21,
+      21,
+      21,
+      21,
+      29,
+      29
      ],
      "partialWindow": false,
      "fingerprints": [
       {
-       "position": 4,
-       "hash": "116412144a3fdd44",
+       "position": 0,
+       "hash": "070aad5c80e152a8",
        "span": [
-        33,
-        77
+        0,
+        51
        ]
       },
       {
        "position": 8,
-       "hash": "03022fb1401d7f4b",
+       "hash": "2510c0f55d060712",
        "span": [
         52,
         103
        ]
       },
       {
-       "position": 13,
-       "hash": "15f597e20884d36e",
+       "position": 12,
+       "hash": "025806285b4e41d2",
        "span": [
-        83,
-        130
+        78,
+        126
        ]
       },
       {
-       "position": 16,
-       "hash": "68432379e29fbbf0",
+       "position": 17,
+       "hash": "23833fa36d824b70",
        "span": [
-        104,
-        148
+        109,
+        153
        ]
       },
       {
-       "position": 24,
-       "hash": "420f607456f257bd",
+       "position": 21,
+       "hash": "1cfa1f935daa69bf",
        "span": [
-        149,
-        189
+        131,
+        178
        ]
       },
       {
-       "position": 25,
-       "hash": "00e4703af4236172",
+       "position": 29,
+       "hash": "3a072232e4443787",
        "span": [
-        156,
-        196
+        179,
+        217
        ]
       }
      ]
@@ -3071,7 +3039,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "236fee943e041c88",
+       "hash": "73a2d9f2b0ed089e",
        "span": [
         0,
         119
@@ -3079,7 +3047,7 @@
       },
       {
        "position": 1,
-       "hash": "f81c86fac3bef568",
+       "hash": "523c1840c4feb760",
        "span": [
         7,
         124
@@ -3087,7 +3055,7 @@
       },
       {
        "position": 2,
-       "hash": "7b55feaaba439a8a",
+       "hash": "7ccb246e6c5d8d96",
        "span": [
         11,
         129
@@ -3095,7 +3063,7 @@
       },
       {
        "position": 3,
-       "hash": "5cc1524527805d16",
+       "hash": "090cce8a868eb54e",
        "span": [
         16,
         135
@@ -3103,7 +3071,7 @@
       },
       {
        "position": 4,
-       "hash": "ce71e766c53c4fc2",
+       "hash": "cf26732698458426",
        "span": [
         19,
         143
@@ -3111,7 +3079,7 @@
       },
       {
        "position": 5,
-       "hash": "740dee98fcb4e888",
+       "hash": "a4abc4f402fead1f",
        "span": [
         25,
         148
@@ -3119,16 +3087,16 @@
       }
      ],
      "windowSelections": [
-      0
+      3
      ],
      "partialWindow": true,
      "fingerprints": [
       {
-       "position": 0,
-       "hash": "236fee943e041c88",
+       "position": 3,
+       "hash": "090cce8a868eb54e",
        "span": [
-        0,
-        119
+        16,
+        135
        ]
       }
      ]
@@ -3152,7 +3120,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "95d113337ab52e6f",
+       "hash": "5180894f97278481",
        "span": [
         0,
         119
@@ -3160,7 +3128,7 @@
       },
       {
        "position": 1,
-       "hash": "828801e009d926d7",
+       "hash": "503d08ab010bac00",
        "span": [
         7,
         124
@@ -3168,7 +3136,7 @@
       },
       {
        "position": 2,
-       "hash": "ae5fe3828d79e5f6",
+       "hash": "9a06d93e60acd7b5",
        "span": [
         11,
         129
@@ -3176,7 +3144,7 @@
       },
       {
        "position": 3,
-       "hash": "d49802a019986dbc",
+       "hash": "29478e922c2fe075",
        "span": [
         16,
         135
@@ -3184,7 +3152,7 @@
       },
       {
        "position": 4,
-       "hash": "031d5e4a99ffbdb5",
+       "hash": "eb5b1f56e6a7fb9f",
        "span": [
         19,
         143
@@ -3192,7 +3160,7 @@
       },
       {
        "position": 5,
-       "hash": "29748a055d1c0bae",
+       "hash": "5a14758438634897",
        "span": [
         25,
         148
@@ -3200,16 +3168,16 @@
       }
      ],
      "windowSelections": [
-      4
+      3
      ],
      "partialWindow": true,
      "fingerprints": [
       {
-       "position": 4,
-       "hash": "031d5e4a99ffbdb5",
+       "position": 3,
+       "hash": "29478e922c2fe075",
        "span": [
-        19,
-        143
+        16,
+        135
        ]
       }
      ]
@@ -3233,7 +3201,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "bfa61ef0cad58bb4",
+       "hash": "33fb65a516bd4a58",
        "span": [
         0,
         119
@@ -3241,7 +3209,7 @@
       },
       {
        "position": 1,
-       "hash": "148fa825bea06303",
+       "hash": "14a052871180e315",
        "span": [
         7,
         124
@@ -3249,7 +3217,7 @@
       },
       {
        "position": 2,
-       "hash": "070c1946877fa1a1",
+       "hash": "335789c920dde2be",
        "span": [
         11,
         129
@@ -3257,7 +3225,7 @@
       },
       {
        "position": 3,
-       "hash": "949f7dc4ea4e1095",
+       "hash": "e9dff74ef584bccc",
        "span": [
         16,
         135
@@ -3265,7 +3233,7 @@
       },
       {
        "position": 4,
-       "hash": "f6602cfc6e4ee8a0",
+       "hash": "60cc8fde08065993",
        "span": [
         19,
         143
@@ -3273,7 +3241,7 @@
       },
       {
        "position": 5,
-       "hash": "0db05e021106d403",
+       "hash": "65f46cffced3ddef",
        "span": [
         25,
         148
@@ -3281,16 +3249,16 @@
       }
      ],
      "windowSelections": [
-      2
+      1
      ],
      "partialWindow": true,
      "fingerprints": [
       {
-       "position": 2,
-       "hash": "070c1946877fa1a1",
+       "position": 1,
+       "hash": "14a052871180e315",
        "span": [
-        11,
-        129
+        7,
+        124
        ]
       }
      ]
@@ -3509,7 +3477,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "082737afd98299ad",
+       "hash": "e13927bc802777cc",
        "span": [
         41,
         90
@@ -3517,7 +3485,7 @@
       },
       {
        "position": 1,
-       "hash": "98267d84992c77dc",
+       "hash": "d30b781cc67e47a0",
        "span": [
         49,
         95
@@ -3525,16 +3493,16 @@
       }
      ],
      "windowSelections": [
-      0
+      1
      ],
      "partialWindow": true,
      "fingerprints": [
       {
-       "position": 0,
-       "hash": "082737afd98299ad",
+       "position": 1,
+       "hash": "d30b781cc67e47a0",
        "span": [
-        41,
-        90
+        49,
+        95
        ]
       }
      ]
@@ -3554,7 +3522,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "2c2550ea0189412d",
+       "hash": "99d927e40d346b5f",
        "span": [
         41,
         90
@@ -3562,7 +3530,7 @@
       },
       {
        "position": 1,
-       "hash": "7fa89c9b8f379766",
+       "hash": "a2c40d8bed292214",
        "span": [
         49,
         95
@@ -3576,7 +3544,7 @@
      "fingerprints": [
       {
        "position": 0,
-       "hash": "2c2550ea0189412d",
+       "hash": "99d927e40d346b5f",
        "span": [
         41,
         90
@@ -3599,7 +3567,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "2122b133a6c8de89",
+       "hash": "d0fb4a6d45b8be29",
        "span": [
         41,
         90
@@ -3607,7 +3575,7 @@
       },
       {
        "position": 1,
-       "hash": "66b83839af42275f",
+       "hash": "a8bb8be2898a804c",
        "span": [
         49,
         95
@@ -3615,16 +3583,16 @@
       }
      ],
      "windowSelections": [
-      0
+      1
      ],
      "partialWindow": true,
      "fingerprints": [
       {
-       "position": 0,
-       "hash": "2122b133a6c8de89",
+       "position": 1,
+       "hash": "a8bb8be2898a804c",
        "span": [
-        41,
-        90
+        49,
+        95
        ]
       }
      ]
@@ -3728,7 +3696,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "93bd7f5bacf2f883",
+       "hash": "6a23b3ad87710acf",
        "span": [
         20,
         67
@@ -3742,7 +3710,7 @@
      "fingerprints": [
       {
        "position": 0,
-       "hash": "93bd7f5bacf2f883",
+       "hash": "6a23b3ad87710acf",
        "span": [
         20,
         67
@@ -3764,7 +3732,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "f3c89168d6adfe90",
+       "hash": "94ce204500b5539e",
        "span": [
         20,
         67
@@ -3778,7 +3746,7 @@
      "fingerprints": [
       {
        "position": 0,
-       "hash": "f3c89168d6adfe90",
+       "hash": "94ce204500b5539e",
        "span": [
         20,
         67
@@ -3800,7 +3768,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "66fac040b5ba6d4f",
+       "hash": "b361daffc3b82171",
        "span": [
         20,
         67
@@ -3814,7 +3782,7 @@
      "fingerprints": [
       {
        "position": 0,
-       "hash": "66fac040b5ba6d4f",
+       "hash": "b361daffc3b82171",
        "span": [
         20,
         67
@@ -3933,7 +3901,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "9070bbf7381d3f36",
+       "hash": "3db2d0f95774813b",
        "span": [
         4,
         54
@@ -3941,7 +3909,7 @@
       },
       {
        "position": 1,
-       "hash": "678368844d8247df",
+       "hash": "e592cb56ebdc489a",
        "span": [
         11,
         62
@@ -3949,7 +3917,7 @@
       },
       {
        "position": 2,
-       "hash": "d080ff44b45b7ae1",
+       "hash": "26d6ef0f77d9eab7",
        "span": [
         17,
         67
@@ -3957,16 +3925,16 @@
       }
      ],
      "windowSelections": [
-      1
+      2
      ],
      "partialWindow": true,
      "fingerprints": [
       {
-       "position": 1,
-       "hash": "678368844d8247df",
+       "position": 2,
+       "hash": "26d6ef0f77d9eab7",
        "span": [
-        11,
-        62
+        17,
+        67
        ]
       }
      ]
@@ -3987,7 +3955,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "cbc093eaa469ed8e",
+       "hash": "f072d611f5b1cfdf",
        "span": [
         4,
         54
@@ -3995,7 +3963,7 @@
       },
       {
        "position": 1,
-       "hash": "d58b8ff4e7eca263",
+       "hash": "eba6029d17414637",
        "span": [
         11,
         62
@@ -4003,7 +3971,7 @@
       },
       {
        "position": 2,
-       "hash": "860e7a91a8e26531",
+       "hash": "48797d67f5144a36",
        "span": [
         17,
         67
@@ -4017,7 +3985,7 @@
      "fingerprints": [
       {
        "position": 2,
-       "hash": "860e7a91a8e26531",
+       "hash": "48797d67f5144a36",
        "span": [
         17,
         67
@@ -4041,7 +4009,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "06822c8b27b2066e",
+       "hash": "c5962b8180a56eda",
        "span": [
         4,
         54
@@ -4049,7 +4017,7 @@
       },
       {
        "position": 1,
-       "hash": "b82d23159ab3cb51",
+       "hash": "deb18876394531f7",
        "span": [
         11,
         62
@@ -4057,7 +4025,7 @@
       },
       {
        "position": 2,
-       "hash": "a944009296483a5b",
+       "hash": "02fc1de045487bd8",
        "span": [
         17,
         67
@@ -4065,16 +4033,16 @@
       }
      ],
      "windowSelections": [
-      0
+      2
      ],
      "partialWindow": true,
      "fingerprints": [
       {
-       "position": 0,
-       "hash": "06822c8b27b2066e",
+       "position": 2,
+       "hash": "02fc1de045487bd8",
        "span": [
-        4,
-        54
+        17,
+        67
        ]
       }
      ]
@@ -4181,7 +4149,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "1d498fbcf19264b1",
+       "hash": "b1e0a6201dc60204",
        "span": [
         0,
         80
@@ -4195,7 +4163,7 @@
      "fingerprints": [
       {
        "position": 0,
-       "hash": "1d498fbcf19264b1",
+       "hash": "b1e0a6201dc60204",
        "span": [
         0,
         80
@@ -4217,7 +4185,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "04ba071c7e8925f4",
+       "hash": "a447c1019b542b4d",
        "span": [
         0,
         80
@@ -4231,7 +4199,7 @@
      "fingerprints": [
       {
        "position": 0,
-       "hash": "04ba071c7e8925f4",
+       "hash": "a447c1019b542b4d",
        "span": [
         0,
         80
@@ -4253,7 +4221,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "0990689eb9ec1048",
+       "hash": "8baeb8904a234aa6",
        "span": [
         0,
         80
@@ -4267,7 +4235,7 @@
      "fingerprints": [
       {
        "position": 0,
-       "hash": "0990689eb9ec1048",
+       "hash": "8baeb8904a234aa6",
        "span": [
         0,
         80
@@ -4404,7 +4372,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "21506d9a083febc5",
+       "hash": "13baa0fbf28694f2",
        "span": [
         0,
         51
@@ -4412,7 +4380,7 @@
       },
       {
        "position": 1,
-       "hash": "8fdd00c9602cb696",
+       "hash": "dabc9118a6e3af6d",
        "span": [
         11,
         54
@@ -4420,7 +4388,7 @@
       },
       {
        "position": 2,
-       "hash": "eb53266ff7b99e22",
+       "hash": "1c387f959e012e6a",
        "span": [
         17,
         58
@@ -4428,7 +4396,7 @@
       },
       {
        "position": 3,
-       "hash": "45e2f8dd97232d5c",
+       "hash": "edb7074f125687bc",
        "span": [
         24,
         64
@@ -4436,7 +4404,7 @@
       },
       {
        "position": 4,
-       "hash": "b2cc50b66be826c0",
+       "hash": "da4c67457b4958a1",
        "span": [
         27,
         71
@@ -4450,7 +4418,7 @@
      "fingerprints": [
       {
        "position": 0,
-       "hash": "21506d9a083febc5",
+       "hash": "13baa0fbf28694f2",
        "span": [
         0,
         51
@@ -4476,7 +4444,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "581bc4684ae5e1cf",
+       "hash": "2d9b6ef165ef0ec2",
        "span": [
         0,
         51
@@ -4484,7 +4452,7 @@
       },
       {
        "position": 1,
-       "hash": "72ef72dc04c5e8fb",
+       "hash": "3a387afc2e78ae64",
        "span": [
         11,
         54
@@ -4492,7 +4460,7 @@
       },
       {
        "position": 2,
-       "hash": "1e3c82a6825235db",
+       "hash": "6d1c2482d915f067",
        "span": [
         17,
         58
@@ -4500,7 +4468,7 @@
       },
       {
        "position": 3,
-       "hash": "4ab7d77260e9d976",
+       "hash": "f53e3d7f587bb761",
        "span": [
         24,
         64
@@ -4508,7 +4476,7 @@
       },
       {
        "position": 4,
-       "hash": "2c398cb6f5a596f7",
+       "hash": "d4ad73d9560cbc76",
        "span": [
         27,
         71
@@ -4516,16 +4484,16 @@
       }
      ],
      "windowSelections": [
-      2
+      0
      ],
      "partialWindow": true,
      "fingerprints": [
       {
-       "position": 2,
-       "hash": "1e3c82a6825235db",
+       "position": 0,
+       "hash": "2d9b6ef165ef0ec2",
        "span": [
-        17,
-        58
+        0,
+        51
        ]
       }
      ]
@@ -4548,7 +4516,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "e7cfbd22bb1f9f5d",
+       "hash": "742152f96bd8c785",
        "span": [
         0,
         51
@@ -4556,7 +4524,7 @@
       },
       {
        "position": 1,
-       "hash": "192612b9bdaff628",
+       "hash": "2ae2b86aabc4e7b3",
        "span": [
         11,
         54
@@ -4564,7 +4532,7 @@
       },
       {
        "position": 2,
-       "hash": "9c5c437d75a1e5cc",
+       "hash": "29b475993ab10362",
        "span": [
         17,
         58
@@ -4572,7 +4540,7 @@
       },
       {
        "position": 3,
-       "hash": "e96f895c94351a30",
+       "hash": "3d31ead3b3ea93dd",
        "span": [
         24,
         64
@@ -4580,7 +4548,7 @@
       },
       {
        "position": 4,
-       "hash": "d2fd1321f0793876",
+       "hash": "7683b8612c737132",
        "span": [
         27,
         71
@@ -4588,16 +4556,16 @@
       }
      ],
      "windowSelections": [
-      1
+      2
      ],
      "partialWindow": true,
      "fingerprints": [
       {
-       "position": 1,
-       "hash": "192612b9bdaff628",
+       "position": 2,
+       "hash": "29b475993ab10362",
        "span": [
-        11,
-        54
+        17,
+        58
        ]
       }
      ]
@@ -4745,7 +4713,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "80c4ca0a966f8c2b",
+       "hash": "5ea5ab03f193717a",
        "span": [
         0,
         39
@@ -4753,7 +4721,7 @@
       },
       {
        "position": 1,
-       "hash": "81ba438067a2100b",
+       "hash": "ddffd61552d91bdd",
        "span": [
         4,
         90
@@ -4761,7 +4729,7 @@
       },
       {
        "position": 2,
-       "hash": "3ad90990c6873650",
+       "hash": "46c75c91a22a375c",
        "span": [
         9,
         101
@@ -4769,7 +4737,7 @@
       },
       {
        "position": 3,
-       "hash": "027c071a30d90706",
+       "hash": "00cdd7548d76217f",
        "span": [
         16,
         107
@@ -4777,7 +4745,7 @@
       },
       {
        "position": 4,
-       "hash": "2d418cf6585e2cc3",
+       "hash": "b949d6beab5a0b5e",
        "span": [
         19,
         115
@@ -4785,7 +4753,7 @@
       },
       {
        "position": 5,
-       "hash": "0436710a44a489f9",
+       "hash": "6f43ac6f78d14c6e",
        "span": [
         23,
         123
@@ -4799,7 +4767,7 @@
      "fingerprints": [
       {
        "position": 3,
-       "hash": "027c071a30d90706",
+       "hash": "00cdd7548d76217f",
        "span": [
         16,
         107
@@ -4826,7 +4794,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "b13041933eba16c0",
+       "hash": "3d55c84a621f17e0",
        "span": [
         0,
         39
@@ -4834,7 +4802,7 @@
       },
       {
        "position": 1,
-       "hash": "6fcef075eb830ec6",
+       "hash": "e0d813e37c4660b5",
        "span": [
         4,
         90
@@ -4842,7 +4810,7 @@
       },
       {
        "position": 2,
-       "hash": "f62772bdc798c503",
+       "hash": "9e5a9ab4172f8172",
        "span": [
         9,
         101
@@ -4850,7 +4818,7 @@
       },
       {
        "position": 3,
-       "hash": "a399b26ec06f7a46",
+       "hash": "270320c0e548becc",
        "span": [
         16,
         107
@@ -4858,7 +4826,7 @@
       },
       {
        "position": 4,
-       "hash": "d9e98940c37c0996",
+       "hash": "a289f8fbbb4cc808",
        "span": [
         19,
         115
@@ -4866,7 +4834,7 @@
       },
       {
        "position": 5,
-       "hash": "b1ccd895cfba1f70",
+       "hash": "75881fb06e52888f",
        "span": [
         23,
         123
@@ -4874,16 +4842,16 @@
       }
      ],
      "windowSelections": [
-      1
+      3
      ],
      "partialWindow": true,
      "fingerprints": [
       {
-       "position": 1,
-       "hash": "6fcef075eb830ec6",
+       "position": 3,
+       "hash": "270320c0e548becc",
        "span": [
-        4,
-        90
+        16,
+        107
        ]
       }
      ]
@@ -4907,7 +4875,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "ce1f32be0b3b8edb",
+       "hash": "30f3338b1e2e8a5b",
        "span": [
         0,
         39
@@ -4915,7 +4883,7 @@
       },
       {
        "position": 1,
-       "hash": "63c0baf8564235c4",
+       "hash": "cb433bdf233332ef",
        "span": [
         4,
         90
@@ -4923,7 +4891,7 @@
       },
       {
        "position": 2,
-       "hash": "3e1b6e24b1024ca2",
+       "hash": "e1dc8ed3eecd6731",
        "span": [
         9,
         101
@@ -4931,7 +4899,7 @@
       },
       {
        "position": 3,
-       "hash": "8c3eda4819d6dbc0",
+       "hash": "58e119f1bc681ac9",
        "span": [
         16,
         107
@@ -4939,7 +4907,7 @@
       },
       {
        "position": 4,
-       "hash": "82c29616f98832bd",
+       "hash": "df8c646d1c522145",
        "span": [
         19,
         115
@@ -4947,7 +4915,7 @@
       },
       {
        "position": 5,
-       "hash": "419293fae9f498f0",
+       "hash": "ff6266c82737492d",
        "span": [
         23,
         123
@@ -4955,16 +4923,16 @@
       }
      ],
      "windowSelections": [
-      2
+      0
      ],
      "partialWindow": true,
      "fingerprints": [
       {
-       "position": 2,
-       "hash": "3e1b6e24b1024ca2",
+       "position": 0,
+       "hash": "30f3338b1e2e8a5b",
        "span": [
-        9,
-        101
+        0,
+        39
        ]
       }
      ]
@@ -5139,7 +5107,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "e184ed9d834a881b",
+       "hash": "8cfda1b14b418a7e",
        "span": [
         0,
         108
@@ -5147,7 +5115,7 @@
       },
       {
        "position": 1,
-       "hash": "e6239f51ec9ad53f",
+       "hash": "bc180c5b7b73eec5",
        "span": [
         6,
         114
@@ -5155,7 +5123,7 @@
       },
       {
        "position": 2,
-       "hash": "2fe58383e58c754c",
+       "hash": "b3852fd4a4878b7a",
        "span": [
         10,
         120
@@ -5163,7 +5131,7 @@
       },
       {
        "position": 3,
-       "hash": "caed5272cd26b092",
+       "hash": "5cf8574f67f2c5d0",
        "span": [
         79,
         123
@@ -5171,7 +5139,7 @@
       },
       {
        "position": 4,
-       "hash": "1a9cb28afc0f98d5",
+       "hash": "6d58fd137904b485",
        "span": [
         85,
         128
@@ -5179,7 +5147,7 @@
       },
       {
        "position": 5,
-       "hash": "aa0a9e3590233b19",
+       "hash": "c76aecb71b7ea9aa",
        "span": [
         92,
         133
@@ -5187,7 +5155,7 @@
       },
       {
        "position": 6,
-       "hash": "f8f3e819d873c556",
+       "hash": "10b0cb4e3e55e694",
        "span": [
         98,
         137
@@ -5195,7 +5163,7 @@
       },
       {
        "position": 7,
-       "hash": "51b355899b9dba97",
+       "hash": "81febe984cb733b1",
        "span": [
         106,
         146
@@ -5203,7 +5171,7 @@
       },
       {
        "position": 8,
-       "hash": "0ef7d79be5b0d8ce",
+       "hash": "9795209b79da452f",
        "span": [
         109,
         154
@@ -5211,25 +5179,17 @@
       }
      ],
      "windowSelections": [
-      4,
-      8
+      6,
+      6
      ],
      "partialWindow": false,
      "fingerprints": [
       {
-       "position": 4,
-       "hash": "1a9cb28afc0f98d5",
+       "position": 6,
+       "hash": "10b0cb4e3e55e694",
        "span": [
-        85,
-        128
-       ]
-      },
-      {
-       "position": 8,
-       "hash": "0ef7d79be5b0d8ce",
-       "span": [
-        109,
-        154
+        98,
+        137
        ]
       }
      ]
@@ -5256,7 +5216,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "e7e7b862c14c92a9",
+       "hash": "7091b96d556af8b5",
        "span": [
         0,
         108
@@ -5264,7 +5224,7 @@
       },
       {
        "position": 1,
-       "hash": "301704b899a6fb2e",
+       "hash": "1ea94704e549e86a",
        "span": [
         6,
         114
@@ -5272,7 +5232,7 @@
       },
       {
        "position": 2,
-       "hash": "f7ad1c1ec246abb8",
+       "hash": "e79c63717bd584b1",
        "span": [
         10,
         120
@@ -5280,7 +5240,7 @@
       },
       {
        "position": 3,
-       "hash": "453d3279f014ce72",
+       "hash": "2302385fc260e2b8",
        "span": [
         79,
         123
@@ -5288,7 +5248,7 @@
       },
       {
        "position": 4,
-       "hash": "32cb7ba7054443db",
+       "hash": "c16077f2c534e3b5",
        "span": [
         85,
         128
@@ -5296,7 +5256,7 @@
       },
       {
        "position": 5,
-       "hash": "d2c7ee3e25b42e3a",
+       "hash": "23fea6558f2a2f8f",
        "span": [
         92,
         133
@@ -5304,7 +5264,7 @@
       },
       {
        "position": 6,
-       "hash": "1b752c430136a716",
+       "hash": "bd139b9cebdd8407",
        "span": [
         98,
         137
@@ -5312,7 +5272,7 @@
       },
       {
        "position": 7,
-       "hash": "24556a8e737edc43",
+       "hash": "5dd120e5ebc484cb",
        "span": [
         106,
         146
@@ -5320,7 +5280,7 @@
       },
       {
        "position": 8,
-       "hash": "dacf277ff592dc1f",
+       "hash": "69da625510ae3119",
        "span": [
         109,
         154
@@ -5328,17 +5288,17 @@
       }
      ],
      "windowSelections": [
-      6,
-      6
+      1,
+      1
      ],
      "partialWindow": false,
      "fingerprints": [
       {
-       "position": 6,
-       "hash": "1b752c430136a716",
+       "position": 1,
+       "hash": "1ea94704e549e86a",
        "span": [
-        98,
-        137
+        6,
+        114
        ]
       }
      ]
@@ -5365,7 +5325,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "9c21a90dffc095ef",
+       "hash": "39572198c33b7656",
        "span": [
         0,
         108
@@ -5373,7 +5333,7 @@
       },
       {
        "position": 1,
-       "hash": "8c47b05285f49899",
+       "hash": "5eb5a4446ea02ae9",
        "span": [
         6,
         114
@@ -5381,7 +5341,7 @@
       },
       {
        "position": 2,
-       "hash": "e07546bec88126f3",
+       "hash": "85de433ac98ca9b7",
        "span": [
         10,
         120
@@ -5389,7 +5349,7 @@
       },
       {
        "position": 3,
-       "hash": "ef79d45fb2819dc6",
+       "hash": "91740ba73d0b5612",
        "span": [
         79,
         123
@@ -5397,7 +5357,7 @@
       },
       {
        "position": 4,
-       "hash": "3e3d94344367ae2d",
+       "hash": "9da67fff9430f728",
        "span": [
         85,
         128
@@ -5405,7 +5365,7 @@
       },
       {
        "position": 5,
-       "hash": "2cfc382b0cea41c0",
+       "hash": "0e97d91e2b818278",
        "span": [
         92,
         133
@@ -5413,7 +5373,7 @@
       },
       {
        "position": 6,
-       "hash": "eee463c3a8d8a7d3",
+       "hash": "caed3f41d9e26e96",
        "span": [
         98,
         137
@@ -5421,7 +5381,7 @@
       },
       {
        "position": 7,
-       "hash": "a5ef019d19660951",
+       "hash": "62f06efef540b738",
        "span": [
         106,
         146
@@ -5429,7 +5389,7 @@
       },
       {
        "position": 8,
-       "hash": "ff1ca38cc1c81e13",
+       "hash": "2a0961b171c8a299",
        "span": [
         109,
         154
@@ -5444,7 +5404,7 @@
      "fingerprints": [
       {
        "position": 5,
-       "hash": "2cfc382b0cea41c0",
+       "hash": "0e97d91e2b818278",
        "span": [
         92,
         133
@@ -5640,7 +5600,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "52bccfb60485826e",
+       "hash": "2afa5793aafcc683",
        "span": [
         0,
         25
@@ -5648,7 +5608,7 @@
       },
       {
        "position": 1,
-       "hash": "8fc15b70011f5871",
+       "hash": "370138462a4effe8",
        "span": [
         3,
         27
@@ -5656,7 +5616,7 @@
       },
       {
        "position": 2,
-       "hash": "4c393cf46a93b4b5",
+       "hash": "bc9f51f4a89323c7",
        "span": [
         7,
         31
@@ -5664,7 +5624,7 @@
       },
       {
        "position": 3,
-       "hash": "7cea731ca2e614fb",
+       "hash": "b9d4605faaec43b6",
        "span": [
         9,
         33
@@ -5672,7 +5632,7 @@
       },
       {
        "position": 4,
-       "hash": "13d334f5c99b6707",
+       "hash": "0ff9b171d02da766",
        "span": [
         13,
         36
@@ -5680,7 +5640,7 @@
       },
       {
        "position": 5,
-       "hash": "9a69aa09c2e8d848",
+       "hash": "bea09bb37e641cdf",
        "span": [
         17,
         40
@@ -5688,7 +5648,7 @@
       },
       {
        "position": 6,
-       "hash": "b19d0b43122ba8b5",
+       "hash": "c06bf2ddf36159d7",
        "span": [
         19,
         54
@@ -5696,7 +5656,7 @@
       },
       {
        "position": 7,
-       "hash": "cf7c0665169c00f2",
+       "hash": "0068f709a0e654ed",
        "span": [
         24,
         61
@@ -5704,7 +5664,7 @@
       },
       {
        "position": 8,
-       "hash": "331e34ce16cac8c0",
+       "hash": "9d473e9d76df46aa",
        "span": [
         26,
         67
@@ -5712,7 +5672,7 @@
       },
       {
        "position": 9,
-       "hash": "dbfc97420982f9e6",
+       "hash": "8d33c2246de0312d",
        "span": [
         28,
         70
@@ -5720,7 +5680,7 @@
       },
       {
        "position": 10,
-       "hash": "60aa9d5525e7ac7b",
+       "hash": "d3f69f4bd3d55bc2",
        "span": [
         32,
         77
@@ -5728,19 +5688,19 @@
       }
      ],
      "windowSelections": [
-      4,
-      4,
-      4,
-      4
+      7,
+      7,
+      7,
+      7
      ],
      "partialWindow": false,
      "fingerprints": [
       {
-       "position": 4,
-       "hash": "13d334f5c99b6707",
+       "position": 7,
+       "hash": "0068f709a0e654ed",
        "span": [
-        13,
-        36
+        24,
+        61
        ]
       }
      ]
@@ -5769,7 +5729,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "45d619eebf845fa8",
+       "hash": "f7d024e257cad37f",
        "span": [
         0,
         25
@@ -5777,7 +5737,7 @@
       },
       {
        "position": 1,
-       "hash": "c151aa22f8212c33",
+       "hash": "5f95909e1994dafd",
        "span": [
         3,
         27
@@ -5785,7 +5745,7 @@
       },
       {
        "position": 2,
-       "hash": "0fbceb15180c0aa7",
+       "hash": "137fb2bf72e18a67",
        "span": [
         7,
         31
@@ -5793,7 +5753,7 @@
       },
       {
        "position": 3,
-       "hash": "25d112336def8e58",
+       "hash": "cf295c57a1b76411",
        "span": [
         9,
         33
@@ -5801,7 +5761,7 @@
       },
       {
        "position": 4,
-       "hash": "dd11f463a271596e",
+       "hash": "f237ca609ddb65ac",
        "span": [
         13,
         36
@@ -5809,7 +5769,7 @@
       },
       {
        "position": 5,
-       "hash": "4de31d3ced38216c",
+       "hash": "004edc6e16fbb717",
        "span": [
         17,
         40
@@ -5817,7 +5777,7 @@
       },
       {
        "position": 6,
-       "hash": "3b37eda477f27730",
+       "hash": "a0012393eed1e54c",
        "span": [
         19,
         54
@@ -5825,7 +5785,7 @@
       },
       {
        "position": 7,
-       "hash": "b0127855baba6d69",
+       "hash": "b09299e21335d692",
        "span": [
         24,
         61
@@ -5833,7 +5793,7 @@
       },
       {
        "position": 8,
-       "hash": "e70cb5a521c44890",
+       "hash": "039d98ccaa6050a7",
        "span": [
         26,
         67
@@ -5841,7 +5801,7 @@
       },
       {
        "position": 9,
-       "hash": "5c49f71d3bdc8c79",
+       "hash": "e84fea66484355d4",
        "span": [
         28,
         70
@@ -5849,7 +5809,7 @@
       },
       {
        "position": 10,
-       "hash": "71859d3dc87709c9",
+       "hash": "dbeb78d4a20b8bdb",
        "span": [
         32,
         77
@@ -5857,27 +5817,19 @@
       }
      ],
      "windowSelections": [
-      2,
-      2,
-      2,
-      3
+      5,
+      5,
+      5,
+      5
      ],
      "partialWindow": false,
      "fingerprints": [
       {
-       "position": 2,
-       "hash": "0fbceb15180c0aa7",
+       "position": 5,
+       "hash": "004edc6e16fbb717",
        "span": [
-        7,
-        31
-       ]
-      },
-      {
-       "position": 3,
-       "hash": "25d112336def8e58",
-       "span": [
-        9,
-        33
+        17,
+        40
        ]
       }
      ]
@@ -5906,7 +5858,7 @@
      "kgrams": [
       {
        "position": 0,
-       "hash": "3aad05d6beecdd02",
+       "hash": "d96d4dd74ffd43ff",
        "span": [
         0,
         25
@@ -5914,7 +5866,7 @@
       },
       {
        "position": 1,
-       "hash": "0e14320d77d7b5f1",
+       "hash": "7cfd35ae5b7eda5e",
        "span": [
         3,
         27
@@ -5922,7 +5874,7 @@
       },
       {
        "position": 2,
-       "hash": "2ccff68ab16d8b31",
+       "hash": "682483bea5dca48f",
        "span": [
         7,
         31
@@ -5930,7 +5882,7 @@
       },
       {
        "position": 3,
-       "hash": "1d47e6d0f1fb8644",
+       "hash": "eee63dadd303422a",
        "span": [
         9,
         33
@@ -5938,7 +5890,7 @@
       },
       {
        "position": 4,
-       "hash": "075bb466ba180ddd",
+       "hash": "9d3e5b2c3725c47d",
        "span": [
         13,
         36
@@ -5946,7 +5898,7 @@
       },
       {
        "position": 5,
-       "hash": "b6bdf9da5ab4b8f1",
+       "hash": "2589b9c57c3b6686",
        "span": [
         17,
         40
@@ -5954,7 +5906,7 @@
       },
       {
        "position": 6,
-       "hash": "0b6e3fac02777e33",
+       "hash": "f73094c076d1a4bc",
        "span": [
         19,
         54
@@ -5962,7 +5914,7 @@
       },
       {
        "position": 7,
-       "hash": "6c647241993ed881",
+       "hash": "f3f654394686fcf8",
        "span": [
         24,
         61
@@ -5970,7 +5922,7 @@
       },
       {
        "position": 8,
-       "hash": "41eaefcd25d522d9",
+       "hash": "f650ace53c16a12f",
        "span": [
         26,
         67
@@ -5978,7 +5930,7 @@
       },
       {
        "position": 9,
-       "hash": "65ad9d64a5688e1b",
+       "hash": "3d3de2c2bb891035",
        "span": [
         28,
         70
@@ -5986,7 +5938,7 @@
       },
       {
        "position": 10,
-       "hash": "8550d48aea3bd755",
+       "hash": "39a7f3f2d51e03ad",
        "span": [
         32,
         77
@@ -5994,19 +5946,19 @@
       }
      ],
      "windowSelections": [
-      4,
-      4,
-      4,
-      4
+      5,
+      5,
+      5,
+      5
      ],
      "partialWindow": false,
      "fingerprints": [
       {
-       "position": 4,
-       "hash": "075bb466ba180ddd",
+       "position": 5,
+       "hash": "2589b9c57c3b6686",
        "span": [
-        13,
-        36
+        17,
+        40
        ]
       }
      ]
@@ -6363,6 +6315,922 @@
     "error": {
      "code": "nul",
      "offset": 8
+    }
+   }
+  },
+  {
+   "id": "md-html-block",
+   "tags": [
+    "class:markdown"
+   ],
+   "description": "An HTML block: only the tags are masked; the text line between them stays tokens (CommonMark would treat the lines as one HTML block).",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "PGRpdiBjbGFzcz0ibm90ZSI+ClRleHQgaW5zaWRlIGFuIEhUTUwgYmxvY2sgc3RheXMgdmlzaWJsZSBhcyB0b2tlbnMuCjwvZGl2Pgo=",
+   "inputText": "<div class=\"note\">\nText inside an HTML block stays visible as tokens.\n</div>\n",
+   "result": {
+    "status": "ok",
+    "masked": [
+     [
+      0,
+      18
+     ],
+     [
+      70,
+      76
+     ]
+    ],
+    "tokens": [
+     {
+      "text": "Text",
+      "span": [
+       19,
+       23
+      ],
+      "folded": "text",
+      "skeleton": "text"
+     },
+     {
+      "text": "inside",
+      "span": [
+       24,
+       30
+      ],
+      "folded": "inside",
+      "skeleton": "inside"
+     },
+     {
+      "text": "an",
+      "span": [
+       31,
+       33
+      ],
+      "folded": "an",
+      "skeleton": "an"
+     },
+     {
+      "text": "HTML",
+      "span": [
+       34,
+       38
+      ],
+      "folded": "html",
+      "skeleton": "htrnl"
+     },
+     {
+      "text": "block",
+      "span": [
+       39,
+       44
+      ],
+      "folded": "block",
+      "skeleton": "block"
+     },
+     {
+      "text": "stays",
+      "span": [
+       45,
+       50
+      ],
+      "folded": "stays",
+      "skeleton": "stays"
+     },
+     {
+      "text": "visible",
+      "span": [
+       51,
+       58
+      ],
+      "folded": "visible",
+      "skeleton": "visible"
+     },
+     {
+      "text": "as",
+      "span": [
+       59,
+       61
+      ],
+      "folded": "as",
+      "skeleton": "as"
+     },
+     {
+      "text": "tokens",
+      "span": [
+       62,
+       68
+      ],
+      "folded": "tokens",
+      "skeleton": "tokens"
+     }
+    ],
+    "exact": {
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "ded0d88118febac6",
+       "span": [
+        19,
+        61
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "b9a829f30dcb6017",
+       "span": [
+        24,
+        68
+       ]
+      }
+     ],
+     "windowSelections": [
+      1
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 1,
+       "hash": "b9a829f30dcb6017",
+       "span": [
+        24,
+        68
+       ]
+      }
+     ]
+    },
+    "folded": {
+     "values": [
+      "text",
+      "inside",
+      "an",
+      "html",
+      "block",
+      "stays",
+      "visible",
+      "as",
+      "tokens"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "0d1ab5e635e4b532",
+       "span": [
+        19,
+        61
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "73f35ac53623d22e",
+       "span": [
+        24,
+        68
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "0d1ab5e635e4b532",
+       "span": [
+        19,
+        61
+       ]
+      }
+     ]
+    },
+    "skeleton": {
+     "values": [
+      "text",
+      "inside",
+      "an",
+      "htrnl",
+      "block",
+      "stays",
+      "visible",
+      "as",
+      "tokens"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "6c78032c14ced72c",
+       "span": [
+        19,
+        61
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "e30413a6bd2d7919",
+       "span": [
+        24,
+        68
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "6c78032c14ced72c",
+       "span": [
+        19,
+        61
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "md-bom-front-matter",
+   "tags": [
+    "class:markdown",
+    "class:bom"
+   ],
+   "description": "A BOM before front matter: MD-1 skips the leading U+FEFF, so the front matter is masked from offset 3.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "77u/LS0tCnRpdGxlOiBIaWRkZW4KLS0tClZpc2libGUgd29yZHMgYWZ0ZXIgYSBieXRlIG9yZGVyIG1hcmsgYW5kIGZyb250IG1hdHRlci4K",
+   "inputText": "\ufeff---\ntitle: Hidden\n---\nVisible words after a byte order mark and front matter.\n",
+   "result": {
+    "status": "ok",
+    "masked": [
+     [
+      3,
+      24
+     ]
+    ],
+    "tokens": [
+     {
+      "text": "Visible",
+      "span": [
+       25,
+       32
+      ],
+      "folded": "visible",
+      "skeleton": "visible"
+     },
+     {
+      "text": "words",
+      "span": [
+       33,
+       38
+      ],
+      "folded": "words",
+      "skeleton": "words"
+     },
+     {
+      "text": "after",
+      "span": [
+       39,
+       44
+      ],
+      "folded": "after",
+      "skeleton": "after"
+     },
+     {
+      "text": "a",
+      "span": [
+       45,
+       46
+      ],
+      "folded": "a",
+      "skeleton": "a"
+     },
+     {
+      "text": "byte",
+      "span": [
+       47,
+       51
+      ],
+      "folded": "byte",
+      "skeleton": "byte"
+     },
+     {
+      "text": "order",
+      "span": [
+       52,
+       57
+      ],
+      "folded": "order",
+      "skeleton": "order"
+     },
+     {
+      "text": "mark",
+      "span": [
+       58,
+       62
+      ],
+      "folded": "mark",
+      "skeleton": "rnark"
+     },
+     {
+      "text": "and",
+      "span": [
+       63,
+       66
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "front",
+      "span": [
+       67,
+       72
+      ],
+      "folded": "front",
+      "skeleton": "front"
+     },
+     {
+      "text": "matter",
+      "span": [
+       73,
+       79
+      ],
+      "folded": "matter",
+      "skeleton": "rnatter"
+     }
+    ],
+    "exact": {
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "005179d975c31146",
+       "span": [
+        25,
+        66
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "58bd92892ade79be",
+       "span": [
+        33,
+        72
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "f25c087b6837f62b",
+       "span": [
+        39,
+        79
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "005179d975c31146",
+       "span": [
+        25,
+        66
+       ]
+      }
+     ]
+    },
+    "folded": {
+     "values": [
+      "visible",
+      "words",
+      "after",
+      "a",
+      "byte",
+      "order",
+      "mark",
+      "and",
+      "front",
+      "matter"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "ace9759eab452a71",
+       "span": [
+        25,
+        66
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "73daa74cb0fd71c2",
+       "span": [
+        33,
+        72
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "4745726f4f57e8ce",
+       "span": [
+        39,
+        79
+       ]
+      }
+     ],
+     "windowSelections": [
+      2
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 2,
+       "hash": "4745726f4f57e8ce",
+       "span": [
+        39,
+        79
+       ]
+      }
+     ]
+    },
+    "skeleton": {
+     "values": [
+      "visible",
+      "words",
+      "after",
+      "a",
+      "byte",
+      "order",
+      "rnark",
+      "and",
+      "front",
+      "rnatter"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "26c33a0caaa2f059",
+       "span": [
+        25,
+        66
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "3e0a027f3964f5cf",
+       "span": [
+        33,
+        72
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "8c52db241b8d4544",
+       "span": [
+        39,
+        79
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "26c33a0caaa2f059",
+       "span": [
+        25,
+        66
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "md-list-fence",
+   "tags": [
+    "class:markdown"
+   ],
+   "description": "Fences opened on a list-marker line (ordered and nested bullet); each closes on a fence line indented up to 3 spaces more than the opener's fence column.",
+   "derivation": "hand",
+   "config": "config-text-markdown.json",
+   "inputBase64": "U3RlcHMgZm9sbG93IGhlcmUuCgoxLiBgYGBzaAogICB0b29sIC0tZmxhZyB2YWx1ZQogICBgYGAKMi4gVGhlbiByZWFkIHRoZSBvdXRwdXQgY2FyZWZ1bGx5LgogIC0gfn5+CiAgICBuZXN0ZWQgaGlkZGVuIGNvZGUKICAgIH5+fgpEb25lIHdpdGggdGhlIGxpc3Qgbm93Lgo=",
+   "inputText": "Steps follow here.\n\n1. ```sh\n   tool --flag value\n   ```\n2. Then read the output carefully.\n  - ~~~\n    nested hidden code\n    ~~~\nDone with the list now.\n",
+   "result": {
+    "status": "ok",
+    "masked": [
+     [
+      20,
+      28
+     ],
+     [
+      29,
+      49
+     ],
+     [
+      50,
+      56
+     ],
+     [
+      92,
+      99
+     ],
+     [
+      100,
+      122
+     ],
+     [
+      123,
+      130
+     ]
+    ],
+    "tokens": [
+     {
+      "text": "Steps",
+      "span": [
+       0,
+       5
+      ],
+      "folded": "steps",
+      "skeleton": "steps"
+     },
+     {
+      "text": "follow",
+      "span": [
+       6,
+       12
+      ],
+      "folded": "follow",
+      "skeleton": "follow"
+     },
+     {
+      "text": "here",
+      "span": [
+       13,
+       17
+      ],
+      "folded": "here",
+      "skeleton": "here"
+     },
+     {
+      "text": "2",
+      "span": [
+       57,
+       58
+      ],
+      "folded": "2",
+      "skeleton": "2"
+     },
+     {
+      "text": "Then",
+      "span": [
+       60,
+       64
+      ],
+      "folded": "then",
+      "skeleton": "then"
+     },
+     {
+      "text": "read",
+      "span": [
+       65,
+       69
+      ],
+      "folded": "read",
+      "skeleton": "read"
+     },
+     {
+      "text": "the",
+      "span": [
+       70,
+       73
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "output",
+      "span": [
+       74,
+       80
+      ],
+      "folded": "output",
+      "skeleton": "output"
+     },
+     {
+      "text": "carefully",
+      "span": [
+       81,
+       90
+      ],
+      "folded": "carefully",
+      "skeleton": "carefully"
+     },
+     {
+      "text": "Done",
+      "span": [
+       131,
+       135
+      ],
+      "folded": "done",
+      "skeleton": "done"
+     },
+     {
+      "text": "with",
+      "span": [
+       136,
+       140
+      ],
+      "folded": "with",
+      "skeleton": "with"
+     },
+     {
+      "text": "the",
+      "span": [
+       141,
+       144
+      ],
+      "folded": "the",
+      "skeleton": "the"
+     },
+     {
+      "text": "list",
+      "span": [
+       145,
+       149
+      ],
+      "folded": "list",
+      "skeleton": "list"
+     },
+     {
+      "text": "now",
+      "span": [
+       150,
+       153
+      ],
+      "folded": "now",
+      "skeleton": "now"
+     }
+    ],
+    "exact": {
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "0b5edd8f9fa7e293",
+       "span": [
+        0,
+        80
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "0b762f18c859c450",
+       "span": [
+        6,
+        90
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "47d63c5443f2f9a0",
+       "span": [
+        13,
+        135
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "4d977361e5377aed",
+       "span": [
+        57,
+        140
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "dbdc70e07cb3d63e",
+       "span": [
+        60,
+        144
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "04f7fe0e09cbcbd8",
+       "span": [
+        65,
+        149
+       ]
+      },
+      {
+       "position": 6,
+       "hash": "c8306e9830c6a23c",
+       "span": [
+        70,
+        153
+       ]
+      }
+     ],
+     "windowSelections": [
+      5
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 5,
+       "hash": "04f7fe0e09cbcbd8",
+       "span": [
+        65,
+        149
+       ]
+      }
+     ]
+    },
+    "folded": {
+     "values": [
+      "steps",
+      "follow",
+      "here",
+      "2",
+      "then",
+      "read",
+      "the",
+      "output",
+      "carefully",
+      "done",
+      "with",
+      "the",
+      "list",
+      "now"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "7a7c0ec3903e7b83",
+       "span": [
+        0,
+        80
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "59ee0ad449fb5919",
+       "span": [
+        6,
+        90
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "4f13fbb13603ed15",
+       "span": [
+        13,
+        135
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "a7ccfb80bbb86c00",
+       "span": [
+        57,
+        140
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "deac4a0553c96188",
+       "span": [
+        60,
+        144
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "1a20e3e1fe2081b6",
+       "span": [
+        65,
+        149
+       ]
+      },
+      {
+       "position": 6,
+       "hash": "6642702ff5378242",
+       "span": [
+        70,
+        153
+       ]
+      }
+     ],
+     "windowSelections": [
+      5
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 5,
+       "hash": "1a20e3e1fe2081b6",
+       "span": [
+        65,
+        149
+       ]
+      }
+     ]
+    },
+    "skeleton": {
+     "values": [
+      "steps",
+      "follow",
+      "here",
+      "2",
+      "then",
+      "read",
+      "the",
+      "output",
+      "carefully",
+      "done",
+      "with",
+      "the",
+      "list",
+      "now"
+     ],
+     "kgrams": [
+      {
+       "position": 0,
+       "hash": "3ca039b34d6e4c47",
+       "span": [
+        0,
+        80
+       ]
+      },
+      {
+       "position": 1,
+       "hash": "75cd02a3431def60",
+       "span": [
+        6,
+        90
+       ]
+      },
+      {
+       "position": 2,
+       "hash": "8ed0ed32a6b199f9",
+       "span": [
+        13,
+        135
+       ]
+      },
+      {
+       "position": 3,
+       "hash": "b112e840fe806644",
+       "span": [
+        57,
+        140
+       ]
+      },
+      {
+       "position": 4,
+       "hash": "d682b9ed38f5926d",
+       "span": [
+        60,
+        144
+       ]
+      },
+      {
+       "position": 5,
+       "hash": "3fe7c2fd9119a5dd",
+       "span": [
+        65,
+        149
+       ]
+      },
+      {
+       "position": 6,
+       "hash": "c2ef82e3016d4804",
+       "span": [
+        70,
+        153
+       ]
+      }
+     ],
+     "windowSelections": [
+      0
+     ],
+     "partialWindow": true,
+     "fingerprints": [
+      {
+       "position": 0,
+       "hash": "3ca039b34d6e4c47",
+       "span": [
+        0,
+        80
+       ]
+      }
+     ]
     }
    }
   }

@@ -1,6 +1,6 @@
 # Draft text extraction profile: `text-plain` and `text-markdown`
 
-Status: **draft for review, profile version `draft-1`, 2026-11-22.** Roadmap gates TXT.1 (profile) and TXT.2 (hand-derived vectors), started under the 2026-11-22 owner override for fingerprint-only text work. It serves the proposed [UC-8](../../docs/use-cases.md#proposed-uc-8-find-reused-passages-in-prose), whose wording still awaits the owner (TXT.0). The evidence comes from [lane 09](../lanes/09-evidence-review.md).
+Status: **revised after the [clean-room review](../reviews/extraction-profile-text-review.md), 2026-11-22. `text-plain` is version `draft-1`, staged first and frozen for stage-1 implementation (§17); `text-markdown` is version `draft-2` and stays a draft until it is re-reviewed.** Both are decided in draft, pending owner confirmation. Roadmap gates TXT.1 (profile) and TXT.2 (hand-derived vectors), started under the 2026-11-22 owner override for fingerprint-only text work. It serves the proposed [UC-8](../../docs/use-cases.md#proposed-uc-8-find-reused-passages-in-prose), whose wording still awaits the owner (TXT.0). The evidence comes from [lane 09](../lanes/09-evidence-review.md).
 
 This is research material, not a normative change. It does not modify `spec/`, `schemas/`, `profiles/` or `test-vectors/`. "MUST" describes what this draft proposes for an implementation claiming to follow it. Nothing here is a registered algorithm. The vectors, checker, tables and cross-check are in [extraction-vectors-text/](extraction-vectors-text/README.md).
 
@@ -16,7 +16,7 @@ The profile is a new lexer front end hosted by the [draft extraction contract](e
 - **Spans:** half-open `[start, end)` byte offsets into the original input, never splitting a UTF-8 sequence.
 - **k-gram hashing** ([§7](extraction-contract.md#7-k-grams-and-hashing)): the same length-prefixed layout and `sha256-first8-u64be`, unkeyed. Only the domain string and the class string differ (§9).
 - **Winnowing** ([§8](extraction-contract.md#8-winnowing-selection)): rightmost minimum, a partial window when 1 ≤ m < w, every selected position kept.
-- **The record's logical fields** ([§9](extraction-contract.md#9-extraction-record-logical-fields)), including the `null` rules for `unsupported-config` and `input-too-large`.
+- **The record's logical fields** ([§9](extraction-contract.md#9-extraction-record-logical-fields)), including the `null` rules for `unsupported-config` and `input-too-large`. The wire layout for a three-channel profile is **provisional** (§10).
 - **Configuration bytes, validation steps 1–5 and 8, and bounds** ([§10](extraction-contract.md#10-configuration-record), [§10a](extraction-contract.md#10a-resource-bounds-and-complexity)): `k ≤ 16`, `window ≤ 128`, `maxInputBytes ≤ 8 MiB`, linear time and memory.
 
 **Different from the code profiles, deliberately:**
@@ -49,11 +49,11 @@ The profile name is inside every k-gram hash, so fingerprints from different pro
 Processing follows contract §3 steps 0–2 unchanged. Step 3 (forbidden code points) is replaced by the following:
 
 - **U+0000 is forbidden**: `nul` at the earliest NUL. Text never contains it, and this keeps binary files out. Order is still encoding first: `plain-err-nul-then-invalid` (NUL at 0, invalid byte at 7) is `invalid-utf8`@7.
-- **The BOM is accepted** (decided in draft as OD-T4 (a), with the alternative listed in §15). U+FEFF is Default_Ignorable_Code_Point, so at offset 0 it never starts a token, and inside a word it is transparent (§7). Spans keep original offsets, so the first token after a BOM starts at 3 (`plain-bom`), and the token sequence equals the BOM-less file's (pair with `plain-reflow-a`). Text editors write BOMs routinely (lane 09), and rejecting them would make many real files unusable. The code profiles reject a BOM (contract OD-1) because there it can shift offsets in a lexer. Here nothing shifts, because spans index the original bytes.
+- **The BOM is accepted** (decided in draft as OD-T4′ (a), pending owner confirmation; the rejected alternative was to reject it as `bom`, like the code profiles). U+FEFF is Default_Ignorable_Code_Point, so at offset 0 it never starts a token, and inside a word it is transparent (§7). Spans keep original offsets, so the first token after a BOM starts at 3 (`plain-bom`), and the token sequence equals the BOM-less file's (pair with `plain-reflow-a`). Text editors write BOMs routinely (lane 09), and rejecting them would make many real files unusable. The code profiles reject a BOM (contract OD-1) because there it can shift offsets in a lexer. Here nothing shifts, because spans index the original bytes.
 - **CR, CRLF and every other C0/C1 control except NUL** are separators (§6). There is no `isolated-cr` error.
 - **Noncharacters, private-use and unassigned code points** are accepted as separators. Unassigned code points inside Default_Ignorable ranges (for example U+2065) are ignorable (§6).
 
-**Closed error list:** `invalid-utf8`, `nul` and `input-too-large`, plus `unsupported-config` from §11. Offsets follow contract §2: `input-too-large` is at 0, encoding errors at the first byte of the first ill-formed subsequence, `nul` at the NUL, and `unsupported-config` is `null`. The Markdown front end and the tokenizer cannot fail: every well-formed, NUL-free input yields `ok` or `insufficient-tokens`. **Abstention** is `insufficient-tokens`, meaning fewer than k tokens, including zero. The tokens are still listed.
+**Closed error list:** `invalid-utf8`, `nul` and `input-too-large`, plus `unsupported-config` from §11. Offsets follow contract §2: `input-too-large` is at 0, `nul` at the NUL, and `unsupported-config` is `null`. The `invalid-utf8` offset is the first byte of the first maximal subpart of an ill-formed subsequence (Unicode 17.0.0 §3.9, D92/D93b): the byte at which a strict left-to-right decoder first fails. So a lone continuation byte, an overlong lead, the lead of an encoded surrogate and the lead of a truncated sequence are each reported at their own first byte (`plain-err-lone-continuation`@4, `-overlong`@0, `-surrogate`@3, `-truncated`@4, `-above-max`@0). The Markdown front end and the tokenizer cannot fail: every well-formed, NUL-free input yields `ok` or `insufficient-tokens`. **Abstention** is `insufficient-tokens`, meaning fewer than k tokens, including zero. The tokens are still listed.
 
 ## 4. Pinned Unicode data
 
@@ -80,19 +80,19 @@ An implementation MUST use tables generated from these files, or the committed d
 
 ## 5. Markdown front end (`text-markdown` only)
 
-**Decided in draft (OD-T1 (a)): a fixed set of masks, not a CommonMark parse.**
+**Decided in draft, pending owner confirmation (OD-T1′ (a), the reviewer's recommendation): a fixed set of masks, not a CommonMark parse.** This section is `text-markdown` **draft-2**: the list-item fence and BOM rules below changed from draft-1 (§18).
 - **Masked ranges** are byte ranges of the original input. Every code point in them is treated as a separator (§6). Nothing is deleted, decoded or rewritten.
 - **Reference.** [CommonMark 0.31.2](https://spec.commonmark.org/0.31.2/) is the pinned reference: it names the constructs below, and the deviations from it are listed in this section.
 - **Why not a parser.** A full parse would make the token stream depend on two parsers agreeing over the whole CommonMark grammar. It would also need a source-span rule for every rendered text node, including decoded entities, which CommonMark does not define.
-- **What the masks cover.** All other Markdown syntax is ASCII punctuation, so it is already a separator under §6. That covers emphasis, headings, block-quote markers, list bullets, table pipes and alignment rows, thematic breaks, backslash escapes, and code-span backticks. Code-span **contents** are kept as prose.
+- **What the masks cover.** All other Markdown syntax is ASCII punctuation, so it is already a separator under §6. That covers emphasis, headings, block-quote markers, list bullets, table pipes and alignment rows, thematic breaks, backslash escapes, and code-span backticks. Code-span contents are scanned like any other inline text: words in them are tokens, and the masks below still apply inside them (a stated deviation, below).
 
 **Lines.** A line is a maximal run of bytes without LF. Its *content* is the line without one trailing CR; the rules below match against content. **Masking a line** masks all of its bytes, including a trailing CR, but not the LF that ends it. "Up to 3 spaces" means 0–3 U+0020 characters; a TAB does not count as indentation.
 
 The masks are applied in this order:
 
-1. **MD-1 front matter.** The content of the first line must be exactly `---`. If a later line's content is exactly `---` or `...`, mask from offset 0 through the end of that line, including its CR but not its LF (`md-front-matter-crlf`). Otherwise there is no front matter, and `---` is punctuation (`md-front-matter`, `md-front-matter-unclosed`).
+1. **MD-1 front matter.** The content of the first line, after skipping one leading U+FEFF if present, must be exactly `---`. The mask then starts after the BOM, at offset 3 (`md-bom-front-matter`); draft-1 did not skip the BOM. If a later line's content is exactly `---` or `...`, mask from the start of the `---` (offset 0, or 3 after a BOM) through the end of that line, including its CR but not its LF (`md-front-matter-crlf`). Otherwise there is no front matter, and `---` is punctuation (`md-front-matter`, `md-front-matter-unclosed`).
 2. **Line scan** over the remaining lines, with a state that is either *normal* or *in fence (c, n)*:
-   - **MD-2 fenced code.** In *normal* state, at a line start, a line whose content matches up to 3 spaces then a run of n ≥ 3 backticks or n ≥ 3 tildes opens a fence. A backtick fence additionally requires no backtick in the rest of the line. The whole opening line is masked, and the state becomes *in fence (c, n)*. In that state every line is masked. A line whose content is up to 3 spaces, a run of c with length ≥ n, then only spaces and tabs, closes the fence; it is masked too. An unclosed fence masks to end of input (`md-fence`, `md-fence-unclosed`).
+   - **MD-2 fenced code.** In *normal* state, at a line start, a line whose content matches this pattern opens a fence: up to 3 spaces; then optionally a **list marker** (`-`, `*` or `+`, or 1–9 ASCII digits followed by `.` or `)`) followed by 1–4 spaces; then a run of n ≥ 3 backticks or n ≥ 3 tildes. A backtick fence additionally requires no backtick in the rest of the line. Let e be 0 without a list marker, and otherwise the number of bytes before the fence run on the opening line. The whole opening line, including any list marker, is masked, and the state becomes *in fence (c, n, e)*. In that state every line is masked. A line whose content is at most 3 + e spaces, a run of c with length ≥ n, then only spaces and tabs, closes the fence; it is masked too. An unclosed fence masks to end of input (`md-fence`, `md-fence-unclosed`, `md-list-fence`). Draft-1 had no list marker and e = 0, which inverted masking in lists: the indented closing line opened a fence that masked the rest of the document (review M1).
    - **MD-3 link reference definition.** In *normal* state, at a line start, a line whose content matches up to 3 spaces, `[`, a first label character that is neither `]` nor `^`, any further characters other than `]`, then `]:`, is masked whole. Footnote definitions (`[^…]:`) are not masked (`md-link-reference`).
    - **Inline scan** of any other line, left to right from its start, or from a resume point. At each position the first matching rule applies:
      - **MD-4 HTML comment.** `<!--`: find the first `-->` starting at or after the position plus 4, anywhere later in the input. If found, mask through it and resume after it. If that is on a later line, continue that line's inline scan without the line-start rules. If not found, the `<` is ordinary, and no later `<!--` can close either (`md-html-comment`, `md-html-comment-unclosed`).
@@ -107,14 +107,20 @@ The masks are applied in this order:
 - MD-5 stops at the next `<`, so every byte is scanned a bounded number of times.
 - MD-6 can be computed with one stack per line that pairs each `(` with its `)`.
 
-**Deviations from CommonMark 0.31.2.** These are measured against pulldown-cmark 0.13.5's text content in §14: 11 of 16 Markdown vectors give the same folded token sequence, and the 5 that differ do so for the first five reasons below.
-- Ordered-list numbers are tokens (`1. First item` gives `1`). CommonMark renders the number as list markup.
-- Autolinks are masked. CommonMark renders the URL as the link text.
-- Reference-style link labels are tokens (`[guide][g]` gives `g`).
-- Character references are masked, not decoded, so `Caf&eacute;` gives `caf`, not `café`.
+**Deviations from CommonMark 0.31.2.** These are measured against pulldown-cmark 0.13.5's text content in §14: 11 of 19 Markdown vectors give the same folded token sequence. Each of the 8 that differ is explained by an item below.
+- Ordered-list numbers are tokens (`1. First item` gives `1`; `md-syntax`, `md-stripped`, `md-list-fence`). CommonMark renders the number as list markup.
+- Autolinks are masked (`md-syntax`). CommonMark renders the URL as the link text.
+- Reference-style link labels are tokens (`[guide][g]` gives `g`; `md-link-reference`).
+- Character references are masked, not decoded, so `Caf&eacute;` gives `caf`, not `café` (`md-entities`).
 - Indented code blocks are not recognized (`md-indented-code`).
-- HTML blocks are masked only tag by tag, so text between tags remains.
-- Fences indented 4 or more spaces, as in list items, are not recognized.
+- HTML blocks are masked only tag by tag, so text between tags remains (`md-html-block`). CommonMark hides the whole block through the next blank line; this profile keeps prose that sits between tags.
+- Front matter is not CommonMark at all. pulldown-cmark's metadata extension does not recognize it after a BOM, while MD-1 does (`md-bom-front-matter`).
+- Code-span contents are not literal: in `` `&amp;` ``, `` `<b>` `` and `` `[x](y)` `` the entity, tag and destination are masked (review M3).
+- `<script>` and `<style>` bodies are tokenized; only the tags are masked.
+- Fences inside block quotes (`> ````) are not recognized.
+- `<!-->` and `<!--->` are not complete comments: the `-->` search starts 4 bytes after `<`. CommonMark 0.31.2 accepts them.
+- A link reference definition with a blank label (`[ ]:`) is masked; CommonMark does not accept a blank label. Multi-line definitions are masked on their first line only.
+- Fences indented 4 or more spaces without a list marker on the same line are not recognized, and a list item's fence closer may be indented up to 3 more spaces than the opener's fence column, where CommonMark measures from the list item's content column.
 - Setext and other block structure is irrelevant, since its syntax is punctuation.
 
 ## 6. Character classes
@@ -146,6 +152,7 @@ Every token is class `word`. A W token never contains S or C, and a C token is e
 | White space, line wrapping and reflow (any White_Space, CRLF, tabs, runs) | Separators only: the token sequence is identical, spans differ | `plain-reflow-a`/`-b`, `plain-crlf` (identical hashes in every channel) |
 | Zero-width and other Default_Ignorable inside a word | Transparent: one token; exact text keeps them, folded deletes them | `plain-zero-width`, `plain-other-ignorable`, `plain-bom` |
 | ZWSP used *as* a word separator | Joins the words (`alpha`+ZWSP+`beta` is one token) | `plain-zwsp-as-separator` (limit) |
+| A format character that is not Default_Ignorable (U+FFFB, U+0600, …) inside a word | Splits it, since it is S | `plain-format-char-split` (limit) |
 | Apostrophes, ASCII `'` and U+2019 | Separate: `it’s` and `it's` both give `it`, `s` | `plain-punct-a`/`-b` (identical hashes in every channel) |
 | Hyphens and dashes | Separate: `well-known` gives `well`, `known` | `plain-punct-a` |
 | Hyphenation at a line end (`exam-`, LF, `ple`) | Two tokens `exam`, `ple`, unlike the reflowed `example`. A SOFT HYPHEN is transparent instead | `plain-hyphenation-wrap` (limit) |
@@ -200,11 +207,13 @@ No W or C code point folds to the empty string under these tables, even after st
 | `pas`+ZWSP+`sages` | `passages` | `plain-zero-width` |
 | Cherokee `ꮳꮃꭹ` | `ᏣᎳᎩ` (capitals) | `plain-cherokee` |
 
-**skeleton(y)** follows [UTS #39](https://www.unicode.org/reports/tr39/tr39-32.html) §4 with the pinned `confusables.txt`:
+**skeleton(y)** follows [UTS #39](https://www.unicode.org/reports/tr39/tr39-32.html) §4 with the pinned `confusables.txt`, **applied exactly once** (not iterated to a fixed point):
 1. NFD.
 2. Delete Default_Ignorable code points.
 3. Replace each code point by its prototype, if it has one.
 4. NFD.
+
+Single application matters: U+048B folds to itself, its prototype is U+0439 U+0326, and step 4 gives U+0438 U+0326 U+0306. Iterating would map U+0438 again, to U+1D0E (`plain-skeleton-single-pass`).
 
 It is applied to the folded value, so case is already gone. The skeleton is a comparison key, not text: it maps `m` to `rn`, `0` to `O` and `1` to `l`, Cyrillic `а` to Latin `a`, and Greek `σ` to `o`. So Latin `oo` and Greek `σο` collide in this channel (§13). Vector `plain-confusable-cyrillic` substitutes Cyrillic а с о р in 8 of 17 words. Its folded hashes share nothing with the Latin sentence, and its skeleton hashes are identical.
 
@@ -239,7 +248,9 @@ Winnowing, `windowSelections`, `partialWindow` and the fingerprints follow contr
 
 ## 10. Record
 
-The record is contract §9 with these per-token fields: `text` (exact), `span`, `folded` and `skeleton`. There are three channel blocks; `folded` and `skeleton` also list `values`. `text-markdown` adds `masked`, the merged masked byte ranges. It is required in vectors and optional in production output. The wire names belong to TW-03.
+**The wire layout is provisional.** This profile fixes the *values* of contract §9's logical fields: status, error code and offset, each token's exact text and span, each channel's values, k-grams, selections, partial-window flag and fingerprints, and for `text-markdown` the masked byte ranges. It does **not** define a record layout. The catalogue and report contract's canonical record (A1) currently fixes exactly the channels `exact` and `normalized`. The amendment for profiles with more than two channels (review §4: channels in configuration order, tokens as `class`, `text`, `span` with class `word`, `tokenCount`, and `masked` for Markdown) is being made by that contract's author. This profile will align with it when it lands.
+
+Until then, the vector files use a **fixture layout only**: per-token `text`, `span`, `folded` and `skeleton`; top-level `exact`, `folded` and `skeleton` blocks; and `masked`. An implementation MUST NOT treat that layout as a record or catalogue format. The values in it are what the amended record will carry.
 
 ## 11. Configuration
 
@@ -251,16 +262,17 @@ The canonical bytes have the contract's §10 shape: one line, keys in order and 
 
 The configuration digests are:
 - `text-plain`: `35c1f63cc2f669a54acb5f9792614721431943b2fd626ffb88982e53bd37323e`;
-- `text-markdown` (differs only in `profile`): `0be5e93c4c90b24ca8c6ebecdf3ecf214e37ed35e160213ec87c59ad2bacb7c4`;
+- `text-markdown` (differs in `profile` and `"profileVersion":"draft-2"`): `3bf7760a91297a5077f9fb0de3c119cb0a5d14b163190d640814a8735de23203`. The draft-1 digest, `0be5e93c…b7c4`, is superseded;
 - the limit-vector configuration (`text-plain` with `maxInputBytes` 16): `16d15b33a3b0a117a155d1919f4331e94fce37af7cfbf285952f20fc22f4ac2a`.
 
-Validation is contract §10 steps 1–5 and 8 unchanged, then:
+Validation is contract §10 steps 1–4 and 8 unchanged, and these steps:
+- **5.** `k` is an integer in `1 … 16`, `window` in `1 … 128` and `maxInputBytes` in `1 … 8388608` (8 MiB), each written in decimal without a sign, leading zeros or exponent. These are contract §10a's bounds, restated here.
 - **6.** `channels` is exactly `["exact","folded","skeleton"]`.
-- **7.** `contract` is `traceweave-text-winnow-draft-1`, `profile` is `text-plain` or `text-markdown`, `profileVersion` is `draft-1` and `hash` is `sha256-first8-u64be`.
+- **7.** `contract` is `traceweave-text-winnow-draft-1`, `hash` is `sha256-first8-u64be`, and `(profile, profileVersion)` is `(text-plain, draft-1)` or `(text-markdown, draft-2)`.
 
-There is no `format` key: the front end is the profile. [`config-negative-text.json`](extraction-vectors-text/config-negative-text.json) has 12 configurations that MUST be rejected, each with its `expectedResult`. They include the code channels, two channels, reordered channels, the code contract string, `text-html`, `draft-2`, k = 17, `window` = 0, the size bound plus 1, whitespace, a missing LF and an extra `format` key. It also has 2 boundary configurations that MUST be accepted.
+There is no `format` key: the front end is the profile. [`config-negative-text.json`](extraction-vectors-text/config-negative-text.json) has 13 configurations that MUST be rejected, each with its `expectedResult`. They include the code channels, two channels, reordered channels, the code contract string, `text-html`, `text-plain`/`draft-2`, the superseded `text-markdown`/`draft-1`, k = 17, `window` = 0, the size bound plus 1, whitespace, a missing LF and an extra `format` key. It also has 2 boundary configurations that MUST be accepted.
 
-A new `profileVersion` is minted when the classes, the fold, the skeleton data, the masks or the token rule change. That includes any move to Unicode 18.0.0.
+A new `profileVersion` is minted on any change to any channel's bytes for some input, as the amended contract §10 now says: classes, the fold, the skeleton data or procedure, the masks, the token rule, errors or tables. That includes any move to Unicode 18.0.0. This is why the draft-1 → draft-2 Markdown changes give `text-markdown` a new version, even though no previously shipped Markdown vector's tokens or masks changed (§18).
 
 ### k and window
 
@@ -305,9 +317,21 @@ TXT.7 requires a citation for each limit. Those below cite a vector or a lane 09
 - **Fragments shorter than `k + w − 1` = 15 tokens.** No guarantee. Shorter shared runs may or may not share a fingerprint (contract §8; `plain-below-kw1`).
 - **Scripts without spaces other than ideographs.** Thai, Lao, Khmer and Myanmar text gives phrase-sized tokens. Any re-spacing changes them (`plain-thai`), and recall on such text is unmeasured. Japanese kana runs depend on where ideographs fall (`plain-japanese`).
 - **ZWSP as a separator** joins words (`plain-zwsp-as-separator`).
+- **Invisible format characters that are not Default_Ignorable split words.** 32 code points are General_Category Cf but not Default_Ignorable_Code_Point, so they are class S: U+0600–U+0605, U+06DD, U+070F, U+0890–U+0891, U+08E2, U+FFF9–U+FFFB, U+110BD, U+110CD and U+13430–U+1343F. Several of them, U+FFF9–U+FFFB and U+13430–U+1343F in particular, commonly render invisibly in Latin text. So `pas`+U+FFFB+`sages` gives `pas`, `sages` in every channel, and inserting them is a zero-width evasion that the fold does not undo. "Zero-width insertion cannot split words" (OD-T8) holds only for Default_Ignorable code points. This is a stated limit, not a rule change (OD-T14): reclassifying them as ignorable would also merge words where the visible ones, such as the Arabic number signs (Prepended_Concatenation_Mark) and U+06DD END OF AYAH, are used as intended (`plain-format-char-split`; review §5).
+- **Distractor insertion.** Measured by the clean-room review on `docs/use-cases.md` (3,639 tokens, `text-markdown`, folded channel, 807 distinct fingerprint hashes and 3,617 distinct k-gram hashes), inserting one unrelated word every N tokens leaves this much shared with the original:
+
+  | N | Words added | Fingerprint hashes shared | k-gram hashes shared |
+  | --- | --- | --- | --- |
+  | 30 | +121 | 582/807 | 2773/3617 |
+  | 15 | +242 | 349/807 | 1938/3617 |
+  | 14 = w + k − 2 | +259 | 326/807 | 1815/3617 |
+  | 8 = k | +454 | 67/807 | 454/3617 |
+  | 7 = k − 1 | +519 | 0 | 0 |
+
+  Spacing distractors at w + k − 2 = 14 tokens defeats the *guarantee*, yet still leaves 326 of 807 fingerprint hashes (40%) shared. Removing every shared k-gram needs an edit in every run of k tokens: here one inserted word per 7 tokens (+14%). The numbers are the reviewer's and were not re-run for this revision. The lane 09 text that calls w + k − 2 the "cheapest removal" overstates it; that file belongs to another lane, and the coordinator has been told.
 - **Line-end hyphenation** splits words (`plain-hyphenation-wrap`).
 - **Typography that NFKC does not unify.** Examples: U+02BC (a letter) against U+2019 (punctuation) as an apostrophe; non-ASCII digits against ASCII digits; vulgar fractions against `1/2` (`plain-nfkc-compat`: `½` gives `12`, `1/2` gives `1`, `2`).
-- **Markdown deviations** (§5): entities are not decoded, list numbers and reference labels are kept, and indented code is tokenized.
+- **Markdown deviations** (§5): entities are not decoded, list numbers and reference labels are kept, indented code is tokenized, text inside HTML blocks and `<script>`/`<style>` bodies is tokenized, and code-span contents are not literal.
 - **Homoglyphs not listed in the pinned `confusables.txt`** survive the skeleton. The skeleton also merges distinct words across scripts, for example Greek `σοφοσ` and Latin `ooɸoo`-like strings, so skeleton matches need the exact or folded channel as context (UTS #39 §4; `plain-greek`).
 - **Common phrases and boilerplate match.** Licence text, front matter that is not masked, and stock phrases are expected matches unless suppressed by an explicit boilerplate catalogue (lane 09, citing W §5.1–5.2; [catalogue contract](catalogue-report-contract.md) OD-C5 (b); roadmap M2.10). Suppression is advisory and selection-dependent.
 - **No ownership, authorship, permission or direction-of-copying inference.** A shared fingerprint is a shared folded word run, nothing more (UC-8; contract §12).
@@ -330,19 +354,30 @@ The tools are in [extraction-vectors-text/](extraction-vectors-text/README.md):
 - NFD, NFKC_CF, NFC, the separator filter and the skeleton;
 - k-gram bytes, hashes and winnowing.
 
-It compares token by token and names the first failing layer:
+It compares token by token and names the first failing layer. It then runs two self-tests:
+- the **paired rejections**: wrong expected results, each rejected at its declared layer;
+- the **wrong-implementation self-test**: 14 whole alternative extractors, each run over every vector input, at least one of whose results must differ.
+
+The wrong implementations are:
+- the five the clean-room review found the draft-1 checker accepted: Unicode 16.0 library data, an iterated skeleton, CommonMark-style HTML blocks, a BOM that disables front matter, and fences after a list marker not recognized;
+- the non-ignorable format characters treated as ignorable;
+- a BOM stripped with offsets taken from the stripped text;
+- seven variants the review already found rejected: x/text Cherokee, no leading NFD, no separator filter, skeleton before fold, ZWSP as separator, ideograph runs, and apostrophe joins.
+
+Restricted to the 71 draft-1 vectors, 6 of the 14 are accepted: the five from the review and the format-character variant. With the new vectors, all 14 are rejected. The Unicode 16.0 variant uses Python's `unicodedata` (16.0.0 here) only to *be* the wrong implementation, and it reports "not applicable" on an interpreter whose data is 17.0.0.
 
 ```
-PASS config-negative-text.json: 12/12 invalid configurations rejected, 2/2 boundary configurations accepted
-PASS text-plain.json vectors=50 tokens=610 errors=7 …
-PASS text-markdown.json vectors=18 tokens=201 errors=2 masked-ranges=26 …
+PASS config-negative-text.json: 13/13 invalid configurations rejected, 2/2 boundary configurations accepted
+PASS text-plain.json vectors=55 tokens=625 errors=9 masked-ranges=0 fingerprints(all channels)=227 partial-windows=57 tie-windows=48
+PASS text-markdown.json vectors=21 tokens=234 errors=2 masked-ranges=35 fingerprints(all channels)=72 partial-windows=30 tie-windows=0
 PASS limits-text.json vectors=3 tokens=3 errors=2 …
-PASS pairs=16 classes=27 total-vectors=71
-PASS rejections.json: 64/64 corruptions rejected at their declared layer (error=5, fold=14, hash=1, markdown=11, segmentation=23, skeleton=5, status=3, winnow=2); positive vectors with a paired rejection: 60/60
+PASS pairs=18 classes=28 total-vectors=79
+PASS rejections.json: 70/70 corruptions rejected at their declared layer (error=5, fold=14, hash=1, markdown=14, segmentation=25, skeleton=6, status=3, winnow=2); positive vectors with a paired rejection: 66/66
+PASS wrong-implementation self-test: rejected 14/14
 PASS NormalizationTest.txt (17.0.0): NFC and NFD checks 120204/120204
 ```
 
-**Cross-check, run 2026-11-22.** Versions read from the built binaries:
+**Cross-check, run 2026-11-22 on the revised vectors.** Versions read from the built binaries:
 - Go oracle: `unicode=17.0.0 norm=17.0.0 cases=17.0.0`.
 - Rust oracle: `unicode-normalization=17.0.0 unicode-segmentation=17.0.0 pulldown-cmark=0.13.5`.
 
@@ -352,13 +387,13 @@ PASS NormalizationTest.txt (17.0.0): NFC and NFD checks 120204/120204
 | Fold of every scalar value | Go x/text: repeat NFKC → `cases.Fold` → delete DI until stable, then NFC | 1,111,978 / 1,112,064. The 86 differences are all Cherokee small letters; 0 unexplained |
 | Token fold (with the separator filter), every W/C scalar value | Same | 149,786 / 149,872; the same 86 Cherokee letters; 0 unexplained |
 | Fold of every NormalizationTest.txt 17.0.0 string (37,671 distinct) | Same | 37,671 / 37,671 agree |
-| Token fold of every vector token | Same | 813 / 814; the 1 difference is the Cherokee token in `plain-cherokee` |
-| Token rule and fold on every plain-profile vector, independent Go tokenizer | Same | 43 / 44; the 1 difference is `plain-cherokee` |
+| Token fold of every vector token | Same | 861 / 862; the 1 difference is the Cherokee token in `plain-cherokee` |
+| Token rule and fold on every plain-profile vector, independent Go tokenizer | Same | 46 / 47; the 1 difference is `plain-cherokee` |
 | NFC and NFD, every scalar value and every NormalizationTest string | Rust unicode-normalization 0.1.25 | 1,149,735 / 1,149,735 agree, both forms |
-| UAX #29 words vs profile tokens (informative) | Rust unicode-segmentation 1.13.3 | Equal spans on 31 / 44 plain vectors |
-| CommonMark text content vs Markdown masks (informative) | Rust pulldown-cmark 0.13.5 | Equal folded token sequences on 11 / 16 Markdown vectors. The differences are list numbers, autolinks, the reference label, the decoded entity and indented code |
+| UAX #29 words vs profile tokens (informative) | Rust unicode-segmentation 1.13.3 | Equal spans on 33 / 47 plain vectors |
+| CommonMark text content vs Markdown masks (informative) | Rust pulldown-cmark 0.13.5 | Equal folded token sequences on 11 / 19 Markdown vectors; each difference is a listed deviation (§5) |
 
-The 13 vectors where UAX #29 differs are `plain-zero-width`, `plain-zwsp-as-separator`, `plain-other-ignorable`, `plain-nfkc-compat`, `plain-punct-a`/`-b`, `plain-numbers`, `plain-japanese`, `plain-thai`, `plain-combining-a`/`-b`, `plain-bidi` and `plain-md-syntax`.
+The 14 vectors where UAX #29 differs are `plain-zero-width`, `plain-zwsp-as-separator`, `plain-other-ignorable`, `plain-nfkc-compat`, `plain-punct-a`/`-b`, `plain-numbers`, `plain-japanese`, `plain-thai`, `plain-combining-a`/`-b`, `plain-bidi`, `plain-format-char-split` and `plain-md-syntax`.
 
 **Unusable references.** Python `unicodedata` (16.0.0) and Rust `caseless` 0.2.2 (16.0.0) were not used, because their Unicode version differs from 17.0.0. No local reference implements the UTS #39 skeleton, so the skeleton is checked only by the checker against `confusables.txt`. No local reference implements this token rule; the Go tokenizer above was written separately from the checker by the same author, so it is not independent in the TXT.3 sense.
 
@@ -369,60 +404,50 @@ The 13 vectors where UAX #29 differs are `plain-zero-width`, `plain-zwsp-as-sepa
 
 The first two were hand errors and were corrected. For the third, the builder now skips hand-listed masked ranges when locating spans. Before that run, my own re-reading had caught 6 missing `m` → `rn` skeleton mappings.
 
+The 8 vectors added in this revision matched the checker on the first run. One wrong-implementation switch did not: the HTML-block switch first masked only lines starting with a tag, which is not what CommonMark does, and the checker accepted it. It was corrected to mask through the next blank line, as CommonMark does; no vector changed.
+
 ## 15. Decisions
 
-**Decided in draft, pending owner confirmation.** Each changes tokens, values, hashes or accept/reject, and the vectors encode them:
+**Decided in draft, pending owner confirmation.** Each changes tokens, values, hashes or accept/reject, and the vectors encode them. The coordinator adopted the clean-room review's recommendations for OD-T1′, OD-T3′, OD-T4′, OD-T5′, OD-T8′ and OD-T12. None was found wrong, so all are taken as recommended:
 
 | ID | Decision | Reason |
 | --- | --- | --- |
-| OD-T1 | (a) Markdown front end is the masks of §5, not a CommonMark parse | Deterministic and linear; no parser agreement needed; deviations listed and measured against pulldown-cmark |
+| OD-T1′ | (a) The Markdown front end is the masks of §5, with the review's M1 (list-item fences) and M2 (BOM before front matter) fixed in `text-markdown` draft-2 | Deterministic and linear. A CommonMark parser would need a span rule per rendered node, which no reference supplies |
 | OD-T2 | (a) Ordered-list numbers and reference labels stay tokens; autolinks, destinations, tags, comments, entities, front matter and fences are masked | Fewest rules that make `md-stripped` equal `md-syntax` |
-| OD-T3 | (a) One token per Ideographic code point; other scripts without spaces get no segmentation | Pinned property only; no dictionary data |
-| OD-T4 | (a) Accept a BOM; it is ignorable | Common in text files; offsets are unaffected |
-| OD-T5 | (a) Always three channels, including `skeleton` | The homoglyph class needs it; comparison chooses channels |
+| OD-T3′ | (a) One token per Ideographic code point; other scripts without spaces get no segmentation, a stated TXT.7 limit to be measured | Pinned property only; no dictionary data |
+| OD-T4′ | (a) Accept a BOM; it is ignorable; MD-1 skips it | Common in text files; offsets are unaffected |
+| OD-T5′ | (a) Always three channels, **provided** the catalogue/report amendment lets comparisons choose modes; otherwise (b) also allow `["exact","folded"]` | The homoglyph class needs the skeleton; comparison chooses channels |
 | OD-T6 | (a) Domain `traceweave/text-kgram/draft-1`; class constant `word`; contract `traceweave-text-winnow-draft-1` | Keeps the §7 layout; an explicit family name |
 | OD-T7 | (a) k = 8, w = 8, experimental | §11 |
-| OD-T8 | (a) Default_Ignorable code points, ZWSP included, are transparent inside words | Zero-width insertion must not split words; lane 09 transformation |
+| OD-T8′ | (a) Default_Ignorable code points, ZWSP included, are transparent inside words, plus the stated limit for non-ignorable format characters (§13) | Zero-width insertion must not split words; lane 09 transformation |
 | OD-T9 | (a) Fold = NFC(NFKC_CF over NFD), delete separators, NFC | Canonical-equivalence-safe; one stream with 1:1 spans |
 | OD-T10 | (a) Errors: `invalid-utf8`, `nul`, `input-too-large`, `unsupported-config` | No front-end or token failure exists |
+| OD-T12 | Keep the result-mutation rejections, and add a rejected *input* wherever one exists. `plain-reflow-a` is paired with `plain-err-reflow-nul` and `plain-err-reflow-invalid` (relation `input-rejected`). No positive vector has a rejected BOM input under OD-T4′ (a) | Both readings of TXT.2's "paired rejection vector" are covered |
+| OD-T15 | Skeleton applied once (§8) | UTS #39 §4 defines one pass; pinned by `plain-skeleton-single-pass` |
+| Staging | `text-plain` first, frozen for stage-1 implementation (§17); `text-markdown` stays a draft until re-reviewed | Coordinator decision, following the review |
 
 **Still open, with options:**
-- **OD-T1′ Markdown front end:**
-  - (a) the masks (current);
-  - (b) a full CommonMark 0.31.2 parse by a pinned parser, with a source-span rule per text node, plus vectors for decoded entities;
-  - (c) drop `text-markdown` and document a plain-only profile.
+- **Record layout:** provisional until the catalogue/report contract's amendment for more than two channels lands (§10). Blocking for any catalogue or report.
 - **OD-T2′ Markdown details** (each is a one-rule change and a new version):
   - mask ordered-list markers;
   - mask reference labels;
   - keep autolink URLs as tokens;
-  - decode character references, giving a span over the whole reference.
-- **OD-T3′ Scripts without spaces:**
-  - (a) current;
-  - (b) UAX #29 plus a pinned dictionary for Thai, Lao, Khmer and Myanmar;
-  - (c) character tokens for those scripts.
-
-  TXT.7 needs a measurement or a stated limit either way.
-- **OD-T4′ BOM:**
-  - (a) accept (current);
-  - (b) reject as `bom`, like the code profiles, for one rule across all profiles.
-- **OD-T5′ Skeleton optional:**
-  - (a) always (current);
-  - (b) also allow `["exact","folded"]`, which needs another configuration digest and vectors;
-  - (c) drop it and leave homoglyphs as a limit.
+  - decode character references, giving a span over the whole reference;
+  - treat HTML blocks as CommonMark does;
+  - recognize block-quote fences.
 - **OD-T6′ Domain string:**
   - (a) new (current);
   - (b) reuse `traceweave/token-kgram/draft-1`.
-- **OD-T8′ ZWSP:**
-  - (a) transparent (current);
-  - (b) treat U+200B as a separator but keep the other ignorables transparent. That better serves scripts that use ZWSP between words, but then a ZWSP inserted inside a word splits it.
 - **OD-T11 Line-end hyphenation:**
   - (a) none (current);
   - (b) join `-`+LF+lowercase letter, which risks joining real compounds such as `well-` LF `known`.
-- **OD-T12 Meaning of TXT.2's "paired rejection vector."** Implemented as a wrong expected result per positive vector that the checker must reject at a declared layer (64 entries). An alternative reading is a rejected *input* per positive vector, which most positives do not have.
-- **OD-T13 Unicode 18.0.0:** when to move, as a new `profileVersion`. Some libraries and `confusables.txt` "latest" have already moved.
+- **OD-T13 Unicode 18.0.0:** when to move, as a new `profileVersion`.
+- **OD-T14 Non-ignorable format characters:**
+  - (a) a stated limit (current);
+  - (b) class the invisible ones (U+FFF9–U+FFFB, U+13430–U+1343F) as I. That is a rule change and a new version for both profiles.
 - **OD-20 analogue:** whether this profile's bounds and identifiers follow any later change of the code contract's OD-20.
 
-Before implementation (TXT.3), the owner should settle at least OD-T1′, OD-T3′, OD-T4′, OD-T5′ and OD-T12. Each changes the vectors. OD-T7 is settled only by TXT.4 and TXT.6 measurements.
+OD-T7 is settled only by TXT.4 and TXT.6 measurements.
 
 ## 16. TXT.1 and TXT.2 checklists
 
@@ -448,16 +473,51 @@ Before implementation (TXT.3), the owner should settle at least OD-T1′, OD-T3�
 | --- | --- |
 | Empty | `plain-empty`, `plain-whitespace-only`, `plain-punctuation-only`, `md-empty`, `md-syntax-only` |
 | Below `k+w−1` | `plain-short` (below k), `plain-exact-k`, `plain-below-kw1` (`plain-at-kw1` is the boundary) |
-| BOM | `plain-bom`, and U+FEFF inside words in `plain-other-ignorable` |
+| BOM | `plain-bom`, `md-bom-front-matter`, and U+FEFF inside words in `plain-other-ignorable` |
 | CRLF | `plain-crlf`, `md-front-matter-crlf` |
 | NFD input | `plain-nfd`, `plain-hangul-jamo`, `plain-combining-b` |
 | NFKC expansion (U+FB01) | `plain-nfkc-ligature`, `plain-nfkc-compat` |
 | Case-fold expansion (U+00DF) | `plain-casefold-expansion`, `plain-greek`, `plain-cherokee` |
 | Zero-width inside a word | `plain-zero-width`, `plain-zwsp-as-separator` |
 | Listed confusable | `plain-confusable-cyrillic` (pair `plain-confusable-latin`) |
-| Other Default_Ignorable | `plain-other-ignorable`, `plain-bidi` |
-| Markdown syntax | `md-*` (16 non-error vectors), `plain-md-syntax` |
-| Invalid UTF-8 | `plain-err-lone-continuation`, `-overlong`, `-surrogate`, `-truncated`, `-above-max`, `plain-err-nul-then-invalid`, `md-err-invalid-utf8` |
-| NUL | `plain-err-nul`, `md-err-nul` |
+| Other Default_Ignorable | `plain-other-ignorable`, `plain-bidi`; the non-ignorable format characters in `plain-format-char-split` |
+| Markdown syntax | `md-*` (19 non-error vectors), `plain-md-syntax` |
+| Invalid UTF-8 | `plain-err-lone-continuation`, `-overlong`, `-surrogate`, `-truncated`, `-above-max`, `plain-err-nul-then-invalid`, `plain-err-reflow-invalid`, `md-err-invalid-utf8` |
+| NUL | `plain-err-nul`, `plain-err-reflow-nul`, `md-err-nul` |
 
-The vectors also cover ties, reflow, case, punctuation, numbers, hyphenation, partial copy, non-Latin scripts, combining sequences, mixed direction and the size limit: 71 vectors in 27 tagged classes.
+The vectors also cover ties, reflow, case, punctuation, numbers, hyphenation, partial copy, non-Latin scripts, combining sequences, mixed direction, Unicode 17.0-new characters, the single-pass skeleton and the size limit: 79 vectors in 28 tagged classes.
+
+## 17. Staging and the `text-plain` freeze
+
+**Decided in draft, pending owner confirmation:** `text-plain` draft-1 is frozen for stage-1 implementation (TXT.3, TXT.4). The frozen inputs are below. No existing `text-plain` or limit vector changed in this revision: all 53 are byte-identical to commit `6fbf11b`, and 5 were added.
+
+| Item | SHA-256 |
+| --- | --- |
+| `config-text-plain.json` | `35c1f63cc2f669a54acb5f9792614721431943b2fd626ffb88982e53bd37323e` |
+| `config-text-plain-limit16.json` | `16d15b33a3b0a117a155d1919f4331e94fce37af7cfbf285952f20fc22f4ac2a` |
+| `text-tables-17.0.0.json` | `49eb0304ece1f9351f4db79ddf853fdc3bce353d4a833f7c4f9424bf80ae53f4` |
+| `text-plain.json` (55 vectors) | `3888ee6f29f018b8449a518f4fa42494d8dcf50d5da21971ccda716e7f9cf599` |
+| `limits-text.json` (3 vectors) | `29ec0cc75ae0e3fe64328da672e605a61b24552a064ac6c4265f78f23bae98b8` |
+
+The freeze covers values, not the record layout: an implementation emits the §10 values in the amended canonical record once that lands. Any change to a `text-plain` channel's bytes for any input needs `draft-2` and a new configuration digest. `text-markdown` draft-2 is **not** frozen: the review's M1 and M2 and the previously unlisted CommonMark differences are fixed or listed here, but they await re-review.
+
+## 18. Change log
+
+**This revision (after the clean-room review at `c6e8f2a`):**
+- **`text-plain` stays `draft-1`. No rule changed:**
+  - The single-pass skeleton (T-G4), the invalid-UTF-8 offset (T-G3) and the configuration bounds (T-G2) are now stated rather than implied.
+  - The record layout is marked provisional (T-G1).
+  - New vectors: `plain-unicode17-new`, `plain-skeleton-single-pass`, `plain-format-char-split`, `plain-err-reflow-nul` and `plain-err-reflow-invalid`.
+  - New limits: non-ignorable format characters and distractor insertion.
+- **`text-markdown` becomes `draft-2`:**
+  - Rule changes: MD-1 skips a leading BOM, and MD-2 accepts a list marker before a fence, with the closer indentation allowance e.
+  - The deviations list is completed.
+  - The new configuration digest is `3bf7760a…23203`; `text-markdown`/`draft-1` is now an `unsupported-config` (negative `cfg-text-markdown-draft-1`).
+  - **Changed vectors:** 11 Markdown vectors with k-grams changed only their hashes, k-gram hashes and fingerprints, because `profileVersion` is in every hash. Their tokens, spans, values and masks are unchanged. They are `md-syntax`, `md-stripped`, `md-fence`, `md-front-matter`, `md-front-matter-crlf`, `md-front-matter-unclosed`, `md-html-comment`, `md-html-comment-unclosed`, `md-link-reference`, `md-link-nested-parens` and `md-angle-brackets`.
+  - **Unchanged:** the 7 others, which are errors or have fewer than k tokens.
+  - New vectors: `md-html-block`, `md-bom-front-matter` and `md-list-fence`.
+- **Checker:**
+  - draft-2 Markdown rules;
+  - a `(profile, version)` table;
+  - the `input-rejected` pair relation;
+  - the wrong-implementation self-test (14/14).

@@ -25,8 +25,11 @@ DOMAIN = b"traceweave/text-kgram/draft-1"
 CHANNELS = ["exact", "folded", "skeleton"]
 
 
+VERSIONS = {"text-plain": "draft-1", "text-markdown": "draft-2"}
+
+
 def config_bytes(profile, max_bytes=1048576, k=8, window=8):
-    cfg = {"contract": "traceweave-text-winnow-draft-1", "profile": profile, "profileVersion": "draft-1",
+    cfg = {"contract": "traceweave-text-winnow-draft-1", "profile": profile, "profileVersion": VERSIONS[profile],
            "channels": CHANNELS, "k": k, "window": window, "hash": "sha256-first8-u64be",
            "maxInputBytes": max_bytes}
     return (json.dumps(cfg, separators=(",", ":")) + "\n").encode()
@@ -474,6 +477,36 @@ vec(P, "plain-bidi", ["bidi", "non-latin", "default-ignorable"],
 rej("plain-bidi", "segmentation", "Isolate characters included at the token edges",
     {"op": "replace-tokens", "tokens": "BIDI-EDGE"})
 
+# ------------------------------------------------------------------ review additions (draft-1 text-plain, draft-2 text-markdown)
+
+vec(P, "plain-unicode17-new", ["unicode-version", "non-latin", "case"],
+    "Code points new in Unicode 17.0.0: TELUGU LETTER NAKAARA POLLU (U+0C5C) inside a word, the new case pair U+A7CE/U+A7CF, and two CJK Extension J ideographs. Unicode 16.0 data has them unassigned, so a 16.0 library splits the first word and drops the rest.",
+    "abc\u0c5cdef \ua7ce\ua7cf x \U000323b0\U000323b1 end",
+    ["abc\u0c5cdef", "\ua7ce\ua7cf", "x", "\U000323b0", "\U000323b1", "end"],
+    "abc\u0c5cdef \ua7cf\ua7cf x \U000323b0 \U000323b1 end",
+    "abc\u0c5cdef \ua7ce\ua7ce x \U000323b0 \U000323b1 end")
+rej("plain-unicode17-new", "segmentation", "U+0C5C treated as unassigned (Unicode 16.0 data) and splitting the word",
+    {"op": "split", "token": 0, "at": 3, "folded": ["abc", "def"], "skeleton": ["abc", "def"]})
+
+vec(P, "plain-skeleton-single-pass", ["confusable"],
+    "U+048B folds to itself; its prototype is U+0439 U+0326, whose NFD is U+0438 U+0326 U+0306. The skeleton is applied once: U+0438 is not mapped again to U+1D0E.",
+    "\u043c\u043e\u048b\u0430 \u048b", ["\u043c\u043e\u048b\u0430", "\u048b"],
+    "\u043c\u043e\u048b\u0430 \u048b",
+    "\u028do\u0438\u0326\u0306a \u0438\u0326\u0306")
+rej("plain-skeleton-single-pass", "skeleton", "Skeleton iterated to a fixed point",
+    {"op": "set", "token": 1, "field": "skeleton", "value": "\u1d0e\u0326\u0306"})
+
+vec(P, "plain-format-char-split", ["default-ignorable", "limit"],
+    "U+FFFB INTERLINEAR ANNOTATION TERMINATOR and U+0600 ARABIC NUMBER SIGN are format characters (Cf) but not Default_Ignorable, so they are separators and split a word (stated limit: 32 such code points can split words invisibly).",
+    "pas\ufffbsages and wa\u0600ter split here", "pas sages and wa ter split here", "pas sages and wa ter split here")
+rej("plain-format-char-split", "segmentation", "Non-ignorable format character treated as transparent",
+    {"op": "replace-tokens", "tokens": "FMT-MERGE"})
+
+vec(P, "plain-err-reflow-nul", ["nul"], "plain-reflow-a with its first space replaced by NUL: the paired rejected input.",
+    REFLOW_A.encode().replace(b" ", b"\x00", 1), error=("nul", 6))
+vec(P, "plain-err-reflow-invalid", ["invalid-utf8"], "plain-reflow-a with its second space replaced by 0xFF: the paired rejected input.",
+    REFLOW_A.encode().replace(b"passages ", b"passages\xff", 1), error=("invalid-utf8", 15))
+
 # ------------------------------------------------------------------ errors
 
 vec(P, "plain-err-lone-continuation", ["invalid-utf8"], "Lone continuation byte.", b"abc \x80 def", error=("invalid-utf8", 4))
@@ -655,6 +688,33 @@ vec(M, "md-err-invalid-utf8", ["invalid-utf8", "markdown"], "Invalid UTF-8 after
 vec(M, "md-err-nul", ["nul", "markdown"], "NUL on the second line.", b"# Title\n\x00", error=("nul", 8))
 rej("md-err-nul", "error", "NUL ignored as a separator", {"op": "error", "code": "invalid-utf8", "offset": 8})
 
+MD_HTML = "<div class=\"note\">\nText inside an HTML block stays visible as tokens.\n</div>\n"
+vec(M, "md-html-block", ["markdown"],
+    "An HTML block: only the tags are masked; the text line between them stays tokens (CommonMark would treat the lines as one HTML block).",
+    MD_HTML, "Text inside an HTML block stays visible as tokens", "text inside an html block stays visible as tokens",
+    "text inside an htrnl block stays visible as tokens",
+    masked=md_masks(MD_HTML, ["<div class=\"note\">", "</div>"]))
+rej("md-html-block", "markdown", "Every line starting with a tag masked whole (CommonMark HTML block)",
+    {"op": "set-masked", "masked": "HTML-BLOCK"})
+
+MD_BOM_FM = "\ufeff---\ntitle: Hidden\n---\nVisible words after a byte order mark and front matter.\n"
+vec(M, "md-bom-front-matter", ["markdown", "bom"],
+    "A BOM before front matter: MD-1 skips the leading U+FEFF, so the front matter is masked from offset 3.",
+    MD_BOM_FM, "Visible words after a byte order mark and front matter",
+    "visible words after a byte order mark and front matter", "visible words after a byte order rnark and front rnatter",
+    masked=[[3, len("\ufeff---\ntitle: Hidden\n---".encode())]])
+rej("md-bom-front-matter", "markdown", "BOM disables front matter (draft-1 rule)", {"op": "set-masked", "masked": []})
+
+MD_LIST = ("Steps follow here.\n\n1. ```sh\n   tool --flag value\n   ```\n2. Then read the output carefully.\n"
+           "  - ~~~\n    nested hidden code\n    ~~~\nDone with the list now.\n")
+vec(M, "md-list-fence", ["markdown"],
+    "Fences opened on a list-marker line (ordered and nested bullet); each closes on a fence line indented up to 3 spaces more than the opener's fence column.",
+    MD_LIST, "Steps follow here 2 Then read the output carefully Done with the list now",
+    "steps follow here 2 then read the output carefully done with the list now",
+    masked=md_masks(MD_LIST, ["1. ```sh", "   tool --flag value", "   ```", "  - ~~~", "    nested hidden code", "    ~~~"]))
+rej("md-list-fence", "markdown", "Fence after a list marker not recognized (draft-1 rule)",
+    {"op": "set-masked", "masked": "LIST-FENCE-V1"})
+
 # ------------------------------------------------------------------ pairs
 
 PAIRS[P] = [
@@ -673,6 +733,8 @@ PAIRS[P] = [
     {"a": "plain-partial-source", "b": "plain-partial-host", "channels": ["folded", "skeleton"], "relation": "shares-fingerprint"},
     {"a": "plain-hangul", "b": "plain-hangul-jamo", "channels": ["folded", "skeleton"], "relation": "identical-hashes"},
     {"a": "plain-combining-a", "b": "plain-combining-b", "channels": ["folded", "skeleton"], "relation": "identical-hashes"},
+    {"a": "plain-reflow-a", "b": "plain-err-reflow-nul", "channels": [], "relation": "input-rejected"},
+    {"a": "plain-reflow-a", "b": "plain-err-reflow-invalid", "channels": [], "relation": "input-rejected"},
 ]
 PAIRS[M] = [{"a": "md-syntax", "b": "md-stripped", "channels": CHANNELS, "relation": "identical-hashes"}]
 
@@ -741,6 +803,9 @@ def resolve():
                 t = [x for x in t if x["folded"] not in ("https", "example", "com", "title", "span", "class", "amp", "img", "pic", "png", "org", "x", "b")]
             elif name == "CMT-BODY":
                 t.insert(2, {"text": "hidden", "span": [15, 21], "folded": "hidden", "skeleton": "hidden"})
+            elif name == "FMT-MERGE":
+                a, b = t[0], t[1]
+                t[0:2] = [{"text": "pas\ufffbsages", "span": [a["span"][0], b["span"][1]], "folded": "passages", "skeleton": "passages"}]
             elif name == "IND-DROP":
                 t = t[:2]
             else:
@@ -758,6 +823,10 @@ def resolve():
             elif mm == "PAREN-FIRST":
                 a = ms[0][0]
                 ms = [[a, a + len("(https://en.wikipedia.org/wiki/Fold_(higher-order_function)")]]
+            elif mm == "HTML-BLOCK":
+                ms = [[0, len(MD_HTML.encode()) - 1]]
+            elif mm == "LIST-FENCE-V1":
+                ms = ms[2:]
             elif mm == "LT-GREEDY":
                 p = MD_LT.index("<y")
                 q = MD_LT.index("<Tag attr>")
@@ -792,13 +861,15 @@ def config_negatives():
     neg("cfg-text-token-contract", "Code contract identifier", enc({**base, "contract": "traceweave-token-winnow-draft-1"}))
     neg("cfg-text-unknown-format", "Unknown front end", enc({**base, "profile": "text-html"}))
     neg("cfg-text-version", "Unknown profile version", enc({**base, "profileVersion": "draft-2"}))
+    neg("cfg-text-markdown-draft-1", "text-markdown draft-1 (superseded by draft-2)",
+        enc({**base, "profile": "text-markdown", "profileVersion": "draft-1"}))
     neg("cfg-text-k-above-bound", "k = 17", enc({**base, "k": 17}))
     neg("cfg-text-window-zero", "window = 0", enc({**base, "window": 0}))
     neg("cfg-text-max-above-bound", "maxInputBytes = 8388609", enc({**base, "maxInputBytes": 8388609}))
     neg("cfg-text-whitespace", "Insignificant whitespace", json.dumps(base, separators=(", ", ": ")) + "\n")
     neg("cfg-text-no-lf", "No trailing LF", enc(base)[:-1])
     neg("cfg-text-extra-key", "Extra key (format)", enc({**base, "format": "plain"}))
-    pos = [{"id": "cfg-text-bounds-max", "configText": enc({**base, "profile": "text-markdown", "k": 16, "window": 128, "maxInputBytes": 8388608})},
+    pos = [{"id": "cfg-text-bounds-max", "configText": enc({**base, "profile": "text-markdown", "profileVersion": "draft-2", "k": 16, "window": 128, "maxInputBytes": 8388608})},
            {"id": "cfg-text-bounds-min", "configText": enc({**base, "k": 1, "window": 1, "maxInputBytes": 1})}]
     return {"description": "Configurations that MUST be rejected with unsupported-config (profile section 11), and boundary configurations that MUST be accepted.",
             "negatives": negs, "boundaryPositives": pos}

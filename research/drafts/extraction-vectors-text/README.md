@@ -1,23 +1,25 @@
-# Draft text-profile vectors (`text-plain` and `text-markdown`, `draft-1`)
+# Draft text-profile vectors (`text-plain` draft-1, `text-markdown` draft-2)
 
-Status: draft for review, 2026-11-22. These are the hand-derived vectors (roadmap gate TXT.2) for the [draft text extraction profile](../extraction-profile-text.md). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
+Status: revised after the [clean-room review](../../reviews/extraction-profile-text-review.md), 2026-11-22. `text-plain` draft-1 is frozen for stage-1 implementation (profile §17: digests listed there); `text-markdown` draft-2 is still a draft. These are the hand-derived vectors (roadmap gate TXT.2) for the [draft text extraction profile](../extraction-profile-text.md). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
 
 ## Files
 
 | File | Contents |
 | --- | --- |
-| `config-text-plain.json`, `config-text-markdown.json` | Exact configuration bytes (profile §11), k = 8, w = 8, 1 MiB. Do not reformat: the digest covers the trailing LF |
+| `config-text-plain.json`, `config-text-markdown.json` | Exact configuration bytes (profile §11), k = 8, w = 8, 1 MiB; `text-plain`/`draft-1` and `text-markdown`/`draft-2`. Do not reformat: the digest covers the trailing LF |
 | `config-text-plain-limit16.json` | `text-plain` with `maxInputBytes` 16, used by `limits-text.json` |
-| `config-negative-text.json` | 12 configurations that MUST be rejected, each with its `expectedResult`, and 2 boundary configurations that MUST be accepted |
-| `text-plain.json` | 50 vectors (43 accepted, 7 errors) and 15 pair relations |
-| `text-markdown.json` | 18 vectors (16 accepted, 2 errors) and 1 pair relation |
+| `config-negative-text.json` | 13 configurations that MUST be rejected, each with its `expectedResult`, and 2 boundary configurations that MUST be accepted |
+| `text-plain.json` | 55 vectors (46 accepted, 9 errors) and 17 pair relations |
+| `text-markdown.json` | 21 vectors (19 accepted, 2 errors) and 1 pair relation |
 | `limits-text.json` | 3 vectors: exactly the limit, over it, and over it with an invalid byte (the size check runs first) |
-| `rejections.json` | 64 paired rejections: one deliberately wrong expected result for each of the 60 accepted vectors, plus 4 for error vectors |
+| `rejections.json` | 70 paired rejections: one deliberately wrong expected result for each of the 66 accepted vectors, plus 4 for error vectors |
 | `text-tables-17.0.0.json` | Derived Unicode 17.0.0 data (profile §4), SHA-256 `49eb0304…80ae53f4` |
 | `check_text_vectors.py` | Independent checker, standard library only |
 | `harness/gen_text_tables.py` | Regenerates the table from the six pinned files and refuses any other digests |
 | `harness/build_vectors.py` | Writes every vector, configuration and rejection file from the hand-written expectations |
 | `harness/crosscheck_text.py`, `harness/go/`, `harness/rust/` | Cross-check against Go x/text and Rust Unicode crates, offline, with `go.sum` and `Cargo.lock` |
+
+**Fixture layout, not a record format.** The layout below is for these fixtures only. The canonical record for a three-channel profile is provisional until the catalogue and report contract's amendment lands (profile §10).
 
 **Vector fields.** Every vector has `id`, `tags` (its `class:` labels), `description`, `derivation` (always `hand`), `config` (the file whose bytes apply), `inputBase64` (the authoritative bytes) and `inputText`. `inputText` is `null` when the bytes are not UTF-8; `inputDisplay` then gives an escaped form. The `result` is one of these:
 - **`status: "error"`** with `error.code` and `error.offset`, and nothing else.
@@ -29,9 +31,12 @@ Status: draft for review, 2026-11-22. These are the hand-derived vectors (roadma
 **Pairs.** Each pair names two vectors, a list of channels and a relation:
 - `identical-hashes`: equal, non-empty k-gram hash lists;
 - `different-hashes`: no k-gram hash in common;
-- `shares-fingerprint`: at least one fingerprint hash in common.
+- `shares-fingerprint`: at least one fingerprint hash in common;
+- `input-rejected`: an accepted input paired with a rejected variant of it (OD-T12). The channel list is empty.
 
-**Rejections.** Each rejection names a vector, a declared `layer` and a `mutation`. The checker applies the mutation, recomputes k-grams, hashes and winnowing from the mutated tokens so that only the declared layer is wrong, and requires the checker to fail at exactly that layer. The layers are `segmentation`, `fold`, `skeleton`, `markdown`, `status`, `hash`, `winnow` and `error`. This is how TXT.2's "each positive vector has a paired rejection vector" is read (open decision OD-T12 in the profile).
+**Rejections.** Each rejection names a vector, a declared `layer` and a `mutation`. The checker applies the mutation, recomputes k-grams, hashes and winnowing from the mutated tokens so that only the declared layer is wrong, and requires the checker to fail at exactly that layer. The layers are `segmentation`, `fold`, `skeleton`, `markdown`, `status`, `hash`, `winnow` and `error`. Together with the `input-rejected` pairs, this is how TXT.2's "each positive vector has a paired rejection vector" is read (OD-T12 in the profile).
+
+**Wrong implementations.** Paired rejections only mutate a vector's own result, so they cannot catch an implementation that is wrong only on inputs no vector contains. The checker therefore also runs 14 whole alternative extractors over every vector input, and each must differ on at least one vector. On the 71 draft-1 vectors, 6 of them were accepted: Unicode 16.0 data, an iterated skeleton, CommonMark HTML blocks, a BOM that disables front matter, list-item fences not recognized, and ignorable format characters. The vectors `plain-unicode17-new`, `plain-skeleton-single-pass`, `md-html-block`, `md-bom-front-matter`, `md-list-fence` and `plain-format-char-split` now reject them.
 
 ## How the expectations were derived
 
@@ -51,7 +56,7 @@ The checker's first run against these expectations reported 3 discrepancies:
 - a limit input that was 16 bytes, not 17;
 - a builder span-location defect: `an` was located inside a masked `</span>`.
 
-All three were fixed, two in the hand values and one in the builder. Before that run, re-reading had caught 6 missing `m` → `rn` skeleton mappings. No expectation was copied from checker output.
+All three were fixed, two in the hand values and one in the builder. The 8 vectors added after the review matched the checker on the first run. Before that run, re-reading had caught 6 missing `m` → `rn` skeleton mappings. No expectation was copied from checker output.
 
 ## Coverage
 
@@ -68,10 +73,12 @@ All three were fixed, two in the hand values and one in the builder. Before that
 | `punctuation`, `numbers`, `hyphenation` | `plain-punct-a`/`-b` (identical in every channel), `plain-numbers`, `plain-hyphenation-wrap` |
 | `partial-copy` | `plain-partial-source`/`plain-partial-host`: 17 shared tokens, at least one shared folded and skeleton fingerprint |
 | `non-latin`, `no-spaces`, `bidi` | `plain-greek`, `plain-rtl-and-indic`, `plain-japanese`, `plain-chinese`, `plain-thai`, `plain-hangul`, `plain-cherokee`, `plain-numbers`, `plain-bidi` |
-| `markdown` | `md-syntax`/`md-stripped` (identical in every channel), `plain-md-syntax`, `md-fence`, `md-fence-unclosed`, `md-front-matter`, `md-front-matter-crlf`, `md-front-matter-unclosed`, `md-html-comment`, `md-html-comment-unclosed`, `md-link-reference`, `md-link-nested-parens`, `md-angle-brackets`, `md-entities`, `md-indented-code` |
+| `markdown` | `md-syntax`/`md-stripped` (identical in every channel), `plain-md-syntax`, `md-fence`, `md-fence-unclosed`, `md-list-fence`, `md-html-block`, `md-bom-front-matter`, `md-front-matter`, `md-front-matter-crlf`, `md-front-matter-unclosed`, `md-html-comment`, `md-html-comment-unclosed`, `md-link-reference`, `md-link-nested-parens`, `md-angle-brackets`, `md-entities`, `md-indented-code` |
 | `invalid-utf8`, `nul` | `plain-err-lone-continuation`, `-overlong`, `-surrogate`, `-truncated`, `-above-max`, `-nul`, `-nul-then-invalid`, `md-err-invalid-utf8`, `md-err-nul` |
 | `limit-size` | `limit-exact`, `limit-over`, `limit-over-invalid` |
-| `limit` (stated limits) | `plain-zwsp-as-separator`, `plain-hyphenation-wrap`, `plain-thai`, `md-entities`, `md-indented-code` |
+| `limit` (stated limits) | `plain-zwsp-as-separator`, `plain-format-char-split`, `plain-hyphenation-wrap`, `plain-thai`, `md-entities`, `md-indented-code` |
+| `unicode-version`, `confusable` | `plain-unicode17-new` (U+0C5C, U+A7CE/U+A7CF, CJK Extension J), `plain-skeleton-single-pass` (U+048B) |
+| paired rejected inputs | `plain-err-reflow-nul`, `plain-err-reflow-invalid` (`input-rejected` pairs with `plain-reflow-a`) |
 
 ## 1. Checker
 
@@ -79,21 +86,22 @@ All three were fixed, two in the hand values and one in the builder. Before that
 python3 -I research/drafts/extraction-vectors-text/check_text_vectors.py [--normalization-test PATH/NormalizationTest.txt]
 ```
 
-Output on 2026-11-22, with `--normalization-test` pointing at the UCD 17.0.0 file (SHA-256 `5019ffd5…8c64dd`):
+Output on 2026-11-22, with `--normalization-test` pointing at the UCD 17.0.0 file (SHA-256 `5019ffd5…8c64dd`). The 14 per-variant lines of the wrong-implementation self-test are omitted here:
 
 ```
-PASS config-negative-text.json: 12/12 invalid configurations rejected, 2/2 boundary configurations accepted; config-text-plain.json=35c1f63cc2f669a5, config-text-markdown.json=0be5e93c4c90b24c, config-text-plain-limit16.json=16d15b33a3b0a117
-PASS text-plain.json vectors=50 tokens=610 errors=7 masked-ranges=0 fingerprints(all channels)=227 partial-windows=57 tie-windows=48
-PASS text-markdown.json vectors=18 tokens=201 errors=2 masked-ranges=26 fingerprints(all channels)=69 partial-windows=21 tie-windows=0
+PASS config-negative-text.json: 13/13 invalid configurations rejected, 2/2 boundary configurations accepted; config-text-plain.json=35c1f63cc2f669a5, config-text-markdown.json=3bf7760a91297a50, config-text-plain-limit16.json=16d15b33a3b0a117
+PASS text-plain.json vectors=55 tokens=625 errors=9 masked-ranges=0 fingerprints(all channels)=227 partial-windows=57 tie-windows=48
+PASS text-markdown.json vectors=21 tokens=234 errors=2 masked-ranges=35 fingerprints(all channels)=72 partial-windows=30 tie-windows=0
 PASS limits-text.json vectors=3 tokens=3 errors=2 masked-ranges=0 fingerprints(all channels)=0 partial-windows=0 tie-windows=0
-PASS pairs=16 classes=27 total-vectors=71
-PASS rejections.json: 64/64 corruptions rejected at their declared layer (error=5, fold=14, hash=1, markdown=11, segmentation=23, skeleton=5, status=3, winnow=2); positive vectors with a paired rejection: 60/60
+PASS pairs=18 classes=28 total-vectors=79
+PASS rejections.json: 70/70 corruptions rejected at their declared layer (error=5, fold=14, hash=1, markdown=14, segmentation=25, skeleton=6, status=3, winnow=2); positive vectors with a paired rejection: 66/66
+PASS wrong-implementation self-test: rejected 14/14
 PASS NormalizationTest.txt (17.0.0): NFC and NFD checks 120204/120204
 ```
 
 **What it recomputes.** Everything is recomputed from the input bytes and the pinned table: configuration validation, the size, UTF-8 and NUL checks in order, the Markdown masks, character classes and the token rule, NFD, NFKC_CF, NFC, the separator filter, the skeleton, the k-gram bytes, the hashes, rightmost-minimum winnowing, partial windows, fingerprints, `input[span] == text` and the pair relations.
 
-**Python's `unicodedata` is not imported.** It is Unicode 16.0.0 in the interpreter used here. The checker's own NFD and NFC are verified against NormalizationTest.txt 17.0.0 when the file is supplied. That file is not committed (2,827,429 bytes); its digest is pinned in the checker.
+**Python's `unicodedata` is not used for any expected value.** It is Unicode 16.0.0 in the interpreter used here. It is imported only by the self-test, to act as the "Unicode 16.0 library" wrong implementation, which reports "not applicable" if the interpreter's data is 17.0.0. The checker's own NFD and NFC are verified against NormalizationTest.txt 17.0.0 when the file is supplied. That file is not committed (2,827,429 bytes); its digest is pinned in the checker.
 
 **Limits.** The checker and the builder were written by the same author from the same profile text, so a misreading of the profile shared by both would not be caught. The cross-check below compares the Unicode parts with independent library code. TXT.3 still needs two independent implementations.
 
@@ -124,12 +132,12 @@ fold, every scalar value (Go x/text NFKC+cases.Fold+DI loop, then NFC): 1111978/
 token fold (with separator filter), every W/C scalar value: 149786/149872 DIFFER
     attributed to Cherokee: 86; unexplained: 0
 fold, NormalizationTest.txt strings: 37671/37671 agree
-token fold, every vector token (Go): 813/814 DIFFER   (the Cherokee token of plain-cherokee)
-plain token rule + fold, every plain-profile vector (Go): 43/44 DIFFER   (plain-cherokee)
+token fold, every vector token (Go): 861/862 DIFFER   (the Cherokee token of plain-cherokee)
+plain token rule + fold, every plain-profile vector (Go): 46/47 DIFFER   (plain-cherokee)
 NFC, every scalar value + NormalizationTest.txt strings (Rust unicode-normalization): 1149735/1149735 agree
 NFD, every scalar value + NormalizationTest.txt strings (Rust unicode-normalization): 1149735/1149735 agree
-Markdown masks vs CommonMark text content, folded token sequences (informative): 11/16 equal
-UAX #29 word spans equal to profile token spans (informative, not required): 31/44 plain vectors
+Markdown masks vs CommonMark text content, folded token sequences (informative): 11/19 equal
+UAX #29 word spans equal to profile token spans (informative, not required): 33/47 plain vectors
 ```
 
 **Reading the results.**

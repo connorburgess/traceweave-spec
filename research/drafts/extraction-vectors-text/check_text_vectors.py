@@ -22,9 +22,14 @@ For every vector file it recomputes, from the input bytes alone:
   windows and fingerprints for each of the three channels;
 * the pair relations declared in each file.
 
-Then it runs the paired rejections in rejections.json: each is a deliberately
-wrong expected result (hashes recomputed so that only the targeted layer is
-wrong) that MUST be rejected.
+Then it runs two self-tests. The paired rejections in rejections.json are
+deliberately wrong expected results (hashes recomputed so that only the
+targeted layer is wrong) that MUST be rejected. The wrong-implementation
+self-test re-extracts every vector input with each of 14 plausible but wrong
+extractors (WRONG_IMPLEMENTATIONS); each MUST differ on at least one vector.
+
+Profiles and versions: text-plain draft-1 (frozen for stage 1), text-markdown
+draft-2.
 
 Usage:
   python3 -I check_text_vectors.py [--normalization-test NormalizationTest.txt]
@@ -49,7 +54,11 @@ NORMALIZATION_TEST_SHA256 = "5019ffd530751a741900c849c0e010332f142a3612234639bd2
 DOMAIN = b"traceweave/text-kgram/draft-1"
 CONTRACT = "traceweave-text-winnow-draft-1"
 HASH_ID = "sha256-first8-u64be"
-PROFILES = {"text-plain", "text-markdown"}
+PROFILES = {"text-plain": "draft-1", "text-markdown": "draft-2"}  # profile -> the version implemented
+# Wrong-implementation switches (profile section 14). Empty for the real checker.
+VAR = frozenset()
+NON_DI_FORMAT = set(range(0x0600, 0x0606)) | {0x06DD, 0x070F, 0x0890, 0x0891, 0x08E2, 0xFFF9, 0xFFFA, 0xFFFB,
+                                              0x110BD, 0x110CD} | set(range(0x13430, 0x13440))
 CHANNELS = ["exact", "folded", "skeleton"]
 TOKEN_CLASS = b"word"
 CONFIG_KEYS = ["contract", "profile", "profileVersion", "channels", "k", "window", "hash", "maxInputBytes"]
@@ -111,6 +120,15 @@ class Tables:
         return 0
 
     def char_class(self, c):
+        if VAR:
+            if "u16" in VAR and _unassigned_16(c):
+                return "S"
+            if "cf-ignorable" in VAR and c in NON_DI_FORMAT:
+                return "I"
+            if "zwsp-sep" in VAR and c == 0x200B:
+                return "S"
+            if "ideo-runs" in VAR and self.ideo(c) and not self.ign(c):
+                return "W"
         if self.ign(c):
             return "I"
         if self.ideo(c):
@@ -124,6 +142,15 @@ class Tables:
         if i >= 0 and self.cf[i][0] <= c <= self.cf[i][1]:
             return self.cf[i][2]
         return [c]
+
+
+def _unassigned_16(c):
+    import unicodedata  # only for the "Unicode 16.0 library" wrong implementation
+    return unicodedata.category(chr(c)) == "Cn" and not 0xE0000 <= c <= 0xE0FFF
+
+
+def _cherokee_small(c):
+    return 0x13F8 <= c <= 0x13FD or 0xAB70 <= c <= 0xABBF
 
 
 SBASE, LBASE, VBASE, TBASE = 0xAC00, 0x1100, 0x1161, 0x11A7
@@ -197,21 +224,26 @@ def nfc(T, cps):
 def fold(T, cps):
     """Profile section 8: folded value of one token's code points."""
     mapped = []
-    for c in nfd(T, cps):
-        mapped.extend(T.nfkc_cf(c))
+    for c in (cps if "no-nfd" in VAR else nfd(T, cps)):
+        mapped.extend([c] if "cherokee" in VAR and _cherokee_small(c) else T.nfkc_cf(c))
     v = nfc(T, mapped)
+    if "no-filter" in VAR:
+        return v
     v = [c for c in v if T.char_class(c) in ("W", "C")]
     return nfc(T, v)
 
 
 def skeleton(T, cps):
-    """UTS #39 section 4 skeleton, applied to a folded value."""
+    """UTS #39 section 4 skeleton, applied once to a folded value."""
     out = []
     for c in nfd(T, cps):
         if T.ign(c):
             continue
         out.extend(T.conf.get(c, [c]))
-    return nfd(T, out)
+    out = nfd(T, out)
+    if "skel-iter" in VAR and out != list(cps):
+        return skeleton(T, out)
+    return out
 
 
 def s_of(cps):
@@ -256,33 +288,52 @@ def markdown_masks(cps):
         return body[:-1] if body.endswith("\r") else body
 
     li = 0
-    # MD-1 front matter
-    if line_starts and content(0) == "---":
+    # MD-1 front matter; draft-2: a leading U+FEFF is skipped
+    first = content(0)
+    bom = 1 if first.startswith("\ufeff") and "bom-no-fm" not in VAR else 0
+    if line_starts and first[bom:] == "---":
         for j in range(1, len(line_starts)):
             if content(line_starts[j]) in ("---", "..."):
-                masks.append((0, line_end(line_starts[j])))
+                masks.append((bom, line_end(line_starts[j])))
                 li = j + 1
                 break
     fence = None
+    html_block = False
     resume = None
     comment_unclosed_from = None
     while li < len(line_starts):
         ls = line_starts[li]
         le = line_end(ls)
         body = content(ls)
+        if html_block:  # wrong-implementation switch only: CommonMark HTML block runs to a blank line
+            if body.strip(" \t") == "":
+                html_block = False
+            else:
+                masks.append((ls, le))
+                li += 1
+                continue
         if fence is not None:
             masks.append((ls, le))
-            m = re.match(r" {0,3}(" + re.escape(fence[0]) + "+)[ \t]*$", body)
-            if m and len(m.group(1)) >= fence[1]:
+            m = re.match(r"( *)(" + re.escape(fence[0]) + "+)[ \t]*$", body)
+            if m and len(m.group(1)) <= 3 + fence[2] and len(m.group(2)) >= fence[1]:
                 fence = None
             li += 1
             continue
         p = ls
         if resume is None:
-            m = re.match(r" {0,3}(`{3,}|~{3,})(.*)$", body)
-            if m and not (m.group(1)[0] == "`" and "`" in m.group(2)):
+            if "fence-v1" in VAR:
+                m = re.match(r"( {0,3})()()(`{3,}|~{3,})(.*)$", body)
+            else:  # draft-2: an optional list marker before the fence
+                m = re.match(r"( {0,3})(?:([-*+]|[0-9]{1,9}[.)])( {1,4}))?(`{3,}|~{3,})(.*)$", body)
+            if m and not (m.group(4)[0] == "`" and "`" in m.group(5)):
                 masks.append((ls, le))
-                fence = (m.group(1)[0], len(m.group(1)))
+                extra = m.start(4) if m.group(2) else 0
+                fence = (m.group(4)[0], len(m.group(4)), extra)
+                li += 1
+                continue
+            if "html-block" in VAR and re.match(r" {0,3}</?[A-Za-z]", body):
+                masks.append((ls, le))
+                html_block = True
                 li += 1
                 continue
             if re.match(r" {0,3}\[[^\]^][^\]]*\]:", body):
@@ -358,6 +409,10 @@ def tokenize(T, cps, masked):
     """Profile section 7. Returns a list of (first, last) code point indexes."""
     n = len(cps)
     cls = [T.char_class(c) for c in cps]
+    if "apos-join" in VAR:
+        for i in range(1, n - 1):
+            if cps[i] in (0x27, 0x2019) and cls[i - 1] == "W" and cls[i + 1] == "W":
+                cls[i] = "W"
     for a, b in masked:
         for i in range(a, b):
             cls[i] = "S"
@@ -423,7 +478,7 @@ def validate_config(raw):
             raise ValueError(f"step 5: {key}")
     if cfg["channels"] != CHANNELS:
         raise ValueError("step 6: channels")
-    if cfg["contract"] != CONTRACT or cfg["profile"] not in PROFILES or cfg["profileVersion"] != "draft-1" or cfg["hash"] != HASH_ID:
+    if cfg["contract"] != CONTRACT or PROFILES.get(cfg["profile"]) != cfg["profileVersion"] or cfg["hash"] != HASH_ID:
         raise ValueError("step 7: identifiers")
     canon = json.dumps(cfg, separators=(",", ":"), ensure_ascii=False) + "\n"
     if canon.encode("utf-8") != raw:
@@ -506,13 +561,16 @@ def expected_result(T, cfg, data):
     cps, offs = dec
     if 0 in cps:
         return {"status": "error", "error": {"code": "nul", "offset": offs[cps.index(0)]}}
+    if "bom-strip" in VAR and cps[:1] == [0xFEFF]:
+        cps, offs = cps[1:], [o - 3 for o in offs[1:]]
     masked = markdown_masks(cps) if cfg["profile"] == "text-markdown" else []
     toks = []
     for a, b in tokenize(T, cps, masked):
         piece = cps[a:b + 1]
         f = fold(T, piece)
+        sk = fold(T, skeleton(T, piece)) if "skel-before-fold" in VAR else skeleton(T, f)
         toks.append({"text": s_of(piece), "span": [offs[a], offs[b + 1]],
-                     "folded": s_of(f), "skeleton": s_of(skeleton(T, f))})
+                     "folded": s_of(f), "skeleton": s_of(sk)})
     res = {"status": "ok" if len(toks) >= cfg["k"] else "insufficient-tokens"}
     if cfg["profile"] == "text-markdown":
         res["masked"] = [[offs[a], offs[b]] for a, b in masked]
@@ -567,6 +625,10 @@ def check_spans(data, res, where):
 def check_relation(T, files, pair):
     a = files[pair["a"]]
     b = files[pair["b"]]
+    if pair["relation"] == "input-rejected":
+        require(a["result"]["status"] != "error" and b["result"]["status"] == "error", "pair",
+                f"pair {pair['a']} / {pair['b']}: not an accepted input paired with a rejected one")
+        return
     for ch in pair["channels"]:
         ha = [g["hash"] for g in a["result"][ch]["kgrams"]]
         hb = [g["hash"] for g in b["result"][ch]["kgrams"]]
@@ -708,6 +770,53 @@ def run_rejections(T, configs, vectors):
     return rejected, len(doc["rejections"]), layers, failures, unpaired, len(positives)
 
 
+WRONG_IMPLEMENTATIONS = [
+    # (switch, description). The first five are the variants the clean-room review found the
+    # draft-1 checker accepted; the rest are review variants it already rejected.
+    ("u16", "Unicode 16.0 library data: code points new in 17.0 are unassigned"),
+    ("skel-iter", "skeleton iterated to a fixed point instead of applied once"),
+    ("html-block", "CommonMark-style HTML block: from a line starting with a tag through the next blank line"),
+    ("bom-no-fm", "draft-1 rule: a leading BOM disables front matter"),
+    ("bom-strip", "BOM stripped before extraction, offsets taken from the stripped text"),
+    ("fence-v1", "draft-1 fence rule: no list marker before a fence opener"),
+    ("cf-ignorable", "the 32 non-Default_Ignorable format characters treated as ignorable"),
+    ("cherokee", "golang.org/x/text cases.Fold: Cherokee small letters left unfolded"),
+    ("no-nfd", "NFKC_CF mapping without the leading NFD"),
+    ("no-filter", "no separator filter after the fold"),
+    ("skel-before-fold", "skeleton of the exact text, then folded"),
+    ("zwsp-sep", "ZWSP treated as a separator"),
+    ("ideo-runs", "ideographs grouped into runs like letters"),
+    ("apos-join", "apostrophes between letters kept inside words"),
+]
+
+
+def run_wrong_implementations(T, configs, vectors):
+    """Each wrong implementation recomputes every vector; at least one must differ."""
+    global VAR
+    rows = []
+    for switch, desc in WRONG_IMPLEMENTATIONS:
+        if switch == "u16":
+            import unicodedata
+            if unicodedata.unidata_version == "17.0.0":
+                rows.append((switch, desc, None, "not applicable: this Python's unicodedata is 17.0.0"))
+                continue
+        VAR = frozenset([switch])
+        first = None
+        differing = 0
+        try:
+            for vid, v in vectors.items():
+                data = base64.b64decode(v["inputBase64"])
+                try:
+                    compare(expected_result(T, configs[v["config"]], data), v["result"], vid)
+                except CheckError:
+                    differing += 1
+                    first = first or vid
+        finally:
+            VAR = frozenset()
+        rows.append((switch, desc, differing, first))
+    return rows
+
+
 def normalization_test(T, path):
     raw = Path(path).read_bytes()
     digest = hashlib.sha256(raw).hexdigest()
@@ -791,6 +900,19 @@ def main(argv):
           f"({', '.join(f'{k}={v}' for k, v in sorted(layers.items()))}); "
           f"positive vectors with a paired rejection: {npos - len(unpaired)}/{npos}")
     ok = ok and status == "PASS"
+    rows = run_wrong_implementations(T, configs, vectors)
+    applicable = [r for r in rows if r[2] is not None]
+    caught = [r for r in applicable if r[2] > 0]
+    for sw, desc, n, first in rows:
+        if n is None:
+            print(f"  wrong implementation {sw}: {first}")
+        else:
+            print(f"  wrong implementation {sw} ({desc}): {'REJECTED' if n else 'ACCEPTED'}, "
+                  f"{n} vector(s) differ, first {first}")
+    wstatus = "PASS" if len(caught) == len(applicable) else "FAIL"
+    print(f"{wstatus} wrong-implementation self-test: rejected {len(caught)}/{len(applicable)}"
+          + (f" ({len(rows) - len(applicable)} not applicable)" if len(rows) != len(applicable) else ""))
+    ok = ok and wstatus == "PASS"
     if "--normalization-test" in argv:
         n, bad = normalization_test(T, argv[argv.index("--normalization-test") + 1])
         print(f"{'PASS' if bad == 0 else 'FAIL'} NormalizationTest.txt (17.0.0): NFC and NFD checks {n - bad}/{n}")

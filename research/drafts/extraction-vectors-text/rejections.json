@@ -2476,6 +2476,102 @@
    }
   },
   {
+   "id": "rej-plain-unicode17-new",
+   "vector": "plain-unicode17-new",
+   "layer": "segmentation",
+   "description": "U+0C5C treated as unassigned (Unicode 16.0 data) and splitting the word",
+   "mutation": {
+    "op": "split",
+    "token": 0,
+    "at": 3,
+    "folded": [
+     "abc",
+     "def"
+    ],
+    "skeleton": [
+     "abc",
+     "def"
+    ]
+   }
+  },
+  {
+   "id": "rej-plain-skeleton-single-pass",
+   "vector": "plain-skeleton-single-pass",
+   "layer": "skeleton",
+   "description": "Skeleton iterated to a fixed point",
+   "mutation": {
+    "op": "set",
+    "token": 1,
+    "field": "skeleton",
+    "value": "\u1d0e\u0326\u0306"
+   }
+  },
+  {
+   "id": "rej-plain-format-char-split",
+   "vector": "plain-format-char-split",
+   "layer": "segmentation",
+   "description": "Non-ignorable format character treated as transparent",
+   "mutation": {
+    "op": "replace-tokens",
+    "tokens": [
+     {
+      "text": "pas\ufffbsages",
+      "span": [
+       0,
+       11
+      ],
+      "folded": "passages",
+      "skeleton": "passages"
+     },
+     {
+      "text": "and",
+      "span": [
+       12,
+       15
+      ],
+      "folded": "and",
+      "skeleton": "and"
+     },
+     {
+      "text": "wa",
+      "span": [
+       16,
+       18
+      ],
+      "folded": "wa",
+      "skeleton": "wa"
+     },
+     {
+      "text": "ter",
+      "span": [
+       20,
+       23
+      ],
+      "folded": "ter",
+      "skeleton": "ter"
+     },
+     {
+      "text": "split",
+      "span": [
+       24,
+       29
+      ],
+      "folded": "split",
+      "skeleton": "split"
+     },
+     {
+      "text": "here",
+      "span": [
+       30,
+       34
+      ],
+      "folded": "here",
+      "skeleton": "here"
+     }
+    ]
+   }
+  },
+  {
    "id": "rej-plain-err-nul",
    "vector": "plain-err-nul",
    "layer": "error",
@@ -3582,6 +3678,58 @@
     "op": "error",
     "code": "invalid-utf8",
     "offset": 8
+   }
+  },
+  {
+   "id": "rej-md-html-block",
+   "vector": "md-html-block",
+   "layer": "markdown",
+   "description": "Every line starting with a tag masked whole (CommonMark HTML block)",
+   "mutation": {
+    "op": "set-masked",
+    "masked": [
+     [
+      0,
+      76
+     ]
+    ]
+   }
+  },
+  {
+   "id": "rej-md-bom-front-matter",
+   "vector": "md-bom-front-matter",
+   "layer": "markdown",
+   "description": "BOM disables front matter (draft-1 rule)",
+   "mutation": {
+    "op": "set-masked",
+    "masked": []
+   }
+  },
+  {
+   "id": "rej-md-list-fence",
+   "vector": "md-list-fence",
+   "layer": "markdown",
+   "description": "Fence after a list marker not recognized (draft-1 rule)",
+   "mutation": {
+    "op": "set-masked",
+    "masked": [
+     [
+      50,
+      56
+     ],
+     [
+      92,
+      99
+     ],
+     [
+      100,
+      122
+     ],
+     [
+      123,
+      130
+     ]
+    ]
    }
   }
  ]
