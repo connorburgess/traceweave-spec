@@ -1034,6 +1034,86 @@
           }
         }
       }
+    },
+    {
+      "id": "go-q9-unassigned",
+      "tags": ["malformed", "question", "unicode-boundary"],
+      "description": "Q9: U+0378 is unassigned (not in go_letter): illegal character. The assigned table is informative only.",
+      "inputBase64": "zbg=",
+      "inputText": "͸",
+      "result": {"status": "error", "error": {"code": "illegal-character", "offset": 0}}
+    },
+    {
+      "id": "go-q11-imag-binary-digit",
+      "tags": ["malformed", "question", "literals"],
+      "description": "Q11: '0b2i' matches no production (0b2 is not int_lit or decimal_digits): malformed. go/scanner accepts; cmd/compile rejects.",
+      "inputBase64": "MGIyaQ==",
+      "inputText": "0b2i",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 0}}
+    },
+    {
+      "id": "go-q11-imag-octal-digit",
+      "tags": ["malformed", "question", "literals"],
+      "description": "Q11: '0o9i' likewise malformed.",
+      "inputBase64": "MG85aQ==",
+      "inputText": "0o9i",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 0}}
+    },
+    {
+      "id": "go-q12-line-directive",
+      "tags": ["question", "comments"],
+      "description": "Q12: '/*line :*/' is an ordinary general comment (section 4.6): zero tokens. go/scanner rejects it as an invalid line directive.",
+      "inputBase64": "LypsaW5lIDoqLw==",
+      "inputText": "/*line :*/",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 0,
+        "tokens": [],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {"values": [], "kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []}
+        }
+      }
+    },
+    {
+      "id": "go-escapes-vt-raw",
+      "tags": ["literals"],
+      "description": "Interpreted string with \\x escape and a raw string containing U+000B (exercises the cross-check harness quoting fix).",
+      "inputBase64": "cyA6PSAiXHg0MSIgKyBgYQtiYAo=",
+      "inputText": "s := \"\\x41\" + `a\u000bb`\n",
+      "result": {
+        "status": "ok",
+        "tokenCount": 6,
+        "tokens": [
+          {"class": "ident", "text": "s", "span": [0, 1]},
+          {"class": "punct", "text": ":=", "span": [2, 4]},
+          {"class": "string", "text": "\"\\x41\"", "span": [5, 11]},
+          {"class": "punct", "text": "+", "span": [12, 13]},
+          {"class": "string", "text": "`a\u000bb`", "span": [14, 19]},
+          {"class": "punct", "text": ";", "span": [19, 19], "inserted": true}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "f005ddbc9d62296c", "span": [0, 19]},
+              {"position": 1, "hash": "b554152874158a5e", "span": [2, 19]}
+            ],
+            "windowSelections": [1],
+            "partialWindow": true,
+            "fingerprints": [{"position": 1, "hash": "b554152874158a5e", "span": [2, 19]}]
+          },
+          "normalized": {
+            "values": ["", ":=", "", "+", "", ";"],
+            "kgrams": [
+              {"position": 0, "hash": "a97b7eb673c78947", "span": [0, 19]},
+              {"position": 1, "hash": "48e828f63ff10eff", "span": [2, 19]}
+            ],
+            "windowSelections": [1],
+            "partialWindow": true,
+            "fingerprints": [{"position": 1, "hash": "48e828f63ff10eff", "span": [2, 19]}]
+          }
+        }
+      }
     }
   ]
 }

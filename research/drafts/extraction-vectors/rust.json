@@ -1687,6 +1687,685 @@
           }
         }
       }
+    },
+    {
+      "id": "rust-q1-raw-extra-hash",
+      "tags": ["question", "literals"],
+      "description": "Q1: a raw string ends at the first '\"' followed by n '#'; the extra '#' is punctuation.",
+      "inputBase64": "ciMiYSIjIw==",
+      "inputText": "r#\"a\"##",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 2,
+        "tokens": [
+          {"class": "rawstring", "text": "r#\"a\"#", "span": [0, 6]},
+          {"class": "punct", "text": "#", "span": [6, 7]}
+        ],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {
+            "values": ["", "#"],
+            "kgrams": [],
+            "windowSelections": [],
+            "partialWindow": false,
+            "fingerprints": []
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-q1-raw-extra-pounds",
+      "tags": ["malformed", "question", "literals"],
+      "description": "Q1: after the raw string, '##' is RESERVED_POUNDS.",
+      "inputBase64": "ciMiYSIjIyM=",
+      "inputText": "r#\"a\"###",
+      "result": {"status": "error", "error": {"code": "reserved-token", "offset": 6}}
+    },
+    {
+      "id": "rust-q2-open-then-unterminated",
+      "tags": ["malformed", "question"],
+      "description": "Q2: errors in scan order; the unterminated string comes before the end-of-input delimiter check.",
+      "inputBase64": "KCAiYWJj",
+      "inputText": "( \"abc",
+      "result": {"status": "error", "error": {"code": "unterminated-literal", "offset": 2}}
+    },
+    {
+      "id": "rust-q2-open-then-illegal",
+      "tags": ["malformed", "question"],
+      "description": "Q2: scan order: illegal character before the unclosed '('.",
+      "inputBase64": "KCDigqw=",
+      "inputText": "( €",
+      "result": {"status": "error", "error": {"code": "illegal-character", "offset": 2}}
+    },
+    {
+      "id": "rust-q2-unclosed-innermost",
+      "tags": ["malformed", "question"],
+      "description": "Q2: two unclosed openers at end of input: the innermost '[' is reported.",
+      "inputBase64": "KCBbIHg=",
+      "inputText": "( [ x",
+      "result": {"status": "error", "error": {"code": "unbalanced-delimiter", "offset": 2}}
+    },
+    {
+      "id": "rust-q3-byte-unclosed",
+      "tags": ["malformed", "question", "literals"],
+      "description": "Q3: char and byte literals have no unterminated state: b'a at end of input is malformed.",
+      "inputBase64": "Yidh",
+      "inputText": "b'a",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 0}}
+    },
+    {
+      "id": "rust-q4-cstring-xff",
+      "tags": ["question", "literals"],
+      "description": "Q4: C strings accept \\x escapes 01-FF.",
+      "inputBase64": "YyJceGZmIg==",
+      "inputText": "c\"\\xff\"",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 1,
+        "tokens": [{"class": "cstring", "text": "c\"\\xff\"", "span": [0, 7]}],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {"values": [""], "kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []}
+        }
+      }
+    },
+    {
+      "id": "rust-q4-cstring-x00",
+      "tags": ["malformed", "question", "literals"],
+      "description": "Q4: \\x00 in a C string is malformed.",
+      "inputBase64": "YyJceDAwIg==",
+      "inputText": "c\"\\x00\"",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 0}}
+    },
+    {
+      "id": "rust-q4-cstring-u-zero",
+      "tags": ["malformed", "question", "literals"],
+      "description": "Q4: any \\u{...} spelling of zero (here \\u{0_0}) is malformed in a C string.",
+      "inputBase64": "YyJcdXswXzB9Ig==",
+      "inputText": "c\"\\u{0_0}\"",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 0}}
+    },
+    {
+      "id": "rust-q5-raw-lifetime-hash",
+      "tags": ["question", "lifetimes"],
+      "description": "Q5: a raw lifetime followed by '#' is not reserved: lifetime then '#'.",
+      "inputBase64": "J3IjYSM=",
+      "inputText": "'r#a#",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 2,
+        "tokens": [
+          {"class": "lifetime", "text": "'r#a", "span": [0, 4]},
+          {"class": "punct", "text": "#", "span": [4, 5]}
+        ],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {
+            "values": ["", "#"],
+            "kgrams": [],
+            "windowSelections": [],
+            "partialWindow": false,
+            "fingerprints": []
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-q6-lifetime-nfc-first",
+      "tags": ["malformed", "question", "lifetimes", "unicode-boundary"],
+      "description": "Q6: lifetime checks run NFC, then zero-width, then the '#' reservation.",
+      "inputBase64": "J2XMgSM=",
+      "inputText": "'é#",
+      "result": {"status": "error", "error": {"code": "non-nfc-identifier", "offset": 0}}
+    },
+    {
+      "id": "rust-q6-lifetime-zwj-before-hash",
+      "tags": ["malformed", "question", "lifetimes", "unicode-boundary"],
+      "description": "Q6: zero-width check precedes the '#' reservation.",
+      "inputBase64": "J2HigI0j",
+      "inputText": "'a‍#",
+      "result": {"status": "error", "error": {"code": "malformed-identifier", "offset": 0}}
+    },
+    {
+      "id": "rust-q7-unterminated-escape",
+      "tags": ["malformed", "question", "literals"],
+      "description": "Q7: termination is decided first (escape-aware): '\"\\q' has no closing quote.",
+      "inputBase64": "Ilxx",
+      "inputText": "\"\\q",
+      "result": {"status": "error", "error": {"code": "unterminated-literal", "offset": 0}}
+    },
+    {
+      "id": "rust-q7-closed-bad-escape",
+      "tags": ["malformed", "question", "literals"],
+      "description": "Q7: closed literal with an unknown escape is malformed.",
+      "inputBase64": "IlxxIg==",
+      "inputText": "\"\\q\"",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 0}}
+    },
+    {
+      "id": "rust-q7-raw-byte-unterminated",
+      "tags": ["malformed", "question", "literals"],
+      "description": "Q7: an unterminated raw byte string is unterminated even though its content is not ASCII.",
+      "inputBase64": "YnIiw6k=",
+      "inputText": "br\"é",
+      "result": {"status": "error", "error": {"code": "unterminated-literal", "offset": 0}}
+    },
+    {
+      "id": "rust-q8-shebang-outer-line-doc",
+      "tags": ["question", "shebang"],
+      "description": "Q8: in the shebang look-ahead '///' is a doc comment, i.e. content, so line 1 is a shebang (Reference SHEBANG, rustc).",
+      "inputBase64": "IyEvLy94ClthXQ==",
+      "inputText": "#!///x\n[a]",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 3,
+        "tokens": [
+          {"class": "punct", "text": "[", "span": [7, 8]},
+          {"class": "ident", "text": "a", "span": [8, 9]},
+          {"class": "punct", "text": "]", "span": [9, 10]}
+        ],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {
+            "values": ["[", "", "]"],
+            "kgrams": [],
+            "windowSelections": [],
+            "partialWindow": false,
+            "fingerprints": []
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-q8-shebang-inner-line-doc",
+      "tags": ["question", "shebang"],
+      "description": "Q8: '//!' is a doc comment: shebang.",
+      "inputBase64": "IyEvLyF4ClthXQ==",
+      "inputText": "#!//!x\n[a]",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 3,
+        "tokens": [
+          {"class": "punct", "text": "[", "span": [7, 8]},
+          {"class": "ident", "text": "a", "span": [8, 9]},
+          {"class": "punct", "text": "]", "span": [9, 10]}
+        ],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {
+            "values": ["[", "", "]"],
+            "kgrams": [],
+            "windowSelections": [],
+            "partialWindow": false,
+            "fingerprints": []
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-q8-shebang-outer-block-doc",
+      "tags": ["question", "shebang"],
+      "description": "Q8: '/** d */' is a doc comment: shebang through end of input (no LF), zero tokens.",
+      "inputBase64": "IyEvKiogZCAqL1thXQ==",
+      "inputText": "#!/** d */[a]",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 0,
+        "tokens": [],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {"values": [], "kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []}
+        }
+      }
+    },
+    {
+      "id": "rust-q8-shebang-inner-block-doc",
+      "tags": ["question", "shebang"],
+      "description": "Q8: '/*! d */' is a doc comment: shebang, zero tokens.",
+      "inputBase64": "IyEvKiEgZCAqL1thXQ==",
+      "inputText": "#!/*! d */[a]",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 0,
+        "tokens": [],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {"values": [], "kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []}
+        }
+      }
+    },
+    {
+      "id": "rust-q8-not-shebang-four-slashes",
+      "tags": ["question", "shebang"],
+      "description": "Q8: '////x' is an ordinary comment, so the look-ahead reaches '[': not a shebang.",
+      "inputBase64": "IyEvLy8veApbYV0=",
+      "inputText": "#!////x\n[a]",
+      "result": {
+        "status": "ok",
+        "tokenCount": 5,
+        "tokens": [
+          {"class": "punct", "text": "#", "span": [0, 1]},
+          {"class": "punct", "text": "!", "span": [1, 2]},
+          {"class": "punct", "text": "[", "span": [8, 9]},
+          {"class": "ident", "text": "a", "span": [9, 10]},
+          {"class": "punct", "text": "]", "span": [10, 11]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [{"position": 0, "hash": "311a28f24c090d10", "span": [0, 11]}],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "311a28f24c090d10", "span": [0, 11]}]
+          },
+          "normalized": {
+            "values": ["#", "!", "[", "", "]"],
+            "kgrams": [{"position": 0, "hash": "211e63737daa800f", "span": [0, 11]}],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "211e63737daa800f", "span": [0, 11]}]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-q8-not-shebang-empty-block",
+      "tags": ["question", "shebang"],
+      "description": "Q8: '/**/' is an ordinary comment: not a shebang.",
+      "inputBase64": "IyEvKiovW2Fd",
+      "inputText": "#!/**/[a]",
+      "result": {
+        "status": "ok",
+        "tokenCount": 5,
+        "tokens": [
+          {"class": "punct", "text": "#", "span": [0, 1]},
+          {"class": "punct", "text": "!", "span": [1, 2]},
+          {"class": "punct", "text": "[", "span": [6, 7]},
+          {"class": "ident", "text": "a", "span": [7, 8]},
+          {"class": "punct", "text": "]", "span": [8, 9]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [{"position": 0, "hash": "311a28f24c090d10", "span": [0, 9]}],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "311a28f24c090d10", "span": [0, 9]}]
+          },
+          "normalized": {
+            "values": ["#", "!", "[", "", "]"],
+            "kgrams": [{"position": 0, "hash": "211e63737daa800f", "span": [0, 9]}],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "211e63737daa800f", "span": [0, 9]}]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-q8-not-shebang-three-stars",
+      "tags": ["question", "shebang"],
+      "description": "Q8: '/***/' is an ordinary comment: not a shebang.",
+      "inputBase64": "IyEvKioqL1thXQ==",
+      "inputText": "#!/***/[a]",
+      "result": {
+        "status": "ok",
+        "tokenCount": 5,
+        "tokens": [
+          {"class": "punct", "text": "#", "span": [0, 1]},
+          {"class": "punct", "text": "!", "span": [1, 2]},
+          {"class": "punct", "text": "[", "span": [7, 8]},
+          {"class": "ident", "text": "a", "span": [8, 9]},
+          {"class": "punct", "text": "]", "span": [9, 10]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [{"position": 0, "hash": "311a28f24c090d10", "span": [0, 10]}],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "311a28f24c090d10", "span": [0, 10]}]
+          },
+          "normalized": {
+            "values": ["#", "!", "[", "", "]"],
+            "kgrams": [{"position": 0, "hash": "211e63737daa800f", "span": [0, 10]}],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "211e63737daa800f", "span": [0, 10]}]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-q8b-shebang-lookahead-nel",
+      "tags": ["question", "shebang"],
+      "description": "Q8b: U+0085 is white space in the look-ahead: '[' follows, not a shebang.",
+      "inputBase64": "IyHChVthXQ==",
+      "inputText": "#![a]",
+      "result": {
+        "status": "ok",
+        "tokenCount": 5,
+        "tokens": [
+          {"class": "punct", "text": "#", "span": [0, 1]},
+          {"class": "punct", "text": "!", "span": [1, 2]},
+          {"class": "punct", "text": "[", "span": [4, 5]},
+          {"class": "ident", "text": "a", "span": [5, 6]},
+          {"class": "punct", "text": "]", "span": [6, 7]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [{"position": 0, "hash": "311a28f24c090d10", "span": [0, 7]}],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "311a28f24c090d10", "span": [0, 7]}]
+          },
+          "normalized": {
+            "values": ["#", "!", "[", "", "]"],
+            "kgrams": [{"position": 0, "hash": "211e63737daa800f", "span": [0, 7]}],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "211e63737daa800f", "span": [0, 7]}]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-q8b-bare-shebang",
+      "tags": ["question", "shebang"],
+      "description": "Q8b: a bare '#!' is a shebang: zero tokens.",
+      "inputBase64": "IyE=",
+      "inputText": "#!",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 0,
+        "tokens": [],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {"values": [], "kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []}
+        }
+      }
+    },
+    {
+      "id": "rust-q9-unassigned",
+      "tags": ["malformed", "question", "unicode-boundary"],
+      "description": "Q9: U+0378 is not XID_Continue: illegal character after 'x'. The assigned table is informative only.",
+      "inputBase64": "eM24",
+      "inputText": "x͸",
+      "result": {"status": "error", "error": {"code": "illegal-character", "offset": 1}}
+    },
+    {
+      "id": "rust-q11-shebang-first-line-only",
+      "tags": ["question", "shebang"],
+      "description": "Q11: the shebang covers line 1 only, even when a block comment opened on it closes later.",
+      "inputBase64": "IyEvKgoqLyBmbg==",
+      "inputText": "#!/*\n*/ fn",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 3,
+        "tokens": [
+          {"class": "punct", "text": "*", "span": [5, 6]},
+          {"class": "punct", "text": "/", "span": [6, 7]},
+          {"class": "keyword", "text": "fn", "span": [8, 10]}
+        ],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {
+            "values": ["*", "/", "fn"],
+            "kgrams": [],
+            "windowSelections": [],
+            "partialWindow": false,
+            "fingerprints": []
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-s1-string-digit",
+      "tags": ["question", "literals"],
+      "description": "S1/Q11: a digit cannot start a SUFFIX, so a literal directly followed by a digit is two tokens (rustc accepts).",
+      "inputBase64": "IngiMA==",
+      "inputText": "\"x\"0",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 2,
+        "tokens": [{"class": "string", "text": "\"x\"", "span": [0, 3]}, {"class": "int", "text": "0", "span": [3, 4]}],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {
+            "values": ["", ""],
+            "kgrams": [],
+            "windowSelections": [],
+            "partialWindow": false,
+            "fingerprints": []
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-s1-char-digit",
+      "tags": ["question", "literals"],
+      "description": "S1/Q11: a digit cannot start a SUFFIX, so a literal directly followed by a digit is two tokens (rustc accepts).",
+      "inputBase64": "J2EnMA==",
+      "inputText": "'a'0",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 2,
+        "tokens": [{"class": "char", "text": "'a'", "span": [0, 3]}, {"class": "int", "text": "0", "span": [3, 4]}],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {
+            "values": ["", ""],
+            "kgrams": [],
+            "windowSelections": [],
+            "partialWindow": false,
+            "fingerprints": []
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-s1-bytestring-digit",
+      "tags": ["question", "literals"],
+      "description": "S1/Q11: a digit cannot start a SUFFIX, so a literal directly followed by a digit is two tokens (rustc accepts).",
+      "inputBase64": "YiJ4IjA=",
+      "inputText": "b\"x\"0",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 2,
+        "tokens": [
+          {"class": "bytestring", "text": "b\"x\"", "span": [0, 4]},
+          {"class": "int", "text": "0", "span": [4, 5]}
+        ],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {
+            "values": ["", ""],
+            "kgrams": [],
+            "windowSelections": [],
+            "partialWindow": false,
+            "fingerprints": []
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-s1-rawstring-digit",
+      "tags": ["question", "literals"],
+      "description": "S1/Q11: a digit cannot start a SUFFIX, so a literal directly followed by a digit is two tokens (rustc accepts).",
+      "inputBase64": "ciJ4IjA=",
+      "inputText": "r\"x\"0",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 2,
+        "tokens": [
+          {"class": "rawstring", "text": "r\"x\"", "span": [0, 4]},
+          {"class": "int", "text": "0", "span": [4, 5]}
+        ],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {
+            "values": ["", ""],
+            "kgrams": [],
+            "windowSelections": [],
+            "partialWindow": false,
+            "fingerprints": []
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-s1-cstring-digit",
+      "tags": ["question", "literals"],
+      "description": "S1/Q11: a digit cannot start a SUFFIX, so a literal directly followed by a digit is two tokens (rustc accepts).",
+      "inputBase64": "YyJ4IjA=",
+      "inputText": "c\"x\"0",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 2,
+        "tokens": [
+          {"class": "cstring", "text": "c\"x\"", "span": [0, 4]},
+          {"class": "int", "text": "0", "span": [4, 5]}
+        ],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {
+            "values": ["", ""],
+            "kgrams": [],
+            "windowSelections": [],
+            "partialWindow": false,
+            "fingerprints": []
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-s1-byte-digit",
+      "tags": ["question", "literals"],
+      "description": "S1/Q11: a digit cannot start a SUFFIX, so a literal directly followed by a digit is two tokens (rustc accepts).",
+      "inputBase64": "YidhJzA=",
+      "inputText": "b'a'0",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 2,
+        "tokens": [{"class": "byte", "text": "b'a'", "span": [0, 4]}, {"class": "int", "text": "0", "span": [4, 5]}],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {
+            "values": ["", ""],
+            "kgrams": [],
+            "windowSelections": [],
+            "partialWindow": false,
+            "fingerprints": []
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-s1-string-digit-expr",
+      "tags": ["question", "literals"],
+      "description": "S1/Q11: a digit cannot start a SUFFIX, so a literal directly followed by a digit is two tokens (rustc accepts).",
+      "inputBase64": "IngiMSArIHk=",
+      "inputText": "\"x\"1 + y",
+      "result": {
+        "status": "insufficient-tokens",
+        "tokenCount": 4,
+        "tokens": [
+          {"class": "string", "text": "\"x\"", "span": [0, 3]},
+          {"class": "int", "text": "1", "span": [3, 4]},
+          {"class": "punct", "text": "+", "span": [5, 6]},
+          {"class": "ident", "text": "y", "span": [7, 8]}
+        ],
+        "channels": {
+          "exact": {"kgrams": [], "windowSelections": [], "partialWindow": false, "fingerprints": []},
+          "normalized": {
+            "values": ["", "", "+", ""],
+            "kgrams": [],
+            "windowSelections": [],
+            "partialWindow": false,
+            "fingerprints": []
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-shebang-unresolved-body",
+      "tags": ["shebang"],
+      "description": "Shebang then a body that lexes but would fail name resolution (exercises the cross-check: only the remainder is macro-wrapped).",
+      "inputBase64": "IyEvdXNyL2Jpbi9lbnYgeApmbiBmKCkgeyB5IH0=",
+      "inputText": "#!/usr/bin/env x\nfn f() { y }",
+      "result": {
+        "status": "ok",
+        "tokenCount": 7,
+        "tokens": [
+          {"class": "keyword", "text": "fn", "span": [17, 19]},
+          {"class": "ident", "text": "f", "span": [20, 21]},
+          {"class": "punct", "text": "(", "span": [21, 22]},
+          {"class": "punct", "text": ")", "span": [22, 23]},
+          {"class": "punct", "text": "{", "span": [24, 25]},
+          {"class": "ident", "text": "y", "span": [26, 27]},
+          {"class": "punct", "text": "}", "span": [28, 29]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "e590d6f268a9247a", "span": [17, 25]},
+              {"position": 1, "hash": "93b01e9579db4bb6", "span": [20, 27]},
+              {"position": 2, "hash": "6e87a8de5c85536c", "span": [21, 29]}
+            ],
+            "windowSelections": [2],
+            "partialWindow": true,
+            "fingerprints": [{"position": 2, "hash": "6e87a8de5c85536c", "span": [21, 29]}]
+          },
+          "normalized": {
+            "values": ["fn", "", "(", ")", "{", "", "}"],
+            "kgrams": [
+              {"position": 0, "hash": "22108fd33e4996ce", "span": [17, 25]},
+              {"position": 1, "hash": "818aa9d3ac99e919", "span": [20, 27]},
+              {"position": 2, "hash": "a61ac5753e9e6206", "span": [21, 29]}
+            ],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "22108fd33e4996ce", "span": [17, 25]}]
+          }
+        }
+      }
+    },
+    {
+      "id": "rust-doc-comment-bracket",
+      "tags": ["comments"],
+      "description": "A doc comment containing ']' is dropped (exercises the cross-check filter for proc-macro2's synthesized doc tokens).",
+      "inputBase64": "Ly8vIGFdCmZuIGYoKSB7fQ==",
+      "inputText": "/// a]\nfn f() {}",
+      "result": {
+        "status": "ok",
+        "tokenCount": 6,
+        "tokens": [
+          {"class": "keyword", "text": "fn", "span": [7, 9]},
+          {"class": "ident", "text": "f", "span": [10, 11]},
+          {"class": "punct", "text": "(", "span": [11, 12]},
+          {"class": "punct", "text": ")", "span": [12, 13]},
+          {"class": "punct", "text": "{", "span": [14, 15]},
+          {"class": "punct", "text": "}", "span": [15, 16]}
+        ],
+        "channels": {
+          "exact": {
+            "kgrams": [
+              {"position": 0, "hash": "e590d6f268a9247a", "span": [7, 15]},
+              {"position": 1, "hash": "3a54f635a686e68a", "span": [10, 16]}
+            ],
+            "windowSelections": [1],
+            "partialWindow": true,
+            "fingerprints": [{"position": 1, "hash": "3a54f635a686e68a", "span": [10, 16]}]
+          },
+          "normalized": {
+            "values": ["fn", "", "(", ")", "{", "}"],
+            "kgrams": [
+              {"position": 0, "hash": "22108fd33e4996ce", "span": [7, 15]},
+              {"position": 1, "hash": "a5f2fdbd9b845910", "span": [10, 16]}
+            ],
+            "windowSelections": [0],
+            "partialWindow": true,
+            "fingerprints": [{"position": 0, "hash": "22108fd33e4996ce", "span": [7, 15]}]
+          }
+        }
+      }
     }
   ]
 }

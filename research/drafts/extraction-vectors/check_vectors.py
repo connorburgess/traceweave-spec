@@ -50,7 +50,7 @@ DOMAIN = b"traceweave/token-kgram/draft-1"
 CONTRACT = "traceweave-token-winnow-draft-1"
 HASH_ID = "sha256-first8-u64be"
 CONFIG_KEYS = ["contract", "profile", "profileVersion", "channels", "k", "window", "hash", "maxInputBytes"]
-UINT32_MAX = 2**32 - 1
+K_MAX, WINDOW_MAX, MAX_INPUT_BYTES = 16, 128, 8_388_608  # contract section 10 step 5
 VALUE_RE = re.compile(r"[a-z0-9.-]+")
 
 COMMON_CODES = {"invalid-utf8", "bom", "nul", "input-too-large", "illegal-character",
@@ -185,9 +185,9 @@ def validate_config(raw: bytes):
     require(isinstance(cfg, dict) and list(cfg) == CONFIG_KEYS, f"keys must be exactly {CONFIG_KEYS} in order")
     for key in ("contract", "profile", "profileVersion", "hash"):
         require(isinstance(cfg[key], str) and VALUE_RE.fullmatch(cfg[key]), f"{key} must match [a-z0-9.-]+")
-    for key in ("k", "window", "maxInputBytes"):
+    for key, top in (("k", K_MAX), ("window", WINDOW_MAX), ("maxInputBytes", MAX_INPUT_BYTES)):
         v = cfg[key]
-        require(type(v) is int and 1 <= v <= UINT32_MAX, f"{key} must be an integer in 1..2^32-1")
+        require(type(v) is int and 1 <= v <= top, f"{key} must be an integer in 1..{top}")
     require(cfg["channels"] == ["exact", "normalized"], "channels must be [\"exact\",\"normalized\"]")
     require(cfg["contract"] == CONTRACT, "unknown contract")
     require((cfg["profile"], cfg["profileVersion"]) in PROFILES, "unknown profile/version")
@@ -199,14 +199,21 @@ def validate_config(raw: bytes):
 
 def check_negative_configs(path: Path):
     data = strict_json(path)
+    want = {"status": "error", "error": {"code": "unsupported-config", "offset": None}}
     for item in data["negatives"]:
+        require(item["expectedResult"] == want, f"{path.name}:{item['id']}: expectedResult must be {want}")
         raw = base64.b64decode(item["configBase64"], validate=True)
         try:
             validate_config(raw)
         except CheckError:
             continue
         raise CheckError(f"{path.name}:{item['id']}: accepted, must be rejected ({item['reason']})")
-    return len(data["negatives"])
+    for item in data["boundaryPositives"]:
+        try:
+            validate_config(base64.b64decode(item["configBase64"], validate=True))
+        except CheckError as exc:
+            raise CheckError(f"{path.name}:{item['id']}: rejected, must be accepted ({exc})") from None
+    return len(data["negatives"]), len(data["boundaryPositives"])
 
 
 def strict_json(path):
@@ -309,8 +316,18 @@ def skip_block(text, i, nested):
     return None
 
 
+def rust_doc_comment_at(text, j):
+    """True if a doc comment starts at j: '///' not followed by '/', '//!', '/**' not followed by '*' or '/', '/*!'."""
+    return ((text.startswith("///", j) and not text.startswith("////", j)) or text.startswith("//!", j)
+            or (text.startswith("/**", j) and text[j + 3:j + 4] not in ("*", "/")) or text.startswith("/*!", j))
+
+
 def rust_shebang_end(text):
-    """End (exclusive) of a Rust shebang at offset 0, or None. Unterminated comments count as comment."""
+    """End (exclusive) of a Rust shebang at offset 0, or None.
+
+    Look-ahead per Reference SHEBANG and rustc: skip white space and non-doc
+    comments (an unterminated non-doc block comment runs to end of input); a
+    doc comment is content and ends the look-ahead."""
     if not text.startswith("#!"):
         return None
     ws = PROFILES[("rust2024-tokens", "draft-1")]["whitespace"]
@@ -318,6 +335,8 @@ def rust_shebang_end(text):
     while j < len(text):
         if text[j] in ws:
             j += 1
+        elif rust_doc_comment_at(text, j):
+            break
         elif text.startswith("//", j):
             nl = text.find("\n", j)
             j = len(text) if nl < 0 else nl
@@ -518,7 +537,6 @@ def check_rust_token(t, text, ci, ce):
     else:
         want = next((c for p, c in RUST_PREFIX if s.startswith(p) and (p not in ("br", "cr", "r") or s[len(p):len(p) + 1] in ("#", "\""))), None)
         require(want == cls, f"{s!r}: literal prefix says {want}, class is {cls}")
-        require(not nxt or not xid_continue(nxt), f"{s!r}: literal or suffix not maximal")
         # The literal body must be closed by its own delimiter, then an optional suffix.
         p = next(p for p, c in RUST_PREFIX if c == cls)
         rest = s[len(p):] if cls not in ("char", "string") else s[1:]
@@ -536,6 +554,12 @@ def check_rust_token(t, text, ci, ce):
             require(i < n and (q == "\"" or i > 0), f"{s!r}: literal not closed by {q}")
             tail = rest[i + 1:]
         require(tail == "" or rust_suffix_end(tail, 0) == len(tail), f"{s!r}: text after the literal is not a suffix")
+        # Maximal munch: a suffix absorbs every following XID_Continue; without a suffix, only a SUFFIX start
+        # ('_' or XID_Start) may not follow. A digit may follow ("x"0 is two tokens).
+        if tail:
+            require(not nxt or not xid_continue(nxt), f"{s!r}: suffix not maximal")
+        else:
+            require(not nxt or not (nxt == "_" or xid_start(nxt)), f"{s!r}: literal followed by a suffix start")
 
 
 # ---------------------------------------------------------------- per-vector checks
@@ -817,6 +841,11 @@ def mutations(data, cfg, spec):
                 {"class": "int", "text": "1", "span": [8, 9]}, {"class": "punct", "text": ";", "span": [9, 9], "inserted": True}],
                 "channels": {}}
         yield "U+2160 accepted as a Go letter", mutate("go-err-u2160", lambda v: (accept_u2160(v), rebuild_channels(v["result"], cfg, spec)), rehash=False)
+
+        def accept_0b2i(v):
+            v["result"] = {"status": "ok", "tokens": [{"class": "imag", "text": "0b2i", "span": [0, 4]}], "channels": {}}
+            rebuild_channels(v["result"], cfg, spec)
+        yield "'0b2i' accepted as imaginary", mutate("go-q11-imag-binary-digit", accept_0b2i, rehash=False)
     else:
         def split_suffix(v):
             v["result"] = {"status": "ok", "tokens": [
@@ -847,6 +876,16 @@ def mutations(data, cfg, spec):
             ts[i]["class"] = "char"
         yield "lifetime relabelled char", mutate("rust-lifetimes-chars", lifetime_as_char)
 
+        def string_digit_one_token(v):
+            v["result"]["tokens"] = [{"class": "string", "text": "\"x\"0", "span": [0, 4]}]
+        yield "'\"x\"0' as one string with suffix", mutate("rust-s1-string-digit", string_digit_one_token)
+
+        def doc_skipped(v):
+            v["result"]["tokens"] = [{"class": "punct", "text": "#", "span": [0, 1]}, {"class": "punct", "text": "!", "span": [1, 2]},
+                                     {"class": "punct", "text": "[", "span": [7, 8]}, {"class": "ident", "text": "a", "span": [8, 9]},
+                                     {"class": "punct", "text": "]", "span": [9, 10]}]
+        yield "shebang look-ahead skips '///'", mutate("rust-q8-shebang-outer-line-doc", doc_skipped)
+
 
 def mutation_self_test(data, cfg, spec, required):
     names, missed = [], []
@@ -867,8 +906,9 @@ def main(argv):
     paths = [Path(a) for a in argv] or [HERE / f for f in DEFAULT_FILES]
     failed = False
     try:
-        negatives = check_negative_configs(HERE / "config-negative.json")
-        print(f"PASS config-negative.json: {negatives}/{negatives} invalid configurations rejected")
+        negatives, positives = check_negative_configs(HERE / "config-negative.json")
+        print(f"PASS config-negative.json: {negatives}/{negatives} invalid configurations rejected, "
+              f"{positives}/{positives} boundary configurations accepted")
     except CheckError as exc:
         print(f"FAIL {exc}")
         failed = True

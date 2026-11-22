@@ -1,6 +1,8 @@
 # Draft extraction contract: token-fingerprint comparison baseline
 
-Status: **draft for review, revision draft-1, 2026-11-22.** Roadmap item TW-02, gating M1. This revision resolves the findings of the [clean-room review](../reviews/extraction-contract-review.md) (F1–F8, A1–A4). Every disposition is listed in [§15](#15-review-dispositions).
+Status: **draft for review, revision draft-1 (amended), 2026-11-22.** Roadmap item TW-02, gating M1. This revision resolves the findings of the [clean-room review](../reviews/extraction-contract-review.md) (F1–F8, A1–A4). The amendment rules on the contract questions from the two-implementation cross-check (Rust and Go lanes, 9.9 M differential cases), bounds `k`, `window` and `maxInputBytes`, and states the required complexity. Every disposition is listed in [§15](#15-review-dispositions).
+
+**Identifiers are unchanged.** No previously shipped expected output changed: every existing vector's result is byte-identical. So the profile version stays `draft-1` and the configuration digests stay as they were. The amendment does narrow the set of valid configurations (§10 step 5); whether that alone warrants a new `contract` identifier is listed as OD-20.
 
 This is research material, not a normative change. It does not modify [core](../../spec/core.md), [conformance](../../spec/conformance.md), [the code profile](../../profiles/code.md), schemas or test vectors. "MUST" and "MUST NOT" describe what this draft proposes for an implementation claiming to follow it. Profile versions are `draft-1`, and nothing here is a registered algorithm.
 
@@ -37,10 +39,10 @@ Error codes form a closed list per profile (§4.8, §5.9), plus `unsupported-con
 These checks run in order. The first failure decides the result.
 
 0. **Configuration.** Validate the configuration bytes (§10). On failure the result is `unsupported-config`, and the input is not examined.
-1. **Size.** An input longer than `maxInputBytes` is `input-too-large` at offset 0.
+1. **Size.** An input longer than `maxInputBytes` is `input-too-large` at offset 0. Where the input length is knowable before reading (a regular file's size, a declared content length), the check MUST be made before reading the content. Otherwise the implementation MUST stop reading after `maxInputBytes + 1` bytes and MUST NOT process any byte beyond `maxInputBytes`. Either way, the input's SHA-256 and length are not computed for an `input-too-large` result (§9).
 2. **Encoding.** The input MUST be well-formed UTF-8 ([Unicode 17.0.0](https://www.unicode.org/versions/Unicode17.0.0/) §3.9, D92). This rules out overlong forms, encoded surrogates and values above U+10FFFF. On failure the result is `invalid-utf8`, at the first byte of the first ill-formed subsequence.
 3. **Forbidden code points.** Search the whole input, including literals and comments, for U+FEFF (code `bom`) and U+0000 (code `nul`). The Rust profile also forbids U+000D not immediately followed by U+000A (code `isolated-cr`). Report the earliest offending code point.
-4. **Lexing** runs left to right (§4, §5). The first lexical error, in input order, is reported.
+4. **Lexing** runs left to right (§4, §5). The first lexical error in scan order is reported. Checks that can only be made at end of input, such as Rust's unclosed-delimiter check, apply only if scanning reached end of input without an error (Q2: `( "abc` is `unterminated-literal`@2, and `( [ x` is `unbalanced-delimiter` at the innermost opener, @2).
 
 **Spans.** Every span is a half-open interval `[start, end)` of byte offsets into the original input. A span MUST NOT split a UTF-8 sequence. Every token's text equals the bytes at its span, except Go's inserted semicolons, which have empty spans and text `;` (§4.3). Line/column display is out of scope.
 
@@ -59,7 +61,7 @@ The derived table holds:
 - `go_letter`: General_Category Lu, Ll, Lt, Lm or Lo, plus U+005F;
 - `go_digit`: Nd;
 - `xid_start` and `xid_continue`;
-- `assigned`: every code point not Cn.
+- `assigned`: every code point not Cn. This property is **informative only** (Q9). No rule in this contract consults it: an unassigned code point is simply in no identifier class, so it is `illegal-character` (vectors `go-q9-unassigned`, `rust-q9-unassigned`). The checker uses it only to scope its NFC self-check.
 
 [`harness/gen_unicode_tables.py`](extraction-vectors/harness/gen_unicode_tables.py) regenerates it byte for byte from the four files and refuses inputs with other digests. NFC means Normalization Form C as defined in [UAX #15](https://www.unicode.org/reports/tr15/), computed from the 17.0.0 files above.
 
@@ -112,7 +114,7 @@ Scanning mirrors go/scanner and is maximal munch over a candidate:
 4. If the next character is `e`, `E`, `p` or `P`, consume it, an optional `+` or `-`, and `[0-9_]`.
 5. If the next character is `i`, consume it.
 
-The consumed text MUST match exactly one of the spec productions `int_lit`, `float_lit` or `imaginary_lit`. It is classified `int`, `float` or `imag`, and otherwise it is `malformed-literal` at the literal start. Examples: `0x`, `0b12`, `08` and `0x1.8` (a hex mantissa without `p`) are errors, while `08.5` and `08i` are valid. Scanning then resumes, so `0x1g` gives `0x1` and then the identifier `g`.
+The consumed text MUST match exactly one of the spec productions `int_lit`, `float_lit` or `imaginary_lit`. It is classified `int`, `float` or `imag`, and otherwise it is `malformed-literal` at the literal start. Examples: `0x`, `0b12`, `08` and `0x1.8` (a hex mantissa without `p`) are errors, while `08.5` and `08i` are valid. `0b2i` and `0o9i` are errors too (Q11), because neither `0b2` nor `0o9` is an `int_lit` or `decimal_digits`. cmd/compile agrees; go/scanner and gofmt accept them (vectors `go-q11-imag-binary-digit`, `go-q11-imag-octal-digit`). Scanning then resumes, so `0x1g` gives `0x1` and then the identifier `g`.
 
 ### 4.5 Rune and string literals
 
@@ -122,7 +124,7 @@ The consumed text MUST match exactly one of the spec productions `int_lit`, `flo
 
 ### 4.6 Not covered
 
-`//go:` and `//line` directives are comments. Build constraints, cgo preambles, generated-file markers and test files belong to TW-01/TW-03 (OD-14).
+`//go:` and `//line` directives are comments, and so are `/*line …*/` general comments, whatever their content (Q12). go/scanner interprets and can reject line directives (`/*line :*/` → "invalid line number"); the contract does not (vector `go-q12-line-directive`, a listed crosscheck divergence). Build constraints, cgo preambles, generated-file markers and test files belong to TW-01/TW-03 (OD-14).
 
 ### 4.7 Hand check
 
@@ -146,7 +148,13 @@ Deliberate deviations from the Reference: NUL and isolated CR are rejected (§3)
 
 CRLF pairs are legal and are not rewritten: offsets and token text use original bytes, and CR before LF counts as white space or as part of a comment or literal.
 
-**Shebang.** A shebang is recognized only at offset 0, because a BOM is already rejected. Per [shebang], if the input begins with `#!` and the next content after white space and comments is not `[`, then everything through the first U+000A, or to end of input, is trivia. During this look-ahead, an unterminated block comment counts as a comment extending to end of input, so the line is a shebang. This matches rustc (vector `rust-shebang-unterminated-comment`). `#![...]` lexes as tokens.
+**Shebang** (Q8, Q8b, Q11). A shebang is recognized only at offset 0, because a BOM is already rejected. The rule is the Reference's `SHEBANG` grammar, which rustc follows: if the input begins with `#!`, look ahead past white space, `LINE_COMMENT` and `BLOCK_COMMENT` only. If the first other content is `[`, there is no shebang and `#!` lexes as tokens. Otherwise everything from offset 0 through the first U+000A, or to end of input, is trivia.
+
+- **White space** in the look-ahead is the 11 Pattern_White_Space characters of §5.3 (`rust-q8b-shebang-lookahead-nel`).
+- **Doc comments are content, not comments, in the look-ahead.** These are `///` not followed by `/`, `//!`, `/**` not followed by `*` or `/`, and `/*!`. So `#!///x\n[a]` is a shebang followed by `[ a ]`, and `#!/** d */[a]` is a shebang to end of input with zero tokens. `////x`, `/**/` and `/***/` are ordinary comments: `#!////x\n[a]` lexes as `# ! [ a ]`. Vectors `rust-q8-*`. Outside the look-ahead, doc comments are still dropped as comments (OD-5).
+- **An unterminated ordinary block comment** in the look-ahead counts as a comment extending to end of input, so the line is a shebang (`rust-shebang-unterminated-comment`).
+- **A bare `#!`** is a shebang (`rust-q8b-bare-shebang`).
+- **The shebang covers line 1 only**, even when a block comment opened on line 1 closes later. `#!/*\n*/ fn` lexes as `*` `/` `fn` (`rust-q11-shebang-first-line-only`), as rustc does.
 
 ### 5.3 Scanning loop
 
@@ -166,8 +174,8 @@ CRLF pairs are legal and are not rewritten: offsets and token text use original 
 4. **ASCII digit.** A number (§5.4).
 5. **`'`.**
    - If the following characters form a CHAR_LITERAL, the token is `char`, with an optional suffix (§5.5).
-   - Otherwise, `'r#` + IDENTIFIER_OR_KEYWORD not followed by `'` is a raw lifetime. Its name gets checks 1 and 2, the reserved names give `reserved-token`, and other names give `lifetime`.
-   - Otherwise, `'` + IDENTIFIER_OR_KEYWORD not followed by `'` is a `lifetime`, with checks 1 and 2. It is `reserved-token` if `#` follows immediately.
+   - Otherwise, `'r#` + IDENTIFIER_OR_KEYWORD not followed by `'` is a raw lifetime. Its name gets checks 1 and 2, the reserved names give `reserved-token`, and other names give `lifetime`. A raw lifetime followed by `#` is **not** reserved: `'r#a#` is `lifetime 'r#a` then `#` (Q5, `rust-q5-raw-lifetime-hash`; rustc accepts it).
+   - Otherwise, `'` + IDENTIFIER_OR_KEYWORD not followed by `'` is a `lifetime`. The checks run in this order, all at the `'`: NFC (check 1), then zero-width (check 2), then `reserved-token` if `#` follows immediately (Q6: `'é#` with a decomposed é is `non-nfc-identifier`@0, and `'a`+ZWJ+`#` is `malformed-identifier`@0).
    - Anything else is `malformed-literal` at the `'`.
 6. **`"`.** A string (§5.5).
 7. **`#` immediately followed by `"` or `#`** is `reserved-token` ([lex.token.reserved-guards]).
@@ -192,19 +200,22 @@ CRLF pairs are legal and are not rewritten: offsets and token text use original 
 
 These follow the Reference productions for CHAR_LITERAL, STRING_LITERAL, RAW_STRING_LITERAL, BYTE_LITERAL, BYTE_STRING_LITERAL, RAW_BYTE_STRING_LITERAL, C_STRING_LITERAL and RAW_C_STRING_LITERAL.
 
-**Escapes.** Quote escapes are `\'` and `\"`. ASCII escapes are `\x` with an octal digit and a hex digit, `\n`, `\r`, `\t`, `\\` and `\0`. Unicode escapes are `\u{` followed by 1–6 hex digits with `_` allowed after the first, then `}`, and the value must be a scalar value. Byte forms allow the full `\xHH` range and no `\u`. C strings forbid `\0`, `\x00` and `\u{0}`. String forms also allow `\` followed by LF (or CRLF) as a continuation.
+**Escapes.** Quote escapes are `\'` and `\"`. ASCII escapes are `\x` with an octal digit and a hex digit, `\n`, `\r`, `\t`, `\\` and `\0`. Unicode escapes are `\u{` followed by 1–6 hex digits with `_` allowed after the first, then `}`, and the value must be a scalar value. Byte forms allow the full `\xHH` range and no `\u`. String forms also allow `\` followed by LF (or CRLF) as a continuation.
+
+**C strings** (Q4) take byte escapes and Unicode escapes: `\xHH` over the full range 00–FF and `\u{…}` for any scalar value, plus the other ASCII escapes. Any escape whose value is zero is `malformed-literal`, whatever its spelling: `\0`, `\x00`, `\u{0}`, `\u{00}`, `\u{0_0}`. So `c"\xff"` is valid, matching rustc (vectors `rust-q4-*`, `rust-err-cstring-nul-escape`).
 
 **Content.** Char and byte literals exclude a raw TAB, LF or CR and must contain exactly one value. Byte forms are ASCII only.
 
-**Termination and errors.**
-- A string or raw string with no terminator before end of input is `unterminated-literal` at its first byte, including any prefix.
-- A raw string ends at `"` followed by exactly n `#`.
-- Any other content violation is `malformed-literal` at the first byte.
+**Termination and errors.** Termination is decided first, then content (Q7).
+- **Finding the end.** A string literal's end is found by an escape-aware scan: `\` skips the next character, and the first unescaped `"` ends it. A raw string ends at the **first** `"` that is followed by n `#`. Any further `#` characters are lexed as ordinary tokens after it (Q1): `r#"a"##` is `rawstring r#"a"#` then `#`, and `r#"a"###` is `reserved-token`@6 because `##` follows.
+- **No end found.** A string, byte string, C string or raw form with no end before end of input is `unterminated-literal` at its first byte, including any prefix. This holds whatever the content: `"\q` and `br"é` are both `unterminated-literal`@0.
+- **Content.** Only after the end is found is the content validated. A violation is `malformed-literal` at the first byte: `"\q"` is `malformed-literal`@0.
+- **Char and byte literals have no unterminated state** (Q3). Anything that is not a complete CHAR_LITERAL or BYTE_LITERAL is `malformed-literal` at its first byte, as for `'ab'`. `b'a` at end of input is `malformed-literal`@0 (`rust-q3-byte-unclosed`).
 
 **Suffix** ([lex.token.literal.suffix]). After any literal except a float ending in `.`, apply SUFFIX → `_ ^ XID_Continue+ | XID_Start XID_Continue*`, where `^` means no backtracking:
 - If the next character is `_`, at least one `xid_continue` character MUST follow, otherwise the result is `malformed-literal` at the literal start. So `"x"_` and `'a'_` are errors, matching rustc. They are not a literal followed by the keyword `_`.
 - If the next character is `xid_start`, consume `xid_continue*`.
-- Otherwise there is no suffix.
+- Otherwise there is no suffix. In particular a digit cannot start a SUFFIX, so a literal directly followed by a digit is two tokens: `"x"0` is `string "x"` then `int 0`, and likewise `'a'0`, `b"x"0`, `r"x"0`, `c"x"0`, `b'a'0` and `"x"1 + y`. rustc accepts all of these (Q11/S1, vectors `rust-s1-*`).
 
 The suffix is part of the token text, and any suffix is accepted lexically (OD-17). The suffix text gets checks 1 and 2 of §5.3, reported at the literal start, after the literal body has been validated.
 
@@ -269,7 +280,7 @@ The procedure runs independently for each channel.
 
 ## 9. Extraction record (logical fields)
 
-The wire schema belongs to TW-03. An extraction MUST make these available:
+The wire schema, including field names and any constant keys, belongs to TW-03. This contract fixes the values. An extraction MUST make these available:
 
 - `profile`, `profileVersion` and `configSha256`
 - SHA-256 and byte length of the input
@@ -279,6 +290,12 @@ The wire schema belongs to TW-03. An extraction MUST make these available:
 - per channel: `partialWindow` and fingerprints (position, hash, span)
 
 K-gram lists and `windowSelections` are required in vectors and optional in production output.
+
+**Values that are not computed** (Q10, decided in draft, pending owner confirmation):
+- For `unsupported-config`, `profile` and `profileVersion` are `null`, because an unvalidated configuration names nothing. `configSha256` is the SHA-256 of the bytes supplied. The input SHA-256 and length are `null`, because the input is not examined (§3 step 0). The error offset is `null`.
+- For `input-too-large`, the input SHA-256 and length are `null`, because the input is not read past the limit (§3 step 1).
+
+The two implementations currently disagree on envelope names (`inputBytes` versus `inputLength`, and a constant `contract` key), and that choice is TW-03's. The extraction vectors carry `result` objects only. [config-negative.json](extraction-vectors/config-negative.json) gives the expected `unsupported-config` result for each negative configuration.
 
 ## 10. Configuration record
 
@@ -300,12 +317,41 @@ The Rust configuration differs only in `"profile":"rust2024-tokens"`. Digests: G
 2. The bytes parse as JSON without duplicate keys, without non-integer numbers, and without constants such as `NaN`.
 3. The top level is an object with exactly the keys above, in that order.
 4. `contract`, `profile`, `profileVersion` and `hash` are strings matching `[a-z0-9.-]+`. No escapes are possible.
-5. `k`, `window` and `maxInputBytes` are integers in `1 … 2³² − 1`, written in decimal without a sign, leading zeros or exponent. `k` is encoded as `uint32be` in §7.
+5. `k` is an integer in `1 … 16`, `window` in `1 … 128` and `maxInputBytes` in `1 … 8388608` (8 MiB), each written in decimal without a sign, leading zeros or exponent (bounds: §10a).
 6. `channels` is exactly `["exact","normalized"]`. Subsets and other orders are not supported in this draft.
 7. `contract` is `traceweave-token-winnow-draft-1`, `(profile, profileVersion)` is a pair the implementation implements, and `hash` is `sha256-first8-u64be`.
 8. Re-serializing the parsed values in canonical form reproduces the bytes exactly.
 
-An implementation MUST NOT fall back to another profile. [config-negative.json](extraction-vectors/config-negative.json) lists 25 configurations that MUST be rejected. Any positive `k`, `window` and `maxInputBytes` within bounds is a valid configuration with its own digest. The vectors exercise k = 5, w = 4 and `maxInputBytes` of 1 MiB and 16.
+An implementation MUST NOT fall back to another profile. [config-negative.json](extraction-vectors/config-negative.json) lists 28 configurations that MUST be rejected, including one just above each bound, and 3 `boundaryPositives` at the bounds that MUST be accepted. Any `k`, `window` and `maxInputBytes` within bounds is a valid configuration with its own digest. The extraction vectors exercise k = 5, w = 4 and `maxInputBytes` of 1 MiB and 16.
+
+## 10a. Resource bounds and complexity
+
+**Decided in draft, pending owner confirmation (OD-21): `k ≤ 16`, `window ≤ 128`, `maxInputBytes ≤ 8,388,608`.** draft-1 allowed up to 2³² − 1 for all three. The cross-check measured hashing time growing as n·k: 64 KiB of `;` with k = 32,768 took 18 s (Go) and 60 s (Rust), and extrapolating to 1 MiB with k = 2¹⁹ gives about 77 min and 4 h.
+
+**Rationale for each bound.**
+- **`k ≤ 16`** covers the token k-gram lengths used in token-based plagiarism baselines and the k = 8–12 candidates under OD-10 tuning, with headroom.
+- **`window ≤ 128`** allows a locality threshold `k + w − 1` of up to 143 tokens, several functions. Sparser selection than that belongs to comparison (M2), not extraction.
+- **`maxInputBytes ≤ 8 MiB`** is 8× the shipped 1 MiB. Hand-written source files are far smaller, and larger files are generated or vendored (OD-14). The bound makes "maximum-size input" finite.
+
+**Worst-case hashing work.** Let N be the input length in bytes and T the token count. For Rust T ≤ N. For Go T ≤ 2N, since real tokens are at most N and inserted `;` at most one per real token.
+
+- **Per k-gram.** Each k-gram hashes a fixed prefix of at most 82 bytes, plus 8 + |class| + |value| per token. |class| is at most 13.
+- **Per channel.** Each token is in at most k k-grams and Σ|value| ≤ N + T. So one channel hashes at most 82T + k·(22T + N) ≤ (164 + 45k)·N message bytes.
+- **Both channels**, with SHA-256 padding (at most 72 bytes per message), compress at most **(616 + 90k)·N bytes**.
+
+| Configuration | Worst-case SHA-256 input | At 3 GB/s |
+| --- | --- | --- |
+| Shipped (k = 5, N = 1 MiB) | about 1.0 GiB | about 0.4 s |
+| Bounds (k = 16, N = 8 MiB) | about 16.1 GiB | about 6 s |
+
+3 GB/s is single-core bulk SHA-256 measured on darwin/arm64 for this amendment. These worst cases need one-byte tokens such as `;;;;`. Real source code has multi-byte tokens and is far below them.
+
+**Required complexity.** For a fixed configuration, an implementation's time and working memory MUST be O(N), linear in the input length. In particular:
+- **Lexing** is a single left-to-right pass, plus the bounded look-aheads defined here: the shebang look-ahead, raw-string terminators of at most 255 `#`, and literal suffixes. Nested comments, unterminated literals and long identifiers MUST NOT cause rescanning.
+- **NFC checking** MUST be linear in the identifier length. Canonical reordering of a run of non-starters MUST NOT be quadratic. A stable counting sort by combining class (0–255) is linear. An NFC_QC quick check may short-cut the common case. The cross-check measured a quadratic insertion sort at 126 s for a 1 MiB identifier.
+- **Hashing** is O(k·N) as bounded above. Implementations SHOULD reuse one buffer per k-gram rather than retaining k-gram byte strings.
+- **Selection** is O(m·w) by direct scan, or O(m) with a monotone deque. Working memory beyond the token and k-gram lists is O(w).
+- **Output.** The record is O(N) in size. Implementations SHOULD stream it rather than build an in-memory tree; the cross-check measured 8.7 GiB peak memory on a 1 MiB input from a tree-building encoder.
 
 ## 11. Parameters k and window
 
@@ -333,7 +379,8 @@ Two tools check the vectors:
 
 | Requirement | Check |
 | --- | --- |
-| §10 configuration validation and canonical bytes | Checker validates the shipped configurations and rejects all 25 negatives |
+| §10 configuration validation, bounds and canonical bytes | Checker validates the shipped configurations, rejects all 28 negatives (including one above each bound) and accepts the 3 boundary positives |
+| §9 `unsupported-config` result | `expectedResult` on every negative configuration, checked by the checker |
 | §3 order: size, then UTF-8, then forbidden code points | `*-limit-*`, `*-err-invalid-utf8`, `*-err-bom`, `*-err-mid-bom`, `*-err-nul`, `rust-err-isolated-cr`, `rust-err-cr-in-literal`; recomputed by the checker |
 | Spans: half-open, character boundaries, `text == input[span]` except inserted `;` | Checker on every accepted vector; span-cut mutation |
 | §3a pinned Unicode data | Checker verifies the table digest; the generator reproduces it from UCD digests; crosscheck matches it against Go `unicode` and unicode-ident 1.0.24 |
@@ -341,14 +388,16 @@ Two tools check the vectors:
 | Go semicolon insertion (§4.3) | Checker recomputes every inserted `;` from the gaps; crosscheck by kind and order |
 | Rust identifiers, NFC, keywords, raw identifiers, reserved prefixes (§5.3) | Checker per token; crosscheck token-for-token; rustc acceptance |
 | Rust numbers and literal suffixes, including the `_` cut (§5.4, §5.5) | Checker re-scans numbers and checks literal closure and the suffix; `rust-literal-suffixes`, `rust-err-*-underscore-suffix` |
-| Trivia, nested comments, shebang including unterminated look-ahead | Checker trivia scan; `rust-format-b`, `rust-shebang*`, `rust-inner-attribute`, `rust-doc-comment` |
+| Trivia, nested comments, shebang look-ahead (Reference SHEBANG: doc comments are content) | Checker trivia scan with the §5.2 look-ahead; `rust-format-b`, `rust-shebang*`, `rust-q8-*`, `rust-q8b-*`, `rust-q11-shebang-first-line-only`, `rust-inner-attribute`, `rust-doc-comment*`; crosscheck (proc-macro2 with the shebang blanked; rustc with the shebang kept and the rest wrapped) |
+| Rulings Q1–Q12 (§3, §3a, §4.4, §4.6, §5.2, §5.3, §5.5, §9) | At least one vector each (`*-q*-*`, `rust-s1-*`, config negatives for Q10); see §15 |
+| §10a complexity | Not machine-checked by these tools. The cross-check's adversarial inputs measure it; the bound is derived above |
 | Delimiter balance | Checker (accepted vectors); `rust-err-unbalanced` |
 | Closed error-code lists | Checker per profile; invented-code mutation |
 | Lexical error offsets | Checker: the character at the offset can start that construct (plausibility). Crosscheck: equal to the toolchain offset, or a listed divergence with its reason |
 | Normalization (§6), k-grams, hash, winnowing, ties, duplicates, partial window | Checker recomputes everything; `*-equal-minimum`, `*-repeated`, `*-empty`, `*-short`, `*-exact-k`; hash and tie mutations |
 | Comment/whitespace invariance; rename behavior | `*-format-a/b` and `*-rename-a/b` pair invariants |
 
-**Mutation self-test.** The checker must reject 11 corruptions per language. Hashes are recomputed so that only the targeted layer is wrong. The corruptions include the reviewer's five: a dropped inserted `;`, `func` relabelled `ident`, `:=` split, `;` after `,`, and an invented error code. They also include U+2160 accepted as a Go letter, `"x"_` split into string plus `_`, `->` as one token, U+2E2F accepted as XID, and a lifetime relabelled `char`.
+**Mutation self-test.** The checker must reject 12 Go and 13 Rust corruptions. Hashes are recomputed so that only the targeted layer is wrong. The corruptions include the reviewer's five: a dropped inserted `;`, `func` relabelled `ident`, `:=` split, `;` after `,`, and an invented error code. They also include U+2160 accepted as a Go letter, `0b2i` accepted as imaginary, `"x"_` split into string plus `_`, `"x"0` as one suffixed string, `->` as one token, U+2E2F accepted as XID, a lifetime relabelled `char`, and a shebang look-ahead that skips `///`.
 
 **Limits.** The checker validates given token streams and does not produce them. It cannot prove that a different, equally self-consistent tokenization is wrong where the contract's rules are not encoded in it: escape validity, raw-string termination and most error kinds. The crosscheck covers those only for the shipped inputs.
 
@@ -376,11 +425,18 @@ Two tools check the vectors:
 | OD-17 | (a) Accept any lexically valid suffix, with the Reference `_` cut (F2) | Matches the Reference lexer and rustc |
 | OD-18 | (a) `maxInputBytes` in the configuration, 1 MiB in the shipped configurations | Bounded; covered by the limit vectors |
 
+| Q1–Q12 | The rulings in §15's second table | Each follows rustc, cmd/compile or the Reference grammar where they agree. Where they disagree, the authority (Reference or Go spec) wins and the oracle difference is a listed crosscheck divergence |
+| OD-21 | `k ≤ 16`, `window ≤ 128`, `maxInputBytes ≤ 8 MiB`; linear time and memory for a fixed configuration (§10a) | Bounded worst case (about 16 GiB of SHA-256 input at the bounds); the cross-check showed unbounded `k` is a denial-of-service vector |
+| OD-22 | `unsupported-config` and `input-too-large` leave the uncomputed values `null` (§9) | The input is not examined or not fully read; no implementation should read gigabytes just to report a limit |
+
 **Still open:**
 
 - **OD-10 tuning.** Which values follow 5/4, chosen on development data (TW-05). Each choice is a new configuration digest.
 - **OD-11 keyed variant.** Options: (a) none; (b) HMAC-SHA-256 under a separate hash identifier. This waits for the keyed-selection gate in the [roadmap](../../ROADMAP.md).
 - **OD-14 eligible files.** Generated, vendor, test, `build.rs` and macro-heavy files. Belongs to TW-01/TW-03.
+- **OD-20 Contract identifier after the bounds change** (new). Options:
+  - (a) Keep `traceweave-token-winnow-draft-1` (current). No shipped expected output changed, and [matching-vectors](matching-vectors/README.md) pins the draft-1 configuration digests.
+  - (b) Bump to `draft-2`. Configurations accepted by draft-1 but now rejected (k > 16, window > 128, `maxInputBytes` > 8 MiB) would then never meet two different outcomes under one identifier. All configuration digests would change, and the matching vectors would need regenerating.
 - **OD-19 U+200D/U+200C in Rust identifiers** (new). Options:
   - (a) Follow the Reference [ident.zero-width-chars] and reject them (current draft).
   - (b) Follow rustc 1.97.1, which accepts them with an `uncommon_codepoints` warning.
@@ -401,3 +457,25 @@ Two tools check the vectors:
 | F8 | Vectors for `input-too-large` and its precedence, mid-file BOM, Go hex-float error, CR in a Go raw string, Rust raw lifetime and reserved raw lifetime, `##`, C-string escapes, more than 255 hashes, and isolated CR inside a literal |
 | A3 | §7 names `profile`/`profileVersion` as the configuration strings |
 | Version pinning | Adopted: profile ids omit toolchain versions; versions change only with lexical rules or tables (§10) |
+
+**Amendment: two-implementation cross-check (Rust and Go lanes, 2026-11-22).** Both lanes reproduced every vector. Over 9.88 M differential cases they disagreed only on Q8. The rulings below are "decided in draft, pending owner confirmation" (row Q1–Q12 in §14). Every existing vector's expected result is unchanged.
+
+| Question | Ruling | Vectors |
+| --- | --- | --- |
+| Q1 raw-string end | First `"` followed by n `#`; extra `#` lexed after it (§5.5) | `rust-q1-raw-extra-hash`, `rust-q1-raw-extra-pounds` |
+| Q2 unclosed opener vs later error | Scan order; the end-of-input delimiter check applies only if scanning finished (§3 step 4) | `rust-q2-open-then-unterminated`, `-open-then-illegal`, `-unclosed-innermost` |
+| Q3 `b'a` at end of input | Char and byte literals have no unterminated state: `malformed-literal` (§5.5) | `rust-q3-byte-unclosed` |
+| Q4 C-string escapes | `\x01`–`\xFF` and nonzero `\u{…}` allowed; every zero spelling malformed (§5.5) | `rust-q4-cstring-xff`, `-x00`, `-u-zero`, `rust-err-cstring-nul-escape` |
+| Q5 `'r#a#` | Not reserved: raw lifetime then `#` (§5.3 step 5) | `rust-q5-raw-lifetime-hash` |
+| Q6 lifetime check order | NFC, then zero-width, then `#` (§5.3 step 5) | `rust-q6-lifetime-nfc-first`, `rust-q6-lifetime-zwj-before-hash` |
+| Q7 unterminated vs malformed | Escape-aware end first, then content (§5.5) | `rust-q7-unterminated-escape`, `-closed-bad-escape`, `-raw-byte-unterminated` |
+| Q8 shebang look-ahead over doc comments (the one divergence) | Reference SHEBANG and rustc: doc comments are content and end the look-ahead (§5.2). The Go lane's reading; the Rust lane must change | `rust-q8-shebang-outer-line-doc`, `-inner-line-doc`, `-outer-block-doc`, `-inner-block-doc`, `rust-q8-not-shebang-four-slashes`, `-empty-block`, `-three-stars` |
+| Q8b look-ahead white space; bare `#!` | 11 Pattern_White_Space characters; bare `#!` is a shebang (§5.2) | `rust-q8b-shebang-lookahead-nel`, `rust-q8b-bare-shebang` |
+| Q9 `assigned` table | Informative only; unassigned code points are `illegal-character` (§3a) | `go-q9-unassigned`, `rust-q9-unassigned` |
+| Q10 `unsupported-config` record | `profile`, `profileVersion`, input digest and length `null`; offset `null`. Envelope names belong to TW-03 (§9) | `expectedResult` on all 28 negatives in `config-negative.json` |
+| Q11 shebang line 1 only; literal then digit; `0b2i`/`0o9i` | Shebang ends at the first LF (§5.2); a digit cannot start a SUFFIX (§5.5); radix-imaginary forms malformed (§4.4) | `rust-q11-shebang-first-line-only`, `rust-s1-*` (7), `go-q11-imag-binary-digit`, `go-q11-imag-octal-digit` |
+| Q12 Go `/*line :*/` | Plain comment (§4.6); listed go/scanner divergence | `go-q12-line-directive` |
+| C1 unbounded `k`/`window` | Bounds and complexity (§10a, OD-21) | `cfg-k-above-bound`, `cfg-window-above-bound`, `cfg-max-above-bound`; `boundaryPositives` |
+| R6 reading before the size check | Size checked before reading where knowable; never read past `maxInputBytes + 1` (§3 step 1) | `*-limit-*` (behavioral; reading is not observable in a vector) |
+| S1 checker false rejection | `check_vectors.py` now forbids only a SUFFIX start (`_` or XID_Start) after an unsuffixed literal | `rust-s1-*`: the previous checker failed all 7; the current one passes them |
+| S2 harness defects | (a) the Go oracle emits base64; (b) proc-macro2 tokens starting inside a doc comment are dropped; (c) rustc keeps the BOM and shebang line at file start and wraps only the rest | `go-escapes-vt-raw` (the old harness crashed on it), `rust-doc-comment-bracket` (the old filter kept a synthesized `]`), `rust-shebang-unresolved-body` and the `rust-q8-*` inputs (the old harness reported false rustc rejections) |

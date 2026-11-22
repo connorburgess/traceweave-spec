@@ -1,4 +1,4 @@
-# Draft extraction vectors (revision draft-1)
+# Draft extraction vectors (revision draft-1, amended)
 
 Status: draft for review, 2026-11-22. These vectors accompany the [draft extraction contract](../extraction-contract.md), revised after the [clean-room review](../../reviews/extraction-contract-review.md). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
 
@@ -8,13 +8,13 @@ Status: draft for review, 2026-11-22. These vectors accompany the [draft extract
 | --- | --- |
 | `config-go.json`, `config-rust.json` | Exact configuration bytes (contract §10), 1 MiB limit. Do not reformat: the digest covers the trailing LF. |
 | `config-go-limit16.json`, `config-rust-limit16.json` | The same with `maxInputBytes` 16, used by the limit files |
-| `config-negative.json` | 25 configuration byte strings that MUST be rejected as `unsupported-config` |
-| `go.json` | 29 vectors for `go-tokens`/`draft-1`: 14 accepted inputs and 15 errors |
-| `rust.json` | 43 vectors for `rust2024-tokens`/`draft-1`: 20 accepted inputs and 23 errors |
+| `config-negative.json` | `negatives`: 28 configuration byte strings that MUST be rejected, each with its `expectedResult` (`unsupported-config`, offset `null`). `boundaryPositives`: 3 configurations at the §10 bounds that MUST be accepted |
+| `go.json` | 34 vectors for `go-tokens`/`draft-1`: 16 accepted inputs and 18 errors |
+| `rust.json` | 78 vectors for `rust2024-tokens`/`draft-1`: 42 accepted inputs and 36 errors |
 | `limits-go.json`, `limits-rust.json` | 3 vectors each: exactly the limit, over the limit, and over the limit plus another defect, showing the size check runs first |
 | `unicode-17.0.0-tables.json` | Pinned identifier tables derived from UCD 17.0.0 (contract §3a), SHA-256 `9363b97e…3ac29f` |
 | `check_vectors.py` | Independent checker, standard library only |
-| `harness/` | Toolchain cross-check: Go oracle, Rust oracle with `Cargo.lock`, the driver `crosscheck.py`, and the table generator `gen_unicode_tables.py` |
+| `harness/` | Toolchain cross-check: Go oracle, Rust oracle with `Cargo.lock`, the driver `crosscheck.py`, the table generator `gen_unicode_tables.py`, and `build_vectors.py`, which writes every vector and configuration file from hand-written token streams |
 
 Every vector has an `id`, `tags`, a `description`, `inputBase64` (the authoritative bytes) and `inputText`. `inputText` is the readable text, or `null` when the bytes are not UTF-8, in which case `inputDisplay` shows a backslash-escaped form. The `result` object holds one of the following:
 
@@ -22,6 +22,39 @@ Every vector has an `id`, `tags`, a `description`, `inputBase64` (the authoritat
 - **`status: "ok"` or `"insufficient-tokens"`** with:
   - `tokens`: each has `class`, `text` and a half-open byte `span`, and Go adds `inserted: true` for automatic semicolons;
   - one object per channel, `exact` and `normalized`. Each holds `kgrams` (position, 16-hex-digit hash, span), `windowSelections`, `partialWindow` and `fingerprints`. `normalized` also lists the normalized `values`.
+
+## Amendment (2026-11-22): what changed for re-vendoring
+
+Contract identifiers, profile versions, configuration files and digests, and the Unicode table are **unchanged**. Every previously shipped vector is byte-identical; this was checked against the previous commit, and no ID was changed or removed. The changes below are additions and the `config-negative.json` format.
+
+**New vectors: 40.**
+- **Go (5):**
+  - `go-q9-unassigned`
+  - `go-q11-imag-binary-digit`
+  - `go-q11-imag-octal-digit`
+  - `go-q12-line-directive`
+  - `go-escapes-vt-raw`
+- **Rust, contract questions (26):**
+  - Q1: `rust-q1-raw-extra-hash`, `rust-q1-raw-extra-pounds`
+  - Q2: `rust-q2-open-then-unterminated`, `rust-q2-open-then-illegal`, `rust-q2-unclosed-innermost`
+  - Q3: `rust-q3-byte-unclosed`
+  - Q4: `rust-q4-cstring-xff`, `rust-q4-cstring-x00`, `rust-q4-cstring-u-zero`
+  - Q5: `rust-q5-raw-lifetime-hash`
+  - Q6: `rust-q6-lifetime-nfc-first`, `rust-q6-lifetime-zwj-before-hash`
+  - Q7: `rust-q7-unterminated-escape`, `rust-q7-closed-bad-escape`, `rust-q7-raw-byte-unterminated`
+  - Q8: `rust-q8-shebang-outer-line-doc`, `rust-q8-shebang-inner-line-doc`, `rust-q8-shebang-outer-block-doc`, `rust-q8-shebang-inner-block-doc`, `rust-q8-not-shebang-four-slashes`, `rust-q8-not-shebang-empty-block`, `rust-q8-not-shebang-three-stars`
+  - Q8b: `rust-q8b-shebang-lookahead-nel`, `rust-q8b-bare-shebang`
+  - Q9: `rust-q9-unassigned`
+  - Q11: `rust-q11-shebang-first-line-only`
+- **Rust, literal then digit (S1/Q11, 7):** `rust-s1-string-digit`, `rust-s1-char-digit`, `rust-s1-bytestring-digit`, `rust-s1-rawstring-digit`, `rust-s1-cstring-digit`, `rust-s1-byte-digit`, `rust-s1-string-digit-expr`
+- **Rust, harness regression inputs (2):** `rust-shebang-unresolved-body`, `rust-doc-comment-bracket`
+
+**Configuration files.**
+- New negatives `cfg-k-above-bound` (k = 17), `cfg-window-above-bound` (129) and `cfg-max-above-bound` (8388609).
+- New `boundaryPositives` list: `cfg-bounds-min`, `cfg-bounds-max`, `cfg-rust-bounds-max`.
+- Every negative now carries `expectedResult`.
+
+**Lane impact.** The Rust lane's current results differ from these vectors on the `rust-q8-shebang-*` doc-comment cases (D1). The Go lane's results match all 28 report-proposed inputs. Both lanes need the new configuration bounds.
 
 The table shows which case each vector covers:
 
@@ -32,6 +65,7 @@ The table shows which case each vector covers:
 | Identifier boundaries (§3a) | `go-unicode-boundary` (U+2E2F, U+0660 accepted); `go-err-u2160`, `-u00b7`, `-u0345`, `-u200d`, `-nd-start` | `rust-unicode-boundary` (U+2160, U+00B7, U+0345 accepted); `rust-err-u2e2f`, `-u200d`, `-non-nfc-*` |
 | Repeated tokens, equal-minimum ties | `go-repeated`, `go-equal-minimum` | `rust-repeated`, `rust-equal-minimum` |
 | Comment/whitespace pair; rename pair | `go-format-a/b`; `go-rename-a/b` | `rust-format-a/b` (CRLF, nested comment); `rust-rename-a/b` |
+| Contract questions (Q1–Q12) and S1 | `go-q9-*`, `go-q11-*`, `go-q12-*` | `rust-q1-*` … `rust-q11-*`, `rust-s1-*` |
 | Language specifics | `go-literals`, `go-semicolon-comments`, `go-raw-string-cr` | `rust-literals`, `rust-literal-suffixes`, `rust-lifetimes-chars`, `rust-raw-lifetime`, `rust-cstring-escapes`, `rust-shebang`, `rust-shebang-unterminated-comment`, `rust-inner-attribute`, `rust-doc-comment` |
 | Encoding errors | `go-err-invalid-utf8`, `-bom`, `-mid-bom`, `-nul` | `rust-err-invalid-utf8`, `-bom`, `-mid-bom`, `-nul`, `-isolated-cr`, `-cr-in-literal` |
 | Lexical errors | `go-err-unterminated-*`, `-illegal-character`, `-malformed-number`, `-invalid-escape`, `-hex-float-no-exponent` | `rust-err-unterminated-*`, `-unbalanced`, `-char-two-codepoints`, `-reserved-prefix`, `-reserved-raw-lifetime`, `-pounds`, `-*-underscore-suffix`, `-cstring-nul-escape`, `-raw-too-many-hashes` |
@@ -47,15 +81,15 @@ python3 -I research/drafts/extraction-vectors/check_vectors.py
 Output on 2026-11-22 (Python 3.14.6, `unicodedata` 16.0.0):
 
 ```
-PASS config-negative.json: 25/25 invalid configurations rejected
-PASS go.json profile=go-tokens/draft-1 config=dfbc5fe3517e9da6... vectors=29 tokens=164 (inserted ';'=20) identifiers=60 kgrams=224 fingerprints=80 tie-windows=11 errors=15 (lexical offsets plausibility-only: 11) pairs=2 mutations-rejected=11/11
-PASS rust.json profile=rust2024-tokens/draft-1 config=64b34335e4a61383... vectors=43 tokens=259 (inserted ';'=0) identifiers=90 kgrams=366 fingerprints=134 tie-windows=10 errors=23 (lexical offsets plausibility-only: 17) pairs=2 mutations-rejected=11/11
+PASS config-negative.json: 28/28 invalid configurations rejected, 3/3 boundary configurations accepted
+PASS go.json profile=go-tokens/draft-1 config=dfbc5fe3517e9da6... vectors=34 tokens=170 (inserted ';'=21) identifiers=61 kgrams=228 fingerprints=82 tie-windows=11 errors=18 (lexical offsets plausibility-only: 14) pairs=2 mutations-rejected=12/12
+PASS rust.json profile=rust2024-tokens/draft-1 config=64b34335e4a61383... vectors=78 tokens=322 (inserted ';'=0) identifiers=103 kgrams=384 fingerprints=146 tie-windows=10 errors=36 (lexical offsets plausibility-only: 30) pairs=2 mutations-rejected=13/13
 PASS limits-go.json profile=go-tokens/draft-1 config=aa86722255afbf50... vectors=3 tokens=8 (inserted ';'=1) identifiers=1 kgrams=8 fingerprints=2 tie-windows=0 errors=2 (lexical offsets plausibility-only: 0) pairs=0
 PASS limits-rust.json profile=rust2024-tokens/draft-1 config=71d5ed27bea011f6... vectors=3 tokens=7 (inserted ';'=0) identifiers=2 kgrams=6 fingerprints=2 tie-windows=0 errors=2 (lexical offsets plausibility-only: 0) pairs=0
 ```
 
 The checker verifies the following:
-- **Configuration:** the §10 validation rules, the shipped digests, and rejection of every negative configuration.
+- **Configuration:** the §10 validation rules including the bounds `k ≤ 16`, `window ≤ 128` and `maxInputBytes ≤ 8388608`; the shipped digests; rejection of every negative configuration with its `expectedResult`; acceptance of every boundary positive.
 - **Encoding errors** (size, UTF-8, BOM, NUL, isolated CR), recomputed from the input bytes.
 - **Error codes:** each must be in the profile's closed list. For lexical errors, the character at the offset must be able to start the failing construct.
 - **Go tokens:**
@@ -72,7 +106,7 @@ The checker verifies the following:
   - single-character punctuation;
   - lifetimes versus chars;
   - the numeric scan;
-  - literal prefix, closing delimiter and the suffix `_` cut;
+  - literal prefix, closing delimiter and the suffix `_` cut. After a literal without a suffix, only a SUFFIX start (`_` or XID_Start) is forbidden, so a following digit is allowed (S1 fix);
   - delimiter balance.
 - **Trivia:** every gap between tokens is whitespace, comments or a shebang, including the shebang rule with an unterminated look-ahead comment.
 - **Fingerprints:**
@@ -82,7 +116,7 @@ The checker verifies the following:
   - the comment/whitespace and rename pair invariants;
   - coverage of every required case.
 
-**Mutation self-test.** The checker corrupts copies of the data, recomputing hashes so that only the targeted layer is wrong, and requires every copy to be rejected. Per language, these are the corruptions:
+**Mutation self-test** (12 Go, 13 Rust). The checker corrupts copies of the data, recomputing hashes so that only the targeted layer is wrong, and requires every copy to be rejected. Per language, these are the corruptions:
 
 - **Both languages:**
   - flipped hash digit;
@@ -96,12 +130,17 @@ The checker verifies the following:
   - final inserted `;` dropped;
   - `:=` split into `:` `=`;
   - inserted `;` after `,`;
-  - U+2160 accepted as a Go letter.
+  - U+2160 accepted as a Go letter;
+  - `0b2i` accepted as imaginary.
 - **Rust only:**
   - `"x"_` split into string and `_`;
   - `->` as one token;
   - U+2E2F accepted as XID;
-  - lifetime relabelled `char`.
+  - lifetime relabelled `char`;
+  - `"x"0` as one suffixed string;
+  - shebang look-ahead that skips `///`.
+
+**S1 fix verified.** The previous checker (the parent commit) failed each of the 7 `rust-s1-*` inputs with "literal or suffix not maximal". The current checker passes them.
 
 Separately, the review's five corruptions were each written into a standalone `go.json` and passed to the CLI, which failed on every one (exit 1):
 
@@ -134,28 +173,30 @@ python3 -I research/drafts/extraction-vectors/harness/crosscheck.py [--build-dir
 
 - **Tables:** Go's `unicode` package (letter + `_`, Nd) and `unicode-ident` 1.0.24 (XID) are compared with `unicode-17.0.0-tables.json` over every code point.
 - **go/scanner** (mode 0), for every Go vector:
-  - Class, text and start offset of each token are compared.
+  - Class, text and start offset of each token are compared. The oracle emits literals and messages as base64 (fix S2a: the previous `strconv.Quote` output was mis-parsed for `\x` escapes and crashed on U+000B).
   - Declared adjustments: inserted `;` is compared by kind and order only, and CR is removed from raw strings because go/scanner strips it.
 - **proc-macro2** fallback lexer, for every Rust vector:
   - Class (literal classes excluded), text, start and end offsets are compared.
-  - Declared adjustments: a `'` followed by an adjacent identifier becomes a lifetime; tokens whose source bytes differ from their text (synthesized from doc comments) are dropped; a shebang is blanked to spaces with offsets kept.
+  - Declared adjustments: a `'` followed by an adjacent identifier becomes a lifetime; tokens whose span starts inside a doc comment are dropped. proc-macro2 synthesizes them as `#[doc = …]` (fix S2b: the previous text-comparison filter kept a synthesized `]` for `/// a]`); a shebang is blanked to spaces with offsets kept.
 - **rustc `--edition 2024`:**
-  - Each input is wrapped in a `macro_rules!` invocation, or compiled unwrapped if it starts with `#!` or a BOM.
+  - A leading BOM and the shebang line, as §5.2 decides it, stay at file start. Everything after them is wrapped in a `macro_rules!` invocation, so name resolution never runs (fix S2c: whole-file compilation of `#!` inputs reported false rejections).
   - This checks lexical acceptance only.
+- **Accepted vectors** must be accepted by every tool, unless `EXPECT` lists a `rejects` entry (tool offset and reason) and the tokens still agree.
 - **Errors:** every error vector must fail in each tool at the same offset, or appear in the `EXPECT` table with a reason. An unlisted difference, or an expectation that no longer happens, fails the run.
 
 Output on 2026-11-22 (go1.27.3 darwin/arm64, rustc 1.97.1):
 
 ```
 tables: go unicode + unicode-ident 1.0.24 vs pinned 17.0.0 tables: MATCH
-  go accepted agree: 15
-  go error agree: 11
-  go error expected: 6
-  rust accepted proc-macro2 agree: 21
-  rust accepted rustc accepts: 21
-  rust error proc-macro2 agree: 9
-  rust error proc-macro2 expected: 16
-  rust error rustc agree: 15
+  go accepted agree: 16
+  go accepted expected: 1
+  go error agree: 12
+  go error expected: 8
+  rust accepted proc-macro2 agree: 43
+  rust accepted rustc accepts: 43
+  rust error proc-macro2 agree: 21
+  rust error proc-macro2 expected: 17
+  rust error rustc agree: 28
   rust error rustc expected: 10
 PASS: no unexpected divergence
 ```
@@ -173,7 +214,9 @@ The script prints all of these with reasons:
 - **proc-macro2 laxer than rustc, where the contract follows rustc:**
   - edition 2021 reserved prefixes, including the non-NFC-before-quote case;
   - edition 2024 `##`;
-  - `"x"_` and `'a'_` (F2).
+  - `"x"_` and `'a'_` (F2);
+  - `r#"a"###` (Q1, reserved pounds).
+- **Go toolchain versus the Go spec productions** (Q11, Q12): go/scanner accepts `0b2i` and `0o9i`, which cmd/compile and the contract reject. go/scanner rejects `/*line :*/` at offset 8, which the contract treats as a comment (an accepted vector with a listed `rejects` entry).
 - **Different offsets** (OD-13, where the contract reports the token start):
   - go/scanner reports `0x`, `\q` and `0x1.8` at the following bytes (7, 7, 10);
   - proc-macro2 reports CR-in-literal at the literal start (8), while the contract's forbidden-code-point scan reports the CR (10);
@@ -183,6 +226,15 @@ The script prints all of these with reasons:
 ### Self-test of the driver
 
 A copy of the vectors with `:=` split in `go-unicode` and `"x"_a` truncated in `rust-literal-suffixes` made the driver report both mismatches under `PROBLEMS`.
+
+### Harness fixes verified
+
+The previous harness (the parent commit), run on the amended vectors, reproduced all three defects:
+- **(a)** It crashed with `JSONDecodeError` on `go-escapes-vt-raw`.
+- **(b)** It kept proc-macro2's synthesized `]` at [5,6) in `rust-doc-comment-bracket`.
+- **(c)** It reported rustc rejecting 8 accepted inputs: the `rust-q8-*` look-ahead cases, `rust-q8b-shebang-lookahead-nel`, `rust-q11-shebang-first-line-only` and `rust-shebang-unresolved-body`.
+
+The current harness passes them all. Because the shebang line is kept at file start and the rest is wrapped, the rustc check confirms lexical acceptance of the remainder. It does not independently confirm where rustc ends the shebang; that evidence comes from the cross-check report's toolchain probes.
 
 ### History
 
