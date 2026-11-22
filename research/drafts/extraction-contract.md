@@ -241,7 +241,7 @@ Macro bodies are lexed but not expanded. Cargo-script frontmatter is not recogni
 
 ## 6. Token serializations
 
-Each token is a pair `(class, value)` of UTF-8 strings. The exact channel's stream is the full token stream. The normalized channel's stream is the same tokens, minus any the profile excludes (below), in the same order. The channels also differ in `value`:
+§6–§8 run once per channel in the profile's declared channel list (§10 step 6). For Go, Rust and TypeScript that list is `exact`, `normalized`, the two channels described here. Each token is a pair `(class, value)` of UTF-8 strings. The exact channel's stream is the full token stream. The normalized channel's stream is the same tokens, minus any the profile excludes (below), in the same order. The channels also differ in `value`:
 
 | Channel | `value` |
 | --- | --- |
@@ -284,7 +284,7 @@ The algorithm follows Schleimer, Wilkerson and Aiken, [*Winnowing*](https://theo
 - **m = 0.** `windowSelections` is `[]`, `partialWindow` is `false` and there are no fingerprints. Without exclusions this happens exactly when the status is `insufficient-tokens`. With exclusions, the normalized channel can be empty in an `ok` result (§6).
 - **Fingerprints.** The distinct selected positions in ascending order, each with its hash and k-gram span. Different positions with equal hashes are all kept (OD-16).
 
-The procedure runs independently for each channel.
+The procedure runs independently for each listed channel.
 
 **Vector example (`go-equal-minimum`, exact channel).** The window starting at 2 spans positions 2–5 and holds `1d99e08d…` at both 2 and 5. Position 5 is selected. The selections are `[2, 2, 5, 5, 5]` and the fingerprints are at `[2, 5]`. The [implementation-patterns](../../docs/implementation-patterns.md) example `[8, 4, 4, 7, 2]` with `w = 3` gives fingerprints at `[2, 4]`.
 
@@ -299,7 +299,7 @@ The wire schema, including field names and any constant keys, belongs to TW-03. 
 - `status`
 - for errors: `error.code` and `error.offset`
 - tokens: class, exact text, span, and `inserted` for Go
-- per channel: `partialWindow` and fingerprints (position, hash, span)
+- per listed channel, in list order: `partialWindow` and fingerprints (position, hash, span)
 - for the normalized channel of a profile with exclusions (§6): `tokenIndices`, which gives that channel's token count, and so its k-gram count
 
 K-gram lists and `windowSelections` are required in vectors and optional in production output.
@@ -331,7 +331,7 @@ The Rust configuration differs only in `"profile":"rust2024-tokens"`. Digests: G
 3. The top level is an object with exactly the keys above, in that order.
 4. `contract`, `profile`, `profileVersion` and `hash` are strings matching `[a-z0-9.-]+`. No escapes are possible.
 5. `k` is an integer in `1 … 16`, `window` in `1 … 128` and `maxInputBytes` in `1 … 8388608` (8 MiB), each written in decimal without a sign, leading zeros or exponent (bounds: §10a).
-6. `channels` is exactly `["exact","normalized"]`. Subsets and other orders are not supported in this draft.
+6. `channels` equals the profile's declared, ordered channel list, whose first entry is `exact` ([catalogue-report contract §2b](catalogue-report-contract.md#2b-declared-channel-lists-amendment-a3)). Go, Rust and TypeScript declare exactly `["exact","normalized"]`. Subsets and other orders are rejected.
 7. `contract` is `traceweave-token-winnow-draft-1`, `(profile, profileVersion)` is a pair the implementation implements, and `hash` is `sha256-first8-u64be`.
 8. Re-serializing the parsed values in canonical form reproduces the bytes exactly.
 
