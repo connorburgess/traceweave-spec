@@ -96,3 +96,32 @@ git status --porcelain --untracked-files=all                 # nothing
 ```
 
 **Log in the results commit**, which must descend from the freeze commit and the review commit: every command with its exit code (all 0); from both summaries: `codeIdentity.ok` true, with HEAD = FROZEN; `networkProbe.denied` true (EPERM); weights 6/6, sources 84/84, goldens 3/3, 0 environment deviations; `recordValidation` 0 errors, and `statusAfterRun` empty; equal `resultsSha256`; `elapsedSeconds` ≤ 14,400.
+
+## Confirmation pass: e-img-m-2
+
+Checked 2026-11-23 on a `git archive` export of the frozen commit `d3af1ee`, offline, using the existing `.venv` and the weights in the eval directory. I did not run `full` and generated no seed in 2,000,000–2,000,201.
+
+**Reruns.** **Digest:** the self-excluding digest recomputes to `cba36673…4110`; the version line reads `e-img-m-2`. **Smoke runs:** two runs and `compare` all exit 0 ("W3: identical"). `resultsSha256` `2d78db49…6ecd` equals the author's three runs. **Unit tests:** 22 tests. One (`test_fetch_refuses_work_tree`) fails on the export only, because `git archive` does not make a git work tree. In the shared checkout, whose `research/experiments/image-mark/` equals `d3af1ee`, all 22 pass.
+
+**Earlier findings.** **B1 resolved.** **Exact tail:** P(Bin(61, ½) ≥ 49) = 2,271,115,189,673 / 2⁶¹ = 9.85×10⁻⁷ ≤ 10⁻⁶, and at 48 it is 3.83×10⁻⁶. So k = 49 is the smallest value, as §5 states. **Tested positions in code:** `tm` `tested()` = raw[:61]. Upstream `process_encode` puts the 61 data bits first, then ECC, then version, so these are the HMAC data bits; the test checks the trailing `0001`. `ps` uses `preds[0, 1:]` (256 bits; the detection bit is excluded). `dw` uses 32 bits. Every tested bit is direct keyed output. **100-bit agreement:** kept as the report-only `agree100True`. **B2 resolved.** **§1:** P2–P4 are labelled implementation checks, "close to guaranteed by construction"; removal and forgery counts are "a lower bound on what an attacker can do"; and the text says anyone can copy a mark without the key. **`reembed` (condition 20):** decodes the `clean` raw bits, takes `forge_bits` (TrustMark: BCH data bits when valid with version 1, else raw 0–60), embeds them into H with the public encoder, and uses no key. **Copied bits survive:** in my smoke run the forged images decode to exactly the copied bits, 3/3 for `tm` (61/61, `forgedFrom: bch`) and 3/3 for `ps` (256/256). Both are accepted for the donor's entry. `dw` agreed on 26/32, 32/32 and 32/32 bits, consistent with the control's weakness. **M1 resolved** (lane 12): "This is trust on first use", including the host-side substitution case. **M2 resolved.** The runtime pins are listed in §10 and checked in W1. In `compare`: exit 0 means identical; exit 5 means outputs differ while every recorded input (environment, runtime pins, versions, weights, sources, goldens, digest, HEAD) is equal; exit 1 means some recorded input differs. **It cannot be used to discard an inconvenient result.** The classification depends only on byte equality and recorded inputs, never on counts. Every invalid pair is kept and reported. At most two fresh pairs may be rerun; a third invalid pair goes to the owner, and any change is a new version. The rule is mechanical, so no one chooses when to rerun. **M3 not resolved, outside the frozen paths.** ROADMAP IMG.2 still says "under `scripts/offline`". Before IMG.2 is marked met, add "(`sandbox-exec` deny-network with the harness probe failing first)" as IMGF.4 does. This does not block the run.
+
+**Diff scope.** The changes are the review items only. The 25 conditions and 7,500 query lines follow from `reembed`, and P1–P4 keep their thresholds, adding only the label "implementation check". **Report-only lines are unchanged.** E5 is a stated expectation. The k values for PixelSeal and `dwtDct` are unchanged. **The `dwtDct` smoke outputs changed** because of the OpenCV threading pin; that is recorded, and no measured run exists. **Nothing was chosen after data:** every change was requested by the review before any experiment-range seed existed.
+
+**Measured-run commands**, run outside any agent sandbox, with `FROZEN=d3af1ee07595bde53ff53fcce0f3880ad04fb62c`:
+```sh
+SB='(version 1)(allow default)(deny network*)'; export TRACEWEAVE_EVAL_DIR="$HOME/traceweave-eval"
+git worktree add --detach ../imgm-run "$FROZEN" && cd ../imgm-run/research/experiments/image-mark
+python3 -I fetch_sources.py                                   # online once; 84/84 by SHA-256 and git blob id
+/opt/homebrew/bin/python3.14 -m venv .venv && .venv/bin/python -m pip install --no-cache-dir --no-index --find-links <shared checkout>/research/experiments/image-mark/wheelhouse --require-hashes --only-binary=:all: -r requirements.txt
+/usr/bin/sandbox-exec -p "$SB" python3 -I fetch_weights.py --verify   # 6/6 size + SHA-256 in $TRACEWEAVE_EVAL_DIR/models, offline
+git rev-parse HEAD; git status --porcelain --untracked-files=all        # FROZEN, then nothing
+/usr/bin/sandbox-exec -p "$SB" .venv/bin/python -I -m unittest discover -s tests -t .
+for r in 1 2; do /usr/bin/sandbox-exec -p "$SB" .venv/bin/python -I run_mark.py full --frozen-commit "$FROZEN" --require-network-denied --out out/full-$r; echo "exit $?"; done
+/usr/bin/sandbox-exec -p "$SB" .venv/bin/python -I run_mark.py compare out/full-1 out/full-2; echo "exit $?"   # 0; 5 → §6 rerun rule; 1 → negative
+git status --porcelain --untracked-files=all                  # nothing
+```
+`full` re-verifies the 6 weight SHA-256 pins (W1) before loading any model.
+
+**Log in the results commit** (`results/e-img-m-2/`), which must descend from `FROZEN` and from this review's commit: every command with its exit code; from both summaries: `codeIdentity.ok` true, with HEAD = FROZEN; `networkProbe.denied` true (EPERM); weights 6/6, sources 84/84, goldens 3/3; 0 environment and runtime deviations before and after the run; `recordValidation` 0 errors; `statusAfterRun` empty; equal `resultsSha256`; `elapsedSeconds` ≤ 14,400. the `compare` output, and any invalid pair, kept.
+
+**Verdict: the run may start as frozen (`e-img-m-2`, `d3af1ee`).** No blocking item remains. M3 (the ROADMAP IMG.2 wording) must be fixed before IMG.2 is marked met.
