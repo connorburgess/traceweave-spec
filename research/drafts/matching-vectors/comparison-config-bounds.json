@@ -1,0 +1,39 @@
+{
+ "description": "Comparison-configuration bounds (contract \u00a74 step 5): maxSeedsPerMode <= 10^7, maxRegionsPerMode <= 10^5. Negatives MUST be rejected; positives MUST be accepted.",
+ "negatives": [
+  {
+   "id": "seeds-bound-plus-1",
+   "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMDAxLCJtYXhSZWdpb25zUGVyTW9kZSI6MTAwMCwic3VwcHJlc3Npb25DYXRhbG9ndWVTaGEyNTYiOiJub25lIn0K"
+  },
+  {
+   "id": "seeds-u32-max",
+   "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjQyOTQ5NjcyOTUsIm1heFJlZ2lvbnNQZXJNb2RlIjoxMDAwLCJzdXBwcmVzc2lvbkNhdGFsb2d1ZVNoYTI1NiI6Im5vbmUifQo="
+  },
+  {
+   "id": "regions-bound-plus-1",
+   "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAwMSwic3VwcHJlc3Npb25DYXRhbG9ndWVTaGEyNTYiOiJub25lIn0K"
+  },
+  {
+   "id": "regions-u32-max",
+   "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjQyOTQ5NjcyOTUsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2Ijoibm9uZSJ9Cg=="
+  }
+ ],
+ "positives": [
+  {
+   "id": "seeds-at-bound",
+   "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMDAwLCJtYXhSZWdpb25zUGVyTW9kZSI6MTAwMCwic3VwcHJlc3Npb25DYXRhbG9ndWVTaGEyNTYiOiJub25lIn0K"
+  },
+  {
+   "id": "seeds-bound-minus-1",
+   "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjk5OTk5OTksIm1heFJlZ2lvbnNQZXJNb2RlIjoxMDAwLCJzdXBwcmVzc2lvbkNhdGFsb2d1ZVNoYTI1NiI6Im5vbmUifQo="
+  },
+  {
+   "id": "regions-at-bound",
+   "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAwMCwic3VwcHJlc3Npb25DYXRhbG9ndWVTaGEyNTYiOiJub25lIn0K"
+  },
+  {
+   "id": "both-at-bound",
+   "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMDAwLCJtYXhSZWdpb25zUGVyTW9kZSI6MTAwMDAwLCJzdXBwcmVzc2lvbkNhdGFsb2d1ZVNoYTI1NiI6Im5vbmUifQo="
+  }
+ ]
+}

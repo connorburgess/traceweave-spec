@@ -1,6 +1,6 @@
 # Draft catalogue and comparison-report contract: token-fingerprint baseline
 
-Status: **draft for review, revision draft-2 with amendments A1 (extraction record), A2 (normalized-stream exclusions), A3 (declared channel lists) and A4 (registered text-plain and ts-tokens), 2026-11-22.** Roadmap item TW-03. Gates: [roadmap](../../ROADMAP.md) M1.3 (catalogue and report schemas) and M2.6 (hand-derived matching vectors). This contract also fixes what I2 in the [implementation plan](../../docs/implementation-repo-plan.md#milestones) must reproduce for M2.4 and M2.5. It builds on the reviewed [extraction contract](extraction-contract.md) and changes nothing in it.
+Status: **draft for review, revision draft-2 with amendments A1 (extraction record), A2 (normalized-stream exclusions), A3 (declared channel lists), A4 (registered text-plain and ts-tokens) and A5 (I2 cross-check rulings), 2026-11-22.** Roadmap item TW-03. Gates: [roadmap](../../ROADMAP.md) M1.3 (catalogue and report schemas) and M2.6 (hand-derived matching vectors). This contract also fixes what I2 in the [implementation plan](../../docs/implementation-repo-plan.md#milestones) must reproduce for M2.4 and M2.5. It builds on the reviewed [extraction contract](extraction-contract.md) and changes nothing in it.
 
 This revision resolves the [clean-room review](../reviews/catalogue-report-contract-review.md) Part 1 findings 1–10 and guesses G1–G6, plus the non-blocking additions of its confirmation pass (G7, invariance, cap and suppression-order vectors). Every disposition is in [§13](#13-review-dispositions). Draft-2 changes formats: catalogue `traceweave-catalogue-draft-2`, comparison `traceweave-seed-merge-draft-2`, report `traceweave-report-draft-2`. Draft-1 identifiers are no longer accepted.
 
@@ -87,7 +87,7 @@ These are exactly the extraction vectors' `result` objects (extraction §9 and t
 
 Records differ from catalogues and report bodies (sorted keys, no final LF, §3.3) because a record is a stream unit: it reproduces the layout both current implementations already emit for `result`, and its final LF makes records concatenable.
 
-**Record streams and the CLI.** A sequence of records concatenated in input order is a valid JSON Lines stream, because each record is one line. That framing, the CLI's argument syntax, exit statuses and any `--pretty`/`--result-only` options are **not normative** (conformance: CLI names are optional interfaces). What is normative is (a) the bytes of each record and (b) the catalogue (§3), which is the persisted, committed artifact.
+**Record streams and the CLI.** A sequence of records concatenated in input order is a valid JSON Lines stream, because each record is one line. That framing, the CLI's argument syntax, exit statuses and any `--pretty`/`--result-only` options are **not normative** (conformance: CLI names are optional interfaces). What is normative is (a) the bytes of each record and (b) the catalogue (§3), which is the persisted, committed artifact. **Unknown option values are errors** (A5): an implementation that offers options, environment settings or fault-injection hooks MUST reject an unknown value as a usage error rather than ignore it, so a typo can never silently disable a check.
 
 **Not in the record.** The configuration bytes themselves (bound by `configSha256`), the input bytes, file names, timestamps and implementation identity. A record carries the token text, so it is as private as the source (it is source text).
 
@@ -165,7 +165,15 @@ Every object has `additionalProperties: false`, so a catalogue with any extra fi
 
 Steps in order. The first failure decides the code:
 
-1. **Strict JSON.** The bytes are UTF-8 and strict JSON, with no non-integer numbers and no constants. **Duplicate keys are detected during parsing, before any member is read**, so a catalogue with `catalogueVersion` twice is `malformed-catalogue` whatever the values (finding 6). The top level is an object with a string `catalogueVersion`. Otherwise: `malformed-catalogue`.
+1. **Strict JSON.** All of the following are decided at this step, **before any member (including `catalogueVersion`) is read**; any failure is `malformed-catalogue`:
+   - the bytes are UTF-8;
+   - **nesting depth** (A5, K4): at most **64** nested containers (objects and arrays), the top-level object counting as 1. Implementations count depth on the bytes or while parsing, never by unbounded recursion. A valid catalogue nests 8 deep, a report body 9 and a record 7, so the limit only bounds hostile input (`k4-depth-64` is within it and falls through to step 2; `k4-depth-65` is not);
+   - strict JSON with no non-integer numbers (`1.0`, `1e3`) and no constants (`k3-non-integer-number`);
+   - **duplicate keys** are detected during parsing, so a catalogue with `catalogueVersion` twice is `malformed-catalogue` whatever the values (finding 6);
+   - **every key and string is a sequence of Unicode scalar values** (I-JSON, RFC 7493 §2.1; A5, K3): a lone surrogate escape such as `"\ud800"` is ill-formed, so `{"catalogueVersion":"\ud800"}` is `malformed-catalogue`, not `unsupported-catalogue` (`k3-lone-surrogate`);
+   - the top level is an object with a string `catalogueVersion`.
+
+   The same step-1 rules (depth 64, strict JSON, duplicate keys, scalar values) apply to comparison configurations (§4 step 2, outcome `unsupported-comparison-config`) and to records (§2a; a record failing them is not canonical).
 2. `catalogueVersion` is `traceweave-catalogue-draft-2`. Otherwise: `unsupported-catalogue`.
 3. The schema holds. Otherwise: `malformed-catalogue`.
 4. The canonical serialization (§3.3) equals the bytes exactly. Otherwise: `malformed-catalogue`.
@@ -181,6 +189,7 @@ Steps in order. The first failure decides the code:
    `tsx-tokens` and `text-markdown` are not registered: they are not frozen for stage 1. The TEST-ONLY profiles (`go-tokens-exclusion-test`, `go-tokens-three-channel-test`) are accepted only in vectors flagged as such and are never registered. Registering a profile adds lists to the set `modes` may name (§4 step 4); it changes no existing byte.
 6. Semantic rules hold. Otherwise: `malformed-catalogue`.
    - **Binding.** `profile` matches `extractionConfig`, and `configSha256` is the digest of its canonical bytes. Ids are strictly ordered, and digests are unique.
+   - **Extraction bounds and profile row** (A5, K1). `extractionConfig` MUST be a configuration a conforming extractor accepts: `k` ≤ 16, `window` ≤ 128, `maxInputBytes` ≤ 8,388,608 (extraction §10 step 5, §10a), `contract` equal to the profile's contract (§3.6 step 5 table) and `channels` equal to its channel list. A catalogue outside these is `malformed-catalogue` **even when its digest binding is correct**, because no conforming extractor could have produced it (`k1-extraction-bounds-k17` as reference, `k1-extraction-bounds-max-input` as candidate; `k1-extraction-bounds-at-bound` shows k 16, window 128 accepted).
    - **Error entries.** The code is in the profile's closed list. An `input-too-large` entry has `sha256` and `byteLength` `null` and offset 0 (A1; draft-2 before A1 required `byteLength > maxInputBytes`, which a Q10 record cannot supply). Every other error entry has a digest, `byteLength ≤ maxInputBytes` and offset at most `byteLength`.
    - **Other entries.** `byteLength ≤ maxInputBytes`. `status` is `ok` exactly when `tokenCount ≥ k` (the exact count decides status). Exact `kgramCount = max(0, tokenCount − k + 1)`. Normalized `kgramCount`: for a profile without exclusions it equals the exact `kgramCount`; for a profile that declares exclusions, n_N is not stored, so the rule is `0 ≤ kgramCount ≤` the exact `kgramCount`, and an `ok` entry may have an empty normalized channel (`kgramCount` 0, no fingerprints, `partialWindow` false). In each channel, `partialWindow` is true exactly when `1 ≤ kgramCount < window`, and a partial window has exactly one fingerprint.
    - **Fingerprints.** Each position is below `kgramCount`, with `0 ≤ start ≤ end ≤ byteLength` (finding 9). The span may be empty: with k = 1, a Go inserted `;` k-gram has span `[e, e)`, and `e` can equal `byteLength`. Positions and span starts strictly increase, and span ends never decrease. When `kgramCount ≥ window`: consecutive positions differ by at most `window`, the first position is below `window`, the last is at least `kgramCount − window`, and the count lies between ⌈(m − w + 1)/w⌉ and m − w + 1.
@@ -202,8 +211,8 @@ Exchanging catalogues for a comparison discloses all of this to the other party.
 
 Inputs: the extraction configuration bytes, and a list of `(id, record bytes)`. Output: the catalogue bytes, or a refusal. The builder:
 
-1. Validates the configuration bytes (extraction §10) and requires an implemented profile.
-2. For each record: validates it as a canonical record (§2a), and requires `configSha256` = SHA-256 of the configuration bytes and `profile`/`profileVersion` equal to the configuration's. An `unsupported-config` record is refused (it has no catalogue entry, §3.2).
+1. Validates the configuration bytes (extraction §10) and requires **a registered profile (§3.6 step 5), whether or not the implementation extracts that profile** (A5, K2). The builder reads records only, so it needs no lexer: refusing to build `text-plain` records is non-conformant (`cat-text-plain`, `cat-k2-text-plain-registered`). TEST-ONLY profiles are refused outside flagged vectors (`build-unregistered-profile`). An empty artifact list is refused (`build-empty-artifact-list`).
+2. For each record: validates it as a canonical record (§2a), and requires `configSha256` = SHA-256 of the configuration bytes and `profile`/`profileVersion` equal to the configuration's. An `unsupported-config` record is refused (it has no catalogue entry, §3.2). **Validation depth** (A5): canonical bytes (step-1 rules, key order, escaping, final LF), the record schema, the declared channel list and order, closed error codes, Q10 nulls, `tokenCount` = number of tokens, `tokenIndices` presence and range, and `values` length. The builder does **not** re-derive hashes or window selections and does not compare token text with input bytes, because it has no input: a record whose hash was changed consistently in `kgrams` and `fingerprints` is accepted (`cat-builder-hash-not-rederived`), while a wrong `tokenCount` is refused (`build-tokencount-mismatch`). Hash correctness is the extractor's conformance (level 4), checked against record vectors.
 3. Maps each record to an entry:
    - `id` from the caller; `sha256` = `inputSha256`; `byteLength` = `inputLength` (both `null` only for `input-too-large`); `status` = `result.status`;
    - for errors, `error` = `result.error`;
@@ -226,7 +235,7 @@ Validation, in order. Any failure is `unsupported-comparison-config`:
 2. Strict JSON. Duplicate keys are rejected during parsing, and non-integer numbers and constants are rejected.
 3. A top-level object with exactly these seven keys in this order.
 4. `comparison` is `traceweave-seed-merge-draft-2`, and `modes` equals the channel list of a profile the implementation supports (§2b). For every shipped vector outside the TEST-ONLY ones, that is exactly `["exact","normalized"]`.
-5. `minRegionDistinctHashes`, `mergeGap`, `maxSeedsPerMode` and `maxRegionsPerMode` are integers in 1 … 2³² − 1, written in decimal with no sign, leading zero or exponent.
+5. `minRegionDistinctHashes`, `mergeGap`, `maxSeedsPerMode` and `maxRegionsPerMode` are integers in 1 … 2³² − 1, written in decimal with no sign, leading zero or exponent; in addition **`maxSeedsPerMode` ≤ 10,000,000 and `maxRegionsPerMode` ≤ 100,000** (A5, decided in draft, pending owner confirmation; OD-C33). Vectors: `bounds-seeds-above`, `bounds-regions-above` (rejected), `bounds-at-limits` (accepted), and [comparison-config-bounds.json](matching-vectors/comparison-config-bounds.json) (4 negatives at bound + 1 and 2³² − 1, 4 positives at the bounds and one below).
 6. `suppressionCatalogueSha256` is `"none"` or 64 lowercase hexadecimal digits.
 7. Re-serialization reproduces the bytes.
 
@@ -336,6 +345,14 @@ The cap applies after ordering, ambiguity and counting:
 
 **Completeness.** For a valid configuration and catalogues that pass §3.6, an implementation MUST emit a body. The work is bounded by `maxSeedsPerMode`. An implementation that cannot finish within those limits is non-conformant for that input. No conformance outcome is "failed outside the report".
 
+**Complexity** (A5, decided in draft, pending owner confirmation). Per compared pair and mode, with F_r and F_c fingerprints and S = `seedCount`:
+- counting seeds (§5.4) is O(F_r + F_c) and is done before any seed is enumerated, so a mode above the limit costs only the count;
+- enumeration, sorting and region formation are O(S log S) time and O(S) memory, S ≤ `maxSeedsPerMode` ≤ 10⁷ — linear in seeds up to the sort;
+- the body lists at most `maxRegionsPerMode` ≤ 10⁵ regions per mode, whose seeds are bounded by S.
+- **A report's total work is the sum over its pairs**, so it grows with (reference artifacts × candidate artifacts × modes). The bounds limit one mode of one pair, not a whole report; callers comparing large catalogues SHOULD split them.
+
+Measured by the I2 cross-check (go-tokens k1 w1, periodic sources): 8 M seeds per mode took 1.9 s and 1.4 GiB (Rust) and 4.2 s and 3.1 GiB (Go); 72 M seeds took 7.6 GiB and 10.8 GiB. About 54 (Rust) and 77 (Go) bytes per seed, both modes counted. The largest catalogue within the extraction bounds (8.4 M fingerprints per channel, 7.0 × 10¹³ seeds) validates and abstains in both without enumerating.
+
 ### 5.8 Mode outcome
 
 Evaluated in order:
@@ -427,7 +444,13 @@ The list is closed. The schema pins every class, code and side combination.
 | `specCommit` | yes | 40 hex digits: the spec commit the implementation pins |
 | `generatedAt` | no | `YYYY-MM-DDThh:mm:ssZ`, a claimed time only, like core's `recordedAt` |
 
+**Dirty or unknown builds** (A5, M2.4). `implementation.commit` MUST describe the code that produced the body. An implementation **refuses to write a report document** when its build has uncommitted changes or no recorded commit; it MAY still write the body alone, which carries no provenance. An explicitly supplied commit (40 lowercase hex) is accepted only for a build that has no version-control stamp at all (for example from a source archive), never to cover a dirty tree. *Why refuse rather than add a `dirty` flag:* a flag would make provenance name a commit that does not describe the code, so M2.4's recheck ("commit = the code") could not pass, and it would add a field to a closed schema; refusing keeps every existing provenance byte and meaning.
+
+**Report document bytes are not normative.** Both implementations write RFC 8785 of `{"body", "provenance"}`; a consumer MUST NOT hash or compare the document bytes, only `bodySha256` and the provenance fields.
+
 The block has **no free-text field**. Draft-1's `note` is removed, and the `name`/`version` patterns cannot hold spaces, quotes, braces or operators, so provenance cannot carry source text (finding 5). It holds no signature and no trust or time result. [example-report.json](matching-vectors/example-report.json) shows the form with placeholder commits.
+
+**Private outputs** (A5, M2.8). The default private location for catalogues and reports is implementation-defined, but an implementation MUST refuse to write private output (catalogues, reports, records) to a directory inside a version-controlled working tree, whether chosen by default, by environment variable or by option, unless the operator passes an explicit override naming that directory. Writes are atomic (temporary file then rename) with owner-only permissions.
 
 ### 6.7 Privacy class of the report
 
@@ -540,6 +563,21 @@ Draft-1 said `match` here. The rule changed (§5.6), not the arithmetic.
 | OD-C27 | `modes` must equal a full declared list; subsets are not allowed in draft-2 | Allowing `["exact"]` would make an existing negative configuration valid and change `comparison-config-negative.json`. A subset (e.g. `["folded"]`) needs a new comparison identifier, which the owner may choose later |
 | OD-C28 | The comparison identifier stays `traceweave-seed-merge-draft-2` | Every existing configuration keeps its meaning and bytes; the change only admits lists of other profiles, which no draft-2 configuration could name before |
 
+**Amendment A5 (I2 cross-check rulings), decided in draft, pending owner confirmation:**
+
+| ID | Question | Ruling | Vectors |
+| --- | --- | --- | --- |
+| OD-C29 (K1) | `extractionConfig` outside extraction bounds | `malformed-catalogue` at §3.6 step 6, even with a correct digest (Rust reading) | `k1-extraction-bounds-k17`, `-max-input`, `-at-bound`; rule self-test window 129, k 2³²−1, wrong contract |
+| OD-C30 (K2) | Which profiles a record builder accepts | Every registered profile (Go reading) | `cat-text-plain`, `cat-k2-text-plain-registered`, `build-unregistered-profile` |
+| OD-C31 (K3) | Lone surrogate / ill-formed strings | `malformed-catalogue` at step 1, before the version (Rust reading) | `k3-lone-surrogate`, `k3-non-integer-number` |
+| OD-C32 (K4) | Nesting depth | At most 64 containers; deeper is `malformed-catalogue` at step 1 (both lanes adjust) | `k4-depth-64`, `k4-depth-65` |
+| OD-C33 | Comparison bounds | `maxSeedsPerMode` ≤ 10⁷, `maxRegionsPerMode` ≤ 10⁵, plus the §5.7 complexity statement | `bounds-*`, `comparison-config-bounds.json` |
+| OD-C34 | Builder validation depth | Structural and canonical, no hash re-derivation (§3.8 step 2) | `cat-builder-hash-not-rederived`, `build-tokencount-mismatch`, `build-empty-artifact-list` |
+| OD-C35 | Provenance for dirty or unknown builds | Refuse the report document; body-only output allowed; explicit commit only for unstamped clean builds (§6.6) | behavioral, no vector |
+| OD-C36 | Report document bytes | Not normative (§6.6) | none |
+| OD-C37 | Private output inside a checkout | Refused unless explicitly overridden; location otherwise implementation-defined (§6.6) | behavioral, no vector |
+| OD-C38 | Unknown option or fault-injection values | Usage error (§2a) | behavioral, no vector |
+
 **Still open:**
 - **OD-C17, parameter tuning** (TW-05). Each choice is a new configuration digest.
 - **OD-C18, gap-tolerant region formation** (OD-C3 (b)/(c)) as a future comparison id. It needs its own tie rule and vectors.
@@ -589,6 +627,7 @@ All checks are in [check_matching.py](matching-vectors/check_matching.py) unless
 | Part 3 item 1 (M2.9 index) | §1 and §7: no index or rank field. The candidate set is identified by `inputs.candidateCatalogueSha256`, and canonical id ordering makes input order irrelevant. Recording how candidates were generated (exhaustive, or a digest of the selected id set) is left to M2.9's own record; the body records only the resulting catalogue digest |
 | Part 3 item 2 (M2.7 origin links) | §1, §5.5 region key and §7: origin links live in a separate record that references `bodySha256` and the region key |
 | Parts 2 and 3, other items | Outside this lane's files (use-case plans, roadmap) |
+| **A5** I2 cross-check (`xcheck/REPORT-I2.md` on `merge-i2`; Rust `i2-rust` 9bd3bbf, Go `i2-go` c1b105c) | K1–K4 and the other reconciled questions ruled as OD-C29–C38 (§3.6 steps 1 and 6, §3.8, §4 step 5, §5.7, §2a, §6.6). New vectors: 10 matching (`k1-*` 3, `k3-*` 2, `k4-*` 2, `bounds-*` 3), 2 catalogues from records (`cat-k2-text-plain-registered`, `cat-builder-hash-not-rederived`), 3 refused builds (`build-tokencount-mismatch`, `build-unregistered-profile`, `build-empty-artifact-list`), and `comparison-config-bounds.json` (8). Checker: step-1 depth and scalar-value checks for catalogues, configurations and records; K1 bounds; builder depth; 6 wrong-implementation variants (one per reading, plus an off-by-one depth and ignored bounds), 3 wrong builders, 4 corruptions, 3 rule cases. **No existing expected output changed**: every earlier vector, record, catalogue, report and digest is byte-identical, so no version bump |
 | **A4** register `text-plain` and `ts-tokens` (coordinator; text profile frozen at commit 794f1fe, TypeScript profile frozen for stage 1) | §3.6 step 5 table (contract, channel list, closed error codes); §2b. `check_matching.py` validates all 60 frozen `text-plain` records from `extraction-vectors-text/records-text-plain.json`: named configuration and digests, canonical bytes, schema, declared channel order, closed codes, Q10 nulls, input digests, and all 1,023 k-gram hashes and window selections recomputed from the recorded values (the shared hashing layer; folding and skeleton derivations remain the text checker's). New: catalogue `cat-text-plain` from text records (ok, insufficient, `nul` error), matching vector `text-plain-three-modes` on real inputs (identical and reflowed copies match in all three modes; the Cyrillic homoglyph variant matches only in `skeleton`; unrelated shares nothing), with hand expectations derived from the recorded fingerprints; it uses `minRegionDistinctHashes` 1 (the homoglyph pair shares exactly one skeleton fingerprint) and `mergeGap` 8 (the text window). **Nothing in the text records contradicts A3**: all 60 have the §2a shape and the declared channel order. One A3 file changed: the negative `modes-text-list-unimplemented` was removed from `comparison-config-negative-channels.json`, because its stated reason (no text profile registered) no longer holds. Every other existing byte is identical |
 | **A3** declared channel lists (coordinator, from the text-profile review §4, commit c6e8f2a) | §2b; §2a, §4 step 4, §5.1 step 8, §5.3 rule 4, §6.4. Schemas: channel and mode objects keyed by the declared list (`exact` required, other keys by `additionalProperties`), `extractionConfig.contract` enum gains `traceweave-text-winnow-draft-1`, channel lists are arrays, new code `mode-mismatch`. New: TEST-ONLY profile `go-tokens-three-channel-test` ([config](matching-vectors/config-three-channel-test.json)), 8 re-derived records, 1 catalogue from records, 5 matching vectors (`tc-*`), 6 channel-list negatives. Unchanged (checked byte for byte against the previous files): every existing record, catalogue, report body and digest, `comparison-config.json`, `comparison-config-negative.json`, `example-report.json`, `extraction-go.json`, `extraction-rust.json`. **What the shared extraction contract must say** (not edited here): §10 step 6 becomes "`channels` equals the profile's declared channel list; `exact` is first", §6–§8 run per listed channel with the channel name in the hash input (already so in §7), and §9 lists "per listed channel". **What the text profile must say:** it declares `["exact","folded","skeleton"]`; its records use the §2a shape (token `class` `word`, `tokenCount`, no per-token `folded`/`skeleton`, which are the channels' `values`); `text-markdown`'s `masked` needs a declared place in the record (proposed: after `tokens`, before `channels`), which A3 does not yet define; the catalogue profile list and error codes (`invalid-utf8`, `nul`, `input-too-large`) are added when a text profile is implemented |
 | **A2** extraction OD-23 normalized-stream exclusions (commit c81be10) | §2 per-channel n_C; §2a normalized channel order (`tokenIndices` only with exclusions, then `values`, `kgrams`, `windowSelections`, `partialWindow`, `fingerprints`), `values` for kept tokens only; §3.6 normalized `kgramCount` rule; §3.8 per-channel `kgramCount`; `record.schema.json` (optional `tokenIndices`) and `catalogue.schema.json` (empty normalized channel allowed for `ok`, enforced per profile). §2a citation fixed: the `input-too-large` offset of 0 comes from extraction §2. Unchanged: every Go/Rust record, catalogue and report byte (checked against the previous files) |

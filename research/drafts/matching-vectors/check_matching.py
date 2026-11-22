@@ -66,9 +66,10 @@ PROFILES[("ts-tokens", "draft-2")] = {
               "unterminated-literal", "malformed-literal", "malformed-identifier", "unbalanced-delimiter"},
     "literals": {"number", "bigint", "string", "template", "template-head", "template-middle", "template-tail", "regex",
                  "jsx-text", "jsx-string"}}
-PROFILES[("text-plain", "draft-1")] = {
+PROFILES[("text-plain", "draft-1")] = {"contract": "traceweave-text-winnow-draft-1",
     "lang": "text", "exclusions": (), "channels": ("exact", "folded", "skeleton"),
     "codes": {"invalid-utf8", "nul", "input-too-large"}, "literals": set()}
+PROFILES[("text-plain", "draft-1")]["lang"] = "text"
 DOMAINS = {"traceweave-token-winnow-draft-1": b"traceweave/token-kgram/draft-1",
            "traceweave-text-winnow-draft-1": b"traceweave/text-kgram/draft-1"}
 for _p in PROFILES.values():
@@ -122,6 +123,48 @@ def _refuse(s):
 def strict_loads(raw: bytes):
     """UTF-8, no duplicate keys, no non-integer numbers, no NaN/Infinity."""
     return json.loads(raw.decode("utf-8"), object_pairs_hook=_no_dups, parse_float=_refuse, parse_constant=_refuse)
+
+
+MAX_DEPTH = 64          # contract §3.6 step 1 (K4): maximum container nesting of catalogues, configurations, records
+
+
+def strict_document(raw: bytes):
+    """Contract §3.6 step 1 (K3, K4), for catalogues, comparison configurations and records: container nesting
+    (objects and arrays) at most 64, counted on the bytes before parsing; strict JSON (no duplicate keys, no
+    non-integer numbers, no constants); and every key and string a sequence of Unicode scalar values (I-JSON,
+    RFC 7493 §2.1), so a lone surrogate escape is ill-formed."""
+    text = raw.decode("utf-8")
+    deepest, depth, i, n = 0, 0, 0, len(text)
+    while i < n:
+        c = text[i]
+        if c == '"':
+            i += 1
+            while text[i] != '"':
+                i += 2 if text[i] == "\\" else 1
+        elif c in "[{":
+            depth += 1
+            deepest = max(deepest, depth)
+        elif c in "]}":
+            depth -= 1
+        i += 1
+    limit = {"no-depth-limit": 10**9, "depth-limit-strict": MAX_DEPTH - 1}.get(CATALOGUE_VARIANT[0], MAX_DEPTH)
+    if deepest > limit:
+        raise ValueError(f"nesting {deepest} deeper than {MAX_DEPTH}")
+    obj = strict_loads(raw)
+
+    def walk(x):
+        if type(x) is str:
+            yield x
+        elif type(x) is list:
+            for e in x:
+                yield from walk(e)
+        elif type(x) is dict:
+            for k, v in x.items():
+                yield k
+                yield from walk(v)
+    if CATALOGUE_VARIANT[0] != "lone-surrogate-accepted" and any(0xD800 <= ord(ch) <= 0xDFFF for st in walk(obj) for ch in st):
+        raise ValueError("string with a lone surrogate")
+    return obj
 
 
 def canon(x) -> str:
@@ -432,8 +475,8 @@ def comparison_config(raw: bytes):
         text = raw.decode("utf-8")
         if not text.endswith("\n") or "\n" in text[:-1] or "\r" in text:
             return None
-        obj = strict_loads(raw)           # duplicate keys rejected here, before any field is read
-    except (ValueError, UnicodeDecodeError):
+        obj = strict_document(raw)        # depth, duplicate keys, numbers, surrogates: before any field is read
+    except (ValueError, UnicodeDecodeError, IndexError):
         return None
     if type(obj) is not dict or list(obj) != CC_KEYS:
         return None
@@ -442,6 +485,8 @@ def comparison_config(raw: bytes):
     for key in ("minRegionDistinctHashes", "mergeGap", "maxSeedsPerMode", "maxRegionsPerMode"):
         if type(obj[key]) is not int or not 1 <= obj[key] <= U32:
             return None
+    if CATALOGUE_VARIANT[0] != "config-bounds-ignored" and (obj["maxSeedsPerMode"] > 10**7 or obj["maxRegionsPerMode"] > 10**5):
+        return None     # §4 step 5 bounds (decided in draft)
     supp = obj["suppressionCatalogueSha256"]
     if type(supp) is not str or not (supp == "none" or re.fullmatch(r"[0-9a-f]{64}", supp)):
         return None
@@ -463,8 +508,8 @@ def catalogue_rejection(raw: bytes, schema):
         if CATALOGUE_VARIANT[0] == "last-duplicate-key-wins":
             obj = json.loads(raw.decode("utf-8"))
         else:
-            obj = strict_loads(raw)       # duplicate keys rejected here, before any field is read
-    except (ValueError, UnicodeDecodeError):
+            obj = strict_document(raw)    # depth, duplicates, numbers, surrogates: before any field is read
+    except (ValueError, UnicodeDecodeError, IndexError):
         return None, "malformed-catalogue"
     if type(obj) is not dict or type(obj.get("catalogueVersion")) is not str:
         return None, "malformed-catalogue"
@@ -489,6 +534,15 @@ def catalogue_semantic_errors(cat, prof):
     k, w, cap = cfg["k"], cfg["window"], cfg["maxInputBytes"]
     if (cat["profile"]["id"], cat["profile"]["version"]) != (cfg["profile"], cfg["profileVersion"]):
         errs.append("profile triple differs from extractionConfig")
+    if CATALOGUE_VARIANT[0] != "extraction-bounds-ignored":
+        # K1: the extraction configuration must be one a conforming extractor accepts (extraction §10 step 5, §10a).
+        for key, bound in (("k", 16), ("window", 128), ("maxInputBytes", 8388608)):
+            if cfg[key] > bound:
+                errs.append(f"extractionConfig.{key} {cfg[key]} above the extraction bound {bound}")
+        if cfg["contract"] != prof.get("contract", "traceweave-token-winnow-draft-1"):
+            errs.append("extractionConfig.contract is not the profile's contract")
+        if errs:
+            return errs
     if tuple(cfg["channels"]) != tuple(prof["channels"]):
         errs.append("extractionConfig.channels is not the profile's declared channel list")
         return errs
@@ -786,7 +840,15 @@ VARIANTS = [
     ("channels-hardcoded", "L1: modes fixed to exact and normalized whatever the configuration says"),
     ("mode-mismatch-ignored", "L2: modes not equal to the catalogue channels are intersected instead of rejected"),
     ("modes-echo-sorted", "L3: comparison.modes echoed in sorted order instead of the configured order"),
+    ("extraction-bounds-ignored", "K1: extractionConfig outside the extraction bounds accepted (Go reading)"),
+    ("extracted-profiles-only", "K2: builder refuses registered profiles it does not extract, e.g. text-plain (Rust reading)"),
+    ("lone-surrogate-accepted", "K3: lone surrogate accepted at step 1, so the version check decides (Go reading)"),
+    ("no-depth-limit", "K4: no nesting limit (Rust reading)"),
+    ("depth-limit-strict", "K4: limit applied at 64 instead of above 64 (off by one)"),
+    ("config-bounds-ignored", "Bounds: maxSeedsPerMode above 10^7 or maxRegionsPerMode above 10^5 accepted"),
 ]
+CATALOGUE_LEVEL_VARIANTS = {"suppression-lenient-digest", "last-duplicate-key-wins", "extraction-bounds-ignored",
+                            "lone-surrogate-accepted", "no-depth-limit", "depth-limit-strict", "config-bounds-ignored"}
 
 
 # ------------------------------------------------------------------ report rules beyond the schema (contract §6)
@@ -1006,6 +1068,11 @@ def vector_inputs(v, doc, ctx, stats=None):
                 _, data, _, _, _ = ctx.sources.get(a["source"])
                 texts[side][a["id"]] = data
             built = build_catalogue(entry, ctx.sources)
+            if "configOverride" in entry:
+                # K1 at-bound vectors: an error-only catalogue whose extractionConfig is changed within the bounds.
+                need(all(a["status"] == "error" for a in built["artifacts"]), "configOverride only for error-only catalogues")
+                built["extractionConfig"].update(entry["configOverride"])
+                built["profile"]["configSha256"] = sha(ex_config_bytes(built["extractionConfig"]))
             if "canonical" in entry:
                 need("fabricated" not in entry, f"{side}: canonical catalogues are not fabricated")
                 need(entry["canonical"] == built, f"{side} catalogue differs from the one rebuilt from its extraction records "
@@ -1103,7 +1170,11 @@ def check_all(doc, ctx, negatives, example):
     stats = dict.fromkeys(("catalogues", "fabricated", "synthetic", "pairs", "regions", "reportable", "rejected"), 0)
     need(comparison_config((HERE / doc["comparisonConfigFile"]).read_bytes()) is not None, "shipped comparison config invalid")
     need(sha((HERE / doc["comparisonConfigFile"]).read_bytes()) == doc["comparisonConfigSha256"], "comparison config digest")
-    chn = strict_loads((HERE / "comparison-config-negative-channels.json").read_bytes())
+    bnd = strict_loads((HERE / "comparison-config-bounds.json").read_bytes())
+    for n in bnd["positives"]:
+        need(comparison_config(base64.b64decode(n["bytesBase64"])) is not None, f"bound-positive config {n['id']} rejected")
+    stats["boundsConfigs"] = len(bnd["positives"]) + len(bnd["negatives"])
+    chn = strict_loads((HERE / "comparison-config-negative-channels.json").read_bytes()) + bnd["negatives"]
     stats["channelNegatives"] = len(chn)
     for n in negatives + chn:
         need(comparison_config(base64.b64decode(n["bytesBase64"])) is None, f"negative comparison config {n['id']} accepted")
@@ -1276,6 +1347,16 @@ def corruptions(doc, negatives, example):
                     {"class": "no-match", "code": "below-minimum-evidence"}))
     yield make("text-folded-mode-dropped", "text-plain-three-modes",
                lambda v: v["expectedReport"]["body"]["pairs"][4]["modes"].pop("folded"))
+    yield make("k3-relabelled-unsupported", "k3-lone-surrogate",
+               setp(lambda v: v["expectedReport"]["body"]["rejection"], "code", "unsupported-catalogue"))
+    yield make("k4-depth-64-relabelled-malformed", "k4-depth-64",
+               setp(lambda v: v["expectedReport"]["body"]["rejection"], "code", "malformed-catalogue"))
+    yield make("k1-at-bound-override-out-of-bounds", "k1-extraction-bounds-at-bound",
+               lambda v: v["reference"].__setitem__("configOverride", {"k": 17, "window": 128}))
+    yield make("bounds-at-limits-relabelled-rejected", "bounds-at-limits",
+               lambda v: v["expectedReport"].__setitem__("body", {"inputs": v["expectedReport"]["body"]["inputs"],
+                   "rejection": {"class": "unsupported-input", "code": "unsupported-comparison-config", "side": "comparison-config"},
+                   "reportVersion": REPORT_VERSION, "resultKind": "token-fingerprint-comparison", "status": "rejected"}))
     yield make("wrong-rejection-code", "go-config-mismatch", setp(lambda v: v["expectedReport"]["body"]["rejection"], "code", "profile-mismatch"))
     yield make("wrong-rejection-side", "go-suppression-config-mismatch", setp(lambda v: v["expectedReport"]["body"]["rejection"], "side", "candidate"))
     yield make("insufficient-pair-compared", "go-insufficient-tokens",
@@ -1364,6 +1445,13 @@ def catalogue_rule_self_test(doc, ctx):
         ("unknown-profile-version", lambda c: (c["profile"].__setitem__("version", "draft-9"),
                                                c["extractionConfig"].__setitem__("profileVersion", "draft-9")), "unsupported-profile"),
         ("k1-empty-span-at-end-accepted", k1, None),
+        ("K1-window-129", lambda c: (c["extractionConfig"].__setitem__("window", 129),
+                                     c["profile"].__setitem__("configSha256", sha(ex_config_bytes(c["extractionConfig"])))), "malformed-catalogue"),
+        ("K1-k-u32-max", lambda c: (c["extractionConfig"].__setitem__("k", 2**32 - 1),
+                                    c["profile"].__setitem__("configSha256", sha(ex_config_bytes(c["extractionConfig"])))), "malformed-catalogue"),
+        ("K1-text-contract-on-go", lambda c: (c["extractionConfig"].__setitem__("contract", "traceweave-text-winnow-draft-1"),
+                                              c["profile"].__setitem__("configSha256", sha(ex_config_bytes(c["extractionConfig"])))),
+         "malformed-catalogue"),
         ("input-too-large-with-length", lambda c: art(c, "error").__setitem__("error", {"code": "input-too-large", "offset": 0}),
          "malformed-catalogue"),
         ("null-digest-on-lexical-error", lambda c: art(c, "error").__setitem__("sha256", None), "malformed-catalogue"),
@@ -1485,20 +1573,32 @@ def wrong_implementation_self_test(doc, ctx):
         catching = []
         for v in doc["vectors"]:
             ALLOW_TEST_PROFILES[0] = bool(v.get("testOnlyProfile"))
-            cc_raw, raws, _ = vector_inputs(v, doc, ctx)
+            if name == "extracted-profiles-only":
+                BUILDER_VARIANT[0] = name
+            try:
+                cc_raw, raws, _ = vector_inputs(v, doc, ctx)
+            except CheckError:
+                catching.append(v["id"])     # the wrong builder cannot even build this vector's catalogues
+                BUILDER_VARIANT[0] = None
+                ALLOW_TEST_PROFILES[0] = False
+                continue
+            BUILDER_VARIANT[0] = None
             exp = v["expectedReport"]
             if name == "trailing-lf":
                 if sha(canon_bytes(exp["body"]) + b"\n") != exp["bodySha256"]:
                     catching.append(v["id"])
                 continue
-            if name in ("suppression-lenient-digest", "last-duplicate-key-wins"):
+            if name in CATALOGUE_LEVEL_VARIANTS:
                 CATALOGUE_VARIANT[0] = name
+            if name == "extracted-profiles-only":
+                BUILDER_VARIANT[0] = name
             try:
                 got = compare(raws["reference"], raws["candidate"], cc_raw, ctx.cat_schema, raws.get("suppression"), variant=name)
             except (KeyError, CheckError):
                 got = None      # the wrong implementation cannot even process this vector: caught
             finally:
                 CATALOGUE_VARIANT[0] = None
+                BUILDER_VARIANT[0] = None
                 ALLOW_TEST_PROFILES[0] = False
             if got != exp["body"]:
                 catching.append(v["id"])
@@ -1620,7 +1720,7 @@ def check_record_bytes(rb, rec_schema):
     need(rb.endswith(b"\n") and rb.count(b"\n") == 1, "a record is one line ending in exactly one LF")
     need(b"\r" not in rb, "raw CR in a record")
     try:
-        r = strict_loads(rb[:-1])
+        r = strict_document(rb[:-1])
     except (ValueError, UnicodeDecodeError) as exc:
         raise CheckError(f"record is not strict UTF-8 JSON ({exc})") from None
     schema_check(rec_schema, r, "record")
@@ -1739,13 +1839,27 @@ def check_external_records(path, ctx, doc=None):
     return n, kgrams
 
 
+BUILDER_VARIANT = [None]     # set only by the builder self-test
+
+
 def catalogue_from_records(cfg_raw, items, rec_schema):
-    """Contract §3.8: build catalogue bytes from (id, record bytes) pairs, or raise CheckError."""
+    """Contract §3.8: build catalogue bytes from (id, record bytes) pairs, or raise CheckError.
+    Step 1: any registered profile (K2). Step 2 validates each record as canonical (§2a) and structurally consistent
+    (schema, key order, channel list, codes, Q10 nulls, tokenCount, tokenIndices, values) but does NOT re-derive
+    hashes, because a builder has no input bytes."""
     cfg = parse_extraction_config(cfg_raw)
     need(supported(cfg["profile"], cfg["profileVersion"]) is not None, "unsupported profile")
+    need(BUILDER_VARIANT[0] != "extracted-profiles-only" or cfg["profile"] in ("go-tokens", "rust2024-tokens"),
+         "(wrong implementation) builder refuses a registered profile it does not extract")
+    need(len(items) >= 1, "a catalogue has at least one artifact")
     entries = []
     for aid, rb in items:
-        r = check_record_bytes(rb, rec_schema)
+        if BUILDER_VARIANT[0] == "builder-skips-tokencount":
+            r = json.loads(rb)
+        else:
+            r = check_record_bytes(rb, rec_schema)
+        if BUILDER_VARIANT[0] == "builder-rederives-hashes" and r["result"]["status"] != "error":
+            check_record_hashes(r, cfg)
         res = r["result"]
         need(not (res["status"] == "error" and res["error"]["code"] == "unsupported-config"),
              "an unsupported-config record cannot enter a catalogue")
@@ -1818,18 +1932,22 @@ def check_records(rdoc, mdoc, ctx):
     mvec = {v["id"]: v for v in mdoc["vectors"]}
 
     def rec_bytes(ref):
+        if isinstance(ref, dict):     # an artifact entry: inline recordText, or a record reference
+            if "recordText" in ref:
+                return ref["recordText"].encode("utf-8")
+            ref = ref["record"]
         return by_id[ref] if "#" not in ref else resolve_record(ref, ctx)["expectedRecordText"].encode("utf-8")
     for c in rdoc["cataloguesFromRecords"]:
         ALLOW_TEST_PROFILES[0] = bool(c.get("testOnlyProfile"))
         try:
             cb = catalogue_from_records((HERE / c["extractionConfigFile"]).read_bytes(),
-                                        [(a["id"], rec_bytes(a["record"])) for a in c["artifacts"]], ctx.rec_schema)
+                                        [(a["id"], rec_bytes(a)) for a in c["artifacts"]], ctx.rec_schema)
             need(sha(cb) == c["expectedCatalogueSha256"], f"{c['id']}: catalogue from records digest")
             need(catalogue_rejection(cb, ctx.cat_schema)[1] is None, f"{c['id']}: catalogue fails the §3.6 rules")
             if "sameAs" in c:
                 vid, side = c["sameAs"].split("#", 1)[1].split("/")
                 need(sha(cb) == mvec[vid][side]["sha256"], f"{c['id']}: differs from the catalogue in {c['sameAs']}")
-            elif any("#" in a["record"] for a in c["artifacts"]):
+            elif any("recordText" in a or "#" in a["record"] for a in c["artifacts"]):
                 pass    # records of another lane, validated by check_external_records()
             elif any(next(r for r in rdoc["records"] if r["id"] == a["record"]).get("rederivedFromTokens") for a in c["artifacts"]):
                 pass    # re-derived records were each checked against derive_result() above; no extraction vector holds them
@@ -1843,7 +1961,7 @@ def check_records(rdoc, mdoc, ctx):
     for c in rdoc["catalogueBuildRejections"]:
         try:
             catalogue_from_records((HERE / c["extractionConfigFile"]).read_bytes(),
-                                   [(a["id"], by_id[a["record"]]) for a in c["artifacts"]], ctx.rec_schema)
+                                   [(a["id"], rec_bytes(a)) for a in c["artifacts"]], ctx.rec_schema)
         except CheckError:
             stats["rejections"] += 1
             continue
@@ -1979,7 +2097,7 @@ def main(argv):
     print(f"PASS {path.name}: vectors={len(doc['vectors'])} catalogues-rebuilt={stats['catalogues']} "
           f"synthetic-catalogues={stats['synthetic']} fabricated-catalogues={stats['fabricated']} pairs={stats['pairs']} "
           f"regions={stats['regions']} reportable={stats['reportable']} rejected-reports={stats['rejected']} "
-          f"comparison-config-negatives={len(negatives)}/{len(negatives)} + channel-list negatives {stats['channelNegatives']}/{stats['channelNegatives']} rejected; example-report.json valid")
+          f"comparison-config-negatives={len(negatives)}/{len(negatives)} + channel-list and bound negatives {stats['channelNegatives']}/{stats['channelNegatives']} rejected, bound positives accepted; example-report.json valid")
     print("  rule situations (vectors each, minimum 2): " + ", ".join(f"{k}={n}" for k, n in stats["situations"].items()))
     missed = []
     results = []
@@ -2056,6 +2174,16 @@ def main(argv):
         except CheckError as exc:
             rec_results.append((name, str(exc)))
         print(f"  record corruption {name}: {'REJECTED: ' + rec_results[-1][1] if rec_results[-1][1] else 'ACCEPTED (checker defect)'}")
+    for bv in ("builder-rederives-hashes", "builder-skips-tokencount", "extracted-profiles-only"):
+        BUILDER_VARIANT[0] = bv
+        try:
+            check_records(rdoc, doc, ctx)
+            rec_results.append((f"wrong-builder-{bv}", None))
+        except (CheckError, KeyError, ValueError, TypeError) as exc:
+            rec_results.append((f"wrong-builder-{bv}", str(exc)))
+        finally:
+            BUILDER_VARIANT[0] = None
+        print(f"  record corruption wrong-builder-{bv}: {'REJECTED: ' + rec_results[-1][1] if rec_results[-1][1] else 'ACCEPTED (checker defect)'}")
     rec_missed = [n for n, m in rec_results if m is None]
     print(f"{'PASS' if not rec_missed else 'FAIL'} record corruption self-test: rejected "
           f"{len(rec_results) - len(rec_missed)}/{len(rec_results)}")

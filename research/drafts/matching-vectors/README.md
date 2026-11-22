@@ -7,12 +7,13 @@ Status: draft for review, 2026-11-22. These vectors accompany the [catalogue and
 | File | Contents |
 | --- | --- |
 | `record.schema.json` | Draft schema of the canonical extraction record (contract §2a, amendment A1) |
-| `records.json` | 29 expected records (bytes and SHA-256), 5 catalogues built from records (one from the text lane's `text-plain` records), 3 refused builds |
+| `records.json` | 29 expected records (bytes and SHA-256), 7 catalogues built from records (two from the text lane's `text-plain` records, one from an inline record whose hash was altered consistently, which a builder accepts), 6 refused builds |
 | `catalogue.schema.json`, `report.schema.json` | Draft JSON Schema 2020-12 (draft-2). They use only the keywords `check_matching.py` interprets |
 | `comparison-config.json` | Exact comparison configuration bytes (contract §4), SHA-256 `39345e9c…147333` |
 | `comparison-config-negative.json` | 22 configurations that MUST be rejected |
 | `extraction-go.json`, `extraction-rust.json` | 17 new synthetic inputs (15 Go, 2 Rust) in the [extraction vector](../extraction-vectors/README.md) format, with the shipped 1 MiB configurations |
-| `matching.json` | 66 matching vectors |
+| `matching.json` | 76 matching vectors |
+| `comparison-config-bounds.json` | A5: 4 configurations above the seed and region bounds (MUST be rejected) and 4 at or just below them (MUST be accepted) |
 | `config-three-channel-test.json`, `extraction-go-classes.json` | Amendment A3: the TEST-ONLY three-channel profile's configuration, and two Go inputs with equal class sequences |
 | `comparison-config-negative-channels.json` | 5 channel-list configurations that MUST be rejected (A3; the text list was removed in A4 when `text-plain` was registered) |
 | `example-report.json` | One report document (body plus provenance). The commits are placeholders |
@@ -63,6 +64,7 @@ The checker rejects a corrupted copy that relabels a `computed-then-reviewed` mo
 | Suppression arithmetic (synthetic) | `rv-common-reduces-evidence`, `-2`, `-unsuppressed` |
 | Channel lists (A3, TEST-ONLY profile `go-tokens-three-channel-test`, channels `exact`, `normalized`, `classes`) | `tc-rename` (exact no match; normalized and classes match), `tc-classes-only` (only `classes` matches), `tc-format-suppressed` (suppression per mode, three `distinctHashes` keys), `tc-mode-mismatch-three-on-two`, `tc-mode-mismatch-two-on-three` |
 | Real `text-plain` (A4; records from `../extraction-vectors-text/records-text-plain.json`, modes `exact`, `folded`, `skeleton`, `minRegionDistinctHashes` 1, `mergeGap` 8) | `text-plain-three-modes`: identical and reflowed copies match in all three modes; the Cyrillic homoglyph variant matches only in `skeleton` (seed (7,7)); unrelated text shares nothing. Expectations derived by hand from the recorded fingerprints |
+| I2 rulings (A5) | `k1-extraction-bounds-k17`, `k1-extraction-bounds-max-input` (out-of-bound `extractionConfig` with a correct digest: `malformed-catalogue`), `k1-extraction-bounds-at-bound` (k 16, window 128 accepted); `k3-lone-surrogate`, `k3-non-integer-number` (`malformed-catalogue` at step 1); `k4-depth-64` (within the limit: `unsupported-catalogue`), `k4-depth-65` (`malformed-catalogue`); `bounds-seeds-above`, `bounds-regions-above` (rejected), `bounds-at-limits` (accepted). In `records.json`: `cat-k2-text-plain-registered`, `cat-builder-hash-not-rederived`, `build-tokencount-mismatch`, `build-unregistered-profile`, `build-empty-artifact-list` |
 | Caps | `go-output-caps`, `go-output-caps-2` (region truncation with uncapped counts; seed limit at and above the limit); `go-cap-straddles-ambiguous`, `-mirror` (a listed region stays ambiguous when its partner is truncated) |
 | Invariance | `go-invariance-three-references`, `go-invariance-plus-unrelated` (3 ok references sharing the copied loop; adding an unrelated reference changes no pair; checked as an invariance group) |
 | Suppression definition and order | `go-suppression-artifact-count` (artifactCount counts ok, insufficient and error entries: 3); `go-suppression-unexpected` (`none` plus a supplied catalogue is rejected); `go-suppression-order-binding-before-reference`, `-binding-before-validity`, `-malformed-bound`, `-candidate-validity-first`, `-candidate-config-first`, `-profile-before-config` |
@@ -102,15 +104,15 @@ python3 -I research/drafts/matching-vectors/build_vectors.py   # regenerates eve
 `check_matching.py` output on 2026-11-22 (Python 3.14.6), with per-item lines omitted:
 
 ```
-PASS matching.json: vectors=66 catalogues-rebuilt=98 synthetic-catalogues=30 fabricated-catalogues=9 pairs=69 regions=169 reportable=94 rejected-reports=19 comparison-config-negatives=22/22 + channel-list negatives 5/5 rejected; example-report.json valid
-  rule situations (vectors each, minimum 2): match-over-ambiguous=2, match-over-weaker=2, ambiguous-over-weaker=2, below-over-common=3, region-repeats-hash=4, mixed-common-region=2, merge-split-at-gap-plus-one=2, merge-join-at-gap=20, span-overlap-without-shared-position=3, truncated=4, seed-limit=2, ambiguity-before-cap=2
-PASS corruption self-test: rejected 58/58
-PASS catalogue rule self-test (no extraction records used): 36/36 as stated
+PASS matching.json: vectors=76 catalogues-rebuilt=112 synthetic-catalogues=30 fabricated-catalogues=15 pairs=71 regions=171 reportable=96 rejected-reports=27 comparison-config-negatives=22/22 + channel-list and bound negatives 9/9 rejected, bound positives accepted; example-report.json valid
+  rule situations (vectors each, minimum 2): match-over-ambiguous=2, match-over-weaker=2, ambiguous-over-weaker=2, below-over-common=3, region-repeats-hash=4, mixed-common-region=2, merge-split-at-gap-plus-one=2, merge-join-at-gap=21, span-overlap-without-shared-position=3, truncated=4, seed-limit=2, ambiguity-before-cap=2
+PASS corruption self-test: rejected 62/62
+PASS catalogue rule self-test (no extraction records used): 39/39 as stated
 PASS required-field self-test: 706/706 single-field deletions handled (required fields rejected, optional provenance field accepted)
-PASS wrong-implementation self-test: rejected 27/27
+PASS wrong-implementation self-test: rejected 33/33
 PASS records-text-plain.json (text lane, external): 60/60 records valid, 1023 k-gram hashes recomputed from recorded values
-PASS records.json: records=29 (null input fields: 4) catalogues-from-records=5 (2 equal to matching.json catalogues, 1 to a rebuild from extraction vectors, 1 from re-derived records, 1 from text-plain records) build-rejections=3
-PASS record corruption self-test: rejected 52/52
+PASS records.json: records=29 (null input fields: 4) catalogues-from-records=7 (2 equal to matching.json catalogues, 1 to a rebuild from extraction vectors, 1 from re-derived records, 1 from text-plain records) build-rejections=6
+PASS record corruption self-test: rejected 55/55
 ```
 
 **What the checker does.** For each vector it:
@@ -123,7 +125,7 @@ PASS record corruption self-test: rejected 52/52
 
 It then **recognizes rule situations from the bodies themselves**, not from tags, and requires each in at least two vectors.
 
-**Corruption self-test** (58 corruptions, all rejected; A4 adds the `text-plain` skeleton match dropped and the folded mode dropped; A3 adds: a mode dropped from a pair, modes echo reordered, a suppression `distinctHashes` key missing, an extra mode on a Go pair, a mode mismatch relabelled, the test-only flag dropped; digests are refreshed so only the targeted layer is wrong):
+**Corruption self-test** (62 corruptions, all rejected; A5 adds the K3 and K4 rejections relabelled, an at-bound override moved out of bounds, and the at-limits vector relabelled rejected; A4 adds the `text-plain` skeleton match dropped and the folded mode dropped; A3 adds: a mode dropped from a pair, modes echo reordered, a suppression `distinctHashes` key missing, an extra mode on a Go pair, a mode mismatch relabelled, the test-only flag dropped; digests are refreshed so only the targeted layer is wrong):
 - spans and regions: wrong span; reordered regions or pairs; missing or extra region; missing pair; removed seed;
 - outcomes: wrong outcome code or class; exact match claimed for the rename pair; ambiguity cleared, or set on span overlap; region status downgraded; insufficient-tokens pair given an outcome; pair precedence swapped; wrong rejection code or side;
 - counts: distinct count inflated; common count cleared; containment numerator wrong; fraction reduced; float similarity; truncated count wrong; region beyond the cap; seed limit not applied; seed count wrong;
@@ -139,9 +141,9 @@ Two corrupted files were also written to `$TMPDIR` and passed to the CLI. Both f
 - an extra seed `[5,5]` in the first `rv-gap-boundary` region (`seedCount below listed seeds`);
 - `inputs.suppressionCatalogueSha256` set to `none` in `go-boilerplate-suppressed` (`comparison.suppressionCatalogueSha256 differs from inputs`).
 
-**Record checks.** The checker has its own record writer (fixed key order, ECMAScript escaping). For every record it requires strict JSON, the record schema, byte equality with its own canonical re-serialization, and byte equality with the record it derives from the source vector (whose hashes it recomputes from tokens). It rebuilds the two catalogues from record bytes alone and runs the three refused builds. **Configuration rule.** The checker requires exactly one of `configFile`/`configBase64`, requires those bytes to equal the source vector's configuration, and requires `configSha256` to equal their digest and the record's `configSha256`. **Record corruption self-test** (52 cases, all rejected): A4 adds a wrong record in the text catalogue, and three in-memory corruptions of the text lane's records (a skeleton value changed, channels reordered, an error code outside the text list); A3 channels out of declared order; `classes` missing; `classes` without values; `values` in `exact`; an extra channel on a Go record; non-empty `classes` values; re-derivation undeclared; `tokenIndices` on a Go record; `tokenIndices` omitted, or after `values`, on an exclusion record; `values` including excluded tokens; exclusions ignored; normalized positions taken from the exact channel; wrong exclusion-catalogue digest; configuration not named; wrong configuration file; wrong configuration digest; `inputBytes` field name; extra `contract` key; missing `recordVersion`; envelope or result keys reordered; JCS-sorted keys; no final LF; CRLF; insignificant whitespace; non-ASCII escaped; uppercase hex escape; raw control character; unnecessary `\u0061` escape; non-null input digest, profile or offset for unsupported-config; non-null length for input-too-large; null offset for a lexical error; k-grams, window selections or values omitted; `inserted:false`; wrong or float `tokenCount`; duplicate key; wrong input digest; changed fingerprint hash; wrong record digest; wrong catalogue-from-records digest; a refused build made valid; input-too-large coverage dropped.
+**Record checks.** The checker has its own record writer (fixed key order, ECMAScript escaping). For every record it requires strict JSON, the record schema, byte equality with its own canonical re-serialization, and byte equality with the record it derives from the source vector (whose hashes it recomputes from tokens). It rebuilds the two catalogues from record bytes alone and runs the three refused builds. **Configuration rule.** The checker requires exactly one of `configFile`/`configBase64`, requires those bytes to equal the source vector's configuration, and requires `configSha256` to equal their digest and the record's `configSha256`. **Record corruption self-test** (55 cases, all rejected): A5 adds three wrong builders (one that re-derives hashes, one that skips the `tokenCount` check, one that builds only Go and Rust); A4 adds a wrong record in the text catalogue, and three in-memory corruptions of the text lane's records (a skeleton value changed, channels reordered, an error code outside the text list); A3 channels out of declared order; `classes` missing; `classes` without values; `values` in `exact`; an extra channel on a Go record; non-empty `classes` values; re-derivation undeclared; `tokenIndices` on a Go record; `tokenIndices` omitted, or after `values`, on an exclusion record; `values` including excluded tokens; exclusions ignored; normalized positions taken from the exact channel; wrong exclusion-catalogue digest; configuration not named; wrong configuration file; wrong configuration digest; `inputBytes` field name; extra `contract` key; missing `recordVersion`; envelope or result keys reordered; JCS-sorted keys; no final LF; CRLF; insignificant whitespace; non-ASCII escaped; uppercase hex escape; raw control character; unnecessary `\u0061` escape; non-null input digest, profile or offset for unsupported-config; non-null length for input-too-large; null offset for a lexical error; k-grams, window selections or values omitted; `inserted:false`; wrong or float `tokenCount`; duplicate key; wrong input digest; changed fingerprint hash; wrong record digest; wrong catalogue-from-records digest; a refused build made valid; input-too-large coverage dropped.
 
-**Catalogue rule self-test** (36 cases, no extraction records, as a consumer has). It covers:
+**Catalogue rule self-test** (39 cases, A5 adds window 129, k 2³²−1 and a text contract on a Go catalogue; no extraction records, as a consumer has). It covers:
 - ordering and identity: unsorted artifacts; duplicate id or digest;
 - forbidden fields: source-text and token-list fields;
 - binding: config digest; profile triple;
@@ -156,7 +158,7 @@ Two corrupted files were also written to `$TMPDIR` and passed to the CLI. Both f
 
 **Required-field self-test** (M1.3, 706 deletions). Each single-field deletion must be rejected, except `provenance.generatedAt`, which must be accepted. The instances are a catalogue with ok, insufficient and error entries, 3 compared bodies, 4 rejected bodies and the report document.
 
-**Wrong-implementation self-test** (27 variants, all rejected; A3 adds L1 modes hard-coded to exact/normalized, caught by 5 vectors; L2 a mode mismatch intersected instead of rejected, caught by 2; L3 modes echoed sorted, caught by 3). Each variant re-derives every body under one misreading. It is caught when any body or body digest differs. The first 13 are the reviewer's draft-1 variants:
+**Wrong-implementation self-test** (33 variants, all rejected; A5 adds K1 bounds ignored (2 vectors), K2 builder for extracted profiles only (5), K3 lone surrogate accepted (1), K4 no depth limit (1) and off-by-one depth (1), and comparison bounds ignored (2); A3 adds L1 modes hard-coded to exact/normalized, caught by 5 vectors; L2 a mode mismatch intersected instead of rejected, caught by 2; L3 modes echoed sorted, caught by 3). Each variant re-derives every body under one misreading. It is caught when any body or body digest differs. The first 13 are the reviewer's draft-1 variants:
 
 | # | Variant | Caught by |
 | --- | --- | --- |
@@ -202,7 +204,7 @@ The reviewer's own scripts (`variants.py`, `cleanroom.py` in their scratch direc
   - go/scanner agrees token for token on all 15 Go inputs, including the non-ASCII ones (run before the confirmation-pass additions, which added no new inputs);
   - proc-macro2 agrees on both Rust inputs, and rustc 1.97.1 accepts them;
   - toolchains: go1.27.3 and rustc 1.97.1.
-- The `jsonschema` library in `.venv` validated all 235 valid instances: 139 catalogues, 66 bodies, 29 records and the report document. It rejected 4 record corruptions (`inputBytes`, `contract` key, `inserted:false`, missing `kgrams`) in addition to the earlier body corruptions below. It rejected 8 structural corruptions: extra field, rank, origin, float, class/code mismatch, draft-1 region field, provenance note, and source text in the implementation name.
+- The `jsonschema` library in `.venv` validated all 259 valid instances: 153 catalogues, 76 bodies, 29 records and the report document. It rejected 4 record corruptions (`inputBytes`, `contract` key, `inserted:false`, missing `kgrams`) in addition to the earlier body corruptions below. It rejected 8 structural corruptions: extra field, rank, origin, float, class/code mismatch, draft-1 region field, provenance note, and source text in the implementation name.
 
 **What the checker cannot do.**
 - It does not lex. Token streams rest on `check_vectors.py` and the toolchain comparison above.

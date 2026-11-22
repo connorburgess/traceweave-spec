@@ -469,13 +469,13 @@ def parse_comparison_config(raw: bytes):
             keys = [k for k, _ in items]
             assert len(keys) == len(set(keys))
             return dict(items)
-        obj = json.loads(text, object_pairs_hook=pairs, parse_float=lambda s: (_ for _ in ()).throw(ValueError()),
-                         parse_constant=lambda s: (_ for _ in ()).throw(ValueError()))
+        obj = strict_document(raw)
         assert type(obj) is dict and list(obj) == CC_KEYS
         assert obj["comparison"] == COMPARISON_ID and obj["modes"] in list(CHANNEL_LISTS.values())
         assert TEST_CONTEXT[0] or obj["modes"] != CH3
         for key in ("minRegionDistinctHashes", "mergeGap", "maxSeedsPerMode", "maxRegionsPerMode"):
             assert type(obj[key]) is int and 1 <= obj[key] <= 2**32 - 1
+        assert obj["maxSeedsPerMode"] <= 10**7 and obj["maxRegionsPerMode"] <= 10**5      # §4 step 5 bounds
         s = obj["suppressionCatalogueSha256"]
         assert type(s) is str and (s == "none" or re.fullmatch(r"[0-9a-f]{64}", s))
         assert comparison_config_bytes(obj["minRegionDistinctHashes"], obj["mergeGap"], obj["maxSeedsPerMode"],
@@ -485,15 +485,59 @@ def parse_comparison_config(raw: bytes):
         return None
 
 
+MAX_DEPTH = 64          # contract §3.6 step 1 (K4)
+EXTRACTION_BOUNDS = {"k": 16, "window": 128, "maxInputBytes": 8388608}   # extraction §10 step 5 / §10a (K1)
+FAMILY = {"text-plain": "traceweave-text-winnow-draft-1"}                 # others: traceweave-token-winnow-draft-1
+
+
+def strict_document(raw: bytes):
+    """Contract §3.6 step 1 (K3, K4): UTF-8, container depth <= 64 (scanned before parsing), strict JSON without
+    duplicate keys, non-integer numbers or constants, and every string a sequence of Unicode scalar values."""
+    text = raw.decode("utf-8")
+    depth = deepest = 0
+    in_str = esc = False
+    for ch in text:
+        if in_str:
+            esc, in_str = (False, True) if esc else (ch == "\\", ch != '"')
+        elif ch == '"':
+            in_str = True
+        elif ch in "[{":
+            depth += 1
+            deepest = max(deepest, depth)
+        elif ch in "]}":
+            depth -= 1
+    if deepest > MAX_DEPTH:
+        raise ValueError("nesting deeper than 64")
+
+    def pairs(items):
+        keys = [k for k, _ in items]
+        if len(keys) != len(set(keys)):
+            raise ValueError("duplicate key")
+        return dict(items)
+
+    def refuse(x):
+        raise ValueError("non-integer number or constant")
+    obj = json.loads(text, object_pairs_hook=pairs, parse_float=refuse, parse_constant=refuse)
+
+    def strings(x):
+        if isinstance(x, str):
+            yield x
+        elif isinstance(x, list):
+            for e in x:
+                yield from strings(e)
+        elif isinstance(x, dict):
+            for k, v in x.items():
+                yield k
+                yield from strings(v)
+    if any(0xD800 <= ord(c) <= 0xDFFF for st in strings(obj) for c in st):
+        raise ValueError("lone surrogate")
+    return obj
+
+
 def catalogue_status(raw: bytes):
     """Simplified mirror of contract §3.6 for the catalogues this script produces or fabricates."""
     try:
-        def pairs(items):
-            keys = [k for k, _ in items]
-            if len(keys) != len(set(keys)):
-                raise ValueError("duplicate key")
-            return dict(items)
-        obj = json.loads(raw.decode("utf-8"), object_pairs_hook=pairs)
+        obj = strict_document(raw)
     except (ValueError, UnicodeDecodeError):
         return None, "malformed-catalogue"
     if not isinstance(obj, dict) or not isinstance(obj.get("catalogueVersion"), str):
@@ -505,6 +549,10 @@ def catalogue_status(raw: bytes):
     if (obj["profile"]["id"], obj["profile"]["version"]) not in SUPPORTED_PROFILES:
         return None, "unsupported-profile"
     assert sha(extraction_config_bytes(obj["extractionConfig"])) == obj["profile"]["configSha256"]
+    ec = obj["extractionConfig"]
+    if any(ec[key] > b for key, b in EXTRACTION_BOUNDS.items()) or \
+            ec["contract"] != FAMILY.get(ec["profile"], "traceweave-token-winnow-draft-1"):
+        return None, "malformed-catalogue"                                  # K1: step 6
     return obj, None
 
 
@@ -799,6 +847,21 @@ def main():
     ]
     assert all(parse_comparison_config(b) is None for _, b, _ in chneg)
     TEST_CONTEXT[0] = True
+    bounds = {"description": "Comparison-configuration bounds (contract §4 step 5): maxSeedsPerMode <= 10^7, "
+                             "maxRegionsPerMode <= 10^5. Negatives MUST be rejected; positives MUST be accepted.",
+              "negatives": [{"id": i, "bytesBase64": base64.b64encode(b).decode()} for i, b in (
+                  ("seeds-bound-plus-1", comparison_config_bytes(max_seeds=10**7 + 1)),
+                  ("seeds-u32-max", comparison_config_bytes(max_seeds=2**32 - 1)),
+                  ("regions-bound-plus-1", comparison_config_bytes(max_regions=10**5 + 1)),
+                  ("regions-u32-max", comparison_config_bytes(max_regions=2**32 - 1)))],
+              "positives": [{"id": i, "bytesBase64": base64.b64encode(b).decode()} for i, b in (
+                  ("seeds-at-bound", comparison_config_bytes(max_seeds=10**7)),
+                  ("seeds-bound-minus-1", comparison_config_bytes(max_seeds=10**7 - 1)),
+                  ("regions-at-bound", comparison_config_bytes(max_regions=10**5)),
+                  ("both-at-bound", comparison_config_bytes(max_seeds=10**7, max_regions=10**5)))]}
+    assert all(parse_comparison_config(base64.b64decode(n["bytesBase64"])) is None for n in bounds["negatives"])
+    assert all(parse_comparison_config(base64.b64decode(n["bytesBase64"])) is not None for n in bounds["positives"])
+    (HERE / "comparison-config-bounds.json").write_text(json.dumps(bounds, indent=1) + "\n")
     (HERE / "comparison-config-negative-channels.json").write_text(json.dumps(
         [{"id": i, "reason": r, "bytesBase64": base64.b64encode(b).decode()} for i, b, r in chneg], indent=1) + "\n")
     (HERE / "comparison-config-negative.json").write_text(json.dumps(
@@ -1233,6 +1296,46 @@ def main():
             pair("src.txt", "unrel.txt", copy.deepcopy(none3))]},
         cc=CCT)
 
+    # --- I2 cross-check rulings K1-K4 and bounds (hand-derived before computation) ----------------------
+    vec("k1-extraction-bounds-k17", ["k1", "extraction-bounds", "malformed-catalogue"],
+        "K1: an error-only go-tokens catalogue whose extractionConfig has k 17 (above the extraction bound 16), with "
+        "configSha256 recomputed so the digest binding holds. Step 6 rejects it: malformed-catalogue, reference side.",
+        [("bad.go", f"{NG}#go-err-unterminated-string")], COPY, rej("malformed-catalogue", "reference"),
+        overrides={"reference": "k17"})
+    vec("k1-extraction-bounds-max-input", ["k1", "extraction-bounds", "malformed-catalogue"],
+        "K1: the same with maxInputBytes 8388609 (one above 8 MiB), as the candidate.",
+        SUM, [("bad.go", f"{NG}#go-err-unterminated-string")], rej("malformed-catalogue", "candidate"),
+        overrides={"candidate": "max8m1"})
+    vec("k1-extraction-bounds-at-bound", ["k1", "extraction-bounds"],
+        "K1 companion: both catalogues error-only with k 16 and window 128 (at the bounds) are valid; the pair is not "
+        "compared (reference-extraction-error).",
+        [("bad.go", f"{NG}#go-err-unterminated-string")], [("bad2.go", f"{NG}#go-err-unterminated-comment")],
+        {"status": "compared", "pairs": [pair("bad.go", "bad2.go", status="not-compared", code="reference-extraction-error")]},
+        overrides={"reference": "k16w128", "candidate": "k16w128"})
+    vec("k3-lone-surrogate", ["k3", "strict-json", "malformed-catalogue"],
+        "K3: {\"catalogueVersion\":\"\\ud800\"}: a lone surrogate escape is ill-formed (I-JSON), decided at step 1 "
+        "before the version is read: malformed-catalogue, not unsupported-catalogue.",
+        SUM, COPY, rej("malformed-catalogue", "reference"), overrides={"reference": "surrogate"})
+    vec("k3-non-integer-number", ["k3", "strict-json", "malformed-catalogue"],
+        "Step 1: {\"catalogueVersion\":\"x\",\"a\":1.0} has a non-integer number: malformed-catalogue.",
+        SUM, COPY, rej("malformed-catalogue", "reference"), overrides={"reference": "float"})
+    vec("k4-depth-64", ["k4", "nesting-depth"],
+        "K4: 64 nested containers (the object plus 63 arrays) is within the limit, so step 2 decides: unsupported-catalogue.",
+        SUM, COPY, rej("unsupported-catalogue", "reference"), overrides={"reference": "depth64"})
+    vec("k4-depth-65", ["k4", "nesting-depth", "malformed-catalogue"],
+        "K4: 65 nested containers exceeds the limit of 64: malformed-catalogue at step 1.",
+        SUM, COPY, rej("malformed-catalogue", "reference"), overrides={"reference": "depth65"})
+    vec("bounds-seeds-above", ["config-bounds", "unsupported-comparison-config"],
+        "maxSeedsPerMode 10000001 (one above 10^7): unsupported-comparison-config.",
+        SUM, COPY, rej("unsupported-comparison-config", "comparison-config"), cc=comparison_config_bytes(max_seeds=10**7 + 1))
+    vec("bounds-regions-above", ["config-bounds", "unsupported-comparison-config"],
+        "maxRegionsPerMode 100001 (one above 10^5): unsupported-comparison-config.",
+        SUM, COPY, rej("unsupported-comparison-config", "comparison-config"), cc=comparison_config_bytes(max_regions=10**5 + 1))
+    vec("bounds-at-limits", ["config-bounds"],
+        "maxSeedsPerMode 10^7 and maxRegionsPerMode 10^5 (at the bounds) are valid: GO_SUM against itself matches completely.",
+        SUM, COPY, {"status": "compared", "pairs": [pair("sum.go", "copy.go", both(exhaust()))]},
+        cc=comparison_config_bytes(max_seeds=10**7, max_regions=10**5))
+
     cc_cache = {}
     out = []
     for v in V:
@@ -1293,6 +1396,24 @@ def main():
                     cat["catalogueVersion"] = "traceweave-catalogue-draft-9"
                     b = canonical(cat)
                     note = "Catalogue built from the listed artifacts with catalogueVersion changed to traceweave-catalogue-draft-9."
+                elif ov in ("k17", "max8m1", "k16w128"):
+                    upd = {"k17": {"k": 17}, "max8m1": {"maxInputBytes": 8388609}, "k16w128": {"k": 16, "window": 128}}[ov]
+                    cat["extractionConfig"].update(upd)
+                    cat["profile"]["configSha256"] = sha(extraction_config_bytes(cat["extractionConfig"]))
+                    b = canonical(cat)
+                    note = (f"Catalogue built from the listed artifacts (error entries only), then extractionConfig changed to "
+                            f"{json.dumps(upd)} and configSha256 recomputed.")
+                    if ov == "k16w128":
+                        entry.update({"sha256": sha(b), "canonical": json.loads(b), "configOverride": upd})
+                        cats[side] = entry
+                        bytes_[side] = b
+                        continue
+                elif ov in ("surrogate", "float", "depth64", "depth65"):
+                    b = {"surrogate": b'{"catalogueVersion":"\\ud800"}',
+                         "float": b'{"catalogueVersion":"x","a":1.0}',
+                         "depth64": b'{"catalogueVersion":"x","a":' + b"[" * 63 + b"]" * 63 + b"}",
+                         "depth65": b'{"catalogueVersion":"x","a":' + b"[" * 64 + b"]" * 64 + b"}"}[ov]
+                    note = "Fabricated bytes for contract §3.6 step 1 (" + ov + "); the artifact list is not used."
                 elif ov == "dupkey":
                     c = canonical(cat)
                     b = c[:-1] + b',"catalogueVersion":"traceweave-catalogue-draft-9"}'
@@ -1349,7 +1470,7 @@ def main():
                                    "pair-precedence", "match-over-ambiguous", "ambiguous-over-weaker",
                                    "below-over-common", "mixed-common-region", "invariance", "ambiguity-before-cap",
                                    "suppression-artifact-count", "suppression-order", "input-too-large",
-                                   "three-channel", "mode-mismatch", "text-plain"}),
+                                   "three-channel", "mode-mismatch", "text-plain", "k1", "k3", "k4", "config-bounds"}),
            "vectors": out}
     (HERE / "matching.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
     build_records(sources, out)
@@ -1419,9 +1540,17 @@ def record_bytes(cfg_raw, data, result):
     return (json.dumps(rec, separators=(",", ":"), ensure_ascii=False) + "\n").encode("utf-8")
 
 
-def catalogue_from_records(cfg_raw, items):
-    """Contract §3.8: items = [(id, record bytes)]. Returns catalogue bytes, or raises ValueError."""
+REGISTERED = {("go-tokens", "draft-1"), ("rust2024-tokens", "draft-1"), ("ts-tokens", "draft-2"), ("text-plain", "draft-1")}
+
+
+def catalogue_from_records(cfg_raw, items, allow_test=True):
+    """Contract §3.8: items = [(id, record bytes)]. Returns catalogue bytes, or raises ValueError.
+    Validation depth (§3.8 step 2): canonical form and §2a structure, including tokenCount; no hash re-derivation."""
     cfg = json.loads(cfg_raw)
+    if not items:
+        raise ValueError("no artifacts: a catalogue has at least one")
+    if (cfg["profile"], cfg["profileVersion"]) not in REGISTERED and not (allow_test and "test" in cfg["profile"]):
+        raise ValueError("profile not registered")
     entries = []
     for aid, rb in items:
         r = json.loads(rb)
@@ -1430,6 +1559,8 @@ def catalogue_from_records(cfg_raw, items):
         res = r["result"]
         if res["status"] == "error" and res["error"]["code"] == "unsupported-config":
             raise ValueError("unsupported-config records yield no catalogue entry")
+        if res["status"] != "error" and res["tokenCount"] != len(res["tokens"]):
+            raise ValueError("tokenCount differs from the number of tokens")
         e = {"byteLength": r["inputLength"], "id": aid, "sha256": r["inputSha256"], "status": res["status"]}
         if res["status"] == "error":
             e["error"] = dict(res["error"])
@@ -1557,6 +1688,46 @@ def build_records(sources, matching_out):
                  "artifacts": [{"id": a, "record": f"{TEXT_RECORDS}#{r}"} for a, r in titems],
                  "expectedCatalogueSha256": sha(cb),
                  "note": "Built from frozen text-plain records (ok, insufficient-tokens, nul error): channels exact, folded, skeleton."})
+    # K2: build from records for every registered profile, text-plain included (explicit vector).
+    k2 = [("latin.txt", "rec-plain-confusable-latin"), ("thai.txt", "rec-plain-thai")]
+    cb = catalogue_from_records((HERE / TEXT_CFG).read_bytes(), [(a, text_record(r)[0]) for a, r in k2], allow_test=False)
+    cats.append({"id": "cat-k2-text-plain-registered", "extractionConfigFile": TEXT_CFG,
+                 "artifacts": [{"id": a, "record": f"{TEXT_RECORDS}#{r}"} for a, r in k2], "expectedCatalogueSha256": sha(cb),
+                 "note": "K2 (I2 cross-check): a builder builds from records for every registered profile, text-plain included; "
+                         "refusing a registered profile is non-conformant (contract §3.8 step 1)."})
+    # §3.8 step 2 validation depth: a hash changed consistently in kgrams and fingerprints is ACCEPTED (no re-derivation).
+    r0 = json.loads(by_id["rec-go-ok"][0])
+    old = r0["result"]["channels"]["exact"]["fingerprints"][0]["hash"]
+    for g in r0["result"]["channels"]["exact"]["kgrams"] + r0["result"]["channels"]["exact"]["fingerprints"]:
+        if g["hash"] == old:
+            g["hash"] = "0123456789abcdef"
+    altered = (json.dumps(r0, separators=(",", ":"), ensure_ascii=False) + "\n").encode("utf-8")
+    cb = catalogue_from_records(go_cfg_raw, [("a.go", altered)])
+    cats.append({"id": "cat-builder-hash-not-rederived", "extractionConfigFile": "../extraction-vectors/config-go.json",
+                 "artifacts": [{"id": "a.go", "recordText": altered.decode("utf-8")}], "expectedCatalogueSha256": sha(cb),
+                 "note": "§3.8 step 2: rec-go-ok with its first exact fingerprint hash replaced by 0123456789abcdef in both "
+                         "kgrams and fingerprints. The record is canonical and structurally consistent, so the builder ACCEPTS it: "
+                         "builders do not re-derive hashes (they have no input bytes)."})
+    rows = []
+    r1 = json.loads(by_id["rec-go-ok"][0])
+    r1["result"]["tokenCount"] += 1
+    rows.append(("build-tokencount-mismatch", "config-go.json",
+                 [("a.go", None, (json.dumps(r1, separators=(",", ":"), ensure_ascii=False) + "\n"))],
+                 "§3.8 step 2: tokenCount differs from the number of tokens"))
+    rows.append(("build-unregistered-profile", "config-exclusion-test.json", [("e1.go", "rec-excl-semi-newlines", None)],
+                 "§3.8 step 1: go-tokens-exclusion-test is TEST-ONLY, not registered (no testOnlyProfile flag)"))
+    rows.append(("build-empty-artifact-list", "config-go.json", [], "a catalogue has at least one artifact"))
+    extra_rej = []
+    for rid, cfgname, items, reason in rows:
+        try:
+            catalogue_from_records((EXV / cfgname).read_bytes(),
+                                   [(a, txt.encode("utf-8") if txt else by_id[r][0]) for a, r, txt in items], allow_test=False)
+            raise SystemExit(f"builder accepted {rid}")
+        except ValueError:
+            pass
+        extra_rej.append({"id": rid, "extractionConfigFile": f"../extraction-vectors/{cfgname}",
+                          "artifacts": [({"id": a, "record": r} if r else {"id": a, "recordText": txt}) for a, r, txt in items],
+                          "reason": reason})
     rej = []
     for rid, cfgname, items, reason in rejections:
         try:
@@ -1571,7 +1742,7 @@ def build_records(sources, matching_out):
                    "explicitly: configFile (path relative to this file) or configBase64 (the exact bytes, used for rejected "
                    "configurations), plus configSha256 over those bytes. expectedRecordText is the UTF-8 decoding of the "
                    "exact record bytes, including the final LF; expectedRecordSha256 is over those bytes.",
-           "records": records, "cataloguesFromRecords": cats, "catalogueBuildRejections": rej}
+           "records": records, "cataloguesFromRecords": cats, "catalogueBuildRejections": rej + extra_rej}
     (HERE / "records.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
     print(f"wrote {len(records)} record vectors, {len(cats)} catalogue-from-records vectors, {len(rej)} build rejections")
 

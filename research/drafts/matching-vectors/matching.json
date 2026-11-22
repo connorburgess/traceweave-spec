@@ -9,6 +9,7 @@
   "ambiguous-over-weaker",
   "below-over-common",
   "boilerplate",
+  "config-bounds",
   "config-mismatch",
   "distinct-evidence",
   "duplicate-key",
@@ -19,6 +20,9 @@
   "input-too-large",
   "insufficient-tokens",
   "invariance",
+  "k1",
+  "k3",
+  "k4",
   "large-host",
   "malformed-candidate",
   "malformed-catalogue",
@@ -51382,6 +51386,4457 @@
       "version": "draft-1"
      },
      "referenceArtifactCount": 2,
+     "status": "compared",
+     "suppression": {
+      "status": "none"
+     }
+    }
+   }
+  },
+  {
+   "id": "k1-extraction-bounds-k17",
+   "tags": [
+    "k1",
+    "extraction-bounds",
+    "malformed-catalogue"
+   ],
+   "description": "K1: an error-only go-tokens catalogue whose extractionConfig has k 17 (above the extraction bound 16), with configSha256 recomputed so the digest binding holds. Step 6 rejects it: malformed-catalogue, reference side.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "file": "comparison-config.json"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "bad.go",
+      "source": "../extraction-vectors/go.json#go-err-unterminated-string"
+     }
+    ],
+    "sha256": "297951f71f8a393045397e3131ae91ec0f1e9b3d78dd33e882c43d3ec6731b59",
+    "bytesBase64": "eyJhcnRpZmFjdHMiOlt7ImJ5dGVMZW5ndGgiOjE3LCJlcnJvciI6eyJjb2RlIjoidW50ZXJtaW5hdGVkLWxpdGVyYWwiLCJvZmZzZXQiOjV9LCJpZCI6ImJhZC5nbyIsInNoYTI1NiI6IjQ0NzQxODU0MGVkNjkwZmJjZDk0M2IxYmU2Nzg3ZjU0YTI2YmNlOTkzNjJjMzZmZTA5MDZkN2QzMzYyYmRiODMiLCJzdGF0dXMiOiJlcnJvciJ9XSwiY2F0YWxvZ3VlVmVyc2lvbiI6InRyYWNld2VhdmUtY2F0YWxvZ3VlLWRyYWZ0LTIiLCJleHRyYWN0aW9uQ29uZmlnIjp7ImNoYW5uZWxzIjpbImV4YWN0Iiwibm9ybWFsaXplZCJdLCJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJoYXNoIjoic2hhMjU2LWZpcnN0OC11NjRiZSIsImsiOjE3LCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2LCJwcm9maWxlIjoiZ28tdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwid2luZG93Ijo0fSwicHJvZmlsZSI6eyJjb25maWdTaGEyNTYiOiI3ZTU2NTY0OWYyYWQzMzFiZWM4NDFhNWJkMTQ2MDI0NmMzZGI3ZTkxM2FkMTgwMzU2NTY4NTRiNGNiMGIzOGY4IiwiaWQiOiJnby10b2tlbnMiLCJ2ZXJzaW9uIjoiZHJhZnQtMSJ9fQ==",
+    "fabricated": "Catalogue built from the listed artifacts (error entries only), then extractionConfig changed to {\"k\": 17} and configSha256 recomputed."
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "copy.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 127,
+       "id": "copy.go",
+       "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "status": "ok",
+       "tokenCount": 40,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "13c53975ffd60dcc",
+           "position": 2,
+           "span": [
+            16,
+            29
+           ]
+          },
+          {
+           "hash": "330210cd0c3466ab",
+           "position": 3,
+           "span": [
+            17,
+            30
+           ]
+          },
+          {
+           "hash": "3d497652a23fceab",
+           "position": 5,
+           "span": [
+            25,
+            36
+           ]
+          },
+          {
+           "hash": "3c56878685555e32",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "2f8f40a61dcfae85",
+           "position": 12,
+           "span": [
+            47,
+            56
+           ]
+          },
+          {
+           "hash": "423c6c9d5d7a23e7",
+           "position": 16,
+           "span": [
+            55,
+            74
+           ]
+          },
+          {
+           "hash": "02937060fc62470c",
+           "position": 19,
+           "span": [
+            62,
+            83
+           ]
+          },
+          {
+           "hash": "08bdc1a417005230",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "233116908c1f7fdf",
+           "position": 22,
+           "span": [
+            79,
+            89
+           ]
+          },
+          {
+           "hash": "79a8f5e4448bba08",
+           "position": 24,
+           "span": [
+            84,
+            101
+           ]
+          },
+          {
+           "hash": "a036c4dd8fd8dddf",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "725af00bf2abe7a3",
+           "position": 29,
+           "span": [
+            102,
+            110
+           ]
+          },
+          {
+           "hash": "5c344617045cf67d",
+           "position": 30,
+           "span": [
+            103,
+            110
+           ]
+          },
+          {
+           "hash": "76a6eecc8c7a8901",
+           "position": 33,
+           "span": [
+            109,
+            124
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "18da42eca06cd4a1",
+           "position": 0,
+           "span": [
+            0,
+            25
+           ]
+          },
+          {
+           "hash": "31d938568ab36b20",
+           "position": 4,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 6,
+           "span": [
+            26,
+            43
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 7,
+           "span": [
+            29,
+            46
+           ]
+          },
+          {
+           "hash": "38ecb2aa93d2dc60",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "5b464df2df0f81f9",
+           "position": 9,
+           "span": [
+            35,
+            48
+           ]
+          },
+          {
+           "hash": "91c4632deae1e20f",
+           "position": 10,
+           "span": [
+            38,
+            53
+           ]
+          },
+          {
+           "hash": "43d309ceb22374c8",
+           "position": 14,
+           "span": [
+            50,
+            61
+           ]
+          },
+          {
+           "hash": "233ab16433c2d8fb",
+           "position": 15,
+           "span": [
+            54,
+            67
+           ]
+          },
+          {
+           "hash": "538093b29a561332",
+           "position": 18,
+           "span": [
+            59,
+            81
+           ]
+          },
+          {
+           "hash": "1e71d06c4e29e3eb",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "3f23472de367053b",
+           "position": 25,
+           "span": [
+            86,
+            103
+           ]
+          },
+          {
+           "hash": "345ab877317b6271",
+           "position": 26,
+           "span": [
+            88,
+            103
+           ]
+          },
+          {
+           "hash": "2ea7cfbedf6a3813",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "1a900123cb5873b4",
+           "position": 28,
+           "span": [
+            99,
+            107
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 32,
+           "span": [
+            107,
+            124
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 35,
+           "span": [
+            112,
+            126
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "rejected",
+    "rejectionCode": "malformed-catalogue",
+    "rejectionSide": "reference"
+   },
+   "expectedReport": {
+    "bodySha256": "439c8f5c51d7928f72523440759240c7c1458d47011431301049863c3b35548f",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceCatalogueSha256": "297951f71f8a393045397e3131ae91ec0f1e9b3d78dd33e882c43d3ec6731b59",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "rejection": {
+      "class": "unsupported-input",
+      "code": "malformed-catalogue",
+      "side": "reference"
+     },
+     "status": "rejected"
+    }
+   }
+  },
+  {
+   "id": "k1-extraction-bounds-max-input",
+   "tags": [
+    "k1",
+    "extraction-bounds",
+    "malformed-catalogue"
+   ],
+   "description": "K1: the same with maxInputBytes 8388609 (one above 8 MiB), as the candidate.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "file": "comparison-config.json"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "sum.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "b0355010c15b3ffffe3c2b6874dd0f6852361a9774604c8144af1b7a122debca",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 127,
+       "id": "sum.go",
+       "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "status": "ok",
+       "tokenCount": 40,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "13c53975ffd60dcc",
+           "position": 2,
+           "span": [
+            16,
+            29
+           ]
+          },
+          {
+           "hash": "330210cd0c3466ab",
+           "position": 3,
+           "span": [
+            17,
+            30
+           ]
+          },
+          {
+           "hash": "3d497652a23fceab",
+           "position": 5,
+           "span": [
+            25,
+            36
+           ]
+          },
+          {
+           "hash": "3c56878685555e32",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "2f8f40a61dcfae85",
+           "position": 12,
+           "span": [
+            47,
+            56
+           ]
+          },
+          {
+           "hash": "423c6c9d5d7a23e7",
+           "position": 16,
+           "span": [
+            55,
+            74
+           ]
+          },
+          {
+           "hash": "02937060fc62470c",
+           "position": 19,
+           "span": [
+            62,
+            83
+           ]
+          },
+          {
+           "hash": "08bdc1a417005230",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "233116908c1f7fdf",
+           "position": 22,
+           "span": [
+            79,
+            89
+           ]
+          },
+          {
+           "hash": "79a8f5e4448bba08",
+           "position": 24,
+           "span": [
+            84,
+            101
+           ]
+          },
+          {
+           "hash": "a036c4dd8fd8dddf",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "725af00bf2abe7a3",
+           "position": 29,
+           "span": [
+            102,
+            110
+           ]
+          },
+          {
+           "hash": "5c344617045cf67d",
+           "position": 30,
+           "span": [
+            103,
+            110
+           ]
+          },
+          {
+           "hash": "76a6eecc8c7a8901",
+           "position": 33,
+           "span": [
+            109,
+            124
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "18da42eca06cd4a1",
+           "position": 0,
+           "span": [
+            0,
+            25
+           ]
+          },
+          {
+           "hash": "31d938568ab36b20",
+           "position": 4,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 6,
+           "span": [
+            26,
+            43
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 7,
+           "span": [
+            29,
+            46
+           ]
+          },
+          {
+           "hash": "38ecb2aa93d2dc60",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "5b464df2df0f81f9",
+           "position": 9,
+           "span": [
+            35,
+            48
+           ]
+          },
+          {
+           "hash": "91c4632deae1e20f",
+           "position": 10,
+           "span": [
+            38,
+            53
+           ]
+          },
+          {
+           "hash": "43d309ceb22374c8",
+           "position": 14,
+           "span": [
+            50,
+            61
+           ]
+          },
+          {
+           "hash": "233ab16433c2d8fb",
+           "position": 15,
+           "span": [
+            54,
+            67
+           ]
+          },
+          {
+           "hash": "538093b29a561332",
+           "position": 18,
+           "span": [
+            59,
+            81
+           ]
+          },
+          {
+           "hash": "1e71d06c4e29e3eb",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "3f23472de367053b",
+           "position": 25,
+           "span": [
+            86,
+            103
+           ]
+          },
+          {
+           "hash": "345ab877317b6271",
+           "position": 26,
+           "span": [
+            88,
+            103
+           ]
+          },
+          {
+           "hash": "2ea7cfbedf6a3813",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "1a900123cb5873b4",
+           "position": 28,
+           "span": [
+            99,
+            107
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 32,
+           "span": [
+            107,
+            124
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 35,
+           "span": [
+            112,
+            126
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "bad.go",
+      "source": "../extraction-vectors/go.json#go-err-unterminated-string"
+     }
+    ],
+    "sha256": "fd1c532f756bc3a577098a265784a0f9b29a12b87f797095b9c3bff260040800",
+    "bytesBase64": "eyJhcnRpZmFjdHMiOlt7ImJ5dGVMZW5ndGgiOjE3LCJlcnJvciI6eyJjb2RlIjoidW50ZXJtaW5hdGVkLWxpdGVyYWwiLCJvZmZzZXQiOjV9LCJpZCI6ImJhZC5nbyIsInNoYTI1NiI6IjQ0NzQxODU0MGVkNjkwZmJjZDk0M2IxYmU2Nzg3ZjU0YTI2YmNlOTkzNjJjMzZmZTA5MDZkN2QzMzYyYmRiODMiLCJzdGF0dXMiOiJlcnJvciJ9XSwiY2F0YWxvZ3VlVmVyc2lvbiI6InRyYWNld2VhdmUtY2F0YWxvZ3VlLWRyYWZ0LTIiLCJleHRyYWN0aW9uQ29uZmlnIjp7ImNoYW5uZWxzIjpbImV4YWN0Iiwibm9ybWFsaXplZCJdLCJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJoYXNoIjoic2hhMjU2LWZpcnN0OC11NjRiZSIsImsiOjUsIm1heElucHV0Qnl0ZXMiOjgzODg2MDksInByb2ZpbGUiOiJnby10b2tlbnMiLCJwcm9maWxlVmVyc2lvbiI6ImRyYWZ0LTEiLCJ3aW5kb3ciOjR9LCJwcm9maWxlIjp7ImNvbmZpZ1NoYTI1NiI6IjA1NDEzMjcxZThmODA2ZWEyNWU3ZThjNzkxZWRjMmM1MDk1ZWUwZmM3ZTVhMzhiYzAxNjllNDU2NjA2ZDMwZDEiLCJpZCI6ImdvLXRva2VucyIsInZlcnNpb24iOiJkcmFmdC0xIn19",
+    "fabricated": "Catalogue built from the listed artifacts (error entries only), then extractionConfig changed to {\"maxInputBytes\": 8388609} and configSha256 recomputed."
+   },
+   "handExpectations": {
+    "status": "rejected",
+    "rejectionCode": "malformed-catalogue",
+    "rejectionSide": "candidate"
+   },
+   "expectedReport": {
+    "bodySha256": "af89b884df507023e67d46e5cb2470d8a44639807c60d34aa7477700b3071f08",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "fd1c532f756bc3a577098a265784a0f9b29a12b87f797095b9c3bff260040800",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceCatalogueSha256": "b0355010c15b3ffffe3c2b6874dd0f6852361a9774604c8144af1b7a122debca",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "rejection": {
+      "class": "unsupported-input",
+      "code": "malformed-catalogue",
+      "side": "candidate"
+     },
+     "status": "rejected"
+    }
+   }
+  },
+  {
+   "id": "k1-extraction-bounds-at-bound",
+   "tags": [
+    "k1",
+    "extraction-bounds"
+   ],
+   "description": "K1 companion: both catalogues error-only with k 16 and window 128 (at the bounds) are valid; the pair is not compared (reference-extraction-error).",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "file": "comparison-config.json"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "bad.go",
+      "source": "../extraction-vectors/go.json#go-err-unterminated-string"
+     }
+    ],
+    "sha256": "c02b0e18eace31391b49d67b9aa4da321f0b5fc5c3028291d59f699ed0f930b6",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 17,
+       "error": {
+        "code": "unterminated-literal",
+        "offset": 5
+       },
+       "id": "bad.go",
+       "sha256": "447418540ed690fbcd943b1be6787f54a26bce99362c36fe0906d7d3362bdb83",
+       "status": "error"
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "contract": "traceweave-token-winnow-draft-1",
+      "hash": "sha256-first8-u64be",
+      "k": 16,
+      "maxInputBytes": 1048576,
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "window": 128
+     },
+     "profile": {
+      "configSha256": "386b6bc6361a38bf11d690be05b5e4cc44a55c2455ab5e779fbb795999aab5ed",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    },
+    "configOverride": {
+     "k": 16,
+     "window": 128
+    }
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "bad2.go",
+      "source": "../extraction-vectors/go.json#go-err-unterminated-comment"
+     }
+    ],
+    "sha256": "8f88d61cfb14b40f43d17cd8d0e00eea9af1a0c95ff0422bce8e96878d3162d9",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 22,
+       "error": {
+        "code": "unterminated-comment",
+        "offset": 7
+       },
+       "id": "bad2.go",
+       "sha256": "74f5d21cca1bfcfdb49985de8356a1e176acf526d4326c89a87fbd770d44174b",
+       "status": "error"
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "contract": "traceweave-token-winnow-draft-1",
+      "hash": "sha256-first8-u64be",
+      "k": 16,
+      "maxInputBytes": 1048576,
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "window": 128
+     },
+     "profile": {
+      "configSha256": "386b6bc6361a38bf11d690be05b5e4cc44a55c2455ab5e779fbb795999aab5ed",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    },
+    "configOverride": {
+     "k": 16,
+     "window": 128
+    }
+   },
+   "handExpectations": {
+    "status": "compared",
+    "pairs": [
+     {
+      "reference": "bad.go",
+      "candidate": "bad2.go",
+      "status": "not-compared",
+      "outcomeCode": "reference-extraction-error"
+     }
+    ]
+   },
+   "expectedReport": {
+    "bodySha256": "83dbf354284ff13d766e4250a070077b36473bce0d0078412416bf8873aa3711",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "8f88d61cfb14b40f43d17cd8d0e00eea9af1a0c95ff0422bce8e96878d3162d9",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceCatalogueSha256": "c02b0e18eace31391b49d67b9aa4da321f0b5fc5c3028291d59f699ed0f930b6",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "candidateArtifactCount": 1,
+     "comparison": {
+      "comparison": "traceweave-seed-merge-draft-2",
+      "modes": [
+       "exact",
+       "normalized"
+      ],
+      "minRegionDistinctHashes": 2,
+      "mergeGap": 4,
+      "maxSeedsPerMode": 100000,
+      "maxRegionsPerMode": 1000,
+      "suppressionCatalogueSha256": "none",
+      "parameterStatus": "experimental"
+     },
+     "pairs": [
+      {
+       "candidate": {
+        "id": "bad2.go",
+        "sha256": "74f5d21cca1bfcfdb49985de8356a1e176acf526d4326c89a87fbd770d44174b"
+       },
+       "reference": {
+        "id": "bad.go",
+        "sha256": "447418540ed690fbcd943b1be6787f54a26bce99362c36fe0906d7d3362bdb83"
+       },
+       "outcome": {
+        "class": "unsupported-input",
+        "code": "reference-extraction-error"
+       },
+       "status": "not-compared"
+      }
+     ],
+     "profile": {
+      "configSha256": "386b6bc6361a38bf11d690be05b5e4cc44a55c2455ab5e779fbb795999aab5ed",
+      "id": "go-tokens",
+      "version": "draft-1"
+     },
+     "referenceArtifactCount": 1,
+     "status": "compared",
+     "suppression": {
+      "status": "none"
+     }
+    }
+   }
+  },
+  {
+   "id": "k3-lone-surrogate",
+   "tags": [
+    "k3",
+    "strict-json",
+    "malformed-catalogue"
+   ],
+   "description": "K3: {\"catalogueVersion\":\"\\ud800\"}: a lone surrogate escape is ill-formed (I-JSON), decided at step 1 before the version is read: malformed-catalogue, not unsupported-catalogue.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "file": "comparison-config.json"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "sum.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "4eb5549a6313001f52a9b8f012fb7be09532b44f45382e7805cbad431fcc5847",
+    "bytesBase64": "eyJjYXRhbG9ndWVWZXJzaW9uIjoiXHVkODAwIn0=",
+    "fabricated": "Fabricated bytes for contract §3.6 step 1 (surrogate); the artifact list is not used."
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "copy.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 127,
+       "id": "copy.go",
+       "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "status": "ok",
+       "tokenCount": 40,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "13c53975ffd60dcc",
+           "position": 2,
+           "span": [
+            16,
+            29
+           ]
+          },
+          {
+           "hash": "330210cd0c3466ab",
+           "position": 3,
+           "span": [
+            17,
+            30
+           ]
+          },
+          {
+           "hash": "3d497652a23fceab",
+           "position": 5,
+           "span": [
+            25,
+            36
+           ]
+          },
+          {
+           "hash": "3c56878685555e32",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "2f8f40a61dcfae85",
+           "position": 12,
+           "span": [
+            47,
+            56
+           ]
+          },
+          {
+           "hash": "423c6c9d5d7a23e7",
+           "position": 16,
+           "span": [
+            55,
+            74
+           ]
+          },
+          {
+           "hash": "02937060fc62470c",
+           "position": 19,
+           "span": [
+            62,
+            83
+           ]
+          },
+          {
+           "hash": "08bdc1a417005230",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "233116908c1f7fdf",
+           "position": 22,
+           "span": [
+            79,
+            89
+           ]
+          },
+          {
+           "hash": "79a8f5e4448bba08",
+           "position": 24,
+           "span": [
+            84,
+            101
+           ]
+          },
+          {
+           "hash": "a036c4dd8fd8dddf",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "725af00bf2abe7a3",
+           "position": 29,
+           "span": [
+            102,
+            110
+           ]
+          },
+          {
+           "hash": "5c344617045cf67d",
+           "position": 30,
+           "span": [
+            103,
+            110
+           ]
+          },
+          {
+           "hash": "76a6eecc8c7a8901",
+           "position": 33,
+           "span": [
+            109,
+            124
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "18da42eca06cd4a1",
+           "position": 0,
+           "span": [
+            0,
+            25
+           ]
+          },
+          {
+           "hash": "31d938568ab36b20",
+           "position": 4,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 6,
+           "span": [
+            26,
+            43
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 7,
+           "span": [
+            29,
+            46
+           ]
+          },
+          {
+           "hash": "38ecb2aa93d2dc60",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "5b464df2df0f81f9",
+           "position": 9,
+           "span": [
+            35,
+            48
+           ]
+          },
+          {
+           "hash": "91c4632deae1e20f",
+           "position": 10,
+           "span": [
+            38,
+            53
+           ]
+          },
+          {
+           "hash": "43d309ceb22374c8",
+           "position": 14,
+           "span": [
+            50,
+            61
+           ]
+          },
+          {
+           "hash": "233ab16433c2d8fb",
+           "position": 15,
+           "span": [
+            54,
+            67
+           ]
+          },
+          {
+           "hash": "538093b29a561332",
+           "position": 18,
+           "span": [
+            59,
+            81
+           ]
+          },
+          {
+           "hash": "1e71d06c4e29e3eb",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "3f23472de367053b",
+           "position": 25,
+           "span": [
+            86,
+            103
+           ]
+          },
+          {
+           "hash": "345ab877317b6271",
+           "position": 26,
+           "span": [
+            88,
+            103
+           ]
+          },
+          {
+           "hash": "2ea7cfbedf6a3813",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "1a900123cb5873b4",
+           "position": 28,
+           "span": [
+            99,
+            107
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 32,
+           "span": [
+            107,
+            124
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 35,
+           "span": [
+            112,
+            126
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "rejected",
+    "rejectionCode": "malformed-catalogue",
+    "rejectionSide": "reference"
+   },
+   "expectedReport": {
+    "bodySha256": "1bfceed2ca13233c8d5e8248fb3e44f774babe92196f81b433b56e46ef26413a",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceCatalogueSha256": "4eb5549a6313001f52a9b8f012fb7be09532b44f45382e7805cbad431fcc5847",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "rejection": {
+      "class": "unsupported-input",
+      "code": "malformed-catalogue",
+      "side": "reference"
+     },
+     "status": "rejected"
+    }
+   }
+  },
+  {
+   "id": "k3-non-integer-number",
+   "tags": [
+    "k3",
+    "strict-json",
+    "malformed-catalogue"
+   ],
+   "description": "Step 1: {\"catalogueVersion\":\"x\",\"a\":1.0} has a non-integer number: malformed-catalogue.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "file": "comparison-config.json"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "sum.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "6bd46ac5daa5faced1afd74ca02bb10fa2391aae17019879835310f1e09e7ad2",
+    "bytesBase64": "eyJjYXRhbG9ndWVWZXJzaW9uIjoieCIsImEiOjEuMH0=",
+    "fabricated": "Fabricated bytes for contract §3.6 step 1 (float); the artifact list is not used."
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "copy.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 127,
+       "id": "copy.go",
+       "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "status": "ok",
+       "tokenCount": 40,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "13c53975ffd60dcc",
+           "position": 2,
+           "span": [
+            16,
+            29
+           ]
+          },
+          {
+           "hash": "330210cd0c3466ab",
+           "position": 3,
+           "span": [
+            17,
+            30
+           ]
+          },
+          {
+           "hash": "3d497652a23fceab",
+           "position": 5,
+           "span": [
+            25,
+            36
+           ]
+          },
+          {
+           "hash": "3c56878685555e32",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "2f8f40a61dcfae85",
+           "position": 12,
+           "span": [
+            47,
+            56
+           ]
+          },
+          {
+           "hash": "423c6c9d5d7a23e7",
+           "position": 16,
+           "span": [
+            55,
+            74
+           ]
+          },
+          {
+           "hash": "02937060fc62470c",
+           "position": 19,
+           "span": [
+            62,
+            83
+           ]
+          },
+          {
+           "hash": "08bdc1a417005230",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "233116908c1f7fdf",
+           "position": 22,
+           "span": [
+            79,
+            89
+           ]
+          },
+          {
+           "hash": "79a8f5e4448bba08",
+           "position": 24,
+           "span": [
+            84,
+            101
+           ]
+          },
+          {
+           "hash": "a036c4dd8fd8dddf",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "725af00bf2abe7a3",
+           "position": 29,
+           "span": [
+            102,
+            110
+           ]
+          },
+          {
+           "hash": "5c344617045cf67d",
+           "position": 30,
+           "span": [
+            103,
+            110
+           ]
+          },
+          {
+           "hash": "76a6eecc8c7a8901",
+           "position": 33,
+           "span": [
+            109,
+            124
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "18da42eca06cd4a1",
+           "position": 0,
+           "span": [
+            0,
+            25
+           ]
+          },
+          {
+           "hash": "31d938568ab36b20",
+           "position": 4,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 6,
+           "span": [
+            26,
+            43
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 7,
+           "span": [
+            29,
+            46
+           ]
+          },
+          {
+           "hash": "38ecb2aa93d2dc60",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "5b464df2df0f81f9",
+           "position": 9,
+           "span": [
+            35,
+            48
+           ]
+          },
+          {
+           "hash": "91c4632deae1e20f",
+           "position": 10,
+           "span": [
+            38,
+            53
+           ]
+          },
+          {
+           "hash": "43d309ceb22374c8",
+           "position": 14,
+           "span": [
+            50,
+            61
+           ]
+          },
+          {
+           "hash": "233ab16433c2d8fb",
+           "position": 15,
+           "span": [
+            54,
+            67
+           ]
+          },
+          {
+           "hash": "538093b29a561332",
+           "position": 18,
+           "span": [
+            59,
+            81
+           ]
+          },
+          {
+           "hash": "1e71d06c4e29e3eb",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "3f23472de367053b",
+           "position": 25,
+           "span": [
+            86,
+            103
+           ]
+          },
+          {
+           "hash": "345ab877317b6271",
+           "position": 26,
+           "span": [
+            88,
+            103
+           ]
+          },
+          {
+           "hash": "2ea7cfbedf6a3813",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "1a900123cb5873b4",
+           "position": 28,
+           "span": [
+            99,
+            107
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 32,
+           "span": [
+            107,
+            124
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 35,
+           "span": [
+            112,
+            126
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "rejected",
+    "rejectionCode": "malformed-catalogue",
+    "rejectionSide": "reference"
+   },
+   "expectedReport": {
+    "bodySha256": "3b0676e4a383d80315a3d25ae059dd8cab5a2544bd79270eb5af1617ecc458dd",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceCatalogueSha256": "6bd46ac5daa5faced1afd74ca02bb10fa2391aae17019879835310f1e09e7ad2",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "rejection": {
+      "class": "unsupported-input",
+      "code": "malformed-catalogue",
+      "side": "reference"
+     },
+     "status": "rejected"
+    }
+   }
+  },
+  {
+   "id": "k4-depth-64",
+   "tags": [
+    "k4",
+    "nesting-depth"
+   ],
+   "description": "K4: 64 nested containers (the object plus 63 arrays) is within the limit, so step 2 decides: unsupported-catalogue.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "file": "comparison-config.json"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "sum.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "38972ade41d7d6e2b70b56067ceea9b6276bc6bf9e30d004b08a7066b03f31e5",
+    "bytesBase64": "eyJjYXRhbG9ndWVWZXJzaW9uIjoieCIsImEiOltbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW11dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXX0=",
+    "fabricated": "Fabricated bytes for contract §3.6 step 1 (depth64); the artifact list is not used."
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "copy.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 127,
+       "id": "copy.go",
+       "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "status": "ok",
+       "tokenCount": 40,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "13c53975ffd60dcc",
+           "position": 2,
+           "span": [
+            16,
+            29
+           ]
+          },
+          {
+           "hash": "330210cd0c3466ab",
+           "position": 3,
+           "span": [
+            17,
+            30
+           ]
+          },
+          {
+           "hash": "3d497652a23fceab",
+           "position": 5,
+           "span": [
+            25,
+            36
+           ]
+          },
+          {
+           "hash": "3c56878685555e32",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "2f8f40a61dcfae85",
+           "position": 12,
+           "span": [
+            47,
+            56
+           ]
+          },
+          {
+           "hash": "423c6c9d5d7a23e7",
+           "position": 16,
+           "span": [
+            55,
+            74
+           ]
+          },
+          {
+           "hash": "02937060fc62470c",
+           "position": 19,
+           "span": [
+            62,
+            83
+           ]
+          },
+          {
+           "hash": "08bdc1a417005230",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "233116908c1f7fdf",
+           "position": 22,
+           "span": [
+            79,
+            89
+           ]
+          },
+          {
+           "hash": "79a8f5e4448bba08",
+           "position": 24,
+           "span": [
+            84,
+            101
+           ]
+          },
+          {
+           "hash": "a036c4dd8fd8dddf",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "725af00bf2abe7a3",
+           "position": 29,
+           "span": [
+            102,
+            110
+           ]
+          },
+          {
+           "hash": "5c344617045cf67d",
+           "position": 30,
+           "span": [
+            103,
+            110
+           ]
+          },
+          {
+           "hash": "76a6eecc8c7a8901",
+           "position": 33,
+           "span": [
+            109,
+            124
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "18da42eca06cd4a1",
+           "position": 0,
+           "span": [
+            0,
+            25
+           ]
+          },
+          {
+           "hash": "31d938568ab36b20",
+           "position": 4,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 6,
+           "span": [
+            26,
+            43
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 7,
+           "span": [
+            29,
+            46
+           ]
+          },
+          {
+           "hash": "38ecb2aa93d2dc60",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "5b464df2df0f81f9",
+           "position": 9,
+           "span": [
+            35,
+            48
+           ]
+          },
+          {
+           "hash": "91c4632deae1e20f",
+           "position": 10,
+           "span": [
+            38,
+            53
+           ]
+          },
+          {
+           "hash": "43d309ceb22374c8",
+           "position": 14,
+           "span": [
+            50,
+            61
+           ]
+          },
+          {
+           "hash": "233ab16433c2d8fb",
+           "position": 15,
+           "span": [
+            54,
+            67
+           ]
+          },
+          {
+           "hash": "538093b29a561332",
+           "position": 18,
+           "span": [
+            59,
+            81
+           ]
+          },
+          {
+           "hash": "1e71d06c4e29e3eb",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "3f23472de367053b",
+           "position": 25,
+           "span": [
+            86,
+            103
+           ]
+          },
+          {
+           "hash": "345ab877317b6271",
+           "position": 26,
+           "span": [
+            88,
+            103
+           ]
+          },
+          {
+           "hash": "2ea7cfbedf6a3813",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "1a900123cb5873b4",
+           "position": 28,
+           "span": [
+            99,
+            107
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 32,
+           "span": [
+            107,
+            124
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 35,
+           "span": [
+            112,
+            126
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "rejected",
+    "rejectionCode": "unsupported-catalogue",
+    "rejectionSide": "reference"
+   },
+   "expectedReport": {
+    "bodySha256": "0423f6abe3fddc2ea82be586477af614edbe9001646e260a394c7d320c59d06a",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceCatalogueSha256": "38972ade41d7d6e2b70b56067ceea9b6276bc6bf9e30d004b08a7066b03f31e5",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "rejection": {
+      "class": "unsupported-input",
+      "code": "unsupported-catalogue",
+      "side": "reference"
+     },
+     "status": "rejected"
+    }
+   }
+  },
+  {
+   "id": "k4-depth-65",
+   "tags": [
+    "k4",
+    "nesting-depth",
+    "malformed-catalogue"
+   ],
+   "description": "K4: 65 nested containers exceeds the limit of 64: malformed-catalogue at step 1.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "file": "comparison-config.json"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "sum.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "9ed1536b986cd6b08c0df66c9b1e44408424140390fa56d009ad557ad075656c",
+    "bytesBase64": "eyJjYXRhbG9ndWVWZXJzaW9uIjoieCIsImEiOltbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tdXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dfQ==",
+    "fabricated": "Fabricated bytes for contract §3.6 step 1 (depth65); the artifact list is not used."
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "copy.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 127,
+       "id": "copy.go",
+       "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "status": "ok",
+       "tokenCount": 40,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "13c53975ffd60dcc",
+           "position": 2,
+           "span": [
+            16,
+            29
+           ]
+          },
+          {
+           "hash": "330210cd0c3466ab",
+           "position": 3,
+           "span": [
+            17,
+            30
+           ]
+          },
+          {
+           "hash": "3d497652a23fceab",
+           "position": 5,
+           "span": [
+            25,
+            36
+           ]
+          },
+          {
+           "hash": "3c56878685555e32",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "2f8f40a61dcfae85",
+           "position": 12,
+           "span": [
+            47,
+            56
+           ]
+          },
+          {
+           "hash": "423c6c9d5d7a23e7",
+           "position": 16,
+           "span": [
+            55,
+            74
+           ]
+          },
+          {
+           "hash": "02937060fc62470c",
+           "position": 19,
+           "span": [
+            62,
+            83
+           ]
+          },
+          {
+           "hash": "08bdc1a417005230",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "233116908c1f7fdf",
+           "position": 22,
+           "span": [
+            79,
+            89
+           ]
+          },
+          {
+           "hash": "79a8f5e4448bba08",
+           "position": 24,
+           "span": [
+            84,
+            101
+           ]
+          },
+          {
+           "hash": "a036c4dd8fd8dddf",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "725af00bf2abe7a3",
+           "position": 29,
+           "span": [
+            102,
+            110
+           ]
+          },
+          {
+           "hash": "5c344617045cf67d",
+           "position": 30,
+           "span": [
+            103,
+            110
+           ]
+          },
+          {
+           "hash": "76a6eecc8c7a8901",
+           "position": 33,
+           "span": [
+            109,
+            124
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "18da42eca06cd4a1",
+           "position": 0,
+           "span": [
+            0,
+            25
+           ]
+          },
+          {
+           "hash": "31d938568ab36b20",
+           "position": 4,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 6,
+           "span": [
+            26,
+            43
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 7,
+           "span": [
+            29,
+            46
+           ]
+          },
+          {
+           "hash": "38ecb2aa93d2dc60",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "5b464df2df0f81f9",
+           "position": 9,
+           "span": [
+            35,
+            48
+           ]
+          },
+          {
+           "hash": "91c4632deae1e20f",
+           "position": 10,
+           "span": [
+            38,
+            53
+           ]
+          },
+          {
+           "hash": "43d309ceb22374c8",
+           "position": 14,
+           "span": [
+            50,
+            61
+           ]
+          },
+          {
+           "hash": "233ab16433c2d8fb",
+           "position": 15,
+           "span": [
+            54,
+            67
+           ]
+          },
+          {
+           "hash": "538093b29a561332",
+           "position": 18,
+           "span": [
+            59,
+            81
+           ]
+          },
+          {
+           "hash": "1e71d06c4e29e3eb",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "3f23472de367053b",
+           "position": 25,
+           "span": [
+            86,
+            103
+           ]
+          },
+          {
+           "hash": "345ab877317b6271",
+           "position": 26,
+           "span": [
+            88,
+            103
+           ]
+          },
+          {
+           "hash": "2ea7cfbedf6a3813",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "1a900123cb5873b4",
+           "position": 28,
+           "span": [
+            99,
+            107
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 32,
+           "span": [
+            107,
+            124
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 35,
+           "span": [
+            112,
+            126
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "rejected",
+    "rejectionCode": "malformed-catalogue",
+    "rejectionSide": "reference"
+   },
+   "expectedReport": {
+    "bodySha256": "212107f29e67b5815c694b4a654d38d0bcd67fe14bce81cf8d8d234b9a98b974",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceCatalogueSha256": "9ed1536b986cd6b08c0df66c9b1e44408424140390fa56d009ad557ad075656c",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "rejection": {
+      "class": "unsupported-input",
+      "code": "malformed-catalogue",
+      "side": "reference"
+     },
+     "status": "rejected"
+    }
+   }
+  },
+  {
+   "id": "bounds-seeds-above",
+   "tags": [
+    "config-bounds",
+    "unsupported-comparison-config"
+   ],
+   "description": "maxSeedsPerMode 10000001 (one above 10^7): unsupported-comparison-config.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMDAxLCJtYXhSZWdpb25zUGVyTW9kZSI6MTAwMCwic3VwcHJlc3Npb25DYXRhbG9ndWVTaGEyNTYiOiJub25lIn0K"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "sum.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "b0355010c15b3ffffe3c2b6874dd0f6852361a9774604c8144af1b7a122debca",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 127,
+       "id": "sum.go",
+       "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "status": "ok",
+       "tokenCount": 40,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "13c53975ffd60dcc",
+           "position": 2,
+           "span": [
+            16,
+            29
+           ]
+          },
+          {
+           "hash": "330210cd0c3466ab",
+           "position": 3,
+           "span": [
+            17,
+            30
+           ]
+          },
+          {
+           "hash": "3d497652a23fceab",
+           "position": 5,
+           "span": [
+            25,
+            36
+           ]
+          },
+          {
+           "hash": "3c56878685555e32",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "2f8f40a61dcfae85",
+           "position": 12,
+           "span": [
+            47,
+            56
+           ]
+          },
+          {
+           "hash": "423c6c9d5d7a23e7",
+           "position": 16,
+           "span": [
+            55,
+            74
+           ]
+          },
+          {
+           "hash": "02937060fc62470c",
+           "position": 19,
+           "span": [
+            62,
+            83
+           ]
+          },
+          {
+           "hash": "08bdc1a417005230",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "233116908c1f7fdf",
+           "position": 22,
+           "span": [
+            79,
+            89
+           ]
+          },
+          {
+           "hash": "79a8f5e4448bba08",
+           "position": 24,
+           "span": [
+            84,
+            101
+           ]
+          },
+          {
+           "hash": "a036c4dd8fd8dddf",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "725af00bf2abe7a3",
+           "position": 29,
+           "span": [
+            102,
+            110
+           ]
+          },
+          {
+           "hash": "5c344617045cf67d",
+           "position": 30,
+           "span": [
+            103,
+            110
+           ]
+          },
+          {
+           "hash": "76a6eecc8c7a8901",
+           "position": 33,
+           "span": [
+            109,
+            124
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "18da42eca06cd4a1",
+           "position": 0,
+           "span": [
+            0,
+            25
+           ]
+          },
+          {
+           "hash": "31d938568ab36b20",
+           "position": 4,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 6,
+           "span": [
+            26,
+            43
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 7,
+           "span": [
+            29,
+            46
+           ]
+          },
+          {
+           "hash": "38ecb2aa93d2dc60",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "5b464df2df0f81f9",
+           "position": 9,
+           "span": [
+            35,
+            48
+           ]
+          },
+          {
+           "hash": "91c4632deae1e20f",
+           "position": 10,
+           "span": [
+            38,
+            53
+           ]
+          },
+          {
+           "hash": "43d309ceb22374c8",
+           "position": 14,
+           "span": [
+            50,
+            61
+           ]
+          },
+          {
+           "hash": "233ab16433c2d8fb",
+           "position": 15,
+           "span": [
+            54,
+            67
+           ]
+          },
+          {
+           "hash": "538093b29a561332",
+           "position": 18,
+           "span": [
+            59,
+            81
+           ]
+          },
+          {
+           "hash": "1e71d06c4e29e3eb",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "3f23472de367053b",
+           "position": 25,
+           "span": [
+            86,
+            103
+           ]
+          },
+          {
+           "hash": "345ab877317b6271",
+           "position": 26,
+           "span": [
+            88,
+            103
+           ]
+          },
+          {
+           "hash": "2ea7cfbedf6a3813",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "1a900123cb5873b4",
+           "position": 28,
+           "span": [
+            99,
+            107
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 32,
+           "span": [
+            107,
+            124
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 35,
+           "span": [
+            112,
+            126
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "copy.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 127,
+       "id": "copy.go",
+       "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "status": "ok",
+       "tokenCount": 40,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "13c53975ffd60dcc",
+           "position": 2,
+           "span": [
+            16,
+            29
+           ]
+          },
+          {
+           "hash": "330210cd0c3466ab",
+           "position": 3,
+           "span": [
+            17,
+            30
+           ]
+          },
+          {
+           "hash": "3d497652a23fceab",
+           "position": 5,
+           "span": [
+            25,
+            36
+           ]
+          },
+          {
+           "hash": "3c56878685555e32",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "2f8f40a61dcfae85",
+           "position": 12,
+           "span": [
+            47,
+            56
+           ]
+          },
+          {
+           "hash": "423c6c9d5d7a23e7",
+           "position": 16,
+           "span": [
+            55,
+            74
+           ]
+          },
+          {
+           "hash": "02937060fc62470c",
+           "position": 19,
+           "span": [
+            62,
+            83
+           ]
+          },
+          {
+           "hash": "08bdc1a417005230",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "233116908c1f7fdf",
+           "position": 22,
+           "span": [
+            79,
+            89
+           ]
+          },
+          {
+           "hash": "79a8f5e4448bba08",
+           "position": 24,
+           "span": [
+            84,
+            101
+           ]
+          },
+          {
+           "hash": "a036c4dd8fd8dddf",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "725af00bf2abe7a3",
+           "position": 29,
+           "span": [
+            102,
+            110
+           ]
+          },
+          {
+           "hash": "5c344617045cf67d",
+           "position": 30,
+           "span": [
+            103,
+            110
+           ]
+          },
+          {
+           "hash": "76a6eecc8c7a8901",
+           "position": 33,
+           "span": [
+            109,
+            124
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "18da42eca06cd4a1",
+           "position": 0,
+           "span": [
+            0,
+            25
+           ]
+          },
+          {
+           "hash": "31d938568ab36b20",
+           "position": 4,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 6,
+           "span": [
+            26,
+            43
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 7,
+           "span": [
+            29,
+            46
+           ]
+          },
+          {
+           "hash": "38ecb2aa93d2dc60",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "5b464df2df0f81f9",
+           "position": 9,
+           "span": [
+            35,
+            48
+           ]
+          },
+          {
+           "hash": "91c4632deae1e20f",
+           "position": 10,
+           "span": [
+            38,
+            53
+           ]
+          },
+          {
+           "hash": "43d309ceb22374c8",
+           "position": 14,
+           "span": [
+            50,
+            61
+           ]
+          },
+          {
+           "hash": "233ab16433c2d8fb",
+           "position": 15,
+           "span": [
+            54,
+            67
+           ]
+          },
+          {
+           "hash": "538093b29a561332",
+           "position": 18,
+           "span": [
+            59,
+            81
+           ]
+          },
+          {
+           "hash": "1e71d06c4e29e3eb",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "3f23472de367053b",
+           "position": 25,
+           "span": [
+            86,
+            103
+           ]
+          },
+          {
+           "hash": "345ab877317b6271",
+           "position": 26,
+           "span": [
+            88,
+            103
+           ]
+          },
+          {
+           "hash": "2ea7cfbedf6a3813",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "1a900123cb5873b4",
+           "position": 28,
+           "span": [
+            99,
+            107
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 32,
+           "span": [
+            107,
+            124
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 35,
+           "span": [
+            112,
+            126
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "rejected",
+    "rejectionCode": "unsupported-comparison-config",
+    "rejectionSide": "comparison-config"
+   },
+   "expectedReport": {
+    "bodySha256": "b691496f656123053094f2e18052037ff16658cb6e9e160c62207a53a481aed8",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+      "comparisonConfigSha256": "894a4651b8b4c7b997d8f6da39a32facf687839c6f3473ef2064b86c5072275e",
+      "referenceCatalogueSha256": "b0355010c15b3ffffe3c2b6874dd0f6852361a9774604c8144af1b7a122debca",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "rejection": {
+      "class": "unsupported-input",
+      "code": "unsupported-comparison-config",
+      "side": "comparison-config"
+     },
+     "status": "rejected"
+    }
+   }
+  },
+  {
+   "id": "bounds-regions-above",
+   "tags": [
+    "config-bounds",
+    "unsupported-comparison-config"
+   ],
+   "description": "maxRegionsPerMode 100001 (one above 10^5): unsupported-comparison-config.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAwMSwic3VwcHJlc3Npb25DYXRhbG9ndWVTaGEyNTYiOiJub25lIn0K"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "sum.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "b0355010c15b3ffffe3c2b6874dd0f6852361a9774604c8144af1b7a122debca",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 127,
+       "id": "sum.go",
+       "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "status": "ok",
+       "tokenCount": 40,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "13c53975ffd60dcc",
+           "position": 2,
+           "span": [
+            16,
+            29
+           ]
+          },
+          {
+           "hash": "330210cd0c3466ab",
+           "position": 3,
+           "span": [
+            17,
+            30
+           ]
+          },
+          {
+           "hash": "3d497652a23fceab",
+           "position": 5,
+           "span": [
+            25,
+            36
+           ]
+          },
+          {
+           "hash": "3c56878685555e32",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "2f8f40a61dcfae85",
+           "position": 12,
+           "span": [
+            47,
+            56
+           ]
+          },
+          {
+           "hash": "423c6c9d5d7a23e7",
+           "position": 16,
+           "span": [
+            55,
+            74
+           ]
+          },
+          {
+           "hash": "02937060fc62470c",
+           "position": 19,
+           "span": [
+            62,
+            83
+           ]
+          },
+          {
+           "hash": "08bdc1a417005230",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "233116908c1f7fdf",
+           "position": 22,
+           "span": [
+            79,
+            89
+           ]
+          },
+          {
+           "hash": "79a8f5e4448bba08",
+           "position": 24,
+           "span": [
+            84,
+            101
+           ]
+          },
+          {
+           "hash": "a036c4dd8fd8dddf",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "725af00bf2abe7a3",
+           "position": 29,
+           "span": [
+            102,
+            110
+           ]
+          },
+          {
+           "hash": "5c344617045cf67d",
+           "position": 30,
+           "span": [
+            103,
+            110
+           ]
+          },
+          {
+           "hash": "76a6eecc8c7a8901",
+           "position": 33,
+           "span": [
+            109,
+            124
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "18da42eca06cd4a1",
+           "position": 0,
+           "span": [
+            0,
+            25
+           ]
+          },
+          {
+           "hash": "31d938568ab36b20",
+           "position": 4,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 6,
+           "span": [
+            26,
+            43
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 7,
+           "span": [
+            29,
+            46
+           ]
+          },
+          {
+           "hash": "38ecb2aa93d2dc60",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "5b464df2df0f81f9",
+           "position": 9,
+           "span": [
+            35,
+            48
+           ]
+          },
+          {
+           "hash": "91c4632deae1e20f",
+           "position": 10,
+           "span": [
+            38,
+            53
+           ]
+          },
+          {
+           "hash": "43d309ceb22374c8",
+           "position": 14,
+           "span": [
+            50,
+            61
+           ]
+          },
+          {
+           "hash": "233ab16433c2d8fb",
+           "position": 15,
+           "span": [
+            54,
+            67
+           ]
+          },
+          {
+           "hash": "538093b29a561332",
+           "position": 18,
+           "span": [
+            59,
+            81
+           ]
+          },
+          {
+           "hash": "1e71d06c4e29e3eb",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "3f23472de367053b",
+           "position": 25,
+           "span": [
+            86,
+            103
+           ]
+          },
+          {
+           "hash": "345ab877317b6271",
+           "position": 26,
+           "span": [
+            88,
+            103
+           ]
+          },
+          {
+           "hash": "2ea7cfbedf6a3813",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "1a900123cb5873b4",
+           "position": 28,
+           "span": [
+            99,
+            107
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 32,
+           "span": [
+            107,
+            124
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 35,
+           "span": [
+            112,
+            126
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "copy.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 127,
+       "id": "copy.go",
+       "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "status": "ok",
+       "tokenCount": 40,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "13c53975ffd60dcc",
+           "position": 2,
+           "span": [
+            16,
+            29
+           ]
+          },
+          {
+           "hash": "330210cd0c3466ab",
+           "position": 3,
+           "span": [
+            17,
+            30
+           ]
+          },
+          {
+           "hash": "3d497652a23fceab",
+           "position": 5,
+           "span": [
+            25,
+            36
+           ]
+          },
+          {
+           "hash": "3c56878685555e32",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "2f8f40a61dcfae85",
+           "position": 12,
+           "span": [
+            47,
+            56
+           ]
+          },
+          {
+           "hash": "423c6c9d5d7a23e7",
+           "position": 16,
+           "span": [
+            55,
+            74
+           ]
+          },
+          {
+           "hash": "02937060fc62470c",
+           "position": 19,
+           "span": [
+            62,
+            83
+           ]
+          },
+          {
+           "hash": "08bdc1a417005230",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "233116908c1f7fdf",
+           "position": 22,
+           "span": [
+            79,
+            89
+           ]
+          },
+          {
+           "hash": "79a8f5e4448bba08",
+           "position": 24,
+           "span": [
+            84,
+            101
+           ]
+          },
+          {
+           "hash": "a036c4dd8fd8dddf",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "725af00bf2abe7a3",
+           "position": 29,
+           "span": [
+            102,
+            110
+           ]
+          },
+          {
+           "hash": "5c344617045cf67d",
+           "position": 30,
+           "span": [
+            103,
+            110
+           ]
+          },
+          {
+           "hash": "76a6eecc8c7a8901",
+           "position": 33,
+           "span": [
+            109,
+            124
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "18da42eca06cd4a1",
+           "position": 0,
+           "span": [
+            0,
+            25
+           ]
+          },
+          {
+           "hash": "31d938568ab36b20",
+           "position": 4,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 6,
+           "span": [
+            26,
+            43
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 7,
+           "span": [
+            29,
+            46
+           ]
+          },
+          {
+           "hash": "38ecb2aa93d2dc60",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "5b464df2df0f81f9",
+           "position": 9,
+           "span": [
+            35,
+            48
+           ]
+          },
+          {
+           "hash": "91c4632deae1e20f",
+           "position": 10,
+           "span": [
+            38,
+            53
+           ]
+          },
+          {
+           "hash": "43d309ceb22374c8",
+           "position": 14,
+           "span": [
+            50,
+            61
+           ]
+          },
+          {
+           "hash": "233ab16433c2d8fb",
+           "position": 15,
+           "span": [
+            54,
+            67
+           ]
+          },
+          {
+           "hash": "538093b29a561332",
+           "position": 18,
+           "span": [
+            59,
+            81
+           ]
+          },
+          {
+           "hash": "1e71d06c4e29e3eb",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "3f23472de367053b",
+           "position": 25,
+           "span": [
+            86,
+            103
+           ]
+          },
+          {
+           "hash": "345ab877317b6271",
+           "position": 26,
+           "span": [
+            88,
+            103
+           ]
+          },
+          {
+           "hash": "2ea7cfbedf6a3813",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "1a900123cb5873b4",
+           "position": 28,
+           "span": [
+            99,
+            107
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 32,
+           "span": [
+            107,
+            124
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 35,
+           "span": [
+            112,
+            126
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "rejected",
+    "rejectionCode": "unsupported-comparison-config",
+    "rejectionSide": "comparison-config"
+   },
+   "expectedReport": {
+    "bodySha256": "51fbe102513351b9e8203dbb81387ffb24c0fed91009f6a5b4330da31eaa25d1",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+      "comparisonConfigSha256": "b6ca7b23ed2739d81b07cc04f5656c1a50c56d704f784b7657f51f9619f280eb",
+      "referenceCatalogueSha256": "b0355010c15b3ffffe3c2b6874dd0f6852361a9774604c8144af1b7a122debca",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "rejection": {
+      "class": "unsupported-input",
+      "code": "unsupported-comparison-config",
+      "side": "comparison-config"
+     },
+     "status": "rejected"
+    }
+   }
+  },
+  {
+   "id": "bounds-at-limits",
+   "tags": [
+    "config-bounds"
+   ],
+   "description": "maxSeedsPerMode 10^7 and maxRegionsPerMode 10^5 (at the bounds) are valid: GO_SUM against itself matches completely.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMDAwLCJtYXhSZWdpb25zUGVyTW9kZSI6MTAwMDAwLCJzdXBwcmVzc2lvbkNhdGFsb2d1ZVNoYTI1NiI6Im5vbmUifQo="
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "sum.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "b0355010c15b3ffffe3c2b6874dd0f6852361a9774604c8144af1b7a122debca",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 127,
+       "id": "sum.go",
+       "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "status": "ok",
+       "tokenCount": 40,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "13c53975ffd60dcc",
+           "position": 2,
+           "span": [
+            16,
+            29
+           ]
+          },
+          {
+           "hash": "330210cd0c3466ab",
+           "position": 3,
+           "span": [
+            17,
+            30
+           ]
+          },
+          {
+           "hash": "3d497652a23fceab",
+           "position": 5,
+           "span": [
+            25,
+            36
+           ]
+          },
+          {
+           "hash": "3c56878685555e32",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "2f8f40a61dcfae85",
+           "position": 12,
+           "span": [
+            47,
+            56
+           ]
+          },
+          {
+           "hash": "423c6c9d5d7a23e7",
+           "position": 16,
+           "span": [
+            55,
+            74
+           ]
+          },
+          {
+           "hash": "02937060fc62470c",
+           "position": 19,
+           "span": [
+            62,
+            83
+           ]
+          },
+          {
+           "hash": "08bdc1a417005230",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "233116908c1f7fdf",
+           "position": 22,
+           "span": [
+            79,
+            89
+           ]
+          },
+          {
+           "hash": "79a8f5e4448bba08",
+           "position": 24,
+           "span": [
+            84,
+            101
+           ]
+          },
+          {
+           "hash": "a036c4dd8fd8dddf",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "725af00bf2abe7a3",
+           "position": 29,
+           "span": [
+            102,
+            110
+           ]
+          },
+          {
+           "hash": "5c344617045cf67d",
+           "position": 30,
+           "span": [
+            103,
+            110
+           ]
+          },
+          {
+           "hash": "76a6eecc8c7a8901",
+           "position": 33,
+           "span": [
+            109,
+            124
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "18da42eca06cd4a1",
+           "position": 0,
+           "span": [
+            0,
+            25
+           ]
+          },
+          {
+           "hash": "31d938568ab36b20",
+           "position": 4,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 6,
+           "span": [
+            26,
+            43
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 7,
+           "span": [
+            29,
+            46
+           ]
+          },
+          {
+           "hash": "38ecb2aa93d2dc60",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "5b464df2df0f81f9",
+           "position": 9,
+           "span": [
+            35,
+            48
+           ]
+          },
+          {
+           "hash": "91c4632deae1e20f",
+           "position": 10,
+           "span": [
+            38,
+            53
+           ]
+          },
+          {
+           "hash": "43d309ceb22374c8",
+           "position": 14,
+           "span": [
+            50,
+            61
+           ]
+          },
+          {
+           "hash": "233ab16433c2d8fb",
+           "position": 15,
+           "span": [
+            54,
+            67
+           ]
+          },
+          {
+           "hash": "538093b29a561332",
+           "position": 18,
+           "span": [
+            59,
+            81
+           ]
+          },
+          {
+           "hash": "1e71d06c4e29e3eb",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "3f23472de367053b",
+           "position": 25,
+           "span": [
+            86,
+            103
+           ]
+          },
+          {
+           "hash": "345ab877317b6271",
+           "position": 26,
+           "span": [
+            88,
+            103
+           ]
+          },
+          {
+           "hash": "2ea7cfbedf6a3813",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "1a900123cb5873b4",
+           "position": 28,
+           "span": [
+            99,
+            107
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 32,
+           "span": [
+            107,
+            124
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 35,
+           "span": [
+            112,
+            126
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "copy.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 127,
+       "id": "copy.go",
+       "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "status": "ok",
+       "tokenCount": 40,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "13c53975ffd60dcc",
+           "position": 2,
+           "span": [
+            16,
+            29
+           ]
+          },
+          {
+           "hash": "330210cd0c3466ab",
+           "position": 3,
+           "span": [
+            17,
+            30
+           ]
+          },
+          {
+           "hash": "3d497652a23fceab",
+           "position": 5,
+           "span": [
+            25,
+            36
+           ]
+          },
+          {
+           "hash": "3c56878685555e32",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "2f8f40a61dcfae85",
+           "position": 12,
+           "span": [
+            47,
+            56
+           ]
+          },
+          {
+           "hash": "423c6c9d5d7a23e7",
+           "position": 16,
+           "span": [
+            55,
+            74
+           ]
+          },
+          {
+           "hash": "02937060fc62470c",
+           "position": 19,
+           "span": [
+            62,
+            83
+           ]
+          },
+          {
+           "hash": "08bdc1a417005230",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "233116908c1f7fdf",
+           "position": 22,
+           "span": [
+            79,
+            89
+           ]
+          },
+          {
+           "hash": "79a8f5e4448bba08",
+           "position": 24,
+           "span": [
+            84,
+            101
+           ]
+          },
+          {
+           "hash": "a036c4dd8fd8dddf",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "725af00bf2abe7a3",
+           "position": 29,
+           "span": [
+            102,
+            110
+           ]
+          },
+          {
+           "hash": "5c344617045cf67d",
+           "position": 30,
+           "span": [
+            103,
+            110
+           ]
+          },
+          {
+           "hash": "76a6eecc8c7a8901",
+           "position": 33,
+           "span": [
+            109,
+            124
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "18da42eca06cd4a1",
+           "position": 0,
+           "span": [
+            0,
+            25
+           ]
+          },
+          {
+           "hash": "31d938568ab36b20",
+           "position": 4,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 6,
+           "span": [
+            26,
+            43
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 7,
+           "span": [
+            29,
+            46
+           ]
+          },
+          {
+           "hash": "38ecb2aa93d2dc60",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "5b464df2df0f81f9",
+           "position": 9,
+           "span": [
+            35,
+            48
+           ]
+          },
+          {
+           "hash": "91c4632deae1e20f",
+           "position": 10,
+           "span": [
+            38,
+            53
+           ]
+          },
+          {
+           "hash": "43d309ceb22374c8",
+           "position": 14,
+           "span": [
+            50,
+            61
+           ]
+          },
+          {
+           "hash": "233ab16433c2d8fb",
+           "position": 15,
+           "span": [
+            54,
+            67
+           ]
+          },
+          {
+           "hash": "538093b29a561332",
+           "position": 18,
+           "span": [
+            59,
+            81
+           ]
+          },
+          {
+           "hash": "1e71d06c4e29e3eb",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "3f23472de367053b",
+           "position": 25,
+           "span": [
+            86,
+            103
+           ]
+          },
+          {
+           "hash": "345ab877317b6271",
+           "position": 26,
+           "span": [
+            88,
+            103
+           ]
+          },
+          {
+           "hash": "2ea7cfbedf6a3813",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "1a900123cb5873b4",
+           "position": 28,
+           "span": [
+            99,
+            107
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 32,
+           "span": [
+            107,
+            124
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 35,
+           "span": [
+            112,
+            126
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "compared",
+    "pairs": [
+     {
+      "reference": "sum.go",
+      "candidate": "copy.go",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "derivation": "hand"
+       }
+      }
+     }
+    ]
+   },
+   "expectedReport": {
+    "bodySha256": "16f62341c8429b39116f91b32d56eb6fff96645b1f67ef49ee58bd7f92d76b5c",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+      "comparisonConfigSha256": "de40096c34253194060b9e791e1843b7e764a33d9a9b0c2c4595c40b44aefaa3",
+      "referenceCatalogueSha256": "b0355010c15b3ffffe3c2b6874dd0f6852361a9774604c8144af1b7a122debca",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "candidateArtifactCount": 1,
+     "comparison": {
+      "comparison": "traceweave-seed-merge-draft-2",
+      "modes": [
+       "exact",
+       "normalized"
+      ],
+      "minRegionDistinctHashes": 2,
+      "mergeGap": 4,
+      "maxSeedsPerMode": 10000000,
+      "maxRegionsPerMode": 100000,
+      "suppressionCatalogueSha256": "none",
+      "parameterStatus": "experimental"
+     },
+     "pairs": [
+      {
+       "candidate": {
+        "id": "copy.go",
+        "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"
+       },
+       "reference": {
+        "id": "sum.go",
+        "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 14,
+           "numerator": 14
+          },
+          "referenceInCandidate": {
+           "denominator": 14,
+           "numerator": 14
+          }
+         },
+         "seedCount": 14,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 14,
+           "numerator": 14
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            16,
+            124
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 14,
+           "referenceSpan": [
+            16,
+            124
+           ],
+           "seeds": [
+            [
+             2,
+             2
+            ],
+            [
+             3,
+             3
+            ],
+            [
+             5,
+             5
+            ],
+            [
+             8,
+             8
+            ],
+            [
+             12,
+             12
+            ],
+            [
+             16,
+             16
+            ],
+            [
+             19,
+             19
+            ],
+            [
+             21,
+             21
+            ],
+            [
+             22,
+             22
+            ],
+            [
+             24,
+             24
+            ],
+            [
+             27,
+             27
+            ],
+            [
+             29,
+             29
+            ],
+            [
+             30,
+             30
+            ],
+            [
+             33,
+             33
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 17,
+           "numerator": 17
+          },
+          "referenceInCandidate": {
+           "denominator": 17,
+           "numerator": 17
+          }
+         },
+         "seedCount": 17,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 17,
+           "numerator": 17
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            0,
+            126
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 17,
+           "referenceSpan": [
+            0,
+            126
+           ],
+           "seeds": [
+            [
+             0,
+             0
+            ],
+            [
+             4,
+             4
+            ],
+            [
+             6,
+             6
+            ],
+            [
+             7,
+             7
+            ],
+            [
+             8,
+             8
+            ],
+            [
+             9,
+             9
+            ],
+            [
+             10,
+             10
+            ],
+            [
+             14,
+             14
+            ],
+            [
+             15,
+             15
+            ],
+            [
+             18,
+             18
+            ],
+            [
+             21,
+             21
+            ],
+            [
+             25,
+             25
+            ],
+            [
+             26,
+             26
+            ],
+            [
+             27,
+             27
+            ],
+            [
+             28,
+             28
+            ],
+            [
+             32,
+             32
+            ],
+            [
+             35,
+             35
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      }
+     ],
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     },
+     "referenceArtifactCount": 1,
      "status": "compared",
      "suppression": {
       "status": "none"
