@@ -1,0 +1,69 @@
+# Lane 09: NotebookLM report audit
+
+Prepared 2026-11-22. Companion to the [lane 09 evidence review](09-evidence-review.md), whose source ledger (W, B, M, P, K, U, N, A) and claim-audit checklist this audit applies. The report is a hypothesis source, not a requirement. **Verdict: accept the report's top-level decision (a winnowing fingerprint baseline; no embedded mark in existing text). Reject its stated reasons for the no-go on Unicode marks, its experiment, its thresholds and its specification changes as written.** The no-go stands for a different reason than the report gives: NFKC does not remove zero-width characters or cross-script homoglyphs; a wider canonical fold does (N, U).
+
+## Capture identity and limitations
+
+| Field | Value |
+| --- | --- |
+| Artifact | Studio report titled "Traceweave 09: Text and Document Profile Candidates — Forensic Evaluation, Comparative Robustness, and Baseline Candidate Selection", captured by the coordinator, not by this lane |
+| Raw capture | `.local/research/google/09-text-profile-ui.txt` (git-ignored; read only, not edited) |
+| Size | 38,469 code points; 38,751 bytes; 415 lines |
+| SHA-256 | `87c47dc5b8f1e398dad5eedb072441cd64432349455acc645aa5c528394239cf`, matching the value supplied, checked before and after this audit |
+
+Limitations:
+- Rendered Studio text, not a native export. Maths is broken across lines (for example `C(A,B)`, subscripts and square roots split), so some formulas were reconstructed by reading.
+- The evidence table is tab-separated; the last five ledger rows are collapsed into one line of `|` separators.
+- No NotebookLM citation markers, so claims cannot be traced to the notebook's imported sources. The source count of the notebook is not in the capture.
+- The report does not cite PAN-PC-10, the Nemecek et al. preprint (N) or Unicode UTS #39, the three sources in the evidence review that decide the Unicode-carrier question.
+
+## Claim-by-claim audit, by decision impact
+
+Status: **S** supported, **P** partly supported or overstated, **U** unsupported (no evidence offered), **C** contradicted, **V** unverifiable in this pass.
+
+| Impact | Report claim | Status | Basis |
+| --- | --- | --- | --- |
+| Blocker | Decision: winnowing as the single bounded fingerprint baseline; no-go for all embedded marks in existing text. | **S** | Same conclusion as the evidence review, reached independently. It is a selection inference, not a measurement. |
+| Blocker | NFKC "completely strips" U+200B, U+200C, U+200D, U+2060 and U+FEFF, "reducing payload bit recovery from 100% to exactly 0%"; homoglyphs have "0% survival under NFKC". | **C** | None of those five code points, nor Cyrillic U+0430, has a decomposition mapping; NFKC leaves them unchanged (UAX #15 §1.2 defines NFKC by decomposition mappings; local `unicodedata` lookup, Unicode 16.0.0 data, normalization of `a…b` returned the input unchanged for all six, while U+FB01 changed). N §6: NFKC keeps 93% of cross-script pairs; zero-width loss comes from the modelled copy-paste step, not NFKC. The removal that works is the canonical fold (NFKC + UTS #39 skeleton + delete Default_Ignorable). |
+| Blocker | Experiment: 500 Project Gutenberg and Wikipedia technical documents, pools of 100/400, k = 8, w = 10, 64-bit truncated MD5, θ = 0.05, r = 10; pass if positive containment ≥ 0.98 with 1% token substitutions, negatives < 0.05, abort if a negative ≥ 0.10, R_contain = 1.0000. | **C** (scope and arithmetic) | Corpus acquisition is an owner decision ([roadmap](../../ROADMAP.md), "Needs the owner"); Wikipedia text carries share-alike terms not discussed. All thresholds are invented. The 0.98 expectation conflicts with B §2 (one changed token affects up to k shingles): 1% substituted words with k = 8 alters roughly 8% of k-grams, so containment near 0.92 is the expected order, not ≥ 0.98. The negative "< 0.05" and "abort ≥ 0.10" rules leave an undecided gap. MD5 replaces the draft contract's SHA-256 framing (§7) without reason. |
+| Blocker | Experiment success criterion: the "dilution identity" df_corpus(u) = s · df_pool(u) must hold, with critical prevalence θ/s = 0.25 ± 0.01. | **P / U** | C2: the identity holds in the manuscript, but for a unit confined to a pool it follows from the definition of document frequency as a fraction (the reported 8.7×10⁻¹⁹ residual is floating-point error). Testing it cannot fail on correct code, so it cannot falsify anything about Traceweave. The ± 0.01 tolerance is invented. |
+| High | "Winnowing… 10.09M code/license blobs in World of Code; 14,684 pinned prose docs"; "C(A,B) ≥ 0.85 yields 92.08% accuracy, 87.14% precision, 95.45% recall"; "Manual verification of 1,000 deforked projects". | **P / C** | C1: the 92.08/87.14/95.45/91.11% figures exist (Table 3c), but they are project-to-licence assignment on the 580 of 1,000 sampled projects that got responses, after two rounds of exclusions (39 deleted projects and 11 later-removed licences, then 12 README-only cases). The score is shared signatures over the **union** (Eq. 1), a resemblance, not containment. The corpus is licence files, not prose. The "14,684 prose docs" belong to C2, a different study. |
+| High | Background-frame "dilution law" is "a decisive empirical finding in recent similarity literature" (issue-132, 2026); Traceweave "must forbid bare similarity threshold quotes" and declare frame level, θ, catalogue size and share s. | **P / U** | C2 exists at the cited commit with the quoted numbers, but it is a manuscript in a GitHub repository described as a journal "operated by EMRG autonomous agents", with no licence; it is not independent peer review. The requirement is invented. Traceweave already avoids document-frequency frames: the draft catalogue contract suppresses boilerplate with an explicit catalogue (OD-C5 option b), and roadmap M2.10 requires a vector where document-frequency suppression fails. C2 supports that existing choice; it adds no new field. |
+| High | Project baseline: carriers recovered raw states "following compilation"; "standard toolchain canonicalization (gofmt, rustfmt) systematically erased all tested non-zero distinctions". | **C** | Formatting is what the carriers survived; separate normalization erased them (lane 08 review: "clean/formatter recovery, normalization erases all 55 nonzero states per language"; SYN.2 in the roadmap counts 124/124 clean + formatted outputs). |
+| High | DIPPER "systematically erased lexical and syntactic watermarks… to random chance (50%), while preserving semantic similarity within 2%" (Krishna et al., 2023). | **C** | K evaluates a generation-time watermark, DetectGPT, a classifier and GPTZero, not lexical or syntactic marks in existing text. The watermark fell to 55.8/51.4% detection at 1% FPR (Table 2), a detection rate, not bit recovery. K reports semantic preservation differently: 88–99% of paraphrases score above the median P-SP of human-written paraphrases (§4); no "within 2%" figure was found. |
+| High | Reference implementation: fpcc (MIT), "Lex/Flex tokenization and 64-bit truncated MD5", for prose and Markdown. | **P / C** | C3: MIT licence and winnowing are **S**. fpcc is "a set of tools to detect similarities between C source files"; its front end is a C lexer that hashes token IDs and ignores names, literals and comments, so it does not tokenize prose. The README names MD5; truncation to 64 bits was not seen. Last commit 2020; build needs flex, bison and OpenSSL. |
+| High | Proposed profile `traceweave-profile-text-winnow-v1` with k = 8, w = 10, "HighwayHash or truncated BLAKE3 for cryptographic robustness"; metadata for T = 17. | **U / C** | Invented name and parameters. Changing the hash conflicts with the draft contract (§7 SHA-256 framing); an unkeyed hash gives no privacy or "cryptographic robustness" whatever its function (contract §7, §12). |
+| Medium | Cheapest removal of winnowing: insert distractor tokens every w + k − 2 words. | **P** | Follows from the W §3 guarantee: no unchanged run of w + k − 1 tokens remains. "Without altering human comprehension" is unsupported. Adopted in the evidence review as a recorded limit. |
+| Medium | MinHash: SE ≤ 1/√K ≈ 0.088 at K = 128 in one place, SE ≈ 0.035 in another; macro F1 0.921 on CORE; rensa 39× faster than datasketch (1,725 s vs 44 s). | **P / V** | The two SE figures are inconsistent with each other. For an unbiased min-hash estimate the binomial standard error is √(J(1−J)/K) ≤ 0.044 at K = 128 (B §3 estimator; arithmetic). Benchmarks and F1 not checked. |
+| Medium | SimHash macro F1 0.550 across 41 languages (RETSim, arXiv:2311.17264v1, Tables 4, 11). | **V** | Not checked. Consistent in direction with M, which documents SimHash only for whole-page near-duplicates. |
+| Medium | Zero-width "1 bit per visible char; up to 1,000 bits/doc"; homoglyph "0.1–0.5 bits per word"; whitespace 20–50 bits per 1,000 words; synonym < 0.05 bits/word, BER 15–35%; syntactic 85–95% clean recovery. | **U / V** | No unit derivation or denominator. N measures 2.30 raw bits per character for the insertion track and 7.09 total for English, both before keying or authentication. The steganography repositories, d'Amore & Serpi, Topkara, Atallah and Liu were not checked. |
+| Medium | "A fingerprint match constitutes technical proof of structural containment"; profiles must separate `detection_score` from `identity_assertion`. | **P / U** | Separating similarity from identity is **S** (use cases; contract §12). "Proof" overstates: a shared unkeyed 64-bit hash may be a common phrase or a collision; W guarantees only that a long enough shared run yields a shared fingerprint. Field names are proposed schema names. |
+| Low | Handoffs: code profiles "should adopt Winnowing on AST linearized tokens"; continuous media "possess high entropy capable of supporting robust spread-spectrum watermarking". | **C / U** | The draft contract is lexical only, with no parser (§1). The media statement is a generalization with no source; lane 08 found distinct, medium-specific failure modes. |
+| Low | "Traceweave architectural mandate for decentralized, privacy-preserving infrastructure"; detection "must execute locally on commodity CPU". | **P** | The brief requires that local/private verification be possible and prefers local operation; it does not mandate decentralization or forbid other deployments. |
+
+## Additional primary-source checks (three)
+
+Fetched 2026-11-22 with read-only HTTP (each returned 200). Repository heads read through GitHub's API.
+
+| ID | Source | Locations used |
+| --- | --- | --- |
+| C1 | Jahanshahi, Reid, McDaniel, Mockus, *OSS License Identification at Scale: A Comprehensive Dataset Using World of Code*, [arXiv:2409.04824v1](https://arxiv.org/abs/2409.04824v1), 2024-09-07 | Winnowing description and Eq. 1 (shared over union); Table 1 (10,093,268 potential blobs, 9,794,559 with signatures, 7,167,046 matched); 20 blobs per score bucket, 85% threshold; P2L verification of 1,000 sampled projects, 580 responses, Table 3a–c and the exclusions behind 92.08% |
+| C2 | argszero, *The Frame Is a Level*, `papers/issue-132/manuscript.md` at commit [`499c243`](https://github.com/argszero/silicon-science-cs/blob/499c24322d6705ef47de14e9e0100ed5da6c2b79/papers/issue-132/manuscript.md), 2026-10-14; repository description "operated by EMRG autonomous agents", no licence detected by the API | Abstract: 14,684 pinned documents, containment refuted in 24 of 24 cells, dilution identity residual 8.7×10⁻¹⁹ over 685,502 word-3 pairs, 120 of 120 community pairs, critical prevalence 0.278 vs 0.118 |
+| C3 | [dlp/fpcc](https://github.com/dlp/fpcc/tree/fd9522728c47b3271762d866d081e7984e877231), head `fd95227`, 2020-11-04; [LICENSE](https://github.com/dlp/fpcc/blob/fd9522728c47b3271762d866d081e7984e877231/LICENSE) MIT | README: C-source tool, C-grammar lexer over token IDs, winnowing, MD5 via OpenSSL, `sig`/`idx`/`comp`/`map` tools, flex/bison build |
+
+The NFKC check in the first blocker row used the evidence review's ledger U and a local standard-library lookup, not an additional source.
+
+## Flags
+
+- **Invented thresholds:** containment ≥ 0.98, < 0.05, abort ≥ 0.10, R_contain = 1.0000 and < 0.9990, ± 0.01 on critical prevalence, ≥ 1% negative alerts, θ = 0.05 and r = 10 as profile values, k = 8 / w = 10 as profile values, the "< 30 seconds" runtime, and every per-carrier capacity range.
+- **Invented project requirements:** a ban on bare similarity thresholds, mandatory frame-level, share and catalogue-size declarations, a normative exclusion clause for surface steganography, AST winnowing for code profiles, a decentralization mandate, and "text provenance must rely on" fingerprints and DSSE.
+- **Unsupported guarantees:** "completely invariant to Markdown reflowing" (true only for the declared tokenizer), "exactly 0%" recovery under NFKC, "technical proof of structural containment", "100% semantic fidelity", and "fails completely" against paraphrase for every syntactic scheme.
+- **Proposed schema names:** `traceweave-profile-text-winnow-v1`, `detection_score`, `identity_assertion`, a frame-level field `l`, catalogue size `|N|` and share `s` fields.
+
+## What survives
+
+1. The decision itself: a winnowing fingerprint baseline for prose, and no embedded mark in existing text, matching the evidence review.
+2. Periodic insertion at a spacing of w + k − 2 tokens as the cheapest removal of a winnowing match. The evidence review now records it as a Stage 1 limit.
+3. C2's point that a document-frequency frame hides registers common inside a minority sub-population. It reinforces the existing explicit-catalogue choice (OD-C5 option b, M2.10) rather than adding a requirement.
+
+Validation: capture SHA-256 rechecked after writing; all external links in this file returned HTTP 200; local links resolve; no trailing whitespace. No experiment was run and nothing under `.local/` was edited or committed.
