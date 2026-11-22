@@ -55,7 +55,7 @@ Owner column: **S** = spec repository; **I** = implementation repository (`trace
 
 | ID | Type | Verifiable criterion | Status / evidence | Owner |
 | --- | --- | --- | --- | --- |
-| M0.1 | E | The capability list is exactly: UC-1…UC-6 and walkthroughs W-1, W-2 from `docs/use-cases.md`, plus one row per `##` heading of `docs/implementation-patterns.md` except "Example matrix" (13 rows today). A non-author recounts it from those documents. Each row needs a verification plan, merged into `docs/`, whose pass/fail is a command exit code or a count, with no judgment words. Met when every recounted row has such a plan | open: plans not yet merged into `docs/` | S |
+| M0.1 | E | The capability list is exactly: UC-1…UC-6 and walkthroughs W-1, W-2 from `docs/use-cases.md`, plus one row per `##` heading of `docs/implementation-patterns.md` except "Example matrix" (13 rows today). A non-author recounts it from those documents. Each row needs a verification plan, merged into `docs/`, whose pass/fail is a command exit code or a count, with no judgment words. Met when every recounted row has such a plan | open: verification plans merged into `docs/` in `b13cb68` ([use cases](docs/use-cases.md#capability-index-and-recount), [patterns](docs/implementation-patterns.md)). **Ready for the non-author recount**; not marked met. The recount also decides whether every pass/fail is an exit code or a count: the plans for UC-3, UC-4, UC-6, W-1, W-2 and H-1…H-5 still describe some observations in words | S |
 | M0.2 | E | Five discovery lanes are reviewed against both provider reports | met: [discovery-checkpoint.md](research/discovery-checkpoint.md) | S |
 | M0.3 | E | Example matrix: each row names its use case and expected assertion | met: [example matrix](docs/implementation-patterns.md#example-matrix) | S |
 | M0.4 | E | `validate` exits 0 with 6 tests | met: [validate.py](tools/validate.py), rerun 2026-11-22 | S |
@@ -93,11 +93,11 @@ Owner column: **S** = spec repository; **I** = implementation repository (`trace
 
 | Record | Result | Status / evidence |
 | --- | --- | --- |
-| SYN.1 | Deliberate insertion recovers after the formatter: **55/55** nonzero insertions per language. The 62/62 total includes 7 already-zero states, which show decoding only | measured; evidence exists, uncommitted: [experiment-checkpoint.md](research/experiment-checkpoint.md) |
-| SYN.2 | Functionality checks on marked outputs only: Go 124/124 (clean + formatted); Rust 124/124 per build profile, 248 across two. Attack outputs excluded | measured; evidence exists, uncommitted: [Go](research/lanes/go-carrier-results.md), [Rust](research/lanes/rust-carrier-results.md) |
-| SYN.3 | Nonzero states survive cheap canonicalization | negative-result measured; evidence exists, uncommitted: 55/55 reset per language |
-| SYN.4 | Signal transplant is not decoded as same-context evidence | negative-result measured; evidence exists, uncommitted: transfers decode, [fragment-policy-checkpoint.md](research/fragment-policy-checkpoint.md) |
-| SYN.5 | Safe eligible sites in the 4-repository census, narrow patterns | inconclusive: no eligible site established; 5 Go singletons unassessed, [census](research/public-census-checkpoint.md) |
+| SYN.1 | Deliberate insertion recovers after the formatter: **55/55** nonzero insertions per language. The 62/62 total includes 7 already-zero states, which show decoding only | measured; evidence committed in `4d0288f`: [experiment-checkpoint.md](research/experiment-checkpoint.md) |
+| SYN.2 | Functionality checks on marked outputs only: Go 124/124 (clean + formatted); Rust 124/124 per build profile, 248 across two. Attack outputs excluded | measured; evidence committed in `4d0288f`: [Go](research/lanes/go-carrier-results.md), [Rust](research/lanes/rust-carrier-results.md) |
+| SYN.3 | Nonzero states survive cheap canonicalization | negative-result measured; evidence committed in `4d0288f`: 55/55 reset per language ([experiment-checkpoint.md](research/experiment-checkpoint.md)) |
+| SYN.4 | Signal transplant is not decoded as same-context evidence | negative-result measured; evidence committed in `4d0288f`: same-context transfers decode, [fragment-policy-checkpoint.md](research/fragment-policy-checkpoint.md) |
+| SYN.5 | Safe eligible sites in the 4-repository census, narrow patterns | inconclusive: no eligible site established; 5 Go singletons unassessed, [census](research/public-census-checkpoint.md), committed in `95fb157` |
 
 **Counted gates for the next candidate C:**
 
@@ -128,8 +128,8 @@ Owner column: **S** = spec repository; **I** = implementation repository (`trace
 
 | ID | Type | Verifiable criterion | Status / evidence | Owner |
 | --- | --- | --- | --- | --- |
-| M4.1 | R | Pinned Go/Rust DSSE libraries interoperate on the existing statement: 4 producer/consumer pairs, no network | open: evidence exists, uncommitted (66 outcomes, [signing-interop-results.md](research/lanes/signing-interop-results.md)) | S |
-| M4.2 | R | Independent Go/Rust commitment code reproduces `test-vectors/commitment.json` and rejects changed openings | open: evidence exists, uncommitted ([signing-policy-results.md](research/lanes/signing-policy-results.md)) | S |
+| M4.1 | R | Pinned Go/Rust DSSE libraries interoperate on the existing statement: 4 producer/consumer pairs, no network | met: committed in `0bc4e23`. [results.json](research/experiments/signing-interop/results.json) holds 66 outcomes, 16 for each of the 4 producer/consumer pairs (Go→Go, Go→Rust, Rust→Go, Rust→Rust) on the existing 762-byte statement, with `network_denied: true`; libraries pinned in the committed `go.sum` and `Cargo.lock` ([results](research/lanes/signing-interop-results.md)). Recorded results checked in this change; the harness was not rerun | S |
+| M4.2 | R | Independent Go/Rust commitment code reproduces `test-vectors/commitment.json` and rejects changed openings | met: committed in `0bc4e23`. [policy-results.json](research/experiments/signing-interop/policy-results.json) holds 50 native commitment outcomes: Go and Rust both reproduce the `test-vectors/commitment.json` value `f4df04ab…c4a9`, and changed openings (catalogue bit flip, trailing whitespace, nonce bit flip, reserialization) give different commitments in both; invalid nonce lengths are rejected ([results](research/lanes/signing-policy-results.md)). Recorded results checked in this change; the harness was not rerun | S |
 | M4.3 | E | Negative cryptographic vectors (tampered payload, type or signature; untrusted key; malformed or duplicate-key payload; subject mismatch), each with a distinct reason code. `validate` checks them | open | S |
 | M4.4 | E | Two implementations, each with its own strict parser and key-hint policy, produce identical bytes and reason codes on every M4.3 vector | open | I |
 | M4.5 | E | in-toto adapter accept/reject fixtures, checked by `validate`. A trust-policy document. A recorded decision on the optional timestamp adapter | open | S |
@@ -144,6 +144,17 @@ Owner column: **S** = spec repository; **I** = implementation repository (`trace
 | M5.3 | E | A non-author reproduces the demo offline after dependency fetch: clean clone → pinned implementation | open | S+I |
 | M5.4 | E | Release notes list every unresolved limit and state (a) whether embedding is included, citing M2E.0 if omitted, and (b) whether signing is included. Claiming cryptographic verification requires all M4 E gates met; otherwise the release is labelled unsigned detector-only | open | S |
 | M5.5 | E | Versioned spec, migration notes and a conformance matrix (feature × level × implementation) | open | S |
+
+## Progress count
+
+Counted on 2026-11-22 from the status columns above.
+
+| Gates | Total | Met | Negative-result | Open |
+| --- | --- | --- | --- | --- |
+| Core M0–M5 | 47 | 5 (M0.2, M0.3, M0.4, M4.1, M4.2) | 0 | 42 |
+| Later profiles, EXT and RC | 26 | 0 | 0 | 26 |
+
+M0.1 is ready for the non-author recount and is counted open. The SYN records are research records and are not counted. Evidence for M4.1 and M4.2 is committed in `0bc4e23`.
 
 ## Later profiles and sequence
 
