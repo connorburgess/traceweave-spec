@@ -112,3 +112,38 @@ Fixes required before starting:
 4. M1: rerun `check_vectors.py` in the clean tree, with `git status --porcelain` staying empty.
 
 Not blocking: the M2 reporting rule and M3 errata go in the results commit; L1, L2 and a built-in code-identity check go in the next version; the profile discretion items go in IMGF.1 and IMGF.5 before those gates are claimed.
+
+## Confirmation pass: e-img-f-2
+
+Checked 2026-11-22 on a `git archive` export of the frozen commit `6f39e50f33026c9f1d9526c2a566d6a447219667`, offline, using the existing `.venv` with nothing installed. I did not run `full` and generated no seed in 0–199.
+
+**Reruns.** The self-excluding digest recomputes to `44a67a14…6b90c4`, equal to the recorded value. `check_vectors.py` gives: files 30/30; port 30/30; C++ within 10 bits 8/8 (exact 0/8), quality 8/8; Python within 16 bits 12/12 and 18/18; ISCC 3/3 compiled and 3/3 pure. The regenerated `check-results.json` is byte-identical to the committed one. Unit tests (`-s tests -t .`): 30 OK.
+
+**Earlier findings: all resolved.**
+- B1: `code_identity()` requires HEAD = `--frozen-commit`, an empty `status --porcelain --untracked-files=all`, a zero `git diff --exit-code` on the frozen paths, ancestry, and the version line `e-img-f-2`. All are logged; failure exits 2.
+- B2 is recorded in §0 and IMGF.3. B3: IMGF.2 carries the proposed text, and IMGF.4 accepts `sandbox-exec` with the probe. M1: a fresh `check_vectors.run_checks()`, refused if `statusAfterVectorCheck` is non-empty. M2: §1 and the §6 reporting rule. M3: the erratum is in §13; now 1,400 extractions = 100 + 1,200 + 100.
+- Truncation is gone, and V5 checks list length = count. L1: the probe now uses `127.0.0.1:1`, so no packet leaves. L2: §3 gives every draw, in order. Profile draft-2: `JDCT_ISLOW` and fancy upsampling named; IHDR bit-depth rule; EXIF for JPEG only; CMYK/YCbCr out of scope; gamma chunks ignored; iscc-sdk equality claim withdrawn; no NOTICE.
+
+**Diff against `e-img-f-1`.**
+- **Nothing passes trivially or was chosen from results.** No count has a pass line. `T_iscc = ⌊64·31/256⌋ = 7` comes from a fixed rule.
+- **V1 is predictable.** Its counts come from the public vendor vectors and its tolerances are the vendor's. The real uncertainty is V2 and V5 on 1,400 extractions, as §1 says.
+- **No experiment seed has been generated, as far as the repository and logs show.** The tests generate only seeds ≥ 1,000,000 (goldens 1,000,000–1,000,002). The `seed: i` at `tests/test_harness.py:332` is a fixture dictionary, not a generator call. All three `out/smoke-*` summaries are mode `smoke`, and no `results/` path exists in any commit.
+
+**Conditions against IMGF.3/IMGF.4.** Each is decided by an exit code or a count, and each matches the gates as worded: V1, `vector_verdict()` with 7 k/k counts (IMGF.4(a)); V2, the `compare` exit code (IMGF.4(b)); V4, 0 mismatches with 1,400 compared (the in-run half of IMGF.2 "exact"); V5, 0 catalogue and 0 query errors (IMGF.4(c)). Editorial: IMGF.2's "(protocol C2)" should read "(protocol V4)".
+
+**New discrepancy, non-blocking.** §9 sets the abort limit at 1 h, but `run_experiment.py:56` has `ABORT_SECONDS = 4 * 3600`. The protocol text governs, so the recheck treats `elapsedSeconds` > 3,600 as an aborted run. Align the code in the next version.
+
+**Command sequence.** Run outside any agent sandbox, which blocks nested `sandbox-exec` and `.git/worktrees` writes. Both full runs are under network denial, so a third run is unnecessary (smoke c already recorded ECONNREFUSED with the network allowed).
+```sh
+FROZEN=6f39e50f33026c9f1d9526c2a566d6a447219667; SB='(version 1)(allow default)(deny network*)'
+git worktree add --detach ../imgf-run "$FROZEN" && cd ../imgf-run/research/experiments/image-fingerprint
+# provision git-ignored wheelhouse/ and vectors/pdq-data/ (fetch_*.py or copy; hash-checked); README install, --no-index --require-hashes
+git rev-parse HEAD; git status --porcelain --untracked-files=all    # FROZEN, then nothing
+/usr/bin/sandbox-exec -p "$SB" .venv/bin/python -m unittest discover -s tests -t .
+for r in 1 2; do /usr/bin/sandbox-exec -p "$SB" .venv/bin/python run_experiment.py full --frozen-commit "$FROZEN" --require-network-denied --out out/full-$r; echo "exit $?"; done
+/usr/bin/sandbox-exec -p "$SB" .venv/bin/python run_experiment.py compare out/full-1 out/full-2; echo "exit $?"
+git status --porcelain --untracked-files=all                         # nothing
+```
+**Log in the results commit:** every command, with its stdout and exit code (all 0). From each `summary.json`: `codeIdentity.ok: true` with `frozenCommit` = HEAD = `6f39e50f…`; empty `statusAfterVectorCheck` and `statusAfterRun`; `networkDenied.denied: true` with the EPERM probe text; `vectorChecks` 7/7; the validity map; equal `resultsSha256`; `elapsedSeconds` ≤ 3,600. The results commit must pass `git merge-base --is-ancestor $FROZEN HEAD`.
+
+**Verdict: the run may start.** No blocking items remain. The abort-limit reading and the C2→V4 wording are handled as stated above.
