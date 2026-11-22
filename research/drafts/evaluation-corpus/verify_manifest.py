@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
-"""Check the M3 corpus manifest (protocol m3-eval-draft-1). Standard library only.
+"""Check the M3 corpus manifest (protocol m3-eval-draft-2). Standard library only.
 
 Usage:
   python3 -I verify_manifest.py [MANIFEST] [--schema SCHEMA]   exit 0 valid, 1 invalid, 2 usage or I/O error
+  python3 -I verify_manifest.py --licence-dir DIR [MANIFEST]    also recheck every licence file against
+                                                                 DIR/<owner>/<repo>/<path> (acquisition, M5):
+                                                                 SHA-256 and classification must match
   python3 -I verify_manifest.py --self-test [MANIFEST]          exit 0 when the manifest passes and every
-                                                                 generated broken manifest is rejected with
-                                                                 its expected error code
+                                                                 generated broken manifest (and broken licence
+                                                                 text) is rejected with its expected error code
 
 The checker interprets the schema keywords used by manifest.schema.json, then makes the semantic checks a
 schema cannot express: licence expression and redistribution follow from the classified licence files,
-census and excluded owners are absent, groups are disjoint across splits, the split assignment and its
-digest are recomputed, the selection walk is recomputed from the pool snapshot, and the totals add up.
-It makes no network request; URLs are checked for form, not fetched.
+census and excluded owners are absent, groups are one owner each and disjoint across splits, no two entries
+are dependency-linked, acquisition-time rejections name an earlier accepted repository and stay within the
+replacement limit, the split assignment and its digest are recomputed, the selection walk is recomputed
+from the pool snapshot, and the totals add up. With --licence-dir it also reruns the licence classifier
+(m3-licence-classifier-v1) on the fetched licence texts. It makes no network request.
 """
 import copy
 import hashlib
@@ -29,7 +34,71 @@ IGNORED_TOPICS = {"go", "golang", "rust", "rustlang", "hacktoberfest"}
 PREFILTER_REASONS = {"excluded-owner-census", "excluded-owner-development-exposed", "list-repository", "owner-already-selected"}
 FACT_REASONS = {"licence-file-missing", "licence-unclassified", "licence-not-allowed", "too-few-eligible-files",
                 "eligible-bytes-over-limit"}
-ACQUISITION_REASONS = {"revision-unresolved", "tree-truncated", "dependency-linked", "duplicate-content"}
+NO_FACT_REASONS = {"revision-unresolved", "tree-truncated"}
+LINK_REASONS = {"dependency-linked", "duplicate-content"}
+
+# m3-licence-classifier-v1 (protocol section 3.2)
+PHRASES = {
+    "MIT": ["permission is hereby granted, free of charge, to any person obtaining a copy",
+            "the above copyright notice and this permission notice shall be included"],
+    "Apache-2.0": ["apache license", "version 2.0, january 2004"],
+    "BSD-3-Clause": ["redistribution and use in source and binary forms, with or without modification, are permitted",
+                     "endorse or promote products derived from this software"],
+    "BSD-2-Clause": ["redistribution and use in source and binary forms, with or without modification, are permitted"],
+    "ISC": ["permission to use, copy, modify, and",
+            "distribute this software for any purpose with or without fee is hereby granted",
+            "provided that the above copyright notice and this permission notice appear in all copies"],
+    "0BSD": ["permission to use, copy, modify, and",
+             "distribute this software for any purpose with or without fee is hereby granted"],
+    "Unlicense": ["this is free and unencumbered software released into the public domain"],
+    "Zlib": ["altered source versions must be plainly marked as such"],
+    "GPL-3.0": ["gnu general public license version 3, 29 june 2007"],
+    "GPL-2.0": ["gnu general public license version 2, june 1991"],
+    "AGPL-3.0": ["gnu affero general public license version 3, 19 november 2007"],
+    "LGPL-3.0": ["gnu lesser general public license version 3, 29 june 2007"],
+    "MPL-2.0": ["mozilla public license version 2.0"],
+    "CC": ["creative commons"],
+    "EUPL": ["european union public licence"],
+}
+
+
+def classify(data):
+    text = data.decode("utf-8", "replace").lower().replace("*", " ").replace("#", " ")
+    text = re.sub(r"\s+", " ", text)
+    hits = {k for k, phrases in PHRASES.items() if all(ph in text for ph in phrases)}
+    if "BSD-3-Clause" in hits:
+        hits.discard("BSD-2-Clause")
+    if "ISC" in hits:
+        hits.discard("0BSD")
+    if len(hits) == 1:
+        return hits.pop()
+    if not hits:
+        return "unrecognized"
+    return "multiple:" + "+".join(sorted(hits))
+
+
+def recheck_licences(m, directory, only=None):
+    """Fail closed: every licence file of every entry must exist under directory with the recorded
+    SHA-256 and classification."""
+    checked = 0
+    for e in m["entries"]:
+        if only is not None and e["id"] not in only:
+            continue
+        for f in e["licence"]["files"]:
+            path = Path(directory) / e["fullName"] / f["path"]
+            try:
+                data = path.read_bytes()
+            except OSError:
+                raise Invalid("E-LICENCE-TEXT", f"{e['fullName']}: {f['path']} not found under {directory}")
+            if hashlib.sha256(data).hexdigest() != f["sha256"]:
+                raise Invalid("E-LICENCE-TEXT", f"{e['fullName']}: {f['path']} SHA-256 differs from the manifest")
+            if len(data) != f["bytes"]:
+                raise Invalid("E-LICENCE-TEXT", f"{e['fullName']}: {f['path']} length differs from the manifest")
+            got = classify(data)
+            if got != f["spdx"]:
+                raise Invalid("E-LICENCE-TEXT", f"{e['fullName']}: {f['path']} classifies as {got}, manifest says {f['spdx']}")
+            checked += 1
+    return checked
 
 
 class Invalid(Exception):
@@ -247,7 +316,7 @@ def check(m):
         walk = m["walks"][language]
         if len(walk) > len(pool):
             raise Invalid("E-WALK", f"{language}: walk longer than pool")
-        accepted_owners, accepted = set(), []
+        accepted_owners, accepted, replacements = set(), [], 0
         for pos, (w, p) in enumerate(zip(walk, pool)):
             if w["fullName"] != p["fullName"]:
                 raise Invalid("E-WALK", f"{language} walk position {pos + 1}: {w['fullName']}, order requires {p['fullName']}")
@@ -268,10 +337,21 @@ def check(m):
             if reason in PREFILTER_REASONS:
                 raise Invalid("E-WALK", f"{language} {p['fullName']}: {reason} does not apply")
             facts = w.get("facts")
-            if reason in ACQUISITION_REASONS:
+            if reason in NO_FACT_REASONS:
                 if w["verdict"] != "rejected":
                     raise Invalid("E-WALK", f"{language} {p['fullName']}: verdict/reason mismatch")
+                replacements += 1
                 continue
+            if reason in LINK_REASONS:
+                linked = w.get("linkedTo", "").lower()
+                if w["verdict"] != "rejected" or facts is None:
+                    raise Invalid("E-WALK", f"{language} {p['fullName']}: {reason} needs a rejected verdict and recorded facts")
+                if linked not in {a["fullName"].lower() for a, _ in accepted}:
+                    raise Invalid("E-WALK", f"{language} {p['fullName']}: {reason} must name an accepted repository earlier in the walk")
+                replacements += 1
+                continue
+            if "linkedTo" in w:
+                raise Invalid("E-WALK", f"{language} {p['fullName']}: linkedTo without a link reason")
             if facts is None or "licenceFiles" not in facts or "eligiblePathCount" not in facts:
                 raise Invalid("E-WALK", f"{language} {p['fullName']}: verdict needs recorded facts")
             derived = licence_outcome(facts["licenceFiles"], allow)
@@ -286,6 +366,9 @@ def check(m):
                 accepted.append((p, facts))
             elif w["verdict"] != "rejected" or reason != derived:
                 raise Invalid("E-WALK", f"{language} {p['fullName']}: facts require rejected/{derived}")
+        if replacements > m["acquisition"]["replacementLimitPerLanguage"]:
+            raise Invalid("E-REPLACEMENTS", f"{language}: {replacements} acquisition-time rejections exceed the limit "
+                                            f"{m['acquisition']['replacementLimitPerLanguage']}")
         if len(accepted) != sel["targetPerLanguage"]:
             raise Invalid("E-WALK", f"{language}: {len(accepted)} accepted, target {sel['targetPerLanguage']}")
         if walk and walk[-1]["verdict"] != "accepted":
@@ -304,14 +387,9 @@ def check(m):
                     raise Invalid("E-WALK", f"{p['fullName']}: size.{k} differs from the walk record")
 
     # Groups: owner-derived unless merged; disjoint across splits.
-    merged = {}
-    for mg in m["groupMerges"]:
-        target = min(mg["owners"])
-        for o in mg["owners"]:
-            merged[(mg["language"], o)] = target
     group_split, owner_group = {}, {}
     for e in entries:
-        want = merged.get((e["language"], e["owner"]), e["owner"])
+        want = e["owner"]
         if e["splitGroup"] != want:
             raise Invalid("E-GROUP", f"{e['fullName']}: splitGroup {e['splitGroup']}, rule gives {want}")
         prev = owner_group.setdefault((e["language"], e["owner"]), e["splitGroup"])
@@ -320,12 +398,18 @@ def check(m):
         key = (e["language"], e["splitGroup"])
         if group_split.setdefault(key, e["split"]) != e["split"]:
             raise Invalid("E-GROUP-DISJOINT", f"group {e['splitGroup']} ({e['language']}) appears in both splits")
+    rejected_link = {}
+    for language in LANGUAGES:
+        for w in m["walks"][language]:
+            if w.get("reason") == "dependency-linked":
+                rejected_link[w["fullName"].lower()] = w["linkedTo"].lower()
     for edge in m["dependencyEdges"]:
-        a, b = by_full.get(edge["from"].lower()), by_full.get(edge["to"].lower())
-        if a is None or b is None:
-            raise Invalid("E-GROUP", f"dependency edge {edge['from']} -> {edge['to']} names a repository not in the corpus")
-        if (a["language"], a["splitGroup"]) != (b["language"], b["splitGroup"]):
-            raise Invalid("E-GROUP-DISJOINT", f"dependency edge {edge['from']} -> {edge['to']} crosses groups")
+        a, b = edge["from"].lower(), edge["to"].lower()
+        if a in by_full and b in by_full:
+            raise Invalid("E-DEPENDENCY-LINKED", f"accepted entries {edge['from']} and {edge['to']} are dependency-linked")
+        if rejected_link.get(a) != b and rejected_link.get(b) != a:
+            raise Invalid("E-DEPENDENCY-LINKED", f"edge {edge['from']} -> {edge['to']}: the later repository must be "
+                                                 "rejected dependency-linked to the earlier one")
 
     # Split assignment and digest, recomputed.
     for language in LANGUAGES:
@@ -354,7 +438,7 @@ def check(m):
         raise Invalid("E-TOTALS", "totals do not match the entries")
 
     return {"entries": len(entries), "digest": digest,
-            "negativeSearches": sum(n * (n - 1) for n in (
+            "negativeSearches": sum(n * (n - 1) // 2 for n in (
                 len({e["splitGroup"] for e in entries if e["language"] == lang and e["split"] == "held-out"})
                 for lang in LANGUAGES)),
             "sameDomainSearches": same_domain(entries)}
@@ -363,9 +447,9 @@ def check(m):
 def same_domain(entries):
     count = 0
     held = [e for e in entries if e["split"] == "held-out"]
-    for a in held:
-        for b in held:
-            if a is b or a["language"] != b["language"] or a["splitGroup"] == b["splitGroup"]:
+    for i, a in enumerate(held):
+        for b in held[i + 1:]:
+            if a["language"] != b["language"] or a["splitGroup"] == b["splitGroup"]:
                 continue
             if (set(a["topics"]) - IGNORED_TOPICS) & (set(b["topics"]) - IGNORED_TOPICS):
                 count += 1
@@ -442,14 +526,42 @@ def mutations(m):
     def straddle(b):
         held, tune = entry(b, "Go", "held-out"), entry(b, "Go", "tuning")
         tune["splitGroup"] = held["splitGroup"]
-        b["groupMerges"].append({"language": "Go", "owners": sorted([held["owner"], tune["owner"]]), "reason": "dependency"})
-        held["splitGroup"] = tune["splitGroup"] = min(held["owner"], tune["owner"])
-    yield mut("merged group straddles splits", "E-GROUP-DISJOINT", straddle)
+    yield mut("tuning entry put in a held-out owner's group", "E-GROUP", straddle)
 
     def edge(b):
         held, tune = entry(b, "Go", "held-out"), entry(b, "Go", "tuning")
         b["dependencyEdges"].append({"from": held["fullName"], "to": tune["fullName"], "declaredIn": "go.mod"})
-    yield mut("dependency edge crosses splits", "E-GROUP-DISJOINT", edge)
+    yield mut("two accepted entries dependency-linked", "E-DEPENDENCY-LINKED", edge)
+
+    def edge_same_split(b):
+        x, y = [e for e in b["entries"] if e["language"] == "Rust" and e["split"] == "held-out"][:2]
+        b["dependencyEdges"].append({"from": x["fullName"], "to": y["fullName"], "declaredIn": "Cargo.toml"})
+    yield mut("dependency edge inside one split is still rejected", "E-DEPENDENCY-LINKED", edge_same_split)
+
+    def link_without_target(b):
+        w = next(w for w in b["walks"]["Rust"] if w.get("reason") == "licence-not-allowed")
+        w["reason"] = "dependency-linked"
+    yield mut("dependency-linked rejection without linkedTo", "E-WALK", link_without_target)
+
+    def link_to_later(b):
+        walk = b["walks"]["Rust"]
+        i = next(i for i, w in enumerate(walk) if w.get("reason") == "licence-not-allowed")
+        later = next(w for w in walk[i + 1:] if w["verdict"] == "accepted")
+        walk[i]["reason"] = "duplicate-content"
+        walk[i]["linkedTo"] = later["fullName"]
+    yield mut("duplicate-content linked to a later repository (tie rule)", "E-WALK", link_to_later)
+
+    def too_many_replacements(b):
+        b["acquisition"]["replacementLimitPerLanguage"] = 0
+        walk = b["walks"]["Rust"]
+        first_accepted = next(w for w in walk if w["verdict"] == "accepted")
+        w = next(w for w in walk if w.get("reason") == "licence-not-allowed" and walk.index(w) > walk.index(first_accepted))
+        w["reason"] = "dependency-linked"
+        w["linkedTo"] = first_accepted["fullName"]
+    yield mut("acquisition rejections above the replacement limit", "E-REPLACEMENTS", too_many_replacements)
+    yield mut("older manifest version", "E-SCHEMA", lambda b: b.update(manifestVersion="traceweave-m3-corpus-manifest-draft-1"))
+    yield mut("ordered search unit", "E-SCHEMA", lambda b: b["acquisition"].update(searchUnit="ordered repository pair"))
+    yield mut("replacement limit above 8", "E-SCHEMA", lambda b: b["acquisition"].update(replacementLimitPerLanguage=9))
 
     def wrong_group(b):
         entry(b)["splitGroup"] = "someone-else"
@@ -507,9 +619,56 @@ def mutations(m):
     yield mut("revision differs from walk record", "E-WALK", revision_swap)
 
 
+SYNTHETIC_MIT = (b"MIT License\n\nCopyright (c) synthetic test\n\nPermission is hereby granted, free of charge, to any person "
+                 b"obtaining a copy\nof this software ...\n\nThe above copyright notice and this permission notice shall be "
+                 b"included in all\ncopies or substantial portions of the Software.\n")
+SYNTHETIC_GPL = b"GNU GENERAL PUBLIC LICENSE\nVersion 3, 29 June 2007\n"
+
+
+def licence_text_target(m):
+    return next(e for e in m["entries"] if len(e["licence"]["files"]) == 1 and e["licence"]["files"][0]["spdx"] == "MIT")
+
+
+def licence_text_cases(m):
+    """Yield (name, expected code or None, manifest, files) for the --licence-dir recheck, on one entry whose single
+    licence file is replaced by a synthetic text (no third-party text is shipped)."""
+    target = licence_text_target(m)
+
+    def with_text(data, recorded_sha=None, spdx="MIT", present=True):
+        b = copy.deepcopy(m)
+        e = next(x for x in b["entries"] if x["id"] == target["id"])
+        f = e["licence"]["files"][0]
+        f["sha256"] = recorded_sha or hashlib.sha256(data).hexdigest()
+        f["bytes"] = len(data)
+        f["spdx"] = spdx
+        return b, ({(e["fullName"], f["path"]): data} if present else {})
+    yield ("synthetic MIT text, recorded correctly", None) + with_text(SYNTHETIC_MIT)
+    yield ("SHA-256 changed consistently in the manifest (review M5)", "E-LICENCE-TEXT") + with_text(SYNTHETIC_MIT, "ab" * 32)
+    yield ("fetched text classifies differently", "E-LICENCE-TEXT") + with_text(SYNTHETIC_GPL, spdx="MIT")
+    yield ("licence file missing from the checkout", "E-LICENCE-TEXT") + with_text(SYNTHETIC_MIT, present=False)
+    yield ("text edited after recording", "E-LICENCE-TEXT") + with_text(SYNTHETIC_MIT, hashlib.sha256(SYNTHETIC_MIT + b" ").hexdigest())
+
+
 def self_test(m, schema):
+    import tempfile
     verify(m, schema)
     rejected, failures = 0, []
+    for name, code, b, files in licence_text_cases(m):
+        with tempfile.TemporaryDirectory() as d:
+            for (full, path), data in files.items():
+                (Path(d) / full).mkdir(parents=True, exist_ok=True)
+                (Path(d) / full / path).write_bytes(data)
+            try:
+                recheck_licences(b, d, only={licence_text_target(m)["id"]})
+                if code is not None:
+                    failures.append(f"accepted: {name}")
+            except Invalid as err:
+                if code is None:
+                    failures.append(f"{name}: unexpected {err}")
+                elif err.code == code:
+                    rejected += 1
+                else:
+                    failures.append(f"{name}: expected {code}, got {err}")
     for name, code, broken in mutations(m):
         try:
             verify(broken, schema)
@@ -528,15 +687,23 @@ def main(argv):
     if selftest:
         args.remove("--self-test")
     schema_path = HERE / "manifest.schema.json"
+    licence_dir = None
+    if "--licence-dir" in args:
+        i = args.index("--licence-dir")
+        if i + 1 >= len(args):
+            print("usage: verify_manifest.py [--self-test] [--licence-dir DIR] [MANIFEST] [--schema SCHEMA]", file=sys.stderr)
+            return 2
+        licence_dir = args[i + 1]
+        del args[i:i + 2]
     if "--schema" in args:
         i = args.index("--schema")
         if i + 1 >= len(args):
-            print("usage: verify_manifest.py [--self-test] [MANIFEST] [--schema SCHEMA]", file=sys.stderr)
+            print("usage: verify_manifest.py [--self-test] [--licence-dir DIR] [MANIFEST] [--schema SCHEMA]", file=sys.stderr)
             return 2
         schema_path = Path(args[i + 1])
         del args[i:i + 2]
     if len(args) > 1 or any(a.startswith("-") for a in args):
-        print("usage: verify_manifest.py [--self-test] [MANIFEST] [--schema SCHEMA]", file=sys.stderr)
+        print("usage: verify_manifest.py [--self-test] [--licence-dir DIR] [MANIFEST] [--schema SCHEMA]", file=sys.stderr)
         return 2
     manifest_path = Path(args[0]) if args else HERE / "manifest-proposal.json"
 
@@ -559,13 +726,17 @@ def main(argv):
         rejected, failures = self_test(manifest, schema)
         for f in failures:
             print("FAIL", f)
-        print(f"self-test: manifest valid; {rejected} broken manifests rejected with the expected code; {len(failures)} failures")
+        print(f"self-test: manifest valid; {rejected} broken manifests and licence texts rejected with the expected code; "
+              f"{len(failures)} failures")
         return 0 if not failures and rejected >= 10 else 1
     try:
         info = verify(manifest, schema)
+        checked = recheck_licences(manifest, licence_dir) if licence_dir else None
     except Invalid as err:
         print(f"INVALID {err}")
         return 1
+    if checked is not None:
+        print(f"licence recheck: {checked} licence files match SHA-256, length and classification")
     print(f"VALID: {info['entries']} entries; split digest {info['digest']}; "
           f"{info['negativeSearches']} held-out negative searches; {info['sameDomainSearches']} labelled same-domain")
     return 0

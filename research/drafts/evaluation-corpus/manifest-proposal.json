@@ -1,7 +1,7 @@
 {
- "manifestVersion": "traceweave-m3-corpus-manifest-draft-1",
+ "manifestVersion": "traceweave-m3-corpus-manifest-draft-2",
  "status": "proposed, not acquired",
- "protocolVersion": "m3-eval-draft-1",
+ "protocolVersion": "m3-eval-draft-2",
  "protocol": "research/drafts/evaluation-protocol.md",
  "snapshotDate": "2026-11-22",
  "selection": {
@@ -56,7 +56,12 @@
   "provisional": true,
   "digest": "146acfc26d97beb04ac6c7e485b0b7bd65a19136e74173be9fa71674d569dce3"
  },
- "groupMerges": [],
+ "acquisition": {
+  "replacementLimitPerLanguage": 8,
+  "approvalCovers": "the listed entries and mechanical replacements from the continuing walk, up to replacementLimitPerLanguage per language",
+  "licenceRecheck": "recompute SHA-256 and rerun m3-licence-classifier-v1 on fetched licence files; exit 1 and stop on any difference",
+  "searchUnit": "unordered repository pair"
+ },
  "dependencyEdges": [],
  "totals": {
   "all": {
