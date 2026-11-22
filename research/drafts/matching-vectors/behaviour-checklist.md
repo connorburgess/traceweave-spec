@@ -1,6 +1,6 @@
 # Behavioural conformance checklist (amendment A6)
 
-Status: draft, 2026-11-22, amended by A7. Companion to [catalogue-report-contract.md](../catalogue-report-contract.md) §6.8 (rules B1–B13). Item numbers are stable: A7 rewords items 36, 37, 43 and 46 and appends items 47–58. These behaviours cannot be pinned by vectors. Each item is one command with an observable outcome: an exit status, files present or absent, file modes, or output bytes. Both implementations should script every item. The I2 probe `xcheck/probes/i2_behaviour.py` on `merge-i2` is the current executable record.
+Status: draft, 2026-11-22, amended by A7. Companion to [catalogue-report-contract.md](../catalogue-report-contract.md) §6.8 (rules B1–B13; B10 as refined by A8). Item numbers are stable: A7 rewords items 36, 37, 43 and 46 and appends items 47–58; A8 rewords item 55 and appends items 59–60. These behaviours cannot be pinned by vectors. Each item is one command with an observable outcome: an exit status, files present or absent, file modes, or output bytes. Both implementations should script every item. The I2 probe `xcheck/probes/i2_behaviour.py` on `merge-i2` is the current executable record.
 
 ## Operations
 
@@ -100,9 +100,14 @@ Exit statuses are the B3 classes: **0** result, **1** refused input, **2** usage
 52. `T/link` is a symbolic link to `G/out`: `BUILD … T/link/c.json` with no override: exit 2, nothing written under `G` (B1, after resolving links).
 53. `OVERRIDE -` (`-` given to the directory option): exit 2, no file written (B7).
 54. **Stamped**, run with `TRACEWEAVE_BUILD_COMMIT=` and `TRACEWEAVE_IMPL_COMMIT=` both set to 40 hex digits of another commit: `DOC`: exit 0, and `provenance.implementation.commit` still equals the build commit (B6, B10).
-55. A `git archive` export **unpacked inside `G`** (another repository) and built there: `DOC`: exit 2, no document. `BODY`: exit 0, bytes identical to item 13 (B10).
+55. A `git archive` export **unpacked inside `G`** (another repository; the unpacked files are untracked there) and built there, with the implementation's documented verifying build step and with its plain toolchain build: `DOC`: exit 2, no document. `BODY`: exit 0, bytes identical to item 13. The export is not the root of a repository, so no commit can be verified (B10).
 56. `XDG_DATA_HOME=T/xdg` (absolute), default output location: on Linux, the file is under `T/xdg/traceweave/private`; on macOS, it is under `$HOME/Library/Application Support/traceweave/private` and nothing is under `T/xdg`. With `TRACEWEAVE_PRIVATE_DIR=T/p` also set, it is under `T/p` on every platform (B11).
 57. `VALIDATE record` (and `BUILD` from that record) where the record has an extra key `zzCanaryKey7`: exit 1, and neither stdout nor stderr contains `zzCanary` (B12).
 58. `EXTRACT` (Go configuration) on the input `s := "zzCanaryText8` (an unterminated string): exit 0, an error record. Neither the record, stdout nor stderr contains `zzCanary`.
 
-**Item count: 58.** Items 16–24 are nine marker items.
+### Verified stamp (A8: B10)
+
+59. **Ignored folder.** `G` has `.gitignore` containing `arch/`, committed. A `git archive` export is unpacked into `G/arch` and built there, both with the verifying build step and with the plain toolchain build. `DOC`: exit 2, no document. The toolchain may report `G`'s HEAD as a clean stamp, but that commit does not describe the code. `BODY`: exit 0, bytes identical to item 13.
+60. **Plain toolchain build without the verifying step.** In a clean clone of the implementation's own repository, build with the toolchain's plain build command (for example `go build ./cmd/…` instead of the documented build script). `DOC`: exit 2, no document; `BODY`: exit 0. An implementation whose plain build command *is* the documented verifying step (for example a `build.rs` that performs both B10 checks) records that, and this item then expects item 43's outcome.
+
+**Item count: 60.** Items 16–24 are nine marker items.
