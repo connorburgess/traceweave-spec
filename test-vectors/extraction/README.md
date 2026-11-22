@@ -284,3 +284,5 @@ SHA-256 of the local copies cited by the contract:
 | `harness/rust/Cargo.lock` | `02e4a1012b12a9e1c3d0d746850c1521f09a51df24719c9a52f917a9a9d7b201` |
 
 The online pages are mutable and were not compared byte for byte with these copies.
+
+Unicode data notice: `unicode-17.0.0-tables.json` is derived from the Unicode Character Database 17.0.0 files `UnicodeData.txt`, `DerivedCoreProperties.txt`, `DerivedNormalizationProps.txt` and `CompositionExclusions.txt` (digests in `harness/gen_unicode_tables.py`). Those data files are Copyright © 1991-2026 Unicode, Inc. and are used under the Unicode License v3; see [LICENSES/Unicode-3.0.txt](../../LICENSES/Unicode-3.0.txt) and [LICENSE.md](../../LICENSE.md).

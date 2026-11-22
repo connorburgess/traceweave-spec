@@ -159,6 +159,8 @@ UAX #29 word spans equal to profile token spans (informative, not required): 33/
 
 ## Scope of these files
 
-Nothing here is normative. Promoting the profile or vectors into `profiles/` or `test-vectors/` needs the owner. `text-tables-17.0.0.json` is derived from Unicode, Inc. data files whose headers point to the [Unicode terms of use](https://www.unicode.org/terms_of_use.html). Whether derived tables may be committed under those terms is not settled here, and the owner should confirm it together with the existing [extraction table](../extraction/unicode-17.0.0-tables.json).
+Nothing here is normative. Promoting the profile or vectors into `profiles/` or `test-vectors/` needs the owner. `text-tables-17.0.0.json` is derived from Unicode, Inc. data files; the Unicode License v3 applies to them and its text is in the repository (see the notice below).
 
 Note on paths after promotion: the `profileDraft` field inside `text-plain.json`, `text-markdown.json` and `limits-text.json` still reads `research/drafts/extraction-profile-text.md`. It is a historical label that no checker reads; it was left unchanged so the frozen vector bytes and digests do not change. The profile is [profiles/text.md](../../profiles/text.md).
+
+Unicode data notice: `text-tables-17.0.0.json` is derived from the Unicode Character Database 17.0.0 files `UnicodeData.txt`, `DerivedCoreProperties.txt`, `DerivedNormalizationProps.txt`, `CompositionExclusions.txt` and `PropList.txt`, and from the Unicode security data file `confusables.txt` (digests in `harness/gen_text_tables.py`). Those data files are Copyright © 1991-2026 Unicode, Inc. and are used under the Unicode License v3; see [LICENSES/Unicode-3.0.txt](../../LICENSES/Unicode-3.0.txt) and [LICENSE.md](../../LICENSE.md).

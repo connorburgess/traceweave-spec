@@ -8,4 +8,6 @@ Schemas, examples (including example fixtures), test vectors, source code, scrip
 
 Third-party materials retain their own notices and licenses. The texts in `LICENSES/` are the original license instruments. Local ignored research inputs are not distributed or relicensed by this notice.
 
+Two test-vector files are derived from Unicode Character Database data: `test-vectors/extraction/unicode-17.0.0-tables.json` and `test-vectors/extraction-text/text-tables-17.0.0.json`. Those data files remain under the [Unicode License v3](LICENSES/Unicode-3.0.txt) (Copyright © 1991-2026 Unicode, Inc.), whose notice must accompany copies of the data. The license text was fetched read-only from <https://www.unicode.org/license.txt> on 2026-11-23; its SHA-256 is `e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96`.
+
 Attribution for the specification may identify “Traceweave contributors” and link to <https://github.com/connorburgess/traceweave-spec>. This licensing split covers this repository, not any external content an implementation fingerprints. No claim of patent clearance or standards-body endorsement is made.
