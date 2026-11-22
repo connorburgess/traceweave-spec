@@ -18,9 +18,9 @@ if [ ! -r "$rules" ] || [ -z "$top" ] || [ ! -r "$tool" ]; then
   echo "pre-push: cannot read the private rules file or the scanner; refusing to push" >&2
   exit 1
 fi
-work=$(mktemp -d "${TMPDIR:-/tmp}/prepush.XXXXXX") || exit 1
+work=$(mktemp -d "${TMPDIR:-/tmp}/prepush.XXXXXX") || { echo "pre-push: cannot create a temporary directory; refusing to push" >&2; exit 1; }
 trap 'rm -rf "$work"' EXIT
-python3 - "$rules" "$work" <<'PY' || exit 1
+python3 - "$rules" "$work" <<'PY' || { echo "pre-push: cannot parse the private rules file; refusing to push" >&2; exit 1; }
 import json, sys
 data = json.load(open(sys.argv[1]))
 open(sys.argv[2] + "/blobs", "w").write("\n".join(data.get("drop_tool_blobs", [])) + "\n")
@@ -47,10 +47,16 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     echo "pre-push: $local_ref contains a rule-bearing version of the rewrite tool; refusing to push" >&2
     exit 1
   fi
-  # 4. full scan
-  if ! python3 "$tool" scan "$local_sha" --base "$base" > "$work/scan.txt" 2>&1; then
+  # 4. full scan (exit status 3 = hits; anything else = the scanner could not run)
+  python3 "$tool" --rules "$rules" scan "$local_sha" --base "$base" > "$work/scan.txt" 2>&1
+  status=$?
+  if [ "$status" -eq 3 ]; then
     echo "pre-push: the scanner found removed material in $local_ref (details withheld); refusing to push" >&2
     grep -E "hits \(" "$work/scan.txt" | grep -v ": 0 hits" >&2
+    exit 1
+  elif [ "$status" -ne 0 ]; then
+    echo "pre-push: the scanner could not run (exit status $status); refusing to push" >&2
+    tail -3 "$work/scan.txt" >&2
     exit 1
   fi
 done

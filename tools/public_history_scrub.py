@@ -51,6 +51,9 @@ EMAIL = re.compile(r"[A-Za-z0-9._+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z
 BASE64_TOKEN = re.compile(r"[A-Za-z0-9+/]{24,}={0,2}")
 
 
+HITS_EXIT = 3  # scan found material; other non-zero statuses mean the tool could not run
+
+
 class Blocked(Exception):
     pass
 
@@ -282,7 +285,7 @@ def run_scan(rules, args):
             for path, n in sorted(files.items())[:20]:
                 print("   ", path, n)
             total += sum(files.values())
-        return 1 if total else 0
+        return HITS_EXIT if total else 0
     n_commits, n_objects, hits = scan_range(rules, args.revs or ["HEAD"], args.base)
     print(f"scanned {n_commits} commits and {n_objects} objects not reachable from {args.base} (plain, ROT13, reversed, base64 and hex decodings)")
     total = 0
@@ -294,7 +297,7 @@ def run_scan(rules, args):
         for kind in hits:
             for where, count in sorted(hits[kind].get(category, {}).items())[:10]:
                 print("   ", kind, where, count)
-    return 1 if total else 0
+    return HITS_EXIT if total else 0
 
 
 # --------------------------------------------------------------------------- rewrite
