@@ -1,5 +1,7 @@
 # Independent review: research 06–08 checkpoint (draft)
 
+> Adoption note: the checkpoint reviewed here was adopted as [research-06-08-checkpoint.md](../research-06-08-checkpoint.md). Line references (`L<n>`) point to the draft as committed in `6f75d55` (`research/drafts/research-06-08-checkpoint.md`).
+
 Reviewed 2026-11-22. Target: `research-06-08-checkpoint.md` (113 lines), with the 07 and 08 report audits and the 06/07/08 evidence reviews. Read-only. The reviewer did not write any of these files. Line numbers refer to the checkpoint unless a file is named.
 
 **Verdict: adopt after fixes.** The two audits and the checkpoint's reasoning are mostly sound. One recommendation is overstated, one cited figure is untraceable, and the proposed image study is not yet specified well enough to authorize.

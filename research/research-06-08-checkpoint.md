@@ -1,10 +1,10 @@
-# Research lanes 06–08: reconciliation checkpoint (draft)
+# Research lanes 06–08: reconciliation checkpoint
 
-Drafted 2026-11-22 and revised the same day after an [independent review](research-06-08-checkpoint-review.md). This is a non-normative research draft, not adopted policy. It reconciles three evidence reviews and three NotebookLM report audits:
+Written 2026-11-22 and revised the same day after an [independent review](reviews/research-06-08-checkpoint-review.md); adopted as a research checkpoint on 2026-11-22. It is non-normative and changes no spec, schema or profile file. It reconciles three evidence reviews and three NotebookLM report audits:
 
-- Lane 06: [evidence review with report audit](../lanes/06-evidence-review.md)
-- Lane 07: [evidence review](../lanes/07-evidence-review.md) and [report audit](../lanes/07-report-audit.md)
-- Lane 08: [evidence review](../lanes/08-evidence-review.md) and [report audit](../lanes/08-report-audit.md)
+- Lane 06: [evidence review with report audit](lanes/06-evidence-review.md)
+- Lane 07: [evidence review](lanes/07-evidence-review.md) and [report audit](lanes/07-report-audit.md)
+- Lane 08: [evidence review](lanes/08-evidence-review.md) and [report audit](lanes/08-report-audit.md)
 
 All three reports were captured as rendered Studio text, not native exports. Capture hashes are in each audit. No experiment was run for this checkpoint.
 
@@ -12,7 +12,7 @@ All three reports were captured as rendered Studio text, not native exports. Cap
 
 1. **None of the five reviewed code candidates clears the project's carrier bar.**
    - The five are SrcMarker, RoSeMary, SEW, CLASP and PLACEMARK.
-   - The bar, from the [census checkpoint](../public-census-checkpoint.md): a typed safe subset, measured eligible sites in real Go/Rust code, defined blind or reference-assisted extraction and alignment, and a cheapest-valid-normalizer test before identity framing.
+   - The bar, from the [census checkpoint](public-census-checkpoint.md): a typed safe subset, measured eligible sites in real Go/Rust code, defined blind or reference-assisted extraction and alignment, and a cheapest-valid-normalizer test before identity framing.
    - SrcMarker, RoSeMary and SEW report bit accuracy or keyed presence tests on other languages, not net authenticated capacity (lane 06).
    - CLASP's reference-assisted mode is the best-measured of the five: 2–32 bits tested, clean bit accuracy 97.85–99.72%. It still has no typed safe subset, no Go/Rust measurement and no cheapest-normalizer test (07 audit, A2).
    - PLACEMARK is Python-only. Its authors state that Go loses the placement property (07 audit, A3).
@@ -98,5 +98,4 @@ Acceptance of transplanted residuals is a hypothesis to test, since TetherMark m
 
 ## Remaining decisions
 
-1. Whether to promote any part of this draft into `research/` checkpoints. Normative files stay untouched either way.
-2. After M3, the owner decides whether to commission the image protocol under the note above.
+Adopting this checkpoint settled whether to promote it into `research/`: it is promoted, and normative files stay untouched. One decision remains: after M3, the owner decides whether to commission the image protocol under the note above ([roadmap](../ROADMAP.md), "Needs the owner").
