@@ -1,0 +1,1219 @@
+{
+  "platform": "macOS-26.4-arm64-arm-64bit",
+  "machine": "arm64",
+  "network_denied": true,
+  "elapsed_seconds": 1.7602,
+  "prior_results_sha256": "8edb54aee33f214568e7494abc2cc5f79ace2e8f88503a624538f966c1134814",
+  "statement_sha256": "d56168540b70fca582fd2f39752f72617e0c2d246890f447341b712ac29eacec",
+  "outcomes": 126,
+  "results": [
+    {
+      "case": "hint-absent",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-empty",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-original",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-wrong",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-other-known-key",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-unicode",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "valid-but-untrusted",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": false,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": false
+    },
+    {
+      "case": "wrong-key-with-correct-hint",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": false,
+      "signer_trusted": false,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "bad-signature-cannot-be-repaired-by-hint-normalization",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": false,
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-payloadType",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-escaped-payload",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-signatures",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-nested-keyid",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "case-alias-extra-field",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "nonstring-hint",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-inner-top",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": false,
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-inner-nested",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": false,
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "signed-two-subjects-schema-rejected",
+      "producer": "go",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": false,
+      "accepted": false
+    },
+    {
+      "case": "hint-absent",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-empty",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-original",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-wrong",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-other-known-key",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-unicode",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "valid-but-untrusted",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": false,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": false
+    },
+    {
+      "case": "wrong-key-with-correct-hint",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": false,
+      "signer_trusted": false,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "bad-signature-cannot-be-repaired-by-hint-normalization",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": false,
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-payloadType",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-escaped-payload",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-signatures",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-nested-keyid",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "case-alias-extra-field",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "nonstring-hint",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-inner-top",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": false,
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-inner-nested",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": false,
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "signed-two-subjects-schema-rejected",
+      "producer": "go",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": false,
+      "accepted": false
+    },
+    {
+      "case": "hint-absent",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-empty",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-original",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-wrong",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-other-known-key",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-unicode",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "valid-but-untrusted",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": false,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": false
+    },
+    {
+      "case": "wrong-key-with-correct-hint",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": false,
+      "signer_trusted": false,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "bad-signature-cannot-be-repaired-by-hint-normalization",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": false,
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-payloadType",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-escaped-payload",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-signatures",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-nested-keyid",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "case-alias-extra-field",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "nonstring-hint",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-inner-top",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": false,
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-inner-nested",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": false,
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "signed-two-subjects-schema-rejected",
+      "producer": "rust",
+      "consumer": "go",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": false,
+      "accepted": false
+    },
+    {
+      "case": "hint-absent",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-empty",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-original",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-wrong",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-other-known-key",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "hint-unicode",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": true
+    },
+    {
+      "case": "valid-but-untrusted",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": false,
+      "payload_policy": true,
+      "schema_valid": true,
+      "accepted": false
+    },
+    {
+      "case": "wrong-key-with-correct-hint",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": false,
+      "signer_trusted": false,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "bad-signature-cannot-be-repaired-by-hint-normalization",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": false,
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-payloadType",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-escaped-payload",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-signatures",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-nested-keyid",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "case-alias-extra-field",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "nonstring-hint",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": false,
+      "signature_valid": "not-checked",
+      "signer_trusted": true,
+      "payload_policy": "not-checked",
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-inner-top",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": false,
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "duplicate-inner-nested",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": false,
+      "schema_valid": "not-checked",
+      "accepted": false
+    },
+    {
+      "case": "signed-two-subjects-schema-rejected",
+      "producer": "rust",
+      "consumer": "rust",
+      "envelope_policy": true,
+      "signature_valid": true,
+      "signer_trusted": true,
+      "payload_policy": true,
+      "schema_valid": false,
+      "accepted": false
+    },
+    {
+      "case": "existing-repository-vector",
+      "implementation": "go",
+      "catalogue_bytes": 497,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "f4df04ab00454b3a4b1bc25d80009a8a3e82f9d5d4f4eeed08c6cbbd9891c4a9"
+    },
+    {
+      "case": "existing-repository-vector",
+      "implementation": "rust",
+      "catalogue_bytes": 497,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "f4df04ab00454b3a4b1bc25d80009a8a3e82f9d5d4f4eeed08c6cbbd9891c4a9"
+    },
+    {
+      "case": "catalogue-byte-length-0",
+      "implementation": "go",
+      "catalogue_bytes": 0,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "a6e8a2ec291c551a8847df5bc02b79f88685673960ab219eaa57eaa3195e3647"
+    },
+    {
+      "case": "catalogue-byte-length-0",
+      "implementation": "rust",
+      "catalogue_bytes": 0,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "a6e8a2ec291c551a8847df5bc02b79f88685673960ab219eaa57eaa3195e3647"
+    },
+    {
+      "case": "catalogue-byte-length-1",
+      "implementation": "go",
+      "catalogue_bytes": 1,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "a22194ec6bfe02ff4a0e63944c3bd26957c6962a6d92e9bf839ef571153c3574"
+    },
+    {
+      "case": "catalogue-byte-length-1",
+      "implementation": "rust",
+      "catalogue_bytes": 1,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "a22194ec6bfe02ff4a0e63944c3bd26957c6962a6d92e9bf839ef571153c3574"
+    },
+    {
+      "case": "catalogue-byte-length-55",
+      "implementation": "go",
+      "catalogue_bytes": 55,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "f50803bf6c31768e8e15967c3c05f13f1b5a75996330f91c4d326b7fe67c1337"
+    },
+    {
+      "case": "catalogue-byte-length-55",
+      "implementation": "rust",
+      "catalogue_bytes": 55,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "f50803bf6c31768e8e15967c3c05f13f1b5a75996330f91c4d326b7fe67c1337"
+    },
+    {
+      "case": "catalogue-byte-length-56",
+      "implementation": "go",
+      "catalogue_bytes": 56,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "349f725071942faabd629fa1797607c9bbcc713c6172b871e438a5bb62f162be"
+    },
+    {
+      "case": "catalogue-byte-length-56",
+      "implementation": "rust",
+      "catalogue_bytes": 56,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "349f725071942faabd629fa1797607c9bbcc713c6172b871e438a5bb62f162be"
+    },
+    {
+      "case": "catalogue-byte-length-63",
+      "implementation": "go",
+      "catalogue_bytes": 63,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "2d14e4bd12c2eac30c8a04c475d0f90a350e52b5acac05d932404e56b9f4542d"
+    },
+    {
+      "case": "catalogue-byte-length-63",
+      "implementation": "rust",
+      "catalogue_bytes": 63,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "2d14e4bd12c2eac30c8a04c475d0f90a350e52b5acac05d932404e56b9f4542d"
+    },
+    {
+      "case": "catalogue-byte-length-64",
+      "implementation": "go",
+      "catalogue_bytes": 64,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "579fb571091d90d17bc451637965879b45115f00ab9d37146a944c89792773be"
+    },
+    {
+      "case": "catalogue-byte-length-64",
+      "implementation": "rust",
+      "catalogue_bytes": 64,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "579fb571091d90d17bc451637965879b45115f00ab9d37146a944c89792773be"
+    },
+    {
+      "case": "catalogue-byte-length-65",
+      "implementation": "go",
+      "catalogue_bytes": 65,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "fd6acdc4d984f1ed4720a9336269fd80c160a3608f2a68bc098011d98b04e91f"
+    },
+    {
+      "case": "catalogue-byte-length-65",
+      "implementation": "rust",
+      "catalogue_bytes": 65,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "fd6acdc4d984f1ed4720a9336269fd80c160a3608f2a68bc098011d98b04e91f"
+    },
+    {
+      "case": "catalogue-byte-length-255",
+      "implementation": "go",
+      "catalogue_bytes": 255,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "56a2e030c3ad0d8f75f777f034f8d61688d2a88db60fdf5c815712c853e4c52d"
+    },
+    {
+      "case": "catalogue-byte-length-255",
+      "implementation": "rust",
+      "catalogue_bytes": 255,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "56a2e030c3ad0d8f75f777f034f8d61688d2a88db60fdf5c815712c853e4c52d"
+    },
+    {
+      "case": "catalogue-byte-length-256",
+      "implementation": "go",
+      "catalogue_bytes": 256,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "5787974ee0d50d88f1d606003d102e7f490e56117d5d13f9d48f7cc646739c9a"
+    },
+    {
+      "case": "catalogue-byte-length-256",
+      "implementation": "rust",
+      "catalogue_bytes": 256,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "5787974ee0d50d88f1d606003d102e7f490e56117d5d13f9d48f7cc646739c9a"
+    },
+    {
+      "case": "catalogue-byte-length-65535",
+      "implementation": "go",
+      "catalogue_bytes": 65535,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "0dd5cc3bd8889bcd1ad070a21dcc8ea8210ffff152ca281feeff4905752faf18"
+    },
+    {
+      "case": "catalogue-byte-length-65535",
+      "implementation": "rust",
+      "catalogue_bytes": 65535,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "0dd5cc3bd8889bcd1ad070a21dcc8ea8210ffff152ca281feeff4905752faf18"
+    },
+    {
+      "case": "catalogue-byte-length-65536",
+      "implementation": "go",
+      "catalogue_bytes": 65536,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "33119a114325915f8d7e36a59a6b2cbf83254655db27f997ebb5458e0c80e9de"
+    },
+    {
+      "case": "catalogue-byte-length-65536",
+      "implementation": "rust",
+      "catalogue_bytes": 65536,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "33119a114325915f8d7e36a59a6b2cbf83254655db27f997ebb5458e0c80e9de"
+    },
+    {
+      "case": "catalogue-byte-length-1048576",
+      "implementation": "go",
+      "catalogue_bytes": 1048576,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "9691d707737425df792c59152a6707d1824a1d8058f02bcf1d8e815e415e93e5"
+    },
+    {
+      "case": "catalogue-byte-length-1048576",
+      "implementation": "rust",
+      "catalogue_bytes": 1048576,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "9691d707737425df792c59152a6707d1824a1d8058f02bcf1d8e815e415e93e5"
+    },
+    {
+      "case": "utf8",
+      "implementation": "go",
+      "catalogue_bytes": 9,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "7d61439df0a5035515eaeabe8877b43e85e3017b45df7e708bbd9608ce00c020"
+    },
+    {
+      "case": "utf8",
+      "implementation": "rust",
+      "catalogue_bytes": 9,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "7d61439df0a5035515eaeabe8877b43e85e3017b45df7e708bbd9608ce00c020"
+    },
+    {
+      "case": "embedded-zero-nonutf8",
+      "implementation": "go",
+      "catalogue_bytes": 4,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "aa685fa66a5228b567b3a9bd9fa3fb3838d09d37cf51d6f5005ee7443c8b7656"
+    },
+    {
+      "case": "embedded-zero-nonutf8",
+      "implementation": "rust",
+      "catalogue_bytes": 4,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "aa685fa66a5228b567b3a9bd9fa3fb3838d09d37cf51d6f5005ee7443c8b7656"
+    },
+    {
+      "case": "json-reserialization",
+      "implementation": "go",
+      "catalogue_bytes": 394,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "9482580a5f8b81da18371e1b92a47206033dd9750c24bc8875acc1049d530d73"
+    },
+    {
+      "case": "json-reserialization",
+      "implementation": "rust",
+      "catalogue_bytes": 394,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "9482580a5f8b81da18371e1b92a47206033dd9750c24bc8875acc1049d530d73"
+    },
+    {
+      "case": "catalogue-bit-tamper",
+      "implementation": "go",
+      "catalogue_bytes": 497,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "e7b481ebebfb0e57bb433a3c82c6435e14807dde9df2a3e522a2a2205c22fa75"
+    },
+    {
+      "case": "catalogue-bit-tamper",
+      "implementation": "rust",
+      "catalogue_bytes": 497,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "e7b481ebebfb0e57bb433a3c82c6435e14807dde9df2a3e522a2a2205c22fa75"
+    },
+    {
+      "case": "catalogue-trailing-whitespace",
+      "implementation": "go",
+      "catalogue_bytes": 498,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "4b59e14e0daf48b87291b24d0d25561dd706a2cb7d23dd8eb4b47deda73d8a45"
+    },
+    {
+      "case": "catalogue-trailing-whitespace",
+      "implementation": "rust",
+      "catalogue_bytes": 498,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "4b59e14e0daf48b87291b24d0d25561dd706a2cb7d23dd8eb4b47deda73d8a45"
+    },
+    {
+      "case": "nonce-bit-tamper",
+      "implementation": "go",
+      "catalogue_bytes": 497,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "6ed61a0923ffa4310ff4b6a1ab939cd74650d7aa568fe1c77023eede8dca43c6"
+    },
+    {
+      "case": "nonce-bit-tamper",
+      "implementation": "rust",
+      "catalogue_bytes": 497,
+      "nonce_bytes": 32,
+      "accepted": true,
+      "commitment": "6ed61a0923ffa4310ff4b6a1ab939cd74650d7aa568fe1c77023eede8dca43c6"
+    },
+    {
+      "case": "invalid-nonce-length-0",
+      "implementation": "go",
+      "catalogue_bytes": 497,
+      "nonce_bytes": 0,
+      "accepted": false,
+      "commitment": null
+    },
+    {
+      "case": "invalid-nonce-length-0",
+      "implementation": "rust",
+      "catalogue_bytes": 497,
+      "nonce_bytes": 0,
+      "accepted": false,
+      "commitment": null
+    },
+    {
+      "case": "invalid-nonce-length-1",
+      "implementation": "go",
+      "catalogue_bytes": 497,
+      "nonce_bytes": 1,
+      "accepted": false,
+      "commitment": null
+    },
+    {
+      "case": "invalid-nonce-length-1",
+      "implementation": "rust",
+      "catalogue_bytes": 497,
+      "nonce_bytes": 1,
+      "accepted": false,
+      "commitment": null
+    },
+    {
+      "case": "invalid-nonce-length-31",
+      "implementation": "go",
+      "catalogue_bytes": 497,
+      "nonce_bytes": 31,
+      "accepted": false,
+      "commitment": null
+    },
+    {
+      "case": "invalid-nonce-length-31",
+      "implementation": "rust",
+      "catalogue_bytes": 497,
+      "nonce_bytes": 31,
+      "accepted": false,
+      "commitment": null
+    },
+    {
+      "case": "invalid-nonce-length-33",
+      "implementation": "go",
+      "catalogue_bytes": 497,
+      "nonce_bytes": 33,
+      "accepted": false,
+      "commitment": null
+    },
+    {
+      "case": "invalid-nonce-length-33",
+      "implementation": "rust",
+      "catalogue_bytes": 497,
+      "nonce_bytes": 33,
+      "accepted": false,
+      "commitment": null
+    },
+    {
+      "case": "invalid-nonce-length-64",
+      "implementation": "go",
+      "catalogue_bytes": 497,
+      "nonce_bytes": 64,
+      "accepted": false,
+      "commitment": null
+    },
+    {
+      "case": "invalid-nonce-length-64",
+      "implementation": "rust",
+      "catalogue_bytes": 497,
+      "nonce_bytes": 64,
+      "accepted": false,
+      "commitment": null
+    },
+    {
+      "case": "catalogue-resource-limit",
+      "implementation": "go",
+      "catalogue_bytes": 1048577,
+      "nonce_bytes": 32,
+      "accepted": false,
+      "commitment": null
+    },
+    {
+      "case": "catalogue-resource-limit",
+      "implementation": "rust",
+      "catalogue_bytes": 1048577,
+      "nonce_bytes": 32,
+      "accepted": false,
+      "commitment": null
+    },
+    {
+      "case": "missing-domain-zero",
+      "reference_framing_rejected": true
+    },
+    {
+      "case": "little-endian-length",
+      "reference_framing_rejected": true
+    },
+    {
+      "case": "missing-length",
+      "reference_framing_rejected": true
+    },
+    {
+      "case": "length-after-catalogue",
+      "reference_framing_rejected": true
+    }
+  ]
+}

@@ -1,0 +1,476 @@
+{
+  "platform": "macOS-26.4-arm64-arm-64bit",
+  "machine": "arm64",
+  "network_denied": true,
+  "payload_bytes": 762,
+  "statement_sha256": "d56168540b70fca582fd2f39752f72617e0c2d246890f447341b712ac29eacec",
+  "elapsed_seconds": 0.4218,
+  "results": [
+    {
+      "case": "same-exact-raw-statement",
+      "producer": "go",
+      "consumer": "go",
+      "accepted": true,
+      "layer": "library-driver"
+    },
+    {
+      "case": "envelope-whitespace-and-key-order",
+      "producer": "go",
+      "consumer": "go",
+      "accepted": true,
+      "layer": "library-driver"
+    },
+    {
+      "case": "payload-byte-mutation",
+      "producer": "go",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "payload-type-mutation",
+      "producer": "go",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "signature-bit-mutation",
+      "producer": "go",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "different-public-key",
+      "producer": "go",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "valid-signature-untrusted-signer",
+      "producer": "go",
+      "consumer": "go",
+      "signature_valid": true,
+      "signer_trusted": false
+    },
+    {
+      "case": "candidate-mismatch",
+      "producer": "go",
+      "consumer": "go",
+      "signature_valid": true,
+      "exact_binding": false,
+      "fingerprint_comparison": "not-checked"
+    },
+    {
+      "case": "duplicate-envelope-key-policy",
+      "producer": "go",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "duplicate-envelope-key-native-probe",
+      "producer": "go",
+      "consumer": "go",
+      "accepted": true
+    },
+    {
+      "case": "oversize-envelope",
+      "producer": "go",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "oversize-decoded-payload",
+      "producer": "go",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "empty-signature-list",
+      "producer": "go",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "invalid-base64",
+      "producer": "go",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "changed-keyid-hint",
+      "producer": "go",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "same-exact-raw-statement",
+      "producer": "go",
+      "consumer": "rust",
+      "accepted": true,
+      "layer": "library-driver"
+    },
+    {
+      "case": "envelope-whitespace-and-key-order",
+      "producer": "go",
+      "consumer": "rust",
+      "accepted": true,
+      "layer": "library-driver"
+    },
+    {
+      "case": "payload-byte-mutation",
+      "producer": "go",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "payload-type-mutation",
+      "producer": "go",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "signature-bit-mutation",
+      "producer": "go",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "different-public-key",
+      "producer": "go",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "valid-signature-untrusted-signer",
+      "producer": "go",
+      "consumer": "rust",
+      "signature_valid": true,
+      "signer_trusted": false
+    },
+    {
+      "case": "candidate-mismatch",
+      "producer": "go",
+      "consumer": "rust",
+      "signature_valid": true,
+      "exact_binding": false,
+      "fingerprint_comparison": "not-checked"
+    },
+    {
+      "case": "duplicate-envelope-key-policy",
+      "producer": "go",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "duplicate-envelope-key-native-probe",
+      "producer": "go",
+      "consumer": "rust",
+      "accepted": false
+    },
+    {
+      "case": "oversize-envelope",
+      "producer": "go",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "oversize-decoded-payload",
+      "producer": "go",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "empty-signature-list",
+      "producer": "go",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "invalid-base64",
+      "producer": "go",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "changed-keyid-hint",
+      "producer": "go",
+      "consumer": "rust",
+      "accepted": true,
+      "layer": "library-driver"
+    },
+    {
+      "case": "signed-duplicate-inner-payload",
+      "producer": "go",
+      "consumer": "go",
+      "signature_valid": true,
+      "payload_policy_valid": false,
+      "schema": "not-checked-after-parse-rejection"
+    },
+    {
+      "case": "signed-duplicate-inner-payload",
+      "producer": "go",
+      "consumer": "rust",
+      "signature_valid": true,
+      "payload_policy_valid": false,
+      "schema": "not-checked-after-parse-rejection"
+    },
+    {
+      "case": "same-exact-raw-statement",
+      "producer": "rust",
+      "consumer": "go",
+      "accepted": true,
+      "layer": "library-driver"
+    },
+    {
+      "case": "envelope-whitespace-and-key-order",
+      "producer": "rust",
+      "consumer": "go",
+      "accepted": true,
+      "layer": "library-driver"
+    },
+    {
+      "case": "payload-byte-mutation",
+      "producer": "rust",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "payload-type-mutation",
+      "producer": "rust",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "signature-bit-mutation",
+      "producer": "rust",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "different-public-key",
+      "producer": "rust",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "valid-signature-untrusted-signer",
+      "producer": "rust",
+      "consumer": "go",
+      "signature_valid": true,
+      "signer_trusted": false
+    },
+    {
+      "case": "candidate-mismatch",
+      "producer": "rust",
+      "consumer": "go",
+      "signature_valid": true,
+      "exact_binding": false,
+      "fingerprint_comparison": "not-checked"
+    },
+    {
+      "case": "duplicate-envelope-key-policy",
+      "producer": "rust",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "duplicate-envelope-key-native-probe",
+      "producer": "rust",
+      "consumer": "go",
+      "accepted": true
+    },
+    {
+      "case": "oversize-envelope",
+      "producer": "rust",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "oversize-decoded-payload",
+      "producer": "rust",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "empty-signature-list",
+      "producer": "rust",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "invalid-base64",
+      "producer": "rust",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "changed-keyid-hint",
+      "producer": "rust",
+      "consumer": "go",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "same-exact-raw-statement",
+      "producer": "rust",
+      "consumer": "rust",
+      "accepted": true,
+      "layer": "library-driver"
+    },
+    {
+      "case": "envelope-whitespace-and-key-order",
+      "producer": "rust",
+      "consumer": "rust",
+      "accepted": true,
+      "layer": "library-driver"
+    },
+    {
+      "case": "payload-byte-mutation",
+      "producer": "rust",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "payload-type-mutation",
+      "producer": "rust",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "signature-bit-mutation",
+      "producer": "rust",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "different-public-key",
+      "producer": "rust",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "library-driver"
+    },
+    {
+      "case": "valid-signature-untrusted-signer",
+      "producer": "rust",
+      "consumer": "rust",
+      "signature_valid": true,
+      "signer_trusted": false
+    },
+    {
+      "case": "candidate-mismatch",
+      "producer": "rust",
+      "consumer": "rust",
+      "signature_valid": true,
+      "exact_binding": false,
+      "fingerprint_comparison": "not-checked"
+    },
+    {
+      "case": "duplicate-envelope-key-policy",
+      "producer": "rust",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "duplicate-envelope-key-native-probe",
+      "producer": "rust",
+      "consumer": "rust",
+      "accepted": false
+    },
+    {
+      "case": "oversize-envelope",
+      "producer": "rust",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "oversize-decoded-payload",
+      "producer": "rust",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "empty-signature-list",
+      "producer": "rust",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "invalid-base64",
+      "producer": "rust",
+      "consumer": "rust",
+      "accepted": false,
+      "layer": "preflight"
+    },
+    {
+      "case": "changed-keyid-hint",
+      "producer": "rust",
+      "consumer": "rust",
+      "accepted": true,
+      "layer": "library-driver"
+    },
+    {
+      "case": "signed-duplicate-inner-payload",
+      "producer": "rust",
+      "consumer": "go",
+      "signature_valid": true,
+      "payload_policy_valid": false,
+      "schema": "not-checked-after-parse-rejection"
+    },
+    {
+      "case": "signed-duplicate-inner-payload",
+      "producer": "rust",
+      "consumer": "rust",
+      "signature_valid": true,
+      "payload_policy_valid": false,
+      "schema": "not-checked-after-parse-rejection"
+    },
+    {
+      "case": "existing-commitment-opening",
+      "consistent": true,
+      "altered_catalogue": false,
+      "altered_nonce": false
+    },
+    {
+      "case": "nonce-lengths",
+      "rejected": [
+        0,
+        31,
+        33
+      ]
+    }
+  ]
+}

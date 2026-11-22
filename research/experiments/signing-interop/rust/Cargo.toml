@@ -1,0 +1,10 @@
+[package]
+name = "traceweave-signing-interop"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+wsc-dsse = "=0.12.1"
+ed25519-compact = { version = "=2.3.0", default-features = false }
+sha2 = "=0.10.9"
