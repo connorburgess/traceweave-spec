@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://traceweave.invalid/research/drafts/evaluation-corpus/manifest.schema.json",
+  "title": "Traceweave M3 corpus manifest (draft-1)",
+  "description": "Structure only. verify_manifest.py interprets the keywords used here (type, const, enum, pattern, minimum, maximum, minLength, minItems, maxItems, uniqueItems, required, properties, additionalProperties, items, $ref) and adds the semantic checks that a schema cannot express.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifestVersion", "status", "protocolVersion", "protocol", "snapshotDate", "selection", "exclusions", "split", "groupMerges", "dependencyEdges", "totals", "pools", "walks", "entries"],
+  "properties": {
+    "manifestVersion": {"const": "traceweave-m3-corpus-manifest-draft-1"},
+    "status": {"const": "proposed, not acquired"},
+    "protocolVersion": {"const": "m3-eval-draft-1"},
+    "protocol": {"const": "research/drafts/evaluation-protocol.md"},
+    "snapshotDate": {"$ref": "#/$defs/date"},
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "queries", "queryBounds", "orderSalt", "targetPerLanguage", "listMarker", "minEligiblePaths", "maxEligiblePathBytes", "maxFileBytes", "licenceClassifier", "licenceAllowlist"],
+      "properties": {
+        "source": {"type": "string", "minLength": 1},
+        "queries": {
+          "type": "object", "additionalProperties": false, "required": ["Go", "Rust"],
+          "properties": {"Go": {"type": "string", "pattern": "^language:Go "}, "Rust": {"type": "string", "pattern": "^language:Rust "}}
+        },
+        "queryBounds": {
+          "type": "object", "additionalProperties": false,
+          "required": ["minStars", "maxSizeKiB", "createdBefore", "pushedSince"],
+          "properties": {
+            "minStars": {"type": "integer", "minimum": 1},
+            "maxSizeKiB": {"type": "integer", "minimum": 1},
+            "createdBefore": {"$ref": "#/$defs/timestamp"},
+            "pushedSince": {"$ref": "#/$defs/timestamp"}
+          }
+        },
+        "orderSalt": {"const": "traceweave-m3-select-v1\n"},
+        "targetPerLanguage": {"type": "integer", "minimum": 2},
+        "listMarker": {"const": "awesome"},
+        "minEligiblePaths": {"type": "integer", "minimum": 1},
+        "maxEligiblePathBytes": {"type": "integer", "minimum": 1},
+        "maxFileBytes": {"const": 1048576},
+        "licenceClassifier": {"const": "m3-licence-classifier-v1"},
+        "licenceAllowlist": {
+          "type": "object",
+          "additionalProperties": {"enum": ["permitted", "permitted-with-notice"]}
+        }
+      }
+    },
+    "exclusions": {
+      "type": "object", "additionalProperties": false, "required": ["censusRepositories", "excludedOwners"],
+      "properties": {
+        "censusRepositories": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/fullName"}},
+        "excludedOwners": {"type": "object", "additionalProperties": {"enum": ["census", "development-exposed"]}}
+      }
+    },
+    "split": {
+      "type": "object", "additionalProperties": false, "required": ["salt", "heldOutShare", "provisional", "digest"],
+      "properties": {
+        "salt": {"const": "traceweave-m3-split-v1\n"},
+        "heldOutShare": {"const": "floor(G/2) groups per language, in hash order"},
+        "provisional": {"type": "boolean"},
+        "digest": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "groupMerges": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["language", "owners", "reason"],
+        "properties": {
+          "language": {"$ref": "#/$defs/language"},
+          "owners": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"$ref": "#/$defs/owner"}},
+          "reason": {"enum": ["dependency", "duplicate-content", "fork-network"]}
+        }
+      }
+    },
+    "dependencyEdges": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["from", "to", "declaredIn"],
+        "properties": {"from": {"$ref": "#/$defs/fullName"}, "to": {"$ref": "#/$defs/fullName"}, "declaredIn": {"type": "string", "minLength": 1}}
+      }
+    },
+    "totals": {"type": "object", "additionalProperties": {"$ref": "#/$defs/total"}},
+    "pools": {
+      "type": "object", "additionalProperties": false, "required": ["Go", "Rust"],
+      "properties": {"Go": {"$ref": "#/$defs/pool"}, "Rust": {"$ref": "#/$defs/pool"}}
+    },
+    "walks": {
+      "type": "object", "additionalProperties": false, "required": ["Go", "Rust"],
+      "properties": {"Go": {"$ref": "#/$defs/walk"}, "Rust": {"$ref": "#/$defs/walk"}}
+    },
+    "entries": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/entry"}}
+  },
+  "$defs": {
+    "date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sha1": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "language": {"enum": ["Go", "Rust"]},
+    "owner": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,38}$"},
+    "fullName": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{0,38}/[A-Za-z0-9._-]{1,100}$"},
+    "spdx": {"type": "string", "minLength": 1},
+    "total": {
+      "type": "object", "additionalProperties": false,
+      "required": ["repositories", "githubSizeKiB", "eligiblePathCount", "eligiblePathBytes"],
+      "properties": {
+        "repositories": {"type": "integer", "minimum": 0},
+        "githubSizeKiB": {"type": "integer", "minimum": 0},
+        "eligiblePathCount": {"type": "integer", "minimum": 0},
+        "eligiblePathBytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "pool": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["fullName", "owner", "name", "fork", "archived", "sizeKiB", "stars", "language", "defaultBranch", "topics", "createdAt", "pushedAt", "githubDetectedLicence"],
+        "properties": {
+          "fullName": {"$ref": "#/$defs/fullName"},
+          "owner": {"type": "string", "minLength": 1},
+          "name": {"type": "string", "minLength": 1},
+          "fork": {"type": "boolean"},
+          "archived": {"type": "boolean"},
+          "sizeKiB": {"type": "integer", "minimum": 0},
+          "stars": {"type": "integer", "minimum": 0},
+          "language": {"$ref": "#/$defs/language"},
+          "defaultBranch": {"type": "string", "minLength": 1},
+          "topics": {"type": "array", "items": {"type": "string"}},
+          "createdAt": {"$ref": "#/$defs/timestamp"},
+          "pushedAt": {"$ref": "#/$defs/timestamp"},
+          "githubDetectedLicence": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "licenceFile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "gitBlobSha1", "sha256", "bytes", "spdx", "url"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^([Ll][Ii][Cc][Ee][Nn][CcSs][Ee]|[Cc][Oo][Pp][Yy][Ii][Nn][Gg]|[Uu][Nn][Ll][Ii][Cc][Ee][Nn][Ss][Ee])([-._][A-Za-z0-9.-]+)?$"},
+        "gitBlobSha1": {"$ref": "#/$defs/sha1"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "spdx": {"$ref": "#/$defs/spdx"},
+        "url": {"type": "string", "pattern": "^https://raw\\.githubusercontent\\.com/"}
+      }
+    },
+    "walk": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["fullName", "verdict"],
+        "properties": {
+          "fullName": {"$ref": "#/$defs/fullName"},
+          "verdict": {"enum": ["accepted", "rejected"]},
+          "reason": {"enum": ["excluded-owner-census", "excluded-owner-development-exposed", "list-repository", "owner-already-selected", "revision-unresolved", "tree-truncated", "licence-file-missing", "licence-unclassified", "licence-not-allowed", "too-few-eligible-files", "eligible-bytes-over-limit", "dependency-linked", "duplicate-content"]},
+          "facts": {
+            "type": "object", "additionalProperties": false, "required": ["revision", "resolvedAt"],
+            "properties": {
+              "revision": {"$ref": "#/$defs/sha1"},
+              "resolvedAt": {"$ref": "#/$defs/timestamp"},
+              "eligiblePathCount": {"type": "integer", "minimum": 0},
+              "eligiblePathBytes": {"type": "integer", "minimum": 0},
+              "oversizePathCount": {"type": "integer", "minimum": 0},
+              "submoduleCount": {"type": "integer", "minimum": 0},
+              "symlinkCount": {"type": "integer", "minimum": 0},
+              "licenceFiles": {"type": "array", "items": {"$ref": "#/$defs/licenceFile"}}
+            }
+          }
+        }
+      }
+    },
+    "entry": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "status", "language", "fullName", "owner", "url", "defaultBranch", "revision", "revisionResolvedAt", "licence", "redistribution", "size", "splitGroup", "split", "topics", "rationale"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^(go|rust)-[a-z0-9.-]+$"},
+        "status": {"const": "proposed, not acquired"},
+        "language": {"$ref": "#/$defs/language"},
+        "fullName": {"$ref": "#/$defs/fullName"},
+        "owner": {"$ref": "#/$defs/owner"},
+        "url": {"type": "string", "pattern": "^https://github\\.com/"},
+        "defaultBranch": {"type": "string", "minLength": 1},
+        "revision": {"$ref": "#/$defs/sha1"},
+        "revisionResolvedAt": {"$ref": "#/$defs/timestamp"},
+        "licence": {
+          "type": "object", "additionalProperties": false, "required": ["files", "expression", "verifiedFrom", "classifier"],
+          "properties": {
+            "files": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/licenceFile"}},
+            "expression": {"type": "string", "minLength": 1},
+            "verifiedFrom": {"const": "root licence files at the pinned revision"},
+            "classifier": {"const": "m3-licence-classifier-v1"}
+          }
+        },
+        "redistribution": {
+          "type": "object", "additionalProperties": false, "required": ["permittedByLicence", "projectRedistributesSource"],
+          "properties": {
+            "permittedByLicence": {"enum": ["permitted", "permitted-with-notice"]},
+            "projectRedistributesSource": {"const": false}
+          }
+        },
+        "size": {
+          "type": "object", "additionalProperties": false,
+          "required": ["githubSizeKiB", "eligiblePathCount", "eligiblePathBytes", "oversizePathCount", "submoduleCount", "symlinkCount"],
+          "properties": {
+            "githubSizeKiB": {"type": "integer", "minimum": 0},
+            "eligiblePathCount": {"type": "integer", "minimum": 0},
+            "eligiblePathBytes": {"type": "integer", "minimum": 0},
+            "oversizePathCount": {"type": "integer", "minimum": 0},
+            "submoduleCount": {"type": "integer", "minimum": 0},
+            "symlinkCount": {"type": "integer", "minimum": 0}
+          }
+        },
+        "splitGroup": {"$ref": "#/$defs/owner"},
+        "split": {"enum": ["tuning", "held-out"]},
+        "topics": {"type": "array", "items": {"type": "string"}},
+        "rationale": {"type": "string", "minLength": 20}
+      }
+    }
+  }
+}
