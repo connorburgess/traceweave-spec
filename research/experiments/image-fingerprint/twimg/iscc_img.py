@@ -1,10 +1,13 @@
 """ISCC Content-Code Image v0 (iscc-core 1.5.0) with the iscc-sdk 0.9.7 caller normalization.
 
 iscc-core leaves normalization to the caller (module docstring of code_content_image). The steps
-below copy iscc-sdk 0.9.7 image_normalize with its defaults (tolerant border trim, tolerance 16,
-at most 16 passes; Pillow "L" conversion; 32x32 BICUBIC resize), Apache-2.0, iscc-sdk commit
-cc11f771e4efbf0a600f196c7e9155b529ad7598. EXIF transpose and transparency fill happen earlier,
-in the shared decode stage, with the same Pillow calls.
+below are re-implemented following iscc-sdk 0.9.7 image_normalize with its defaults (tolerant
+border trim, tolerance 16, at most 16 passes; grey conversion; 32x32 BICUBIC resize); iscc-sdk is
+Apache-2.0, commit cc11f771e4efbf0a600f196c7e9155b529ad7598, licence in vendor/. Equality with
+iscc-sdk's own outputs is NOT tested (iscc-sdk is not installed and no vector covers this step).
+EXIF orientation and transparency are handled earlier, by the shared decode stage's own rules.
+Grey: Pillow convert("L") = (19595 R + 38470 G + 7471 B + 0x8000) >> 16 (checked by a unit test).
+Resize: Pillow 13.0.0 BICUBIC, defined by that implementation (profile §5 step 3).
 """
 from __future__ import annotations
 

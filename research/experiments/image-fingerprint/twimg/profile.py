@@ -14,7 +14,7 @@ import sys
 
 EXTRACTION_CONFIG = {
     "profile": "traceweave-image-fingerprint",
-    "profileVersion": "draft-1",
+    "profileVersion": "draft-2",
     "decoder": {
         "library": "Pillow",
         "version": "13.0.0",
@@ -23,11 +23,13 @@ EXTRACTION_CONFIG = {
         "jpegDraft": False,
     },
     "formats": ["JPEG", "PNG"],
-    "modes": ["1", "CMYK", "L", "LA", "P", "RGB", "RGBA", "YCbCr"],
+    "jpeg": {"dctMethod": "islow", "fancyUpsampling": True, "blockSmoothing": True, "outColorSpace": "rgb-or-grayscale", "cmykYcck": "abstain"},
+    "png": {"bitDepth": "8; palette indices 1-8", "colourChunks": "ignore-gAMA-cHRM-sRGB-iCCP"},
+    "modes": ["L", "LA", "P", "RGB", "RGBA"],
     "multiFrame": "abstain",
-    "exifOrientation": "apply",
+    "exifOrientation": "apply-jpeg-only",
     "icc": "ignore-and-record",
-    "alpha": "flatten-white-iscc-sdk-0.9.7",
+    "alpha": "flatten-white-(c*a+255*(255-a)+127)//255",
     "minSide": 32,
     "maxPixels": 50000000,
     "maxBytes": 67108864,
@@ -43,7 +45,7 @@ EXTRACTION_CONFIG = {
     "iscc": {
         "implementation": "iscc-core-1.5.0",
         "algorithm": "image-code-v0",
-        "normalization": "iscc-sdk-0.9.7-cc11f771",
+        "normalization": "following-iscc-sdk-0.9.7-cc11f771-pillow-13.0.0",
         "bits": 64,
         "qualityFloor": "none",
         "dihedral": "catalogue-orig-query-8-on-32x32",
@@ -54,7 +56,7 @@ MATCHING_CONFIG = {
     "matching": "traceweave-image-nearest-draft-1",
     "parameterStatus": "experimental",
     "pdq": {"threshold": 31, "comparison": "le"},
-    "iscc": {"threshold": "selection-rule-1", "comparison": "le"},
+    "iscc": {"threshold": 7, "comparison": "le"},
     "distance": "hamming-min-over-query-dihedral",
     "tie": "abstain-ambiguous",
 }

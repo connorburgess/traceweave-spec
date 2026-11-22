@@ -3,9 +3,13 @@
 Implements research/drafts/image-experiment-protocol.md. Modes:
 
   smoke   20 images from a seed range disjoint from the experiment; NOT A RESULT.
-  full    the frozen protocol: 2,000 images, 6,000 + 3,000 edited queries. Refuses to start
-          unless the protocol digest, the environment pin and the vector checks all hold.
-  compare DIR_A DIR_B   two-run determinism check (resultsSha256 and catalogue digests).
+  full    the frozen contract check: 200 images (100 enrolled, 100 never enrolled) and
+          1,200 edited queries. Refuses to start unless the protocol digest, the environment
+          pin, the vector checks and the network probe all hold.
+  compare DIR_A DIR_B   two-run determinism check (byte comparison of the record files).
+
+Match and false-match counts are reported without any pass line. The run is judged only on
+the validity conditions V1-V5 (protocol section 6).
 
 Nothing is read from the network or from disk other than this directory's code and the
 vector files. Images are generated in memory and never written; only hashes are recorded.
@@ -20,6 +24,7 @@ import os
 import re
 import resource
 import socket
+import subprocess
 import sys
 import time
 
@@ -47,25 +52,19 @@ from twimg.profile import (  # noqa: E402
 )
 
 PROTOCOL = os.path.join(HERE, "..", "..", "drafts", "image-experiment-protocol.md")
-PROTOCOL_VERSION = "e-img-f-1"
+PROTOCOL_VERSION = "e-img-f-2"
 ABORT_SECONDS = 4 * 3600
 PDQ_T = MATCHING_CONFIG["pdq"]["threshold"]
+ISCC_T = MATCHING_CONFIG["iscc"]["threshold"]
 PDQ_QUALITY_FLOOR = EXTRACTION_CONFIG["pdq"]["qualityFloor"]
 EXTRACTORS = ("pdq", "iscc")
 
-# Seed plan (protocol §3). Each split is a contiguous seed range.
+# Seed plan (protocol §3). Contiguous seed ranges.
 SPLITS = {
-    "full": {
-        "selection": {"catalogue": range(0, 250), "negatives": range(250, 500)},
-        "evaluation": {"catalogue": range(500, 1000), "negatives": range(1000, 2000)},
-        "vendorQueryEntries": 50,
-    },
-    "smoke": {
-        "selection": {"catalogue": range(1_000_000, 1_000_004), "negatives": range(1_000_004, 1_000_008)},
-        "evaluation": {"catalogue": range(1_000_008, 1_000_012), "negatives": range(1_000_012, 1_000_020)},
-        "vendorQueryEntries": 2,
-    },
+    "full": {"catalogue": range(0, 100), "negatives": range(100, 200)},
+    "smoke": {"catalogue": range(1_000_000, 1_000_010), "negatives": range(1_000_010, 1_000_020)},
 }
+SPLIT_LABEL = "contract"
 
 
 class AbortRun(Exception):
@@ -94,8 +93,11 @@ def protocol_digest(path: str = PROTOCOL) -> tuple[str | None, str]:
 
 
 def network_denied() -> tuple[bool, str]:
-    """True if the OS refuses both a local bind and an outbound connect (sandbox-exec deny
-    network*). Contacts no remote service: an allowed connect is closed at once."""
+    """True if the OS sandbox refuses both a local bind and a loopback connect.
+
+    Refused by design: nothing listens on 127.0.0.1 port 1, so with the network allowed the
+    connect fails with ECONNREFUSED; under sandbox-exec deny network* it fails with EPERM. No
+    packet ever leaves the host, whether or not the network is denied."""
     notes = []
     denied_bind = denied_connect = False
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -110,14 +112,60 @@ def network_denied() -> tuple[bool, str]:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.settimeout(3)
     try:
-        s.connect(("1.1.1.1", 443))
-        notes.append("connect allowed")
+        s.connect(("127.0.0.1", 1))
+        notes.append("loopback connect accepted")
     except OSError as e:
         denied_connect = e.errno in (errno.EPERM, errno.EACCES)
-        notes.append(f"connect refused errno {e.errno}")
+        notes.append(f"loopback connect refused errno {e.errno} ({errno.errorcode.get(e.errno, '?')})")
     finally:
         s.close()
     return denied_bind and denied_connect, "; ".join(notes)
+
+
+FROZEN_PATHS = (
+    "research/experiments/image-fingerprint",
+    "research/drafts/image-experiment-protocol.md",
+    "research/drafts/extraction-profile-image.md",
+)
+
+
+def _git(*args: str) -> tuple[int, str]:
+    r = subprocess.run(["git", *args], cwd=HERE, capture_output=True, text=True)
+    return r.returncode, (r.stdout + r.stderr).strip()
+
+
+def git_status() -> str:
+    """Porcelain status of the whole work tree, untracked files included (ignored files excluded)."""
+    return _git("status", "--porcelain", "--untracked-files=all")[1]
+
+
+def code_identity(frozen_commit: str | None) -> dict:
+    """The identity checks of protocol §8, logged verbatim into summary.json."""
+    rc_head, head = _git("rev-parse", "HEAD")
+    status = git_status()
+    out: dict = {
+        "frozenCommit": frozen_commit,
+        "head": head if rc_head == 0 else None,
+        "statusPorcelain": status.splitlines(),
+        "protocolVersionInFile": None,
+    }
+    with open(PROTOCOL, "rb") as fh:
+        m = re.search(rb"Protocol version: `([a-z0-9-]+)`", fh.read())
+    out["protocolVersionInFile"] = m.group(1).decode() if m else None
+    if frozen_commit:
+        rc_diff, diff = _git("diff", "--exit-code", "--stat", frozen_commit, "--", *FROZEN_PATHS)
+        rc_anc, _ = _git("merge-base", "--is-ancestor", frozen_commit, "HEAD")
+        out["diffAgainstFrozen"] = {"exitCode": rc_diff, "stat": diff.splitlines()}
+        out["frozenIsAncestorOfHead"] = rc_anc == 0
+    out["ok"] = bool(
+        frozen_commit
+        and out["head"] == frozen_commit
+        and status == ""
+        and out["diffAgainstFrozen"]["exitCode"] == 0
+        and out["frozenIsAncestorOfHead"]
+        and out["protocolVersionInFile"] == PROTOCOL_VERSION
+    )
+    return out
 
 
 def hex_to_bytes_matrix(hexes: list[str]) -> np.ndarray:
@@ -238,7 +286,7 @@ def decide(dist: np.ndarray, cat_ids: list[str], threshold: int, true_id: str | 
             out["outcome"] = "match"
             out["entry"] = tops[0]
         out["distance"] = best
-    out["withinThreshold"] = [[i, d] for d, i in matched][:20]
+    out["withinThreshold"] = [[i, d] for d, i in matched]
     out["withinThresholdCount"] = len(matched)
     if true_id is not None:
         idx = {c: k for k, c in enumerate(cat_ids)}
@@ -259,21 +307,72 @@ def decide(dist: np.ndarray, cat_ids: list[str], threshold: int, true_id: str | 
     return out
 
 
+# --------------------------------------------------------------------------- query records
+
+OUTCOMES = {"match", "no-match", "abstain-ambiguous"} | {"abstain-" + c for c in (
+    "input-too-large", "undecodable", "unsupported-format", "unsupported-bit-depth", "multi-frame", "too-many-pixels",
+    "unsupported-mode", "too-small", "low-quality")}
+QUERY_KEYS = {"id", "split", "kind", "source", "transform", "sha256", "byteLength", "decode", "pdq", "iscc"}
+EXTRACTOR_OK_KEYS = {"status", "quality", "hashes", "outcome", "entry", "distance", "withinThreshold",
+                     "withinThresholdCount", "trueDistance", "wrongWithinThreshold", "nearestWrong", "nearest"}
+BITS = {"pdq": 256, "iscc": 64}
+
+
+def validate_query(q: dict, entry_ids: set) -> list[str]:
+    """V5: a query line has the closed field set of protocol §10 and internally consistent values."""
+    e = []
+    qid = q.get("id", "?")
+    keys = set(q)
+    want = QUERY_KEYS | ({"pixelSha256"} if q.get("kind") == "negative" else set())
+    if keys != want:
+        e.append(f"{qid}: keys")
+    if q.get("kind") == "positive" and (q.get("source") not in entry_ids or q.get("transform") not in transforms.TRANSFORMS):
+        e.append(f"{qid}: source or transform")
+    if q.get("kind") == "negative" and (q.get("source") is not None or q.get("transform") is not None):
+        e.append(f"{qid}: negative fields")
+    if not re.fullmatch(r"[0-9a-f]{64}", q.get("sha256", "")):
+        e.append(f"{qid}: sha256")
+    for x in EXTRACTORS:
+        r = q.get(x, {})
+        if r.get("outcome") not in OUTCOMES:
+            e.append(f"{qid}: {x} outcome")
+            continue
+        if r["status"] == "ok":
+            if set(r) - EXTRACTOR_OK_KEYS:
+                e.append(f"{qid}: {x} keys")
+            if set(r.get("hashes", {})) != set(DIHEDRAL_NAMES) or any(
+                not re.fullmatch(f"[0-9a-f]{{{BITS[x] // 4}}}", h) for h in r["hashes"].values()
+            ):
+                e.append(f"{qid}: {x} hashes")
+            for d in [r.get("distance"), r.get("trueDistance")] + [w[1] for w in r.get("withinThreshold", [])]:
+                if d is not None and not (isinstance(d, int) and 0 <= d <= BITS[x]):
+                    e.append(f"{qid}: {x} distance range")
+            if (r["outcome"] == "match") != ("entry" in r) or (r["outcome"] == "match" and r["entry"] not in entry_ids):
+                e.append(f"{qid}: {x} match entry")
+            if r["withinThresholdCount"] != len(r["withinThreshold"]) or (r["outcome"] == "no-match") != (r["withinThresholdCount"] == 0):
+                e.append(f"{qid}: {x} within-threshold count")
+        else:
+            if set(r) - {"status", "code", "quality", "outcome"} or r["outcome"] != "abstain-" + r["code"]:
+                e.append(f"{qid}: {x} abstain fields")
+    return e
+
+
 # --------------------------------------------------------------------------- run
 
 
-def run(mode: str, out_dir: str, require_network_denied: bool, vendor_check: bool) -> int:
+def run(mode: str, out_dir: str, require_network_denied: bool, vendor_check: bool, frozen_commit: str | None = None) -> int:
     t0 = time.time()
     plan = SPLITS[mode]
     os.makedirs(out_dir, exist_ok=True)
     meta: dict = {
         "protocolVersion": PROTOCOL_VERSION,
         "mode": mode,
-        "label": "SMOKE RUN - NOT A RESULT" if mode == "smoke" else "MEASURED RUN",
+        "label": "SMOKE RUN - NOT A RESULT" if mode == "smoke" else "MEASURED RUN (contract check; counts have no pass line)",
         "extractionConfigSha256": extraction_config_sha256(),
         "matchingConfigSha256": matching_config_sha256(),
         "generator": generator.GENERATOR_ID,
         "environment": environment(),
+        "crossHost": "not-tested: one host (macOS arm64). Audit source X1 (arXiv:2610.04151v1, author-run preprint) reports PDQ and ISCC bit-identical across x86 and arm64 on 200 PNG files; that is not our measurement",
     }
     rec_digest, comp_digest = protocol_digest()
     meta["protocolDigest"] = {"recorded": rec_digest, "computed": comp_digest}
@@ -281,34 +380,49 @@ def run(mode: str, out_dir: str, require_network_denied: bool, vendor_check: boo
     meta["environmentDeviations"] = env_dev
     denied, note = network_denied()
     meta["networkDenied"] = {"denied": denied, "probe": note}
+    meta["codeIdentity"] = code_identity(frozen_commit)
 
     if mode == "full":
         problems = []
+        ci = meta["codeIdentity"]
+        if not ci["ok"]:
+            problems.append("code identity: HEAD must equal --frozen-commit, the work tree must be clean, "
+                            "the frozen paths must not differ, and the protocol version must be " + PROTOCOL_VERSION)
         if rec_digest is None or rec_digest != comp_digest:
             problems.append("protocol digest missing or mismatched")
         if env_dev:
             problems.append("environment deviates from pin: " + "; ".join(env_dev))
         if require_network_denied and not denied:
             problems.append("network not denied: " + note)
-        vec = os.path.join(HERE, "vectors", "check-results.json")
-        if not os.path.exists(vec):
-            problems.append("vectors/check-results.json missing; run check_vectors.py")
-        else:
-            v = json.load(open(vec))
-            core = v["pdqCorePortVsVendor"]
-            ic = v["isccConformance"]
-            if core["equal"] != core["total"] or ic["compiledDctEqual"] != ic["total"]:
-                problems.append("vector conformance failed")
-            meta["vectorChecks"] = {"pdqCore": core, "iscc": {k: ic[k] for k in ("compiledDctEqual", "pureDctEqual", "total")}}
+        if not require_network_denied:
+            problems.append("a measured run requires --require-network-denied")
+        if not vendor_check:
+            problems.append("the vendor cross-check cannot be disabled in a measured run")
         if problems:
             print("REFUSING full run:\n  " + "\n  ".join(problems))
             return 2
-    elif require_network_denied and not denied:
-        print("network not denied: " + note)
-        return 2
+        # Fresh reference-vector check on this host (V1); it rewrites the tracked
+        # vectors/check-results.json, so the work tree must still be clean afterwards.
+        import check_vectors
 
-    peak_check = []
-    vendor_mismatch = []
+        fresh = check_vectors.run_checks(verbose=False)
+        meta["vectorChecks"] = vector_verdict(fresh) if fresh is not None else None
+        meta["statusAfterVectorCheck"] = git_status().splitlines()
+        if fresh is None or meta["statusAfterVectorCheck"]:
+            print("REFUSING full run: fresh vector check missing inputs or changed the work tree")
+            return 2
+    else:
+        vec = os.path.join(HERE, "vectors", "check-results.json")
+        meta["vectorChecks"] = None
+        if os.path.exists(vec):
+            with open(vec) as fh:
+                meta["vectorChecks"] = vector_verdict(json.load(fh))
+        meta["vectorChecksSource"] = "stored file (smoke mode only)"
+        if require_network_denied and not denied:
+            print("network not denied: " + note)
+            return 2
+
+    vendor_mismatch: list = []
     vendor_compared = 0
 
     def check_time():
@@ -326,256 +440,203 @@ def run(mode: str, out_dir: str, require_network_denied: bool, vendor_check: boo
         if nq != vq or (nh is not None and nh != vh) or (nh is None and vq >= PDQ_QUALITY_FLOOR):
             vendor_mismatch.append(qid)
 
-    results: dict = {"catalogues": {}, "queries": [], "selectionRule": None}
-    split_state: dict = {}
     try:
-        for split in ("selection", "evaluation"):
-            cat_seeds = list(plan[split]["catalogue"])
-            neg_seeds = list(plan[split]["negatives"])
-            # Enrollment.
-            entries = []
-            for seed in cat_seeds:
-                check_time()
-                rgb0 = generator.generate(seed)
-                data = transforms.encode_original(rgb0)
-                rec, rgb = extract(data)
-                eid = f"s{seed:07d}"
-                vendor_compare(eid, rgb, rec)
-                entry = {"id": eid, "seed": seed, "pixelSha256": generator.pixel_sha256(rgb0), **rec}
-                for x in EXTRACTORS:
-                    if rec[x]["status"] == "ok":
-                        entry[x] = {"status": "ok", "hash": rec[x]["hashes"]["orig"], **({"quality": rec[x]["quality"]} if "quality" in rec[x] else {})}
-                entries.append(entry)
-            entries.sort(key=lambda e: e["id"])
-            catalogue = {
-                "catalogueVersion": "traceweave-image-catalogue-draft-1",
-                "profile": {"configSha256": extraction_config_sha256(), "id": EXTRACTION_CONFIG["profile"], "version": EXTRACTION_CONFIG["profileVersion"]},
-                "extractionConfig": EXTRACTION_CONFIG,
-                "matchingConfigSha256": matching_config_sha256(),
-                "split": split,
-                "artifacts": entries,
-            }
-            cbytes = canonical_bytes(catalogue)
-            with open(os.path.join(out_dir, f"catalogue-{split}.json"), "wb") as fh:
-                fh.write(cbytes)
-            results["catalogues"][split] = {"sha256": hashlib.sha256(cbytes).hexdigest(), "entries": len(entries)}
-            results.setdefault("catalogueValidation", {})[split] = validate_catalogue(cbytes)
-
-            enrolled = {}
+        # Enrollment.
+        entries = []
+        for seed in plan["catalogue"]:
+            check_time()
+            rgb0 = generator.generate(seed)
+            rec, rgb = extract(transforms.encode_original(rgb0))
+            eid = f"s{seed:07d}"
+            vendor_compare(eid, rgb, rec)
+            entry = {"id": eid, "seed": seed, "pixelSha256": generator.pixel_sha256(rgb0), **rec}
             for x in EXTRACTORS:
-                ok = [e for e in entries if e[x]["status"] == "ok"]
-                ids = [e["id"] for e in ok]
-                enrolled[x] = (ids, hex_to_bytes_matrix([e[x]["hash"] for e in ok]) if ok else np.zeros((0, 32 if x == "pdq" else 8), np.uint8))
+                if rec[x]["status"] == "ok":
+                    entry[x] = {"status": "ok", "hash": rec[x]["hashes"]["orig"], **({"quality": rec[x]["quality"]} if "quality" in rec[x] else {})}
+            entries.append(entry)
+        entries.sort(key=lambda e: e["id"])
+        catalogue = {
+            "catalogueVersion": "traceweave-image-catalogue-draft-1",
+            "profile": {"configSha256": extraction_config_sha256(), "id": EXTRACTION_CONFIG["profile"], "version": EXTRACTION_CONFIG["profileVersion"]},
+            "extractionConfig": EXTRACTION_CONFIG,
+            "matchingConfigSha256": matching_config_sha256(),
+            "split": SPLIT_LABEL,
+            "artifacts": entries,
+        }
+        cbytes = canonical_bytes(catalogue)
+        with open(os.path.join(out_dir, "catalogue.json"), "wb") as fh:
+            fh.write(cbytes)
+        cat_errors = validate_catalogue(cbytes)
 
-            # Queries: 12 edits of every catalogue original, then the never-enrolled negatives.
-            queries = []
-            # Originals are regenerated here rather than held in memory (about 1.6 GB for 500).
-            cat_ids = sorted(e["id"] for e in entries)
-            seed_of = {e["id"]: e["seed"] for e in entries}
-            vendor_entries = set(cat_ids[: plan["vendorQueryEntries"]]) if split == "evaluation" else set()
-            for eid in cat_ids:
-                rgb0 = generator.generate(seed_of[eid])
-                for tname in transforms.TRANSFORMS:
-                    check_time()
-                    data = transforms.apply(tname, rgb0)
-                    rec, rgb = extract(data)
-                    qid = f"{eid}.{tname}"
-                    if eid in vendor_entries:
-                        vendor_compare(qid, rgb, rec)
-                    queries.append({"id": qid, "split": split, "kind": "positive", "source": eid, "transform": tname, **rec})
-            for seed in neg_seeds:
+        enrolled = {}
+        for x in EXTRACTORS:
+            ok = [e for e in entries if e[x]["status"] == "ok"]
+            enrolled[x] = ([e["id"] for e in ok], hex_to_bytes_matrix([e[x]["hash"] for e in ok]) if ok else np.zeros((0, BITS[x] // 8), np.uint8))
+
+        # Queries: the 12 edits of every catalogue original (regenerated, not held in memory),
+        # then the never-enrolled negatives.
+        queries = []
+        for e in entries:
+            rgb0 = generator.generate(e["seed"])
+            for tname in transforms.TRANSFORMS:
                 check_time()
-                rgb0 = generator.generate(seed)
-                rec, rgb = extract(transforms.encode_original(rgb0))
-                qid = f"s{seed:07d}.neg"
+                rec, rgb = extract(transforms.apply(tname, rgb0))
+                qid = f"{e['id']}.{tname}"
                 vendor_compare(qid, rgb, rec)
-                queries.append({"id": qid, "split": split, "kind": "negative", "source": None, "transform": None, "pixelSha256": generator.pixel_sha256(rgb0), **rec})
+                queries.append({"id": qid, "split": SPLIT_LABEL, "kind": "positive", "source": e["id"], "transform": tname, **rec})
+        for seed in plan["negatives"]:
+            check_time()
+            rgb0 = generator.generate(seed)
+            rec, rgb = extract(transforms.encode_original(rgb0))
+            qid = f"s{seed:07d}.neg"
+            vendor_compare(qid, rgb, rec)
+            queries.append({"id": qid, "split": SPLIT_LABEL, "kind": "negative", "source": None, "transform": None, "pixelSha256": generator.pixel_sha256(rgb0), **rec})
 
-            # Distances for every query and extractor.
-            for q in queries:
-                for x in EXTRACTORS:
-                    if q[x]["status"] != "ok":
-                        continue
-                    ids, mat = enrolled[x]
-                    q[x]["_dist"] = nearest(q[x]["hashes"], ids, mat) if len(ids) else np.zeros(0, np.int64)
-
-            # Thresholds. The ISCC threshold is fixed from the selection split only, before any
-            # evaluation query is scored (selection-rule-1, protocol §5).
-            if split == "selection":
-                rule = {}
-                for x in EXTRACTORS:
-                    ids = enrolled[x][0]
-                    dmins = []
-                    for q in queries:
-                        if q[x]["status"] != "ok" or not len(ids):
-                            continue
-                        d = q[x]["_dist"]
-                        if q["kind"] == "negative":
-                            dmins.append(int(d.min()))
-                        else:
-                            mask = np.array([i != q["source"] for i in ids])
-                            if mask.any():
-                                dmins.append(int(d[mask].min()))
-                    rule[x] = {"nullComparisonsMinDistance": min(dmins) if dmins else None, "nullQueries": len(dmins)}
-                d_min = rule["iscc"]["nullComparisonsMinDistance"]
-                iscc_t = (d_min - 1) if d_min is not None else -1
-                rule["iscc"]["threshold"] = iscc_t
-                rule["pdq"]["threshold"] = PDQ_T
-                rule["rule"] = "selection-rule-1: T_iscc = (minimum over selection null comparisons of the min-over-dihedral Hamming distance) - 1"
-                results["selectionRule"] = rule
-                with open(os.path.join(out_dir, "selection-threshold.json"), "w") as fh:
-                    fh.write(json.dumps(rule, indent=1, sort_keys=True) + "\n")
-                split_state["thresholds"] = {"pdq": PDQ_T, "iscc": iscc_t}
-
-            th = split_state["thresholds"]
-            for q in queries:
-                for x in EXTRACTORS:
-                    if q[x]["status"] != "ok":
-                        q[x]["outcome"] = "abstain-" + q[x]["code"]
-                        continue
-                    ids = enrolled[x][0]
-                    true_id = q["source"] if q["kind"] == "positive" else None
-                    q[x].update(decide(q[x].pop("_dist"), ids, th[x], true_id))
-            results["queries"].extend(queries)
-            results.setdefault("enrollment", {})[split] = {
-                x: {"enrolled": len(enrolled[x][0]), "catalogue": len(entries), "abstained": {c: sum(1 for e in entries if e[x]["status"] != "ok" and e[x]["code"] == c) for c in sorted({e[x]["code"] for e in entries if e[x]["status"] != "ok"})}}
-                for x in EXTRACTORS
-            }
+        thresholds = {"pdq": PDQ_T, "iscc": ISCC_T}
+        for q in queries:
+            for x in EXTRACTORS:
+                if q[x]["status"] != "ok":
+                    q[x]["outcome"] = "abstain-" + q[x]["code"]
+                    continue
+                ids, mat = enrolled[x]
+                dist = nearest(q[x]["hashes"], ids, mat) if len(ids) else np.zeros(0, np.int64)
+                q[x].update(decide(dist, ids, thresholds[x], q["source"] if q["kind"] == "positive" else None))
     except AbortRun:
         meta["status"] = "aborted-time-limit"
         meta["elapsedSeconds"] = round(time.time() - t0, 1)
-        open(os.path.join(out_dir, "summary.json"), "w").write(json.dumps(meta, indent=1, sort_keys=True) + "\n")
+        with open(os.path.join(out_dir, "summary.json"), "w") as fh:
+            fh.write(json.dumps(meta, indent=1, sort_keys=True) + "\n")
         print("ABORTED at time limit; nothing here is a result")
         return 3
 
-    # Records (deterministic part) and digest.
-    results["queries"].sort(key=lambda q: (q["split"], q["id"]))
-    qbytes = b"".join(canonical_bytes(q) + b"\n" for q in results["queries"])
-    open(os.path.join(out_dir, "queries.jsonl"), "wb").write(qbytes)
-    det = {
-        "catalogues": results["catalogues"],
-        "queriesSha256": hashlib.sha256(qbytes).hexdigest(),
-        "selectionRule": results["selectionRule"],
-    }
+    queries.sort(key=lambda q: q["id"])
+    entry_ids = {e["id"] for e in entries}
+    query_errors = [err for q in queries for err in validate_query(q, entry_ids)]
+    qbytes = b"".join(canonical_bytes(q) + b"\n" for q in queries)
+    with open(os.path.join(out_dir, "queries.jsonl"), "wb") as fh:
+        fh.write(qbytes)
+    det = {"catalogueSha256": hashlib.sha256(cbytes).hexdigest(), "queriesSha256": hashlib.sha256(qbytes).hexdigest()}
     results_sha = hashlib.sha256(canonical_bytes(det)).hexdigest()
 
-    metrics = compute_metrics(results, split_state["thresholds"])
     elapsed = time.time() - t0
     peak = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss  # bytes on macOS
     summary = {
         **meta,
         "status": "completed",
-        "thresholds": split_state["thresholds"],
+        "thresholds": thresholds,
         "deterministic": det,
         "resultsSha256": results_sha,
-        "enrollment": results["enrollment"],
-        "catalogueValidation": results["catalogueValidation"],
-        "vendorCrossCheck": {"compared": vendor_compared, "mismatches": len(vendor_mismatch), "mismatchIds": vendor_mismatch[:50]},
+        "enrollment": {
+            x: {"enrolled": len(enrolled[x][0]), "catalogue": len(entries),
+                "abstained": {c: sum(1 for e in entries if e[x]["status"] != "ok" and e[x]["code"] == c) for c in sorted({e[x]["code"] for e in entries if e[x]["status"] != "ok"})}}
+            for x in EXTRACTORS
+        },
+        "recordValidation": {"catalogueErrors": cat_errors, "queryErrors": query_errors, "queryErrorCount": len(query_errors), "queriesChecked": len(queries)},
+        "vendorCrossCheck": {"compared": vendor_compared, "mismatches": len(vendor_mismatch), "mismatchIds": vendor_mismatch},
         "elapsedSeconds": round(elapsed, 1),
         "peakRssBytes": int(peak),
-        "counts": {"queries": len(results["queries"])},
+        "counts": {"catalogue": len(entries), "queries": len(queries)},
     }
+    summary["statusAfterRun"] = git_status().splitlines()
     if mode == "full":
-        summary["metrics"] = metrics
-        summary["criteria"] = criteria(metrics, vendor_mismatch)
+        summary["metrics"] = compute_metrics(queries, thresholds)
+        summary["passLine"] = "none: match and false-match counts are reported, not judged (protocol §6)"
         summary["validity"] = validity(summary)
     else:
         # A smoke run records only that the pipeline completed; its match figures are withheld
         # from the summary so they cannot be read as results (they remain in queries.jsonl).
         summary["metricsWithheld"] = True
-    open(os.path.join(out_dir, "summary.json"), "w").write(json.dumps(summary, indent=1, sort_keys=True) + "\n")
-    print(f"{summary['label']}: {len(results['queries'])} queries, {elapsed:.1f} s, peak RSS {peak / 2**20:.0f} MiB")
+    with open(os.path.join(out_dir, "summary.json"), "w") as fh:
+        fh.write(json.dumps(summary, indent=1, sort_keys=True) + "\n")
+    print(f"{summary['label']}: {len(queries)} queries, {elapsed:.1f} s, peak RSS {peak / 2**20:.0f} MiB")
     print(f"resultsSha256 {results_sha}")
-    print(f"vendor cross-check {vendor_compared - len(vendor_mismatch)}/{vendor_compared} equal")
+    print(f"vendor cross-check {vendor_compared - len(vendor_mismatch)}/{vendor_compared} equal; record errors: catalogue {len(cat_errors)}, queries {len(query_errors)}")
     return 0
 
 
-# --------------------------------------------------------------------------- metrics
+# --------------------------------------------------------------------------- metrics and validity
 
 
-def compute_metrics(results: dict, thresholds: dict) -> dict:
+def _hist(values) -> dict:
+    h: dict = {}
+    for v in values:
+        h[v] = h.get(v, 0) + 1
+    return {str(k): h[k] for k in sorted(h)}
+
+
+def compute_metrics(queries: list, thresholds: dict) -> dict:
+    """Counts with denominators (protocol §6). No pass line is applied to any of them."""
     m: dict = {}
-    for split in ("selection", "evaluation"):
-        qs = [q for q in results["queries"] if q["split"] == split]
-        m[split] = {}
-        for x in EXTRACTORS:
-            per: dict = {}
-            for tname in transforms.TRANSFORMS:
-                sub = [q for q in qs if q["kind"] == "positive" and q["transform"] == tname]
-                o = [q[x]["outcome"] for q in sub]
-                hist: dict = {}
-                for q in sub:
-                    if "trueDistance" in q[x]:
-                        hist[q[x]["trueDistance"]] = hist.get(q[x]["trueDistance"], 0) + 1
-                per[tname] = {
-                    "n": len(sub),
-                    "correctMatch": sum(1 for q in sub if q[x]["outcome"] == "match" and q[x]["entry"] == q["source"]),
-                    "wrongTopMatch": sum(1 for q in sub if q[x]["outcome"] == "match" and q[x]["entry"] != q["source"]),
-                    "anyWrongWithinThreshold": sum(1 for q in sub if q[x].get("wrongWithinThreshold", 0) > 0),
-                    "ambiguous": o.count("abstain-ambiguous"),
-                    "noMatch": o.count("no-match"),
-                    "abstain": {c: o.count(c) for c in sorted(set(o)) if c.startswith("abstain-") and c != "abstain-ambiguous"},
-                    "trueDistanceHistogram": {str(k): hist[k] for k in sorted(hist)},
-                }
-            negs = [q for q in qs if q["kind"] == "negative"]
-            o = [q[x]["outcome"] for q in negs]
-            nh: dict = {}
-            for q in negs:
-                if "nearest" in q[x]:
-                    d = q[x]["nearest"][1]
-                    nh[d] = nh.get(d, 0) + 1
-            wrong_hist: dict = {}
-            for q in qs:
-                if q["kind"] == "positive" and "nearestWrong" in q[x]:
-                    d = q[x]["nearestWrong"][1]
-                    wrong_hist[d] = wrong_hist.get(d, 0) + 1
-            m[split][x] = {
-                "threshold": thresholds[x],
-                "positives": per,
-                "positivesTotal": {
-                    "n": sum(v["n"] for v in per.values()),
-                    "anyWrongWithinThreshold": sum(v["anyWrongWithinThreshold"] for v in per.values()),
-                    "wrongTopMatch": sum(v["wrongTopMatch"] for v in per.values()),
-                },
-                "negatives": {
-                    "n": len(negs),
-                    "anyWithinThreshold": sum(1 for q in negs if q[x].get("withinThresholdCount", 0) > 0),
-                    "outcomes": {c: o.count(c) for c in sorted(set(o))},
-                    "nearestDistanceHistogram": {str(k): nh[k] for k in sorted(nh)},
-                },
-                "positivesNearestWrongHistogram": {str(k): wrong_hist[k] for k in sorted(wrong_hist)},
+    for x in EXTRACTORS:
+        per: dict = {}
+        for tname in transforms.TRANSFORMS:
+            sub = [q for q in queries if q["kind"] == "positive" and q["transform"] == tname]
+            o = [q[x]["outcome"] for q in sub]
+            per[tname] = {
+                "n": len(sub),
+                "correctMatch": sum(1 for q in sub if q[x]["outcome"] == "match" and q[x]["entry"] == q["source"]),
+                "wrongTopMatch": sum(1 for q in sub if q[x]["outcome"] == "match" and q[x]["entry"] != q["source"]),
+                "anyWrongWithinThreshold": sum(1 for q in sub if q[x].get("wrongWithinThreshold", 0) > 0),
+                "ambiguous": o.count("abstain-ambiguous"),
+                "noMatch": o.count("no-match"),
+                "abstain": {c: o.count(c) for c in sorted(set(o)) if c.startswith("abstain-") and c != "abstain-ambiguous"},
+                "trueDistanceHistogram": _hist(q[x]["trueDistance"] for q in sub if "trueDistance" in q[x]),
             }
+        negs = [q for q in queries if q["kind"] == "negative"]
+        o = [q[x]["outcome"] for q in negs]
+        m[x] = {
+            "threshold": thresholds[x],
+            "positives": per,
+            "positivesTotal": {
+                "n": sum(v["n"] for v in per.values()),
+                "anyWrongWithinThreshold": sum(v["anyWrongWithinThreshold"] for v in per.values()),
+                "wrongTopMatch": sum(v["wrongTopMatch"] for v in per.values()),
+            },
+            "negatives": {
+                "n": len(negs),
+                "anyWithinThreshold": sum(1 for q in negs if q[x].get("withinThresholdCount", 0) > 0),
+                "outcomes": {c: o.count(c) for c in sorted(set(o))},
+                "nearestDistanceHistogram": _hist(q[x]["nearest"][1] for q in negs if "nearest" in q[x]),
+            },
+            "positivesNearestWrongHistogram": _hist(q[x]["nearestWrong"][1] for q in queries if q["kind"] == "positive" and "nearestWrong" in q[x]),
+        }
     return m
 
 
-def criteria(metrics: dict, vendor_mismatch: list) -> dict:
-    """Protocol §6 failure criteria on the evaluation split, per extractor."""
-    out = {}
-    for x in EXTRACTORS:
-        e = metrics["evaluation"][x]
-        p = e["positives"]
-        f1 = e["negatives"]["anyWithinThreshold"] >= 1
-        f2 = e["positivesTotal"]["anyWrongWithinThreshold"] > 5
-        f3 = any(p[t]["correctMatch"] * 100 < 95 * p[t]["n"] for t in ("jpeg75", "png"))
-        out[x] = {
-            "F1-negative-within-threshold": f1,
-            "F2-more-than-5-wrong-entry-queries": f2,
-            "F3-recall-below-95-jpeg75-or-png": f3,
-            "fails": f1 or f2 or f3,
-        }
-    out["C2-vendor-cross-check-mismatch"] = bool(vendor_mismatch)
-    return out
+def vector_verdict(v: dict) -> dict:
+    """V1 from vectors/check-results.json (protocol §6 defines 'reference-vector mismatch')."""
+    sets = {(r["set"], r["decodePath"]): r for r in v["pdqPublished"]}
+    core = v["pdqCorePortVsVendor"]
+    cpp = sets[("cpp-regtest", "profile-full-resolution")]
+    ut = sets[("python-unittest", "profile-full-resolution")]
+    readme = sets[("python-readme", "profile-full-resolution")]
+    ic = v["isccConformance"]
+    checks = {
+        "pdqCorePortEqualsVendored": [core["equal"], core["total"]],
+        "pdqCppWithin10": [cpp["within10"], cpp["comparable"]],
+        "pdqCppQualityEqual": [cpp["qualityEqual"], cpp["comparable"]],
+        "pdqPythonUnittestWithin16": [ut["within16"], ut["comparable"]],
+        "pdqPythonReadmeWithin16": [readme["within16"], readme["comparable"]],
+        "isccConformanceEqual": [ic["compiledDctEqual"], ic["total"]],
+        "inputFilesVerified": [v["inputFiles"]["verified"], v["inputFiles"]["listed"]],
+    }
+    return {"checks": checks, "pass": all(a == b for a, b in checks.values())}
 
 
 def validity(summary: dict) -> dict:
-    """C1, C2, C4, C5, C6 as observed in one run (C3 needs two runs: compare)."""
-    vc = summary.get("vectorChecks", {})
+    """V1, V2, V4, V5 and the start conditions as observed in one run (V3 needs compare)."""
+    vc = summary.get("vectorChecks") or {}
+    rv = summary["recordValidation"]
     return {
-        "C1-vectors": bool(vc) and vc["pdqCore"]["equal"] == vc["pdqCore"]["total"] and vc["iscc"]["compiledDctEqual"] == vc["iscc"]["total"],
-        "C2-vendor-cross-check": summary["vendorCrossCheck"]["mismatches"] == 0 and summary["vendorCrossCheck"]["compared"] > 0,
-        "C4-environment-and-digest": not summary["environmentDeviations"] and summary["protocolDigest"]["recorded"] == summary["protocolDigest"]["computed"],
-        "C5-network-denied": summary["networkDenied"]["denied"],
-        "C6-catalogues": all(not v for v in summary["catalogueValidation"].values()),
+        "V1-reference-vectors": bool(vc.get("pass")),
+        "V2-run-to-run": "decided by compare (two runs)",
+        "V3-cross-host": "not-tested",
+        "V4-vendor-cross-check": summary["vendorCrossCheck"]["mismatches"] == 0 and summary["vendorCrossCheck"]["compared"] == summary["counts"]["catalogue"] + summary["counts"]["queries"],
+        "V5-records-fit": not rv["catalogueErrors"] and rv["queryErrorCount"] == 0,
+        "start-environment-and-digest": not summary["environmentDeviations"] and summary["protocolDigest"]["recorded"] == summary["protocolDigest"]["computed"],
+        "start-network-denied": summary["networkDenied"]["denied"],
+        "start-code-identity": summary["codeIdentity"]["ok"],
+        "work-tree-clean-after-vector-check-and-run": not summary.get("statusAfterVectorCheck") and not summary["statusAfterRun"],
     }
 
 
@@ -585,7 +646,7 @@ def compare(a: str, b: str) -> int:
     same = sa["resultsSha256"] == sb["resultsSha256"]
     files_same = all(
         open(os.path.join(a, f), "rb").read() == open(os.path.join(b, f), "rb").read()
-        for f in ("catalogue-selection.json", "catalogue-evaluation.json", "queries.jsonl", "selection-threshold.json")
+        for f in ("catalogue.json", "queries.jsonl")
     )
     print(f"resultsSha256 equal: {same}; record files byte-identical: {files_same}")
     return 0 if same and files_same else 1
@@ -598,11 +659,12 @@ def main() -> int:
     ap.add_argument("--out", default=None)
     ap.add_argument("--require-network-denied", action="store_true")
     ap.add_argument("--no-vendor-check", action="store_true")
+    ap.add_argument("--frozen-commit", default=None, help="full mode: the 40-hex protocol commit; HEAD must equal it")
     a = ap.parse_args()
     if a.mode == "compare":
         return compare(*a.dirs)
     out = a.out or os.path.join(HERE, "out", a.mode)
-    return run(a.mode, out, a.require_network_denied, not a.no_vendor_check)
+    return run(a.mode, out, a.require_network_denied, not a.no_vendor_check, a.frozen_commit)
 
 
 if __name__ == "__main__":

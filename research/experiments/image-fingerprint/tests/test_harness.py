@@ -36,6 +36,17 @@ GOLDEN = {
 }
 
 
+def raw_png(w, h, depth, ctype, row: bytes) -> bytes:
+    import struct
+    import zlib
+
+    def chunk(t, d):
+        return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xFFFFFFFF)
+
+    ihdr = struct.pack(">IIBBBBB", w, h, depth, ctype, 0, 0, 0)
+    return b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", ihdr) + chunk(b"IDAT", zlib.compress(row * h)) + chunk(b"IEND", b"")
+
+
 def png_bytes(img: Image.Image, **kw) -> bytes:
     b = io.BytesIO()
     img.save(b, format="PNG", **kw)
@@ -47,8 +58,8 @@ class TestEnvironment(unittest.TestCase):
         self.assertEqual(check_environment(), [])
 
     def test_config_digests(self):
-        self.assertEqual(extraction_config_sha256(), "56c0d63ae0c3047d447d883c704cb47a1d1760dfc9719fb879413ca6b1f71315")
-        self.assertEqual(matching_config_sha256(), "3925a95bc9f08bad07f788da784a1e50005f42e32a26fa43848b33108e9258dd")
+        self.assertEqual(extraction_config_sha256(), "c740e92de69a47904fa81bb3614c086194717be856fa6a44d89ad6fdba3bb927")
+        self.assertEqual(matching_config_sha256(), "fe3fa0395d3701fa5b1b55839063998eba528851d4f9e3dcaca62d3a0f6c97ac")
         self.assertTrue(canonical({"b": 1, "a": [True]}).endswith(b"\n"))
 
 
@@ -165,7 +176,12 @@ class TestDecode(unittest.TestCase):
         base.save(b, format="GIF")
         self.assertEqual(self.code(b.getvalue()), "unsupported-format")
         self.assertEqual(self.code(png_bytes(base.resize((31, 64)))), "too-small")
-        self.assertEqual(self.code(png_bytes(Image.new("I;16", (64, 64)))), "unsupported-mode")
+        self.assertEqual(self.code(png_bytes(Image.new("I;16", (64, 64)))), "unsupported-bit-depth")
+        b = io.BytesIO()
+        base.convert("CMYK").save(b, format="JPEG")
+        self.assertEqual(self.code(b.getvalue()), "unsupported-mode")
+        self.assertEqual(self.code(raw_png(40, 40, 16, 2, b"\x00" + b"\x00" * 240)), "unsupported-bit-depth")
+        self.assertEqual(self.code(raw_png(40, 40, 2, 0, b"\x00" + b"\x00" * 10)), "unsupported-bit-depth")
         b = io.BytesIO()
         base.save(b, format="PNG", save_all=True, append_images=[base.rotate(90)])
         self.assertEqual(self.code(b.getvalue()), "multi-frame")
@@ -175,6 +191,44 @@ class TestDecode(unittest.TestCase):
         rgba = Image.new("RGBA", (64, 64), (10, 20, 30, 0))
         rgb, _ = decode(png_bytes(rgba))
         self.assertTrue((rgb == 255).all())
+
+    def test_flatten_equals_pillow_paste(self):
+        rng = np.random.default_rng(11)
+        c = rng.integers(0, 256, (64, 64, 3), dtype=np.uint8)
+        a = rng.integers(0, 256, (64, 64), dtype=np.uint8)
+        rgba = Image.fromarray(np.dstack([c, a]), "RGBA")
+        bg = Image.new("RGB", rgba.size, (255, 255, 255))
+        bg.paste(rgba, mask=rgba.getchannel("A"))
+        rgb, _ = decode(png_bytes(rgba))
+        self.assertTrue(np.array_equal(rgb, np.asarray(bg)))
+
+    def test_palette_and_grey(self):
+        base = Image.fromarray(generator.generate(SMOKE + 2)).resize((64, 64))
+        p = base.quantize(16)
+        rgb, info = decode(png_bytes(p))
+        self.assertEqual(info["sourceMode"], "P")
+        self.assertTrue(np.array_equal(rgb, np.asarray(p.convert("RGB"))))
+        p.info["transparency"] = 3
+        rgb, _ = decode(png_bytes(p, transparency=3))
+        idx = np.asarray(p)
+        self.assertTrue((rgb[idx == 3] == 255).all())
+        g = base.convert("L")
+        rgb, _ = decode(png_bytes(g))
+        self.assertTrue(np.array_equal(rgb[..., 0], np.asarray(g)) and np.array_equal(rgb[..., 0], rgb[..., 2]))
+
+    def test_pillow_grey_formula(self):
+        rng = np.random.default_rng(5)
+        a = rng.integers(0, 256, (50, 50, 3), dtype=np.uint8)
+        r, g, b = (a[..., i].astype(np.int64) for i in range(3))
+        want = (r * 19595 + g * 38470 + b * 7471 + 0x8000) >> 16
+        self.assertTrue(np.array_equal(np.asarray(Image.fromarray(a).convert("L")), want))
+
+    def test_png_exif_orientation_not_applied(self):
+        img = Image.fromarray(generator.generate(SMOKE + 1)).resize((200, 100))
+        exif = Image.Exif()
+        exif[0x0112] = 6
+        rgb, info = decode(png_bytes(img, exif=exif.tobytes()))
+        self.assertEqual((info["exifOrientation"], rgb.shape[:2]), (1, (100, 200)))
 
     def test_exif_orientation_applied(self):
         img = Image.fromarray(generator.generate(SMOKE + 1)).resize((200, 100))
@@ -208,6 +262,13 @@ class TestMatching(unittest.TestCase):
         cat = rx.hex_to_bytes_matrix(["0" * 64, "0" * 63 + "1"])
         self.assertEqual(rx.nearest(q, ["x", "y"], cat).tolist(), [0, 1])
 
+    def test_probe_and_identity_shapes(self):
+        denied, note = rx.network_denied()
+        self.assertIsInstance(denied, bool)
+        self.assertIn("loopback connect", note)
+        self.assertFalse(rx.code_identity(None)["ok"])
+        self.assertFalse(rx.code_identity("0" * 40)["ok"])
+
     def test_protocol_digest_self_excluding(self):
         with tempfile.TemporaryDirectory() as t:
             p = os.path.join(t, "p.md")
@@ -218,15 +279,48 @@ class TestMatching(unittest.TestCase):
             recorded, again = rx.protocol_digest(p)
             self.assertEqual((recorded, again), (computed, computed))
 
-    def test_criteria(self):
-        pos = {t: {"n": 500, "correctMatch": 500} for t in transforms.TRANSFORMS}
-        e = {"positives": pos, "positivesTotal": {"anyWrongWithinThreshold": 5}, "negatives": {"anyWithinThreshold": 0}}
-        m = {"evaluation": {"pdq": e, "iscc": json.loads(json.dumps(e))}}
-        self.assertFalse(rx.criteria(m, [])["pdq"]["fails"])
-        m["evaluation"]["pdq"]["positives"]["jpeg75"]["correctMatch"] = 474
-        self.assertTrue(rx.criteria(m, [])["pdq"]["F3-recall-below-95-jpeg75-or-png"])
-        m["evaluation"]["iscc"]["positivesTotal"]["anyWrongWithinThreshold"] = 6
-        self.assertTrue(rx.criteria(m, [])["iscc"]["F2-more-than-5-wrong-entry-queries"])
+    def test_vector_verdict(self):
+        with open(os.path.join(HERE, "vectors", "check-results.json")) as fh:
+            v = json.load(fh)
+        self.assertTrue(rx.vector_verdict(v)["pass"])
+        v["pdqCorePortVsVendor"]["equal"] -= 1
+        self.assertFalse(rx.vector_verdict(v)["pass"])
+
+
+class TestQueryValidation(unittest.TestCase):
+    def make(self):
+        h8 = {n: "a" * 64 for n in DIHEDRAL_NAMES}
+        i8 = {n: "b" * 16 for n in DIHEDRAL_NAMES}
+        q = {
+            "id": "s0000001.jpeg75", "split": "contract", "kind": "positive", "source": "s0000001", "transform": "jpeg75",
+            "sha256": "c" * 64, "byteLength": 5,
+            "decode": {"status": "ok"},
+            "pdq": {"status": "ok", "quality": 90, "hashes": h8},
+            "iscc": {"status": "ok", "hashes": i8},
+        }
+        q["pdq"].update(rx.decide(np.array([3, 40]), ["s0000001", "s0000002"], 31, "s0000001"))
+        q["iscc"].update(rx.decide(np.array([20, 30]), ["s0000001", "s0000002"], 7, "s0000001"))
+        return q
+
+    def test_valid_and_corruptions(self):
+        ids = {"s0000001", "s0000002"}
+        self.assertEqual(rx.validate_query(self.make(), ids), [])
+        bad = self.make(); bad["score"] = 1
+        self.assertTrue(rx.validate_query(bad, ids))
+        bad = self.make(); bad["pdq"]["outcome"] = "maybe"
+        self.assertTrue(rx.validate_query(bad, ids))
+        bad = self.make(); bad["pdq"]["entry"] = "s0000009"
+        self.assertTrue(rx.validate_query(bad, ids))
+        bad = self.make(); bad["iscc"]["hashes"]["rot90"] = "b" * 15
+        self.assertTrue(rx.validate_query(bad, ids))
+        bad = self.make(); bad["pdq"]["distance"] = 300
+        self.assertTrue(rx.validate_query(bad, ids))
+        bad = self.make(); bad["iscc"]["withinThresholdCount"] = 1
+        self.assertTrue(rx.validate_query(bad, ids))
+        bad = self.make(); bad["pdq"] = {"status": "abstain", "code": "low-quality", "quality": 10, "outcome": "abstain-low-quality"}
+        self.assertEqual(rx.validate_query(bad, ids), [])
+        bad["pdq"]["outcome"] = "abstain-too-small"
+        self.assertTrue(rx.validate_query(bad, ids))
 
 
 class TestCatalogueValidation(unittest.TestCase):

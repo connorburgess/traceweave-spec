@@ -59,7 +59,9 @@ def path_vendor_python(path: str):
     return str(hq.getHash()), hq.getQuality()
 
 
-def main() -> int:
+def run_checks(verbose: bool = True) -> dict | None:
+    """Run every check, write vectors/check-results.json, return the results (None if inputs
+    are missing)."""
     ref = json.load(open(os.path.join(HERE, "vectors", "pdq-reference.json")))
     out: dict = {"environment": environment(), "environmentDeviations": check_environment()}
 
@@ -72,7 +74,7 @@ def main() -> int:
     out["inputFiles"] = {"verified": present, "listed": len(ref["files"])}
     if present != len(ref["files"]):
         print("vector files missing or altered; run fetch_pdq_vectors.py first")
-        return 2
+        return None
 
     # 2. Hash core: NumPy port vs vendored pure Python on identical decoded pixels
     #    (profile decode; 8 dihedral hashes and quality must all be equal).
@@ -161,14 +163,26 @@ def main() -> int:
     with open(path, "w") as fh:
         json.dump(out, fh, indent=1, sort_keys=True)
         fh.write("\n")
-    print(f"vector files verified: {present}/{len(ref['files'])}")
-    print(f"PDQ core, NumPy port vs vendored: {agree}/{len(ref['files'])}")
-    for r in sets_out:
+    if verbose:
+        report(out)
+    return out
+
+
+def report(out: dict) -> None:
+    present = out["inputFiles"]["verified"]
+    agree = out["pdqCorePortVsVendor"]["equal"]
+    n = out["pdqCorePortVsVendor"]["total"]
+    print(f"vector files verified: {present}/{out['inputFiles']['listed']}")
+    print(f"PDQ core, NumPy port vs vendored: {agree}/{n}")
+    for r in out["pdqPublished"]:
         extra = f", quality equal {r['qualityEqual']}/{r['comparable']}" if "qualityEqual" in r else ""
         print(f"PDQ {r['set']} [{r['decodePath']}]: exact {r['exactEqual']}/{r['comparable']}, max distance {r['maxDistance']}{extra}")
     c = out["isccConformance"]
     print(f"ISCC image v0 conformance: compiled {c['compiledDctEqual']}/{c['total']}, pure {c['pureDctEqual']}/{c['total']}")
-    return 0
+
+
+def main() -> int:
+    return 0 if run_checks() is not None else 2
 
 
 if __name__ == "__main__":
