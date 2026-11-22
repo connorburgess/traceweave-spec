@@ -2,6 +2,8 @@
 
 Research only. This directory holds the code for the frozen protocol [`e-img-f-2`](../../drafts/image-experiment-protocol.md), a 200-image contract check of the draft [still-image fingerprint profile](../../drafts/extraction-profile-image.md) (`draft-2`; roadmap IMGF.1–IMGF.5). The earlier `e-img-f-1` (commit `4714735`, 2,000 images with pass lines) was retired unrun by coordinator decision on 2026-11-22. **The measured run has not been made.** Nothing in this directory is a result. Smoke runs use a seed range disjoint from the experiment and are labelled `SMOKE RUN - NOT A RESULT`.
 
+Results: the frozen protocol was executed as `e-img-f-2`; the results, transcript and run records are in [results/e-img-f-2/](results/e-img-f-2/RESULTS.md). The protocol file itself still says "not yet run" because its bytes are frozen by digest and are not edited after the run.
+
 Protocol digest (`e-img-f-2`, SHA-256 of [image-experiment-protocol.md](../../drafts/image-experiment-protocol.md) with its digest field set to 64 zeros): `44a67a14c6e4c3028bd20a093896390c308a89cf92fc2d521c788346ad6b90c4`
 
 ## Layout
