@@ -1,0 +1,29 @@
+#!/bin/sh
+# Git pre-push hook. Install with: install -m 755 tools/hooks/pre-push .git/hooks/pre-push
+#
+# Refuses to push any ref whose history contains a rule-bearing version of the
+# history-rewrite tool. The blob ids come from the private rules file (outside
+# every working tree), never from this repository. Fails closed when that file
+# cannot be read.
+rules="${TRACEWEAVE_SCRUB_RULES:-${TRACEWEAVE_EVAL_DIR:-$HOME/traceweave-eval}/private/public-history-rules.json}"
+if [ ! -r "$rules" ]; then
+  echo "pre-push: cannot read the private rules file; refusing to push" >&2
+  exit 1
+fi
+list=$(mktemp "${TMPDIR:-/tmp}/prepush.XXXXXX") || exit 1
+trap 'rm -f "$list"' EXIT
+python3 -c 'import json,sys; print("\n".join(json.load(open(sys.argv[1])).get("drop_tool_blobs", [])))' "$rules" > "$list" || exit 1
+zero=0000000000000000000000000000000000000000
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ "$local_sha" = "$zero" ] && continue
+  if [ "$remote_sha" = "$zero" ]; then
+    objects=$(git rev-list --objects "$local_sha")
+  else
+    objects=$(git rev-list --objects "$local_sha" "^$remote_sha")
+  fi
+  if printf '%s\n' "$objects" | awk '{print $1}' | grep -F -x -q -f "$list"; then
+    echo "pre-push: $local_ref contains a rule-bearing version of the rewrite tool; refusing to push" >&2
+    exit 1
+  fi
+done
+exit 0

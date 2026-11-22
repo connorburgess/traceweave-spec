@@ -18,7 +18,7 @@ The only workflow is [.github/workflows/validate.yml](.github/workflows/validate
 2. `python -m unittest discover -s tests`.
 3. `python tools/validate.py --links-all`: local Markdown links in every Markdown file, including `research/`.
 4. Every vector builder (`extraction`, `matching`, `extraction-typescript`, `extraction-text`), then `git diff --exit-code` and a clean `git status`: regenerated files must be byte-identical to the committed ones.
-5. `python tools/check_hygiene.py --messages <range>`: no absolute home-directory paths, chat-session thread identifiers or AI-attribution trailers in tracked files or in the messages of the pushed commits.
+5. `python tools/check_hygiene.py --messages <range>`: no absolute home-directory paths, chat-session thread identifiers or AI-attribution trailers in tracked files or in the messages of the pushed commits. The same step also fails on long string literals in `tools/` that are trivially encoded (ROT13 or base64 text), in the tree and in every version of a `tools/` file reachable from the pushed commits.
 
 CI does **not** run:
 
@@ -29,3 +29,7 @@ CI does **not** run:
 - any implementation of the specification. The implementation repository has its own checks.
 
 The vector checkers validate recorded outputs. Passing CI is not an interoperability result and not a conformance claim. To regenerate the pinned requirements, see the header of `requirements-dev.txt`.
+
+## Publishing history
+
+`tools/public_history_scrub.py` rewrites a local branch into a publishable one. It contains no rules: they are in a private file outside every working tree (`$TRACEWEAVE_EVAL_DIR/private/public-history-rules.json`, mode 0600, or the path in `TRACEWEAVE_SCRUB_RULES`), and the tool refuses to run without it. `tools/hooks/pre-push` is a pre-push hook that refuses refs whose history contains a rule-bearing version of that tool (the blob ids are read from the private file); install it with `install -m 755 tools/hooks/pre-push .git/hooks/pre-push`. Only the rewritten branch is pushed.

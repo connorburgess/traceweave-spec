@@ -18,6 +18,10 @@ The patterns are assembled from fragments so that this file does not match itsel
 
 from __future__ import annotations
 
+import base64
+import binascii
+import codecs
+import os
 import re
 import subprocess
 import sys
@@ -38,6 +42,39 @@ def git(*args):
     return subprocess.run(["git", *args], capture_output=True, text=True, check=True).stdout
 
 
+COMMON_WORDS = frozenset(
+    "the and of to in is for with that this not are was be by on as at from or an it its no all can will has have been which when "
+    "there their they then than these those into over under about after before between because while where who what".split()
+)
+QUOTED = re.compile(r"""(["'])((?:(?!\1)[^\n\\]|\\.){40,}?)\1""")
+B64 = re.compile(r"[A-Za-z0-9+/]{40,}={0,2}")
+
+
+def english(text):
+    words = re.findall(r"[a-z]{2,}", text.lower())
+    return sum(word in COMMON_WORDS for word in words), len(words)
+
+
+def encoded_payloads(label, text, failures):
+    """Flag long string literals that look like ROT13 or base64 text (a trivial encoding of hidden content)."""
+    for match in QUOTED.finditer(text):
+        literal = match.group(2)
+        plain_hits, _ = english(literal)
+        rot_hits, rot_words = english(codecs.decode(literal, "rot13"))
+        if rot_hits >= 2 and rot_hits >= 3 * max(plain_hits, 1) and rot_words >= 5:
+            failures.append(f"{label}: ROT13-encoded text in a string literal")
+    for match in B64.finditer(text):
+        token = match.group(0)
+        try:
+            decoded = base64.b64decode(token + "=" * (-len(token) % 4), validate=True)
+            payload = decoded.decode("utf-8")
+        except (binascii.Error, ValueError, UnicodeDecodeError):
+            continue
+        hits, words = english(payload)
+        if payload and sum(ch.isprintable() for ch in payload) / len(payload) > 0.9 and (hits >= 2 or " " in payload):
+            failures.append(f"{label}: base64-encoded text")
+
+
 def check_text(label, text, failures):
     for name, pattern in (("home-directory path", HOME), ("thread identifier", THREAD), ("AI-attribution trailer", TRAILER)):
         for match in pattern.finditer(text):
@@ -56,6 +93,10 @@ def main(argv):
         except (OSError, UnicodeDecodeError):
             continue
         check_text(path, text, failures)
+    for path in git("ls-files", "-z", "tools").split("\0"):
+        if path:
+            with open(path, encoding="utf-8", errors="replace") as handle:
+                encoded_payloads(path, handle.read(), failures)
     if "--messages" in argv:
         spec = argv[argv.index("--messages") + 1]
         zeros = set(spec.split("..")[0]) <= {"0"} and ".." in spec
@@ -69,6 +110,22 @@ def main(argv):
             revs = git("rev-list", spec).split()
         for rev in revs:
             check_text(f"commit {rev[:12]}", git("log", "-1", "--format=%B", rev), failures)
+        # Every version of every tools/ file reachable from the pushed commits.
+        seen = {}
+        for rev in revs:
+            for line in git("ls-tree", "-r", rev, "tools").splitlines():
+                info, path = line.split("\t", 1)
+                seen.setdefault(info.split()[2], path)
+        for oid, path in seen.items():
+            encoded_payloads(f"{path} (blob {oid[:12]})", git("cat-file", "blob", oid), failures)
+        # Optional: rule-bearing versions of the rewrite tool, identified by a private list.
+        rules = os.environ.get("TRACEWEAVE_SCRUB_RULES") or (
+            os.path.join(os.environ["TRACEWEAVE_EVAL_DIR"], "private", "public-history-rules.json") if os.environ.get("TRACEWEAVE_EVAL_DIR") else "")
+        if rules and os.path.exists(rules):
+            import json
+            banned = set(json.load(open(rules)).get("drop_tool_blobs", []))
+            if banned & set(seen):
+                failures.append("a rule-bearing version of the rewrite tool is reachable from the pushed commits")
     if failures:
         print("Hygiene check failed:\n" + "\n".join(failures))
         return 1
