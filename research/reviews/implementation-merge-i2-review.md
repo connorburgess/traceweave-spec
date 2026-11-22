@@ -124,3 +124,28 @@ Branch `post-i2` at `f955fc1` (contract A6–A9 through spec `f0da1f0`); `82b02a
 - **M2.1 met on macOS:** `scripts/offline` proves the denial, and `scripts/check` (extract, catalogue, compare and document steps across conformance and the checklist) passes under it. It refuses rather than run unconfined on other systems; a Linux equivalent is not provided.
 - **M2.2 open:** no frozen manifest; the cases are in `research/drafts` at an unpushed commit. **M2.3 open:** the vendor class (OD-C19) is missing. **M2.7 open:** no review-packet record or schema exists.
 - **M2.9 open:** there is no candidate-generation record keyed by `bodySha256` and no index; rank-field rejection and order irrelevance hold, as before.
+
+## Confirmation 2: post-i2
+
+Branch `post-i2` at `c05fe64` (B10 by content, spec `33e12f8`; checklist 64 items). Scratch clones only; probes `<scratch>/post3.sh`, `nd.sh`, `race.sh`. **Verdict: listed fixes first.** One Go route (G-R1) still produces a document whose commit does not describe the code; the fix is one line. Everything else holds.
+
+1. **P1 and P2 re-run as before:**
+   - **P1** (`--assume-unchanged`, `--skip-worktree` on `<=`→`<` mergeGap edits): Rust exits 2 with no document ("built from c05fe64 … with uncommitted changes"); Go `stampbuild` refuses.
+   - **P2** (a `GOENV` file with `GOFLAGS=-overlay`): `stampbuild` refuses ("go env reports GOFLAGS"). Both closed.
+   - **Control:** a clean clone gives a document naming `c05fe64` with body `998c64c2…`, the vector's `bodySha256`, in both lanes.
+2. **New routes** (I read both route tables first; out-of-scope classes skipped):
+   - **G-R1 (Go, not listed; FORGERY):** `stampbuild` resolves `head` with `rev-parse HEAD^{commit}` but lists the tree with `ls-tree … "HEAD"` (`go/tools/stampbuild/main.go:146`). I committed the edit as Y on a detached clone, left the working tree at Y, and flipped HEAD X↔Y with `git update-ref` during `stampbuild`. Outcome over 40 runs:
+     - **2/40 wrote a document naming `c05fe64` (X) with body `a6d7fd1c…`** (Y's code);
+     - 11 named Y honestly, and 27 were refused (HEAD moved, staged changes, content differs).
+     - The end-of-build `head2 == head` check misses an X→Y→X flip. **Fix:** list and export the tree of the resolved id (`ls-tree <head>`, as Rust does at `build.rs:210`), so a mid-build HEAD change cannot mix ids. Add the route to `scripts/forgery-selftest`.
+   - **R-R1 (Rust; closed):** after a clean build I added an untracked `crates/tw-compare/build.rs`, back-dated (`touch -t 2000…`) with the directory mtime restored. Cargo auto-discovers and runs it, and it rewrote `compare.rs` mid-build; I restored the tree afterwards. The stamp check still re-ran, and the binary refuses documents (exit 2).
+   - **R-R2 (Rust; immune by construction):** the same HEAD flip cannot work, because Rust verifies the resolved commit's tree against the working tree.
+   - **Not attempted, since the contract or lanes already class them:** another `GOROOT` or `rustc`, a tampered `target/`, edited registry sources, `cargo --config` source replacement, and edits during the build.
+3. **P3 fixed:** in a detached-HEAD clone, `scripts/offline scripts/check` exits 0 (4 min 33 s; denial proven), with 64/64 items in both CLIs.
+4. **`scripts/forgery-selftest`:**
+   - `--rev f955fc1`: **12 FORGERY lines** (Rust 7, Go 5), exit 1.
+   - at `c05fe64`: every route `ok`, "no forged document; every route exercised", exit 0.
+   - G-R1 is not among its ten routes.
+5. **Contract out-of-scope statement** (§6.8 B10, spec `33e12f8`): honest. It calls provenance "evidence about cooperative builds … not a security boundary" and defers adversarial binding to M4 attestation. It is not sufficient as worded: concurrent changes to repository state during the build are neither listed as out of scope nor closed in Go. Add them, or close G-R1 and say so.
+   - **M2.4 as worded:** met for both CLIs on cooperative routes (a fresh clean clone of `c05fe64` gives an identical body, `bodySha256` and commit). It holds against the forgery routes except G-R1.
+6. **Commits:** the 10 commits `f955fc1..c05fe64` (single author; 24 files, +1,910/−271) carry no AI attribution, secrets or local paths.
