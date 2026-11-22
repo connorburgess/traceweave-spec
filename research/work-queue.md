@@ -13,16 +13,22 @@ Updated 2026-11-22. This queue operationalizes the [roadmap](../ROADMAP.md) by g
 
 ## Current assignments
 
+Updated 2026-11-22 after the I1 and I2 integrations. Implementation repository: `<implementation repo>`, with `main` at `82b02ab` (unpushed).
+
 | Gates | Work | State |
 | --- | --- | --- |
-| I1 (feeds M1.4, M1.6) | Token-fingerprint extractors for Go and Rust source in the implementation repository (`<implementation repo>`), hand-written lexers in both | Extractors exist on local branches there (`i0-i1-rust`, `impl-go`, `xcheck`); not merged to its `main`. Differential test between the two extractors in progress. M1.4 stays open until its criterion is met |
-| I2 (feeds M2.1–M2.5, M2.7–M2.11) | Catalogue, matcher, localized-report CLI and offline walkthrough | Next. Needs M1.3 schemas and M2.6 matching vectors from the spec side; the [draft contracts](drafts/catalogue-report-contract.md) and [matching vectors](drafts/matching-vectors/README.md) are the starting point |
-| M0.1 | Non-author recount of the 13 capabilities and their verification plans | Met: second recount 13/13, commit `3a640b3` |
-| M1.1–M1.3, M1.5 | Profile document, vectors, schemas and requirement map in this repository | Open. The [extraction contract](drafts/extraction-contract.md) and [vectors](drafts/extraction-vectors/README.md) are drafts; promoting them needs the owner |
-| M2E.0, M2E.1 | Select a carrier or omit embedding | Open. [Lane 06](lanes/06-evidence-review.md) found no ready candidate; see the [lane 06–08 checkpoint](research-06-08-checkpoint.md). No new carrier experiment without a candidate read in primary form that plausibly meets the bar |
-| M3.0 | False-alarm budget and unit | Open, owner |
+| I1 (M1.4, M1.6) | Go and Rust extractors, hand-written lexers | Merged; [I1 review](reviews/implementation-merge-i1-review.md) `9c03c95`. Open on owner items only: the pushed spec commit and promotion of the M1.2 vectors |
+| I2 (M2.1–M2.11) | Catalogue, comparison and report, two implementations | Merged at `82b02ab`; [I2 review](reviews/implementation-merge-i2-review.md) `de9a5b7`. M2.5 and M2.8 met |
+| Post-I2 integration | The A6 behavioural rules B1–B10 ([contract](drafts/catalogue-report-contract.md) §6.8) and the [behaviour checklist](drafts/matching-vectors/behaviour-checklist.md) | In progress on implementation branches (`i2-rust` and others); not yet on `main` or reviewed. Next engineering for M2:<br>- `scripts/offline` wrapper (M2.1)<br>- frozen fixture manifest (M2.2)<br>- vendor control class (M2.3, M2.6; OD-C19)<br>- B10 rebuild-from-clean-clone check (M2.4)<br>- review packets (M2.7, not started)<br>- candidate-generation record keyed by `bodySha256` (M2.9)<br>- the I2 review's follow-ups F1–F4 |
+| Behavioural follow-up rulings | A6 rulings OD-C39–OD-C47 | Decided in draft, pending owner confirmation |
+| M1.1, M1.5 | Item map against `profiles/code.md`; requirement map of MUSTs to failing checks | Open, engineering |
+| M3.0–M3.3 | M3 evaluation protocol draft | In progress. The budget (M3.0) and corpus acquisition (M3.1) need the owner |
+| TS.1–TS.3, TXT.1–TXT.3 | `ts-tokens` and `text-plain` profiles | Frozen for stage 1 and registered in the draft contract. Not yet implemented in the implementation repository |
+| IMGF.1, IMGF.5 | Image profile item map; second implementation with a C++ reference build | Open. IMGF.2–IMGF.4 met (`ec0cf67`) |
+| M2E.0, M2E.1 | Select a carrier or omit embedding | Open. [Lane 06](lanes/06-evidence-review.md) found no ready candidate |
+| Owner | Draft promotion; pushed spec commit; OD-C5 and distinct-hash confirmation; M3.0 budget; A6 rulings | Would close M1.2, M1.3, M1.4, M1.6, M2.10 and M2.11, and the (a) clauses of M1.1, M2.2, M2.4 and M2.6 (see the roadmap progress section) |
 
-Closed with evidence: M0.1, M0.2, M0.3, M0.4, M4.1 and M4.2 (see the roadmap for the evidence). Everything else in the gate tables is open.
+Closed with evidence: M0.1–M0.4, M2.5, M2.8, M4.1, M4.2, and IMGF.2–IMGF.4. Everything else is open.
 
 ## Completed evidence (progress records)
 
