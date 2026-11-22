@@ -587,6 +587,12 @@ class WNewline(tslex.Lexer):
         return self.expr_end
 
 
+class WLFOnly(tslex.Lexer):
+    """Only LF counts as a line break before '!', '++', '--' (review W5)."""
+    def line_breaks(self):
+        return ("\n",)
+
+
 class WArrow(tslex.Lexer):
     """Arrow-body '}' followed by division (draft-1 rule)."""
     def closer_expr_end(self, entry, c):
@@ -625,7 +631,7 @@ class WBang(tslex.Lexer):
 
 # WExtendsComment is defined but not listed: it is observationally equivalent to the
 # profile (the unterminated comment fails at the same offset in either mode; profile §5.2).
-WRONG_LEXERS = [V1, V5, V25, V22, V11, V21, V13, V26, WNewline, WArrow, WEscape, WNonOctalSep, WHeader, WBang]
+WRONG_LEXERS = [V1, V5, V25, V22, V11, V21, V13, V26, WNewline, WLFOnly, WArrow, WEscape, WNonOctalSep, WHeader, WBang]
 
 
 def wrong_lexer_test(docs):

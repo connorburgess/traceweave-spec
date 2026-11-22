@@ -16650,6 +16650,506 @@
    }
   },
   {
+   "id": "ts-newline-prefix-cr-ls-ps",
+   "derivation": "hand",
+   "tags": [
+    "regex",
+    "asi",
+    "line-terminators"
+   ],
+   "description": "CR, LS and PS before '++', '!' and '--' are line terminators too: prefix, regex follows.",
+   "inputBase64": "YQ0rKy9yZS8ueDti4oCoIS95Ly56O2PigKktLS93Ly52Owo=",
+   "inputText": "a\r++/re/.x;b !/y/.z;c --/w/.v;\n",
+   "pairedRejection": "ts-err-unterminated-regex",
+   "result": {
+    "status": "ok",
+    "tokenCount": 18,
+    "tokens": [
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       0,
+       1
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "++",
+      "span": [
+       2,
+       4
+      ]
+     },
+     {
+      "class": "regex",
+      "text": "/re/",
+      "span": [
+       4,
+       8
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ".",
+      "span": [
+       8,
+       9
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "x",
+      "span": [
+       9,
+       10
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       10,
+       11
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "b",
+      "span": [
+       11,
+       12
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "!",
+      "span": [
+       15,
+       16
+      ]
+     },
+     {
+      "class": "regex",
+      "text": "/y/",
+      "span": [
+       16,
+       19
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ".",
+      "span": [
+       19,
+       20
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "z",
+      "span": [
+       20,
+       21
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       21,
+       22
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "c",
+      "span": [
+       22,
+       23
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "--",
+      "span": [
+       26,
+       28
+      ]
+     },
+     {
+      "class": "regex",
+      "text": "/w/",
+      "span": [
+       28,
+       31
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ".",
+      "span": [
+       31,
+       32
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "v",
+      "span": [
+       32,
+       33
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       33,
+       34
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "b088cc8564c47ad5",
+        "span": [
+         0,
+         10
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "67239196ac0c6fb7",
+        "span": [
+         2,
+         11
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "65f93b62d23ce7f1",
+        "span": [
+         4,
+         12
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "0e9c03941654922d",
+        "span": [
+         8,
+         16
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "2beb35c9568c1ee0",
+        "span": [
+         9,
+         19
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "9cc50f25b3480532",
+        "span": [
+         10,
+         20
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "e17239b3aa1a24a9",
+        "span": [
+         11,
+         21
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "9b101772f5888812",
+        "span": [
+         15,
+         22
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "1c61cab1516c054b",
+        "span": [
+         16,
+         23
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "229a37692a6e85ed",
+        "span": [
+         19,
+         28
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "e600014724ef28a9",
+        "span": [
+         20,
+         31
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "46f5420dcc66a117",
+        "span": [
+         21,
+         32
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "733a7e2944af3937",
+        "span": [
+         22,
+         33
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "50dd2e45ddc62335",
+        "span": [
+         26,
+         34
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       3,
+       3,
+       3,
+       4,
+       8,
+       8,
+       8,
+       8,
+       9,
+       11
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "0e9c03941654922d",
+        "span": [
+         8,
+         16
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "2beb35c9568c1ee0",
+        "span": [
+         9,
+         19
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "1c61cab1516c054b",
+        "span": [
+         16,
+         23
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "229a37692a6e85ed",
+        "span": [
+         19,
+         28
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "46f5420dcc66a117",
+        "span": [
+         21,
+         32
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "tokenIndices": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       6,
+       7,
+       8,
+       9,
+       10,
+       12,
+       13,
+       14,
+       15,
+       16
+      ],
+      "values": [
+       "",
+       "++",
+       "",
+       ".",
+       "",
+       "",
+       "!",
+       "",
+       ".",
+       "",
+       "",
+       "--",
+       "",
+       ".",
+       ""
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "f410a6cbd8924bed",
+        "span": [
+         0,
+         10
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "ba49117826fcda6d",
+        "span": [
+         2,
+         12
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "92b0ef3ed1127eb3",
+        "span": [
+         4,
+         16
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "3282adb081e4f8e7",
+        "span": [
+         8,
+         19
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "36e04d10617dd791",
+        "span": [
+         9,
+         20
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "2b8b667fe707a26d",
+        "span": [
+         11,
+         21
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "d272adf452a7436e",
+        "span": [
+         15,
+         23
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "9bb5242822170726",
+        "span": [
+         16,
+         28
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "cf4e030808b641c4",
+        "span": [
+         19,
+         31
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "d14d4b5fa45e9353",
+        "span": [
+         20,
+         32
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "a218f2a54d157134",
+        "span": [
+         22,
+         33
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       3,
+       5,
+       5,
+       5,
+       5,
+       7,
+       7
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "3282adb081e4f8e7",
+        "span": [
+         8,
+         19
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "2b8b667fe707a26d",
+        "span": [
+         11,
+         21
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "9bb5242822170726",
+        "span": [
+         16,
+         28
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
    "id": "ts-yield-await-regex",
    "derivation": "hand",
    "tags": [

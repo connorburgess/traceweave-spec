@@ -2,7 +2,9 @@
 
 Status: **draft for review, revision draft-2, 2026-11-22.** Roadmap items TS.1 and TS.2. TS.3 (two implementations) and TS.4 (own M3 split) are implementation gates and are not claimed here. Draft-2 resolves the [clean-room review](../reviews/extraction-profile-typescript-review.md) of draft-1 (F1–F6, A1–A6). The dispositions are in §15 and the output changes in §16.
 
-**Staging** (decided in draft, pending owner confirmation, TSOD-1): **`ts-tokens` is stage 1** and is the profile to freeze. It also takes plain `.js`, `.mjs` and `.cjs`. **`tsx-tokens` is deferred.** §5 and its vectors are kept as a draft, but they are not frozen until a real `.tsx`/`.jsx` corpus measures TSOD-8.
+**`ts-tokens` `draft-2` is frozen for stage-1 implementation, pending owner confirmation of the decided-in-draft items** (§17 lists the frozen files and digests).
+
+**Staging** (decided in draft, pending owner confirmation, TSOD-1): **`ts-tokens` is stage 1** and is the frozen profile. It also takes plain `.js`, `.mjs` and `.cjs`. **`tsx-tokens` is deferred.** §5 and its vectors are kept as a draft, but they are not frozen until a real `.tsx`/`.jsx` corpus measures TSOD-8.
 
 This is research material, not a normative change. It does not modify `spec/`, `schemas/`, `profiles/`, `test-vectors/` or the [extraction contract](extraction-contract.md). "MUST" describes what this draft proposes for an implementation claiming to follow it. Nothing here is a registered algorithm.
 
@@ -37,7 +39,7 @@ The vectors are in [extraction-vectors-typescript/](extraction-vectors-typescrip
 | `.js`, `.mjs`, `.cjs` | `ts-tokens` | 1 | Valid JavaScript without JSX lexes identically under both profiles, because `<` at expression start is not valid JavaScript outside JSX (vectors `ts-plain-js` and `tsx-plain-js`). JSX in such a file usually becomes an explicit error (`ts-err-jsx-in-js`) |
 | `.tsx`, `.jsx` | `tsx-tokens` | deferred | JSX recognized (§5) |
 
-**JSX in a `.js` file under `ts-tokens` is not always rejected.** Any element with a closing tag or with text makes `</` start a regular expression that runs to the end of the line. That gives `unterminated-literal` unless the line happens to contain another `/` (`ts-err-jsx-in-js`). A text-free self-closing element such as `x = <br/>;` lexes as the punctuators `< br / > ;` and is fingerprinted (`ts-jsx-selfclosing-in-js`, D-16). A repository whose `.js` files hold JSX should map them to `tsx-tokens` once stage 2 exists. Until then, TW-01/TW-03 may exclude them.
+**JSX in a `.js` file under `ts-tokens` is not always rejected.** Any element with a closing tag or with text makes `</` start a regular expression that runs to the end of the line. That gives `unterminated-literal` unless the line happens to contain another `/` (`ts-err-jsx-in-js`). A text-free self-closing element such as `x = <br/>;` lexes as the punctuators `< br / > ;` and is fingerprinted (`ts-jsx-selfclosing-in-js`, D-16). **`.js` files containing JSX are deferred to stage 2** (decided in draft, pending owner confirmation). The selecting tool (TW-01/TW-03) MUST record each such file as **deferred to stage 2**, whether it detects the JSX before extraction or meets it as an extraction error. It MUST NOT drop such files silently, and MUST NOT count them as ordinary lexical rejections. Text-free self-closing elements are a **known stage-1 misread (D-16)**: they are fingerprinted as punctuators and cannot be told apart lexically from comparison and type syntax. A repository with JSX in `.js` should map those files to `tsx-tokens` once stage 2 exists.
 
 **Why two profiles and not one or four.** At the token level TypeScript adds nothing to ECMAScript except `@`, which both profiles accept. JavaScript and TypeScript therefore need no separate grammars. JSX is the one real fork: `<T>x` is a type assertion in `.ts` and an element in `.tsx`, and no lexical rule can serve both (vectors `ts-type-assertion` and `tsx-err-ts-type-assertion` use the same input). Separate `js-tokens` and `jsx-tokens` profiles would duplicate these two with no lexical difference.
 
@@ -367,7 +369,7 @@ The vector files repeat the declaration as `normalizedExclusions`, and the check
 | `</` with no open element | `unbalanced-delimiter` at the `<` |
 | Comment in the generic look-ahead is unterminated | JSX; the comment's `unterminated-comment` is reported by tag mode |
 
-**Offsets** follow contract §2, OD-13: the first byte of the token, comment or literal being scanned. TypeScript usually reports later, at the failing character. 16 of 33 lexical error vectors share an offset with a TypeScript diagnostic, and 16 differ only in offset (§11).
+**Offsets** follow contract §2, OD-13: the first byte of the token, comment or literal being scanned. TypeScript usually reports later, at the failing character. Of the 40 lexical error vectors, 17 share an offset with a TypeScript diagnostic, 20 are rejected by TypeScript at another offset, and 3 are documented divergences that TypeScript accepts (§11).
 
 ## 8. What this profile does not cover
 
@@ -389,7 +391,7 @@ The vector files repeat the declaration as `normalizedExclusions`, and the check
 | D-8 | Identifier characters added after TypeScript's tables | ID_Start/ID_Continue of the Unicode version in use | invalid character | accepted (Unicode 17.0.0) | Contract §3a |
 | D-9 | BOM, NUL | BOM is white space; NUL is allowed in literals | same | `bom`, `nul` | Shared contract OD-1 and §3 |
 | D-10 | Regex after the `}` of a block statement, function declaration or class declaration; after `of`; after `for await (…)` | regex | regex (parser) | division | No parser (§4.9, TSOD-3) |
-| D-11 | Generic function type or signature after `=`, `:` or `{` in `.tsx` | — | parsed | JSX, then an error | No parser (§5.5, TSOD-8) |
+| D-11 | Generic function type, call signature or construct signature (`new <T>(…)`) with a leading `<` in a type position in `.tsx`: after `=`, `:`, `{`, `;`, `new`, `(`, `\|`, `&`, `,` or `<` | — | parsed | JSX, then an error | No parser (§5.5, TSOD-8) |
 | D-12 | HTML-like comments | comments (Script goal only) | punctuators | punctuators | Module goal; matches TypeScript |
 | D-13 | Error offsets | — | usually at the failing character | token start | Contract OD-13 |
 | D-14 | Escaped name in the `.tsx` generic look-ahead (`<\u0054,>`) | — | escape decoded; generic | JSX (then `illegal-character` at `\`) | Escape-free names keep the look-ahead textual (§5.2) |
@@ -433,15 +435,15 @@ Contract §10 applies, including the draft-2 bounds of contract §10a (k ≤ 16,
 
 **Results, draft-2, 2026-11-22** (Python 3.14.6, Node 22.23.2, TypeScript 6.0.3).
 
-- **Checker:** PASS for 112 vectors: 76 `ts`, 33 `tsx` and 3 limits. That is 1,059 tokens and 45 errors, all with re-derived code and offset. The 19 negative configurations are rejected.
-- **Vector-corruption self-test:** 27 of 27 rejected, 24 of them lexical.
-- **Wrong-lexer self-test (new):** **14 of 14 wrong lexers rejected.** Each is `tslex.Lexer` with one rule choice changed, substituted for the profile's lexer, and the checker must fail on the shipped vectors. Each fails on the vector added for it:
+- **Checker:** PASS for 113 vectors: 77 `ts`, 33 `tsx` and 3 limits. That is 1,077 tokens and 45 errors, all with re-derived code and offset. The 19 negative configurations are rejected.
+- **Vector-corruption self-test:** 28 of 28 rejected, 24 of them lexical.
+- **Wrong-lexer self-test (new):** **15 of 15 wrong lexers rejected.** Each is `tslex.Lexer` with one rule choice changed, substituted for the profile's lexer, and the checker must fail on the shipped vectors. Each fails on the vector added for it:
   - all **8 variants the review found accepted**: V1 `}` always followed by a regex, V5 `await`/`yield` end an expression, V25 most keywords end an expression, V22 `exprEnd` false after a JSX element, V11 ASCII-only JSX trimming, V21 `<` anywhere in a tag, V13 a lone CR not ending a string, and V26 `0_1` accepted;
-  - 6 more: the draft-1 newline rule, the draft-1 arrow-body rule, escapes in the look-ahead, no separators in a NonOctalDecimal fraction, no header marking, and `!` resetting the flag.
+  - 7 more: the draft-1 newline rule, an LF-only newline rule (the review's W5, rejected by `ts-newline-prefix-cr-ls-ps`), the draft-1 arrow-body rule, escapes in the look-ahead, no separators in a NonOctalDecimal fraction, no header marking, and `!` resetting the flag.
 
   A 15th variant (unterminated comment after `extends` read as generic) is observationally equivalent to the profile (§5.2), so it is shipped but not counted.
 - **Cross-check, vectors:**
-  - Of the 67 accepted vectors, 58 agree with TypeScript's parser and 7 with its raw scanner (TypeScript reports syntax or strict-mode diagnostics for those). 2 diverge as documented: `ts-function-decl-division` and `ts-class-decl-division`, both tagged `departure`.
+  - Of the 68 accepted vectors, 59 agree with TypeScript's parser and 7 with its raw scanner (TypeScript reports syntax or strict-mode diagnostics for those). 2 diverge as documented: `ts-function-decl-division` and `ts-class-decl-division`, both tagged `departure`.
   - Of the 40 lexical error vectors, 17 are rejected by TypeScript at the same offset and 20 at another offset. 3 are accepted by TypeScript, as documented: `ts-err-await-identifier`, `tsx-err-generic-type-position` and `tsx-err-lookahead-escape`.
   - The 5 pre-lexing vectors are not compared.
   - There are 0 undocumented divergences.
@@ -449,7 +451,7 @@ Contract §10 applies, including the draft-2 bounds of contract §10a (k ≤ 16,
 - **Cross-check, probes:** 55 inputs. 35 agree as expected and 20 diverge exactly as §9 documents. There are 0 unexpected outcomes.
 - **Unicode sweep:** unchanged from draft-1. Identifier start differs on 8,949 code points and identifier part on 9,132 (D-8), white space on 2 (D-6) and line terminators on 0.
 
-**Limits.** The hand-written streams, `tslex.py` and the wrong-lexer variants come from one author. The review's independent lexer reproduced all 89 draft-1 vectors byte for byte. The 23 vectors added in draft-2 have not been reproduced independently. The cross-check covers only the shipped inputs, the probes and a corpus without JSX.
+**Limits.** The hand-written streams, `tslex.py` and the wrong-lexer variants come from one author. The review's independent lexer reproduced all 89 draft-1 vectors byte for byte. The review's confirmation pass independently reproduced all 112 draft-2 vectors. The N2 vector `ts-newline-prefix-cr-ls-ps` was added afterwards. The cross-check covers only the shipped inputs, the probes and a corpus without JSX.
 
 ## 12. Decisions
 
@@ -489,8 +491,8 @@ The M1.4 cross-check spent 9.88 million cases to find a single Rust divergence (
 **In this profile's favour:**
 - There is no NFC.
 - Error classes are few, and offsets are token starts.
-- The regex rule is a 12-row table, not a grammar.
-- On 2.48 million real tokens the rule never disagreed with TypeScript's parser.
+- The regex rule is an 11-row table, not a grammar.
+- On 2.48 million corpus tokens the rule never disagreed with TypeScript's parser. That corpus is compiler-emitted JavaScript and declaration files without JSX, so this says nothing about hand-written or `.tsx` code (§4.9). The review's 536 targeted runs found only the documented departure classes.
 
 The risk is concentrated in JSX, where the profile admits a known gap (TSOD-8) and has no corpus evidence.
 
@@ -551,3 +553,26 @@ The [clean-room review](../reviews/extraction-profile-typescript-review.md) of d
 - **`tsx.json`:** `tsx-element-division`, `tsx-nbsp-text`, `tsx-attr-element-space`, `tsx-generic-const-reserved`, `tsx-extends-word`, `tsx-err-attr-lt`, `tsx-err-lookahead-escape`, `tsx-err-extends-comment`.
 
 **Tags.** `tsx-err-generic-type-position` and `tsx-err-lookahead-escape` gained the `departure` tag, which the cross-check uses to expect a divergence.
+
+The review's confirmation pass (draft-2) added N1–N4:
+- **N1:** the contract's versioning sentence must also cover normalized values and exclusions. That is a contract change, owned by the coordinator.
+- **N2:** vector `ts-newline-prefix-cr-ls-ps` (CR, LS and PS before `++`, `!` and `--`), plus the `WLFOnly` wrong lexer, which the checker now rejects.
+- **N3:** the §7 offset counts, the D-11 position list, the §13 row count and the §13 corpus claim are corrected.
+- **N4:** the deferral rule for `.js` files containing JSX is in §2.
+
+N2 adds one vector and changes no existing output, so `profileVersion` stays `draft-2`.
+
+## 17. Freeze record: `ts-tokens` `draft-2`
+
+**Frozen for stage-1 implementation, pending owner confirmation of the decided-in-draft items** (§12: TSOD-1 to TSOD-10 and TSOD-2b). Implementations target these exact bytes. Any change to them needs a new `profileVersion` (contract §10 versioning). `tsx.json`, `config-tsx.json` and §5 are **not** frozen (deferred, TSOD-8).
+
+| File (in [extraction-vectors-typescript/](extraction-vectors-typescript/README.md)) | SHA-256 |
+| --- | --- |
+| `ts.json` (77 vectors) | `be290174a694e3124c510518203220ab6675ac5d44081f89980c08b594f4dc81` |
+| `limits-ts.json` (3 vectors) | `b9db6d79758873db321cee28b7b5161465337666b4c3db18e1efd390f018eb9f` |
+| `config-ts.json` (= `configSha256`) | `aeeed14177cd3be8fea69e453c825e74f2fd301d03babbf49329bde0cc4754de` |
+| `config-ts-limit16.json` | `94403dd3e71a8105a9dcec894fc0d05d09cb771efaada28802dcf43ecd08f8d6` |
+| `config-negative-typescript.json` (19 negatives) | `3965135bae03ab40e244a604e0393247fb750ba326c12eeb68be880f947a291c` |
+| `../extraction-vectors/unicode-17.0.0-tables.json` (shared, contract §3a) | `9363b97eb849cb236c786098f017728ad04688782f07c2969afddf93b03ac29f` |
+
+**The normative text** is this document's §1–§4, §6, §7, §9 and §10, with `normalizedExclusions` `punct` `;`. Its digest is the git blob at the commit that adds this record. The checker (`check_vectors.py`) and `tslex.py` are verification tooling, not frozen artifacts. They may change without a version bump as long as the frozen bytes above still pass.

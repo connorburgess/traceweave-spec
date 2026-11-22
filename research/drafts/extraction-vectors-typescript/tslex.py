@@ -118,6 +118,10 @@ class Lexer:
         self.nl_before = False  # a line terminator lies between the previous token and this one
 
     # ------------------------------------------------------------ policies (§4.9, §5)
+    def line_breaks(self):
+        """Characters that count as a line terminator before '!', '++', '--' (§3.1, §4.9)."""
+        return LINE_TERMINATORS
+
     def keyword_expr_end(self, word):
         return word in EXPR_END_KEYWORDS
 
@@ -243,7 +247,7 @@ class Lexer:
             top = self.stack[-1]["k"] if self.stack else None
             if top != "elem":
                 j = self.skip_trivia(i)
-                self.nl_before = any(ch in LINE_TERMINATORS for ch in s[i:j])
+                self.nl_before = any(ch in self.line_breaks() for ch in s[i:j])
                 i = j
             if i >= self.n:
                 break

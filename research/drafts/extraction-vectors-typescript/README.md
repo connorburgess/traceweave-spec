@@ -1,6 +1,6 @@
 # Draft TypeScript/JavaScript extraction vectors (revision draft-2)
 
-Status: draft for review, 2026-11-22, **draft-2**. Draft-2 resolves the [review](../../reviews/extraction-profile-typescript-review.md) of draft-1, and the changes are listed in [profile §16](../extraction-profile-typescript.md#16-changes-from-draft-1-to-draft-2). These vectors go with the [draft TypeScript/JavaScript profile](../extraction-profile-typescript.md), which plugs into the [extraction contract](../extraction-contract.md). **`ts-tokens` (`ts.json`, `limits-ts.json`) is stage 1. `tsx-tokens` (`tsx.json`) is deferred:** it is kept as a draft and is not to be frozen yet (profile TSOD-1). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
+Status: draft for review, 2026-11-22, **draft-2**. Draft-2 resolves the [review](../../reviews/extraction-profile-typescript-review.md) of draft-1, and the changes are listed in [profile §16](../extraction-profile-typescript.md#16-changes-from-draft-1-to-draft-2). These vectors go with the [draft TypeScript/JavaScript profile](../extraction-profile-typescript.md), which plugs into the [extraction contract](../extraction-contract.md). **`ts-tokens` (`ts.json`, `limits-ts.json`) is stage 1 and frozen for stage-1 implementation, pending owner confirmation of the decided-in-draft items. The digests are in [profile §17](../extraction-profile-typescript.md#17-freeze-record-ts-tokens-draft-2). `tsx-tokens` (`tsx.json`) is deferred:** it is kept as a draft and is not to be frozen yet (profile TSOD-1). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
 
 ## Files
 
@@ -9,7 +9,7 @@ Status: draft for review, 2026-11-22, **draft-2**. Draft-2 resolves the [review]
 | `config-ts.json`, `config-tsx.json` | Exact configuration bytes (contract §10) for `ts-tokens` and `tsx-tokens`, 1 MiB limit. Do not reformat: the digest covers the trailing LF |
 | `config-ts-limit16.json` | `ts-tokens` with `maxInputBytes` 16, used by `limits-ts.json` |
 | `config-negative-typescript.json` | 19 configuration byte strings that MUST be rejected as `unsupported-config` (base64) |
-| `ts.json` | 76 vectors for `ts-tokens`/`draft-2`: 45 accepted, 31 errors |
+| `ts.json` | 77 vectors for `ts-tokens`/`draft-2`: 46 accepted, 31 errors |
 | `tsx.json` | 33 vectors for `tsx-tokens`/`draft-2` (deferred): 21 accepted, 12 errors |
 | `limits-ts.json` | 3 vectors: exactly the limit, over it, and over it with a BOM (size is checked first) |
 | `tslex.py` | The checker's lexer, written from the profile text. Its policy methods are the rule choices that wrong-lexer variants override |
@@ -38,7 +38,7 @@ Every accepted vector names a `pairedRejection`: an error vector that exercises 
 | --- | --- |
 | Empty / below k / exactly k / repeated with ties | `ts-empty`, `ts-short`, `ts-exact-k`, `ts-repeated` |
 | Comment/whitespace pairs (CRLF, LS, block comment); rename pair; semicolon-style pair | `ts-format-a/b`, `tsx-format-a/b`; `ts-rename-a/b`; `ts-semi-a/b` |
-| `exprEnd` rows and documented departures (profile §4.9) | `ts-object-class-division`, `ts-arrow-body-regex`, `ts-newline-prefix-regex`, `ts-yield-await-regex`, `tsx-element-division`; departures `ts-function-decl-division`, `ts-class-decl-division`, `ts-err-await-identifier` |
+| `exprEnd` rows and documented departures (profile §4.9) | `ts-object-class-division`, `ts-arrow-body-regex`, `ts-newline-prefix-regex`, `ts-newline-prefix-cr-ls-ps`, `ts-yield-await-regex`, `tsx-element-division`; departures `ts-function-decl-division`, `ts-class-decl-division`, `ts-err-await-identifier` |
 | JavaScript under `ts-tokens` (stage 1) | `ts-plain-js`, `ts-err-jsx-in-js`, `ts-jsx-selfclosing-in-js` (limitation D-16) |
 | Regex vs division | `ts-regex-after-header`, `ts-division-after-paren`, `ts-regex-class-slash`, `ts-regex-after-keyword`, `ts-nonnull-division`, `ts-postfix-division`, `ts-type-assertion`, `tsx-plain-js`, `tsx-regex-in-container`, `ts-err-unterminated-regex`, `ts-err-regex-class` |
 | Templates | `ts-template-nested`, `ts-template-escapes`, `tsx-template-in-jsx`, `ts-err-unterminated-template`, `ts-err-unterminated-substitution` |
@@ -63,12 +63,12 @@ Output on 2026-11-22 (Python 3.14.6):
 
 ```
 PASS config-negative-typescript.json: 19/19 invalid configurations rejected
-PASS ts.json profile=ts-tokens/draft-2 config=aeeed14177cd3be8... vectors=76 tokens=630 kgrams=455 fingerprints=284 tie-windows=22 errors=31 (code and offset re-derived) pairs=3 classes=12
+PASS ts.json profile=ts-tokens/draft-2 config=aeeed14177cd3be8... vectors=77 tokens=648 kgrams=469 fingerprints=292 tie-windows=22 errors=31 (code and offset re-derived) pairs=3 classes=12
 PASS tsx.json profile=tsx-tokens/draft-2 config=4f121891d73b98b5... vectors=33 tokens=422 kgrams=338 fingerprints=254 tie-windows=0 errors=12 (code and offset re-derived) pairs=1 classes=9
 PASS limits-ts.json profile=ts-tokens/draft-2 config=94403dd3e71a8105... vectors=3 tokens=7 kgrams=3 fingerprints=2 tie-windows=0 errors=2 (code and offset re-derived) pairs=0 classes=3
 PASS every accepted vector has derivation=hand and a pairedRejection that is an error vector
 PASS mutation self-test: 28/28 corruptions rejected (24 lexical)
-PASS wrong-lexer self-test: 14/14 wrong lexers rejected (the review's 8 accepted variants V1 V5 V25 V22 V11 V21 V13 V26, plus 6 more)
+PASS wrong-lexer self-test: 15/15 wrong lexers rejected (the review's 8 accepted variants V1 V5 V25 V22 V11 V21 V13 V26, plus 7 more)
 ```
 
 **What it checks.**
@@ -103,11 +103,11 @@ Draft-2 adds a corruption that treats `++` after a line break as postfix. The fo
 
 **Wrong-lexer self-test** (new in draft-2). Vector corruptions cannot reveal a rule choice that no vector exercises, which the review showed with 8 accepted wrong lexers. Each wrong lexer is a `tslex.Lexer` subclass with one rule changed, substituted for the profile's lexer, and the checker must fail on the shipped vectors:
 - the review's 8: V1 `}` always followed by a regex, V5 `await`/`yield` end an expression, V25 most keywords end an expression, V22 `exprEnd` false after a JSX element, V11 ASCII-only JSX trimming, V21 `<` anywhere in a tag, V13 a lone CR not ending a string, V26 `0_1` accepted;
-- 6 more: the draft-1 newline rule, the draft-1 arrow-body rule, escapes in the look-ahead, no separators in a NonOctalDecimal fraction, no header marking, and `!` resetting the flag.
+- 7 more: the draft-1 newline rule, an LF-only newline rule (the review's W5), the draft-1 arrow-body rule, escapes in the look-ahead, no separators in a NonOctalDecimal fraction, no header marking, and `!` resetting the flag.
 
-All 14 are rejected, each by the vector added for it. `WExtendsComment` is shipped but not counted: it is observationally equivalent to the profile (profile §5.2).
+All 15 are rejected, each by the vector added for it. `WExtendsComment` is shipped but not counted: it is observationally equivalent to the profile (profile §5.2).
 
-**Limits.** The hand-written streams, `tslex.py` and the wrong-lexer variants were written by the same author from the same text. The review's independent lexer reproduced the 89 draft-1 vectors; the 23 draft-2 additions have not been reproduced independently. Their agreement shows the profile text was applied consistently. It does not show that two independent readers would agree; that is TS.3.
+**Limits.** The hand-written streams, `tslex.py` and the wrong-lexer variants were written by the same author from the same text. The review's independent lexer reproduced the 89 draft-1 vectors and, in its confirmation pass, all 112 draft-2 vectors. `ts-newline-prefix-cr-ls-ps` was added afterwards. Their agreement shows the profile text was applied consistently. It does not show that two independent readers would agree; that is TS.3.
 
 ## 2. Cross-check against TypeScript 6.0.3
 
@@ -128,7 +128,7 @@ Run on 2026-11-22, draft-2 (Node 22.23.2, TypeScript 6.0.3). Vectors tagged `dep
 
 | Part | Result |
 | --- | --- |
-| Accepted vectors (67) | **58 agree with the parser** and 7 with the raw scanner (TypeScript reports syntax or strict-mode diagnostics: `ts-html-comment`, `ts-legacy-octal`, `ts-unicode-escape-ident`, `ts-strings`, `ts-nonoctal-separators`, `ts-jsx-selfclosing-in-js`, `tsx-generic-const-reserved`). 2 documented divergences (`ts-function-decl-division`, `ts-class-decl-division`). 2 `gt-merge` |
+| Accepted vectors (68) | **59 agree with the parser** and 7 with the raw scanner (TypeScript reports syntax or strict-mode diagnostics: `ts-html-comment`, `ts-legacy-octal`, `ts-unicode-escape-ident`, `ts-strings`, `ts-nonoctal-separators`, `ts-jsx-selfclosing-in-js`, `tsx-generic-const-reserved`). 2 documented divergences (`ts-function-decl-division`, `ts-class-decl-division`). 2 `gt-merge` |
 | Lexical error vectors (40) | 37 also rejected by TypeScript: 17 at the same offset, 20 at another offset (TypeScript reports at the failing character, the profile at the token start, OD-13). 3 documented divergences accepted by TypeScript: `ts-err-await-identifier` (D-15), `tsx-err-generic-type-position` (D-11), `tsx-err-lookahead-escape` (D-14) |
 | Pre-lexing error vectors (5) | Not compared. TypeScript accepts the BOM and NUL inputs (D-9) |
 | Corpus: all `lib/*.d.ts` and `lib/*.js` of the pinned package, all as `ts-tokens` | **119/119 files agree**: 19,799,782 bytes, 2,478,321 tokens, 71 `gt-merge`. Compiler-emitted code and declaration files only, no JSX |
