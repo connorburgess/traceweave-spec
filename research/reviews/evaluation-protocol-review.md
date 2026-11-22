@@ -120,3 +120,39 @@ Fixes before the protocol is frozen:
 7. **M5:** recheck licence SHA-256 and classification at acquisition.
 
 F7, F8 and the low items are reporting and wording fixes.
+
+## Confirmation pass: m3-eval-draft-2
+
+Checked 2026-11-22 against commit `14809b8` (lines below are in `evaluation-protocol.md`). Scripts are in `$TMPDIR/m3c/`. No network was used.
+
+**Reruns.** `verify_manifest.py` returns VALID (48 entries, split digest `146acfc2…`, 132 searches), exit 0. `--self-test` rejects 45 broken manifests and licence texts with 0 failures, exit 0. My five new broken manifests are all rejected (exit 1): pool stars below the query bound and a pool push date before the bound (both `E-POOL`); an `awesome` topic on an accepted repository and entry topics that differ from the pool (both `E-POOL`, entry disagrees with the snapshot); a Rust entry relabelled Go (`E-ID`).
+
+**Earlier findings.**
+- **F1 is resolved except for two gaps.** Generation is now lexical (L260–L300), and my own implementation of the rules on 5 Go and 5 Rust inputs found no choice in partial units, `split-mix` or Rust `rename`. Two gaps remain:
+  - **Go `rename` scope (L297):** "the ident immediately after `func` or after the receiver's closing `)`" does not say whether it applies only to the unit's head `func` or to every `func`. On `g := func(x int) int {…}` the two readings differ: the second makes `int` a binding.
+  - **Inserted Go `;` (L268–L269):** after a block-ending `}`, the next token is an inserted `;`. Runs may therefore start at that zero-width `;`, whose start offset is undefined (only the end offset is). Runs ending at `}` and at the following `;` also give byte-identical duplicates with different token counts. I found 1–3 such runs per Go input.
+  - **Fix:** apply the rule to the unit's first `func` only. Treat `}` followed by an inserted `;` as one statement end (the `;`), and never start a run at an inserted `;`.
+- **F2 resolved** (L296, L302). Go `fmt` is dropped with its reason, Rust uses edition 2024, and identity outputs are flagged and reported both ways.
+- **F3 resolved as a rule** (L41–L47): any abstention, `not-compared` pair or rejected body is an alarm. **A dodge remains through eligibility.**
+  - Files that `lex-error` or have fewer than 16 tokens are removed before evaluation (L143–L146). The protocol says they are "counted", but the counts are absent from the §10 metrics (L380 counts only eligible files) and from `counts.json`, and nothing bounds them.
+  - The lexer commit used at acquisition is not required to equal the frozen lexing commit (L341). A lexer change between acquisition and the freeze could therefore silently remove the hard files that would alarm.
+  - The 16-token floor itself is sound: `insufficient-tokens` needs fewer than `k` tokens (extraction §1), and `k` ≤ 12.
+  - **Fix:** record the acquisition lexer commit in the split file, and require it to equal the `freeze.json` lexing commit. Put excluded counts per repository and reason, with their path denominators, in `counts.json`, and print them beside M3.6.
+- **F4 resolved** (L37, L365, L448). Searches are unordered and evaluated once, with a symmetry check on 10% (an error on any difference). My exact recomputation for N = 132 matches the table:
+
+  | Budget | Met iff alarms ≤ | One-sided upper bound | P(met) at ½ / 1 / 2× budget |
+  | --- | --- | --- | --- |
+  | A | 6 | 0.088 | 0.951 / 0.508 / 0.018 |
+  | B | 1 | 0.035 | 0.858 / 0.619 / 0.257 |
+  | C | 0 | 0.022 | 0.936 / 0.876 / 0.768 |
+
+  Also: 0 of 132 gives 0.0224; the disjoint bound is 0.221 at 0 alarms and 0.339 at 1.
+- **F5 resolved** (L172–L189). Go module-path and Rust crate/URL matching, the later repository rejected, replacement in walk order capped at 8 per language, and approval covering replacements are all specified. The token-digest rule is specified (`LP(class)‖LP(value)` over the exact stream, files of ≥ 64 tokens); edited copies are stated as a residual leak.
+- **F6, F7, F8, M5 and the low items: all resolved.** F6 (L221, L235–L254): seed sharing checked byte-identically, timing pilot on fold S with outcomes unread, run budget, fixed grid reduction and abort rules; contract §5.2/§5.6 confirms *T* and `minRegionDistinctHashes` act after seeds, so sharing is valid. F7 (L57): covered fraction reported. F8 (L359): ancestry limit stated, identity record required. M5 (L161): `--licence-dir` exists and the self-test covers it. Low: self-excluding digest line at L5.
+
+**New in this revision.**
+- **(a) Rust `rename` sweeps in types and variants.** It collects any `ident` after `let`/`mut`/`for`, so `let Some(n) = v` and `&mut Vec<u8>` make `Some` and `Vec` bindings, while `n` is not one. This is mechanical and covered by the "not compilable" note, but the report should say that `rename` can rename types and variants.
+- **(b) The Go function-unit body rule can pick the wrong `{`.** It takes the first `{` at equal paren depth, so `func f() struct{…} {` or `interface{}` return types yield the type's braces as the "body". This is deterministic and rare; skip units whose body `{` is preceded by `struct` or `interface`.
+- **(c) My budget recommendation has changed.** Under the unordered unit, B separates half from double the budget only weakly (0.86 against 0.26), and one repository can decide it. **If M3.6 is meant as evidence, I now recommend A at this scale, or B only with 100 repositories per language.**
+
+**Verdict: ready for owner decisions; ready to freeze after acquisition approval once three small fixes land.** None of them changes the corpus or the M3.0 options: (1) the Go `rename` scope; (2) inserted-`;` statement ends; (3) the acquisition lexer commit pin plus excluded-file counts in `counts.json`.
