@@ -2173,7 +2173,7 @@ def main(argv):
         print(f"PASS records-text-plain.json (text lane, external): {rs['textRecords']}/60 records valid, "
               f"{rs['textKgrams']} k-gram hashes recomputed from recorded values")
         print(f"PASS records.json: records={rs['records']} (null input fields: {rs['nullInput']}) "
-              f"catalogues-from-records={rs["catalogues"]} (2 equal to matching.json catalogues, 1 to a rebuild from extraction vectors, 1 from re-derived records, 1 from text-plain records) build-rejections={rs['rejections']}")
+              f"catalogues-from-records={rs['catalogues']} (2 equal to matching.json catalogues, 1 to a rebuild from extraction vectors, 1 from re-derived records, 1 from text-plain records) build-rejections={rs['rejections']}")
     except CheckError as exc:
         print(f"FAIL records.json: {exc}")
         return 1
