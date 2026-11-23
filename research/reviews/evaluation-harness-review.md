@@ -122,3 +122,35 @@ Then, with `TRACEWEAVE_EVAL_DIR=~/traceweave-eval` and the git environment from 
 7. Spec repository: write the A1, A7 and A8 rulings and the cost corrections into the protocol, then fill in and commit its digest (spec author; reviewed by a non-author).
 8. `generate-cases.py --namespace tuning`, then `build-suppression.py`, committing after each; then `tune.py`, **without** committing its table yet (operator).
 9. `freeze.py … --budget-commit <M3.0> --labeller L1 --second-labeller L2`; commit `tuning-table.json` and `freeze.json` together (operator). L1 and L2 are named by the coordinator, are not the harness author, and do nothing until the verdict is committed.
+
+
+## Confirmation pass (i3-eval d4502e0 on main e41f200; protocol m3-eval-draft-6, a17fc22)
+
+**Method.** Scratch clones only, free space checked first (11–17 GB; the harness's own 20 GB margin had to be lowered to 9 GB for the synthetic runs). Binaries: stamped e41f200, plus a second stamped pair at d4502e0 for N3. I re-ran my generator, with its two bugs fixed, against the draft-6 text. Roadmap-v2 is already at **draft-7** (e3bac86, O1–O8), while the harness still says `m3-eval-draft-6`.
+
+**Earlier findings.**
+- **Resolved:** **B1** (commit read from each binary's report-document provenance, one stamped commit for both; `twe/impls.py:20-72`); **B3** (`verify_manifest.py` exits 0 on my acquired manifest with a too-few rejection); **B6** (batched timing: estimate 381 s, actual 291 s); **B8** (check rates verified from ids, fold-S list checked, builder refuses non-fold-S).
+- **B2 resolved,** with a residual: bare repositories, isolated git, https only, timeouts, `cat-file` with SHA-1 recomputed, unsafe and case-colliding paths excluded (`twe/corpus.py:34-110,131-209`). Materialized copies are re-verified only in `twe/state.py:37-42,104` and the held-out run, not in eligibility, the pilot or catalogue builds (N1).
+- **B4 partial:** the watchdog polls and includes the harness (`twe/common.py:379-394`), but large-search splitting is not implemented, so a large k5 search is killed, not split.
+- **B5 not resolved in effect:** the batch is checked reference files × checked candidate files (`twe/grid.py:70-107`). With 1-in-50 pair sampling that is 53%, 86% and 97% of a 64², 128² and 200² search, under every configuration, while `pilot.py`'s `estimate` charges only `configs × checked`, about 25–48× too little.
+- **B7 resolved except one hole:** the verdict reads committed records with `git show`, refuses a dirty tree, recomputes and cross-checks every summary (`m36-verdict.py:81-208`); uncommitted or later edits give exit 2. But a doctored, fully consistent **first** result commit gives **"met", exit 0, when `TRACEWEAVE_EVAL_DIR` is unset or empty**, because the body check is skipped silently. It is caught when the bodies are reachable.
+- **A26** implemented, with collateral hashes reported (Go: 1 fallback file, 132 exact).
+
+**Sabotages.**
+- **Caught:** S-b (symmetry skipped before the freeze: `heldout-run.py` exit 2, 0 of 2); S-c (suppression from S plus E: builder exit 1).
+- **Caught late:** S-a (abstentions not counted) silently froze `Tnone` instead of `T2`, and was caught only at M3.6 by the independent body alarm rule. N1 (`.rs` materialized as CRLF): eligibility, split and pilot ran on the altered bytes; tuning case generation stopped with exit 1.
+- **Not caught:** N2 (a fold-E file added as a fallback: exit 0 through the freeze, and M3.5 reruns the same code); N3 (pilot and tuning on stamped d4502e0 binaries, freeze on e41f200: `pilot.json` and `tuning-table.json` record the other commit, and nothing compares it).
+
+**My corpus.** Every predicted count matched: the findings (Go dependency, too-few, licence; Rust dependency); the final sets and split; the acquired manifest valid; branch 288; `k5-w4-m6-T2` by rule 2; A = 4 of 12, each pair in its predicted modes; symmetry 2 of the 2 predicted; 27 caching checks, 0 differences; 2 of 56 excluded per language; **negative-result, exit 3**. Not predicted, but explained by my generator: pair-level `ambiguous` abstentions inside searches that already alarm, and rustfmt, `rename` and `compound` generation failures.
+
+**Safety.** Network only to `https://github.com/<fullName>`; writes only under `TRACEWEAVE_EVAL_DIR` and `eval/`; no repository code runs; hostile paths, symlinks, submodules and case collisions excluded.
+
+**Cost on the real corpus** (22–48 ms per pair over 12 settings, both CLIs):
+- **With the current batching:** pilot 26–58 h (outcome count 4–9 h plus 22–49 h of checks); tuning 40–80 h at 192 configurations or 60–130 h at 288; held-out 1–10 h.
+- **With a per-reference-file sample:** pilot about 5–10 h, tuning 6–15 h.
+- **What happens:** the estimate says about 6–12 h, so the 24-hour rule will **not** trigger, but the **3× wall-time abort will stop tuning**, and large k5 searches may hit the watchdog.
+- **Disk:** derived data 10–45 GB (catalogues 2–3 GB, bodies 2–17 KB per pair). With the 20 GB margin the run needs **about 65 GB free; this machine has 11–17 GB, not enough**.
+
+**Verdict: remaining blocking items.** Before the pilot: (1) a per-reference-file check sample, or batches of only the checked pairs, with an honest estimate (a §5.3/§5.5 change); (2) reference-batch splitting; (3) about 65 GB free. Before the freeze: (4) refuse the verdict unless every body is re-checked; (5) the freeze checks that pilot, suppression and tuning used the acquisition lexing commit; (6) record each fallback file's repository and SHA-256 and check it is fold S; (7) verify materialized bytes at every read; (8) align with draft-7. Acquisition may start after (8) and once the disk is freed.
+
+**Sequence.** The **operator** (a non-author of the harness) builds both binaries with `tools/stamped-build` and `go/tools/stampbuild` from one clean commit C, then runs `acquire`, `licence-recheck` (exit 1 needs owner re-approval), `eligibility` and `group-split`, committing after each. A **non-author** runs `verify_manifest.py` and `shasum -c` (M3.2). **Operator:** `pilot`, then a **non-author** checks the branch and the reduction. **Spec author:** fills in the digest at the final draft. **Operator:** `generate-cases` (tuning), `build-suppression`, `tune`, then `freeze` with the labellers the **coordinator** names, committing `tuning-table.json` and `freeze.json` together; then `generate-cases` (held-out), `heldout-run` and `counts` as one commit; then `ancestry` and `m36-verdict --record` with the bodies reachable, committing `verdict.json`. The **labellers** label after `alarm-audit items`, and the operator commits `alarm-audit record`. A **second person** runs `reproduce` in a clean clone with a fresh root (M3.5).
