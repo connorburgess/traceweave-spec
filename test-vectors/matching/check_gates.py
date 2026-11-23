@@ -32,7 +32,7 @@ import check_matching as cm  # noqa: E402
 
 # Frozen M2.2 manifest (roadmap M2.2 "frozen manifest"). Changing the manifest requires changing this digest in
 # the same commit, which makes every change to the frozen fixture set visible in review.
-M22_MANIFEST_SHA256 = "9674ce2ed114919318a8108dfbb1a724e5eb10424bef35d811f81b23b30f1887"
+M22_MANIFEST_SHA256 = "3fe1f8e729442239cc3230f01c9745594ea6d3a8fdf026bd99066efa3c69620f"
 PACKET_SCHEMA = cm.HERE.parent.parent / "schemas" / "review-packet.schema.json"
 CANDGEN_SCHEMA = cm.HERE.parent.parent / "schemas" / "candidate-generation.schema.json"
 
@@ -108,7 +108,9 @@ def check_manifest(m, ctx, frozen=True):
                     continue
                 m_ = p["modes"][e["mode"]]
                 cm.need(m_["outcome"]["code"] == e["outcome"], f"{c['vectorId']}: {e['mode']} outcome")
-                regs = m_["regions"] if c["role"] == "companion" else [r for r in m_["regions"] if r["status"] == "reportable"]
+                cm.need(c["regionsListed"] == ("all" if c["role"] == "companion" else "reportable"),
+                        f"{c['vectorId']}: regionsListed must be 'all' for companions and 'reportable' for positives")
+                regs = m_["regions"] if c["regionsListed"] == "all" else [r for r in m_["regions"] if r["status"] == "reportable"]
                 got = [{"firstSeed": r["seeds"][0], "referenceSpan": r["referenceSpan"], "candidateSpan": r["candidateSpan"],
                         "status": r["status"]} for r in regs]
                 cm.need(got == e["regions"], f"{c['vectorId']} {e['reference']}/{e['candidate']} {e['mode']}: spans differ")
@@ -136,8 +138,14 @@ def packet_semantic(pk, ctx, licences):
     cm.need(any(r["seeds"][0] == key["firstSeed"] for r in p["modes"][key["mode"]]["regions"]),
             "the region key's first seed is not a listed region of the body")
     o = pk["origin"]
-    if o["kind"] == "own-origin":
-        cm.need(o["artifactSha256"] == p["reference"]["sha256"], "own-origin artifactSha256 is not the region's reference artifact")
+    side, other = o["side"], "candidate" if o["side"] == "reference" else "reference"
+    bound = {"own-origin": "artifactSha256", "vendored-dependency": "vendoredArtifactSha256",
+             "historical-copy": "copyArtifactSha256"}[o["kind"]]
+    cm.need(o[bound] == p[side]["sha256"], f"{o['kind']} {bound} is not the digest of the region's {side} artifact")
+    if o["kind"] == "historical-copy":
+        cm.need(o["sourceArtifactSha256"] == p[other]["sha256"],
+                "historical-copy sourceArtifactSha256 is not the digest of the region's other artifact")
+    # vendored-dependency upstreamArtifactSha256 is a claim: checkable only against the upstream archive, not from body + packet.
     if "licence" in o:
         cm.need(o["licence"]["textSha256"] in licences, "the licence text digest is not an archived licence text")
 
@@ -276,6 +284,11 @@ def corruptions(m, pk, cg):
     yield "manifest-region-dropped", mm(lambda d: d["rows"][2]["cases"][0]["expectedSpans"][1]["regions"].pop())
     yield "packet-valid-made-forbidden", pp(lambda d: d["valid"][0]["packet"].__setitem__("rightsVerdict", "permitted"))
     yield "packet-region-moved", pp(lambda d: d["valid"][3]["packet"]["region"].__setitem__("firstSeed", [0, 1]))
+    yield "manifest-regions-listed-relabelled", mm(lambda d: d["rows"][2]["cases"][0].__setitem__("regionsListed", "all"))
+    yield "packet-own-origin-side-flipped", pp(lambda d: d["valid"][0]["packet"]["origin"].__setitem__("side", "candidate"))
+    yield "packet-vendored-digest-moved", pp(lambda d: d["valid"][1]["packet"]["origin"].__setitem__("vendoredArtifactSha256", "6" * 64))
+    yield "packet-historical-source-moved", pp(lambda d: d["valid"][3]["packet"]["origin"].__setitem__("sourceArtifactSha256", "5" * 64))
+    yield "packet-licence-identifier-added", pp(lambda d: d["valid"][1]["packet"]["origin"]["licence"].__setitem__("identifier", "MIT"))
     yield "packet-missing-fixture-dropped", pp(lambda d: d["invalid"].pop(0))
     yield "packet-licence-file-digest", pp(lambda d: d["licenceTexts"][0].__setitem__("sha256", "8" * 64))
     yield "candgen-order-changes-body", cc(lambda d: d["retrievals"][1].__setitem__("expectedBodySha256", "9" * 64))

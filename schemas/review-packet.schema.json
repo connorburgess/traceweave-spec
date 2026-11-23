@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/connorburgess/traceweave-spec/blob/main/schemas/review-packet.schema.json",
-  "title": "Traceweave review-packet record (traceweave-review-packet-draft-1)",
-  "description": "A separate record that links one region of a comparison report body to UC-2 origin or dependency evidence (spec/catalogue-report.md section 6.9, roadmap M2.7). It references the body by bodySha256 and the region by its region key; it is never part of the report. It has no rights-verdict, permission, ownership, score or free-text field: a rights review reaches its conclusion elsewhere. The region key must exist in the referenced body; check_gates.py enforces that.",
+  "title": "Traceweave review-packet record (traceweave-review-packet-draft-2)",
+  "description": "A separate record that links one region of a comparison report body to UC-2 origin or dependency evidence (spec/catalogue-report.md section 6.9, roadmap M2.7). It references the body by bodySha256 and the region by its region key; it is never part of the report. Each origin names the region side it describes, and its artifact digest must equal that side's digest in the body (for a historical copy, the source digest must equal the other side's). The licence is identified only by the SHA-256 of an archived licence text. There is no rights-verdict, permission, ownership, score, licence-identifier or free-text field. check_gates.py enforces the region and digest bindings.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -13,7 +13,7 @@
   ],
   "properties": {
     "reviewPacketVersion": {
-      "const": "traceweave-review-packet-draft-1"
+      "const": "traceweave-review-packet-draft-2"
     },
     "report": {
       "$ref": "#/$defs/reportRef"
@@ -107,14 +107,9 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "identifier",
         "textSha256"
       ],
       "properties": {
-        "identifier": {
-          "type": "string",
-          "pattern": "^[A-Za-z0-9.+-]{1,64}$"
-        },
         "textSha256": {
           "$ref": "#/$defs/sha256"
         }
@@ -126,14 +121,18 @@
       "required": [
         "artifactSha256",
         "kind",
-        "repositoryCommit"
+        "repositoryCommit",
+        "side"
       ],
       "properties": {
-        "artifactSha256": {
-          "$ref": "#/$defs/sha256"
-        },
         "kind": {
           "const": "own-origin"
+        },
+        "side": {
+          "$ref": "#/$defs/side"
+        },
+        "artifactSha256": {
+          "$ref": "#/$defs/sha256"
         },
         "repositoryCommit": {
           "$ref": "#/$defs/commit"
@@ -147,14 +146,19 @@
         "kind",
         "licence",
         "package",
-        "upstreamArtifactSha256"
+        "side",
+        "upstreamArtifactSha256",
+        "vendoredArtifactSha256"
       ],
       "properties": {
         "kind": {
           "const": "vendored-dependency"
         },
-        "licence": {
-          "$ref": "#/$defs/licence"
+        "side": {
+          "$ref": "#/$defs/side"
+        },
+        "vendoredArtifactSha256": {
+          "$ref": "#/$defs/sha256"
         },
         "package": {
           "type": "object",
@@ -175,6 +179,9 @@
         },
         "upstreamArtifactSha256": {
           "$ref": "#/$defs/sha256"
+        },
+        "licence": {
+          "$ref": "#/$defs/licence"
         }
       }
     },
@@ -182,8 +189,10 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
+        "copyArtifactSha256",
         "kind",
         "licence",
+        "side",
         "sourceArtifactSha256",
         "sourceCommit"
       ],
@@ -191,16 +200,28 @@
         "kind": {
           "const": "historical-copy"
         },
-        "licence": {
-          "$ref": "#/$defs/licence"
+        "side": {
+          "$ref": "#/$defs/side"
+        },
+        "copyArtifactSha256": {
+          "$ref": "#/$defs/sha256"
         },
         "sourceArtifactSha256": {
           "$ref": "#/$defs/sha256"
         },
         "sourceCommit": {
           "$ref": "#/$defs/commit"
+        },
+        "licence": {
+          "$ref": "#/$defs/licence"
         }
       }
+    },
+    "side": {
+      "enum": [
+        "reference",
+        "candidate"
+      ]
     }
   }
 }

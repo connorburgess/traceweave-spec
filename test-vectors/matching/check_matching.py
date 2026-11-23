@@ -70,7 +70,7 @@ PROFILES[("ts-tokens", "draft-2")] = {
 # py-tokens draft-1 (frozen at 58c25a9; registered as specified, not implemented by the reference lanes): zero-width
 # NEWLINE/INDENT/DEDENT tokens with empty text, so k-grams can have empty spans and equal span starts (§3.6).
 PROFILES[("py-tokens", "draft-1")] = {
-    "lang": "py", "exclusions": (), "channels": ("exact", "normalized"),
+    "lang": "py", "exclusions": (), "channels": ("exact", "normalized"), "zeroWidthTokens": True,
     "codes": {"invalid-utf8", "bom", "nul", "input-too-large", "illegal-character", "unterminated-literal",
               "malformed-literal", "unbalanced-delimiter", "inconsistent-indentation", "unmatched-dedent"},
     "literals": {"int", "float", "imag", "string", "bytes", "fstring-start", "fstring-middle", "fstring-end",
@@ -604,10 +604,15 @@ def catalogue_semantic_errors(cat, prof):
             prev = None
             for f in fps:
                 s, e = f["span"]
+                zw = prof.get("zeroWidthTokens", False) or CATALOGUE_VARIANT[0] == "relaxation-global"
                 if not (f["position"] < m and 0 <= s <= e <= n) or (CATALOGUE_VARIANT[0] == "empty-span-rejected" and s == e):
                     errs.append(f"{a['id']}/{ch}: fingerprint position or span out of range")
-                if prev and not (f["position"] > prev["position"] and (s > prev["span"][0] if CATALOGUE_VARIANT[0] == "strict-span-starts"
-                                                                  else s >= prev["span"][0]) and e >= prev["span"][1]):
+                elif s == e and k > 1 and not zw:
+                    # A14: an empty span at k > 1 needs zero-width tokens, which only declared profiles have
+                    errs.append(f"{a['id']}/{ch}: empty span at k > 1 in a profile without zero-width tokens")
+                if prev and not (f["position"] > prev["position"]
+                                 and (s >= prev["span"][0] if zw and CATALOGUE_VARIANT[0] != "strict-span-starts" else s > prev["span"][0])
+                                 and e >= prev["span"][1]):
                     errs.append(f"{a['id']}/{ch}: fingerprints not ordered by position with monotone spans")
                 if prev and f["position"] - prev["position"] > w:
                     errs.append(f"{a['id']}/{ch}: gap between fingerprints exceeds the window")
@@ -858,10 +863,11 @@ VARIANTS = [
     ("config-bounds-ignored", "Bounds: maxSeedsPerMode above 10^7 or maxRegionsPerMode above 10^5 accepted"),
     ("strict-span-starts", "P1: fingerprint span starts required to strictly increase (rejects py-tokens zero-width layout)"),
     ("empty-span-rejected", "P2: an empty fingerprint span rejected at k > 1"),
+    ("relaxation-global", "P3: non-decreasing starts and empty spans allowed for every profile (review W1/W2)"),
 ]
 CATALOGUE_LEVEL_VARIANTS = {"suppression-lenient-digest", "last-duplicate-key-wins", "extraction-bounds-ignored",
                             "lone-surrogate-accepted", "no-depth-limit", "depth-limit-strict", "config-bounds-ignored",
-                            "strict-span-starts", "empty-span-rejected"}
+                            "strict-span-starts", "empty-span-rejected", "relaxation-global"}
 
 
 # ------------------------------------------------------------------ report rules beyond the schema (contract §6)

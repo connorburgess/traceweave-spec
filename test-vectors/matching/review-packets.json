@@ -1,5 +1,5 @@
 {
- "packetVersion": "traceweave-review-packet-draft-1",
+ "packetVersion": "traceweave-review-packet-draft-2",
  "note": "M2.7 review-packet fixtures (spec/catalogue-report.md §6.9). Bodies are matching.json bodies; licence texts are archived under licence-texts/ and referenced by SHA-256.",
  "licenceTexts": [
   {
@@ -16,7 +16,7 @@
    "id": "packet-own-origin",
    "description": "Own-origin region: the GO_SUM region found in a larger host is the reference project's own code at a recorded commit.",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
     },
@@ -31,6 +31,7 @@
     },
     "origin": {
      "kind": "own-origin",
+     "side": "reference",
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
@@ -40,7 +41,7 @@
    "id": "packet-vendored-dependency",
    "description": "Vendored dependency region (vendor control class): the vendored file matches itself; the packet names the package and the digest of the archived licence text.",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -55,13 +56,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -71,7 +73,7 @@
    "id": "packet-vendored-common-only",
    "description": "The same vendored region under the vendor catalogue, where it is common-only: a common-only region is still referenceable.",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "b1dc208a05b0856293e52152078cffe9178e8c41cdef1b1515ca875d3b3bbf98"
     },
@@ -86,13 +88,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "reference",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -102,7 +105,7 @@
    "id": "packet-historical-copy",
    "description": "Historical copy: the loop was copied from an earlier version of the reference at a recorded commit, under the licence then in force. Whether the copy was permitted is a rights conclusion outside the record.",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
     },
@@ -117,10 +120,11 @@
     },
     "origin": {
      "kind": "historical-copy",
+     "side": "candidate",
+     "copyArtifactSha256": "01e15a3678d47a6a35e0a34e135770700e1e4211c2807bff338cc1deab501a9b",
      "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "sourceCommit": "2222222222222222222222222222222222222222",
      "licence": {
-      "identifier": "BSD-3-Clause",
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
@@ -147,6 +151,7 @@
     },
     "origin": {
      "kind": "own-origin",
+     "side": "reference",
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
@@ -157,7 +162,7 @@
    "reason": "required field report removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "region": {
      "referenceId": "sum.go",
      "candidateId": "host.go",
@@ -169,6 +174,7 @@
     },
     "origin": {
      "kind": "own-origin",
+     "side": "reference",
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
@@ -179,7 +185,7 @@
    "reason": "required field report.bodySha256 removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {},
     "region": {
      "referenceId": "sum.go",
@@ -192,6 +198,7 @@
     },
     "origin": {
      "kind": "own-origin",
+     "side": "reference",
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
@@ -202,12 +209,13 @@
    "reason": "required field region removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
     },
     "origin": {
      "kind": "own-origin",
+     "side": "reference",
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
@@ -218,7 +226,7 @@
    "reason": "required field region.referenceId removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
     },
@@ -232,6 +240,7 @@
     },
     "origin": {
      "kind": "own-origin",
+     "side": "reference",
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
@@ -242,7 +251,7 @@
    "reason": "required field region.candidateId removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
     },
@@ -256,6 +265,7 @@
     },
     "origin": {
      "kind": "own-origin",
+     "side": "reference",
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
@@ -266,7 +276,7 @@
    "reason": "required field region.mode removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
     },
@@ -280,6 +290,7 @@
     },
     "origin": {
      "kind": "own-origin",
+     "side": "reference",
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
@@ -290,7 +301,7 @@
    "reason": "required field region.firstSeed removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
     },
@@ -301,6 +312,7 @@
     },
     "origin": {
      "kind": "own-origin",
+     "side": "reference",
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
@@ -311,7 +323,7 @@
    "reason": "required field origin removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
     },
@@ -331,7 +343,7 @@
    "reason": "required field origin.kind removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
     },
@@ -345,6 +357,32 @@
      ]
     },
     "origin": {
+     "side": "reference",
+     "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+     "repositoryCommit": "1111111111111111111111111111111111111111"
+    }
+   }
+  },
+  {
+   "id": "missing-origin.side-own-origin",
+   "reason": "required field origin.side removed",
+   "expect": "schema",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
+    },
+    "region": {
+     "referenceId": "sum.go",
+     "candidateId": "host.go",
+     "mode": "exact",
+     "firstSeed": [
+      2,
+      44
+     ]
+    },
+    "origin": {
+     "kind": "own-origin",
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
@@ -355,7 +393,7 @@
    "reason": "required field origin.artifactSha256 removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
     },
@@ -370,6 +408,7 @@
     },
     "origin": {
      "kind": "own-origin",
+     "side": "reference",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
    }
@@ -379,7 +418,7 @@
    "reason": "required field origin.repositoryCommit removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
     },
@@ -394,6 +433,7 @@
     },
     "origin": {
      "kind": "own-origin",
+     "side": "reference",
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"
     }
    }
@@ -417,13 +457,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -434,7 +475,7 @@
    "reason": "required field report removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "region": {
      "referenceId": "vendor.strutil.go",
      "candidateId": "vendor.strutil.go",
@@ -446,13 +487,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -463,7 +505,7 @@
    "reason": "required field report.bodySha256 removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {},
     "region": {
      "referenceId": "vendor.strutil.go",
@@ -476,13 +518,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -493,19 +536,20 @@
    "reason": "required field region removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -516,7 +560,7 @@
    "reason": "required field region.referenceId removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -530,13 +574,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -547,7 +592,7 @@
    "reason": "required field region.candidateId removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -561,13 +606,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -578,7 +624,7 @@
    "reason": "required field region.mode removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -592,13 +638,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -609,7 +656,7 @@
    "reason": "required field region.firstSeed removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -620,13 +667,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -637,7 +685,7 @@
    "reason": "required field origin removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -657,7 +705,7 @@
    "reason": "required field origin.kind removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -671,13 +719,78 @@
      ]
     },
     "origin": {
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
+      "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
+     }
+    }
+   }
+  },
+  {
+   "id": "missing-origin.side-vendored-dependency",
+   "reason": "required field origin.side removed",
+   "expect": "schema",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
+    },
+    "region": {
+     "referenceId": "vendor.strutil.go",
+     "candidateId": "vendor.strutil.go",
+     "mode": "exact",
+     "firstSeed": [
+      0,
+      0
+     ]
+    },
+    "origin": {
+     "kind": "vendored-dependency",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+     "package": {
+      "name": "example.org/strutil",
+      "version": "1.4.0"
+     },
+     "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+     "licence": {
+      "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
+     }
+    }
+   }
+  },
+  {
+   "id": "missing-origin.vendoredArtifactSha256-vendored-dependency",
+   "reason": "required field origin.vendoredArtifactSha256 removed",
+   "expect": "schema",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
+    },
+    "region": {
+     "referenceId": "vendor.strutil.go",
+     "candidateId": "vendor.strutil.go",
+     "mode": "exact",
+     "firstSeed": [
+      0,
+      0
+     ]
+    },
+    "origin": {
+     "kind": "vendored-dependency",
+     "side": "candidate",
+     "package": {
+      "name": "example.org/strutil",
+      "version": "1.4.0"
+     },
+     "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+     "licence": {
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -688,7 +801,7 @@
    "reason": "required field origin.package removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -703,9 +816,10 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -716,7 +830,7 @@
    "reason": "required field origin.package.name removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -731,12 +845,13 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -747,7 +862,7 @@
    "reason": "required field origin.package.version removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -762,12 +877,13 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -778,7 +894,7 @@
    "reason": "required field origin.upstreamArtifactSha256 removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -793,12 +909,13 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -809,7 +926,7 @@
    "reason": "required field origin.licence removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -824,6 +941,8 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
@@ -833,42 +952,11 @@
    }
   },
   {
-   "id": "missing-origin.licence.identifier-vendored-dependency",
-   "reason": "required field origin.licence.identifier removed",
-   "expect": "schema",
-   "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
-    "report": {
-     "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
-    },
-    "region": {
-     "referenceId": "vendor.strutil.go",
-     "candidateId": "vendor.strutil.go",
-     "mode": "exact",
-     "firstSeed": [
-      0,
-      0
-     ]
-    },
-    "origin": {
-     "kind": "vendored-dependency",
-     "package": {
-      "name": "example.org/strutil",
-      "version": "1.4.0"
-     },
-     "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
-     "licence": {
-      "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
-     }
-    }
-   }
-  },
-  {
    "id": "missing-origin.licence.textSha256-vendored-dependency",
    "reason": "required field origin.licence.textSha256 removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -883,14 +971,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
-     "licence": {
-      "identifier": "MIT"
-     }
+     "licence": {}
     }
    }
   },
@@ -913,10 +1001,11 @@
     },
     "origin": {
      "kind": "historical-copy",
+     "side": "candidate",
+     "copyArtifactSha256": "01e15a3678d47a6a35e0a34e135770700e1e4211c2807bff338cc1deab501a9b",
      "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "sourceCommit": "2222222222222222222222222222222222222222",
      "licence": {
-      "identifier": "BSD-3-Clause",
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
@@ -927,7 +1016,7 @@
    "reason": "required field report removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "region": {
      "referenceId": "sum.go",
      "candidateId": "partial.go",
@@ -939,10 +1028,11 @@
     },
     "origin": {
      "kind": "historical-copy",
+     "side": "candidate",
+     "copyArtifactSha256": "01e15a3678d47a6a35e0a34e135770700e1e4211c2807bff338cc1deab501a9b",
      "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "sourceCommit": "2222222222222222222222222222222222222222",
      "licence": {
-      "identifier": "BSD-3-Clause",
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
@@ -953,7 +1043,7 @@
    "reason": "required field report.bodySha256 removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {},
     "region": {
      "referenceId": "sum.go",
@@ -966,10 +1056,11 @@
     },
     "origin": {
      "kind": "historical-copy",
+     "side": "candidate",
+     "copyArtifactSha256": "01e15a3678d47a6a35e0a34e135770700e1e4211c2807bff338cc1deab501a9b",
      "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "sourceCommit": "2222222222222222222222222222222222222222",
      "licence": {
-      "identifier": "BSD-3-Clause",
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
@@ -980,16 +1071,17 @@
    "reason": "required field region removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
     },
     "origin": {
      "kind": "historical-copy",
+     "side": "candidate",
+     "copyArtifactSha256": "01e15a3678d47a6a35e0a34e135770700e1e4211c2807bff338cc1deab501a9b",
      "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "sourceCommit": "2222222222222222222222222222222222222222",
      "licence": {
-      "identifier": "BSD-3-Clause",
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
@@ -1000,7 +1092,7 @@
    "reason": "required field region.referenceId removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
     },
@@ -1014,10 +1106,11 @@
     },
     "origin": {
      "kind": "historical-copy",
+     "side": "candidate",
+     "copyArtifactSha256": "01e15a3678d47a6a35e0a34e135770700e1e4211c2807bff338cc1deab501a9b",
      "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "sourceCommit": "2222222222222222222222222222222222222222",
      "licence": {
-      "identifier": "BSD-3-Clause",
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
@@ -1028,7 +1121,7 @@
    "reason": "required field region.candidateId removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
     },
@@ -1042,10 +1135,11 @@
     },
     "origin": {
      "kind": "historical-copy",
+     "side": "candidate",
+     "copyArtifactSha256": "01e15a3678d47a6a35e0a34e135770700e1e4211c2807bff338cc1deab501a9b",
      "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "sourceCommit": "2222222222222222222222222222222222222222",
      "licence": {
-      "identifier": "BSD-3-Clause",
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
@@ -1056,7 +1150,7 @@
    "reason": "required field region.mode removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
     },
@@ -1070,10 +1164,11 @@
     },
     "origin": {
      "kind": "historical-copy",
+     "side": "candidate",
+     "copyArtifactSha256": "01e15a3678d47a6a35e0a34e135770700e1e4211c2807bff338cc1deab501a9b",
      "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "sourceCommit": "2222222222222222222222222222222222222222",
      "licence": {
-      "identifier": "BSD-3-Clause",
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
@@ -1084,7 +1179,7 @@
    "reason": "required field region.firstSeed removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
     },
@@ -1095,10 +1190,11 @@
     },
     "origin": {
      "kind": "historical-copy",
+     "side": "candidate",
+     "copyArtifactSha256": "01e15a3678d47a6a35e0a34e135770700e1e4211c2807bff338cc1deab501a9b",
      "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "sourceCommit": "2222222222222222222222222222222222222222",
      "licence": {
-      "identifier": "BSD-3-Clause",
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
@@ -1109,7 +1205,7 @@
    "reason": "required field origin removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
     },
@@ -1129,7 +1225,7 @@
    "reason": "required field origin.kind removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
     },
@@ -1143,10 +1239,69 @@
      ]
     },
     "origin": {
+     "side": "candidate",
+     "copyArtifactSha256": "01e15a3678d47a6a35e0a34e135770700e1e4211c2807bff338cc1deab501a9b",
      "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "sourceCommit": "2222222222222222222222222222222222222222",
      "licence": {
-      "identifier": "BSD-3-Clause",
+      "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
+     }
+    }
+   }
+  },
+  {
+   "id": "missing-origin.side-historical-copy",
+   "reason": "required field origin.side removed",
+   "expect": "schema",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
+    },
+    "region": {
+     "referenceId": "sum.go",
+     "candidateId": "partial.go",
+     "mode": "exact",
+     "firstSeed": [
+      16,
+      14
+     ]
+    },
+    "origin": {
+     "kind": "historical-copy",
+     "copyArtifactSha256": "01e15a3678d47a6a35e0a34e135770700e1e4211c2807bff338cc1deab501a9b",
+     "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+     "sourceCommit": "2222222222222222222222222222222222222222",
+     "licence": {
+      "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
+     }
+    }
+   }
+  },
+  {
+   "id": "missing-origin.copyArtifactSha256-historical-copy",
+   "reason": "required field origin.copyArtifactSha256 removed",
+   "expect": "schema",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
+    },
+    "region": {
+     "referenceId": "sum.go",
+     "candidateId": "partial.go",
+     "mode": "exact",
+     "firstSeed": [
+      16,
+      14
+     ]
+    },
+    "origin": {
+     "kind": "historical-copy",
+     "side": "candidate",
+     "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+     "sourceCommit": "2222222222222222222222222222222222222222",
+     "licence": {
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
@@ -1157,7 +1312,7 @@
    "reason": "required field origin.sourceArtifactSha256 removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
     },
@@ -1172,9 +1327,10 @@
     },
     "origin": {
      "kind": "historical-copy",
+     "side": "candidate",
+     "copyArtifactSha256": "01e15a3678d47a6a35e0a34e135770700e1e4211c2807bff338cc1deab501a9b",
      "sourceCommit": "2222222222222222222222222222222222222222",
      "licence": {
-      "identifier": "BSD-3-Clause",
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
@@ -1185,7 +1341,7 @@
    "reason": "required field origin.sourceCommit removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
     },
@@ -1200,9 +1356,10 @@
     },
     "origin": {
      "kind": "historical-copy",
+     "side": "candidate",
+     "copyArtifactSha256": "01e15a3678d47a6a35e0a34e135770700e1e4211c2807bff338cc1deab501a9b",
      "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "licence": {
-      "identifier": "BSD-3-Clause",
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
@@ -1213,7 +1370,7 @@
    "reason": "required field origin.licence removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
     },
@@ -1228,36 +1385,10 @@
     },
     "origin": {
      "kind": "historical-copy",
+     "side": "candidate",
+     "copyArtifactSha256": "01e15a3678d47a6a35e0a34e135770700e1e4211c2807bff338cc1deab501a9b",
      "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "sourceCommit": "2222222222222222222222222222222222222222"
-    }
-   }
-  },
-  {
-   "id": "missing-origin.licence.identifier-historical-copy",
-   "reason": "required field origin.licence.identifier removed",
-   "expect": "schema",
-   "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
-    "report": {
-     "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
-    },
-    "region": {
-     "referenceId": "sum.go",
-     "candidateId": "partial.go",
-     "mode": "exact",
-     "firstSeed": [
-      16,
-      14
-     ]
-    },
-    "origin": {
-     "kind": "historical-copy",
-     "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
-     "sourceCommit": "2222222222222222222222222222222222222222",
-     "licence": {
-      "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
-     }
     }
    }
   },
@@ -1266,7 +1397,7 @@
    "reason": "required field origin.licence.textSha256 removed",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
     },
@@ -1281,11 +1412,11 @@
     },
     "origin": {
      "kind": "historical-copy",
+     "side": "candidate",
+     "copyArtifactSha256": "01e15a3678d47a6a35e0a34e135770700e1e4211c2807bff338cc1deab501a9b",
      "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "sourceCommit": "2222222222222222222222222222222222222222",
-     "licence": {
-      "identifier": "BSD-3-Clause"
-     }
+     "licence": {}
     }
    }
   },
@@ -1294,7 +1425,7 @@
    "reason": "the region key is not a region of the referenced body",
    "expect": "semantic",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -1309,13 +1440,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -1326,7 +1458,7 @@
    "reason": "the referenced body has no mode folded",
    "expect": "semantic",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -1341,13 +1473,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -1358,7 +1491,7 @@
    "reason": "no known body has this bodySha256",
    "expect": "semantic",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "0000000000000000000000000000000000000000000000000000000000000000"
     },
@@ -1373,13 +1506,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
@@ -1387,10 +1521,10 @@
   },
   {
    "id": "own-origin-digest-mismatch",
-   "reason": "own-origin artifactSha256 is not the region's reference artifact",
+   "reason": "own-origin artifactSha256 is not the digest of the named side",
    "expect": "semantic",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
     },
@@ -1405,17 +1539,77 @@
     },
     "origin": {
      "kind": "own-origin",
+     "side": "reference",
      "artifactSha256": "3333333333333333333333333333333333333333333333333333333333333333",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
    }
   },
   {
-   "id": "licence-text-unarchived",
-   "reason": "no archived licence text has this digest",
+   "id": "own-origin-wrong-side",
+   "reason": "the named side's digest differs from artifactSha256",
    "expect": "semantic",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
+    },
+    "region": {
+     "referenceId": "sum.go",
+     "candidateId": "host.go",
+     "mode": "exact",
+     "firstSeed": [
+      2,
+      44
+     ]
+    },
+    "origin": {
+     "kind": "own-origin",
+     "side": "candidate",
+     "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+     "repositoryCommit": "1111111111111111111111111111111111111111"
+    }
+   }
+  },
+  {
+   "id": "vendored-repointed-p1b",
+   "reason": "review P1b: vendoredArtifactSha256 is not the digest of the named side of the new region",
+   "expect": "semantic",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "998c64c296e40f641b300ba6cf4f12a060aece5dd861eb4552962b23578013ad"
+    },
+    "region": {
+     "referenceId": "sum.go",
+     "candidateId": "copy.go",
+     "mode": "exact",
+     "firstSeed": [
+      2,
+      2
+     ]
+    },
+    "origin": {
+     "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+     "package": {
+      "name": "example.org/strutil",
+      "version": "1.4.0"
+     },
+     "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+     "licence": {
+      "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
+     }
+    }
+   }
+  },
+  {
+   "id": "vendored-digest-mismatch",
+   "reason": "vendoredArtifactSha256 is not the digest of the named side",
+   "expect": "semantic",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -1430,13 +1624,234 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "9999999999999999999999999999999999999999999999999999999999999999",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
+      "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
+     }
+    }
+   }
+  },
+  {
+   "id": "historical-source-unbound",
+   "reason": "review: sourceArtifactSha256 is not the digest of the region's other side",
+   "expect": "semantic",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
+    },
+    "region": {
+     "referenceId": "sum.go",
+     "candidateId": "partial.go",
+     "mode": "exact",
+     "firstSeed": [
+      16,
+      14
+     ]
+    },
+    "origin": {
+     "kind": "historical-copy",
+     "side": "candidate",
+     "copyArtifactSha256": "01e15a3678d47a6a35e0a34e135770700e1e4211c2807bff338cc1deab501a9b",
+     "sourceArtifactSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "sourceCommit": "2222222222222222222222222222222222222222",
+     "licence": {
+      "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
+     }
+    }
+   }
+  },
+  {
+   "id": "historical-copy-digest-mismatch",
+   "reason": "copyArtifactSha256 is not the digest of the named side",
+   "expect": "semantic",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "51afe94551adfe033dbdbc6e63f3cf61946320ffb80a69a8bce3c796192776a9"
+    },
+    "region": {
+     "referenceId": "sum.go",
+     "candidateId": "partial.go",
+     "mode": "exact",
+     "firstSeed": [
+      16,
+      14
+     ]
+    },
+    "origin": {
+     "kind": "historical-copy",
+     "side": "candidate",
+     "copyArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+     "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+     "sourceCommit": "2222222222222222222222222222222222222222",
+     "licence": {
+      "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
+     }
+    }
+   }
+  },
+  {
+   "id": "licence-identifier-p3",
+   "reason": "review P3: a licence identifier is not a field (it could contradict the archived text); the text digest identifies the licence",
+   "expect": "schema",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
+    },
+    "region": {
+     "referenceId": "vendor.strutil.go",
+     "candidateId": "vendor.strutil.go",
+     "mode": "exact",
+     "firstSeed": [
+      0,
+      0
+     ]
+    },
+    "origin": {
+     "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+     "package": {
+      "name": "example.org/strutil",
+      "version": "1.4.0"
+     },
+     "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+     "licence": {
+      "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a",
+      "identifier": "GPL-3.0-only"
+     }
+    }
+   }
+  },
+  {
+   "id": "permitted-inside-package-p4",
+   "reason": "review P4: no permission flag anywhere",
+   "expect": "schema",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
+    },
+    "region": {
+     "referenceId": "vendor.strutil.go",
+     "candidateId": "vendor.strutil.go",
+     "mode": "exact",
+     "firstSeed": [
+      0,
+      0
+     ]
+    },
+    "origin": {
+     "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+     "package": {
+      "name": "example.org/strutil",
+      "version": "1.4.0",
+      "permitted": true
+     },
+     "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+     "licence": {
+      "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
+     }
+    }
+   }
+  },
+  {
+   "id": "uppercase-digest-p6",
+   "reason": "review P6: digests are lowercase hex",
+   "expect": "schema",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "C9C79130C3ED2C15A644B18C282EB367C6035D8CFDAE0375EFAF360AE34384A0"
+    },
+    "region": {
+     "referenceId": "vendor.strutil.go",
+     "candidateId": "vendor.strutil.go",
+     "mode": "exact",
+     "firstSeed": [
+      0,
+      0
+     ]
+    },
+    "origin": {
+     "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+     "package": {
+      "name": "example.org/strutil",
+      "version": "1.4.0"
+     },
+     "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+     "licence": {
+      "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
+     }
+    }
+   }
+  },
+  {
+   "id": "non-first-seed-p2",
+   "reason": "review P2: a region is keyed by its first seed only",
+   "expect": "semantic",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
+    },
+    "region": {
+     "referenceId": "sum.go",
+     "candidateId": "host.go",
+     "mode": "exact",
+     "firstSeed": [
+      3,
+      45
+     ]
+    },
+    "origin": {
+     "kind": "own-origin",
+     "side": "reference",
+     "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+     "repositoryCommit": "1111111111111111111111111111111111111111"
+    }
+   }
+  },
+  {
+   "id": "licence-text-unarchived",
+   "reason": "no archived licence text has this digest",
+   "expect": "semantic",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
+    },
+    "region": {
+     "referenceId": "vendor.strutil.go",
+     "candidateId": "vendor.strutil.go",
+     "mode": "exact",
+     "firstSeed": [
+      0,
+      0
+     ]
+    },
+    "origin": {
+     "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+     "package": {
+      "name": "example.org/strutil",
+      "version": "1.4.0"
+     },
+     "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+     "licence": {
       "textSha256": "4444444444444444444444444444444444444444444444444444444444444444"
      }
     }
@@ -1447,7 +1862,7 @@
    "reason": "rightsVerdict is not a review-packet field (no rights verdict, ownership, score or free text)",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -1462,13 +1877,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     },
@@ -1480,7 +1896,7 @@
    "reason": "permitted is not a review-packet field (no rights verdict, ownership, score or free text)",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -1495,13 +1911,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     },
@@ -1513,7 +1930,7 @@
    "reason": "owner is not a review-packet field (no rights verdict, ownership, score or free text)",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -1528,13 +1945,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     },
@@ -1546,7 +1964,7 @@
    "reason": "score is not a review-packet field (no rights verdict, ownership, score or free text)",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -1561,13 +1979,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     },
@@ -1579,7 +1998,7 @@
    "reason": "note is not a review-packet field (no rights verdict, ownership, score or free text)",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -1594,13 +2013,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     },
@@ -1612,7 +2032,7 @@
    "reason": "a licence-compatibility verdict is a rights conclusion",
    "expect": "schema",
    "packet": {
-    "reviewPacketVersion": "traceweave-review-packet-draft-1",
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
     "report": {
      "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0"
     },
@@ -1627,13 +2047,14 @@
     },
     "origin": {
      "kind": "vendored-dependency",
+     "side": "candidate",
+     "vendoredArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "package": {
       "name": "example.org/strutil",
       "version": "1.4.0"
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {
-      "identifier": "MIT",
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      },
      "licenceCompatible": true

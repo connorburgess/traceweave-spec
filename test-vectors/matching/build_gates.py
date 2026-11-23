@@ -25,7 +25,7 @@ sys.path.insert(0, str(HERE))
 import build_vectors as bv  # noqa: E402
 
 MANIFEST_VERSION = "traceweave-m22-fixture-manifest-draft-1"
-PACKET_VERSION = "traceweave-review-packet-draft-1"
+PACKET_VERSION = "traceweave-review-packet-draft-2"
 CANDGEN_VERSION = "traceweave-candidate-generation-draft-1"
 
 
@@ -85,6 +85,7 @@ def manifest_case(v, role):
                           "regions": [{"firstSeed": r["seeds"][0], "referenceSpan": r["referenceSpan"],
                                        "candidateSpan": r["candidateSpan"], "status": r["status"]} for r in regs]})
     return {"vectorId": v["id"], "role": role, "derivation": v["derivation"],
+            "regionsListed": "all" if role == "companion" else "reportable",
             "referenceCatalogueSha256": v["reference"]["sha256"], "candidateCatalogueSha256": v["candidate"]["sha256"],
             "bodySha256": v["expectedReport"]["bodySha256"], "artifacts": arts, "expectedSpans": spans}
 
@@ -96,8 +97,10 @@ def build_manifest(vecs):
                      "cases": [manifest_case(vecs[vid], role) for vid, role in cases]})
     return {"manifestVersion": MANIFEST_VERSION,
             "note": "Frozen M2.2 fixture manifest. Each UC-1 example-matrix row has at least one positive case derived by hand "
-                    "(derivation 'hand'). Spans are half-open UTF-8 byte offsets [start, end). An implementation passes M2.2 only "
-                    "if, for every case, its catalogues and body reproduce these digests and every listed span (N/N).",
+                    "(derivation 'hand'). Spans are half-open UTF-8 byte offsets [start, end). Positive cases list their REPORTABLE "
+                    "regions only (regionsListed 'reportable'); companion cases list every region ('all'). Other regions are "
+                    "covered by the body digest. An implementation passes M2.2 only if, for every case, its catalogues and body "
+                    "reproduce these digests and every listed span (N/N).",
             "matchingVectorsFile": "matching.json", "rows": rows}
 
 
@@ -138,26 +141,30 @@ def build_packets(vecs):
         {"id": "packet-own-origin", "description": "Own-origin region: the GO_SUM region found in a larger host is the "
                                                    "reference project's own code at a recorded commit.",
          "packet": packet(fih, "sum.go", "host.go", "exact", {
-             "kind": "own-origin", "artifactSha256": p_fih["reference"]["sha256"], "repositoryCommit": "1" * 40})},
+             "kind": "own-origin", "side": "reference", "artifactSha256": p_fih["reference"]["sha256"],
+             "repositoryCommit": "1" * 40})},
         {"id": "packet-vendored-dependency", "description": "Vendored dependency region (vendor control class): the "
                                                             "vendored file matches itself; the packet names the package and "
                                                             "the digest of the archived licence text.",
          "packet": packet(vun, "vendor.strutil.go", "vendor.strutil.go", "exact", {
-             "kind": "vendored-dependency", "package": {"name": "example.org/strutil", "version": "1.4.0"},
+             "kind": "vendored-dependency", "side": "candidate", "vendoredArtifactSha256": p_v["candidate"]["sha256"],
+             "package": {"name": "example.org/strutil", "version": "1.4.0"},
              "upstreamArtifactSha256": p_v["reference"]["sha256"],
-             "licence": {"identifier": "MIT", "textSha256": lic["licence-synthetic-mit-style.txt"]}})},
+             "licence": {"textSha256": lic["licence-synthetic-mit-style.txt"]}})},
         {"id": "packet-vendored-common-only", "description": "The same vendored region under the vendor catalogue, where "
                                                             "it is common-only: a common-only region is still referenceable.",
          "packet": packet(vsu, "vendor.strutil.go", "vendor.strutil.go", "exact", {
-             "kind": "vendored-dependency", "package": {"name": "example.org/strutil", "version": "1.4.0"},
+             "kind": "vendored-dependency", "side": "reference", "vendoredArtifactSha256": p_v["reference"]["sha256"],
+             "package": {"name": "example.org/strutil", "version": "1.4.0"},
              "upstreamArtifactSha256": p_v["reference"]["sha256"],
-             "licence": {"identifier": "MIT", "textSha256": lic["licence-synthetic-mit-style.txt"]}})},
+             "licence": {"textSha256": lic["licence-synthetic-mit-style.txt"]}})},
         {"id": "packet-historical-copy", "description": "Historical copy: the loop was copied from an earlier version of "
                                                        "the reference at a recorded commit, under the licence then in force. "
                                                        "Whether the copy was permitted is a rights conclusion outside the record.",
          "packet": packet(gpc, "sum.go", "partial.go", "exact", {
-             "kind": "historical-copy", "sourceArtifactSha256": p_gpc["reference"]["sha256"], "sourceCommit": "2" * 40,
-             "licence": {"identifier": "BSD-3-Clause", "textSha256": lic["licence-synthetic-bsd-style.txt"]}})},
+             "kind": "historical-copy", "side": "candidate", "copyArtifactSha256": p_gpc["candidate"]["sha256"],
+             "sourceArtifactSha256": p_gpc["reference"]["sha256"], "sourceCommit": "2" * 40,
+             "licence": {"textSha256": lic["licence-synthetic-bsd-style.txt"]}})},
     ]
     invalid = []
     base = valid[1]["packet"]
@@ -191,8 +198,48 @@ def build_packets(vecs):
     invalid.append({"id": "body-unknown", "reason": "no known body has this bodySha256", "expect": "semantic", "packet": d})
     d = copy.deepcopy(valid[0]["packet"])
     d["origin"]["artifactSha256"] = "3" * 64
-    invalid.append({"id": "own-origin-digest-mismatch", "reason": "own-origin artifactSha256 is not the region's reference artifact",
+    invalid.append({"id": "own-origin-digest-mismatch", "reason": "own-origin artifactSha256 is not the digest of the named side",
                     "expect": "semantic", "packet": d})
+    d = copy.deepcopy(valid[0]["packet"])
+    d["origin"]["side"] = "candidate"
+    invalid.append({"id": "own-origin-wrong-side", "reason": "the named side's digest differs from artifactSha256",
+                    "expect": "semantic", "packet": d})
+    # Review P1b: a vendored packet re-pointed at an unrelated own-code region of another body, digests left as they were.
+    d = copy.deepcopy(base)
+    gid = vecs["go-identical"]
+    d["report"]["bodySha256"] = gid["expectedReport"]["bodySha256"]
+    d["region"], _ = region_key(gid, "sum.go", "copy.go", "exact")
+    invalid.append({"id": "vendored-repointed-p1b", "reason": "review P1b: vendoredArtifactSha256 is not the digest of the named "
+                                                              "side of the new region", "expect": "semantic", "packet": d})
+    d = copy.deepcopy(base)
+    d["origin"]["vendoredArtifactSha256"] = "9" * 64
+    invalid.append({"id": "vendored-digest-mismatch", "reason": "vendoredArtifactSha256 is not the digest of the named side",
+                    "expect": "semantic", "packet": d})
+    d = copy.deepcopy(valid[3]["packet"])
+    d["origin"]["sourceArtifactSha256"] = "a" * 64
+    invalid.append({"id": "historical-source-unbound", "reason": "review: sourceArtifactSha256 is not the digest of the region's "
+                                                                 "other side", "expect": "semantic", "packet": d})
+    d = copy.deepcopy(valid[3]["packet"])
+    d["origin"]["copyArtifactSha256"] = d["origin"]["sourceArtifactSha256"]
+    invalid.append({"id": "historical-copy-digest-mismatch", "reason": "copyArtifactSha256 is not the digest of the named side",
+                    "expect": "semantic", "packet": d})
+    d = copy.deepcopy(base)
+    d["origin"]["licence"]["identifier"] = "GPL-3.0-only"
+    invalid.append({"id": "licence-identifier-p3", "reason": "review P3: a licence identifier is not a field (it could contradict "
+                                                             "the archived text); the text digest identifies the licence",
+                    "expect": "schema", "packet": d})
+    d = copy.deepcopy(base)
+    d["origin"]["package"]["permitted"] = True
+    invalid.append({"id": "permitted-inside-package-p4", "reason": "review P4: no permission flag anywhere", "expect": "schema",
+                    "packet": d})
+    d = copy.deepcopy(base)
+    d["report"]["bodySha256"] = d["report"]["bodySha256"].upper()
+    invalid.append({"id": "uppercase-digest-p6", "reason": "review P6: digests are lowercase hex", "expect": "schema", "packet": d})
+    d = copy.deepcopy(valid[0]["packet"])
+    reg = next(p for p in fih["expectedReport"]["body"]["pairs"] if p["candidate"]["id"] == "host.go")["modes"]["exact"]["regions"][0]
+    d["region"]["firstSeed"] = list(reg["seeds"][1])
+    invalid.append({"id": "non-first-seed-p2", "reason": "review P2: a region is keyed by its first seed only", "expect": "semantic",
+                    "packet": d})
     d = copy.deepcopy(base)
     d["origin"]["licence"]["textSha256"] = "4" * 64
     invalid.append({"id": "licence-text-unarchived", "reason": "no archived licence text has this digest", "expect": "semantic",

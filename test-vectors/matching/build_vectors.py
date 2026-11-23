@@ -533,6 +533,7 @@ def parse_comparison_config(raw: bytes):
 
 
 MAX_DEPTH = 64          # contract §3.6 step 1 (K4)
+ZERO_WIDTH_PROFILES = {"py-tokens"}   # §3.6 step 5: profiles that declare zero-width tokens (A14)
 EXTRACTION_BOUNDS = {"k": 16, "window": 128, "maxInputBytes": 8388608}   # extraction §10 step 5 / §10a (K1)
 FAMILY = {"text-plain": "traceweave-text-winnow-draft-1"}                 # others: traceweave-token-winnow-draft-1
 
@@ -600,6 +601,16 @@ def catalogue_status(raw: bytes):
     if any(ec[key] > b for key, b in EXTRACTION_BOUNDS.items()) or \
             ec["contract"] != FAMILY.get(ec["profile"], "traceweave-token-winnow-draft-1"):
         return None, "malformed-catalogue"                                  # K1: step 6
+    zero_width = ec["profile"] in ZERO_WIDTH_PROFILES                       # A14: declared profile property
+    for a in obj["artifacts"]:
+        for c in a.get("channels", {}).values():
+            fps = c["fingerprints"]
+            for f in fps:
+                if f["span"][0] == f["span"][1] and ec["k"] > 1 and not zero_width:
+                    return None, "malformed-catalogue"
+            for x, y in zip(fps, fps[1:]):
+                if (y["span"][0] < x["span"][0]) if zero_width else (y["span"][0] <= x["span"][0]):
+                    return None, "malformed-catalogue"
     return obj, None
 
 
@@ -1437,6 +1448,39 @@ def main():
         "which §3.6 allows (starts are non-decreasing). Identical hashes, so both modes match completely.",
         [("a.py", f"{PY}#py-format-a")], [("b.py", f"{PY}#py-format-b")],
         {"status": "compared", "pairs": [pair("a.py", "b.py", both(exhaust()))]})
+    # --- A14 (core-gates review): OD-C64 profile-conditional; vendor-suppression effects (hand-derived) ----
+    for lang, src, vid0 in (("go", SUM, "go"), ("rust", [("sum.rs", f"{RU}#mv-rust-sum")], "rust")):
+        cand0 = COPY if lang == "go" else [("copy.rs", f"{RU}#mv-rust-sum")]
+        side_id = src[0][0]
+        vec(f"{vid0}-w1-reused-span-start", ["zero-width-rule", "malformed-catalogue"],
+            f"A14 (review W1): a {lang} catalogue whose second exact fingerprint reuses the first one's span start. {lang}-tokens "
+            "declares no zero-width tokens, so span starts must strictly increase: malformed-catalogue.",
+            src, cand0, rej("malformed-catalogue", "reference"), overrides={"reference": "w1"})
+        vec(f"{vid0}-w2-identical-spans", ["zero-width-rule", "malformed-catalogue"],
+            f"A14 (review W2): a {lang} catalogue with identical spans at two consecutive fingerprint positions: malformed-catalogue.",
+            src, cand0, rej("malformed-catalogue", "reference"), overrides={"reference": "w2"})
+    vec("go-empty-span-k5", ["zero-width-rule", "malformed-catalogue"],
+        "A14: an empty fingerprint span at k = 5 in a go-tokens catalogue. Only profiles with zero-width tokens (py-tokens) may "
+        "have empty spans at k > 1: malformed-catalogue.",
+        SUM, COPY, rej("malformed-catalogue", "reference"), overrides={"reference": "emptyk"})
+    vec("vendor-copied-into-own-code", ["vendor", "vendor-effect"],
+        "A14 (vendor-suppression effect 1): the vendored helper copied whole into each project's own source tree under its own "
+        "name (util.go, helpers.go). With the vendor catalogue bound, the copy is common-only exactly like the vendored file: "
+        "suppression cannot tell own code from vendored code. Compare without the vendor catalogue to see the reuse "
+        "(vendor-unsuppressed shows it matching).",
+        [("util.go", f"{GG}#mv-go-vendor-lib")], [("helpers.go", f"{GG}#mv-go-vendor-lib")],
+        {"status": "compared", "pairs": [pair("util.go", "helpers.go", both(ex(codeIn=["common-only"], reportable=0, regions=1,
+                                                                            exhaustiveDiagonalZero=True)))]},
+        supp=[("strutil.go", f"{GG}#mv-go-vendor-lib")], cc="suppress-supplied")
+    vec("vendor-idiom-suppresses-pair", ["vendor", "vendor-effect"],
+        "A14 (vendor-suppression effect 2): two projects share GO_SUM, and the vendor catalogue happens to hold a vendored file "
+        "with the same code. Suppression is per hash for every pair, so this pair loses all evidence (common-only) although "
+        "neither side is vendored; the counts (distinctCommonHashes, sharedCommonDistinctHashes, suppression.distinctHashes) "
+        "show it.",
+        SUM, COPY, {"status": "compared", "pairs": [pair("sum.go", "copy.go", both(ex(codeIn=["common-only"], reportable=0,
+                                                                                     regions=1, exhaustiveDiagonalZero=True)))]},
+        supp=[("strutil.go", f"{GG}#mv-go-vendor-lib"), ("vendored-sum.go", f"{GO}#mv-go-sum")], cc="suppress-supplied")
+
     Z = "a0a0a0a0a0a0a0a0"
     vec("rv-py-empty-span-region", ["synthetic", "py-tokens", "empty-span"],
         "Synthetic py-tokens catalogues whose only shared fingerprint has an empty span ([30, 30) and [20, 20)): the region's "
@@ -1523,6 +1567,21 @@ def main():
                         cats[side] = entry
                         bytes_[side] = b
                         continue
+                elif ov in ("w1", "w2", "emptyk"):
+                    fp = cat["artifacts"][0]["channels"]["exact"]["fingerprints"]
+                    if ov == "w1":
+                        fp[1]["span"][0] = fp[0]["span"][0]            # W1: the previous fingerprint's start reused
+                    elif ov == "w2":
+                        fp[1]["span"] = list(fp[0]["span"])            # W2: identical spans at consecutive positions
+                    else:
+                        fp[0]["span"][1] = fp[0]["span"][0]            # an empty span at k = 5
+                    b = canonical(cat)
+                    note = {"w1": "Catalogue built from the listed artifact, then its second exact fingerprint's span start set to "
+                                  "the first fingerprint's start (review W1).",
+                            "w2": "Catalogue built from the listed artifact, then its second exact fingerprint's span set equal to "
+                                  "the first's (review W2).",
+                            "emptyk": "Catalogue built from the listed artifact, then its first exact fingerprint's span made empty "
+                                      "([start, start)) at k = 5."}[ov]
                 elif ov in ("surrogate", "float", "depth64", "depth65"):
                     b = {"surrogate": b'{"catalogueVersion":"\\ud800"}',
                          "float": b'{"catalogueVersion":"x","a":1.0}',
@@ -1586,7 +1645,8 @@ def main():
                                    "below-over-common", "mixed-common-region", "invariance", "ambiguity-before-cap",
                                    "suppression-artifact-count", "suppression-order", "input-too-large",
                                    "three-channel", "mode-mismatch", "text-plain", "k1", "k3", "k4", "config-bounds",
-                                   "vendor", "formatted-fragment-in-host", "py-tokens", "empty-span", "equal-starts"}),
+                                   "vendor", "formatted-fragment-in-host", "py-tokens", "empty-span", "equal-starts",
+                                   "zero-width-rule", "vendor-effect"}),
            "vectors": out}
     (HERE / "matching.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
     build_records(sources, out)
