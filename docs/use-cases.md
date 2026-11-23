@@ -108,6 +108,66 @@ These filenames describe a proposed example; these three files and the detector 
 - **By:** M2.1 (offline run), M2.2/M2.3 (the three files become cases), M2.5, M2.6; M5.3 has a non-author reproduce it from a clean clone.
 - **Pass/fail:** as UC-1, including the control rule: `control.py` must return the outcome code frozen for it, and a `match` there is shown as a false alarm. **Today:** none; the three files do not exist yet. **Unverifiable:** reviewer judgment in step 5 (a person inspects origin records), and the permission assessment.
 
+## UC-7: recognize a marked image
+
+**Status: accepted 2026-11-23.** The owner approved opening the image embedded-mark study on 2026-11-23 and delegated routine decisions to the coordinator. Under that delegation, the coordinator accepted this wording, which was reviewed as a draft in `research/drafts/image-mark-use-case.md`. Roadmap gate IMG.0. The weight download was approved subject to the licence check in [lane 12](../research/lanes/12-image-mark-licences.md), which cleared it.
+
+**UC-7 — Recognize a marked image.** A creator marks still images that they may modify. They keep the original, the marked artifact digest, the mark profile and a private catalogue, and publish the marked image. Later, they check a candidate image they can read locally; the check never uploads the candidate.
+- **Workflow.** Keep a private key and a local catalogue. For each image, derive a payload from the key and a catalogue entry id, embed it with a pinned mark profile, refuse outputs below the quality floor, and publish. Later, decode a local candidate's raw bits and test them against the catalogue's expected payloads.
+- **Useful result.** A detection record. It gives the candidate digest; the profile and model digests; the statistic, agreement m of n on the stated bit positions, for the accepted entry or entries; the threshold with its calibration basis; the search scope; and the outcome or abstention reason.
+- **Important limit.** **Anyone can copy a mark without the key**, using the public decoder and encoder. A detection therefore shows that bits matching the payload were embedded. It does not show who embedded them, or that the candidate is the original. Removal can erase the mark: the authors' remover, deep crops, rotation, heavy recompression or regeneration. The payload is not signed. No result does not establish absence. Not ownership or permission.
+
+- **What is embedded.** TrustMark-Q carries 61 payload bits, BCH-coded into 100 transmitted bits (35 error-correction bits and 4 fixed version bits). PixelSeal carries 256 payload bits. The payload is HMAC-SHA256(creator key, entry id), truncated. It is a keyed locator for a private catalogue entry. It is not an identity claim, a signature or a licence.
+- **Key handling.** One secret random key per creator, stored outside any repository and never placed in a record. Records carry a key id and the payload-derivation rule id. Rotating keys multiplies the search scope (below).
+- **Decision.** A decode by itself is not presence evidence ([lane 10](../research/lanes/10-evidence-review.md#after-the-report-audit): blind BCH success occurs on 5.9–15.3% of unmarked images in X1).
+  - The verifier counts agreement m between the decoded raw bits and each expected payload, **only on bit positions that are direct keyed-hash output**. It accepts an entry iff m ≥ k.
+  - For TrustMark these are the 61 data positions. Its error-correction bits depend on the data, and its version bits are the same in every mark, so neither can count as independent evidence. For PixelSeal they are all 256 payload bits.
+  - k is the smallest value with P(Bin(n, ½) ≥ k) ≤ 10⁻⁶: **49 of 61** for TrustMark (9.85 × 10⁻⁷) and **167 of 256** for PixelSeal (6.22 × 10⁻⁷). Over the key's randomness, that is the per-comparison bound for an image nobody marked with this payload, whatever its content. Searching N entries under N_K keys gives at most N × N_K × 10⁻⁶ per query.
+  - Outcomes: `match`, `ambiguous` (two or more entries accepted), `no-match`, or an abstention with a reason (`undecodable`, `unsupported-mode`, `too-small`).
+- **What a detection can and cannot evidence.** The decoders and encoders are public and use no key.
+  - Anyone can decode a marked image's bits and embed them into any other image, with no key and no access to the catalogue. The copy then passes the same test as the original.
+  - So an accepted detection shows only that **bits matching this entry's payload were embedded in the candidate**. It does not show who embedded them. It does not show that the candidate is the original, or derives from it. It does not show that the creator marked this particular image.
+  - The false-accept bound above covers chance agreement, never deliberate copying.
+  - Combining a mark with other evidence (exact digests, a fingerprint match to the original, a signed record of what was published) is a separate step, and even that does not prove ancestry.
+- **Quality.** A marked output below the profile's PSNR floor (38 dB in the first protocol) is refused, not published.
+- **Separate results.** Detection, record resolution, signature validity and trust stay separate. Mark evidence and fingerprint evidence are never multiplied.
+
+Expected misses: deep crop, rotation, flip for some schemes, heavy recompression, model-based or author-supplied removal, and re-marking by another party. Expected false acceptances, which are accepted but are not evidence of origin: a mark re-embedded by anyone without the key, and a residual transplanted from a marked image to an unrelated one. Every removal and forgery count in the study is a lower bound on what an attacker can do. Synthetic-image results say nothing about photographs.
+
+### UC-7 verification plan
+
+- **Checked:**
+  - marks embed and are recovered offline on CPU from pinned code and weights;
+  - the expected-payload test rejects unmarked images, wrong keys and wrong entries;
+  - survival under 12 edits and 5 removal attempts is counted;
+  - transplant, keyless re-embedding and overwrite outcomes are counted;
+  - the quality of the marked output is measured;
+  - records carry the fields the shared record needs.
+- **By:**
+  - IMG.1, pins and licences: [lane 12](../research/lanes/12-image-mark-licences.md), `weights.json`, `sources.json`, `requirements.txt`;
+  - IMG.2 and IMG.4, the measured run of [protocol `e-img-m-2`](../research/drafts/image-mark-protocol.md);
+  - IMG.3, that protocol frozen with its digest before running;
+  - IMG.5, its §12 record mapping.
+- **Pass:** each item is decided by an exit code or a count.
+  - `fetch_weights.py --verify` exits 0 (6/6 files) and `fetch_sources.py --verify` exits 0 (84/84). The unit tests exit 0.
+  - `run_mark.py full` exits 0 twice under the network-deny sandbox, with the probe refused first (W2).
+  - `run_mark.py compare` exits 0 (W3). Exit 5, an invalid pair with equal inputs, means a rerun under the protocol's rule, not a fail.
+  - `recordValidation.errors` has 0 entries (W4).
+  - For TrustMark-Q and PixelSeal separately, clean marked images are correctly matched ≥ 95/100 (P1). Implementation checks: unmarked accepted 0 in 20,000 comparisons (P2), wrong key 0 in 10,000 (P3), wrong entry 0 in 9,900 (P4). These are close to guaranteed by construction; they do not measure a false-accept rate or forgery resistance.
+  - Every report-only count (edits, removal, transplant, re-embedding, overwrite, quality) appears with its denominator of 100.
+- **Fail:** any of those commands exits non-zero (except `compare` exit 5, handled by the rerun rule); any record error; P1 below 95; any accept in P2–P4, in which case that scheme is recorded as negative-result, most likely an implementation fault; any count without a denominator. Transplant, re-embedding and removal successes are **not** failures of the plan. They are recorded limits of the use case.
+- **Today:** the measured run `e-img-m-2` is done.
+  - Results are in commit `a78aace`, frozen at `d3af1ee`.
+  - A non-author recheck is in the [image mark protocol review](../research/reviews/image-mark-protocol-review.md#results-recheck-e-img-m-2) (`d3d4788`). Every count reproduced with 0 mismatches in 7,500 queries. P1–P4 are 100/100, 0, 0 and 0 for both learned schemes.
+  - Roadmap IMG.1–IMG.5 carry the gate statuses.
+- **Unverifiable:**
+  - who embedded a detected mark, or whether the candidate is the original;
+  - behaviour on natural photographs (synthetic images only; a real-image set needs the owner);
+  - a false-accept rate near 10⁻⁶ (analytic only; 0 of 200 unmarked bounds the per-source rate only below about 1.5%);
+  - resistance to adaptive, learned or regeneration attacks not in the protocol;
+  - ownership, authorship or permission;
+  - any result across hosts.
+
 ## Proposed UC-8: find reused passages in prose
 
 **Status: proposed, awaiting the owner's acceptance of this wording (roadmap gate TXT.0).** The owner approved text as a profile target on 2026-11-22. This entry is not counted in the capability index below until accepted.
@@ -134,7 +194,7 @@ The capabilities are UC-1…UC-6, the walkthroughs W-1 and W-2, and one row per 
 - `grep -cE '^\| UC-[0-9] — ' docs/use-cases.md` gives 5, `grep -c '^\*\*UC-6' docs/use-cases.md` gives 1, and the two walkthroughs ("For embedding:", "For extracted matching:") give 2: 8 in total.
 - `grep -n '^## ' docs/implementation-patterns.md` lists 6 headings; excluding "Example matrix" leaves 5.
 
-**Count: 13 capabilities.** `grep -cE '^\| (UC|W|H)-[0-9]+ [A-Z"]' docs/use-cases.md` counts the index rows below and gives 13. Input, output and limit are abbreviated from the two documents; each H row's plan sits at the end of its section in implementation patterns.
+**Count: 13 capabilities for M0.1.** UC-7 was accepted on 2026-11-23, after M0.1 closed. It is indexed below but is outside M0.1's fixed list, so `grep -cE '^\| (UC|W|H)-[0-9]+ [A-Z"]' docs/use-cases.md` now counts 14 index rows: the 13 M0.1 capabilities plus UC-7. Input, output and limit are abbreviated from the two documents; each H row's plan sits at the end of its section in implementation patterns.
 
 | Capability | Input | Observable output | Limit | Plan | Gate IDs |
 | --- | --- | --- | --- | --- | --- |
@@ -144,6 +204,7 @@ The capabilities are UC-1…UC-6, the walkthroughs W-1 and W-2, and one row per 
 | UC-4 Check a received evidence packet | Payload, subject digest, signer, time evidence, optional reference | Separate verdicts with reasons and localized evidence | Valid signature on false assertion; missing private material | [plan](#uc-4-verification-plan) | M2.1, M4.1, M4.3, M4.4, M4.5 |
 | UC-5 Assess transformations | Recorded transformations, positives, unrelated and same-task controls | Held-out detection and false-alarm report with failures and costs | Only the tested profile, corpus and pipeline | [plan](#uc-5-verification-plan) | M2.3, M3.0–M3.6 |
 | UC-6 Recognize distributed content | Original bytes, authorized to modify; profile; private mark record | Marked output, validation, localized detection evidence or insufficient evidence | No scheme or survival guarantee selected; not ownership | [plan](#uc-6-verification-plan) | M2E.0–M2E.7, SYN.1–SYN.5 |
+| UC-7 Recognize a marked image | Image the creator may modify; private key and catalogue; pinned mark profile | Detection record: statistic m of n, threshold, search scope, outcome or abstention | Anyone can copy a mark without the key; a detection does not show who embedded it or that the candidate is the original; removal can erase it | [plan](#uc-7-verification-plan) | IMG.0–IMG.5 |
 | W-1 Embedding walkthrough | Synthetic reference, test mark, controls | Detection result per control | Recipe set by the research gate | [plan](#w-1-verification-plan) | M2E.1–M2E.5 |
 | W-2 Extracted-matching walkthrough | `reference.py`, `candidate.py`, `control.py` | Spans, control outcome, containment vs similarity | Files do not exist yet; permission is separate | [plan](#w-2-verification-plan) | M2.1, M2.2, M2.3, M2.5, M2.6, M5.3 |
 | H-1 "Embed and detect as an explicit pair" | Original bytes, mark, profile/config, secret | Marked bytes, private record; detection evidence | Transplantation survives crypto checks; algorithm undecided | [plan](implementation-patterns.md) | M2E.4, M2E.5, M2E.7 |
