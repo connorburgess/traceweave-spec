@@ -1,0 +1,322 @@
+[
+ {
+  "why": "unknown profile python-tokens",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHl0aG9uLXRva2VucyIsInByb2ZpbGVWZXJzaW9uIjoiZHJhZnQtMSIsImNoYW5uZWxzIjpbImV4YWN0Iiwibm9ybWFsaXplZCJdLCJrIjo1LCJ3aW5kb3ciOjQsImhhc2giOiJzaGEyNTYtZmlyc3Q4LXU2NGJlIiwibWF4SW5wdXRCeXRlcyI6MTA0ODU3Nn0K",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "731b4f15573f06b220fc19ba073cf6adc0d3cd0e982abdec7f6750188dc6e795",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "unknown profile py3-tokens",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHkzLXRva2VucyIsInByb2ZpbGVWZXJzaW9uIjoiZHJhZnQtMSIsImNoYW5uZWxzIjpbImV4YWN0Iiwibm9ybWFsaXplZCJdLCJrIjo1LCJ3aW5kb3ciOjQsImhhc2giOiJzaGEyNTYtZmlyc3Q4LXU2NGJlIiwibWF4SW5wdXRCeXRlcyI6MTA0ODU3Nn0K",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "3351bc5d1a224f39299613265b9544353a29ff0c88fd649a92f15a95406bb6e6",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "unknown profile version draft-2",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHktdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0yIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo=",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "5c314b05dd284d59c3c46445e459ad536c2631f6d457b055f7359e077fbc153f",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "profile id is not versioned by interpreter (py314-tokens)",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHkzMTQtdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo=",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "fca47e888d300f4f4f8f607fe0acc2f89806b6848ec32de34781ca528385294e",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "uppercase profile",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoiUFktdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo=",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "13c75ab82b034ddb84e90e4e42f822958199b14e7f45b0d38d9bbe60e3950992",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "ts profile id is not implemented by a Python-only implementation",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoidHMtdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0yIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo=",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "aeeed14177cd3be8fea69e453c825e74f2fd301d03babbf49329bde0cc4754de",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "no trailing LF",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHktdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQ==",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "37d6430c1429c86dea481143831a1a57e68f794abadf48d7ca85977b38419a87",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "CRLF line end",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHktdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQ0K",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "bedbb6215d3b898a08622be3bf7a3d630ae6381f9851f238a7739170cc289e44",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "space after colon",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHktdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOiA1LCJ3aW5kb3ciOjQsImhhc2giOiJzaGEyNTYtZmlyc3Q4LXU2NGJlIiwibWF4SW5wdXRCeXRlcyI6MTA0ODU3Nn0K",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "3f843a500c91b67a58c1a1ffc333fd6b8bc3dc062fa1b5b0caad47cc6c6ffe37",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "keys reordered",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHktdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sIndpbmRvdyI6NCwiayI6NSwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo=",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "7982d73ccb203d9e2fe90bb5ed684cc0d6d7f7b9b62db4abba10c7e490012f67",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "channels reversed",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHktdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsibm9ybWFsaXplZCIsImV4YWN0Il0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo=",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "7ed927f0942462a33b94d7bdcc236f26057da905eef763e21a50be5a1dc26f2d",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "exact channel only",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHktdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiXSwiayI6NSwid2luZG93Ijo0LCJoYXNoIjoic2hhMjU2LWZpcnN0OC11NjRiZSIsIm1heElucHV0Qnl0ZXMiOjEwNDg1NzZ9Cg==",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "c788a2cb83ba22ca77e4f019e11934709082dd297b899d71607d5b438bc185a4",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "k zero",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHktdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjAsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjoxMDQ4NTc2fQo=",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "aecb6bfc4bd0f2cf51a0f3364d758088133b386258d5b59d1d818b3d6ed867c5",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "k above the contract bound 16",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHktdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjE3LCJ3aW5kb3ciOjQsImhhc2giOiJzaGEyNTYtZmlyc3Q4LXU2NGJlIiwibWF4SW5wdXRCeXRlcyI6MTA0ODU3Nn0K",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "c21f6e8d4d9f0c87f752031e91bc9335a6a9929ed704ba611a0d01eb28091034",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "window above the contract bound 128",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHktdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6MTI5LCJoYXNoIjoic2hhMjU2LWZpcnN0OC11NjRiZSIsIm1heElucHV0Qnl0ZXMiOjEwNDg1NzZ9Cg==",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "eda218dce95729ccd0d5a4fb809ea8e2dfdda5a1a36348d078cf636436413a7f",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "maxInputBytes above the contract bound 8388608",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHktdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJtYXhJbnB1dEJ5dGVzIjo4Mzg4NjA5fQo=",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "5924ec3b7d029f26469b1078be2a0f3a4d4de60906458bf01c51cdc0cdb8aef9",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "duplicate profile key",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHktdG9rZW5zIiwicHJvZmlsZSI6InB5LXRva2VucyIsInByb2ZpbGVWZXJzaW9uIjoiZHJhZnQtMSIsImNoYW5uZWxzIjpbImV4YWN0Iiwibm9ybWFsaXplZCJdLCJrIjo1LCJ3aW5kb3ciOjQsImhhc2giOiJzaGEyNTYtZmlyc3Q4LXU2NGJlIiwibWF4SW5wdXRCeXRlcyI6MTA0ODU3Nn0K",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "830b748be02e22041d3a95a483d54b8bb413d25395843864c063ee9f3e5251e6",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "escaped profile string",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHlcdTAwMmR0b2tlbnMiLCJwcm9maWxlVmVyc2lvbiI6ImRyYWZ0LTEiLCJjaGFubmVscyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwiayI6NSwid2luZG93Ijo0LCJoYXNoIjoic2hhMjU2LWZpcnN0OC11NjRiZSIsIm1heElucHV0Qnl0ZXMiOjEwNDg1NzZ9Cg==",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "384b19481425c1571733244545b1431678c7091575b642be71b89098bf3b0e81",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "float k",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHktdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUuMCwid2luZG93Ijo0LCJoYXNoIjoic2hhMjU2LWZpcnN0OC11NjRiZSIsIm1heElucHV0Qnl0ZXMiOjEwNDg1NzZ9Cg==",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "069fdbf6da58febb9869334289c760453cff7bf2a1ad54c5d02941cb59edca6a",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ },
+ {
+  "why": "normalizedExclusions is not a configuration key",
+  "configBase64": "eyJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJwcm9maWxlIjoicHktdG9rZW5zIiwicHJvZmlsZVZlcnNpb24iOiJkcmFmdC0xIiwiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImsiOjUsIndpbmRvdyI6NCwiaGFzaCI6InNoYTI1Ni1maXJzdDgtdTY0YmUiLCJub3JtYWxpemVkRXhjbHVzaW9ucyI6W10sIm1heElucHV0Qnl0ZXMiOjEwNDg1NzZ9Cg==",
+  "expectedResult": {
+   "status": "error",
+   "error": {
+    "code": "unsupported-config",
+    "offset": null
+   },
+   "profile": null,
+   "profileVersion": null,
+   "configSha256": "84380722578bdab8f02098003e3a660309b5e2dc6b13108a89d8f137617515aa",
+   "inputSha256": null,
+   "inputLength": null
+  }
+ }
+]

@@ -1,0 +1,242 @@
+{
+ "contract": "traceweave-token-winnow-draft-1",
+ "profile": "py-tokens",
+ "profileVersion": "draft-1",
+ "configFile": "config-py-limit16.json",
+ "configSha256": "02dd6c5790677df8175faada9fdb938613e26dc6ed886ec597fc642aea64c562",
+ "k": 5,
+ "window": 4,
+ "normalizedExclusions": [],
+ "lexingCheck": "Token streams are hand-derived (harness/vector_sources.py); check_vectors.py re-lexes every input with pylex.py and checks layout, keyword, operator, number and prefix rules on the recorded stream; harness/crosscheck.py compares them with the CPython 3.14.6 tokenizer.",
+ "vectors": [
+  {
+   "id": "py-limit-exact",
+   "derivation": "hand",
+   "tags": [
+    "limits"
+   ],
+   "description": "Exactly maxInputBytes (16): accepted.",
+   "inputBase64": "YSA9IGJiICsgY2NjCmRkCg==",
+   "inputText": "a = bb + ccc\ndd\n",
+   "pairedRejection": "py-limit-over",
+   "result": {
+    "status": "ok",
+    "tokenCount": 8,
+    "tokens": [
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       0,
+       1
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       2,
+       3
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "bb",
+      "span": [
+       4,
+       6
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "+",
+      "span": [
+       7,
+       8
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "ccc",
+      "span": [
+       9,
+       12
+      ]
+     },
+     {
+      "class": "newline",
+      "text": "",
+      "span": [
+       12,
+       12
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "dd",
+      "span": [
+       13,
+       15
+      ]
+     },
+     {
+      "class": "newline",
+      "text": "",
+      "span": [
+       15,
+       15
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "07d081fe7e057237",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "a79750bf13d405d6",
+        "span": [
+         2,
+         12
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "f5ef249730cf7aaa",
+        "span": [
+         4,
+         15
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "612ba12f7e1d61ff",
+        "span": [
+         7,
+         15
+        ]
+       }
+      ],
+      "windowSelections": [
+       0
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 0,
+        "hash": "07d081fe7e057237",
+        "span": [
+         0,
+         12
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "",
+       "=",
+       "",
+       "+",
+       "",
+       "",
+       "",
+       ""
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "65bc508c588b3fda",
+        "span": [
+         0,
+         12
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "345b513d79eec962",
+        "span": [
+         2,
+         12
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "93b656c24d182961",
+        "span": [
+         4,
+         15
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "3431870fdced4f04",
+        "span": [
+         7,
+         15
+        ]
+       }
+      ],
+      "windowSelections": [
+       3
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "3431870fdced4f04",
+        "span": [
+         7,
+         15
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "py-limit-over",
+   "derivation": "hand",
+   "tags": [
+    "limits",
+    "error"
+   ],
+   "description": "17 bytes with maxInputBytes 16: input-too-large at offset 0.",
+   "inputBase64": "YSA9IGJiICsgY2NjCmRkZAo=",
+   "inputText": "a = bb + ccc\nddd\n",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "input-too-large",
+     "offset": 0
+    }
+   }
+  },
+  {
+   "id": "py-limit-over-bom",
+   "derivation": "hand",
+   "tags": [
+    "limits",
+    "error"
+   ],
+   "description": "Size is checked before the BOM: input-too-large, not bom.",
+   "inputBase64": "77u/YSA9IGJiICsgY2NjCmQK",
+   "inputText": "﻿a = bb + ccc\nd\n",
+   "result": {
+    "status": "error",
+    "error": {
+     "code": "input-too-large",
+     "offset": 0
+    }
+   }
+  }
+ ]
+}
