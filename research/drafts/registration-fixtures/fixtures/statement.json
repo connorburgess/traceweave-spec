@@ -1,0 +1,55 @@
+{
+  "fixture": {
+    "kind": "statement",
+    "description": "The registration statement (in-toto Statement v1) before signing.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "artifacts": [
+      {
+        "subjectIndex": 0,
+        "source": "test-vectors/matching/extraction-go.json#mv-go-sum"
+      }
+    ]
+  },
+  "object": {
+    "_type": "https://in-toto.io/Statement/v1",
+    "subject": [
+      {
+        "name": "sum.go",
+        "digest": {
+          "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"
+        }
+      }
+    ],
+    "predicateType": "https://traceweave.org/predicate/registration/draft-1",
+    "predicate": {
+      "registrationVersion": "traceweave-registration-draft-1",
+      "contentKind": "source-code",
+      "nonce": "c57514cd00910af4afb8443d3231c97e89633d05035541aaa1ef4a404350a7ac",
+      "possession": [
+        {
+          "subjectIndex": 0,
+          "scheme": "sha256-salted-possession-v1",
+          "sha256": "f41b8dfc913ee5ab54371511d7da0e18070fa288bce51cc509e60cb679a54a99"
+        }
+      ],
+      "catalogue": {
+        "scheme": "sha256-salted-catalogue-v1",
+        "sha256": "c14fcf64af000f887f37234bb0d39437ccf80ba9bd6d07216ba5fea82b633b15",
+        "profile": {
+          "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+          "id": "go-tokens",
+          "version": "draft-1"
+        }
+      },
+      "implementation": {
+        "name": "build_fixtures.py",
+        "version": "draft-1",
+        "commit": "0000000000000000000000000000000000000000"
+      },
+      "specCommit": "0000000000000000000000000000000000000000",
+      "claims": {
+        "createdAt": "2026-11-20T09:00:00Z"
+      }
+    }
+  }
+}

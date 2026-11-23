@@ -1,0 +1,31 @@
+{
+  "fixture": {
+    "kind": "evidence",
+    "description": "Placeholder presented as a real token.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "bundle": "fixtures/bundle-two-roots.json",
+    "expect": {
+      "code": "placeholder-unlabelled"
+    }
+  },
+  "object": {
+    "evidenceVersion": "traceweave-time-evidence-draft-1",
+    "type": "rfc3161",
+    "placeholder": true,
+    "notice": "RFC 3161 time-stamp token issued by the TSA.",
+    "target": {
+      "kind": "dsse-signature",
+      "signatureIndex": 0,
+      "sha256": "91b0dacf9f52a6ee3c1921f75a659f5b7857ca252f5abf6017cf8e8071f45bfc"
+    },
+    "root": {
+      "kind": "tsa-certificate-chain",
+      "id": "placeholder-tsa-a"
+    },
+    "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT",
+    "statedTime": {
+      "genTime": "2026-11-23T10:00:00Z",
+      "accuracySeconds": 1
+    }
+  }
+}

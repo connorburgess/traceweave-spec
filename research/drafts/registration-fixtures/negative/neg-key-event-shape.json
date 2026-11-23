@@ -1,0 +1,54 @@
+{
+  "fixture": {
+    "kind": "key-event",
+    "description": "Rotation without naming the successor key.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "expect": {
+      "code": "key-event-shape"
+    }
+  },
+  "object": {
+    "bundleVersion": "traceweave-registration-bundle-draft-1",
+    "envelope": {
+      "payloadType": "application/vnd.in-toto+json",
+      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiZXZlbnQiOiJyb3RhdGVkIiwiZXZlbnRWZXJzaW9uIjoidHJhY2V3ZWF2ZS1rZXktZXZlbnQtZHJhZnQtMSIsImtleWlkIjoiY2Q3NmQ2YzZiNGJiNTBhYiJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUva2V5LWV2ZW50L2RyYWZ0LTEiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiY2Q3NmQ2YzZiNGJiNTBhYjgyNzlhNTg5MDY1ZDUwM2VjOWU1MDkwMGM1Y2UzYmNhM2RlYTcxYjNjZGYwZjBlYyJ9LCJuYW1lIjoia2V5In1dfQ==",
+      "signatures": [
+        {
+          "keyid": "cd76d6c6b4bb50ab",
+          "sig": "E7zyJEircytjDPjTvdhGiAKq6tbXkmRG/gfJf4Qga9A/F7baauX/M+smELTfTYsPAMhtQ8KoQqFG72Azt0QMBQ=="
+        }
+      ]
+    },
+    "verificationMaterial": {
+      "publicKeys": [
+        {
+          "keyid": "cd76d6c6b4bb50ab",
+          "alg": "ed25519",
+          "publicKeyHex": "dfb5f64a7aa2a2519c091c93088912cdaa4e6663a607e4a22d302a37b562ffd6"
+        }
+      ]
+    },
+    "timeEvidence": [
+      {
+        "evidenceVersion": "traceweave-time-evidence-draft-1",
+        "type": "rfc3161",
+        "placeholder": true,
+        "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+        "target": {
+          "kind": "dsse-signature",
+          "signatureIndex": 0,
+          "sha256": "44685d7e52bb9bc0ecbec8ef21ae0019696261512fa52d1f46e516237b841e62"
+        },
+        "root": {
+          "kind": "tsa-certificate-chain",
+          "id": "placeholder-tsa-a"
+        },
+        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT",
+        "statedTime": {
+          "genTime": "2026-11-23T10:00:00Z",
+          "accuracySeconds": 1
+        }
+      }
+    ]
+  }
+}

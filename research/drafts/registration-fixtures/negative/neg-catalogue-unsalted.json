@@ -1,0 +1,97 @@
+{
+  "fixture": {
+    "kind": "bundle",
+    "description": "Publishes the plain catalogue digest, which confirms a guessed catalogue.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "artifacts": [
+      {
+        "subjectIndex": 0,
+        "source": "test-vectors/matching/extraction-go.json#mv-go-sum"
+      }
+    ],
+    "expect": {
+      "code": "catalogue-unsalted"
+    }
+  },
+  "object": {
+    "bundleVersion": "traceweave-registration-bundle-draft-1",
+    "envelope": {
+      "payloadType": "application/vnd.in-toto+json",
+      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2F0YWxvZ3VlIjp7InByb2ZpbGUiOnsiY29uZmlnU2hhMjU2IjoiZGZiYzVmZTM1MTdlOWRhNjUxODljZjJlZjMyYzQ2NTViNWVjNjYyNDQxZjJlNzFmNTA4NTQzYTBhNWM4ZjdiMiIsImlkIjoiZ28tdG9rZW5zIiwidmVyc2lvbiI6ImRyYWZ0LTEifSwic2NoZW1lIjoic2hhMjU2Iiwic2hhMjU2IjoiYjAzNTUwMTBjMTViM2ZmZmZlM2MyYjY4NzRkZDBmNjg1MjM2MWE5Nzc0NjA0YzgxNDRhZjFiN2ExMjJkZWJjYSJ9LCJjbGFpbXMiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0yMFQwOTowMDowMFoifSwiY29udGVudEtpbmQiOiJzb3VyY2UtY29kZSIsImltcGxlbWVudGF0aW9uIjp7ImNvbW1pdCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJuYW1lIjoiYnVpbGRfZml4dHVyZXMucHkiLCJ2ZXJzaW9uIjoiZHJhZnQtMSJ9LCJub25jZSI6ImM1NzUxNGNkMDA5MTBhZjRhZmI4NDQzZDMyMzFjOTdlODk2MzNkMDUwMzU1NDFhYWExZWY0YTQwNDM1MGE3YWMiLCJwb3NzZXNzaW9uIjpbeyJzY2hlbWUiOiJzaGEyNTYtc2FsdGVkLXBvc3Nlc3Npb24tdjEiLCJzaGEyNTYiOiJmNDFiOGRmYzkxM2VlNWFiNTQzNzE1MTFkN2RhMGUxODA3MGZhMjg4YmNlNTFjYzUwOWU2MGNiNjc5YTU0YTk5Iiwic3ViamVjdEluZGV4IjowfV0sInJlZ2lzdHJhdGlvblZlcnNpb24iOiJ0cmFjZXdlYXZlLXJlZ2lzdHJhdGlvbi1kcmFmdC0xIiwic3BlY0NvbW1pdCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAifSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vdHJhY2V3ZWF2ZS5vcmcvcHJlZGljYXRlL3JlZ2lzdHJhdGlvbi9kcmFmdC0xIiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6Ijk3NGM4ZDBhZDE0NGMzYzM5ZTlmMWNlNDEwNzQwZjQ0OWY2MjNiZmZkMjljNzUwZThlZDNiZDY4NjQwYjY5N2MifSwibmFtZSI6InN1bS5nbyJ9XX0=",
+      "signatures": [
+        {
+          "keyid": "cd76d6c6b4bb50ab",
+          "sig": "KqDP6JR5dIb4BNz3LokaMIjn0H4jmNLE0hxjov4o/AT3P6OgNgTGN/9GoaU4+l5b0iZN8ZeTrkLxFmOnw8BoBQ=="
+        }
+      ]
+    },
+    "verificationMaterial": {
+      "publicKeys": [
+        {
+          "keyid": "cd76d6c6b4bb50ab",
+          "alg": "ed25519",
+          "publicKeyHex": "dfb5f64a7aa2a2519c091c93088912cdaa4e6663a607e4a22d302a37b562ffd6"
+        }
+      ]
+    },
+    "timeEvidence": [
+      {
+        "evidenceVersion": "traceweave-time-evidence-draft-1",
+        "type": "rfc3161",
+        "placeholder": true,
+        "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+        "target": {
+          "kind": "dsse-signature",
+          "signatureIndex": 0,
+          "sha256": "3377edd6f2afe6c8758e1d4c97bc99776cfcadfcff79ac001b4edaaf2308ffbc"
+        },
+        "root": {
+          "kind": "tsa-certificate-chain",
+          "id": "placeholder-tsa-a"
+        },
+        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT",
+        "statedTime": {
+          "genTime": "2026-11-23T10:00:00Z",
+          "accuracySeconds": 1
+        }
+      },
+      {
+        "evidenceVersion": "traceweave-time-evidence-draft-1",
+        "type": "opentimestamps",
+        "placeholder": true,
+        "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+        "target": {
+          "kind": "dsse-signature",
+          "signatureIndex": 0,
+          "sha256": "3377edd6f2afe6c8758e1d4c97bc99776cfcadfcff79ac001b4edaaf2308ffbc"
+        },
+        "root": {
+          "kind": "bitcoin-proof-of-work",
+          "id": "bitcoin-mainnet"
+        },
+        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT",
+        "status": "complete",
+        "statedTime": {
+          "blockTime": "2026-11-23T11:12:00Z"
+        }
+      },
+      {
+        "evidenceVersion": "traceweave-time-evidence-draft-1",
+        "type": "rekor-v2",
+        "placeholder": true,
+        "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+        "target": {
+          "kind": "dsse-signature",
+          "signatureIndex": 0,
+          "sha256": "3377edd6f2afe6c8758e1d4c97bc99776cfcadfcff79ac001b4edaaf2308ffbc"
+        },
+        "root": {
+          "kind": "log-key",
+          "id": "placeholder-log-2026"
+        },
+        "token": "PLACEHOLDER-NOT-A-REKOR-V2-OBJECT",
+        "logIndex": 0
+      }
+    ]
+  }
+}

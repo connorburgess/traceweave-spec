@@ -1,0 +1,25 @@
+{
+  "fixture": {
+    "kind": "evidence",
+    "description": "OpenTimestamps proof before upgrade: calendar commitments only, so no time.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "bundle": "fixtures/bundle-two-roots.json"
+  },
+  "object": {
+    "evidenceVersion": "traceweave-time-evidence-draft-1",
+    "type": "opentimestamps",
+    "placeholder": true,
+    "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+    "target": {
+      "kind": "dsse-signature",
+      "signatureIndex": 0,
+      "sha256": "91b0dacf9f52a6ee3c1921f75a659f5b7857ca252f5abf6017cf8e8071f45bfc"
+    },
+    "root": {
+      "kind": "bitcoin-proof-of-work",
+      "id": "bitcoin-mainnet"
+    },
+    "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT",
+    "status": "pending"
+  }
+}

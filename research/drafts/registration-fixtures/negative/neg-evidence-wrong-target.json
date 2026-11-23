@@ -1,0 +1,31 @@
+{
+  "fixture": {
+    "kind": "evidence",
+    "description": "Token over the statement bytes, not over the signature it claims to cover.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "bundle": "fixtures/bundle-two-roots.json",
+    "expect": {
+      "code": "evidence-wrong-target"
+    }
+  },
+  "object": {
+    "evidenceVersion": "traceweave-time-evidence-draft-1",
+    "type": "rfc3161",
+    "placeholder": true,
+    "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+    "target": {
+      "kind": "dsse-signature",
+      "signatureIndex": 0,
+      "sha256": "cae2bc522355bfcf37f0307ed71b3893e90ff3b9543b28fed5cfb7d76258a214"
+    },
+    "root": {
+      "kind": "tsa-certificate-chain",
+      "id": "placeholder-tsa-a"
+    },
+    "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT",
+    "statedTime": {
+      "genTime": "2026-11-23T10:00:00Z",
+      "accuracySeconds": 1
+    }
+  }
+}

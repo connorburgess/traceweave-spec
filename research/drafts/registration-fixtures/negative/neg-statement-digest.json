@@ -1,0 +1,40 @@
+{
+  "fixture": {
+    "kind": "report-link",
+    "description": "The link names a different statement.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "expect": {
+      "code": "statement-digest"
+    }
+  },
+  "object": {
+    "linkVersion": "traceweave-registration-link-draft-1",
+    "report": {
+      "path": "test-vectors/matching/example-report.json",
+      "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
+    },
+    "registration": {
+      "bundle": "fixtures/bundle-two-roots.json",
+      "statementSha256": "322d9892eafcbde49b1d108276c3cc3b6864d3eced99361353f589bb4a1e73c3"
+    },
+    "links": [
+      {
+        "pair": 0,
+        "role": "reference",
+        "subjectIndex": 0,
+        "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"
+      }
+    ],
+    "catalogueOpening": {
+      "catalogue": "test-vectors/matching/matching.json#/vectors/1/reference/canonical",
+      "nonceHex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f"
+    },
+    "notShown": [
+      "authorship",
+      "originality",
+      "first-creation",
+      "ownership",
+      "permission"
+    ]
+  }
+}
