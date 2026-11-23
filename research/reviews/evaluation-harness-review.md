@@ -154,3 +154,38 @@ Then, with `TRACEWEAVE_EVAL_DIR=~/traceweave-eval` and the git environment from 
 **Verdict: remaining blocking items.** Before the pilot: (1) a per-reference-file check sample, or batches of only the checked pairs, with an honest estimate (a §5.3/§5.5 change); (2) reference-batch splitting; (3) about 65 GB free. Before the freeze: (4) refuse the verdict unless every body is re-checked; (5) the freeze checks that pilot, suppression and tuning used the acquisition lexing commit; (6) record each fallback file's repository and SHA-256 and check it is fold S; (7) verify materialized bytes at every read; (8) align with draft-7. Acquisition may start after (8) and once the disk is freed.
 
 **Sequence.** The **operator** (a non-author of the harness) builds both binaries with `tools/stamped-build` and `go/tools/stampbuild` from one clean commit C, then runs `acquire`, `licence-recheck` (exit 1 needs owner re-approval), `eligibility` and `group-split`, committing after each. A **non-author** runs `verify_manifest.py` and `shasum -c` (M3.2). **Operator:** `pilot`, then a **non-author** checks the branch and the reduction. **Spec author:** fills in the digest at the final draft. **Operator:** `generate-cases` (tuning), `build-suppression`, `tune`, then `freeze` with the labellers the **coordinator** names, committing `tuning-table.json` and `freeze.json` together; then `generate-cases` (held-out), `heldout-run` and `counts` as one commit; then `ancestry` and `m36-verdict --record` with the bodies reachable, committing `verdict.json`. The **labellers** label after `alarm-audit items`, and the operator commits `alarm-audit record`. A **second person** runs `reproduce` in a clean clone with a fresh root (M3.5).
+
+
+## Confirmation pass 2 (i3-eval 75b84eb; protocol text at e3bac86, draft-7)
+
+**Method.** Scratch only, about 12–13 GB free, with the margin lowered to 9 GB for the synthetic runs. Binaries: stamped e41f200 (X), stamped 75b84eb (for N3) and stamped 6d35308 (for main).
+
+**Claims.**
+- **Resolved:** direct check of exactly the selected pairs, one compare per checked reference file and configuration, with a pair-count check (`twe/grid.py:116-146`). The freeze checks the checked count against the ids, which caught N5. Measured over estimated on my run: tuning 341/373 s (0.91), held-out 13/29 s (0.45); re-verification against blob ids at every stage that reads (`twe/state.py:38-49`; N1 is now caught at acquisition); the verdict exits 2 without the bodies unless `--bodies-unavailable` is given (`m36-verdict.py:13,120,144`; checked: an empty root gives one error per missing body); the binary commit of every stage is checked (`freeze.py:108-112`; N3 is caught at the pilot); fallback provenance (`freeze.py:124-130`; N2 is caught by the builder); a relocated root is resolved through symlinks (`twe/common.py:154,170`).
+- **Not resolved:** batching (`twe/batching.py:49-73`) assembles chunks without checking that the body holds exactly references × candidates distinct pairs (N4).
+- **Disk claim** (2–5.5 GB, about 26 GB free): consistent with the README's stage table; not measured on data. **This machine has 12–13 GB free, which is not enough.**
+- **Version lag:** the harness says `m3-eval-draft-7` (`twe/common.py:17`), but roadmap-v2 is now **draft-8** (a405f67). Draft-8 rules the 75b84eb behaviour and adds a 10 GB minimum margin, so the harness needs a version bump. Draft-8 also says the unbatched held-out caching check "is what checks batching", but that check covers positive cases only, while N4 is in negative searches.
+
+**My corpus, end to end.** Every predicted count matched again: 4 findings; the acquired manifest valid; branch 288; `k5-w4-m6-T2` by rule 2; A = 4 of 12 (the copy in exact and normalized, the near-duplicate in normalized only), with all 12 bodies re-checked; symmetry 2 of the 2 predicted; 27 caching checks, 0 differences; 2 of 56 excluded per language; negative-result, exit 3.
+
+**Sabotages.**
+- **Caught:** S-a (abstentions not counted) at the start of tuning (exit 2: the two alarm rules disagree on fixed vectors); S-b (symmetry skipped) by the held-out run (exit 2); S-c and N2 (fold-E sources) by the builder (exit 1); N1 (CRLF) at acquisition (exit 1); N3 (binaries of another commit) at the pilot (exit 1).
+- **New, caught:** N5 (direct check selecting zero pairs in negative searches) at the freeze (exit 1: 240 checked, 324 selected).
+- **New, not caught: N4**, a batch boundary appending one pair, run with `--max-pairs-per-comparison 40` (24 tuning and 34 held-out batched comparisons). Compared negative pairs went from 1,093 to 1,131 per language, and `pairs.jsonl.gz` gained 76 duplicates, yet freeze, held-out run, counts and the verdict all passed (exit 3). A dropping variant could hide an alarm.
+
+**Main 6d35308.** The stamped binaries are read correctly and the unit tests pass (0 failures). Since e41f200 the CLIs changed only vendored test paths, so a rebase and binaries built there suffice. The published spec pin (`c06b214`) carries protocol draft-5, so `--protocol` and `--spec-repo` must name the spec commit that freezes the final draft, not the pin.
+
+**Cost on the real corpus.** Inputs: 22–48 ms per pair over 12 settings for both CLIs, and about 31 ms of process start per one-file compare (the pilot's `startMs`). Direct checks are about 110 reference files per fold-E search and 135 per fold-S search, each × configurations × 31 ms.
+
+| Stage | Estimate |
+| --- | --- |
+| Pilot | 7–12 h (outcome count 4–8.5 h, direct checks about 3 h) |
+| Tuning, 192 configurations | 12–17 h (comparisons 4.5–10 h, direct checks about 7 h) |
+| Tuning, 288 configurations | 15–20 h (direct checks about 10 h) |
+| Held-out | 1.5–17 h, depending on the frozen k (unbatched caching checks up to about 5.5 h at k 5) |
+
+The 24-hour rule should not trigger, and is close only at the top of the 288 range. The 3× abort should not fire, given ratios of 0.45–0.91.
+
+**Verdict: remaining blocking items.** (1) Before the pilot, in `twe/batching.py`, check that the assembled pairs equal the reference × candidate set with no duplicates, in every search, with N4 as a test. (2) Bump the harness to draft-8, with the 10 GB minimum. (3) Free about 26 GB on the run machine. Then acquisition and the pilot may start, on binaries built at the rebased commit.
+
+**Sequence (who commits).** The **operator** (not the harness author) builds both binaries with `tools/stamped-build` and `go/tools/stampbuild` at one clean commit C, then runs `acquire`, `licence-recheck` (exit 1 needs owner re-approval), `eligibility` and `group-split`, committing after each. A **non-author** runs `verify_manifest.py` and `shasum -a 256 -c eval/splits.tsv.sha256` (M3.2). **Operator:** `pilot`, then commit; a **non-author** checks the grid branch and the reduction. The **spec author** fills in the protocol digest at the final draft and commits. **Operator:** `generate-cases --namespace tuning` and `build-suppression`, committing each; `tune` (left uncommitted); then `freeze` with the labellers the **coordinator** names, committing `tuning-table.json` and `freeze.json` together. **Operator:** `generate-cases --namespace held-out`, `heldout-run` and `counts` as **one** commit; then `ancestry`, and `m36-verdict --record` with the bodies present; commit `verdict.json`. The **labellers** label after `alarm-audit items`; the operator commits `alarm-audit record`. A **second person** runs `reproduce` in a clean clone with a fresh root (M3.5).
