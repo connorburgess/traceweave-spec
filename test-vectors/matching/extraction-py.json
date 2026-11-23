@@ -1,0 +1,1705 @@
+{
+ "contract": "traceweave-token-winnow-draft-1",
+ "profile": "py-tokens",
+ "profileVersion": "draft-1",
+ "configFile": "config-py.json",
+ "configSha256": "365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c77b016",
+ "k": 5,
+ "window": 4,
+ "requiredCoverage": false,
+ "lexingCheck": "Verbatim copies of three vectors from the frozen py-tokens draft-1 vectors (research/drafts/extraction-vectors-python/py.json at 58c25a9), used as matching inputs; their token streams are checked by that profile's checker.",
+ "vectors": [
+  {
+   "id": "py-empty-span-fingerprint",
+   "derivation": "hand",
+   "tags": [
+    "indentation",
+    "eof",
+    "empty-span"
+   ],
+   "description": "Review L1: a file ending four blocks deep; the last k-gram is NEWLINE plus four DEDENTs with the empty span [35, 35), and it is a fingerprint.",
+   "inputBase64": "aWYgYToKIGlmIGI6CiAgaWYgYzoKICAgaWYgZDoKICAgIHg=",
+   "inputText": "if a:\n if b:\n  if c:\n   if d:\n    x",
+   "pairedRejection": "py-err-tab-dedent-alt",
+   "result": {
+    "status": "ok",
+    "tokenCount": 26,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "if",
+      "span": [
+       0,
+       2
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       3,
+       4
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       4,
+       5
+      ]
+     },
+     {
+      "class": "newline",
+      "text": "",
+      "span": [
+       5,
+       5
+      ]
+     },
+     {
+      "class": "indent",
+      "text": "",
+      "span": [
+       7,
+       7
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "if",
+      "span": [
+       7,
+       9
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "b",
+      "span": [
+       10,
+       11
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       11,
+       12
+      ]
+     },
+     {
+      "class": "newline",
+      "text": "",
+      "span": [
+       12,
+       12
+      ]
+     },
+     {
+      "class": "indent",
+      "text": "",
+      "span": [
+       15,
+       15
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "if",
+      "span": [
+       15,
+       17
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "c",
+      "span": [
+       18,
+       19
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       19,
+       20
+      ]
+     },
+     {
+      "class": "newline",
+      "text": "",
+      "span": [
+       20,
+       20
+      ]
+     },
+     {
+      "class": "indent",
+      "text": "",
+      "span": [
+       24,
+       24
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "if",
+      "span": [
+       24,
+       26
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "d",
+      "span": [
+       27,
+       28
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       28,
+       29
+      ]
+     },
+     {
+      "class": "newline",
+      "text": "",
+      "span": [
+       29,
+       29
+      ]
+     },
+     {
+      "class": "indent",
+      "text": "",
+      "span": [
+       34,
+       34
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "x",
+      "span": [
+       34,
+       35
+      ]
+     },
+     {
+      "class": "newline",
+      "text": "",
+      "span": [
+       35,
+       35
+      ]
+     },
+     {
+      "class": "dedent",
+      "text": "",
+      "span": [
+       35,
+       35
+      ]
+     },
+     {
+      "class": "dedent",
+      "text": "",
+      "span": [
+       35,
+       35
+      ]
+     },
+     {
+      "class": "dedent",
+      "text": "",
+      "span": [
+       35,
+       35
+      ]
+     },
+     {
+      "class": "dedent",
+      "text": "",
+      "span": [
+       35,
+       35
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "19235cbc451104b6",
+        "span": [
+         0,
+         7
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "a6c2090ea2d473cd",
+        "span": [
+         3,
+         9
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "c08f9dc31ebcb9e5",
+        "span": [
+         4,
+         11
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "91d4491583062b7b",
+        "span": [
+         5,
+         12
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "caefc6c788ff940c",
+        "span": [
+         7,
+         12
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "8e53061d887f49c5",
+        "span": [
+         7,
+         15
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "004bceac078c2184",
+        "span": [
+         10,
+         17
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "4063f56effb56e0e",
+        "span": [
+         11,
+         19
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "98d48321cdef7463",
+        "span": [
+         12,
+         20
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "2f10c4f4533f0394",
+        "span": [
+         15,
+         20
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "8290018f6cb46724",
+        "span": [
+         15,
+         24
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "05cf26df40a9a383",
+        "span": [
+         18,
+         26
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "e7f6a166a68142c5",
+        "span": [
+         19,
+         28
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "f0e414604c97d6e8",
+        "span": [
+         20,
+         29
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "b852643117d5c2c8",
+        "span": [
+         24,
+         29
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "845c3d6b4220830e",
+        "span": [
+         24,
+         34
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "d2b6d074410c2071",
+        "span": [
+         27,
+         35
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "012104c5e7442fe6",
+        "span": [
+         28,
+         35
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "a41a85d58632ec31",
+        "span": [
+         29,
+         35
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "4dd0847ab3d4db2a",
+        "span": [
+         34,
+         35
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "2140f9ec49302343",
+        "span": [
+         34,
+         35
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "14443fa60c4a7419",
+        "span": [
+         35,
+         35
+        ]
+       }
+      ],
+      "windowSelections": [
+       0,
+       3,
+       5,
+       6,
+       6,
+       6,
+       6,
+       9,
+       11,
+       11,
+       11,
+       11,
+       15,
+       15,
+       17,
+       17,
+       17,
+       17,
+       21
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 0,
+        "hash": "19235cbc451104b6",
+        "span": [
+         0,
+         7
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "91d4491583062b7b",
+        "span": [
+         5,
+         12
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "8e53061d887f49c5",
+        "span": [
+         7,
+         15
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "004bceac078c2184",
+        "span": [
+         10,
+         17
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "2f10c4f4533f0394",
+        "span": [
+         15,
+         20
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "05cf26df40a9a383",
+        "span": [
+         18,
+         26
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "845c3d6b4220830e",
+        "span": [
+         24,
+         34
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "012104c5e7442fe6",
+        "span": [
+         28,
+         35
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "14443fa60c4a7419",
+        "span": [
+         35,
+         35
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "if",
+       "",
+       ":",
+       "",
+       "",
+       "if",
+       "",
+       ":",
+       "",
+       "",
+       "if",
+       "",
+       ":",
+       "",
+       "",
+       "if",
+       "",
+       ":",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       ""
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "cf1ae3f79e2cb20c",
+        "span": [
+         0,
+         7
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "5aea346ff77d842b",
+        "span": [
+         3,
+         9
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "7b19900135cb65d8",
+        "span": [
+         4,
+         11
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "0a6d5e11d194edde",
+        "span": [
+         5,
+         12
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "01f3952281ed4b46",
+        "span": [
+         7,
+         12
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "cf1ae3f79e2cb20c",
+        "span": [
+         7,
+         15
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "5aea346ff77d842b",
+        "span": [
+         10,
+         17
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "7b19900135cb65d8",
+        "span": [
+         11,
+         19
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "0a6d5e11d194edde",
+        "span": [
+         12,
+         20
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "01f3952281ed4b46",
+        "span": [
+         15,
+         20
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "cf1ae3f79e2cb20c",
+        "span": [
+         15,
+         24
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "5aea346ff77d842b",
+        "span": [
+         18,
+         26
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "7b19900135cb65d8",
+        "span": [
+         19,
+         28
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "0a6d5e11d194edde",
+        "span": [
+         20,
+         29
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "01f3952281ed4b46",
+        "span": [
+         24,
+         29
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "cf1ae3f79e2cb20c",
+        "span": [
+         24,
+         34
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "87df20d7dfd852be",
+        "span": [
+         27,
+         35
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "b9566b0bfafcfe9d",
+        "span": [
+         28,
+         35
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "611201e4bd168a9d",
+        "span": [
+         29,
+         35
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "a8b3c16c01964d11",
+        "span": [
+         34,
+         35
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "8175c15868f4985e",
+        "span": [
+         34,
+         35
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "f186f9e16f9c9dd1",
+        "span": [
+         35,
+         35
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       4,
+       4,
+       4,
+       4,
+       8,
+       9,
+       9,
+       9,
+       9,
+       13,
+       14,
+       14,
+       14,
+       14,
+       18,
+       18,
+       18,
+       18
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "0a6d5e11d194edde",
+        "span": [
+         5,
+         12
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "01f3952281ed4b46",
+        "span": [
+         7,
+         12
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "0a6d5e11d194edde",
+        "span": [
+         12,
+         20
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "01f3952281ed4b46",
+        "span": [
+         15,
+         20
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "0a6d5e11d194edde",
+        "span": [
+         20,
+         29
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "01f3952281ed4b46",
+        "span": [
+         24,
+         29
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "611201e4bd168a9d",
+        "span": [
+         29,
+         35
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "py-format-a",
+   "derivation": "hand",
+   "tags": [
+    "format-pair"
+   ],
+   "description": "Comment/whitespace pair, plain layout.",
+   "inputBase64": "ZGVmIGYoYSwgYik6CiAgICByZXR1cm4gYSArIGIK",
+   "inputText": "def f(a, b):\n    return a + b\n",
+   "pairedRejection": "py-err-tab-vs-spaces",
+   "result": {
+    "status": "ok",
+    "tokenCount": 16,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "def",
+      "span": [
+       0,
+       3
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "f",
+      "span": [
+       4,
+       5
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       5,
+       6
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       6,
+       7
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       7,
+       8
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "b",
+      "span": [
+       9,
+       10
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       10,
+       11
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       11,
+       12
+      ]
+     },
+     {
+      "class": "newline",
+      "text": "",
+      "span": [
+       12,
+       12
+      ]
+     },
+     {
+      "class": "indent",
+      "text": "",
+      "span": [
+       17,
+       17
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "return",
+      "span": [
+       17,
+       23
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       24,
+       25
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "+",
+      "span": [
+       26,
+       27
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "b",
+      "span": [
+       28,
+       29
+      ]
+     },
+     {
+      "class": "newline",
+      "text": "",
+      "span": [
+       29,
+       29
+      ]
+     },
+     {
+      "class": "dedent",
+      "text": "",
+      "span": [
+       30,
+       30
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "6e2599314657fa4d",
+        "span": [
+         0,
+         8
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "2c454db000a20488",
+        "span": [
+         4,
+         10
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "1900f7da6bcd610c",
+        "span": [
+         5,
+         11
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "49becff80706e426",
+        "span": [
+         6,
+         12
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "24d5fd7f0157feef",
+        "span": [
+         7,
+         12
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "01e57d9b529e9b09",
+        "span": [
+         9,
+         17
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "e47249298898bd0a",
+        "span": [
+         10,
+         23
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "d3b1a837f4118d56",
+        "span": [
+         11,
+         25
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "d30f1210aca23bf8",
+        "span": [
+         12,
+         27
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "9a135cfeb20c0146",
+        "span": [
+         17,
+         29
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "4af4f315b156cda6",
+        "span": [
+         17,
+         29
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "71b780f3dd0d29cc",
+        "span": [
+         24,
+         30
+        ]
+       }
+      ],
+      "windowSelections": [
+       2,
+       2,
+       5,
+       5,
+       5,
+       5,
+       9,
+       10,
+       10
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 2,
+        "hash": "1900f7da6bcd610c",
+        "span": [
+         5,
+         11
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "01e57d9b529e9b09",
+        "span": [
+         9,
+         17
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "9a135cfeb20c0146",
+        "span": [
+         17,
+         29
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "4af4f315b156cda6",
+        "span": [
+         17,
+         29
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "def",
+       "",
+       "(",
+       "",
+       ",",
+       "",
+       ")",
+       ":",
+       "",
+       "",
+       "return",
+       "",
+       "+",
+       "",
+       "",
+       ""
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "cd78d1f9d660d1a2",
+        "span": [
+         0,
+         8
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "45f45d9d09373840",
+        "span": [
+         4,
+         10
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "b73d0db182dc59a7",
+        "span": [
+         5,
+         11
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "0461ca634d376e8f",
+        "span": [
+         6,
+         12
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "920b57b2f2c23dcd",
+        "span": [
+         7,
+         12
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "32a3e75aef70a56e",
+        "span": [
+         9,
+         17
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "e9fdd7104bbe3811",
+        "span": [
+         10,
+         23
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "9ab7911fd1416929",
+        "span": [
+         11,
+         25
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "b4d2b71e566b25c9",
+        "span": [
+         12,
+         27
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "35dbfb395397243c",
+        "span": [
+         17,
+         29
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "ae33c290ab652984",
+        "span": [
+         17,
+         29
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "54eb332ad8e97b61",
+        "span": [
+         24,
+         30
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       3,
+       3,
+       3,
+       5,
+       5,
+       9,
+       9,
+       9
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "0461ca634d376e8f",
+        "span": [
+         6,
+         12
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "32a3e75aef70a56e",
+        "span": [
+         9,
+         17
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "35dbfb395397243c",
+        "span": [
+         17,
+         29
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "py-format-b",
+   "derivation": "hand",
+   "tags": [
+    "format-pair",
+    "line-terminators"
+   ],
+   "description": "Same tokens as py-format-a: CRLF, a comment inside the brackets, a blank and a comment-only line, tab indentation and trailing white space.",
+   "inputBase64": "ZGVmIGYoYSwgICAjIGZpcnN0DQogICAgICBiKToNCg0KCSMgYWJvdXQgdGhlIGJvZHkNCglyZXR1cm4gYStiICANCg==",
+   "inputText": "def f(a,   # first\r\n      b):\r\n\r\n\t# about the body\r\n\treturn a+b  \r\n",
+   "pairedRejection": "py-err-cr-in-string",
+   "result": {
+    "status": "ok",
+    "tokenCount": 16,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "def",
+      "span": [
+       0,
+       3
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "f",
+      "span": [
+       4,
+       5
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       5,
+       6
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       6,
+       7
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       7,
+       8
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "b",
+      "span": [
+       26,
+       27
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       27,
+       28
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       28,
+       29
+      ]
+     },
+     {
+      "class": "newline",
+      "text": "",
+      "span": [
+       29,
+       29
+      ]
+     },
+     {
+      "class": "indent",
+      "text": "",
+      "span": [
+       53,
+       53
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "return",
+      "span": [
+       53,
+       59
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "a",
+      "span": [
+       60,
+       61
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "+",
+      "span": [
+       61,
+       62
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "b",
+      "span": [
+       62,
+       63
+      ]
+     },
+     {
+      "class": "newline",
+      "text": "",
+      "span": [
+       65,
+       65
+      ]
+     },
+     {
+      "class": "dedent",
+      "text": "",
+      "span": [
+       67,
+       67
+      ]
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "6e2599314657fa4d",
+        "span": [
+         0,
+         8
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "2c454db000a20488",
+        "span": [
+         4,
+         27
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "1900f7da6bcd610c",
+        "span": [
+         5,
+         28
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "49becff80706e426",
+        "span": [
+         6,
+         29
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "24d5fd7f0157feef",
+        "span": [
+         7,
+         29
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "01e57d9b529e9b09",
+        "span": [
+         26,
+         53
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "e47249298898bd0a",
+        "span": [
+         27,
+         59
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "d3b1a837f4118d56",
+        "span": [
+         28,
+         61
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "d30f1210aca23bf8",
+        "span": [
+         29,
+         62
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "9a135cfeb20c0146",
+        "span": [
+         53,
+         63
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "4af4f315b156cda6",
+        "span": [
+         53,
+         65
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "71b780f3dd0d29cc",
+        "span": [
+         60,
+         67
+        ]
+       }
+      ],
+      "windowSelections": [
+       2,
+       2,
+       5,
+       5,
+       5,
+       5,
+       9,
+       10,
+       10
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 2,
+        "hash": "1900f7da6bcd610c",
+        "span": [
+         5,
+         28
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "01e57d9b529e9b09",
+        "span": [
+         26,
+         53
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "9a135cfeb20c0146",
+        "span": [
+         53,
+         63
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "4af4f315b156cda6",
+        "span": [
+         53,
+         65
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "def",
+       "",
+       "(",
+       "",
+       ",",
+       "",
+       ")",
+       ":",
+       "",
+       "",
+       "return",
+       "",
+       "+",
+       "",
+       "",
+       ""
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "cd78d1f9d660d1a2",
+        "span": [
+         0,
+         8
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "45f45d9d09373840",
+        "span": [
+         4,
+         27
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "b73d0db182dc59a7",
+        "span": [
+         5,
+         28
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "0461ca634d376e8f",
+        "span": [
+         6,
+         29
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "920b57b2f2c23dcd",
+        "span": [
+         7,
+         29
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "32a3e75aef70a56e",
+        "span": [
+         26,
+         53
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "e9fdd7104bbe3811",
+        "span": [
+         27,
+         59
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "9ab7911fd1416929",
+        "span": [
+         28,
+         61
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "b4d2b71e566b25c9",
+        "span": [
+         29,
+         62
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "35dbfb395397243c",
+        "span": [
+         53,
+         63
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "ae33c290ab652984",
+        "span": [
+         53,
+         65
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "54eb332ad8e97b61",
+        "span": [
+         60,
+         67
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       3,
+       3,
+       3,
+       5,
+       5,
+       9,
+       9,
+       9
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "0461ca634d376e8f",
+        "span": [
+         6,
+         29
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "32a3e75aef70a56e",
+        "span": [
+         26,
+         53
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "35dbfb395397243c",
+        "span": [
+         53,
+         63
+        ]
+       }
+      ]
+     }
+    }
+   }
+  }
+ ]
+}

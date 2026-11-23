@@ -33,10 +33,12 @@ REPORT_VERSION = "traceweave-report-draft-2"
 COMPARISON_ID = "traceweave-seed-merge-draft-2"
 CHANNELS = ("exact", "normalized")
 SUPPORTED_PROFILES = {("go-tokens", "draft-1"), ("rust2024-tokens", "draft-1"), ("ts-tokens", "draft-2"), ("text-plain", "draft-1"),
+                      ("py-tokens", "draft-1"),
                       ("go-tokens-three-channel-test", "draft-1")}   # last: TEST-ONLY, flagged in vectors
 # Declared channel lists (contract §2b). Comparison `modes` must equal one of them.
 CHANNEL_LISTS = {"go-tokens": ["exact", "normalized"], "rust2024-tokens": ["exact", "normalized"],
                  "ts-tokens": ["exact", "normalized"], "text-plain": ["exact", "folded", "skeleton"],
+                 "py-tokens": ["exact", "normalized"],
                  "go-tokens-three-channel-test": ["exact", "normalized", "classes"]}
 CH3 = ["exact", "normalized", "classes"]
 TEST_CONTEXT = [True]   # the builder accepts the TEST-ONLY list except when writing negatives
@@ -355,6 +357,49 @@ NEW_GO_CLASSES = [
     ("mv-go-classes-b", ["classes"], "Same classes as mv-go-classes-a with other keywords and operators.",
      "defer y - g(2)\ncontinue\ny--\n"),
 ]
+# The first draft of this input (a Reverse helper) repeated a normalized 5-gram (the swap line), which broke the
+# hand expectation of one diagonal-0 region; it was replaced by this helper, whose 28 normalized 5-grams were checked
+# by hand to be distinct (README "Derivation").
+GO_VENDOR_LIB = """// Package strutil is a vendored third-party helper.
+func PadLeft(s string, width int) string {
+\tfor len(s) < width {
+\t\ts = " " + s
+\t}
+\treturn s
+}
+"""
+GO_SUM_FMT = """func sumPositive(values []int)   int {   // total of positives
+    total := 0
+    for _, v := range values {   // each value
+        if v > 0 { total += v
+        }
+    }
+    return total
+}
+"""
+GO_HOST_FMT = """package stats
+
+type Point struct {
+\tX, Y float64
+}
+
+func (p Point) String() string {
+\treturn fmt.Sprintf("(%g, %g)", p.X, p.Y)
+}
+
+// sumPositive adds the positive values.
+""" + GO_SUM_FMT + """
+var names = map[string]bool{"a": true, "b": false}
+"""
+GO_NONASCII_PREFIX2 = "// Ünïcödé\n"   # 3 + 11 + 1 = 15 bytes, 3 + 7 + 1 = 11 code points (hand count)
+NEW_GO_GATES = [
+    ("mv-go-vendor-lib", ["vendor"], "A vendored third-party helper file (vendor control class, OD-C19).", GO_VENDOR_LIB),
+    ("mv-go-host-formatted", ["large-host", "formatted"],
+     "Large host containing GO_SUM reformatted (spacing, indentation, comments, a joined line) with the same token stream.",
+     GO_HOST_FMT),
+    ("mv-go-nonascii-prefixed2", ["unicode"], "mv-go-nonascii after a 15-byte, 11-code-point comment line.",
+     GO_NONASCII_PREFIX2 + GO_NONASCII),
+]
 NG_ = "../extraction/go.json"
 TEXT_RECORDS = "../extraction-text/records-text-plain.json"
 TEXT_CFG = "../extraction-text/config-text-plain.json"
@@ -435,10 +480,12 @@ def extraction_config_bytes(cfg):
 
 def synthetic_catalogue(cfg_raw, cfg, aid, m, fps):
     """A winnowing-shaped catalogue with no source bytes (contract §11, synthetic vectors).
-    fps: list of (position, hash). Spans are [2p, 2p+10). Both channels carry the same data."""
+    fps: list of (position, hash) or (position, hash, span). Default spans are [2p, 2p+10).
+    Both channels carry the same data."""
     k = cfg["k"]
-    blen = 2 * (m - 1) + 10
-    chan = {"fingerprints": [{"hash": h, "position": p, "span": [2 * p, 2 * p + 10]} for p, h in fps],
+    spans = [f[2] if len(f) > 2 else [2 * f[0], 2 * f[0] + 10] for f in fps]
+    blen = max([2 * (m - 1) + 10] + [sp[1] for sp in spans])
+    chan = {"fingerprints": [{"hash": f[1], "position": f[0], "span": list(sp)} for f, sp in zip(fps, spans)],
             "kgramCount": m, "partialWindow": 1 <= m < cfg["window"]}
     art = {"byteLength": blen, "channels": {"exact": copy.deepcopy(chan), "normalized": copy.deepcopy(chan)},
            "id": aid, "sha256": sha(f"traceweave synthetic artifact {aid}".encode()), "status": "ok",
@@ -744,6 +791,8 @@ def check_hand(vid, hand, body, texts):
             if e.get("exhaustiveDiagonalZero"):
                 if len(allr) != 1 or any(a != b for a, b in allr[0]["seeds"]):
                     fail(f"{tag}: not one diagonal-0 region")
+            if "regionSpans" in e and [[r["referenceSpan"], r["candidateSpan"]] for r in allr] != e["regionSpans"]:
+                fail(f"{tag}: region spans {[[r['referenceSpan'], r['candidateSpan']] for r in allr]}")
             if "candidateShift" in e:
                 for r in allr:
                     if [x + e["candidateShift"] for x in r["referenceSpan"]] != r["candidateSpan"]:
@@ -797,13 +846,15 @@ def main():
     ext_file("extraction-go.json", "config-go.json", go_cfg_raw, go_cfg, "go", NEW_GO)
     ext_file("extraction-rust.json", "config-rust.json", rust_cfg_raw, rust_cfg, "rust", NEW_RUST)
     ext_file("extraction-go-classes.json", "config-go.json", go_cfg_raw, go_cfg, "go", NEW_GO_CLASSES)
+    ext_file("extraction-go-gates.json", "config-go.json", go_cfg_raw, go_cfg, "go", NEW_GO_GATES)
     (HERE / "config-three-channel-test.json").write_bytes(CONFIG_3CH)
     cfg3 = json.loads(CONFIG_3CH)
 
     sources = {}
     for f in ["extraction-go.json", "extraction-rust.json", "../extraction/go.json",
               "../extraction/rust.json", "../extraction/limits-go.json",
-              "../extraction/exclusion-rule.json", "extraction-go-classes.json"]:
+              "../extraction/exclusion-rule.json", "extraction-go-classes.json", "extraction-go-gates.json",
+              "extraction-py.json"]:
         d, raw, cfg = load_extraction(HERE / f)
         for v in d["vectors"]:
             sources[f"{f}#{v['id']}"] = (v, raw, cfg)
@@ -1336,6 +1387,66 @@ def main():
         SUM, COPY, {"status": "compared", "pairs": [pair("sum.go", "copy.go", both(exhaust()))]},
         cc=comparison_config_bytes(max_seeds=10**7, max_regions=10**5))
 
+    # --- M2.2 / M2.3 / M2.6 / py-tokens additions (hand-derived before computation) -------------------
+    GG = "extraction-go-gates.json"
+    PY = "extraction-py.json"
+    LIB = ("vendor.strutil.go", f"{GG}#mv-go-vendor-lib")
+    VREF = [("own.go", f"{GO}#mv-go-pair"), LIB]
+    VCAND = [("app.go", "extraction-go-classes.json#mv-go-classes-a"), LIB]
+    nm = both(ex(codeIn=NOMATCH, reportable=0))
+    vec("vendor-suppressed", ["vendor", "control", "suppression", "multi-artifact"],
+        "Vendor control class (OD-C19, decided in draft): both projects vendor the same third-party file "
+        "(vendor.strutil.go). The vendor catalogue holding that file is bound as the suppression catalogue, so every hash "
+        "of the vendored pair is common: one diagonal-0 region, common-only, still listed with its counts. Own code is "
+        "unrelated.",
+        VREF, VCAND, {"status": "compared", "pairs": [
+            pair("own.go", "app.go", copy.deepcopy(nm)), pair("own.go", "vendor.strutil.go", copy.deepcopy(nm)),
+            pair("vendor.strutil.go", "app.go", copy.deepcopy(nm)),
+            pair("vendor.strutil.go", "vendor.strutil.go", both(ex(codeIn=["common-only"], reportable=0, regions=1,
+                                                                    exhaustiveDiagonalZero=True)))]},
+        supp=[("strutil.go", f"{GG}#mv-go-vendor-lib")], cc="suppress-supplied")
+    vec("vendor-unsuppressed", ["vendor", "control", "demonstrative-vendor"],
+        "The same projects with no vendor catalogue: the vendored file matches itself completely in both modes, which is why "
+        "vendored code is supplied as a vendor (suppression) catalogue and its origin recorded in a review packet (M2.7).",
+        VREF, VCAND, {"status": "compared", "pairs": [
+            pair("own.go", "app.go", copy.deepcopy(nm)), pair("own.go", "vendor.strutil.go", copy.deepcopy(nm)),
+            pair("vendor.strutil.go", "app.go", copy.deepcopy(nm)),
+            pair("vendor.strutil.go", "vendor.strutil.go", both(exhaust()))]})
+    vec("go-formatted-fragment-in-host", ["formatted-fragment-in-host", "large-host", "trivia-pair"],
+        "UC-1 row 'formatted fragment in a large host': GO_SUM reformatted (spacing, indentation, comments, a joined line) "
+        "inside a larger host. The token stream is unchanged, so both modes match, localized inside the reformatted "
+        "function.",
+        SUM, [("host.go", f"{GG}#mv-go-host-formatted")],
+        {"status": "compared", "pairs": [pair("sum.go", "host.go", both(
+            ex(codeIn=["match"], reportable=1, within={"reference": GO_SUM, "candidate": GO_SUM_FMT})))]})
+    vec("go-non-ascii-shift-2", ["unicode", "non-ascii"],
+        "Second byte-offset vector, derived by hand before computation: the comment prefix '// Ünïcödé' plus LF is 15 bytes "
+        "but 11 code points, so every candidate span is the reference span plus 15.",
+        [("g.go", f"{GO}#mv-go-nonascii")], [("h.go", f"{GG}#mv-go-nonascii-prefixed2")],
+        {"status": "compared", "pairs": [pair("g.go", "h.go", both(ex(codeIn=["match"], reportable=1,
+                                                                       exhaustiveDiagonalZero=True, candidateShift=15)))]})
+    vec("py-empty-span-self", ["py-tokens", "empty-span"],
+        "py-tokens (registered, specified): py-empty-span-fingerprint against itself. Its exact catalogue stores the "
+        "empty-span fingerprint [35, 35) unchanged; the identical pair matches completely in both modes.",
+        [("a.py", f"{PY}#py-empty-span-fingerprint")], [("b.py", f"{PY}#py-empty-span-fingerprint")],
+        {"status": "compared", "pairs": [pair("a.py", "b.py", {
+            "exact": exhaust(),
+            "normalized": ex(POST, codeIn=["ambiguous"], reportable=5)})]})
+    vec("py-equal-starts", ["py-tokens", "equal-starts"],
+        "py-tokens format pair py-format-a/b: zero-width layout tokens give consecutive fingerprints with equal span starts, "
+        "which §3.6 allows (starts are non-decreasing). Identical hashes, so both modes match completely.",
+        [("a.py", f"{PY}#py-format-a")], [("b.py", f"{PY}#py-format-b")],
+        {"status": "compared", "pairs": [pair("a.py", "b.py", both(exhaust()))]})
+    Z = "a0a0a0a0a0a0a0a0"
+    vec("rv-py-empty-span-region", ["synthetic", "py-tokens", "empty-span"],
+        "Synthetic py-tokens catalogues whose only shared fingerprint has an empty span ([30, 30) and [20, 20)): the region's "
+        "spans are carried unchanged as empty spans. minRegionDistinctHashes 1, so the single hash is reportable.",
+        ("synthetic", "r.syn", 8, [(0, A, [0, 10]), (4, Z, [30, 30])], "py"),
+        ("synthetic", "c.syn", 8, [(0, B, [0, 10]), (4, Z, [20, 20])], "py"),
+        {"status": "compared", "pairs": [pair("r.syn", "c.syn", both(ex(codeIn=["match"], reportable=1, seeds=[[[4, 4]]],
+                                                                         regionSpans=[[[30, 30], [20, 20]]])))]},
+        cc=comparison_config_bytes(min_hashes=1))
+
     cc_cache = {}
     out = []
     for v in V:
@@ -1367,8 +1478,12 @@ def main():
                 bytes_[side] = cb
                 continue
             if isinstance(arts, tuple) and arts[0] == "synthetic":
-                _, aid, m, fps = arts
-                cat = synthetic_catalogue(go_cfg_raw, go_cfg, aid, m, fps)
+                _, aid, m, fps, *prof = arts
+                if prof and prof[0] == "py":
+                    cat = synthetic_catalogue((HERE / "config-py.json").read_bytes(), json.loads((HERE / "config-py.json").read_bytes()),
+                                              aid, m, fps)
+                else:
+                    cat = synthetic_catalogue(go_cfg_raw, go_cfg, aid, m, fps)
                 b = canonical(cat)
                 cats[side] = {"sha256": sha(b), "canonical": cat,
                               "synthetic": "Winnowing-shaped catalogue with no source bytes; the artifact digest is the SHA-256 "
@@ -1470,7 +1585,8 @@ def main():
                                    "pair-precedence", "match-over-ambiguous", "ambiguous-over-weaker",
                                    "below-over-common", "mixed-common-region", "invariance", "ambiguity-before-cap",
                                    "suppression-artifact-count", "suppression-order", "input-too-large",
-                                   "three-channel", "mode-mismatch", "text-plain", "k1", "k3", "k4", "config-bounds"}),
+                                   "three-channel", "mode-mismatch", "text-plain", "k1", "k3", "k4", "config-bounds",
+                                   "vendor", "formatted-fragment-in-host", "py-tokens", "empty-span", "equal-starts"}),
            "vectors": out}
     (HERE / "matching.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
     build_records(sources, out)
@@ -1540,7 +1656,8 @@ def record_bytes(cfg_raw, data, result):
     return (json.dumps(rec, separators=(",", ":"), ensure_ascii=False) + "\n").encode("utf-8")
 
 
-REGISTERED = {("go-tokens", "draft-1"), ("rust2024-tokens", "draft-1"), ("ts-tokens", "draft-2"), ("text-plain", "draft-1")}
+REGISTERED = {("go-tokens", "draft-1"), ("rust2024-tokens", "draft-1"), ("ts-tokens", "draft-2"), ("text-plain", "draft-1"),
+              ("py-tokens", "draft-1")}
 
 
 def catalogue_from_records(cfg_raw, items, allow_test=True):

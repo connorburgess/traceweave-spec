@@ -1,0 +1,4891 @@
+{
+ "contract": "traceweave-token-winnow-draft-1",
+ "profile": "go-tokens",
+ "profileVersion": "draft-1",
+ "configFile": "../extraction/config-go.json",
+ "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+ "k": 5,
+ "window": 4,
+ "requiredCoverage": false,
+ "lexingCheck": "New synthetic inputs for the matching vectors. Token streams are produced by build_vectors.py and validated by ../extraction/check_vectors.py; see README.md.",
+ "vectors": [
+  {
+   "id": "mv-go-vendor-lib",
+   "tags": [
+    "vendor"
+   ],
+   "description": "A vendored third-party helper file (vendor control class, OD-C19).",
+   "inputBase64": "Ly8gUGFja2FnZSBzdHJ1dGlsIGlzIGEgdmVuZG9yZWQgdGhpcmQtcGFydHkgaGVscGVyLgpmdW5jIFBhZExlZnQocyBzdHJpbmcsIHdpZHRoIGludCkgc3RyaW5nIHsKCWZvciBsZW4ocykgPCB3aWR0aCB7CgkJcyA9ICIgIiArIHMKCX0KCXJldHVybiBzCn0K",
+   "inputText": "// Package strutil is a vendored third-party helper.\nfunc PadLeft(s string, width int) string {\n\tfor len(s) < width {\n\t\ts = \" \" + s\n\t}\n\treturn s\n}\n",
+   "result": {
+    "status": "ok",
+    "tokenCount": 32,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "func",
+      "span": [
+       53,
+       57
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "PadLeft",
+      "span": [
+       58,
+       65
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       65,
+       66
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "s",
+      "span": [
+       66,
+       67
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "string",
+      "span": [
+       68,
+       74
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       74,
+       75
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "width",
+      "span": [
+       76,
+       81
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "int",
+      "span": [
+       82,
+       85
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       85,
+       86
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "string",
+      "span": [
+       87,
+       93
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       94,
+       95
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "for",
+      "span": [
+       97,
+       100
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "len",
+      "span": [
+       101,
+       104
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       104,
+       105
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "s",
+      "span": [
+       105,
+       106
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       106,
+       107
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "<",
+      "span": [
+       108,
+       109
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "width",
+      "span": [
+       110,
+       115
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       116,
+       117
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "s",
+      "span": [
+       120,
+       121
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       122,
+       123
+      ]
+     },
+     {
+      "class": "string",
+      "text": "\" \"",
+      "span": [
+       124,
+       127
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "+",
+      "span": [
+       128,
+       129
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "s",
+      "span": [
+       130,
+       131
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       131,
+       131
+      ],
+      "inserted": true
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       133,
+       134
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       134,
+       134
+      ],
+      "inserted": true
+     },
+     {
+      "class": "keyword",
+      "text": "return",
+      "span": [
+       136,
+       142
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "s",
+      "span": [
+       143,
+       144
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       144,
+       144
+      ],
+      "inserted": true
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       145,
+       146
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       146,
+       146
+      ],
+      "inserted": true
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "01b6b26953465bd4",
+        "span": [
+         53,
+         74
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "aa16c824e0b6ffbd",
+        "span": [
+         58,
+         75
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "1ebe6cd42fdfd510",
+        "span": [
+         65,
+         81
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "2eff71d2fe528a3c",
+        "span": [
+         66,
+         85
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "906d7a541a3d91c6",
+        "span": [
+         68,
+         86
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "cb80976c7fffdd0b",
+        "span": [
+         74,
+         93
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "4f37349e579ddedc",
+        "span": [
+         76,
+         95
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "3b5c43a8eb0f2e4f",
+        "span": [
+         82,
+         100
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "f8c6007a91471b27",
+        "span": [
+         85,
+         104
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "722d4ca315f20b47",
+        "span": [
+         87,
+         105
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "8b1c7919281c8423",
+        "span": [
+         94,
+         106
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "9e7943a7d84cee1f",
+        "span": [
+         97,
+         107
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "0942f75ac03a7e70",
+        "span": [
+         101,
+         109
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "866e405beed1c11d",
+        "span": [
+         104,
+         115
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "163090b240d3fc0f",
+        "span": [
+         105,
+         117
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "337c37b9db702797",
+        "span": [
+         106,
+         121
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "7502b8c6e09b0847",
+        "span": [
+         108,
+         123
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "bedeb40e60d14761",
+        "span": [
+         110,
+         127
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "9906b16ace1d1feb",
+        "span": [
+         116,
+         129
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "5d0e8713a2cfe7c9",
+        "span": [
+         120,
+         131
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "2b09a4c3a504b456",
+        "span": [
+         122,
+         131
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "a266c6c0367be9c0",
+        "span": [
+         124,
+         134
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "a8ddfdf9f1123ff0",
+        "span": [
+         128,
+         134
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "aa98e58942cfa14b",
+        "span": [
+         130,
+         142
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "88634555125148e6",
+        "span": [
+         131,
+         144
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "32b949a21ae5e028",
+        "span": [
+         133,
+         144
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "9700a8d492b28c0e",
+        "span": [
+         134,
+         146
+        ]
+       },
+       {
+        "position": 27,
+        "hash": "9a511826504b8cbd",
+        "span": [
+         136,
+         146
+        ]
+       }
+      ],
+      "windowSelections": [
+       0,
+       2,
+       2,
+       3,
+       7,
+       7,
+       7,
+       7,
+       9,
+       12,
+       12,
+       12,
+       12,
+       14,
+       14,
+       15,
+       19,
+       20,
+       20,
+       20,
+       20,
+       24,
+       25,
+       25,
+       25
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 0,
+        "hash": "01b6b26953465bd4",
+        "span": [
+         53,
+         74
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "1ebe6cd42fdfd510",
+        "span": [
+         65,
+         81
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "2eff71d2fe528a3c",
+        "span": [
+         66,
+         85
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "3b5c43a8eb0f2e4f",
+        "span": [
+         82,
+         100
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "722d4ca315f20b47",
+        "span": [
+         87,
+         105
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "0942f75ac03a7e70",
+        "span": [
+         101,
+         109
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "163090b240d3fc0f",
+        "span": [
+         105,
+         117
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "337c37b9db702797",
+        "span": [
+         106,
+         121
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "5d0e8713a2cfe7c9",
+        "span": [
+         120,
+         131
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "2b09a4c3a504b456",
+        "span": [
+         122,
+         131
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "88634555125148e6",
+        "span": [
+         131,
+         144
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "32b949a21ae5e028",
+        "span": [
+         133,
+         144
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "func",
+       "",
+       "(",
+       "",
+       "",
+       ",",
+       "",
+       "",
+       ")",
+       "",
+       "{",
+       "for",
+       "",
+       "(",
+       "",
+       ")",
+       "<",
+       "",
+       "{",
+       "",
+       "=",
+       "",
+       "+",
+       "",
+       ";",
+       "}",
+       ";",
+       "return",
+       "",
+       ";",
+       "}",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "b1f64e56779c6012",
+        "span": [
+         53,
+         74
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "fa382b6016e4f2f8",
+        "span": [
+         58,
+         75
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "583479531b3174fd",
+        "span": [
+         65,
+         81
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "046bfae5d5902fba",
+        "span": [
+         66,
+         85
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "6e3b75adcca33712",
+        "span": [
+         68,
+         86
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "1b78a516202f7860",
+        "span": [
+         74,
+         93
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "c5bd51446b773c13",
+        "span": [
+         76,
+         95
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "a12041a3c03ceaa7",
+        "span": [
+         82,
+         100
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "a4e10d817ecd7949",
+        "span": [
+         85,
+         104
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "af49c0f1dd9342bf",
+        "span": [
+         87,
+         105
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "59314aa4e50f112a",
+        "span": [
+         94,
+         106
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "dfd2ade602f25a44",
+        "span": [
+         97,
+         107
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "ee8f123341132431",
+        "span": [
+         101,
+         109
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "f8a6dd7b30249ed2",
+        "span": [
+         104,
+         115
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "acda730ed54dc4fe",
+        "span": [
+         105,
+         117
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "d84c1029ae074af3",
+        "span": [
+         106,
+         121
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "36a62cff33df1455",
+        "span": [
+         108,
+         123
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "98c5a50f909c8a2f",
+        "span": [
+         110,
+         127
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "81658677057ecfe2",
+        "span": [
+         116,
+         129
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "c1513df2180867f4",
+        "span": [
+         120,
+         131
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "18cf9662eaf5f72b",
+        "span": [
+         122,
+         131
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "78ff959771dfae6f",
+        "span": [
+         124,
+         134
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "85adbe4d292bf2e6",
+        "span": [
+         128,
+         134
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "5146853fee1f7bb4",
+        "span": [
+         130,
+         142
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "2d2dd98d75a840f9",
+        "span": [
+         131,
+         144
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "6924ed5b6ec7fa34",
+        "span": [
+         133,
+         144
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "933db60a111306e4",
+        "span": [
+         134,
+         146
+        ]
+       },
+       {
+        "position": 27,
+        "hash": "23d66ee0192f35a1",
+        "span": [
+         136,
+         146
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       3,
+       3,
+       3,
+       5,
+       5,
+       7,
+       10,
+       10,
+       10,
+       10,
+       14,
+       14,
+       16,
+       16,
+       16,
+       16,
+       20,
+       20,
+       20,
+       20,
+       24,
+       24,
+       24,
+       27
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "046bfae5d5902fba",
+        "span": [
+         66,
+         85
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "1b78a516202f7860",
+        "span": [
+         74,
+         93
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "a12041a3c03ceaa7",
+        "span": [
+         82,
+         100
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "59314aa4e50f112a",
+        "span": [
+         94,
+         106
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "acda730ed54dc4fe",
+        "span": [
+         105,
+         117
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "36a62cff33df1455",
+        "span": [
+         108,
+         123
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "18cf9662eaf5f72b",
+        "span": [
+         122,
+         131
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "2d2dd98d75a840f9",
+        "span": [
+         131,
+         144
+        ]
+       },
+       {
+        "position": 27,
+        "hash": "23d66ee0192f35a1",
+        "span": [
+         136,
+         146
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "mv-go-host-formatted",
+   "tags": [
+    "large-host",
+    "formatted"
+   ],
+   "description": "Large host containing GO_SUM reformatted (spacing, indentation, comments, a joined line) with the same token stream.",
+   "inputBase64": "cGFja2FnZSBzdGF0cwoKdHlwZSBQb2ludCBzdHJ1Y3QgewoJWCwgWSBmbG9hdDY0Cn0KCmZ1bmMgKHAgUG9pbnQpIFN0cmluZygpIHN0cmluZyB7CglyZXR1cm4gZm10LlNwcmludGYoIiglZywgJWcpIiwgcC5YLCBwLlkpCn0KCi8vIHN1bVBvc2l0aXZlIGFkZHMgdGhlIHBvc2l0aXZlIHZhbHVlcy4KZnVuYyBzdW1Qb3NpdGl2ZSh2YWx1ZXMgW11pbnQpICAgaW50IHsgICAvLyB0b3RhbCBvZiBwb3NpdGl2ZXMKICAgIHRvdGFsIDo9IDAKICAgIGZvciBfLCB2IDo9IHJhbmdlIHZhbHVlcyB7ICAgLy8gZWFjaCB2YWx1ZQogICAgICAgIGlmIHYgPiAwIHsgdG90YWwgKz0gdgogICAgICAgIH0KICAgIH0KICAgIHJldHVybiB0b3RhbAp9Cgp2YXIgbmFtZXMgPSBtYXBbc3RyaW5nXWJvb2x7ImEiOiB0cnVlLCAiYiI6IGZhbHNlfQo=",
+   "inputText": "package stats\n\ntype Point struct {\n\tX, Y float64\n}\n\nfunc (p Point) String() string {\n\treturn fmt.Sprintf(\"(%g, %g)\", p.X, p.Y)\n}\n\n// sumPositive adds the positive values.\nfunc sumPositive(values []int)   int {   // total of positives\n    total := 0\n    for _, v := range values {   // each value\n        if v > 0 { total += v\n        }\n    }\n    return total\n}\n\nvar names = map[string]bool{\"a\": true, \"b\": false}\n",
+   "result": {
+    "status": "ok",
+    "tokenCount": 100,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "package",
+      "span": [
+       0,
+       7
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "stats",
+      "span": [
+       8,
+       13
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       13,
+       13
+      ],
+      "inserted": true
+     },
+     {
+      "class": "keyword",
+      "text": "type",
+      "span": [
+       15,
+       19
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "Point",
+      "span": [
+       20,
+       25
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "struct",
+      "span": [
+       26,
+       32
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       33,
+       34
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "X",
+      "span": [
+       36,
+       37
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       37,
+       38
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "Y",
+      "span": [
+       39,
+       40
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "float64",
+      "span": [
+       41,
+       48
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       48,
+       48
+      ],
+      "inserted": true
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       49,
+       50
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       50,
+       50
+      ],
+      "inserted": true
+     },
+     {
+      "class": "keyword",
+      "text": "func",
+      "span": [
+       52,
+       56
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       57,
+       58
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "p",
+      "span": [
+       58,
+       59
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "Point",
+      "span": [
+       60,
+       65
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       65,
+       66
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "String",
+      "span": [
+       67,
+       73
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       73,
+       74
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       74,
+       75
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "string",
+      "span": [
+       76,
+       82
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       83,
+       84
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "return",
+      "span": [
+       86,
+       92
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "fmt",
+      "span": [
+       93,
+       96
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ".",
+      "span": [
+       96,
+       97
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "Sprintf",
+      "span": [
+       97,
+       104
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       104,
+       105
+      ]
+     },
+     {
+      "class": "string",
+      "text": "\"(%g, %g)\"",
+      "span": [
+       105,
+       115
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       115,
+       116
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "p",
+      "span": [
+       117,
+       118
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ".",
+      "span": [
+       118,
+       119
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "X",
+      "span": [
+       119,
+       120
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       120,
+       121
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "p",
+      "span": [
+       122,
+       123
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ".",
+      "span": [
+       123,
+       124
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "Y",
+      "span": [
+       124,
+       125
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       125,
+       126
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       126,
+       126
+      ],
+      "inserted": true
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       127,
+       128
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       128,
+       128
+      ],
+      "inserted": true
+     },
+     {
+      "class": "keyword",
+      "text": "func",
+      "span": [
+       171,
+       175
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "sumPositive",
+      "span": [
+       176,
+       187
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       187,
+       188
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "values",
+      "span": [
+       188,
+       194
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "[",
+      "span": [
+       195,
+       196
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "]",
+      "span": [
+       196,
+       197
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "int",
+      "span": [
+       197,
+       200
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       200,
+       201
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "int",
+      "span": [
+       204,
+       207
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       208,
+       209
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "total",
+      "span": [
+       238,
+       243
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":=",
+      "span": [
+       244,
+       246
+      ]
+     },
+     {
+      "class": "int",
+      "text": "0",
+      "span": [
+       247,
+       248
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       248,
+       248
+      ],
+      "inserted": true
+     },
+     {
+      "class": "keyword",
+      "text": "for",
+      "span": [
+       253,
+       256
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "_",
+      "span": [
+       257,
+       258
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       258,
+       259
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "v",
+      "span": [
+       260,
+       261
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":=",
+      "span": [
+       262,
+       264
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "range",
+      "span": [
+       265,
+       270
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "values",
+      "span": [
+       271,
+       277
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       278,
+       279
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "if",
+      "span": [
+       304,
+       306
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "v",
+      "span": [
+       307,
+       308
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ">",
+      "span": [
+       309,
+       310
+      ]
+     },
+     {
+      "class": "int",
+      "text": "0",
+      "span": [
+       311,
+       312
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       313,
+       314
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "total",
+      "span": [
+       315,
+       320
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "+=",
+      "span": [
+       321,
+       323
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "v",
+      "span": [
+       324,
+       325
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       325,
+       325
+      ],
+      "inserted": true
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       334,
+       335
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       335,
+       335
+      ],
+      "inserted": true
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       340,
+       341
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       341,
+       341
+      ],
+      "inserted": true
+     },
+     {
+      "class": "keyword",
+      "text": "return",
+      "span": [
+       346,
+       352
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "total",
+      "span": [
+       353,
+       358
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       358,
+       358
+      ],
+      "inserted": true
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       359,
+       360
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       360,
+       360
+      ],
+      "inserted": true
+     },
+     {
+      "class": "keyword",
+      "text": "var",
+      "span": [
+       362,
+       365
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "names",
+      "span": [
+       366,
+       371
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "=",
+      "span": [
+       372,
+       373
+      ]
+     },
+     {
+      "class": "keyword",
+      "text": "map",
+      "span": [
+       374,
+       377
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "[",
+      "span": [
+       377,
+       378
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "string",
+      "span": [
+       378,
+       384
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "]",
+      "span": [
+       384,
+       385
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "bool",
+      "span": [
+       385,
+       389
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       389,
+       390
+      ]
+     },
+     {
+      "class": "string",
+      "text": "\"a\"",
+      "span": [
+       390,
+       393
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       393,
+       394
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "true",
+      "span": [
+       395,
+       399
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ",",
+      "span": [
+       399,
+       400
+      ]
+     },
+     {
+      "class": "string",
+      "text": "\"b\"",
+      "span": [
+       401,
+       404
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":",
+      "span": [
+       404,
+       405
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "false",
+      "span": [
+       406,
+       411
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       411,
+       412
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       412,
+       412
+      ],
+      "inserted": true
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "e55518b720f84b37",
+        "span": [
+         0,
+         25
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "7fecab484829d63a",
+        "span": [
+         8,
+         32
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "f59eca1ac9104f33",
+        "span": [
+         13,
+         34
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "3802a5fe48ed3964",
+        "span": [
+         15,
+         37
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "c13b3151171a4933",
+        "span": [
+         20,
+         38
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "1297a3829c58691f",
+        "span": [
+         26,
+         40
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "9031d21886da623a",
+        "span": [
+         33,
+         48
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "bd5e95b0a34096de",
+        "span": [
+         36,
+         48
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "785c5bcce10d15bd",
+        "span": [
+         37,
+         50
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "240cfea8bd487cf5",
+        "span": [
+         39,
+         50
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "e685caead39c83c9",
+        "span": [
+         41,
+         56
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "d67d0c7b3f65655f",
+        "span": [
+         48,
+         58
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "80dfae06dc1c1496",
+        "span": [
+         49,
+         59
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "ea6b6de68f3bc765",
+        "span": [
+         50,
+         65
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "c372d2a2f52cca2b",
+        "span": [
+         52,
+         66
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "831c20e10f8beb18",
+        "span": [
+         57,
+         73
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "b8966c87b84bc9e7",
+        "span": [
+         58,
+         74
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "fbe975df307a2119",
+        "span": [
+         60,
+         75
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "edbbc941e5cac78a",
+        "span": [
+         65,
+         82
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "76a97978356629f2",
+        "span": [
+         67,
+         84
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "45d2e830529bb9fe",
+        "span": [
+         73,
+         92
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "7500c90d18423906",
+        "span": [
+         74,
+         96
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "c16096aaafc8328e",
+        "span": [
+         76,
+         97
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "81de66749d27ff66",
+        "span": [
+         83,
+         104
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "d5df43139aefdfac",
+        "span": [
+         86,
+         105
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "5d4b091f2a7db419",
+        "span": [
+         93,
+         115
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "49e37ca719ce592d",
+        "span": [
+         96,
+         116
+        ]
+       },
+       {
+        "position": 27,
+        "hash": "3b0d1e86f11134c4",
+        "span": [
+         97,
+         118
+        ]
+       },
+       {
+        "position": 28,
+        "hash": "9e6efe80b1e109dc",
+        "span": [
+         104,
+         119
+        ]
+       },
+       {
+        "position": 29,
+        "hash": "bf7f157a5aaa5d76",
+        "span": [
+         105,
+         120
+        ]
+       },
+       {
+        "position": 30,
+        "hash": "02403a4812486a8a",
+        "span": [
+         115,
+         121
+        ]
+       },
+       {
+        "position": 31,
+        "hash": "04ec468c59822e2d",
+        "span": [
+         117,
+         123
+        ]
+       },
+       {
+        "position": 32,
+        "hash": "19971859c72ecca8",
+        "span": [
+         118,
+         124
+        ]
+       },
+       {
+        "position": 33,
+        "hash": "3df59eb0e61cec80",
+        "span": [
+         119,
+         125
+        ]
+       },
+       {
+        "position": 34,
+        "hash": "0b62ac9ea3a8d6a9",
+        "span": [
+         120,
+         126
+        ]
+       },
+       {
+        "position": 35,
+        "hash": "3b5342fdf0c37360",
+        "span": [
+         122,
+         126
+        ]
+       },
+       {
+        "position": 36,
+        "hash": "91b1330db6b34764",
+        "span": [
+         123,
+         128
+        ]
+       },
+       {
+        "position": 37,
+        "hash": "b3df0df3d1b929f6",
+        "span": [
+         124,
+         128
+        ]
+       },
+       {
+        "position": 38,
+        "hash": "93e94c0a3f9298d9",
+        "span": [
+         125,
+         175
+        ]
+       },
+       {
+        "position": 39,
+        "hash": "d20dae50edccdce5",
+        "span": [
+         126,
+         187
+        ]
+       },
+       {
+        "position": 40,
+        "hash": "4557f66b005668c6",
+        "span": [
+         127,
+         188
+        ]
+       },
+       {
+        "position": 41,
+        "hash": "478e35ba8ffcfde0",
+        "span": [
+         128,
+         194
+        ]
+       },
+       {
+        "position": 42,
+        "hash": "2dd70cf38f6046d9",
+        "span": [
+         171,
+         196
+        ]
+       },
+       {
+        "position": 43,
+        "hash": "9e2978c2ce69cdda",
+        "span": [
+         176,
+         197
+        ]
+       },
+       {
+        "position": 44,
+        "hash": "13c53975ffd60dcc",
+        "span": [
+         187,
+         200
+        ]
+       },
+       {
+        "position": 45,
+        "hash": "330210cd0c3466ab",
+        "span": [
+         188,
+         201
+        ]
+       },
+       {
+        "position": 46,
+        "hash": "54db48ff93892f67",
+        "span": [
+         195,
+         207
+        ]
+       },
+       {
+        "position": 47,
+        "hash": "3d497652a23fceab",
+        "span": [
+         196,
+         209
+        ]
+       },
+       {
+        "position": 48,
+        "hash": "d756b70dce844d54",
+        "span": [
+         197,
+         243
+        ]
+       },
+       {
+        "position": 49,
+        "hash": "5099ca4608281bdb",
+        "span": [
+         200,
+         246
+        ]
+       },
+       {
+        "position": 50,
+        "hash": "3c56878685555e32",
+        "span": [
+         204,
+         248
+        ]
+       },
+       {
+        "position": 51,
+        "hash": "8abd010e26557668",
+        "span": [
+         208,
+         248
+        ]
+       },
+       {
+        "position": 52,
+        "hash": "70e3bf47bf7b4971",
+        "span": [
+         238,
+         256
+        ]
+       },
+       {
+        "position": 53,
+        "hash": "f4768f3c6740bae5",
+        "span": [
+         244,
+         258
+        ]
+       },
+       {
+        "position": 54,
+        "hash": "2f8f40a61dcfae85",
+        "span": [
+         247,
+         259
+        ]
+       },
+       {
+        "position": 55,
+        "hash": "f400f7549e830644",
+        "span": [
+         248,
+         261
+        ]
+       },
+       {
+        "position": 56,
+        "hash": "d40cdf6545f112ae",
+        "span": [
+         253,
+         264
+        ]
+       },
+       {
+        "position": 57,
+        "hash": "56d0b01fbd749df5",
+        "span": [
+         257,
+         270
+        ]
+       },
+       {
+        "position": 58,
+        "hash": "423c6c9d5d7a23e7",
+        "span": [
+         258,
+         277
+        ]
+       },
+       {
+        "position": 59,
+        "hash": "e550d164e1f4aa63",
+        "span": [
+         260,
+         279
+        ]
+       },
+       {
+        "position": 60,
+        "hash": "d3ae829b9c070235",
+        "span": [
+         262,
+         306
+        ]
+       },
+       {
+        "position": 61,
+        "hash": "02937060fc62470c",
+        "span": [
+         265,
+         308
+        ]
+       },
+       {
+        "position": 62,
+        "hash": "6d8eac8c7178bbe6",
+        "span": [
+         271,
+         310
+        ]
+       },
+       {
+        "position": 63,
+        "hash": "08bdc1a417005230",
+        "span": [
+         278,
+         312
+        ]
+       },
+       {
+        "position": 64,
+        "hash": "233116908c1f7fdf",
+        "span": [
+         304,
+         314
+        ]
+       },
+       {
+        "position": 65,
+        "hash": "ed760a5519322ae1",
+        "span": [
+         307,
+         320
+        ]
+       },
+       {
+        "position": 66,
+        "hash": "79a8f5e4448bba08",
+        "span": [
+         309,
+         323
+        ]
+       },
+       {
+        "position": 67,
+        "hash": "e19e76de263aca07",
+        "span": [
+         311,
+         325
+        ]
+       },
+       {
+        "position": 68,
+        "hash": "f2204b346bc2f387",
+        "span": [
+         313,
+         325
+        ]
+       },
+       {
+        "position": 69,
+        "hash": "a036c4dd8fd8dddf",
+        "span": [
+         315,
+         335
+        ]
+       },
+       {
+        "position": 70,
+        "hash": "f22cdeb9e7674877",
+        "span": [
+         321,
+         335
+        ]
+       },
+       {
+        "position": 71,
+        "hash": "725af00bf2abe7a3",
+        "span": [
+         324,
+         341
+        ]
+       },
+       {
+        "position": 72,
+        "hash": "5c344617045cf67d",
+        "span": [
+         325,
+         341
+        ]
+       },
+       {
+        "position": 73,
+        "hash": "ef9e8499ef165dbe",
+        "span": [
+         334,
+         352
+        ]
+       },
+       {
+        "position": 74,
+        "hash": "a770f186a5db444b",
+        "span": [
+         335,
+         358
+        ]
+       },
+       {
+        "position": 75,
+        "hash": "76a6eecc8c7a8901",
+        "span": [
+         340,
+         358
+        ]
+       },
+       {
+        "position": 76,
+        "hash": "95e19b9eaf8e7980",
+        "span": [
+         341,
+         360
+        ]
+       },
+       {
+        "position": 77,
+        "hash": "cc17f27384ebf48d",
+        "span": [
+         346,
+         360
+        ]
+       },
+       {
+        "position": 78,
+        "hash": "e6e682986a59a140",
+        "span": [
+         353,
+         365
+        ]
+       },
+       {
+        "position": 79,
+        "hash": "133c5ed7f1bc7f97",
+        "span": [
+         358,
+         371
+        ]
+       },
+       {
+        "position": 80,
+        "hash": "8f5315a52f64cf53",
+        "span": [
+         359,
+         373
+        ]
+       },
+       {
+        "position": 81,
+        "hash": "daa206ef8e0f664e",
+        "span": [
+         360,
+         377
+        ]
+       },
+       {
+        "position": 82,
+        "hash": "f4d8fe9f988105e8",
+        "span": [
+         362,
+         378
+        ]
+       },
+       {
+        "position": 83,
+        "hash": "babaf3236fa55141",
+        "span": [
+         366,
+         384
+        ]
+       },
+       {
+        "position": 84,
+        "hash": "fe7c686645747931",
+        "span": [
+         372,
+         385
+        ]
+       },
+       {
+        "position": 85,
+        "hash": "76ee097a0c4ca730",
+        "span": [
+         374,
+         389
+        ]
+       },
+       {
+        "position": 86,
+        "hash": "7cffed8261e5f7e9",
+        "span": [
+         377,
+         390
+        ]
+       },
+       {
+        "position": 87,
+        "hash": "8f0490c690b0717c",
+        "span": [
+         378,
+         393
+        ]
+       },
+       {
+        "position": 88,
+        "hash": "cd9545bab63daf20",
+        "span": [
+         384,
+         394
+        ]
+       },
+       {
+        "position": 89,
+        "hash": "80366244cf9a61fe",
+        "span": [
+         385,
+         399
+        ]
+       },
+       {
+        "position": 90,
+        "hash": "bbe471eb3eafb57b",
+        "span": [
+         389,
+         400
+        ]
+       },
+       {
+        "position": 91,
+        "hash": "badf0d0fbe29c486",
+        "span": [
+         390,
+         404
+        ]
+       },
+       {
+        "position": 92,
+        "hash": "3282bcf785667a8c",
+        "span": [
+         393,
+         405
+        ]
+       },
+       {
+        "position": 93,
+        "hash": "83d3f7bb3ddc654b",
+        "span": [
+         395,
+         411
+        ]
+       },
+       {
+        "position": 94,
+        "hash": "eee9e28a84b26f0c",
+        "span": [
+         399,
+         412
+        ]
+       },
+       {
+        "position": 95,
+        "hash": "945ff01bd25ce3b1",
+        "span": [
+         401,
+         412
+        ]
+       }
+      ],
+      "windowSelections": [
+       3,
+       3,
+       5,
+       5,
+       5,
+       5,
+       9,
+       9,
+       9,
+       9,
+       12,
+       12,
+       12,
+       15,
+       15,
+       15,
+       19,
+       20,
+       20,
+       20,
+       20,
+       21,
+       25,
+       26,
+       27,
+       27,
+       27,
+       30,
+       30,
+       30,
+       30,
+       31,
+       34,
+       34,
+       34,
+       35,
+       36,
+       40,
+       40,
+       42,
+       42,
+       44,
+       44,
+       44,
+       44,
+       45,
+       47,
+       50,
+       50,
+       50,
+       50,
+       54,
+       54,
+       54,
+       54,
+       58,
+       58,
+       58,
+       61,
+       61,
+       61,
+       61,
+       63,
+       63,
+       64,
+       66,
+       66,
+       69,
+       71,
+       72,
+       72,
+       72,
+       72,
+       75,
+       75,
+       75,
+       79,
+       79,
+       79,
+       79,
+       80,
+       83,
+       85,
+       85,
+       85,
+       85,
+       86,
+       89,
+       89,
+       92,
+       92,
+       92,
+       92
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 3,
+        "hash": "3802a5fe48ed3964",
+        "span": [
+         15,
+         37
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "1297a3829c58691f",
+        "span": [
+         26,
+         40
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "240cfea8bd487cf5",
+        "span": [
+         39,
+         50
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "80dfae06dc1c1496",
+        "span": [
+         49,
+         59
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "831c20e10f8beb18",
+        "span": [
+         57,
+         73
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "76a97978356629f2",
+        "span": [
+         67,
+         84
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "45d2e830529bb9fe",
+        "span": [
+         73,
+         92
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "7500c90d18423906",
+        "span": [
+         74,
+         96
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "5d4b091f2a7db419",
+        "span": [
+         93,
+         115
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "49e37ca719ce592d",
+        "span": [
+         96,
+         116
+        ]
+       },
+       {
+        "position": 27,
+        "hash": "3b0d1e86f11134c4",
+        "span": [
+         97,
+         118
+        ]
+       },
+       {
+        "position": 30,
+        "hash": "02403a4812486a8a",
+        "span": [
+         115,
+         121
+        ]
+       },
+       {
+        "position": 31,
+        "hash": "04ec468c59822e2d",
+        "span": [
+         117,
+         123
+        ]
+       },
+       {
+        "position": 34,
+        "hash": "0b62ac9ea3a8d6a9",
+        "span": [
+         120,
+         126
+        ]
+       },
+       {
+        "position": 35,
+        "hash": "3b5342fdf0c37360",
+        "span": [
+         122,
+         126
+        ]
+       },
+       {
+        "position": 36,
+        "hash": "91b1330db6b34764",
+        "span": [
+         123,
+         128
+        ]
+       },
+       {
+        "position": 40,
+        "hash": "4557f66b005668c6",
+        "span": [
+         127,
+         188
+        ]
+       },
+       {
+        "position": 42,
+        "hash": "2dd70cf38f6046d9",
+        "span": [
+         171,
+         196
+        ]
+       },
+       {
+        "position": 44,
+        "hash": "13c53975ffd60dcc",
+        "span": [
+         187,
+         200
+        ]
+       },
+       {
+        "position": 45,
+        "hash": "330210cd0c3466ab",
+        "span": [
+         188,
+         201
+        ]
+       },
+       {
+        "position": 47,
+        "hash": "3d497652a23fceab",
+        "span": [
+         196,
+         209
+        ]
+       },
+       {
+        "position": 50,
+        "hash": "3c56878685555e32",
+        "span": [
+         204,
+         248
+        ]
+       },
+       {
+        "position": 54,
+        "hash": "2f8f40a61dcfae85",
+        "span": [
+         247,
+         259
+        ]
+       },
+       {
+        "position": 58,
+        "hash": "423c6c9d5d7a23e7",
+        "span": [
+         258,
+         277
+        ]
+       },
+       {
+        "position": 61,
+        "hash": "02937060fc62470c",
+        "span": [
+         265,
+         308
+        ]
+       },
+       {
+        "position": 63,
+        "hash": "08bdc1a417005230",
+        "span": [
+         278,
+         312
+        ]
+       },
+       {
+        "position": 64,
+        "hash": "233116908c1f7fdf",
+        "span": [
+         304,
+         314
+        ]
+       },
+       {
+        "position": 66,
+        "hash": "79a8f5e4448bba08",
+        "span": [
+         309,
+         323
+        ]
+       },
+       {
+        "position": 69,
+        "hash": "a036c4dd8fd8dddf",
+        "span": [
+         315,
+         335
+        ]
+       },
+       {
+        "position": 71,
+        "hash": "725af00bf2abe7a3",
+        "span": [
+         324,
+         341
+        ]
+       },
+       {
+        "position": 72,
+        "hash": "5c344617045cf67d",
+        "span": [
+         325,
+         341
+        ]
+       },
+       {
+        "position": 75,
+        "hash": "76a6eecc8c7a8901",
+        "span": [
+         340,
+         358
+        ]
+       },
+       {
+        "position": 79,
+        "hash": "133c5ed7f1bc7f97",
+        "span": [
+         358,
+         371
+        ]
+       },
+       {
+        "position": 80,
+        "hash": "8f5315a52f64cf53",
+        "span": [
+         359,
+         373
+        ]
+       },
+       {
+        "position": 83,
+        "hash": "babaf3236fa55141",
+        "span": [
+         366,
+         384
+        ]
+       },
+       {
+        "position": 85,
+        "hash": "76ee097a0c4ca730",
+        "span": [
+         374,
+         389
+        ]
+       },
+       {
+        "position": 86,
+        "hash": "7cffed8261e5f7e9",
+        "span": [
+         377,
+         390
+        ]
+       },
+       {
+        "position": 89,
+        "hash": "80366244cf9a61fe",
+        "span": [
+         385,
+         399
+        ]
+       },
+       {
+        "position": 92,
+        "hash": "3282bcf785667a8c",
+        "span": [
+         393,
+         405
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "package",
+       "",
+       ";",
+       "type",
+       "",
+       "struct",
+       "{",
+       "",
+       ",",
+       "",
+       "",
+       ";",
+       "}",
+       ";",
+       "func",
+       "(",
+       "",
+       "",
+       ")",
+       "",
+       "(",
+       ")",
+       "",
+       "{",
+       "return",
+       "",
+       ".",
+       "",
+       "(",
+       "",
+       ",",
+       "",
+       ".",
+       "",
+       ",",
+       "",
+       ".",
+       "",
+       ")",
+       ";",
+       "}",
+       ";",
+       "func",
+       "",
+       "(",
+       "",
+       "[",
+       "]",
+       "",
+       ")",
+       "",
+       "{",
+       "",
+       ":=",
+       "",
+       ";",
+       "for",
+       "",
+       ",",
+       "",
+       ":=",
+       "range",
+       "",
+       "{",
+       "if",
+       "",
+       ">",
+       "",
+       "{",
+       "",
+       "+=",
+       "",
+       ";",
+       "}",
+       ";",
+       "}",
+       ";",
+       "return",
+       "",
+       ";",
+       "}",
+       ";",
+       "var",
+       "",
+       "=",
+       "map",
+       "[",
+       "",
+       "]",
+       "",
+       "{",
+       "",
+       ":",
+       "",
+       ",",
+       "",
+       ":",
+       "",
+       "}",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "3c28fc3c7d6d8e5c",
+        "span": [
+         0,
+         25
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "2aa8fce675748898",
+        "span": [
+         8,
+         32
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "6c22eb0152d46d51",
+        "span": [
+         13,
+         34
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "9d819c7ddceabc62",
+        "span": [
+         15,
+         37
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "1f7e49183e3da462",
+        "span": [
+         20,
+         38
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "5d7780b17b6eba46",
+        "span": [
+         26,
+         40
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "c0f3a6eb25429480",
+        "span": [
+         33,
+         48
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "a3a469fc3219cc01",
+        "span": [
+         36,
+         48
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "7116eca4370a1b43",
+        "span": [
+         37,
+         50
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "b85ffbc06a4abc31",
+        "span": [
+         39,
+         50
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "57f97d2ff068e81c",
+        "span": [
+         41,
+         56
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "a7820083b9588959",
+        "span": [
+         48,
+         58
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "8648684dbddaf9c4",
+        "span": [
+         49,
+         59
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "2c27c33f9e8f6bcf",
+        "span": [
+         50,
+         65
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "87a22da9947aa9e6",
+        "span": [
+         52,
+         66
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "80809c4b029f7706",
+        "span": [
+         57,
+         73
+        ]
+       },
+       {
+        "position": 16,
+        "hash": "9a2d5cc06b6c6d73",
+        "span": [
+         58,
+         74
+        ]
+       },
+       {
+        "position": 17,
+        "hash": "e8a3da6ba84241b4",
+        "span": [
+         60,
+         75
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "7d6098e6cf00314e",
+        "span": [
+         65,
+         82
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "10bfc850c30292ce",
+        "span": [
+         67,
+         84
+        ]
+       },
+       {
+        "position": 20,
+        "hash": "77bec28871e1cc37",
+        "span": [
+         73,
+         92
+        ]
+       },
+       {
+        "position": 21,
+        "hash": "80b8029a7bc9895d",
+        "span": [
+         74,
+         96
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "101eb74f37364a2e",
+        "span": [
+         76,
+         97
+        ]
+       },
+       {
+        "position": 23,
+        "hash": "97a5a3d3ac42fe5f",
+        "span": [
+         83,
+         104
+        ]
+       },
+       {
+        "position": 24,
+        "hash": "5c6ba0cc21782b68",
+        "span": [
+         86,
+         105
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "146668ad18e47ad3",
+        "span": [
+         93,
+         115
+        ]
+       },
+       {
+        "position": 26,
+        "hash": "9b28446778a5aa4e",
+        "span": [
+         96,
+         116
+        ]
+       },
+       {
+        "position": 27,
+        "hash": "9fcad72708d4b485",
+        "span": [
+         97,
+         118
+        ]
+       },
+       {
+        "position": 28,
+        "hash": "0f5ec71bb62835f8",
+        "span": [
+         104,
+         119
+        ]
+       },
+       {
+        "position": 29,
+        "hash": "f5d74174be14294b",
+        "span": [
+         105,
+         120
+        ]
+       },
+       {
+        "position": 30,
+        "hash": "18d4d9334e4591e5",
+        "span": [
+         115,
+         121
+        ]
+       },
+       {
+        "position": 31,
+        "hash": "2afb720ca6ffcb7c",
+        "span": [
+         117,
+         123
+        ]
+       },
+       {
+        "position": 32,
+        "hash": "771418cceada23fd",
+        "span": [
+         118,
+         124
+        ]
+       },
+       {
+        "position": 33,
+        "hash": "c9494bf9ed597f41",
+        "span": [
+         119,
+         125
+        ]
+       },
+       {
+        "position": 34,
+        "hash": "b3f7f49467573052",
+        "span": [
+         120,
+         126
+        ]
+       },
+       {
+        "position": 35,
+        "hash": "f5f4e6546e6ce045",
+        "span": [
+         122,
+         126
+        ]
+       },
+       {
+        "position": 36,
+        "hash": "3ae57e8f8b1c9216",
+        "span": [
+         123,
+         128
+        ]
+       },
+       {
+        "position": 37,
+        "hash": "d959e26b7c94e024",
+        "span": [
+         124,
+         128
+        ]
+       },
+       {
+        "position": 38,
+        "hash": "d32a92149d13ff0c",
+        "span": [
+         125,
+         175
+        ]
+       },
+       {
+        "position": 39,
+        "hash": "96b9f4a6c8b0668c",
+        "span": [
+         126,
+         187
+        ]
+       },
+       {
+        "position": 40,
+        "hash": "1250799b8534f063",
+        "span": [
+         127,
+         188
+        ]
+       },
+       {
+        "position": 41,
+        "hash": "4322ee6a44e38fbb",
+        "span": [
+         128,
+         194
+        ]
+       },
+       {
+        "position": 42,
+        "hash": "18da42eca06cd4a1",
+        "span": [
+         171,
+         196
+        ]
+       },
+       {
+        "position": 43,
+        "hash": "ddfcae499de46fa8",
+        "span": [
+         176,
+         197
+        ]
+       },
+       {
+        "position": 44,
+        "hash": "88b31580f58c8d30",
+        "span": [
+         187,
+         200
+        ]
+       },
+       {
+        "position": 45,
+        "hash": "dd70b9974bfa58ed",
+        "span": [
+         188,
+         201
+        ]
+       },
+       {
+        "position": 46,
+        "hash": "31d938568ab36b20",
+        "span": [
+         195,
+         207
+        ]
+       },
+       {
+        "position": 47,
+        "hash": "41e331b14d1a9877",
+        "span": [
+         196,
+         209
+        ]
+       },
+       {
+        "position": 48,
+        "hash": "1beb73344cd06447",
+        "span": [
+         197,
+         243
+        ]
+       },
+       {
+        "position": 49,
+        "hash": "13515a9361cb6941",
+        "span": [
+         200,
+         246
+        ]
+       },
+       {
+        "position": 50,
+        "hash": "38ecb2aa93d2dc60",
+        "span": [
+         204,
+         248
+        ]
+       },
+       {
+        "position": 51,
+        "hash": "5b464df2df0f81f9",
+        "span": [
+         208,
+         248
+        ]
+       },
+       {
+        "position": 52,
+        "hash": "91c4632deae1e20f",
+        "span": [
+         238,
+         256
+        ]
+       },
+       {
+        "position": 53,
+        "hash": "db011d717a31c766",
+        "span": [
+         244,
+         258
+        ]
+       },
+       {
+        "position": 54,
+        "hash": "a57c5c8f31f2d43d",
+        "span": [
+         247,
+         259
+        ]
+       },
+       {
+        "position": 55,
+        "hash": "c1cb1b2a8cf3df51",
+        "span": [
+         248,
+         261
+        ]
+       },
+       {
+        "position": 56,
+        "hash": "43d309ceb22374c8",
+        "span": [
+         253,
+         264
+        ]
+       },
+       {
+        "position": 57,
+        "hash": "233ab16433c2d8fb",
+        "span": [
+         257,
+         270
+        ]
+       },
+       {
+        "position": 58,
+        "hash": "9d299d8f075ecf26",
+        "span": [
+         258,
+         277
+        ]
+       },
+       {
+        "position": 59,
+        "hash": "a3d7ad9d487bc5d7",
+        "span": [
+         260,
+         279
+        ]
+       },
+       {
+        "position": 60,
+        "hash": "538093b29a561332",
+        "span": [
+         262,
+         306
+        ]
+       },
+       {
+        "position": 61,
+        "hash": "dcdebf733b546c0c",
+        "span": [
+         265,
+         308
+        ]
+       },
+       {
+        "position": 62,
+        "hash": "cfac24f790b11425",
+        "span": [
+         271,
+         310
+        ]
+       },
+       {
+        "position": 63,
+        "hash": "1e71d06c4e29e3eb",
+        "span": [
+         278,
+         312
+        ]
+       },
+       {
+        "position": 64,
+        "hash": "b5d3d6d8dda8eebd",
+        "span": [
+         304,
+         314
+        ]
+       },
+       {
+        "position": 65,
+        "hash": "fa55a0a4766d860a",
+        "span": [
+         307,
+         320
+        ]
+       },
+       {
+        "position": 66,
+        "hash": "8a63ddb2158c3d26",
+        "span": [
+         309,
+         323
+        ]
+       },
+       {
+        "position": 67,
+        "hash": "3f23472de367053b",
+        "span": [
+         311,
+         325
+        ]
+       },
+       {
+        "position": 68,
+        "hash": "345ab877317b6271",
+        "span": [
+         313,
+         325
+        ]
+       },
+       {
+        "position": 69,
+        "hash": "2ea7cfbedf6a3813",
+        "span": [
+         315,
+         335
+        ]
+       },
+       {
+        "position": 70,
+        "hash": "1a900123cb5873b4",
+        "span": [
+         321,
+         335
+        ]
+       },
+       {
+        "position": 71,
+        "hash": "668fb2e160809d0e",
+        "span": [
+         324,
+         341
+        ]
+       },
+       {
+        "position": 72,
+        "hash": "81eead64663d4705",
+        "span": [
+         325,
+         341
+        ]
+       },
+       {
+        "position": 73,
+        "hash": "402552fde1fd906a",
+        "span": [
+         334,
+         352
+        ]
+       },
+       {
+        "position": 74,
+        "hash": "2d2dd98d75a840f9",
+        "span": [
+         335,
+         358
+        ]
+       },
+       {
+        "position": 75,
+        "hash": "6924ed5b6ec7fa34",
+        "span": [
+         340,
+         358
+        ]
+       },
+       {
+        "position": 76,
+        "hash": "933db60a111306e4",
+        "span": [
+         341,
+         360
+        ]
+       },
+       {
+        "position": 77,
+        "hash": "23d66ee0192f35a1",
+        "span": [
+         346,
+         360
+        ]
+       },
+       {
+        "position": 78,
+        "hash": "19f3816240eae86a",
+        "span": [
+         353,
+         365
+        ]
+       },
+       {
+        "position": 79,
+        "hash": "303aafd0b663c82f",
+        "span": [
+         358,
+         371
+        ]
+       },
+       {
+        "position": 80,
+        "hash": "1f01266c699baf3e",
+        "span": [
+         359,
+         373
+        ]
+       },
+       {
+        "position": 81,
+        "hash": "b52609c884cebe3d",
+        "span": [
+         360,
+         377
+        ]
+       },
+       {
+        "position": 82,
+        "hash": "b1297f2a096e8dc5",
+        "span": [
+         362,
+         378
+        ]
+       },
+       {
+        "position": 83,
+        "hash": "ecd56f3d91aabede",
+        "span": [
+         366,
+         384
+        ]
+       },
+       {
+        "position": 84,
+        "hash": "be070dae28e2097e",
+        "span": [
+         372,
+         385
+        ]
+       },
+       {
+        "position": 85,
+        "hash": "38eac5c23b3f9e40",
+        "span": [
+         374,
+         389
+        ]
+       },
+       {
+        "position": 86,
+        "hash": "5f82bf7fce21aef0",
+        "span": [
+         377,
+         390
+        ]
+       },
+       {
+        "position": 87,
+        "hash": "c368af4135b32b0f",
+        "span": [
+         378,
+         393
+        ]
+       },
+       {
+        "position": 88,
+        "hash": "e33e442a1da67b2f",
+        "span": [
+         384,
+         394
+        ]
+       },
+       {
+        "position": 89,
+        "hash": "6e6d960e036df0ca",
+        "span": [
+         385,
+         399
+        ]
+       },
+       {
+        "position": 90,
+        "hash": "29b21605d19b29aa",
+        "span": [
+         389,
+         400
+        ]
+       },
+       {
+        "position": 91,
+        "hash": "289dc0bc58d923e8",
+        "span": [
+         390,
+         404
+        ]
+       },
+       {
+        "position": 92,
+        "hash": "7e26bf4b03a3159d",
+        "span": [
+         393,
+         405
+        ]
+       },
+       {
+        "position": 93,
+        "hash": "4d0113483833f25b",
+        "span": [
+         395,
+         411
+        ]
+       },
+       {
+        "position": 94,
+        "hash": "6615cb3214909a51",
+        "span": [
+         399,
+         412
+        ]
+       },
+       {
+        "position": 95,
+        "hash": "925ddcdfe9f31e0a",
+        "span": [
+         401,
+         412
+        ]
+       }
+      ],
+      "windowSelections": [
+       1,
+       4,
+       4,
+       4,
+       4,
+       5,
+       8,
+       10,
+       10,
+       10,
+       13,
+       13,
+       13,
+       13,
+       15,
+       18,
+       19,
+       19,
+       19,
+       22,
+       22,
+       22,
+       22,
+       25,
+       25,
+       28,
+       28,
+       28,
+       28,
+       30,
+       30,
+       31,
+       32,
+       36,
+       36,
+       36,
+       36,
+       40,
+       40,
+       40,
+       40,
+       42,
+       42,
+       46,
+       46,
+       48,
+       49,
+       49,
+       49,
+       49,
+       50,
+       51,
+       52,
+       56,
+       57,
+       57,
+       57,
+       57,
+       60,
+       60,
+       63,
+       63,
+       63,
+       63,
+       67,
+       68,
+       69,
+       70,
+       70,
+       70,
+       70,
+       74,
+       74,
+       74,
+       77,
+       78,
+       78,
+       78,
+       78,
+       80,
+       80,
+       82,
+       85,
+       85,
+       85,
+       85,
+       86,
+       90,
+       91,
+       91,
+       91,
+       91,
+       93
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 1,
+        "hash": "2aa8fce675748898",
+        "span": [
+         8,
+         32
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "1f7e49183e3da462",
+        "span": [
+         20,
+         38
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "5d7780b17b6eba46",
+        "span": [
+         26,
+         40
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "7116eca4370a1b43",
+        "span": [
+         37,
+         50
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "57f97d2ff068e81c",
+        "span": [
+         41,
+         56
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "2c27c33f9e8f6bcf",
+        "span": [
+         50,
+         65
+        ]
+       },
+       {
+        "position": 15,
+        "hash": "80809c4b029f7706",
+        "span": [
+         57,
+         73
+        ]
+       },
+       {
+        "position": 18,
+        "hash": "7d6098e6cf00314e",
+        "span": [
+         65,
+         82
+        ]
+       },
+       {
+        "position": 19,
+        "hash": "10bfc850c30292ce",
+        "span": [
+         67,
+         84
+        ]
+       },
+       {
+        "position": 22,
+        "hash": "101eb74f37364a2e",
+        "span": [
+         76,
+         97
+        ]
+       },
+       {
+        "position": 25,
+        "hash": "146668ad18e47ad3",
+        "span": [
+         93,
+         115
+        ]
+       },
+       {
+        "position": 28,
+        "hash": "0f5ec71bb62835f8",
+        "span": [
+         104,
+         119
+        ]
+       },
+       {
+        "position": 30,
+        "hash": "18d4d9334e4591e5",
+        "span": [
+         115,
+         121
+        ]
+       },
+       {
+        "position": 31,
+        "hash": "2afb720ca6ffcb7c",
+        "span": [
+         117,
+         123
+        ]
+       },
+       {
+        "position": 32,
+        "hash": "771418cceada23fd",
+        "span": [
+         118,
+         124
+        ]
+       },
+       {
+        "position": 36,
+        "hash": "3ae57e8f8b1c9216",
+        "span": [
+         123,
+         128
+        ]
+       },
+       {
+        "position": 40,
+        "hash": "1250799b8534f063",
+        "span": [
+         127,
+         188
+        ]
+       },
+       {
+        "position": 42,
+        "hash": "18da42eca06cd4a1",
+        "span": [
+         171,
+         196
+        ]
+       },
+       {
+        "position": 46,
+        "hash": "31d938568ab36b20",
+        "span": [
+         195,
+         207
+        ]
+       },
+       {
+        "position": 48,
+        "hash": "1beb73344cd06447",
+        "span": [
+         197,
+         243
+        ]
+       },
+       {
+        "position": 49,
+        "hash": "13515a9361cb6941",
+        "span": [
+         200,
+         246
+        ]
+       },
+       {
+        "position": 50,
+        "hash": "38ecb2aa93d2dc60",
+        "span": [
+         204,
+         248
+        ]
+       },
+       {
+        "position": 51,
+        "hash": "5b464df2df0f81f9",
+        "span": [
+         208,
+         248
+        ]
+       },
+       {
+        "position": 52,
+        "hash": "91c4632deae1e20f",
+        "span": [
+         238,
+         256
+        ]
+       },
+       {
+        "position": 56,
+        "hash": "43d309ceb22374c8",
+        "span": [
+         253,
+         264
+        ]
+       },
+       {
+        "position": 57,
+        "hash": "233ab16433c2d8fb",
+        "span": [
+         257,
+         270
+        ]
+       },
+       {
+        "position": 60,
+        "hash": "538093b29a561332",
+        "span": [
+         262,
+         306
+        ]
+       },
+       {
+        "position": 63,
+        "hash": "1e71d06c4e29e3eb",
+        "span": [
+         278,
+         312
+        ]
+       },
+       {
+        "position": 67,
+        "hash": "3f23472de367053b",
+        "span": [
+         311,
+         325
+        ]
+       },
+       {
+        "position": 68,
+        "hash": "345ab877317b6271",
+        "span": [
+         313,
+         325
+        ]
+       },
+       {
+        "position": 69,
+        "hash": "2ea7cfbedf6a3813",
+        "span": [
+         315,
+         335
+        ]
+       },
+       {
+        "position": 70,
+        "hash": "1a900123cb5873b4",
+        "span": [
+         321,
+         335
+        ]
+       },
+       {
+        "position": 74,
+        "hash": "2d2dd98d75a840f9",
+        "span": [
+         335,
+         358
+        ]
+       },
+       {
+        "position": 77,
+        "hash": "23d66ee0192f35a1",
+        "span": [
+         346,
+         360
+        ]
+       },
+       {
+        "position": 78,
+        "hash": "19f3816240eae86a",
+        "span": [
+         353,
+         365
+        ]
+       },
+       {
+        "position": 80,
+        "hash": "1f01266c699baf3e",
+        "span": [
+         359,
+         373
+        ]
+       },
+       {
+        "position": 82,
+        "hash": "b1297f2a096e8dc5",
+        "span": [
+         362,
+         378
+        ]
+       },
+       {
+        "position": 85,
+        "hash": "38eac5c23b3f9e40",
+        "span": [
+         374,
+         389
+        ]
+       },
+       {
+        "position": 86,
+        "hash": "5f82bf7fce21aef0",
+        "span": [
+         377,
+         390
+        ]
+       },
+       {
+        "position": 90,
+        "hash": "29b21605d19b29aa",
+        "span": [
+         389,
+         400
+        ]
+       },
+       {
+        "position": 91,
+        "hash": "289dc0bc58d923e8",
+        "span": [
+         390,
+         404
+        ]
+       },
+       {
+        "position": 93,
+        "hash": "4d0113483833f25b",
+        "span": [
+         395,
+         411
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "mv-go-nonascii-prefixed2",
+   "tags": [
+    "unicode"
+   ],
+   "description": "mv-go-nonascii after a 15-byte, 11-code-point comment line.",
+   "inputBase64": "Ly8gw5xuw69jw7Zkw6kKZnVuYyBncsO2w59lKG7DpG1lIHN0cmluZykgc3RyaW5nIHsKCWdyw7zDn2UgOj0gImjDqWxsbywg5LiW55WMIgoJcmV0dXJuIGdyw7zDn2UgKyBuw6RtZQp9Cg==",
+   "inputText": "// Ünïcödé\nfunc größe(näme string) string {\n\tgrüße := \"héllo, 世界\"\n\treturn grüße + näme\n}\n",
+   "result": {
+    "status": "ok",
+    "tokenCount": 19,
+    "tokens": [
+     {
+      "class": "keyword",
+      "text": "func",
+      "span": [
+       15,
+       19
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "größe",
+      "span": [
+       20,
+       27
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "(",
+      "span": [
+       27,
+       28
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "näme",
+      "span": [
+       28,
+       33
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "string",
+      "span": [
+       34,
+       40
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ")",
+      "span": [
+       40,
+       41
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "string",
+      "span": [
+       42,
+       48
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "{",
+      "span": [
+       49,
+       50
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "grüße",
+      "span": [
+       52,
+       59
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ":=",
+      "span": [
+       60,
+       62
+      ]
+     },
+     {
+      "class": "string",
+      "text": "\"héllo, 世界\"",
+      "span": [
+       63,
+       79
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       79,
+       79
+      ],
+      "inserted": true
+     },
+     {
+      "class": "keyword",
+      "text": "return",
+      "span": [
+       81,
+       87
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "grüße",
+      "span": [
+       88,
+       95
+      ]
+     },
+     {
+      "class": "punct",
+      "text": "+",
+      "span": [
+       96,
+       97
+      ]
+     },
+     {
+      "class": "ident",
+      "text": "näme",
+      "span": [
+       98,
+       103
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       103,
+       103
+      ],
+      "inserted": true
+     },
+     {
+      "class": "punct",
+      "text": "}",
+      "span": [
+       104,
+       105
+      ]
+     },
+     {
+      "class": "punct",
+      "text": ";",
+      "span": [
+       105,
+       105
+      ],
+      "inserted": true
+     }
+    ],
+    "channels": {
+     "exact": {
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "5f7b5011bfb1c05f",
+        "span": [
+         15,
+         40
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "2b77c462c5c6e238",
+        "span": [
+         20,
+         41
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "1896ba250d6b9aae",
+        "span": [
+         27,
+         48
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "7aa5c2c2cd0cb7ca",
+        "span": [
+         28,
+         50
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "89ff7d5e4aff0ff1",
+        "span": [
+         34,
+         59
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "8faecfbe9fd1db9f",
+        "span": [
+         40,
+         62
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "fdf2189282feeac5",
+        "span": [
+         42,
+         79
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "1ab06a742c38c835",
+        "span": [
+         49,
+         79
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "5df6e80a76ec71f5",
+        "span": [
+         52,
+         87
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "611a1189f887bfe3",
+        "span": [
+         60,
+         95
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "bf4c89185bd73b5b",
+        "span": [
+         63,
+         97
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "546a8677a3ebc8d2",
+        "span": [
+         79,
+         103
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "8373696aa9f02273",
+        "span": [
+         81,
+         103
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "ea64297e2b6046e0",
+        "span": [
+         88,
+         105
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "55a872fb5d99a1fd",
+        "span": [
+         96,
+         105
+        ]
+       }
+      ],
+      "windowSelections": [
+       2,
+       2,
+       2,
+       3,
+       7,
+       7,
+       7,
+       7,
+       11,
+       11,
+       11,
+       11
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 2,
+        "hash": "1896ba250d6b9aae",
+        "span": [
+         27,
+         48
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "7aa5c2c2cd0cb7ca",
+        "span": [
+         28,
+         50
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "1ab06a742c38c835",
+        "span": [
+         49,
+         79
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "546a8677a3ebc8d2",
+        "span": [
+         79,
+         103
+        ]
+       }
+      ]
+     },
+     "normalized": {
+      "values": [
+       "func",
+       "",
+       "(",
+       "",
+       "",
+       ")",
+       "",
+       "{",
+       "",
+       ":=",
+       "",
+       ";",
+       "return",
+       "",
+       "+",
+       "",
+       ";",
+       "}",
+       ";"
+      ],
+      "kgrams": [
+       {
+        "position": 0,
+        "hash": "b1f64e56779c6012",
+        "span": [
+         15,
+         40
+        ]
+       },
+       {
+        "position": 1,
+        "hash": "9020dc33e17b29c6",
+        "span": [
+         20,
+         41
+        ]
+       },
+       {
+        "position": 2,
+        "hash": "80809c4b029f7706",
+        "span": [
+         27,
+         48
+        ]
+       },
+       {
+        "position": 3,
+        "hash": "c5bd51446b773c13",
+        "span": [
+         28,
+         50
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "1beb73344cd06447",
+        "span": [
+         34,
+         59
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "13515a9361cb6941",
+        "span": [
+         40,
+         62
+        ]
+       },
+       {
+        "position": 6,
+        "hash": "b0f61af133b7bf56",
+        "span": [
+         42,
+         79
+        ]
+       },
+       {
+        "position": 7,
+        "hash": "38a74ff5576d45c3",
+        "span": [
+         49,
+         79
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "1a7224848bc8bd1f",
+        "span": [
+         52,
+         87
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "534699085d2df561",
+        "span": [
+         60,
+         95
+        ]
+       },
+       {
+        "position": 10,
+        "hash": "cf447b55dcf28878",
+        "span": [
+         63,
+         97
+        ]
+       },
+       {
+        "position": 11,
+        "hash": "c39384a312e68504",
+        "span": [
+         79,
+         103
+        ]
+       },
+       {
+        "position": 12,
+        "hash": "f5a754c25e21130b",
+        "span": [
+         81,
+         103
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "a5b7e35d72b278aa",
+        "span": [
+         88,
+         105
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "85adbe4d292bf2e6",
+        "span": [
+         96,
+         105
+        ]
+       }
+      ],
+      "windowSelections": [
+       2,
+       4,
+       5,
+       5,
+       5,
+       5,
+       8,
+       8,
+       8,
+       9,
+       13,
+       14
+      ],
+      "partialWindow": false,
+      "fingerprints": [
+       {
+        "position": 2,
+        "hash": "80809c4b029f7706",
+        "span": [
+         27,
+         48
+        ]
+       },
+       {
+        "position": 4,
+        "hash": "1beb73344cd06447",
+        "span": [
+         34,
+         59
+        ]
+       },
+       {
+        "position": 5,
+        "hash": "13515a9361cb6941",
+        "span": [
+         40,
+         62
+        ]
+       },
+       {
+        "position": 8,
+        "hash": "1a7224848bc8bd1f",
+        "span": [
+         52,
+         87
+        ]
+       },
+       {
+        "position": 9,
+        "hash": "534699085d2df561",
+        "span": [
+         60,
+         95
+        ]
+       },
+       {
+        "position": 13,
+        "hash": "a5b7e35d72b278aa",
+        "span": [
+         88,
+         105
+        ]
+       },
+       {
+        "position": 14,
+        "hash": "85adbe4d292bf2e6",
+        "span": [
+         96,
+         105
+        ]
+       }
+      ]
+     }
+    }
+   }
+  }
+ ]
+}

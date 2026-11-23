@@ -67,6 +67,14 @@ PROFILES[("ts-tokens", "draft-2")] = {
               "unterminated-literal", "malformed-literal", "malformed-identifier", "unbalanced-delimiter"},
     "literals": {"number", "bigint", "string", "template", "template-head", "template-middle", "template-tail", "regex",
                  "jsx-text", "jsx-string"}}
+# py-tokens draft-1 (frozen at 58c25a9; registered as specified, not implemented by the reference lanes): zero-width
+# NEWLINE/INDENT/DEDENT tokens with empty text, so k-grams can have empty spans and equal span starts (§3.6).
+PROFILES[("py-tokens", "draft-1")] = {
+    "lang": "py", "exclusions": (), "channels": ("exact", "normalized"),
+    "codes": {"invalid-utf8", "bom", "nul", "input-too-large", "illegal-character", "unterminated-literal",
+              "malformed-literal", "unbalanced-delimiter", "inconsistent-indentation", "unmatched-dedent"},
+    "literals": {"int", "float", "imag", "string", "bytes", "fstring-start", "fstring-middle", "fstring-end",
+                 "tstring-start", "tstring-middle", "tstring-end"}}
 PROFILES[("text-plain", "draft-1")] = {"contract": "traceweave-text-winnow-draft-1",
     "lang": "text", "exclusions": (), "channels": ("exact", "folded", "skeleton"),
     "codes": {"invalid-utf8", "nul", "input-too-large"}, "literals": set()}
@@ -596,9 +604,10 @@ def catalogue_semantic_errors(cat, prof):
             prev = None
             for f in fps:
                 s, e = f["span"]
-                if not (f["position"] < m and 0 <= s <= e <= n):
+                if not (f["position"] < m and 0 <= s <= e <= n) or (CATALOGUE_VARIANT[0] == "empty-span-rejected" and s == e):
                     errs.append(f"{a['id']}/{ch}: fingerprint position or span out of range")
-                if prev and not (f["position"] > prev["position"] and s > prev["span"][0] and e >= prev["span"][1]):
+                if prev and not (f["position"] > prev["position"] and (s > prev["span"][0] if CATALOGUE_VARIANT[0] == "strict-span-starts"
+                                                                  else s >= prev["span"][0]) and e >= prev["span"][1]):
                     errs.append(f"{a['id']}/{ch}: fingerprints not ordered by position with monotone spans")
                 if prev and f["position"] - prev["position"] > w:
                     errs.append(f"{a['id']}/{ch}: gap between fingerprints exceeds the window")
@@ -847,9 +856,12 @@ VARIANTS = [
     ("no-depth-limit", "K4: no nesting limit (Rust reading)"),
     ("depth-limit-strict", "K4: limit applied at 64 instead of above 64 (off by one)"),
     ("config-bounds-ignored", "Bounds: maxSeedsPerMode above 10^7 or maxRegionsPerMode above 10^5 accepted"),
+    ("strict-span-starts", "P1: fingerprint span starts required to strictly increase (rejects py-tokens zero-width layout)"),
+    ("empty-span-rejected", "P2: an empty fingerprint span rejected at k > 1"),
 ]
 CATALOGUE_LEVEL_VARIANTS = {"suppression-lenient-digest", "last-duplicate-key-wins", "extraction-bounds-ignored",
-                            "lone-surrogate-accepted", "no-depth-limit", "depth-limit-strict", "config-bounds-ignored"}
+                            "lone-surrogate-accepted", "no-depth-limit", "depth-limit-strict", "config-bounds-ignored",
+                            "strict-span-starts", "empty-span-rejected"}
 
 
 # ------------------------------------------------------------------ report rules beyond the schema (contract §6)
@@ -994,6 +1006,9 @@ def check_hand(v, body, texts):
                 need([r["ambiguous"] for r in regs] == e["ambiguous"], f"{tag}: ambiguity flags differ")
             if e.get("exhaustiveDiagonalZero"):
                 need(len(regs) == 1 and all(a == b for a, b in regs[0]["seeds"]), f"{tag}: not one diagonal-0 region")
+            if "regionSpans" in e:
+                need([[r["referenceSpan"], r["candidateSpan"]] for r in regs] == e["regionSpans"],
+                     f"{tag}: region spans differ from the hand derivation")
             if "candidateShift" in e:
                 need(all([s + e["candidateShift"] for s in r["referenceSpan"]] == r["candidateSpan"] for r in regs),
                      f"{tag}: candidate spans are not reference spans + {e['candidateShift']} bytes")

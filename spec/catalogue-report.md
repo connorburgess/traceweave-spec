@@ -2,7 +2,7 @@
 
 Status: experimental draft, normative for conformance of this draft version; decided-in-draft items confirmed by the owner's delegation on 2026-11-23.
 
-Revision status (before promotion): **draft for review, revision draft-2 with amendments A1 (extraction record), A2 (normalized-stream exclusions), A3 (declared channel lists), A4 (registered text-plain and ts-tokens), A5 (I2 cross-check rulings), A6 (behavioural rulings), A7 (behavioural follow-ups), A8 (verified provenance stamp), A9 (fault-injection values), A10 (provenance by content), A11 (commit resolved once) and A12 (private read-only export), 2026-11-23.** Roadmap item TW-03. Gates: [roadmap](../ROADMAP.md) M1.3 (catalogue and report schemas) and M2.6 (hand-derived matching vectors). This contract also fixes what I2 in the [implementation plan](../docs/implementation-repo-plan.md#milestones) must reproduce for M2.4 and M2.5. It builds on the reviewed [extraction contract](extraction.md) and changes nothing in it.
+Revision status (before promotion): **draft for review, revision draft-2 with amendments A1 (extraction record), A2 (normalized-stream exclusions), A3 (declared channel lists), A4 (registered text-plain and ts-tokens), A5 (I2 cross-check rulings), A6 (behavioural rulings), A7 (behavioural follow-ups), A8 (verified provenance stamp), A9 (fault-injection values), A10 (provenance by content), A11 (commit resolved once), A12 (private read-only export) and A13 (gate closure), 2026-11-23.** Roadmap item TW-03. Gates: [roadmap](../ROADMAP.md) M1.3 (catalogue and report schemas) and M2.6 (hand-derived matching vectors). This contract also fixes what I2 in the [implementation plan](../docs/implementation-repo-plan.md#milestones) must reproduce for M2.4 and M2.5. It builds on the reviewed [extraction contract](extraction.md) and changes nothing in it.
 
 This revision resolves the [clean-room review](../research/reviews/catalogue-report-contract-review.md) Part 1 findings 1–10 and guesses G1–G6, plus the non-blocking additions of its confirmation pass (G7, invariance, cap and suppression-order vectors). Every disposition is in [§13](#13-review-dispositions). Draft-2 changes formats: catalogue `traceweave-catalogue-draft-2`, comparison `traceweave-seed-merge-draft-2`, report `traceweave-report-draft-2`. Draft-1 identifiers are no longer accepted.
 
@@ -187,14 +187,15 @@ Steps in order. The first failure decides the code:
    | `rust2024-tokens` / `draft-1` | `traceweave-token-winnow-draft-1` | `exact`, `normalized` | Go's list plus `isolated-cr`, `reserved-token`, `unbalanced-delimiter`, `non-nfc-identifier`, `malformed-identifier` |
    | `ts-tokens` / `draft-2` (A4; normalized excludes `punct` `;`, extraction OD-23) | `traceweave-token-winnow-draft-1` | `exact`, `normalized` | `invalid-utf8`, `bom`, `nul`, `input-too-large`, `illegal-character`, `unterminated-comment`, `unterminated-literal`, `malformed-literal`, `malformed-identifier`, `unbalanced-delimiter` ([TypeScript profile](../profiles/typescript.md)) |
    | `text-plain` / `draft-1` (A4) | `traceweave-text-winnow-draft-1` | `exact`, `folded`, `skeleton` | `invalid-utf8`, `nul`, `input-too-large` ([text profile](../profiles/text.md)) |
+   | `py-tokens` / `draft-1` (A13; **specified, not implemented**: frozen at 58c25a9, no reference extractor yet) | `traceweave-token-winnow-draft-1` | `exact`, `normalized` (no `normalizedExclusions`) | `invalid-utf8`, `bom`, `nul`, `input-too-large`, `illegal-character`, `unterminated-literal`, `malformed-literal`, `unbalanced-delimiter`, `inconsistent-indentation`, `unmatched-dedent` ([Python profile draft](../research/drafts/extraction-profile-python.md)) |
 
-   `tsx-tokens` and `text-markdown` are not registered: they are not frozen for stage 1. The TEST-ONLY profiles (`go-tokens-exclusion-test`, `go-tokens-three-channel-test`) are accepted only in vectors flagged as such and are never registered. Registering a profile adds lists to the set `modes` may name (§4 step 4); it changes no existing byte.
+   `tsx-tokens` and `text-markdown` are not registered: they are not frozen for stage 1. The TEST-ONLY profiles (`go-tokens-exclusion-test`, `go-tokens-three-channel-test`) are accepted only in vectors flagged as such and are never registered. Registering a profile adds lists to the set `modes` may name (§4 step 4); it changes no existing byte. **"Specified, not implemented"** (A13) means the profile is registered for everything that needs no lexer: catalogue validation, comparison and building from records (§3.8, K2) MUST accept it. Only extraction of that profile may be missing from an implementation, and the implementation documents that.
 6. Semantic rules hold. Otherwise: `malformed-catalogue`.
    - **Binding.** `profile` matches `extractionConfig`, and `configSha256` is the digest of its canonical bytes. Ids are strictly ordered, and digests are unique.
    - **Extraction bounds and profile row** (A5, K1). `extractionConfig` MUST be a configuration a conforming extractor accepts: `k` ≤ 16, `window` ≤ 128, `maxInputBytes` ≤ 8,388,608 (extraction §10 step 5, §10a), `contract` equal to the profile's contract (§3.6 step 5 table) and `channels` equal to its channel list. A catalogue outside these is `malformed-catalogue` **even when its digest binding is correct**, because no conforming extractor could have produced it (`k1-extraction-bounds-k17` as reference, `k1-extraction-bounds-max-input` as candidate; `k1-extraction-bounds-at-bound` shows k 16, window 128 accepted).
    - **Error entries.** The code is in the profile's closed list. An `input-too-large` entry has `sha256` and `byteLength` `null` and offset 0 (A1; draft-2 before A1 required `byteLength > maxInputBytes`, which a Q10 record cannot supply). Every other error entry has a digest, `byteLength ≤ maxInputBytes` and offset at most `byteLength`.
    - **Other entries.** `byteLength ≤ maxInputBytes`. `status` is `ok` exactly when `tokenCount ≥ k` (the exact count decides status). Exact `kgramCount = max(0, tokenCount − k + 1)`. Normalized `kgramCount`: for a profile without exclusions it equals the exact `kgramCount`; for a profile that declares exclusions, n_N is not stored, so the rule is `0 ≤ kgramCount ≤` the exact `kgramCount`, and an `ok` entry may have an empty normalized channel (`kgramCount` 0, no fingerprints, `partialWindow` false). In each channel, `partialWindow` is true exactly when `1 ≤ kgramCount < window`, and a partial window has exactly one fingerprint.
-   - **Fingerprints.** Each position is below `kgramCount`, with `0 ≤ start ≤ end ≤ byteLength` (finding 9). The span may be empty: with k = 1, a Go inserted `;` k-gram has span `[e, e)`, and `e` can equal `byteLength`. Positions and span starts strictly increase, and span ends never decrease. When `kgramCount ≥ window`: consecutive positions differ by at most `window`, the first position is below `window`, the last is at least `kgramCount − window`, and the count lies between ⌈(m − w + 1)/w⌉ and m − w + 1.
+   - **Fingerprints.** Each position is below `kgramCount`, with `0 ≤ start ≤ end ≤ byteLength` (finding 9). The span may be empty: with k = 1, a Go inserted `;` k-gram has span `[e, e)`, and `e` can equal `byteLength`. **For a profile whose tokens can be zero-width (`py-tokens`: NEWLINE, INDENT, DEDENT), an empty span is valid at every k**: a k-gram made only of zero-width tokens has span `[n, n)`. A catalogue MUST store such a span unchanged, a report MUST carry any region span derived from it unchanged, and a consumer MUST NOT treat it as an error or drop it (A13; `py-empty-span-self`, `rv-py-empty-span-region`). Positions strictly increase. **Span starts never decrease and span ends never decrease** (A13). Consecutive k-grams that start at zero-width tokens can share a start offset (`py-equal-starts`). Before A13 this rule said "starts strictly increase", which every `py-tokens` file with consecutive DEDENTs would have violated. The relaxation changes no existing byte or outcome. When `kgramCount ≥ window`: consecutive positions differ by at most `window`, the first position is below `window`, the last is at least `kgramCount − window`, and the count lies between ⌈(m − w + 1)/w⌉ and m − w + 1.
 
 Step 6 checks only that the fingerprints have the shape winnowing produces. Their *correctness* needs the sources, and is checked in the vectors by re-extraction.
 
@@ -286,6 +287,12 @@ For mode `exact` or `normalized`, a hash is **common** if and only if it occurs 
 Commonness does not depend on the reference or candidate catalogues. Adding or removing unrelated reference files cannot change any pair's outcome (finding 1). Vectors `go-invariance-three-references` and `go-invariance-plus-unrelated` have three ok reference files that share the copied loop, and the checker requires every pair common to both vectors to have an identical result. An implementation that still applied draft-1 document-frequency suppression would mark the loop's hashes common and fail them.
 
 Suppression is **advisory and corpus-dependent**. It removes only the hashes that winnowing happened to select in the boilerplate catalogue's files, so a shared idiom whose k-grams were selected differently is not suppressed (§10). A match produced by boilerplate is expected behavior, not an error (`go-boilerplate-unsuppressed`).
+
+**Vendored third-party code** (OD-C19, decided in draft, pending owner confirmation; A13). Vendored or dependency code needs no new catalogue field or artifact label. It is represented on two paths:
+1. **Comparison: the vendor catalogue is the suppression catalogue.** The vendored files' catalogue, built like any other from the third-party sources, is bound by digest as the suppression catalogue (§4, §5.1). Its hashes are common. Vendored regions therefore stay **visible** in the report, listed with their counts and with status `common-only`, but they never count as evidence (`vendor-suppressed`). Without it they match like any copied code (`vendor-unsuppressed`). A vendor catalogue and a boilerplate catalogue can be one catalogue; this draft binds one suppression catalogue per comparison.
+2. **Origin: a review packet** (§6.9) links the region to the dependency, naming the package and version, the upstream artifact digest and the digest of the archived licence text (`packet-vendored-dependency`, and `packet-vendored-common-only` for the suppressed region).
+
+The alternative, a labelled reference-artifact class inside catalogues, was not chosen. It would add a field to every catalogue entry and put an origin claim inside the comparison inputs, which M2.7 keeps out of the report path. Eligible-file selection (whether vendored files are extracted at all) stays with TW-01 (extraction OD-14).
 
 ### 5.3 Pairs
 
@@ -542,6 +549,49 @@ These rules come from the I2 behavioural run (77 scenarios across both CLIs, `xc
   An unknown field is reported as "unknown field" with its position or depth, not its name (items 57 and 58). The review of `merge-i2` found the Go lane echoing an unknown key name (F3).
 - **B13 A symbolic link at the output file name.** The final rename replaces the link **itself**. The implementation never writes through it, so the link's former target is left byte-identical, and the result is a regular file at the output path. The working-tree check (B1, B2) applies to the output file's directory after resolving links. A link at the file name does not change which directory is checked (items 51 and 52).
 
+### 6.9 Review packets: origin and dependency links (A13, roadmap M2.7)
+
+UC-2 origin and dependency links live in a **separate record**, the review packet ([schemas/review-packet.schema.json](../schemas/review-packet.schema.json), `traceweave-review-packet-draft-1`). It is never part of a report body, which has no origin field (§7; fixture `origin-inside-report`). A packet holds:
+- `report.bodySha256`: the body it annotates;
+- `region`: the region key of §5.5, `{referenceId, candidateId, mode, firstSeed}`. It MUST name a **listed** region of that body: a compared pair, one of its modes, and a region whose first seed equals `firstSeed`. A region cut by the cap cannot be referenced (§5.5). A key absent from the body is invalid (`region-key-absent`, `region-mode-absent`);
+- `origin`, one of three kinds:
+  - `own-origin`: `artifactSha256`, which MUST equal the region's reference artifact digest, and the `repositoryCommit` it comes from;
+  - `vendored-dependency`: `package {name, version}`, `upstreamArtifactSha256`, and `licence {identifier, textSha256}`;
+  - `historical-copy`: `sourceArtifactSha256`, `sourceCommit`, and `licence {identifier, textSha256}` in force at that commit.
+
+`licence.textSha256` is the SHA-256 of an **archived licence text** that the record's holder can produce. Fixtures archive synthetic placeholder texts under `test-vectors/matching/licence-texts/`. A packet has **no rights-verdict field**: no permitted or infringing flag, no licence-compatibility conclusion, no owner, no score and no free text. A rights review reaches its conclusion elsewhere and cites the packet. A "historical permitted copy" is therefore recorded as `historical-copy` with the licence then in force; whether it was permitted is not a field. Fixtures are in [review-packets.json](../test-vectors/matching/review-packets.json):
+- 4 valid packets: own origin, vendored dependency, vendored and common-only, historical copy;
+- 55 rejections: one per required field of each origin kind, region key or mode absent, unknown body, own-origin digest mismatch, an unarchived licence text, and forbidden fields;
+- 1 report body with an origin field, which the report schema rejects.
+
+### 6.10 Candidate-generation record (A13, roadmap M2.9)
+
+Index ranking is not evidence. How the candidate catalogue was produced is recorded in a **separate record keyed by the body's `bodySha256`** ([schemas/candidate-generation.schema.json](../schemas/candidate-generation.schema.json), `traceweave-candidate-generation-draft-1`). It is never part of the body. The record holds:
+- `report.bodySha256`;
+- `candidateCatalogueSha256`, which MUST equal the body's `inputs.candidateCatalogueSha256`;
+- `generation`: either `{"method":"exhaustive"}`, or `{"method":"selected", "selectedIdsSha256", "index": {name, version}}`. `selectedIdsSha256` is the SHA-256 of the RFC 8785 array of the selected candidate ids sorted by bytes, and MUST equal that digest computed over the candidate catalogue's ids.
+
+There is no rank, score or position field, in the record or in the body. Because the candidate catalogue is canonical (artifacts sorted by id, §3.4), **the same candidate set gives a byte-identical catalogue and body whatever retrieval path or order produced it**. A different set changes the candidate catalogue digest, `candidateArtifactCount` and the pairs. Fixtures are in [candidate-generation.json](../test-vectors/matching/candidate-generation.json):
+- built on `text-plain-three-modes`, three retrieval paths (exhaustive, and two toy indexes returning the four documents in other orders) each give that vector's body byte for byte;
+- one index selecting two documents gives a different catalogue, count and pairs;
+- 7 invalid records: rank, scores, unknown method, missing digest, wrong id-set digest, catalogue mismatch, unknown body;
+- 4 report bodies with rank, score, index or candidate-generation fields, which the report schema rejects.
+
+### 6.11 Frozen M2.2 fixture manifest (A13)
+
+[m22-fixture-manifest.json](../test-vectors/matching/m22-fixture-manifest.json) (SHA-256 `9674ce2ed114919318a8108dfbb1a724e5eb10424bef35d811f81b23b30f1887`, pinned in `check_gates.py`) names, for each UC-1 example-matrix row, its cases:
+
+| Row | Positive cases | Companion cases |
+| --- | --- | --- |
+| exact | `go-identical`, `rust-identical` | none |
+| formatted fragment in a large host | `go-formatted-fragment-in-host`, `go-function-in-host`, `go-comments-whitespace` | none |
+| rename/shadowing | `go-renamed`, `go-shadowing`, `rust-renamed` | none |
+| Unicode / repeated minima / tiny file | `go-non-ascii-shift-2` | `go-periodic-distinct` (deterministic handling of repeated equal minima), `go-insufficient-tokens` (abstention on a tiny file) |
+
+Every positive case is `derivation: hand`. Each case lists its input digests and byte lengths, its catalogue and body digests, and the expected outcome and half-open UTF-8 byte spans of every listed region per mode. `check_gates.py` recomputes the bodies and requires every span to match (56/56). An implementation passes M2.2 when it reproduces every digest and span (N/N).
+
+The baseline's normalized channel is not scope-aware (§8). For the shadowing case it is expected to match a shadowed and a fresh binding alike; the example matrix's "a scope-aware channel must distinguish shadowed bindings" applies to a future scope-aware profile, not to this baseline.
+
 ## 7. Separation from other results
 
 The body holds fingerprint comparison results only. `additionalProperties: false` makes each of the following a schema violation; the checker corruptions cover a rank field, an origin field, `ownership` and `signatureValid`:
@@ -672,10 +722,21 @@ Draft-1 said `match` here. The rule changed (§5.6), not the arithmetic.
 
 **Amendment A12 (private read-only export), decided in draft, pending owner confirmation:** OD-C60 the verifying build step compiles from a private, read-only export of the resolved object id and re-verifies that export by content after compiling; writers of the private build directory that the operating system does not record are out of scope, alongside a modified toolchain (B10 point 5).
 
+**Amendment A13 (gate closure: vendor class, review packets, candidate generation, M2.2 manifest, py-tokens), decided in draft, pending owner confirmation:** OD-C19 vendored code is a vendor catalogue bound as the suppression catalogue, plus a review packet for its origin, not a catalogue field (§5.2); OD-C61 the review-packet record (§6.9); OD-C62 the candidate-generation record (§6.10); OD-C63 the frozen M2.2 manifest (§6.11); OD-C64 empty spans valid at every k for zero-width-token profiles, and span starts non-decreasing (§3.6); OD-C65 `py-tokens` registered as specified, not implemented (§3.6 step 5).
+
+**Derivation of the matching vectors** (M2.6). Every vector carries a `derivation` label, and every mode of every hand expectation carries its own. **Five vectors cannot be claimed as hand-derived**, and stay `mixed`, because their values were seen computed before they were written down:
+- `go-duplicate-regions` and `go-tie-equal-candidate-span` (normalized);
+- `go-repeated-hash-self` (normalized);
+- `go-boilerplate-unsuppressed` (both modes);
+- `go-non-ascii-shift` (both modes).
+
+They are not re-labelled: a re-derivation now would still follow the computation. A13 adds one more such mode: `py-empty-span-self` normalized, whose layout-only k-grams repeat, so it is ambiguous. No M2.2 positive case or M2.3 control class rests on a `mixed` vector:
+- `go-non-ascii-shift-2` is a new, hand-derived Unicode vector;
+- the vendor class (`vendor-suppressed`, `vendor-unsuppressed`) is hand-derived. Its first input repeated a normalized 5-gram and failed the hand expectation, so the input was replaced and the expectation kept, as with the draft-1 boilerplate input (README).
+
 **Still open:**
 - **OD-C17, parameter tuning** (TW-05). Each choice is a new configuration digest.
 - **OD-C18, gap-tolerant region formation** (OD-C3 (b)/(c)) as a future comparison id. It needs its own tie rule and vectors.
-- **OD-C19, the vendor/third-party control class** for M2.3. It depends on eligible-file selection (extraction OD-14, TW-01), which this contract does not define. Until it exists, the M2.6 gate claim is **not met**.
 - **OD-C20, keyed fingerprints** (extraction OD-11) would change the privacy class in §3.7. A separate gate.
 
 ## 12. Requirement-to-check map
@@ -694,6 +755,7 @@ All checks are in [check_matching.py](../test-vectors/matching/check_matching.py
 | M2.5 | A `large-host` vector with complete containment and partial Jaccard |
 | §2a record bytes | `records.json`: 16 records (ok, Unicode, CR, U+000B, insufficient, empty, lexical error, encoding error, input-too-large ×2, at-limit ok, unsupported-config ×2, Rust ok with quotes and backslashes, Rust error), each derived from an extraction vector and compared with the checker's own record writer; strict parse, schema and canonical round trip. Record corruption self-test, 48 cases (A3 adds: channels out of order, `classes` missing, `classes` without values, `values` in `exact`, an extra channel on a Go record, non-empty `classes` values, re-derivation undeclared), including an unnamed configuration, a wrong configuration file and a wrong configuration digest |
 | §3.8 catalogue from records | Two catalogues built from records equal the `matching.json` catalogues; a TEST-ONLY exclusion-profile catalogue equals one rebuilt from `exclusion-rule.json`; three refused builds |
+| A13 gates (§3.6, §5.2, §6.9–§6.11) | `check_gates.py` (run by `tools/validate.py`): M2.2 manifest frozen by digest, 11 cases, 56/56 spans recomputed; M2.7 review packets: 4 valid (3 origin kinds), 55 rejections (one per required field per kind, absent region key or mode, unknown body, digest and licence checks, forbidden verdict fields), 1 report body with an origin field rejected; M2.9: 3 retrieval paths give one body byte for byte, a subset changes catalogue, count and pairs, 7 invalid records, 4 report bodies with rank/score/index fields rejected; 13 gate corruptions rejected. `check_matching.py`: 7 new vectors; wrong implementations "strict span starts" and "empty span rejected" are caught |
 | A3 channel lists (§2b) | 8 re-derived TEST-ONLY records checked against an independent re-derivation from the Go tokens; a three-channel catalogue from records; 5 `tc-*` matching vectors (rename: exact no match, normalized and classes match; classes-only match; per-mode suppression; two `mode-mismatch`); 5 channel-list negatives (6 at A3; A4 removed the text list when `text-plain` was registered); catalogue rules (missing channel, wrong `classes` count, config list ≠ profile list, extra channel on Go); report corruptions (mode dropped, modes reordered, suppression key missing, extra mode, flag dropped) |
 | A2 normalized exclusions (§2, §2a, §3.6, §3.8) | Five records from `exclusion-rule.json` (`rec-excl-*`, TEST-ONLY profile `go-tokens-exclusion-test`); the checker recomputes the normalized stream from the declared exclusions. Record corruptions: `tokenIndices` on Go, omitted, after `values`, `values` including excluded tokens, exclusions ignored, normalized positions from exact. Catalogue rules: Go normalized `kgramCount` ≠ exact (rejected), exclusion profile with an empty normalized `ok` channel (accepted), normalized above exact (rejected), test-only profile unsupported for comparison |
 | Hand derivation | Codes, counts, seeds, ambiguity flags, excerpt bounds and byte shifts, with a `derivation` label per mode. A corruption that relabels a computed-then-reviewed mode as `hand` is rejected |
@@ -721,6 +783,7 @@ All checks are in [check_matching.py](../test-vectors/matching/check_matching.py
 | Part 3 item 1 (M2.9 index) | §1 and §7: no index or rank field. The candidate set is identified by `inputs.candidateCatalogueSha256`, and canonical id ordering makes input order irrelevant. Recording how candidates were generated (exhaustive, or a digest of the selected id set) is left to M2.9's own record; the body records only the resulting catalogue digest |
 | Part 3 item 2 (M2.7 origin links) | §1, §5.5 region key and §7: origin links live in a separate record that references `bodySha256` and the region key |
 | Parts 2 and 3, other items | Outside this lane's files (use-case plans, roadmap) |
+| **A13** gate closure (coordinator task; roadmap M2.2, M2.3, M2.6, M2.7, M2.9 and the py-tokens follow-up) | §3.6 (empty spans at every k for zero-width tokens; starts non-decreasing; `py-tokens` registered as specified, not implemented), §5.2 (OD-C19 vendor class), §6.9 review packets, §6.10 candidate generation, §6.11 M2.2 manifest, derivation statement. New schemas `review-packet` and `candidate-generation`; new fixtures `m22-fixture-manifest.json`, `review-packets.json`, `candidate-generation.json`, `licence-texts/`; new checker `check_gates.py` run by `tools/validate.py`; 7 new matching vectors. Every earlier expected output byte-identical |
 | **A12** private read-only export (post-i2 confirmation bcd649e: an edit to the private export between verification and compilation forged a document in both lanes) | §6.8 B10 point 5 and the extended out-of-scope statement; checklist item 66 (66 in total). No vector bytes changed |
 | **A11** commit resolved once (the post-i2 confirmation's Go `HEAD`-race route, f9a71a6) | §6.8 B10 point 4; checklist item 65 (65 in total). Also fixed the remaining "6 channel-list negatives" mentions in §12 and the A3 row (the file has 5 since A4). No vector bytes changed |
 | **A10** provenance by content (`research/reviews/implementation-merge-i2-review.md`, "Confirmation: post-i2", fad444d: P1 index flags hide edits in both CLIs; P2 a Go `GOENV` overlay swaps sources) | §6.8 B10 points 2 and 3 rewritten with the content principle, the known routes as examples, and the out-of-scope statement. Checklist items 62 (P1), 63 (P2) and 64 (generic routes) added, 64 in total. No vector bytes changed |

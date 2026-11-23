@@ -14,6 +14,9 @@
   "distinct-evidence",
   "duplicate-key",
   "duplicate-regions",
+  "empty-span",
+  "equal-starts",
+  "formatted-fragment-in-host",
   "function-in-host",
   "identical",
   "independent-same-task",
@@ -36,6 +39,7 @@
   "pair-precedence",
   "partial-copy",
   "profile-mismatch",
+  "py-tokens",
   "reference-error",
   "rename-pair",
   "rust",
@@ -51,7 +55,8 @@
   "trivia-pair",
   "unsupported-catalogue",
   "unsupported-comparison-config",
-  "unsupported-profile"
+  "unsupported-profile",
+  "vendor"
  ],
  "vectors": [
   {
@@ -55834,6 +55839,5948 @@
      "profile": {
       "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
       "id": "go-tokens",
+      "version": "draft-1"
+     },
+     "referenceArtifactCount": 1,
+     "status": "compared",
+     "suppression": {
+      "status": "none"
+     }
+    }
+   }
+  },
+  {
+   "id": "vendor-suppressed",
+   "tags": [
+    "vendor",
+    "control",
+    "suppression",
+    "multi-artifact"
+   ],
+   "description": "Vendor control class (OD-C19, decided in draft): both projects vendor the same third-party file (vendor.strutil.go). The vendor catalogue holding that file is bound as the suppression catalogue, so every hash of the vendored pair is common: one diagonal-0 region, common-only, still listed with its counts. Own code is unrelated.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjIsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2IjoiZWFkOTcwMDQyNWNkMDczMWNhY2E4MTVmYzljZDRjZGYwNzliMjVkMTQ2Nzc5YTc3NzI0ODg3ODRkMzNlNzFmMCJ9Cg=="
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "own.go",
+      "source": "extraction-go.json#mv-go-pair"
+     },
+     {
+      "id": "vendor.strutil.go",
+      "source": "extraction-go-gates.json#mv-go-vendor-lib"
+     }
+    ],
+    "sha256": "70306d54215e8fe14142a00fdaa0c43aaaf952622ea7f84c750f2427dccceced",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 49,
+       "id": "own.go",
+       "sha256": "48d57e1d56930357cb9407d9f9bc04d3aa822e88ef5d617525a925b3d82ed74a",
+       "status": "ok",
+       "tokenCount": 14,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "3966ec34872553c5",
+           "position": 1,
+           "span": [
+            5,
+            32
+           ]
+          },
+          {
+           "hash": "51fbb57eeb66a477",
+           "position": 4,
+           "span": [
+            20,
+            41
+           ]
+          },
+          {
+           "hash": "0712f186357d092a",
+           "position": 6,
+           "span": [
+            32,
+            46
+           ]
+          }
+         ],
+         "kgramCount": 10,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "10014515afb567ce",
+           "position": 1,
+           "span": [
+            5,
+            32
+           ]
+          },
+          {
+           "hash": "596d662bc58f448f",
+           "position": 4,
+           "span": [
+            20,
+            41
+           ]
+          },
+          {
+           "hash": "5323ff7dc7dd53d7",
+           "position": 7,
+           "span": [
+            34,
+            46
+           ]
+          },
+          {
+           "hash": "252d8679fd20a8f9",
+           "position": 9,
+           "span": [
+            41,
+            48
+           ]
+          }
+         ],
+         "kgramCount": 10,
+         "partialWindow": false
+        }
+       }
+      },
+      {
+       "byteLength": 147,
+       "id": "vendor.strutil.go",
+       "sha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+       "status": "ok",
+       "tokenCount": 32,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "01b6b26953465bd4",
+           "position": 0,
+           "span": [
+            53,
+            74
+           ]
+          },
+          {
+           "hash": "1ebe6cd42fdfd510",
+           "position": 2,
+           "span": [
+            65,
+            81
+           ]
+          },
+          {
+           "hash": "2eff71d2fe528a3c",
+           "position": 3,
+           "span": [
+            66,
+            85
+           ]
+          },
+          {
+           "hash": "3b5c43a8eb0f2e4f",
+           "position": 7,
+           "span": [
+            82,
+            100
+           ]
+          },
+          {
+           "hash": "722d4ca315f20b47",
+           "position": 9,
+           "span": [
+            87,
+            105
+           ]
+          },
+          {
+           "hash": "0942f75ac03a7e70",
+           "position": 12,
+           "span": [
+            101,
+            109
+           ]
+          },
+          {
+           "hash": "163090b240d3fc0f",
+           "position": 14,
+           "span": [
+            105,
+            117
+           ]
+          },
+          {
+           "hash": "337c37b9db702797",
+           "position": 15,
+           "span": [
+            106,
+            121
+           ]
+          },
+          {
+           "hash": "5d0e8713a2cfe7c9",
+           "position": 19,
+           "span": [
+            120,
+            131
+           ]
+          },
+          {
+           "hash": "2b09a4c3a504b456",
+           "position": 20,
+           "span": [
+            122,
+            131
+           ]
+          },
+          {
+           "hash": "88634555125148e6",
+           "position": 24,
+           "span": [
+            131,
+            144
+           ]
+          },
+          {
+           "hash": "32b949a21ae5e028",
+           "position": 25,
+           "span": [
+            133,
+            144
+           ]
+          }
+         ],
+         "kgramCount": 28,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "046bfae5d5902fba",
+           "position": 3,
+           "span": [
+            66,
+            85
+           ]
+          },
+          {
+           "hash": "1b78a516202f7860",
+           "position": 5,
+           "span": [
+            74,
+            93
+           ]
+          },
+          {
+           "hash": "a12041a3c03ceaa7",
+           "position": 7,
+           "span": [
+            82,
+            100
+           ]
+          },
+          {
+           "hash": "59314aa4e50f112a",
+           "position": 10,
+           "span": [
+            94,
+            106
+           ]
+          },
+          {
+           "hash": "acda730ed54dc4fe",
+           "position": 14,
+           "span": [
+            105,
+            117
+           ]
+          },
+          {
+           "hash": "36a62cff33df1455",
+           "position": 16,
+           "span": [
+            108,
+            123
+           ]
+          },
+          {
+           "hash": "18cf9662eaf5f72b",
+           "position": 20,
+           "span": [
+            122,
+            131
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 24,
+           "span": [
+            131,
+            144
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 27,
+           "span": [
+            136,
+            146
+           ]
+          }
+         ],
+         "kgramCount": 28,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "app.go",
+      "source": "extraction-go-classes.json#mv-go-classes-a"
+     },
+     {
+      "id": "vendor.strutil.go",
+      "source": "extraction-go-gates.json#mv-go-vendor-lib"
+     }
+    ],
+    "sha256": "0400961a782f9f67415ad723e923e08306a9e519af149e8ed94721c430966d73",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 26,
+       "id": "app.go",
+       "sha256": "56319f16a9e28da0347ee2dfd7563ed591251670e66462ec45fc24b37b06f7c9",
+       "status": "ok",
+       "tokenCount": 13,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "0bd4ccbe6d91d72d",
+           "position": 1,
+           "span": [
+            7,
+            14
+           ]
+          },
+          {
+           "hash": "187eb9e357cbf8d0",
+           "position": 4,
+           "span": [
+            12,
+            21
+           ]
+          },
+          {
+           "hash": "368c90f7aaac0ea9",
+           "position": 6,
+           "span": [
+            14,
+            23
+           ]
+          }
+         ],
+         "kgramCount": 9,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "2c1866446e7c27ad",
+           "position": 1,
+           "span": [
+            7,
+            14
+           ]
+          },
+          {
+           "hash": "0376a6863145edd6",
+           "position": 5,
+           "span": [
+            13,
+            21
+           ]
+          }
+         ],
+         "kgramCount": 9,
+         "partialWindow": false
+        }
+       }
+      },
+      {
+       "byteLength": 147,
+       "id": "vendor.strutil.go",
+       "sha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+       "status": "ok",
+       "tokenCount": 32,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "01b6b26953465bd4",
+           "position": 0,
+           "span": [
+            53,
+            74
+           ]
+          },
+          {
+           "hash": "1ebe6cd42fdfd510",
+           "position": 2,
+           "span": [
+            65,
+            81
+           ]
+          },
+          {
+           "hash": "2eff71d2fe528a3c",
+           "position": 3,
+           "span": [
+            66,
+            85
+           ]
+          },
+          {
+           "hash": "3b5c43a8eb0f2e4f",
+           "position": 7,
+           "span": [
+            82,
+            100
+           ]
+          },
+          {
+           "hash": "722d4ca315f20b47",
+           "position": 9,
+           "span": [
+            87,
+            105
+           ]
+          },
+          {
+           "hash": "0942f75ac03a7e70",
+           "position": 12,
+           "span": [
+            101,
+            109
+           ]
+          },
+          {
+           "hash": "163090b240d3fc0f",
+           "position": 14,
+           "span": [
+            105,
+            117
+           ]
+          },
+          {
+           "hash": "337c37b9db702797",
+           "position": 15,
+           "span": [
+            106,
+            121
+           ]
+          },
+          {
+           "hash": "5d0e8713a2cfe7c9",
+           "position": 19,
+           "span": [
+            120,
+            131
+           ]
+          },
+          {
+           "hash": "2b09a4c3a504b456",
+           "position": 20,
+           "span": [
+            122,
+            131
+           ]
+          },
+          {
+           "hash": "88634555125148e6",
+           "position": 24,
+           "span": [
+            131,
+            144
+           ]
+          },
+          {
+           "hash": "32b949a21ae5e028",
+           "position": 25,
+           "span": [
+            133,
+            144
+           ]
+          }
+         ],
+         "kgramCount": 28,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "046bfae5d5902fba",
+           "position": 3,
+           "span": [
+            66,
+            85
+           ]
+          },
+          {
+           "hash": "1b78a516202f7860",
+           "position": 5,
+           "span": [
+            74,
+            93
+           ]
+          },
+          {
+           "hash": "a12041a3c03ceaa7",
+           "position": 7,
+           "span": [
+            82,
+            100
+           ]
+          },
+          {
+           "hash": "59314aa4e50f112a",
+           "position": 10,
+           "span": [
+            94,
+            106
+           ]
+          },
+          {
+           "hash": "acda730ed54dc4fe",
+           "position": 14,
+           "span": [
+            105,
+            117
+           ]
+          },
+          {
+           "hash": "36a62cff33df1455",
+           "position": 16,
+           "span": [
+            108,
+            123
+           ]
+          },
+          {
+           "hash": "18cf9662eaf5f72b",
+           "position": 20,
+           "span": [
+            122,
+            131
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 24,
+           "span": [
+            131,
+            144
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 27,
+           "span": [
+            136,
+            146
+           ]
+          }
+         ],
+         "kgramCount": 28,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "suppression": {
+    "artifacts": [
+     {
+      "id": "strutil.go",
+      "source": "extraction-go-gates.json#mv-go-vendor-lib"
+     }
+    ],
+    "sha256": "ead9700425cd0731caca815fc9cd4cdf079b25d146779a7772488784d33e71f0",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 147,
+       "id": "strutil.go",
+       "sha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+       "status": "ok",
+       "tokenCount": 32,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "01b6b26953465bd4",
+           "position": 0,
+           "span": [
+            53,
+            74
+           ]
+          },
+          {
+           "hash": "1ebe6cd42fdfd510",
+           "position": 2,
+           "span": [
+            65,
+            81
+           ]
+          },
+          {
+           "hash": "2eff71d2fe528a3c",
+           "position": 3,
+           "span": [
+            66,
+            85
+           ]
+          },
+          {
+           "hash": "3b5c43a8eb0f2e4f",
+           "position": 7,
+           "span": [
+            82,
+            100
+           ]
+          },
+          {
+           "hash": "722d4ca315f20b47",
+           "position": 9,
+           "span": [
+            87,
+            105
+           ]
+          },
+          {
+           "hash": "0942f75ac03a7e70",
+           "position": 12,
+           "span": [
+            101,
+            109
+           ]
+          },
+          {
+           "hash": "163090b240d3fc0f",
+           "position": 14,
+           "span": [
+            105,
+            117
+           ]
+          },
+          {
+           "hash": "337c37b9db702797",
+           "position": 15,
+           "span": [
+            106,
+            121
+           ]
+          },
+          {
+           "hash": "5d0e8713a2cfe7c9",
+           "position": 19,
+           "span": [
+            120,
+            131
+           ]
+          },
+          {
+           "hash": "2b09a4c3a504b456",
+           "position": 20,
+           "span": [
+            122,
+            131
+           ]
+          },
+          {
+           "hash": "88634555125148e6",
+           "position": 24,
+           "span": [
+            131,
+            144
+           ]
+          },
+          {
+           "hash": "32b949a21ae5e028",
+           "position": 25,
+           "span": [
+            133,
+            144
+           ]
+          }
+         ],
+         "kgramCount": 28,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "046bfae5d5902fba",
+           "position": 3,
+           "span": [
+            66,
+            85
+           ]
+          },
+          {
+           "hash": "1b78a516202f7860",
+           "position": 5,
+           "span": [
+            74,
+            93
+           ]
+          },
+          {
+           "hash": "a12041a3c03ceaa7",
+           "position": 7,
+           "span": [
+            82,
+            100
+           ]
+          },
+          {
+           "hash": "59314aa4e50f112a",
+           "position": 10,
+           "span": [
+            94,
+            106
+           ]
+          },
+          {
+           "hash": "acda730ed54dc4fe",
+           "position": 14,
+           "span": [
+            105,
+            117
+           ]
+          },
+          {
+           "hash": "36a62cff33df1455",
+           "position": 16,
+           "span": [
+            108,
+            123
+           ]
+          },
+          {
+           "hash": "18cf9662eaf5f72b",
+           "position": 20,
+           "span": [
+            122,
+            131
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 24,
+           "span": [
+            131,
+            144
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 27,
+           "span": [
+            136,
+            146
+           ]
+          }
+         ],
+         "kgramCount": 28,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "compared",
+    "pairs": [
+     {
+      "reference": "own.go",
+      "candidate": "app.go",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "no-shared-fingerprints",
+         "below-minimum-evidence",
+         "common-only"
+        ],
+        "reportable": 0,
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "no-shared-fingerprints",
+         "below-minimum-evidence",
+         "common-only"
+        ],
+        "reportable": 0,
+        "derivation": "hand"
+       }
+      }
+     },
+     {
+      "reference": "own.go",
+      "candidate": "vendor.strutil.go",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "no-shared-fingerprints",
+         "below-minimum-evidence",
+         "common-only"
+        ],
+        "reportable": 0,
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "no-shared-fingerprints",
+         "below-minimum-evidence",
+         "common-only"
+        ],
+        "reportable": 0,
+        "derivation": "hand"
+       }
+      }
+     },
+     {
+      "reference": "vendor.strutil.go",
+      "candidate": "app.go",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "no-shared-fingerprints",
+         "below-minimum-evidence",
+         "common-only"
+        ],
+        "reportable": 0,
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "no-shared-fingerprints",
+         "below-minimum-evidence",
+         "common-only"
+        ],
+        "reportable": 0,
+        "derivation": "hand"
+       }
+      }
+     },
+     {
+      "reference": "vendor.strutil.go",
+      "candidate": "vendor.strutil.go",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "common-only"
+        ],
+        "reportable": 0,
+        "regions": 1,
+        "exhaustiveDiagonalZero": true,
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "common-only"
+        ],
+        "reportable": 0,
+        "regions": 1,
+        "exhaustiveDiagonalZero": true,
+        "derivation": "hand"
+       }
+      }
+     }
+    ]
+   },
+   "expectedReport": {
+    "bodySha256": "b1dc208a05b0856293e52152078cffe9178e8c41cdef1b1515ca875d3b3bbf98",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "0400961a782f9f67415ad723e923e08306a9e519af149e8ed94721c430966d73",
+      "comparisonConfigSha256": "280cbc2bff2fcf5cf7a8ff1c68dd7029936a8e96057f4582552ea3cc529cafaf",
+      "referenceCatalogueSha256": "70306d54215e8fe14142a00fdaa0c43aaaf952622ea7f84c750f2427dccceced",
+      "suppressionCatalogueSha256": "ead9700425cd0731caca815fc9cd4cdf079b25d146779a7772488784d33e71f0"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "candidateArtifactCount": 2,
+     "comparison": {
+      "comparison": "traceweave-seed-merge-draft-2",
+      "modes": [
+       "exact",
+       "normalized"
+      ],
+      "minRegionDistinctHashes": 2,
+      "mergeGap": 4,
+      "maxSeedsPerMode": 100000,
+      "maxRegionsPerMode": 1000,
+      "suppressionCatalogueSha256": "ead9700425cd0731caca815fc9cd4cdf079b25d146779a7772488784d33e71f0",
+      "parameterStatus": "experimental"
+     },
+     "pairs": [
+      {
+       "candidate": {
+        "id": "app.go",
+        "sha256": "56319f16a9e28da0347ee2dfd7563ed591251670e66462ec45fc24b37b06f7c9"
+       },
+       "reference": {
+        "id": "own.go",
+        "sha256": "48d57e1d56930357cb9407d9f9bc04d3aa822e88ef5d617525a925b3d82ed74a"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 6,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 2,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 4,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 6,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      },
+      {
+       "candidate": {
+        "id": "vendor.strutil.go",
+        "sha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413"
+       },
+       "reference": {
+        "id": "own.go",
+        "sha256": "48d57e1d56930357cb9407d9f9bc04d3aa822e88ef5d617525a925b3d82ed74a"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 12,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 15,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 9,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 4,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 13,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      },
+      {
+       "candidate": {
+        "id": "app.go",
+        "sha256": "56319f16a9e28da0347ee2dfd7563ed591251670e66462ec45fc24b37b06f7c9"
+       },
+       "reference": {
+        "id": "vendor.strutil.go",
+        "sha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 12,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 15,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 2,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 9,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 11,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      },
+      {
+       "candidate": {
+        "id": "vendor.strutil.go",
+        "sha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413"
+       },
+       "reference": {
+        "id": "vendor.strutil.go",
+        "sha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 12,
+           "numerator": 12
+          },
+          "referenceInCandidate": {
+           "denominator": 12,
+           "numerator": 12
+          }
+         },
+         "seedCount": 12,
+         "sharedCommonDistinctHashes": 12,
+         "similarity": {
+          "jaccard": {
+           "denominator": 12,
+           "numerator": 12
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "common-only"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            53,
+            144
+           ],
+           "distinctCommonHashes": 12,
+           "distinctHashes": 12,
+           "referenceSpan": [
+            53,
+            144
+           ],
+           "seeds": [
+            [
+             0,
+             0
+            ],
+            [
+             2,
+             2
+            ],
+            [
+             3,
+             3
+            ],
+            [
+             7,
+             7
+            ],
+            [
+             9,
+             9
+            ],
+            [
+             12,
+             12
+            ],
+            [
+             14,
+             14
+            ],
+            [
+             15,
+             15
+            ],
+            [
+             19,
+             19
+            ],
+            [
+             20,
+             20
+            ],
+            [
+             24,
+             24
+            ],
+            [
+             25,
+             25
+            ]
+           ],
+           "status": "common-only"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 1,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 9,
+           "numerator": 9
+          },
+          "referenceInCandidate": {
+           "denominator": 9,
+           "numerator": 9
+          }
+         },
+         "seedCount": 9,
+         "sharedCommonDistinctHashes": 9,
+         "similarity": {
+          "jaccard": {
+           "denominator": 9,
+           "numerator": 9
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "common-only"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            66,
+            146
+           ],
+           "distinctCommonHashes": 9,
+           "distinctHashes": 9,
+           "referenceSpan": [
+            66,
+            146
+           ],
+           "seeds": [
+            [
+             3,
+             3
+            ],
+            [
+             5,
+             5
+            ],
+            [
+             7,
+             7
+            ],
+            [
+             10,
+             10
+            ],
+            [
+             14,
+             14
+            ],
+            [
+             16,
+             16
+            ],
+            [
+             20,
+             20
+            ],
+            [
+             24,
+             24
+            ],
+            [
+             27,
+             27
+            ]
+           ],
+           "status": "common-only"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 1,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      }
+     ],
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     },
+     "referenceArtifactCount": 2,
+     "status": "compared",
+     "suppression": {
+      "artifactCount": 1,
+      "distinctHashes": {
+       "exact": 12,
+       "normalized": 9
+      },
+      "status": "supplied"
+     }
+    }
+   }
+  },
+  {
+   "id": "vendor-unsuppressed",
+   "tags": [
+    "vendor",
+    "control",
+    "demonstrative-vendor"
+   ],
+   "description": "The same projects with no vendor catalogue: the vendored file matches itself completely in both modes, which is why vendored code is supplied as a vendor (suppression) catalogue and its origin recorded in a review packet (M2.7).",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "file": "comparison-config.json"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "own.go",
+      "source": "extraction-go.json#mv-go-pair"
+     },
+     {
+      "id": "vendor.strutil.go",
+      "source": "extraction-go-gates.json#mv-go-vendor-lib"
+     }
+    ],
+    "sha256": "70306d54215e8fe14142a00fdaa0c43aaaf952622ea7f84c750f2427dccceced",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 49,
+       "id": "own.go",
+       "sha256": "48d57e1d56930357cb9407d9f9bc04d3aa822e88ef5d617525a925b3d82ed74a",
+       "status": "ok",
+       "tokenCount": 14,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "3966ec34872553c5",
+           "position": 1,
+           "span": [
+            5,
+            32
+           ]
+          },
+          {
+           "hash": "51fbb57eeb66a477",
+           "position": 4,
+           "span": [
+            20,
+            41
+           ]
+          },
+          {
+           "hash": "0712f186357d092a",
+           "position": 6,
+           "span": [
+            32,
+            46
+           ]
+          }
+         ],
+         "kgramCount": 10,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "10014515afb567ce",
+           "position": 1,
+           "span": [
+            5,
+            32
+           ]
+          },
+          {
+           "hash": "596d662bc58f448f",
+           "position": 4,
+           "span": [
+            20,
+            41
+           ]
+          },
+          {
+           "hash": "5323ff7dc7dd53d7",
+           "position": 7,
+           "span": [
+            34,
+            46
+           ]
+          },
+          {
+           "hash": "252d8679fd20a8f9",
+           "position": 9,
+           "span": [
+            41,
+            48
+           ]
+          }
+         ],
+         "kgramCount": 10,
+         "partialWindow": false
+        }
+       }
+      },
+      {
+       "byteLength": 147,
+       "id": "vendor.strutil.go",
+       "sha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+       "status": "ok",
+       "tokenCount": 32,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "01b6b26953465bd4",
+           "position": 0,
+           "span": [
+            53,
+            74
+           ]
+          },
+          {
+           "hash": "1ebe6cd42fdfd510",
+           "position": 2,
+           "span": [
+            65,
+            81
+           ]
+          },
+          {
+           "hash": "2eff71d2fe528a3c",
+           "position": 3,
+           "span": [
+            66,
+            85
+           ]
+          },
+          {
+           "hash": "3b5c43a8eb0f2e4f",
+           "position": 7,
+           "span": [
+            82,
+            100
+           ]
+          },
+          {
+           "hash": "722d4ca315f20b47",
+           "position": 9,
+           "span": [
+            87,
+            105
+           ]
+          },
+          {
+           "hash": "0942f75ac03a7e70",
+           "position": 12,
+           "span": [
+            101,
+            109
+           ]
+          },
+          {
+           "hash": "163090b240d3fc0f",
+           "position": 14,
+           "span": [
+            105,
+            117
+           ]
+          },
+          {
+           "hash": "337c37b9db702797",
+           "position": 15,
+           "span": [
+            106,
+            121
+           ]
+          },
+          {
+           "hash": "5d0e8713a2cfe7c9",
+           "position": 19,
+           "span": [
+            120,
+            131
+           ]
+          },
+          {
+           "hash": "2b09a4c3a504b456",
+           "position": 20,
+           "span": [
+            122,
+            131
+           ]
+          },
+          {
+           "hash": "88634555125148e6",
+           "position": 24,
+           "span": [
+            131,
+            144
+           ]
+          },
+          {
+           "hash": "32b949a21ae5e028",
+           "position": 25,
+           "span": [
+            133,
+            144
+           ]
+          }
+         ],
+         "kgramCount": 28,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "046bfae5d5902fba",
+           "position": 3,
+           "span": [
+            66,
+            85
+           ]
+          },
+          {
+           "hash": "1b78a516202f7860",
+           "position": 5,
+           "span": [
+            74,
+            93
+           ]
+          },
+          {
+           "hash": "a12041a3c03ceaa7",
+           "position": 7,
+           "span": [
+            82,
+            100
+           ]
+          },
+          {
+           "hash": "59314aa4e50f112a",
+           "position": 10,
+           "span": [
+            94,
+            106
+           ]
+          },
+          {
+           "hash": "acda730ed54dc4fe",
+           "position": 14,
+           "span": [
+            105,
+            117
+           ]
+          },
+          {
+           "hash": "36a62cff33df1455",
+           "position": 16,
+           "span": [
+            108,
+            123
+           ]
+          },
+          {
+           "hash": "18cf9662eaf5f72b",
+           "position": 20,
+           "span": [
+            122,
+            131
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 24,
+           "span": [
+            131,
+            144
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 27,
+           "span": [
+            136,
+            146
+           ]
+          }
+         ],
+         "kgramCount": 28,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "app.go",
+      "source": "extraction-go-classes.json#mv-go-classes-a"
+     },
+     {
+      "id": "vendor.strutil.go",
+      "source": "extraction-go-gates.json#mv-go-vendor-lib"
+     }
+    ],
+    "sha256": "0400961a782f9f67415ad723e923e08306a9e519af149e8ed94721c430966d73",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 26,
+       "id": "app.go",
+       "sha256": "56319f16a9e28da0347ee2dfd7563ed591251670e66462ec45fc24b37b06f7c9",
+       "status": "ok",
+       "tokenCount": 13,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "0bd4ccbe6d91d72d",
+           "position": 1,
+           "span": [
+            7,
+            14
+           ]
+          },
+          {
+           "hash": "187eb9e357cbf8d0",
+           "position": 4,
+           "span": [
+            12,
+            21
+           ]
+          },
+          {
+           "hash": "368c90f7aaac0ea9",
+           "position": 6,
+           "span": [
+            14,
+            23
+           ]
+          }
+         ],
+         "kgramCount": 9,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "2c1866446e7c27ad",
+           "position": 1,
+           "span": [
+            7,
+            14
+           ]
+          },
+          {
+           "hash": "0376a6863145edd6",
+           "position": 5,
+           "span": [
+            13,
+            21
+           ]
+          }
+         ],
+         "kgramCount": 9,
+         "partialWindow": false
+        }
+       }
+      },
+      {
+       "byteLength": 147,
+       "id": "vendor.strutil.go",
+       "sha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
+       "status": "ok",
+       "tokenCount": 32,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "01b6b26953465bd4",
+           "position": 0,
+           "span": [
+            53,
+            74
+           ]
+          },
+          {
+           "hash": "1ebe6cd42fdfd510",
+           "position": 2,
+           "span": [
+            65,
+            81
+           ]
+          },
+          {
+           "hash": "2eff71d2fe528a3c",
+           "position": 3,
+           "span": [
+            66,
+            85
+           ]
+          },
+          {
+           "hash": "3b5c43a8eb0f2e4f",
+           "position": 7,
+           "span": [
+            82,
+            100
+           ]
+          },
+          {
+           "hash": "722d4ca315f20b47",
+           "position": 9,
+           "span": [
+            87,
+            105
+           ]
+          },
+          {
+           "hash": "0942f75ac03a7e70",
+           "position": 12,
+           "span": [
+            101,
+            109
+           ]
+          },
+          {
+           "hash": "163090b240d3fc0f",
+           "position": 14,
+           "span": [
+            105,
+            117
+           ]
+          },
+          {
+           "hash": "337c37b9db702797",
+           "position": 15,
+           "span": [
+            106,
+            121
+           ]
+          },
+          {
+           "hash": "5d0e8713a2cfe7c9",
+           "position": 19,
+           "span": [
+            120,
+            131
+           ]
+          },
+          {
+           "hash": "2b09a4c3a504b456",
+           "position": 20,
+           "span": [
+            122,
+            131
+           ]
+          },
+          {
+           "hash": "88634555125148e6",
+           "position": 24,
+           "span": [
+            131,
+            144
+           ]
+          },
+          {
+           "hash": "32b949a21ae5e028",
+           "position": 25,
+           "span": [
+            133,
+            144
+           ]
+          }
+         ],
+         "kgramCount": 28,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "046bfae5d5902fba",
+           "position": 3,
+           "span": [
+            66,
+            85
+           ]
+          },
+          {
+           "hash": "1b78a516202f7860",
+           "position": 5,
+           "span": [
+            74,
+            93
+           ]
+          },
+          {
+           "hash": "a12041a3c03ceaa7",
+           "position": 7,
+           "span": [
+            82,
+            100
+           ]
+          },
+          {
+           "hash": "59314aa4e50f112a",
+           "position": 10,
+           "span": [
+            94,
+            106
+           ]
+          },
+          {
+           "hash": "acda730ed54dc4fe",
+           "position": 14,
+           "span": [
+            105,
+            117
+           ]
+          },
+          {
+           "hash": "36a62cff33df1455",
+           "position": 16,
+           "span": [
+            108,
+            123
+           ]
+          },
+          {
+           "hash": "18cf9662eaf5f72b",
+           "position": 20,
+           "span": [
+            122,
+            131
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 24,
+           "span": [
+            131,
+            144
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 27,
+           "span": [
+            136,
+            146
+           ]
+          }
+         ],
+         "kgramCount": 28,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "compared",
+    "pairs": [
+     {
+      "reference": "own.go",
+      "candidate": "app.go",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "no-shared-fingerprints",
+         "below-minimum-evidence",
+         "common-only"
+        ],
+        "reportable": 0,
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "no-shared-fingerprints",
+         "below-minimum-evidence",
+         "common-only"
+        ],
+        "reportable": 0,
+        "derivation": "hand"
+       }
+      }
+     },
+     {
+      "reference": "own.go",
+      "candidate": "vendor.strutil.go",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "no-shared-fingerprints",
+         "below-minimum-evidence",
+         "common-only"
+        ],
+        "reportable": 0,
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "no-shared-fingerprints",
+         "below-minimum-evidence",
+         "common-only"
+        ],
+        "reportable": 0,
+        "derivation": "hand"
+       }
+      }
+     },
+     {
+      "reference": "vendor.strutil.go",
+      "candidate": "app.go",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "no-shared-fingerprints",
+         "below-minimum-evidence",
+         "common-only"
+        ],
+        "reportable": 0,
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "no-shared-fingerprints",
+         "below-minimum-evidence",
+         "common-only"
+        ],
+        "reportable": 0,
+        "derivation": "hand"
+       }
+      }
+     },
+     {
+      "reference": "vendor.strutil.go",
+      "candidate": "vendor.strutil.go",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "derivation": "hand"
+       }
+      }
+     }
+    ]
+   },
+   "expectedReport": {
+    "bodySha256": "c9c79130c3ed2c15a644b18c282eb367c6035d8cfdae0375efaf360ae34384a0",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "0400961a782f9f67415ad723e923e08306a9e519af149e8ed94721c430966d73",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceCatalogueSha256": "70306d54215e8fe14142a00fdaa0c43aaaf952622ea7f84c750f2427dccceced",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "candidateArtifactCount": 2,
+     "comparison": {
+      "comparison": "traceweave-seed-merge-draft-2",
+      "modes": [
+       "exact",
+       "normalized"
+      ],
+      "minRegionDistinctHashes": 2,
+      "mergeGap": 4,
+      "maxSeedsPerMode": 100000,
+      "maxRegionsPerMode": 1000,
+      "suppressionCatalogueSha256": "none",
+      "parameterStatus": "experimental"
+     },
+     "pairs": [
+      {
+       "candidate": {
+        "id": "app.go",
+        "sha256": "56319f16a9e28da0347ee2dfd7563ed591251670e66462ec45fc24b37b06f7c9"
+       },
+       "reference": {
+        "id": "own.go",
+        "sha256": "48d57e1d56930357cb9407d9f9bc04d3aa822e88ef5d617525a925b3d82ed74a"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 6,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 2,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 4,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 6,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      },
+      {
+       "candidate": {
+        "id": "vendor.strutil.go",
+        "sha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413"
+       },
+       "reference": {
+        "id": "own.go",
+        "sha256": "48d57e1d56930357cb9407d9f9bc04d3aa822e88ef5d617525a925b3d82ed74a"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 12,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 15,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 9,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 4,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 13,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      },
+      {
+       "candidate": {
+        "id": "app.go",
+        "sha256": "56319f16a9e28da0347ee2dfd7563ed591251670e66462ec45fc24b37b06f7c9"
+       },
+       "reference": {
+        "id": "vendor.strutil.go",
+        "sha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 12,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 15,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 2,
+           "numerator": 0
+          },
+          "referenceInCandidate": {
+           "denominator": 9,
+           "numerator": 0
+          }
+         },
+         "seedCount": 0,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 11,
+           "numerator": 0
+          }
+         },
+         "outcome": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+         },
+         "regions": [],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 0
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      },
+      {
+       "candidate": {
+        "id": "vendor.strutil.go",
+        "sha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413"
+       },
+       "reference": {
+        "id": "vendor.strutil.go",
+        "sha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 12,
+           "numerator": 12
+          },
+          "referenceInCandidate": {
+           "denominator": 12,
+           "numerator": 12
+          }
+         },
+         "seedCount": 12,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 12,
+           "numerator": 12
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            53,
+            144
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 12,
+           "referenceSpan": [
+            53,
+            144
+           ],
+           "seeds": [
+            [
+             0,
+             0
+            ],
+            [
+             2,
+             2
+            ],
+            [
+             3,
+             3
+            ],
+            [
+             7,
+             7
+            ],
+            [
+             9,
+             9
+            ],
+            [
+             12,
+             12
+            ],
+            [
+             14,
+             14
+            ],
+            [
+             15,
+             15
+            ],
+            [
+             19,
+             19
+            ],
+            [
+             20,
+             20
+            ],
+            [
+             24,
+             24
+            ],
+            [
+             25,
+             25
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 9,
+           "numerator": 9
+          },
+          "referenceInCandidate": {
+           "denominator": 9,
+           "numerator": 9
+          }
+         },
+         "seedCount": 9,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 9,
+           "numerator": 9
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            66,
+            146
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 9,
+           "referenceSpan": [
+            66,
+            146
+           ],
+           "seeds": [
+            [
+             3,
+             3
+            ],
+            [
+             5,
+             5
+            ],
+            [
+             7,
+             7
+            ],
+            [
+             10,
+             10
+            ],
+            [
+             14,
+             14
+            ],
+            [
+             16,
+             16
+            ],
+            [
+             20,
+             20
+            ],
+            [
+             24,
+             24
+            ],
+            [
+             27,
+             27
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      }
+     ],
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     },
+     "referenceArtifactCount": 2,
+     "status": "compared",
+     "suppression": {
+      "status": "none"
+     }
+    }
+   }
+  },
+  {
+   "id": "go-formatted-fragment-in-host",
+   "tags": [
+    "formatted-fragment-in-host",
+    "large-host",
+    "trivia-pair"
+   ],
+   "description": "UC-1 row 'formatted fragment in a large host': GO_SUM reformatted (spacing, indentation, comments, a joined line) inside a larger host. The token stream is unchanged, so both modes match, localized inside the reformatted function.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "file": "comparison-config.json"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "sum.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "b0355010c15b3ffffe3c2b6874dd0f6852361a9774604c8144af1b7a122debca",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 127,
+       "id": "sum.go",
+       "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "status": "ok",
+       "tokenCount": 40,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "13c53975ffd60dcc",
+           "position": 2,
+           "span": [
+            16,
+            29
+           ]
+          },
+          {
+           "hash": "330210cd0c3466ab",
+           "position": 3,
+           "span": [
+            17,
+            30
+           ]
+          },
+          {
+           "hash": "3d497652a23fceab",
+           "position": 5,
+           "span": [
+            25,
+            36
+           ]
+          },
+          {
+           "hash": "3c56878685555e32",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "2f8f40a61dcfae85",
+           "position": 12,
+           "span": [
+            47,
+            56
+           ]
+          },
+          {
+           "hash": "423c6c9d5d7a23e7",
+           "position": 16,
+           "span": [
+            55,
+            74
+           ]
+          },
+          {
+           "hash": "02937060fc62470c",
+           "position": 19,
+           "span": [
+            62,
+            83
+           ]
+          },
+          {
+           "hash": "08bdc1a417005230",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "233116908c1f7fdf",
+           "position": 22,
+           "span": [
+            79,
+            89
+           ]
+          },
+          {
+           "hash": "79a8f5e4448bba08",
+           "position": 24,
+           "span": [
+            84,
+            101
+           ]
+          },
+          {
+           "hash": "a036c4dd8fd8dddf",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "725af00bf2abe7a3",
+           "position": 29,
+           "span": [
+            102,
+            110
+           ]
+          },
+          {
+           "hash": "5c344617045cf67d",
+           "position": 30,
+           "span": [
+            103,
+            110
+           ]
+          },
+          {
+           "hash": "76a6eecc8c7a8901",
+           "position": 33,
+           "span": [
+            109,
+            124
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "18da42eca06cd4a1",
+           "position": 0,
+           "span": [
+            0,
+            25
+           ]
+          },
+          {
+           "hash": "31d938568ab36b20",
+           "position": 4,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 6,
+           "span": [
+            26,
+            43
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 7,
+           "span": [
+            29,
+            46
+           ]
+          },
+          {
+           "hash": "38ecb2aa93d2dc60",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "5b464df2df0f81f9",
+           "position": 9,
+           "span": [
+            35,
+            48
+           ]
+          },
+          {
+           "hash": "91c4632deae1e20f",
+           "position": 10,
+           "span": [
+            38,
+            53
+           ]
+          },
+          {
+           "hash": "43d309ceb22374c8",
+           "position": 14,
+           "span": [
+            50,
+            61
+           ]
+          },
+          {
+           "hash": "233ab16433c2d8fb",
+           "position": 15,
+           "span": [
+            54,
+            67
+           ]
+          },
+          {
+           "hash": "538093b29a561332",
+           "position": 18,
+           "span": [
+            59,
+            81
+           ]
+          },
+          {
+           "hash": "1e71d06c4e29e3eb",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "3f23472de367053b",
+           "position": 25,
+           "span": [
+            86,
+            103
+           ]
+          },
+          {
+           "hash": "345ab877317b6271",
+           "position": 26,
+           "span": [
+            88,
+            103
+           ]
+          },
+          {
+           "hash": "2ea7cfbedf6a3813",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "1a900123cb5873b4",
+           "position": 28,
+           "span": [
+            99,
+            107
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 32,
+           "span": [
+            107,
+            124
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 35,
+           "span": [
+            112,
+            126
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "host.go",
+      "source": "extraction-go-gates.json#mv-go-host-formatted"
+     }
+    ],
+    "sha256": "8ed81fd5a4a62530804126d6c39d8820dc35ee5bc73eab736bb7200df74c6080",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 413,
+       "id": "host.go",
+       "sha256": "933aa0c9e696db1d938ebc61cec8d542890a5b3fabb32fc5cded4e445f0dec90",
+       "status": "ok",
+       "tokenCount": 100,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "3802a5fe48ed3964",
+           "position": 3,
+           "span": [
+            15,
+            37
+           ]
+          },
+          {
+           "hash": "1297a3829c58691f",
+           "position": 5,
+           "span": [
+            26,
+            40
+           ]
+          },
+          {
+           "hash": "240cfea8bd487cf5",
+           "position": 9,
+           "span": [
+            39,
+            50
+           ]
+          },
+          {
+           "hash": "80dfae06dc1c1496",
+           "position": 12,
+           "span": [
+            49,
+            59
+           ]
+          },
+          {
+           "hash": "831c20e10f8beb18",
+           "position": 15,
+           "span": [
+            57,
+            73
+           ]
+          },
+          {
+           "hash": "76a97978356629f2",
+           "position": 19,
+           "span": [
+            67,
+            84
+           ]
+          },
+          {
+           "hash": "45d2e830529bb9fe",
+           "position": 20,
+           "span": [
+            73,
+            92
+           ]
+          },
+          {
+           "hash": "7500c90d18423906",
+           "position": 21,
+           "span": [
+            74,
+            96
+           ]
+          },
+          {
+           "hash": "5d4b091f2a7db419",
+           "position": 25,
+           "span": [
+            93,
+            115
+           ]
+          },
+          {
+           "hash": "49e37ca719ce592d",
+           "position": 26,
+           "span": [
+            96,
+            116
+           ]
+          },
+          {
+           "hash": "3b0d1e86f11134c4",
+           "position": 27,
+           "span": [
+            97,
+            118
+           ]
+          },
+          {
+           "hash": "02403a4812486a8a",
+           "position": 30,
+           "span": [
+            115,
+            121
+           ]
+          },
+          {
+           "hash": "04ec468c59822e2d",
+           "position": 31,
+           "span": [
+            117,
+            123
+           ]
+          },
+          {
+           "hash": "0b62ac9ea3a8d6a9",
+           "position": 34,
+           "span": [
+            120,
+            126
+           ]
+          },
+          {
+           "hash": "3b5342fdf0c37360",
+           "position": 35,
+           "span": [
+            122,
+            126
+           ]
+          },
+          {
+           "hash": "91b1330db6b34764",
+           "position": 36,
+           "span": [
+            123,
+            128
+           ]
+          },
+          {
+           "hash": "4557f66b005668c6",
+           "position": 40,
+           "span": [
+            127,
+            188
+           ]
+          },
+          {
+           "hash": "2dd70cf38f6046d9",
+           "position": 42,
+           "span": [
+            171,
+            196
+           ]
+          },
+          {
+           "hash": "13c53975ffd60dcc",
+           "position": 44,
+           "span": [
+            187,
+            200
+           ]
+          },
+          {
+           "hash": "330210cd0c3466ab",
+           "position": 45,
+           "span": [
+            188,
+            201
+           ]
+          },
+          {
+           "hash": "3d497652a23fceab",
+           "position": 47,
+           "span": [
+            196,
+            209
+           ]
+          },
+          {
+           "hash": "3c56878685555e32",
+           "position": 50,
+           "span": [
+            204,
+            248
+           ]
+          },
+          {
+           "hash": "2f8f40a61dcfae85",
+           "position": 54,
+           "span": [
+            247,
+            259
+           ]
+          },
+          {
+           "hash": "423c6c9d5d7a23e7",
+           "position": 58,
+           "span": [
+            258,
+            277
+           ]
+          },
+          {
+           "hash": "02937060fc62470c",
+           "position": 61,
+           "span": [
+            265,
+            308
+           ]
+          },
+          {
+           "hash": "08bdc1a417005230",
+           "position": 63,
+           "span": [
+            278,
+            312
+           ]
+          },
+          {
+           "hash": "233116908c1f7fdf",
+           "position": 64,
+           "span": [
+            304,
+            314
+           ]
+          },
+          {
+           "hash": "79a8f5e4448bba08",
+           "position": 66,
+           "span": [
+            309,
+            323
+           ]
+          },
+          {
+           "hash": "a036c4dd8fd8dddf",
+           "position": 69,
+           "span": [
+            315,
+            335
+           ]
+          },
+          {
+           "hash": "725af00bf2abe7a3",
+           "position": 71,
+           "span": [
+            324,
+            341
+           ]
+          },
+          {
+           "hash": "5c344617045cf67d",
+           "position": 72,
+           "span": [
+            325,
+            341
+           ]
+          },
+          {
+           "hash": "76a6eecc8c7a8901",
+           "position": 75,
+           "span": [
+            340,
+            358
+           ]
+          },
+          {
+           "hash": "133c5ed7f1bc7f97",
+           "position": 79,
+           "span": [
+            358,
+            371
+           ]
+          },
+          {
+           "hash": "8f5315a52f64cf53",
+           "position": 80,
+           "span": [
+            359,
+            373
+           ]
+          },
+          {
+           "hash": "babaf3236fa55141",
+           "position": 83,
+           "span": [
+            366,
+            384
+           ]
+          },
+          {
+           "hash": "76ee097a0c4ca730",
+           "position": 85,
+           "span": [
+            374,
+            389
+           ]
+          },
+          {
+           "hash": "7cffed8261e5f7e9",
+           "position": 86,
+           "span": [
+            377,
+            390
+           ]
+          },
+          {
+           "hash": "80366244cf9a61fe",
+           "position": 89,
+           "span": [
+            385,
+            399
+           ]
+          },
+          {
+           "hash": "3282bcf785667a8c",
+           "position": 92,
+           "span": [
+            393,
+            405
+           ]
+          }
+         ],
+         "kgramCount": 96,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "2aa8fce675748898",
+           "position": 1,
+           "span": [
+            8,
+            32
+           ]
+          },
+          {
+           "hash": "1f7e49183e3da462",
+           "position": 4,
+           "span": [
+            20,
+            38
+           ]
+          },
+          {
+           "hash": "5d7780b17b6eba46",
+           "position": 5,
+           "span": [
+            26,
+            40
+           ]
+          },
+          {
+           "hash": "7116eca4370a1b43",
+           "position": 8,
+           "span": [
+            37,
+            50
+           ]
+          },
+          {
+           "hash": "57f97d2ff068e81c",
+           "position": 10,
+           "span": [
+            41,
+            56
+           ]
+          },
+          {
+           "hash": "2c27c33f9e8f6bcf",
+           "position": 13,
+           "span": [
+            50,
+            65
+           ]
+          },
+          {
+           "hash": "80809c4b029f7706",
+           "position": 15,
+           "span": [
+            57,
+            73
+           ]
+          },
+          {
+           "hash": "7d6098e6cf00314e",
+           "position": 18,
+           "span": [
+            65,
+            82
+           ]
+          },
+          {
+           "hash": "10bfc850c30292ce",
+           "position": 19,
+           "span": [
+            67,
+            84
+           ]
+          },
+          {
+           "hash": "101eb74f37364a2e",
+           "position": 22,
+           "span": [
+            76,
+            97
+           ]
+          },
+          {
+           "hash": "146668ad18e47ad3",
+           "position": 25,
+           "span": [
+            93,
+            115
+           ]
+          },
+          {
+           "hash": "0f5ec71bb62835f8",
+           "position": 28,
+           "span": [
+            104,
+            119
+           ]
+          },
+          {
+           "hash": "18d4d9334e4591e5",
+           "position": 30,
+           "span": [
+            115,
+            121
+           ]
+          },
+          {
+           "hash": "2afb720ca6ffcb7c",
+           "position": 31,
+           "span": [
+            117,
+            123
+           ]
+          },
+          {
+           "hash": "771418cceada23fd",
+           "position": 32,
+           "span": [
+            118,
+            124
+           ]
+          },
+          {
+           "hash": "3ae57e8f8b1c9216",
+           "position": 36,
+           "span": [
+            123,
+            128
+           ]
+          },
+          {
+           "hash": "1250799b8534f063",
+           "position": 40,
+           "span": [
+            127,
+            188
+           ]
+          },
+          {
+           "hash": "18da42eca06cd4a1",
+           "position": 42,
+           "span": [
+            171,
+            196
+           ]
+          },
+          {
+           "hash": "31d938568ab36b20",
+           "position": 46,
+           "span": [
+            195,
+            207
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 48,
+           "span": [
+            197,
+            243
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 49,
+           "span": [
+            200,
+            246
+           ]
+          },
+          {
+           "hash": "38ecb2aa93d2dc60",
+           "position": 50,
+           "span": [
+            204,
+            248
+           ]
+          },
+          {
+           "hash": "5b464df2df0f81f9",
+           "position": 51,
+           "span": [
+            208,
+            248
+           ]
+          },
+          {
+           "hash": "91c4632deae1e20f",
+           "position": 52,
+           "span": [
+            238,
+            256
+           ]
+          },
+          {
+           "hash": "43d309ceb22374c8",
+           "position": 56,
+           "span": [
+            253,
+            264
+           ]
+          },
+          {
+           "hash": "233ab16433c2d8fb",
+           "position": 57,
+           "span": [
+            257,
+            270
+           ]
+          },
+          {
+           "hash": "538093b29a561332",
+           "position": 60,
+           "span": [
+            262,
+            306
+           ]
+          },
+          {
+           "hash": "1e71d06c4e29e3eb",
+           "position": 63,
+           "span": [
+            278,
+            312
+           ]
+          },
+          {
+           "hash": "3f23472de367053b",
+           "position": 67,
+           "span": [
+            311,
+            325
+           ]
+          },
+          {
+           "hash": "345ab877317b6271",
+           "position": 68,
+           "span": [
+            313,
+            325
+           ]
+          },
+          {
+           "hash": "2ea7cfbedf6a3813",
+           "position": 69,
+           "span": [
+            315,
+            335
+           ]
+          },
+          {
+           "hash": "1a900123cb5873b4",
+           "position": 70,
+           "span": [
+            321,
+            335
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 74,
+           "span": [
+            335,
+            358
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 77,
+           "span": [
+            346,
+            360
+           ]
+          },
+          {
+           "hash": "19f3816240eae86a",
+           "position": 78,
+           "span": [
+            353,
+            365
+           ]
+          },
+          {
+           "hash": "1f01266c699baf3e",
+           "position": 80,
+           "span": [
+            359,
+            373
+           ]
+          },
+          {
+           "hash": "b1297f2a096e8dc5",
+           "position": 82,
+           "span": [
+            362,
+            378
+           ]
+          },
+          {
+           "hash": "38eac5c23b3f9e40",
+           "position": 85,
+           "span": [
+            374,
+            389
+           ]
+          },
+          {
+           "hash": "5f82bf7fce21aef0",
+           "position": 86,
+           "span": [
+            377,
+            390
+           ]
+          },
+          {
+           "hash": "29b21605d19b29aa",
+           "position": 90,
+           "span": [
+            389,
+            400
+           ]
+          },
+          {
+           "hash": "289dc0bc58d923e8",
+           "position": 91,
+           "span": [
+            390,
+            404
+           ]
+          },
+          {
+           "hash": "4d0113483833f25b",
+           "position": 93,
+           "span": [
+            395,
+            411
+           ]
+          }
+         ],
+         "kgramCount": 96,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "compared",
+    "pairs": [
+     {
+      "reference": "sum.go",
+      "candidate": "host.go",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "within": {
+         "reference": "func sumPositive(values []int) int {\n\ttotal := 0\n\tfor _, v := range values {\n\t\tif v > 0 {\n\t\t\ttotal += v\n\t\t}\n\t}\n\treturn total\n}\n",
+         "candidate": "func sumPositive(values []int)   int {   // total of positives\n    total := 0\n    for _, v := range values {   // each value\n        if v > 0 { total += v\n        }\n    }\n    return total\n}\n"
+        },
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "within": {
+         "reference": "func sumPositive(values []int) int {\n\ttotal := 0\n\tfor _, v := range values {\n\t\tif v > 0 {\n\t\t\ttotal += v\n\t\t}\n\t}\n\treturn total\n}\n",
+         "candidate": "func sumPositive(values []int)   int {   // total of positives\n    total := 0\n    for _, v := range values {   // each value\n        if v > 0 { total += v\n        }\n    }\n    return total\n}\n"
+        },
+        "derivation": "hand"
+       }
+      }
+     }
+    ]
+   },
+   "expectedReport": {
+    "bodySha256": "fc251d9ec4deb1add9b937d890037c8ffbb2a0a7aa56793a26efb5650630fbbb",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "8ed81fd5a4a62530804126d6c39d8820dc35ee5bc73eab736bb7200df74c6080",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceCatalogueSha256": "b0355010c15b3ffffe3c2b6874dd0f6852361a9774604c8144af1b7a122debca",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "candidateArtifactCount": 1,
+     "comparison": {
+      "comparison": "traceweave-seed-merge-draft-2",
+      "modes": [
+       "exact",
+       "normalized"
+      ],
+      "minRegionDistinctHashes": 2,
+      "mergeGap": 4,
+      "maxSeedsPerMode": 100000,
+      "maxRegionsPerMode": 1000,
+      "suppressionCatalogueSha256": "none",
+      "parameterStatus": "experimental"
+     },
+     "pairs": [
+      {
+       "candidate": {
+        "id": "host.go",
+        "sha256": "933aa0c9e696db1d938ebc61cec8d542890a5b3fabb32fc5cded4e445f0dec90"
+       },
+       "reference": {
+        "id": "sum.go",
+        "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 39,
+           "numerator": 14
+          },
+          "referenceInCandidate": {
+           "denominator": 14,
+           "numerator": 14
+          }
+         },
+         "seedCount": 14,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 39,
+           "numerator": 14
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            187,
+            358
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 14,
+           "referenceSpan": [
+            16,
+            124
+           ],
+           "seeds": [
+            [
+             2,
+             44
+            ],
+            [
+             3,
+             45
+            ],
+            [
+             5,
+             47
+            ],
+            [
+             8,
+             50
+            ],
+            [
+             12,
+             54
+            ],
+            [
+             16,
+             58
+            ],
+            [
+             19,
+             61
+            ],
+            [
+             21,
+             63
+            ],
+            [
+             22,
+             64
+            ],
+            [
+             24,
+             66
+            ],
+            [
+             27,
+             69
+            ],
+            [
+             29,
+             71
+            ],
+            [
+             30,
+             72
+            ],
+            [
+             33,
+             75
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 42,
+           "numerator": 17
+          },
+          "referenceInCandidate": {
+           "denominator": 17,
+           "numerator": 17
+          }
+         },
+         "seedCount": 17,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 42,
+           "numerator": 17
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            171,
+            360
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 17,
+           "referenceSpan": [
+            0,
+            126
+           ],
+           "seeds": [
+            [
+             0,
+             42
+            ],
+            [
+             4,
+             46
+            ],
+            [
+             6,
+             48
+            ],
+            [
+             7,
+             49
+            ],
+            [
+             8,
+             50
+            ],
+            [
+             9,
+             51
+            ],
+            [
+             10,
+             52
+            ],
+            [
+             14,
+             56
+            ],
+            [
+             15,
+             57
+            ],
+            [
+             18,
+             60
+            ],
+            [
+             21,
+             63
+            ],
+            [
+             25,
+             67
+            ],
+            [
+             26,
+             68
+            ],
+            [
+             27,
+             69
+            ],
+            [
+             28,
+             70
+            ],
+            [
+             32,
+             74
+            ],
+            [
+             35,
+             77
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      }
+     ],
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     },
+     "referenceArtifactCount": 1,
+     "status": "compared",
+     "suppression": {
+      "status": "none"
+     }
+    }
+   }
+  },
+  {
+   "id": "go-non-ascii-shift-2",
+   "tags": [
+    "unicode",
+    "non-ascii"
+   ],
+   "description": "Second byte-offset vector, derived by hand before computation: the comment prefix '// Ünïcödé' plus LF is 15 bytes but 11 code points, so every candidate span is the reference span plus 15.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "file": "comparison-config.json"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "g.go",
+      "source": "extraction-go.json#mv-go-nonascii"
+     }
+    ],
+    "sha256": "9ff266b98341470ef4ebcf2cb2b58a4a1c4b65ab7bf534ac2858e5451da767b9",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 91,
+       "id": "g.go",
+       "sha256": "1953ff73fe61a3fc2dce2eccf3beb9db223ea1959135be03ce710390896618a0",
+       "status": "ok",
+       "tokenCount": 19,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "1896ba250d6b9aae",
+           "position": 2,
+           "span": [
+            12,
+            33
+           ]
+          },
+          {
+           "hash": "7aa5c2c2cd0cb7ca",
+           "position": 3,
+           "span": [
+            13,
+            35
+           ]
+          },
+          {
+           "hash": "1ab06a742c38c835",
+           "position": 7,
+           "span": [
+            34,
+            64
+           ]
+          },
+          {
+           "hash": "546a8677a3ebc8d2",
+           "position": 11,
+           "span": [
+            64,
+            88
+           ]
+          }
+         ],
+         "kgramCount": 15,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "80809c4b029f7706",
+           "position": 2,
+           "span": [
+            12,
+            33
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 4,
+           "span": [
+            19,
+            44
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 5,
+           "span": [
+            25,
+            47
+           ]
+          },
+          {
+           "hash": "1a7224848bc8bd1f",
+           "position": 8,
+           "span": [
+            37,
+            72
+           ]
+          },
+          {
+           "hash": "534699085d2df561",
+           "position": 9,
+           "span": [
+            45,
+            80
+           ]
+          },
+          {
+           "hash": "a5b7e35d72b278aa",
+           "position": 13,
+           "span": [
+            73,
+            90
+           ]
+          },
+          {
+           "hash": "85adbe4d292bf2e6",
+           "position": 14,
+           "span": [
+            81,
+            90
+           ]
+          }
+         ],
+         "kgramCount": 15,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "h.go",
+      "source": "extraction-go-gates.json#mv-go-nonascii-prefixed2"
+     }
+    ],
+    "sha256": "76e69181a9146032accc7f97f3195d8045b841b041241b11e8dc696fd40f9774",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 106,
+       "id": "h.go",
+       "sha256": "6dd5be5cd6d8838d79d88720b0dc66d5c1c8868d5286b445dfee32fe13b53c45",
+       "status": "ok",
+       "tokenCount": 19,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "1896ba250d6b9aae",
+           "position": 2,
+           "span": [
+            27,
+            48
+           ]
+          },
+          {
+           "hash": "7aa5c2c2cd0cb7ca",
+           "position": 3,
+           "span": [
+            28,
+            50
+           ]
+          },
+          {
+           "hash": "1ab06a742c38c835",
+           "position": 7,
+           "span": [
+            49,
+            79
+           ]
+          },
+          {
+           "hash": "546a8677a3ebc8d2",
+           "position": 11,
+           "span": [
+            79,
+            103
+           ]
+          }
+         ],
+         "kgramCount": 15,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "80809c4b029f7706",
+           "position": 2,
+           "span": [
+            27,
+            48
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 4,
+           "span": [
+            34,
+            59
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 5,
+           "span": [
+            40,
+            62
+           ]
+          },
+          {
+           "hash": "1a7224848bc8bd1f",
+           "position": 8,
+           "span": [
+            52,
+            87
+           ]
+          },
+          {
+           "hash": "534699085d2df561",
+           "position": 9,
+           "span": [
+            60,
+            95
+           ]
+          },
+          {
+           "hash": "a5b7e35d72b278aa",
+           "position": 13,
+           "span": [
+            88,
+            105
+           ]
+          },
+          {
+           "hash": "85adbe4d292bf2e6",
+           "position": 14,
+           "span": [
+            96,
+            105
+           ]
+          }
+         ],
+         "kgramCount": 15,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "compared",
+    "pairs": [
+     {
+      "reference": "g.go",
+      "candidate": "h.go",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "candidateShift": 15,
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "candidateShift": 15,
+        "derivation": "hand"
+       }
+      }
+     }
+    ]
+   },
+   "expectedReport": {
+    "bodySha256": "09bdeb1903bd0e853f63cd88eb38554c0ed565e4288ad0ad950265cbf86508a1",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "76e69181a9146032accc7f97f3195d8045b841b041241b11e8dc696fd40f9774",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceCatalogueSha256": "9ff266b98341470ef4ebcf2cb2b58a4a1c4b65ab7bf534ac2858e5451da767b9",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "candidateArtifactCount": 1,
+     "comparison": {
+      "comparison": "traceweave-seed-merge-draft-2",
+      "modes": [
+       "exact",
+       "normalized"
+      ],
+      "minRegionDistinctHashes": 2,
+      "mergeGap": 4,
+      "maxSeedsPerMode": 100000,
+      "maxRegionsPerMode": 1000,
+      "suppressionCatalogueSha256": "none",
+      "parameterStatus": "experimental"
+     },
+     "pairs": [
+      {
+       "candidate": {
+        "id": "h.go",
+        "sha256": "6dd5be5cd6d8838d79d88720b0dc66d5c1c8868d5286b445dfee32fe13b53c45"
+       },
+       "reference": {
+        "id": "g.go",
+        "sha256": "1953ff73fe61a3fc2dce2eccf3beb9db223ea1959135be03ce710390896618a0"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 4,
+           "numerator": 4
+          },
+          "referenceInCandidate": {
+           "denominator": 4,
+           "numerator": 4
+          }
+         },
+         "seedCount": 4,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 4,
+           "numerator": 4
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            27,
+            103
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 4,
+           "referenceSpan": [
+            12,
+            88
+           ],
+           "seeds": [
+            [
+             2,
+             2
+            ],
+            [
+             3,
+             3
+            ],
+            [
+             7,
+             7
+            ],
+            [
+             11,
+             11
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 7,
+           "numerator": 7
+          },
+          "referenceInCandidate": {
+           "denominator": 7,
+           "numerator": 7
+          }
+         },
+         "seedCount": 7,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 7,
+           "numerator": 7
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            27,
+            105
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 7,
+           "referenceSpan": [
+            12,
+            90
+           ],
+           "seeds": [
+            [
+             2,
+             2
+            ],
+            [
+             4,
+             4
+            ],
+            [
+             5,
+             5
+            ],
+            [
+             8,
+             8
+            ],
+            [
+             9,
+             9
+            ],
+            [
+             13,
+             13
+            ],
+            [
+             14,
+             14
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      }
+     ],
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     },
+     "referenceArtifactCount": 1,
+     "status": "compared",
+     "suppression": {
+      "status": "none"
+     }
+    }
+   }
+  },
+  {
+   "id": "py-empty-span-self",
+   "tags": [
+    "py-tokens",
+    "empty-span"
+   ],
+   "description": "py-tokens (registered, specified): py-empty-span-fingerprint against itself. Its exact catalogue stores the empty-span fingerprint [35, 35) unchanged; the identical pair matches completely in both modes.",
+   "derivation": "mixed",
+   "comparisonConfig": {
+    "file": "comparison-config.json"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "a.py",
+      "source": "extraction-py.json#py-empty-span-fingerprint"
+     }
+    ],
+    "sha256": "bcafc8bd9845ff9da39c44bc6b7863c73bf8c873236033a112393f7d10bc8851",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 35,
+       "id": "a.py",
+       "sha256": "479d397ecdeb22ae0d92c527c8c63764dcb1885a32e5a2835800fcfbc83f5bfd",
+       "status": "ok",
+       "tokenCount": 26,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "19235cbc451104b6",
+           "position": 0,
+           "span": [
+            0,
+            7
+           ]
+          },
+          {
+           "hash": "91d4491583062b7b",
+           "position": 3,
+           "span": [
+            5,
+            12
+           ]
+          },
+          {
+           "hash": "8e53061d887f49c5",
+           "position": 5,
+           "span": [
+            7,
+            15
+           ]
+          },
+          {
+           "hash": "004bceac078c2184",
+           "position": 6,
+           "span": [
+            10,
+            17
+           ]
+          },
+          {
+           "hash": "2f10c4f4533f0394",
+           "position": 9,
+           "span": [
+            15,
+            20
+           ]
+          },
+          {
+           "hash": "05cf26df40a9a383",
+           "position": 11,
+           "span": [
+            18,
+            26
+           ]
+          },
+          {
+           "hash": "845c3d6b4220830e",
+           "position": 15,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "012104c5e7442fe6",
+           "position": 17,
+           "span": [
+            28,
+            35
+           ]
+          },
+          {
+           "hash": "14443fa60c4a7419",
+           "position": 21,
+           "span": [
+            35,
+            35
+           ]
+          }
+         ],
+         "kgramCount": 22,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "0a6d5e11d194edde",
+           "position": 3,
+           "span": [
+            5,
+            12
+           ]
+          },
+          {
+           "hash": "01f3952281ed4b46",
+           "position": 4,
+           "span": [
+            7,
+            12
+           ]
+          },
+          {
+           "hash": "0a6d5e11d194edde",
+           "position": 8,
+           "span": [
+            12,
+            20
+           ]
+          },
+          {
+           "hash": "01f3952281ed4b46",
+           "position": 9,
+           "span": [
+            15,
+            20
+           ]
+          },
+          {
+           "hash": "0a6d5e11d194edde",
+           "position": 13,
+           "span": [
+            20,
+            29
+           ]
+          },
+          {
+           "hash": "01f3952281ed4b46",
+           "position": 14,
+           "span": [
+            24,
+            29
+           ]
+          },
+          {
+           "hash": "611201e4bd168a9d",
+           "position": 18,
+           "span": [
+            29,
+            35
+           ]
+          }
+         ],
+         "kgramCount": 22,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "py-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c77b016",
+      "id": "py-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "b.py",
+      "source": "extraction-py.json#py-empty-span-fingerprint"
+     }
+    ],
+    "sha256": "fae5ecebeccfda386252e952fc7d27dab24f295427dbc673b8073915d4f99516",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 35,
+       "id": "b.py",
+       "sha256": "479d397ecdeb22ae0d92c527c8c63764dcb1885a32e5a2835800fcfbc83f5bfd",
+       "status": "ok",
+       "tokenCount": 26,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "19235cbc451104b6",
+           "position": 0,
+           "span": [
+            0,
+            7
+           ]
+          },
+          {
+           "hash": "91d4491583062b7b",
+           "position": 3,
+           "span": [
+            5,
+            12
+           ]
+          },
+          {
+           "hash": "8e53061d887f49c5",
+           "position": 5,
+           "span": [
+            7,
+            15
+           ]
+          },
+          {
+           "hash": "004bceac078c2184",
+           "position": 6,
+           "span": [
+            10,
+            17
+           ]
+          },
+          {
+           "hash": "2f10c4f4533f0394",
+           "position": 9,
+           "span": [
+            15,
+            20
+           ]
+          },
+          {
+           "hash": "05cf26df40a9a383",
+           "position": 11,
+           "span": [
+            18,
+            26
+           ]
+          },
+          {
+           "hash": "845c3d6b4220830e",
+           "position": 15,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "012104c5e7442fe6",
+           "position": 17,
+           "span": [
+            28,
+            35
+           ]
+          },
+          {
+           "hash": "14443fa60c4a7419",
+           "position": 21,
+           "span": [
+            35,
+            35
+           ]
+          }
+         ],
+         "kgramCount": 22,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "0a6d5e11d194edde",
+           "position": 3,
+           "span": [
+            5,
+            12
+           ]
+          },
+          {
+           "hash": "01f3952281ed4b46",
+           "position": 4,
+           "span": [
+            7,
+            12
+           ]
+          },
+          {
+           "hash": "0a6d5e11d194edde",
+           "position": 8,
+           "span": [
+            12,
+            20
+           ]
+          },
+          {
+           "hash": "01f3952281ed4b46",
+           "position": 9,
+           "span": [
+            15,
+            20
+           ]
+          },
+          {
+           "hash": "0a6d5e11d194edde",
+           "position": 13,
+           "span": [
+            20,
+            29
+           ]
+          },
+          {
+           "hash": "01f3952281ed4b46",
+           "position": 14,
+           "span": [
+            24,
+            29
+           ]
+          },
+          {
+           "hash": "611201e4bd168a9d",
+           "position": 18,
+           "span": [
+            29,
+            35
+           ]
+          }
+         ],
+         "kgramCount": 22,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "py-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c77b016",
+      "id": "py-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "compared",
+    "pairs": [
+     {
+      "reference": "a.py",
+      "candidate": "b.py",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "ambiguous"
+        ],
+        "reportable": 5,
+        "derivation": "computed-then-reviewed"
+       }
+      }
+     }
+    ]
+   },
+   "expectedReport": {
+    "bodySha256": "3a232960fa7a0197d00d1faa3f53029c007e1e13f58f70d6d85c74387498495b",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "fae5ecebeccfda386252e952fc7d27dab24f295427dbc673b8073915d4f99516",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceCatalogueSha256": "bcafc8bd9845ff9da39c44bc6b7863c73bf8c873236033a112393f7d10bc8851",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "candidateArtifactCount": 1,
+     "comparison": {
+      "comparison": "traceweave-seed-merge-draft-2",
+      "modes": [
+       "exact",
+       "normalized"
+      ],
+      "minRegionDistinctHashes": 2,
+      "mergeGap": 4,
+      "maxSeedsPerMode": 100000,
+      "maxRegionsPerMode": 1000,
+      "suppressionCatalogueSha256": "none",
+      "parameterStatus": "experimental"
+     },
+     "pairs": [
+      {
+       "candidate": {
+        "id": "b.py",
+        "sha256": "479d397ecdeb22ae0d92c527c8c63764dcb1885a32e5a2835800fcfbc83f5bfd"
+       },
+       "reference": {
+        "id": "a.py",
+        "sha256": "479d397ecdeb22ae0d92c527c8c63764dcb1885a32e5a2835800fcfbc83f5bfd"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 9,
+           "numerator": 9
+          },
+          "referenceInCandidate": {
+           "denominator": 9,
+           "numerator": 9
+          }
+         },
+         "seedCount": 9,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 9,
+           "numerator": 9
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            0,
+            35
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 9,
+           "referenceSpan": [
+            0,
+            35
+           ],
+           "seeds": [
+            [
+             0,
+             0
+            ],
+            [
+             3,
+             3
+            ],
+            [
+             5,
+             5
+            ],
+            [
+             6,
+             6
+            ],
+            [
+             9,
+             9
+            ],
+            [
+             11,
+             11
+            ],
+            [
+             15,
+             15
+            ],
+            [
+             17,
+             17
+            ],
+            [
+             21,
+             21
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 3
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "seedCount": 19,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "outcome": {
+          "class": "abstain",
+          "code": "ambiguous"
+         },
+         "regions": [
+          {
+           "ambiguous": true,
+           "candidateSpan": [
+            5,
+            35
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 3,
+           "referenceSpan": [
+            5,
+            35
+           ],
+           "seeds": [
+            [
+             3,
+             3
+            ],
+            [
+             4,
+             4
+            ],
+            [
+             8,
+             8
+            ],
+            [
+             9,
+             9
+            ],
+            [
+             13,
+             13
+            ],
+            [
+             14,
+             14
+            ],
+            [
+             18,
+             18
+            ]
+           ],
+           "status": "reportable"
+          },
+          {
+           "ambiguous": true,
+           "candidateSpan": [
+            12,
+            29
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 2,
+           "referenceSpan": [
+            5,
+            20
+           ],
+           "seeds": [
+            [
+             3,
+             8
+            ],
+            [
+             4,
+             9
+            ],
+            [
+             8,
+             13
+            ],
+            [
+             9,
+             14
+            ]
+           ],
+           "status": "reportable"
+          },
+          {
+           "ambiguous": true,
+           "candidateSpan": [
+            20,
+            29
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 2,
+           "referenceSpan": [
+            5,
+            12
+           ],
+           "seeds": [
+            [
+             3,
+             13
+            ],
+            [
+             4,
+             14
+            ]
+           ],
+           "status": "reportable"
+          },
+          {
+           "ambiguous": true,
+           "candidateSpan": [
+            5,
+            20
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 2,
+           "referenceSpan": [
+            12,
+            29
+           ],
+           "seeds": [
+            [
+             8,
+             3
+            ],
+            [
+             9,
+             4
+            ],
+            [
+             13,
+             8
+            ],
+            [
+             14,
+             9
+            ]
+           ],
+           "status": "reportable"
+          },
+          {
+           "ambiguous": true,
+           "candidateSpan": [
+            5,
+            12
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 2,
+           "referenceSpan": [
+            20,
+            29
+           ],
+           "seeds": [
+            [
+             13,
+             3
+            ],
+            [
+             14,
+             4
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 5
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      }
+     ],
+     "profile": {
+      "configSha256": "365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c77b016",
+      "id": "py-tokens",
+      "version": "draft-1"
+     },
+     "referenceArtifactCount": 1,
+     "status": "compared",
+     "suppression": {
+      "status": "none"
+     }
+    }
+   }
+  },
+  {
+   "id": "py-equal-starts",
+   "tags": [
+    "py-tokens",
+    "equal-starts"
+   ],
+   "description": "py-tokens format pair py-format-a/b: zero-width layout tokens give consecutive fingerprints with equal span starts, which §3.6 allows (starts are non-decreasing). Identical hashes, so both modes match completely.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "file": "comparison-config.json"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "a.py",
+      "source": "extraction-py.json#py-format-a"
+     }
+    ],
+    "sha256": "49a0c4779d8394d3b3376afdd93a6845d2d2db0035e27511a8ce4532bb63f0dc",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 30,
+       "id": "a.py",
+       "sha256": "de024fce1fa7157e24667a378bbde60732147302fe5301fbc55130e22f18f5c6",
+       "status": "ok",
+       "tokenCount": 16,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "1900f7da6bcd610c",
+           "position": 2,
+           "span": [
+            5,
+            11
+           ]
+          },
+          {
+           "hash": "01e57d9b529e9b09",
+           "position": 5,
+           "span": [
+            9,
+            17
+           ]
+          },
+          {
+           "hash": "9a135cfeb20c0146",
+           "position": 9,
+           "span": [
+            17,
+            29
+           ]
+          },
+          {
+           "hash": "4af4f315b156cda6",
+           "position": 10,
+           "span": [
+            17,
+            29
+           ]
+          }
+         ],
+         "kgramCount": 12,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "0461ca634d376e8f",
+           "position": 3,
+           "span": [
+            6,
+            12
+           ]
+          },
+          {
+           "hash": "32a3e75aef70a56e",
+           "position": 5,
+           "span": [
+            9,
+            17
+           ]
+          },
+          {
+           "hash": "35dbfb395397243c",
+           "position": 9,
+           "span": [
+            17,
+            29
+           ]
+          }
+         ],
+         "kgramCount": 12,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "py-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c77b016",
+      "id": "py-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "b.py",
+      "source": "extraction-py.json#py-format-b"
+     }
+    ],
+    "sha256": "6c19d351e6d58d9b33d4024fea27ca449fa1dc1257951d027e2d3591af95454c",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 67,
+       "id": "b.py",
+       "sha256": "ebb86f39299443a3b74cb2e32db1d61c1fd5845f38c76afaadcada700ff5b253",
+       "status": "ok",
+       "tokenCount": 16,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "1900f7da6bcd610c",
+           "position": 2,
+           "span": [
+            5,
+            28
+           ]
+          },
+          {
+           "hash": "01e57d9b529e9b09",
+           "position": 5,
+           "span": [
+            26,
+            53
+           ]
+          },
+          {
+           "hash": "9a135cfeb20c0146",
+           "position": 9,
+           "span": [
+            53,
+            63
+           ]
+          },
+          {
+           "hash": "4af4f315b156cda6",
+           "position": 10,
+           "span": [
+            53,
+            65
+           ]
+          }
+         ],
+         "kgramCount": 12,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "0461ca634d376e8f",
+           "position": 3,
+           "span": [
+            6,
+            29
+           ]
+          },
+          {
+           "hash": "32a3e75aef70a56e",
+           "position": 5,
+           "span": [
+            26,
+            53
+           ]
+          },
+          {
+           "hash": "35dbfb395397243c",
+           "position": 9,
+           "span": [
+            53,
+            63
+           ]
+          }
+         ],
+         "kgramCount": 12,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "py-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c77b016",
+      "id": "py-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "compared",
+    "pairs": [
+     {
+      "reference": "a.py",
+      "candidate": "b.py",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "exhaustiveDiagonalZero": true,
+        "derivation": "hand"
+       }
+      }
+     }
+    ]
+   },
+   "expectedReport": {
+    "bodySha256": "cfc8b47bf60e3d2e13c2b42f65e6cdf81f7a0626d17be04eb93b3a60117b9f27",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "6c19d351e6d58d9b33d4024fea27ca449fa1dc1257951d027e2d3591af95454c",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceCatalogueSha256": "49a0c4779d8394d3b3376afdd93a6845d2d2db0035e27511a8ce4532bb63f0dc",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "candidateArtifactCount": 1,
+     "comparison": {
+      "comparison": "traceweave-seed-merge-draft-2",
+      "modes": [
+       "exact",
+       "normalized"
+      ],
+      "minRegionDistinctHashes": 2,
+      "mergeGap": 4,
+      "maxSeedsPerMode": 100000,
+      "maxRegionsPerMode": 1000,
+      "suppressionCatalogueSha256": "none",
+      "parameterStatus": "experimental"
+     },
+     "pairs": [
+      {
+       "candidate": {
+        "id": "b.py",
+        "sha256": "ebb86f39299443a3b74cb2e32db1d61c1fd5845f38c76afaadcada700ff5b253"
+       },
+       "reference": {
+        "id": "a.py",
+        "sha256": "de024fce1fa7157e24667a378bbde60732147302fe5301fbc55130e22f18f5c6"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 4,
+           "numerator": 4
+          },
+          "referenceInCandidate": {
+           "denominator": 4,
+           "numerator": 4
+          }
+         },
+         "seedCount": 4,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 4,
+           "numerator": 4
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            5,
+            65
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 4,
+           "referenceSpan": [
+            5,
+            29
+           ],
+           "seeds": [
+            [
+             2,
+             2
+            ],
+            [
+             5,
+             5
+            ],
+            [
+             9,
+             9
+            ],
+            [
+             10,
+             10
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 3,
+           "numerator": 3
+          },
+          "referenceInCandidate": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "seedCount": 3,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 3,
+           "numerator": 3
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            6,
+            63
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 3,
+           "referenceSpan": [
+            6,
+            29
+           ],
+           "seeds": [
+            [
+             3,
+             3
+            ],
+            [
+             5,
+             5
+            ],
+            [
+             9,
+             9
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      }
+     ],
+     "profile": {
+      "configSha256": "365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c77b016",
+      "id": "py-tokens",
+      "version": "draft-1"
+     },
+     "referenceArtifactCount": 1,
+     "status": "compared",
+     "suppression": {
+      "status": "none"
+     }
+    }
+   }
+  },
+  {
+   "id": "rv-py-empty-span-region",
+   "tags": [
+    "synthetic",
+    "py-tokens",
+    "empty-span"
+   ],
+   "description": "Synthetic py-tokens catalogues whose only shared fingerprint has an empty span ([30, 30) and [20, 20)): the region's spans are carried unchanged as empty spans. minRegionDistinctHashes 1, so the single hash is reportable.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjEsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2Ijoibm9uZSJ9Cg=="
+   },
+   "reference": {
+    "sha256": "41d6ad62e4f4635cdff22e8c112979494a879ac6918e4504abe26e5de76ed9c4",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 30,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "a000000000000001",
+           "position": 0,
+           "span": [
+            0,
+            10
+           ]
+          },
+          {
+           "hash": "a0a0a0a0a0a0a0a0",
+           "position": 4,
+           "span": [
+            30,
+            30
+           ]
+          }
+         ],
+         "kgramCount": 8,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "a000000000000001",
+           "position": 0,
+           "span": [
+            0,
+            10
+           ]
+          },
+          {
+           "hash": "a0a0a0a0a0a0a0a0",
+           "position": 4,
+           "span": [
+            30,
+            30
+           ]
+          }
+         ],
+         "kgramCount": 8,
+         "partialWindow": false
+        }
+       },
+       "id": "r.syn",
+       "sha256": "08d98bd2573255f0abef5c8f6203871e7364c529e694c459ee9ef9aaab30ed5a",
+       "status": "ok",
+       "tokenCount": 12
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "py-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c77b016",
+      "id": "py-tokens",
+      "version": "draft-1"
+     }
+    },
+    "synthetic": "Winnowing-shaped catalogue with no source bytes; the artifact digest is the SHA-256 of the ASCII string 'traceweave synthetic artifact r.syn'."
+   },
+   "candidate": {
+    "sha256": "fa29f8880dd5f02ffc0229b41ebb9a84fc8f122ec1295adfbfeebeb3077eca6a",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 24,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "b000000000000002",
+           "position": 0,
+           "span": [
+            0,
+            10
+           ]
+          },
+          {
+           "hash": "a0a0a0a0a0a0a0a0",
+           "position": 4,
+           "span": [
+            20,
+            20
+           ]
+          }
+         ],
+         "kgramCount": 8,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "b000000000000002",
+           "position": 0,
+           "span": [
+            0,
+            10
+           ]
+          },
+          {
+           "hash": "a0a0a0a0a0a0a0a0",
+           "position": 4,
+           "span": [
+            20,
+            20
+           ]
+          }
+         ],
+         "kgramCount": 8,
+         "partialWindow": false
+        }
+       },
+       "id": "c.syn",
+       "sha256": "932cd2fb30cca2d600d5b1f54bb449a80d746a131654b49311d05f96155b6429",
+       "status": "ok",
+       "tokenCount": 12
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "py-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c77b016",
+      "id": "py-tokens",
+      "version": "draft-1"
+     }
+    },
+    "synthetic": "Winnowing-shaped catalogue with no source bytes; the artifact digest is the SHA-256 of the ASCII string 'traceweave synthetic artifact c.syn'."
+   },
+   "handExpectations": {
+    "status": "compared",
+    "pairs": [
+     {
+      "reference": "r.syn",
+      "candidate": "c.syn",
+      "status": "compared",
+      "modes": {
+       "exact": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "seeds": [
+         [
+          [
+           4,
+           4
+          ]
+         ]
+        ],
+        "regionSpans": [
+         [
+          [
+           30,
+           30
+          ],
+          [
+           20,
+           20
+          ]
+         ]
+        ],
+        "derivation": "hand"
+       },
+       "normalized": {
+        "codeIn": [
+         "match"
+        ],
+        "reportable": 1,
+        "seeds": [
+         [
+          [
+           4,
+           4
+          ]
+         ]
+        ],
+        "regionSpans": [
+         [
+          [
+           30,
+           30
+          ],
+          [
+           20,
+           20
+          ]
+         ]
+        ],
+        "derivation": "hand"
+       }
+      }
+     }
+    ]
+   },
+   "expectedReport": {
+    "bodySha256": "76b1276aec323ebf1dd30ed91227d926ccfa549700f9d0bf797b6780beb684db",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "fa29f8880dd5f02ffc0229b41ebb9a84fc8f122ec1295adfbfeebeb3077eca6a",
+      "comparisonConfigSha256": "0e8eb77a871853f12f353df33d4a64e02c0945b6538b83a96582328501eb6b4f",
+      "referenceCatalogueSha256": "41d6ad62e4f4635cdff22e8c112979494a879ac6918e4504abe26e5de76ed9c4",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "candidateArtifactCount": 1,
+     "comparison": {
+      "comparison": "traceweave-seed-merge-draft-2",
+      "modes": [
+       "exact",
+       "normalized"
+      ],
+      "minRegionDistinctHashes": 1,
+      "mergeGap": 4,
+      "maxSeedsPerMode": 100000,
+      "maxRegionsPerMode": 1000,
+      "suppressionCatalogueSha256": "none",
+      "parameterStatus": "experimental"
+     },
+     "pairs": [
+      {
+       "candidate": {
+        "id": "c.syn",
+        "sha256": "932cd2fb30cca2d600d5b1f54bb449a80d746a131654b49311d05f96155b6429"
+       },
+       "reference": {
+        "id": "r.syn",
+        "sha256": "08d98bd2573255f0abef5c8f6203871e7364c529e694c459ee9ef9aaab30ed5a"
+       },
+       "modes": {
+        "exact": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 2,
+           "numerator": 1
+          },
+          "referenceInCandidate": {
+           "denominator": 2,
+           "numerator": 1
+          }
+         },
+         "seedCount": 1,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 3,
+           "numerator": 1
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            20,
+            20
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 1,
+           "referenceSpan": [
+            30,
+            30
+           ],
+           "seeds": [
+            [
+             4,
+             4
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        },
+        "normalized": {
+         "containment": {
+          "candidateInReference": {
+           "denominator": 2,
+           "numerator": 1
+          },
+          "referenceInCandidate": {
+           "denominator": 2,
+           "numerator": 1
+          }
+         },
+         "seedCount": 1,
+         "sharedCommonDistinctHashes": 0,
+         "similarity": {
+          "jaccard": {
+           "denominator": 3,
+           "numerator": 1
+          }
+         },
+         "outcome": {
+          "class": "match",
+          "code": "match"
+         },
+         "regions": [
+          {
+           "ambiguous": false,
+           "candidateSpan": [
+            20,
+            20
+           ],
+           "distinctCommonHashes": 0,
+           "distinctHashes": 1,
+           "referenceSpan": [
+            30,
+            30
+           ],
+           "seeds": [
+            [
+             4,
+             4
+            ]
+           ],
+           "status": "reportable"
+          }
+         ],
+         "regionCounts": {
+          "belowMinimumEvidence": 0,
+          "commonOnly": 0,
+          "reportable": 1
+         },
+         "truncatedRegions": 0
+        }
+       },
+       "status": "compared"
+      }
+     ],
+     "profile": {
+      "configSha256": "365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c77b016",
+      "id": "py-tokens",
       "version": "draft-1"
      },
      "referenceArtifactCount": 1,
