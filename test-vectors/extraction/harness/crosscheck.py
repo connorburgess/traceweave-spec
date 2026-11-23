@@ -333,7 +333,9 @@ def main():
                     count("go accepted DIFF")
                     problems.append(f"{v['id']} [go/scanner]: token mismatch {toks} vs {contract_go_view(res['tokens'])} errs={errs}")
     for name in RUST_FILES:
-        for v in json.loads((VECTORS / name).read_text())["vectors"]:
+        rust_vectors = json.loads((VECTORS / name).read_text())["vectors"]
+        rust_by_id = {x["id"]: x for x in rust_vectors}
+        for v in rust_vectors:
             seen.add(v["id"])
             data = base64.b64decode(v["inputBase64"])
             res = v["result"]
@@ -361,6 +363,9 @@ def main():
                         and cv.first_forbidden(data.decode("utf-8"), "rust") is None:
                     try:
                         cv.check_error_offset(code, off, data, cv.PROFILES[("rust2024-tokens", "draft-1")])
+                        if "pairedPositive" in v:  # and the pair rules (prefix consistency, no offset inside a shared token)
+                            cv.check_prefix_consistency(rust_by_id[v["pairedPositive"]], v,
+                                                        {"profile": "rust2024-tokens", "profileVersion": "draft-1"}, name)
                     except cv.CheckError as exc:
                         problems.append(f"{v['id']}: recorded result breaks a contract rule: {exc}")
                 count(f"rust error rustc {outcome(v['id'], 'rustc', 'agree' if not accepted else 'accepts', None, problems, notes)}")

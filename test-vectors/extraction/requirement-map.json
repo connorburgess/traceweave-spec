@@ -518,7 +518,7 @@
         {
           "must": "MUST be linear in the identifier length",
           "kind": "implementation-test",
-          "reason": "timing test: 1 MiB adversarial identifiers must finish within 5 s (a quadratic insertion sort took 126 s); Go only, the Rust lane has the adversarial probe measurement",
+          "reason": "Go only: timing test, 1 MiB adversarial identifiers must finish within 5 s (a quadratic insertion sort took 126 s). No Rust timing test exists at af3af2b (crates/tw-unicode/src/nfc.rs has only the correctness test basic()); the Rust lane is measured, not tested, by xcheck/probes/adversarial.py",
           "tests": ["impl:af3af2b:go/internal/unidata/unidata_test.go:TestNFCLinearTime"],
           "spotCheck": true
         }
@@ -532,7 +532,7 @@
         {
           "must": "MUST NOT be quadratic",
           "kind": "implementation-test",
-          "reason": "timing test over runs of non-starters ('a' + (U+0301 U+0316)*, 1 MiB) with a 5 s bound; Go only",
+          "reason": "Go only: timing test over runs of non-starters ('a' + (U+0301 U+0316)*, 1 MiB) with a 5 s bound. No Rust timing test exists at af3af2b; the Rust lane is measured, not tested, by xcheck/probes/adversarial.py",
           "tests": ["impl:af3af2b:go/internal/unidata/unidata_test.go:TestNFCLinearTime"],
           "spotCheck": true
         }

@@ -150,6 +150,23 @@ The two cases the gate names, a vector without `derivation` and a positive witho
 
 Both old records are now **wrong-lexer cases** in the self-test ("wrong lexer without the reserved-prefix rule", 2 of Rust's 22 corruptions), and they are rejected. `harness/crosscheck.py` also re-applies the contract's error-offset rules to every Rust error vector, so agreement with proc-macro2 alone no longer confirms a result. It lists proc-macro2's missing reserved-prefix rule for these two vectors as an expected divergence.
 
+**Exact error offsets (confirmation pass).** A `reserved-token` offset moved by one inside the failing token used to pass. The prefix check skipped tokens that end after the offset, and the per-code checks only tested plausibility. Two changes close this:
+- **Per-code derivation.** For each error code, `check_vectors.py` now derives the start of the failing unit from the input and the contract rule. It also applies a pair rule: an error offset never lies strictly inside a token of the paired positive over bytes the two inputs share. A closer that matched its opener in those shared bytes cannot be the unbalanced one.
+- **Shift self-test.** Every lexical error offset is shifted by −1 and +1, and every shift must be rejected: 151 of 151 (Go 40, Rust 107, exclusion file 4). `harness/crosscheck.py` applies the same local and pair rules.
+
+| Code | How the checker places the offset |
+| --- | --- |
+| `input-too-large`, `invalid-utf8`, `bom`, `nul`, `isolated-cr` | **Exact**: recomputed from the input bytes |
+| `reserved-token` | **Exact in unit**: one of the §5.3 forms starts exactly at the offset. The forms are an identifier or keyword directly followed by `"` `'` `#` (outside the exemptions), `r#` plus a reserved name, a lifetime followed by `#` or `'r#` plus a reserved name, and `#` followed by `#` or `"` that is not part of a raw-string terminator and not preceded by a `#` of the same run |
+| `unterminated-literal` | **Exact in unit**: a string-like literal, including its prefix, starts at the offset and has no end, and no identifier character before the offset extends its prefix |
+| `unterminated-comment` | **Exact in unit**: `/*` at the offset opens a comment with no end, and no earlier `/*` is unterminated. If an earlier `/*` sits inside a literal or line comment, this can over-reject, but it never over-accepts |
+| `malformed-literal` | **Exact in unit**: a literal starts at the offset and does not continue from the previous character. Whether the literal is malformed is the hand judgment, checked further by the per-token rules |
+| `non-nfc-identifier`, `malformed-identifier` | **Exact in unit**: an identifier, raw identifier, lifetime or suffixed literal starts at the offset, and its own identifier run is non-NFC or contains a zero-width joiner |
+| `illegal-character` | **Exact in unit**: the character at the offset cannot start any token |
+| `unbalanced-delimiter` | **Bounded**: a delimiter is at the offset. Which delimiter is unmatched needs bracket matching over a lexed stream. For paired rejections the pair rules decide it; in this set they reject all 20 shifts, and local rules alone reject 18 |
+
+"Exact in unit" means an offset moved anywhere inside or next to the failing unit is rejected. For every lexical code, whether an earlier unit fails first is bounded rather than derived, because proving it needs a full lexer. That property is covered by three things: the paired positive's prefix checks, both implementations (which reproduce every Go and Rust error vector), and the cross-check.
+
 **Re-audit of all 60 new rejections**, by three independent means:
 1. **The two new checker rules**, run over the pre-fix vectors: of 118 error vectors, they flagged exactly these two.
 2. **Both implementations**, built from their repository at `af3af2b` into a scratch directory and run on every vector: they produced the expected result for all 168 Go and Rust vectors, including all 55 new Go and Rust rejections. Their records were compared with the expected `result` objects. The 10 vectors of the test-only `go-tokens-exclusion-test` profile are not supported there by design. Its 5 new rejections are covered by go/scanner and by the checker rules instead.
@@ -179,11 +196,11 @@ Output on 2026-11-22 (Python 3.14.6, `unicodedata` 16.0.0):
 
 ```
 PASS config-negative.json: 28/28 invalid configurations rejected, 3/3 boundary configurations accepted
-PASS go.json profile=go-tokens/draft-1 config=dfbc5fe3517e9da6... vectors=49 tokens=170 (inserted ';'=21) identifiers=61 kgrams=228 fingerprints=82 tie-windows=11 errors=33 (lexical offsets plausibility-only: 27) pairs=2 positives=16 paired-one-to-one mutations-rejected=20/20
-PASS rust.json profile=rust2024-tokens/draft-1 config=64b34335e4a61383... vectors=118 tokens=322 (inserted ';'=0) identifiers=103 kgrams=384 fingerprints=146 tie-windows=10 errors=76 (lexical offsets plausibility-only: 63) pairs=2 positives=42 paired-one-to-one mutations-rejected=23/23
-PASS limits-go.json profile=go-tokens/draft-1 config=aa86722255afbf50... vectors=3 tokens=8 (inserted ';'=1) identifiers=1 kgrams=8 fingerprints=2 tie-windows=0 errors=2 (lexical offsets plausibility-only: 0) pairs=0 positives=1 paired-one-to-one mutations-rejected=7/7
-PASS limits-rust.json profile=rust2024-tokens/draft-1 config=71d5ed27bea011f6... vectors=3 tokens=7 (inserted ';'=0) identifiers=2 kgrams=6 fingerprints=2 tie-windows=0 errors=2 (lexical offsets plausibility-only: 0) pairs=0 positives=1 paired-one-to-one mutations-rejected=7/7
-PASS exclusion-rule.json profile=go-tokens-exclusion-test/draft-1 config=65ae9f23f38b060e... vectors=10 tokens=36 (inserted ';'=4) identifiers=15 kgrams=24 fingerprints=9 tie-windows=0 errors=5 (lexical offsets plausibility-only: 3) pairs=0 positives=5 paired-one-to-one mutations-rejected=11/11
+PASS go.json profile=go-tokens/draft-1 config=dfbc5fe3517e9da6... vectors=49 tokens=170 (inserted ';'=21) identifiers=61 kgrams=228 fingerprints=82 tie-windows=11 errors=33 (lexical offsets checked by rule: 27) pairs=2 positives=16 paired-one-to-one mutations-rejected=20/20 offset-shifts-rejected illegal-character=11/11 malformed-literal=16/16 unterminated-comment=7/7 unterminated-literal=6/6
+PASS rust.json profile=rust2024-tokens/draft-1 config=64b34335e4a61383... vectors=118 tokens=322 (inserted ';'=0) identifiers=103 kgrams=384 fingerprints=146 tie-windows=10 errors=76 (lexical offsets checked by rule: 63) pairs=2 positives=42 paired-one-to-one mutations-rejected=23/23 offset-shifts-rejected illegal-character=5/5 malformed-identifier=5/5 malformed-literal=27/27 non-nfc-identifier=11/11 reserved-token=17/17 unbalanced-delimiter=20/20 unterminated-comment=6/6 unterminated-literal=6/6
+PASS limits-go.json profile=go-tokens/draft-1 config=aa86722255afbf50... vectors=3 tokens=8 (inserted ';'=1) identifiers=1 kgrams=8 fingerprints=2 tie-windows=0 errors=2 (lexical offsets checked by rule: 0) pairs=0 positives=1 paired-one-to-one mutations-rejected=7/7
+PASS limits-rust.json profile=rust2024-tokens/draft-1 config=71d5ed27bea011f6... vectors=3 tokens=7 (inserted ';'=0) identifiers=2 kgrams=6 fingerprints=2 tie-windows=0 errors=2 (lexical offsets checked by rule: 0) pairs=0 positives=1 paired-one-to-one mutations-rejected=7/7
+PASS exclusion-rule.json profile=go-tokens-exclusion-test/draft-1 config=65ae9f23f38b060e... vectors=10 tokens=36 (inserted ';'=4) identifiers=15 kgrams=24 fingerprints=9 tie-windows=0 errors=5 (lexical offsets checked by rule: 3) pairs=0 positives=5 paired-one-to-one mutations-rejected=11/11 offset-shifts-rejected illegal-character=2/2 unterminated-literal=2/2
 ```
 
 The checker verifies the following:
@@ -376,7 +393,7 @@ With `TW_IMPL_REPO` set to the implementation checkout, all 6 implementation-tes
 
 **Counts.** 28 keyword occurrences in 24 sentences:
 - 17 testable clauses;
-- 4 implementation-tested clauses (EX-05a, EX-05b, EX-22, EX-23);
+- 4 implementation-tested clauses: EX-05a and EX-05b in both implementations, EX-22 and EX-23 in Go only, because no Rust timing test exists at `af3af2b`;
 - 5 untestable clauses (EX-03a, EX-03b, EX-04, EX-20, EX-21);
 - 2 definitional clauses.
 
@@ -408,8 +425,8 @@ With `TW_IMPL_REPO` set to the implementation checkout, all 6 implementation-tes
 | EX-19b | §10 | MUST be accepted | testable | `cfg:cfg-bounds-min`, `cfg:cfg-bounds-max`, `cfg:cfg-rust-bounds-max` | `cfg:cfg-k-zero`, `cfg:cfg-k-above-bound`, `cfg:cfg-window-above-bound` |
 | EX-20 | §10a | MUST be O(N) | **untestable** | — | — |
 | EX-21 | §10a | MUST NOT cause rescanning | **untestable** | — | — |
-| EX-22 | §10a | MUST be linear in the identifier length | implementation test | `go/internal/unidata/unidata_test.go:TestNFCLinearTime` | — |
-| EX-23 | §10a | MUST NOT be quadratic | implementation test | `go/internal/unidata/unidata_test.go:TestNFCLinearTime` | — |
+| EX-22 | §10a | MUST be linear in the identifier length | implementation test (Go only) | `go/internal/unidata/unidata_test.go:TestNFCLinearTime` | — |
+| EX-23 | §10a | MUST NOT be quadratic | implementation test (Go only) | `go/internal/unidata/unidata_test.go:TestNFCLinearTime` | — |
 
 **Spot-check sample for a non-author** (10 clauses):
 - the 5 untestable clauses;
@@ -426,8 +443,8 @@ With `TW_IMPL_REPO` set to the implementation checkout, all 6 implementation-tes
 | EX-09 | §3a | MUST NOT rely on a language runtime's or library's built-in Unicode data unless that data is shown to be identical | testable | only differences at the tested boundary code points are caught; harness/crosscheck.py compares the full tables with Go's unicode package and unicode-ident 1.0.24 |
 | EX-20 | §10a | MUST be O(N) | untestable | performance is not observable in vector bytes; the implementations' adversarial probe measures time and memory at the bounds but asserts no limit, so no test fails on violation |
 | EX-21 | §10a | MUST NOT cause rescanning | untestable | performance; the adversarial probe times nested comments, unterminated literals and 8 MiB identifiers but asserts no limit |
-| EX-22 | §10a | MUST be linear in the identifier length | implementation-test | timing test: 1 MiB adversarial identifiers must finish within 5 s (a quadratic insertion sort took 126 s); Go only, the Rust lane has the adversarial probe measurement |
-| EX-23 | §10a | MUST NOT be quadratic | implementation-test | timing test over runs of non-starters ('a' + (U+0301 U+0316)*, 1 MiB) with a 5 s bound; Go only |
+| EX-22 | §10a | MUST be linear in the identifier length | implementation-test | Go only: timing test, 1 MiB adversarial identifiers must finish within 5 s (a quadratic insertion sort took 126 s). No Rust timing test exists at af3af2b (crates/tw-unicode/src/nfc.rs has only the correctness test basic()); the Rust lane is measured, not tested, by xcheck/probes/adversarial.py |
+| EX-23 | §10a | MUST NOT be quadratic | implementation-test | Go only: timing test over runs of non-starters ('a' + (U+0301 U+0316)*, 1 MiB) with a 5 s bound. No Rust timing test exists at af3af2b; the Rust lane is measured, not tested, by xcheck/probes/adversarial.py |
 
 **What a reviewer should confirm:**
 - For each untestable clause, that vector bytes really cannot decide it.

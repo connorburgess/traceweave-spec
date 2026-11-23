@@ -641,6 +641,146 @@ def rust_reserved_prefix_at(text, ci):
     return j
 
 
+RUST_PREFIX_EXEMPT = {"\"": {"b", "c", "r", "br", "cr"}, "'": {"b"}, "#": {"r", "br", "cr"}}
+
+
+def rust_ident_run(text, i):
+    j = i
+    while j < len(text) and xid_continue(text[j]):
+        j += 1
+    return j
+
+
+def rust_unit_start_ok(text, ci):
+    """True if no unit the scanner reads could start before ci and still contain ci (local check, Rust)."""
+    prev = text[ci - 1] if ci > 0 else ""
+    c = text[ci]
+    if prev and xid_continue(prev):
+        return False  # identifier, prefix, suffix or number continues into ci
+    if (xid_start(c) or c == "_" or c.isdigit()) and prev in ("'",):
+        return False  # lifetime name or char body
+    if prev == "#" and ci >= 2 and text[ci - 2] == "r" and (ci < 3 or not xid_continue(text[ci - 3])):
+        return False  # raw identifier name: the token starts at the r
+    return True
+
+
+def go_unit_start_ok(text, ci):
+    prev = text[ci - 1] if ci > 0 else ""
+    c = text[ci]
+    if prev and (go_letter(prev) or go_digit(prev)) and (go_letter(c) or go_digit(c) or c in "._"):
+        return False
+    if c.isdigit() and prev == ".":
+        return False  # '.5': the literal starts at the '.'
+    return True
+
+
+def rust_raw_terminator_before(text, k):
+    """True if text[:k] ends with a raw-string terminator '"' + n '#' whose opener used exactly n '#'."""
+    j = k
+    while j > 0 and text[j - 1] == "#":
+        j -= 1
+    n = k - j
+    if n == 0 or j == 0 or text[j - 1] != '"':
+        return False
+    opener = re.compile(r"(?<![\w])(?:r|br|cr)" + "#" * n + '"')
+    return any(m.end() <= j - 1 for m in opener.finditer(text[:j - 1]))
+
+
+def rust_reserved_start(text, ci):
+    """Derive, from the input and section 5.3 alone, whether a reserved-token error starts exactly at ci.
+    Returns the form name, or None if no reserved form starts at ci."""
+    c = text[ci]
+    if (xid_start(c) or c == "_") and rust_unit_start_ok(text, ci):
+        e = rust_ident_run(text, ci)
+        name = text[ci:e]
+        if name == "r" and text[e:e + 1] == "#" and e + 1 < len(text) and (xid_start(text[e + 1]) or text[e + 1] == "_"):
+            raw = text[e + 1:rust_ident_run(text, e + 1)]
+            return "reserved raw identifier" if raw in RUST_RESERVED_RAW else None
+        nxt = text[e:e + 1]
+        if nxt in RUST_PREFIX_EXEMPT and name not in RUST_PREFIX_EXEMPT[nxt]:
+            return "reserved prefix"
+        return None
+    if c == "'" and (ci == 0 or not xid_continue(text[ci - 1])):
+        if text.startswith("'r#", ci):
+            e = rust_ident_run(text, ci + 3)
+            if text[ci + 3:e] in RUST_RESERVED_RAW and text[e:e + 1] != "'":
+                return "reserved raw lifetime"
+            return None
+        if ci + 1 < len(text) and (xid_start(text[ci + 1]) or text[ci + 1] == "_"):
+            e = rust_ident_run(text, ci + 1)
+            if text[e:e + 1] == "#":
+                return "reserved lifetime prefix"
+        return None
+    if c == "#" and text[ci + 1:ci + 2] in ("#", '"'):
+        if rust_raw_terminator_before(text, ci + 1):
+            return None  # this '#' closes a raw string literal, which is one token
+        if ci > 0 and text[ci - 1] == "#" and not rust_raw_terminator_before(text, ci):
+            return None  # an earlier '#' of the same run starts the reserved form
+        return "reserved pounds" if text[ci + 1] == "#" else "reserved guarded string"
+    return None
+
+
+def literal_unterminated_from(text, ci, lang):
+    """True if a string-like literal starts at ci and has no end before end of input (or newline for Go)."""
+    if lang == "go":
+        q = text[ci]
+        if q == "`":
+            return text.find("`", ci + 1) < 0
+        if q not in "\"'":
+            return False
+        j = ci + 1
+        while j < len(text) and text[j] != "\n":
+            if text[j] == "\\":
+                j += 2
+                continue
+            if text[j] == q:
+                return False
+            j += 1
+        return True
+    m = re.match(r"(br|cr|r)(#*)\"|(b|c)?\"", text[ci:])
+    if not m:
+        return False
+    if m.group(1):
+        return text.find('"' + m.group(2), ci + m.end()) < 0
+    j = ci + m.end()
+    while j < len(text):
+        if text[j] == "\\":
+            j += 2
+            continue
+        if text[j] == '"':
+            return False
+        j += 1
+    return True
+
+
+def literal_starts_at(text, ci, lang):
+    c = text[ci]
+    if lang == "go":
+        return c.isascii() and c.isdigit() or c in "\"'`" or (c == "." and text[ci + 1:ci + 2].isdigit())
+    if c.isascii() and c.isdigit() or c in "\"'":
+        return True
+    return re.match(r"(?:br|cr|r)#*\"|[bc][\"']", text[ci:]) is not None
+
+
+# How exactly the checker places each error offset (contract section 2, OD-13 (a)).
+# "exact": recomputed from the input bytes alone (encoding-level codes).
+# "exact-in-unit": the checker derives, from the input and the contract rule, that a failing unit of this kind
+#   starts exactly at the offset, so an offset moved anywhere inside or next to that unit is rejected (the
+#   offset-shift self-test requires every +-1 shift to be rejected). Whether an earlier unit fails first is
+#   bounded, not derived, for every lexical code: proving it needs a full lexer, and is covered by the paired
+#   positive's prefix checks, the two implementations and harness/crosscheck.py.
+# "bounded": the checker verifies only that a unit of the right kind is at the offset; which one is decided by
+#   bracket matching over the lexed stream, which it does not have. For paired rejections a closer that matched
+#   in the positive's shared bytes is excluded.
+OFFSET_DERIVATION = {
+    "input-too-large": "exact", "invalid-utf8": "exact", "bom": "exact", "nul": "exact", "isolated-cr": "exact",
+    "reserved-token": "exact-in-unit", "unterminated-comment": "exact-in-unit", "unterminated-literal": "exact-in-unit",
+    "malformed-literal": "exact-in-unit", "non-nfc-identifier": "exact-in-unit", "malformed-identifier": "exact-in-unit",
+    "illegal-character": "exact-in-unit",
+    "unbalanced-delimiter": "bounded",
+}
+
+
 def check_error_offset(code, offset, data, spec):
     """Plausibility only: the character at the offset can start the failing construct."""
     text = data.decode("utf-8")
@@ -656,16 +796,40 @@ def check_error_offset(code, offset, data, spec):
         require(not starts and c not in spec["whitespace"], f"{c!r} can start a token")
     elif code == "unterminated-comment":
         require(text.startswith("/*", ci), "unterminated-comment offset is not at '/*'")
+        require(skip_block(text, ci, spec["nested"]) is None, "the block comment at the offset is terminated")
+        k = text.rfind("/*", 0, ci)
+        while k >= 0:  # an earlier unterminated opener would contain this one (exact for these inputs; see README)
+            require(skip_block(text, k, spec["nested"]) is not None,
+                    f"an earlier '/*' at char {k} is already unterminated; the error starts there")
+            k = text.rfind("/*", 0, k)
     elif code == "unterminated-literal":
         require(c in "\"'`rbc", "unterminated-literal offset is not at a literal start")
+        unit_ok = go_unit_start_ok(text, ci) if spec["lang"] == "go" else rust_unit_start_ok(text, ci)
+        require(unit_ok and literal_unterminated_from(text, ci, spec["lang"]),
+                "no unterminated literal starts exactly at the offset")
     elif code == "unbalanced-delimiter":
         require(c in "()[]{}", "unbalanced-delimiter offset is not at a delimiter")
-    elif code == "non-nfc-identifier":
-        require(not unicodedata.is_normalized("NFC", text[ci:]), "input after offset is already NFC")
-    elif code == "malformed-identifier":
-        require("‌" in text[ci:] or "‍" in text[ci:], "no zero-width joiner after offset")
-    elif code in ("malformed-literal", "reserved-token"):
-        require(not c.isspace(), "offset at whitespace")
+    elif code in ("non-nfc-identifier", "malformed-identifier"):
+        # The identifier-like run of the token at the offset: an identifier, the name of a raw identifier or
+        # lifetime, or a literal together with its suffix (digits and suffix are one XID_Continue run).
+        j = ci + (3 if text.startswith("'r#", ci) else 1 if c == "'" else 2 if text.startswith("r#", ci) else 0)
+        q = re.match(r"(?:br|cr|b|c|r)?#*\"[^\"]*\"#*|'[^']*'", text[j:]) if c != "'" else None
+        if q and literal_starts_at(text, ci, "rust") and not text[j].isdigit():
+            j += q.end()  # a string or char literal: its suffix follows the closing quote
+        run = text[j:rust_ident_run(text, j)]
+        if code == "non-nfc-identifier":
+            require(run and not unicodedata.is_normalized("NFC", run), f"the identifier run {run!r} at the offset is NFC")
+        else:
+            require("\u200c" in run or "\u200d" in run, f"the identifier run {run!r} at the offset has no zero-width joiner")
+    elif code == "reserved-token":
+        require(spec["lang"] == "rust" and rust_reserved_start(text, ci) is not None,
+                "no reserved form (section 5.3) starts exactly at the offset")
+    elif code == "malformed-literal":
+        unit_ok = go_unit_start_ok(text, ci) if spec["lang"] == "go" else rust_unit_start_ok(text, ci)
+        require(unit_ok and literal_starts_at(text, ci, spec["lang"]), "no literal starts exactly at the offset")
+    if code in ("non-nfc-identifier", "malformed-identifier"):
+        require(rust_unit_start_ok(text, ci) and (xid_start(c) or c in "_'" or literal_starts_at(text, ci, "rust")),
+                "no identifier, lifetime or literal token starts exactly at the offset")
     if spec["lang"] == "rust":
         j = rust_reserved_prefix_at(text, ci)
         if j is not None:
@@ -970,7 +1134,19 @@ def check_prefix_consistency(pos, rej, cfg, name):
     check = check_go_token if lang == "go" else check_rust_token
     for t in pos["result"]["tokens"]:
         s, e = t["span"]
-        if t.get("inserted") or e > err["offset"] or pdata[:e] != rdata[:e]:
+        if t.get("inserted"):
+            continue
+        # An error offset never lies strictly inside a token of the positive over bytes the two inputs share:
+        # errors are reported at the start of the failing unit (section 2), and the shared bytes lex the same.
+        require(not (s < err["offset"] < e and pdata[:err["offset"] + 1] == rdata[:err["offset"] + 1]),
+                f"{name}:{rej['id']}: error offset {err['offset']} lies inside the positive's token {t['text']!r} "
+                f"[{s}, {e}) over shared bytes")
+        # Positives are balanced, so a closer of the positive over shared bytes always matched its opener (which
+        # precedes it, also shared): an unbalanced-delimiter error cannot be at that closer.
+        require(not (err["code"] == "unbalanced-delimiter" and s == err["offset"] and t["class"] == "punct"
+                     and t["text"] in ")]}" and pdata[:e] == rdata[:e]),
+                f"{name}:{rej['id']}: the closer {t['text']!r} at {s} matches its opener in the shared bytes")
+        if e > err["offset"] or pdata[:e] != rdata[:e]:
             continue
         try:
             ci, ce = len(rdata[:s].decode("utf-8")), len(rdata[:e].decode("utf-8"))
@@ -1172,6 +1348,41 @@ def mutations(data, cfg, spec):
         yield "shebang look-ahead skips '///'", mutate("rust-q8-shebang-outer-line-doc", doc_skipped)
 
 
+def offset_shift_self_test(data, cfg, spec):
+    """Shift every lexical error offset by -1 and +1 (where it stays inside the input). Returns
+    {code: (rejected, tried)}. Every shift of a code the checker derives exactly must be rejected."""
+    out = {}
+    by = {v["id"]: v for v in data["vectors"]}
+    for v in data["vectors"]:
+        res = v["result"]
+        if res["status"] != "error" or res["error"]["code"] in ENCODING_CODES:
+            continue
+        data_b = base64.b64decode(v["inputBase64"])
+        code, off = res["error"]["code"], res["error"]["offset"]
+        for d in (-1, 1):
+            new = off + d
+            if not 0 <= new < len(data_b):
+                continue
+            try:
+                data_b[:new].decode("utf-8")
+            except UnicodeDecodeError:
+                continue  # not a character boundary: rejected by construction, not counted
+            rej, tried = out.get(code, (0, 0))
+            w = copy.deepcopy(v)
+            w["result"]["error"]["offset"] = new
+            try:
+                check_error_offset(code, new, data_b, spec)
+                if "pairedPositive" in w:
+                    check_prefix_consistency(by[w["pairedPositive"]], w, cfg, "shift")
+                caught = False
+            except CheckError:
+                caught = True
+            out[code] = (rej + caught, tried + 1)
+    for code, (rej, tried) in out.items():  # required for every code, including the bounded one
+        require(rej == tried, f"offset shift self-test: {tried - rej} of {tried} shifted {code} offsets accepted")
+    return out
+
+
 def mutation_self_test(data, cfg, spec, required, metadata=False):
     names, missed = [], []
     meta = list(metadata_mutations(data)) if metadata else []
@@ -1187,6 +1398,7 @@ def mutation_self_test(data, cfg, spec, required, metadata=False):
 
 
 TOKEN_INDICES_TEST = "tokenIndices emitted without exclusions"
+OFFSET_SHIFT_TEST = "lexical error offset shifted by -1 or +1"
 
 
 def list_tests():
@@ -1205,6 +1417,8 @@ def list_tests():
             names += [n for n, _ in metadata_mutations(data)]
         if spec["exclusions"]:
             names += [n for n, _ in exclusion_mutations(data, cfg, spec)]
+        if any(v["result"]["status"] == "error" and v["result"]["error"]["code"] not in ENCODING_CODES for v in data["vectors"]):
+            names.append(OFFSET_SHIFT_TEST)
         for n in names:
             print(f"{f}\t{n}")
     return 0
@@ -1257,6 +1471,7 @@ def main(argv):
                 except CheckError as exc:
                     require("tokenIndices accepted" not in str(exc), str(exc))
                 muts += 1
+            shifts = offset_shift_self_test(data, cfg, spec)
             total_mut += muts
         except CheckError as exc:
             print(f"FAIL {path.name}: {exc}")
@@ -1266,9 +1481,10 @@ def main(argv):
               f"vectors={len(data['vectors'])} tokens={s['tokens']} (inserted ';'={s['inserted']}) "
               f"identifiers={s['identifiers']} kgrams={s['kgrams']} fingerprints={s['fingerprints']} "
               f"tie-windows={s['tie-windows']} errors={s['errors']} "
-              f"(lexical offsets plausibility-only: {s['lexical-offsets-plausibility-only']}) pairs={s['pairs']}"
+              f"(lexical offsets checked by rule: {s["lexical-offsets-plausibility-only"]}) pairs={s['pairs']}"
               + (f" positives={s.get('positives-paired', 0)} paired-one-to-one" if metadata else "")
-              + (f" mutations-rejected={muts}/{muts}" if (required or metadata) else ""))
+              + (f" mutations-rejected={muts}/{muts}" if (required or metadata) else "")
+              + (" offset-shifts-rejected " + " ".join(f"{c}={r}/{t}" for c, (r, t) in sorted(shifts.items())) if shifts else ""))
     print(f"Unicode tables {TABLES_FILE} sha256={TABLES_SHA256[:16]}...; NFC via Python unicodedata "
           f"{unicodedata.unidata_version} for characters assigned in both 16.0 and 17.0 only.")
     print("Not a lexer: token streams are validated, not produced; exact lexical error offsets are compared "
