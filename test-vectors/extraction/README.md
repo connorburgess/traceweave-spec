@@ -100,14 +100,22 @@ The table shows which case each vector covers:
 - `derivation: "hand"` on every vector and every configuration entry. The values are 183 vectors and 31 configurations, all `hand`; no other value occurs.
 - `vectorClasses`: the M1.2 classes the vector belongs to.
 - `pairedRejection` on every positive vector, naming a rejection in the same file. The rejection names it back with `pairedPositive`.
-- `derivationNote` on one vector, `rust-err-invalid-utf8`. Its offset was first written as 9; the first toolchain cross-check showed the byte is at 10, and the value was recounted by hand.
+- `derivationNote` on three vectors. On `rust-err-invalid-utf8`, the offset was first written as 9; the first toolchain cross-check showed the byte is at 10, and the value was recounted by hand. On `rust-s1-string-digit-expr-rej` and `rust-q11-shebang-first-line-only-rej`, the results were corrected by hand after the non-author review (below).
 
-**What `hand` covers, and what it does not.** The token classes, token texts, inserted `;` tokens, error codes and defect positions are written by hand in `harness/build_vectors.py` from the contract. Three things are mechanical:
-- **Spans** are located by searching the hand-written token text in source order, except where a start offset is given by hand. Every accepted vector's spans also agree token for token with go/scanner or proc-macro2 (section 2).
-- **Error offsets of the new rejections** are the position of the hand-chosen defect: the index of its hand-written defect text.
-- **k-gram hashes, window selections and fingerprints** are computed. SHA-256 cannot be derived by hand. The checker recomputes them independently.
+**What `hand` means.** It means exactly the definition in [ROADMAP.md, Definitions](../../ROADMAP.md#definitions). Each file states it verbatim in `derivationRule`, and `tools/check_requirement_map.py` fails if the two texts differ. Applied here:
+- **(a) Judgments written by a person.** Every token class and text, every inserted `;`, every outcome status, every error code and every defect position is written by hand in `harness/build_vectors.py` from the contract text.
+- **(b) Arithmetic computed and rechecked.** The builder computes three things:
+  - spans, located from the hand-written token texts, or given by hand where a search would mislocate;
+  - each new rejection's offset, as the index of its hand-chosen defect;
+  - k-gram hashes, window selections and fingerprints.
 
-No vector's expected lexical outcome was computed by an extractor and then reviewed, so `hand` is the only value. Spans and hashes are not claimed as hand-counted.
+  `check_vectors.py` recomputes all of it independently, and so did the clean-room review.
+
+**No vector's lexical layer was first produced by a tool.** No expected output was copied from go/scanner, proc-macro2, rustc or either implementation; toolchains and implementations were run only afterwards, as checks.
+
+**Two hand errors found by the non-author review**, `rust-s1-string-digit-expr-rej` and `rust-q11-shebang-first-line-only-rej`:
+- **The error.** Both were first recorded as `unterminated-literal`, because I missed the reserved-prefix rule. proc-macro2 lacks that rule and happened to agree, so the cross-check passed them.
+- **The correction.** Both were re-derived by hand from §5.3 step 3: an identifier or keyword directly followed by `"` is `reserved-token` at its start. The correct results are `reserved-token`@7 and `reserved-token`@8. Each carries a `derivationNote`.
 
 **Paired rejections, one to one.**
 - **Coverage.** All 65 positive vectors are paired: Go 16, Rust 42, the two limit files 1 each, and the exclusion file 5. The 3 boundary-positive configurations pair with 3 negative configurations.
@@ -140,9 +148,22 @@ Metadata self-tests add 6 corruptions per vector file and 3 per configuration fi
 
 The two cases the gate names, a vector without `derivation` and a positive without its pair, also fail the CLI on a standalone corrupted `go.json` (exit 1).
 
+**How the hole was closed.** `check_vectors.py`, run by `tools/validate.py`, now applies two contract rules itself, instead of trusting a toolchain's agreement:
+- **The reserved-prefix rule.** If the character at a Rust error offset is `"`, `'` or `#` and directly follows a plain identifier or keyword, the result must be `reserved-token` at that identifier's start. Raw identifiers, literal prefixes, literal suffixes and lifetime names are excluded.
+- **Prefix consistency for every paired rejection.** Every token of the positive that ends at or before the recorded error, over bytes the two inputs share, must still pass the per-token lexical checks in the rejection's input. If one no longer does, the first error is at or before that token.
+
+Both old records are now **wrong-lexer cases** in the self-test ("wrong lexer without the reserved-prefix rule", 2 of Rust's 22 corruptions), and they are rejected. `harness/crosscheck.py` also re-applies the contract's error-offset rules to every Rust error vector, so agreement with proc-macro2 alone no longer confirms a result. It lists proc-macro2's missing reserved-prefix rule for these two vectors as an expected divergence.
+
+**Re-audit of all 60 new rejections**, by three independent means:
+1. **The two new checker rules**, run over the pre-fix vectors: of 118 error vectors, they flagged exactly these two.
+2. **Both implementations**, built from their repository at `af3af2b` into a scratch directory and run on every vector: they produced the expected result for all 168 Go and Rust vectors, including all 55 new Go and Rust rejections. Their records were compared with the expected `result` objects. The 10 vectors of the test-only `go-tokens-exclusion-test` profile are not supported there by design. Its 5 new rejections are covered by go/scanner and by the checker rules instead.
+3. **A manual re-reading** of each new rejection's defect against the rule that decides it first in scan order, with particular attention to appended characters that follow an identifier.
+
+No other outcome had come from a toolchain, and no other outcome changed.
+
 **Toolchain agreement for the new rejections.**
 - **Go:** 16 of the 20 new rejections fail in go/scanner at the same offset. The other 4 are listed: a BOM (OD-1), and three offsets after the token start (OD-13).
-- **Rust:** rustc rejects 31 of the 40 new rejections. The other 9 are listed: BOM (OD-1), isolated CR and NUL (OD-2), non-NFC (OD-3), and ZWJ (OD-19).
+- **Rust:** rustc rejects 31 of the 40 new rejections. The other 9 are listed: BOM (OD-1), isolated CR and NUL (OD-2), non-NFC (OD-3), and ZWJ (OD-19). proc-macro2 agrees with 20 of the 40 at the same offset. The rest are listed where it lacks a contract rule: reserved prefixes, the `_` suffix cut and exponent digits.
 
 **Before/after proof:**
 
@@ -163,7 +184,7 @@ Output on 2026-11-22 (Python 3.14.6, `unicodedata` 16.0.0):
 ```
 PASS config-negative.json: 28/28 invalid configurations rejected, 3/3 boundary configurations accepted
 PASS go.json profile=go-tokens/draft-1 config=dfbc5fe3517e9da6... vectors=49 tokens=170 (inserted ';'=21) identifiers=61 kgrams=228 fingerprints=82 tie-windows=11 errors=33 (lexical offsets plausibility-only: 27) pairs=2 positives=16 paired-one-to-one mutations-rejected=19/19
-PASS rust.json profile=rust2024-tokens/draft-1 config=64b34335e4a61383... vectors=118 tokens=322 (inserted ';'=0) identifiers=103 kgrams=384 fingerprints=146 tie-windows=10 errors=76 (lexical offsets plausibility-only: 63) pairs=2 positives=42 paired-one-to-one mutations-rejected=20/20
+PASS rust.json profile=rust2024-tokens/draft-1 config=64b34335e4a61383... vectors=118 tokens=322 (inserted ';'=0) identifiers=103 kgrams=384 fingerprints=146 tie-windows=10 errors=76 (lexical offsets plausibility-only: 63) pairs=2 positives=42 paired-one-to-one mutations-rejected=22/22
 PASS limits-go.json profile=go-tokens/draft-1 config=aa86722255afbf50... vectors=3 tokens=8 (inserted ';'=1) identifiers=1 kgrams=8 fingerprints=2 tie-windows=0 errors=2 (lexical offsets plausibility-only: 0) pairs=0 positives=1 paired-one-to-one mutations-rejected=6/6
 PASS limits-rust.json profile=rust2024-tokens/draft-1 config=71d5ed27bea011f6... vectors=3 tokens=7 (inserted ';'=0) identifiers=2 kgrams=6 fingerprints=2 tie-windows=0 errors=2 (lexical offsets plausibility-only: 0) pairs=0 positives=1 paired-one-to-one mutations-rejected=6/6
 PASS exclusion-rule.json profile=go-tokens-exclusion-test/draft-1 config=65ae9f23f38b060e... vectors=10 tokens=36 (inserted ';'=4) identifiers=15 kgrams=24 fingerprints=9 tie-windows=0 errors=5 (lexical offsets plausibility-only: 3) pairs=0 positives=5 paired-one-to-one mutations-rejected=10/10
@@ -275,8 +296,8 @@ tables: go unicode + unicode-ident 1.0.24 vs pinned 17.0.0 tables: MATCH
   go error expected: 12
   rust accepted proc-macro2 agree: 43
   rust accepted rustc accepts: 43
-  rust error proc-macro2 agree: 43
-  rust error proc-macro2 expected: 35
+  rust error proc-macro2 agree: 41
+  rust error proc-macro2 expected: 37
   rust error rustc agree: 59
   rust error rustc expected: 19
 PASS: no unexpected divergence
@@ -335,24 +356,32 @@ python3 -I test-vectors/extraction/harness/gen_unicode_tables.py UCD_DIR OUT.jso
 
 [requirement-map.json](requirement-map.json) maps every occurrence of the requirement keyword in [spec/extraction.md](../../spec/extraction.md) to clauses. Each clause is one of:
 - **testable:** it names vectors that fail when the requirement is violated (`failsOn`), at least one negative fixture, the violation, and why it fails. A negative fixture is an error vector, a negative configuration, or a self-test that rejects a violating corruption. Where it names `codes`, every cited rejection carries one of them.
+- **implementation test:** it is not decidable from vector bytes, but a process or timing test in the implementation repository fails when the requirement is violated. Tests are cited as `impl:<rev>:<path>:<name>`, at `af3af2b`. `tools/check_requirement_map.py` verifies each citation when `TW_IMPL_REPO` names a checkout of that repository; in CI they are reported as unverified external citations.
 - **untestable:** it gives the reason, and is marked for spot-check.
 - **definitional:** it defines the keyword itself.
 
-`tools/check_requirement_map.py` checks the map mechanically. It is run by `tools/validate.py`:
-- Every keyword occurrence lies in a mapped sentence: **unmapped 0**.
-- Every mapped sentence still occurs verbatim, with one clause per keyword occurrence.
-- Every cited id exists. That covers vector ids, configuration entries, record vectors, `check_vectors.py --list-tests` names and other checkers' self-test names.
-- A self-test of 6 map corruptions must all be rejected: a dropped entry, a non-existent id, a positive vector used as a negative fixture, an untestable clause without spot-check, an edited sentence, and a fixture with another error code.
+`tools/check_requirement_map.py` is run by `tools/validate.py`. It checks:
+- every keyword occurrence is mapped (**unmapped 0**);
+- every mapped sentence is still verbatim in the document;
+- every cited id exists;
+- every `derivationRule` equals the ROADMAP definition;
+- the M1.1 item map is complete.
+
+Its self-test of 6 map corruptions must all be rejected.
 
 ```
 python3 -I tools/check_requirement_map.py
-PASS M1.5 requirement map: MUST occurrences=28 unmapped=0 testable=17 untestable=9 definitional=2 marked-for-spot-check=10 self-test-corruptions-rejected=6/6
+PASS M1.5 requirement map: MUST occurrences=28 unmapped=0 testable=17 implementation-test=4 untestable=5 definitional=2 marked-for-spot-check=10 self-test-corruptions-rejected=6/6; implementation tests verified=0 unverified=6 (set TW_IMPL_REPO to verify)
+PASS M1.2 derivationRule: 6 vector files state the ROADMAP.md definition of hand-derived verbatim
 PASS M1.1 item map: 13 registration items and 6 named constructs, each answered for Go and Rust with links to existing sections of spec/extraction.md
 ```
 
+With `TW_IMPL_REPO` set to the implementation checkout, all 6 implementation-test citations were verified at `af3af2b` on 2026-11-23.
+
 **Counts.** 28 keyword occurrences in 24 sentences:
-- 17 testable clauses, each with failing vectors and negative fixtures;
-- 9 untestable clauses;
+- 17 testable clauses;
+- 4 implementation-tested clauses (EX-05a, EX-05b, EX-22, EX-23);
+- 5 untestable clauses (EX-03a, EX-03b, EX-04, EX-20, EX-21);
 - 2 definitional clauses.
 
 | Clause | Section | Requirement | Kind | Fails on (first 3) | Negative fixtures (first 3) |
@@ -364,8 +393,8 @@ PASS M1.1 item map: 13 registration items and 6 named constructs, each answered 
 | EX-03a | §2 | MUST NOT emit an extraction result | **untestable** | — | — |
 | EX-03b | §2 | MUST surface the failure outside the result | **untestable** | — | — |
 | EX-04 | §3 | MUST be made before reading the content | **untestable** | — | — |
-| EX-05a | §3 | MUST stop reading after maxInputBytes + 1 bytes | **untestable** | — | — |
-| EX-05b | §3 | MUST NOT process any byte beyond maxInputBytes | **untestable** | — | — |
+| EX-05a | §3 | MUST stop reading after maxInputBytes + 1 bytes | implementation test | `go/cmd/traceweave-go/main_test.go:TestStreamingAndExitStatus`, `crates/tw-extract/src/lib.rs:read_input_stops_at_limit` | — |
+| EX-05b | §3 | MUST NOT process any byte beyond maxInputBytes | implementation test | `crates/tw-extract/src/lib.rs:uncomputed_values_are_null`, `go/cmd/traceweave-go/main_test.go:TestStreamingAndExitStatus` | — |
 | EX-06 | §3 | MUST be well-formed UTF-8 | testable | `go-err-invalid-utf8`, `rust-err-invalid-utf8`, `excl-partial-window-rej` | `go-err-invalid-utf8`, `rust-err-invalid-utf8`, `excl-partial-window-rej` |
 | EX-07 | §3 | MUST NOT split a UTF-8 sequence | testable | `go-unicode`, `rust-unicode`, `go-unicode-boundary` (+1) | `selftest:go.json:span cuts a UTF-8 character`, `selftest:rust.json:span cuts a UTF-8 character` |
 | EX-08 | §3a | MUST use tables generated from these files, or the committed derived table | testable | `go-unicode-boundary`, `go-err-u2160`, `go-err-u00b7` (+6) | `go-err-u2160`, `rust-err-u2e2f`, `selftest:go.json:U+2160 accepted as a Go letter` (+1) |
@@ -383,25 +412,34 @@ PASS M1.1 item map: 13 registration items and 6 named constructs, each answered 
 | EX-19b | §10 | MUST be accepted | testable | `cfg:cfg-bounds-min`, `cfg:cfg-bounds-max`, `cfg:cfg-rust-bounds-max` | `cfg:cfg-k-zero`, `cfg:cfg-k-above-bound`, `cfg:cfg-window-above-bound` |
 | EX-20 | §10a | MUST be O(N) | **untestable** | — | — |
 | EX-21 | §10a | MUST NOT cause rescanning | **untestable** | — | — |
-| EX-22 | §10a | MUST be linear in the identifier length | **untestable** | — | — |
-| EX-23 | §10a | MUST NOT be quadratic | **untestable** | — | — |
+| EX-22 | §10a | MUST be linear in the identifier length | implementation test | `go/internal/unidata/unidata_test.go:TestNFCLinearTime` | — |
+| EX-23 | §10a | MUST NOT be quadratic | implementation test | `go/internal/unidata/unidata_test.go:TestNFCLinearTime` | — |
 
-**Spot-check sample for a non-author** (gate M1.5: at least 10, or all if fewer). The sample is all 9 untestable clauses, plus EX-09, which is only partly testable:
+**Spot-check sample for a non-author** (10 clauses):
+- the 5 untestable clauses;
+- the 4 implementation-tested ones, which cannot be confirmed from this repository alone;
+- EX-09, which the vectors test only in part.
 
-| Clause | Section | Requirement | Why vectors cannot decide it |
-| --- | --- | --- | --- |
-| EX-03a | §2 | MUST NOT emit an extraction result | applies only to states the contract does not decide; by construction no vector can expect one (a vector would decide it) |
-| EX-03b | §2 | MUST surface the failure outside the result | process behavior outside the record; not observable in vector bytes |
-| EX-04 | §3 | MUST be made before reading the content | whether bytes are read is not visible in the result; vectors fix only the outcome |
-| EX-05a | §3 | MUST stop reading after maxInputBytes + 1 bytes | reading is not visible in the result |
-| EX-05b | §3 | MUST NOT process any byte beyond maxInputBytes | once the size verdict is input-too-large no output depends on later bytes; the precedence vectors fix the verdict, not the processing |
-| EX-09 | §3a | MUST NOT rely on a language runtime's or library's built-in Unicode data unless that data is shown to be identical | only differences at the tested boundary code points are caught; harness/crosscheck.py compares the full tables with Go's unicode package and unicode-ident 1.0.24 |
-| EX-20 | §10a | MUST be O(N) | performance is not observable in vector bytes; measured by the implementations' adversarial runs, not by these vectors |
-| EX-21 | §10a | MUST NOT cause rescanning | performance; not observable in vector bytes |
-| EX-22 | §10a | MUST be linear in the identifier length | performance; not observable in vector bytes |
-| EX-23 | §10a | MUST NOT be quadratic | performance; not observable in vector bytes |
+| Clause | Section | Requirement | Kind | Note |
+| --- | --- | --- | --- | --- |
+| EX-03a | §2 | MUST NOT emit an extraction result | untestable | applies only to states the contract does not decide; by construction no vector can expect one (a vector would decide it) |
+| EX-03b | §2 | MUST surface the failure outside the result | untestable | process behavior outside the record; not observable in vector bytes |
+| EX-04 | §3 | MUST be made before reading the content | untestable | whether bytes are read is not visible in the result; vectors fix only the outcome. The implementations' over-limit regular-file test would still pass if the file were read, so it does not fail on violation |
+| EX-05a | §3 | MUST stop reading after maxInputBytes + 1 bytes | implementation-test | process tests: an endless stdin must still end in input-too-large (it never ends if read past the limit), and the reader returns exactly limit bytes |
+| EX-05b | §3 | MUST NOT process any byte beyond maxInputBytes | implementation-test | process tests: the record for the first limit+1 bytes equals the record for the whole input, and its digest and length are null |
+| EX-09 | §3a | MUST NOT rely on a language runtime's or library's built-in Unicode data unless that data is shown to be identical | testable | only differences at the tested boundary code points are caught; harness/crosscheck.py compares the full tables with Go's unicode package and unicode-ident 1.0.24 |
+| EX-20 | §10a | MUST be O(N) | untestable | performance is not observable in vector bytes; the implementations' adversarial probe measures time and memory at the bounds but asserts no limit, so no test fails on violation |
+| EX-21 | §10a | MUST NOT cause rescanning | untestable | performance; the adversarial probe times nested comments, unterminated literals and 8 MiB identifiers but asserts no limit |
+| EX-22 | §10a | MUST be linear in the identifier length | implementation-test | timing test: 1 MiB adversarial identifiers must finish within 5 s (a quadratic insertion sort took 126 s); Go only, the Rust lane has the adversarial probe measurement |
+| EX-23 | §10a | MUST NOT be quadratic | implementation-test | timing test over runs of non-starters ('a' + (U+0301 U+0316)*, 1 MiB) with a 5 s bound; Go only |
 
-For each, the reviewer should confirm the clause really cannot be decided from vector bytes, and how an implementation is to be checked instead. For example: a streaming read test for EX-04 and EX-05; the implementations' adversarial timing runs for EX-20 to EX-23; the full-table comparison in `harness/crosscheck.py` for EX-09.
+**What a reviewer should confirm:**
+- For each untestable clause, that vector bytes really cannot decide it.
+- For each implementation test, that it fails when the requirement is violated:
+  - EX-05a: an endless stdin must terminate;
+  - EX-05b: the record for a prefix equals the record for the whole input;
+  - EX-22 and EX-23: a 1 MiB adversarial identifier must stay under 5 s.
+- For EX-04, that no current test fails if a regular file is read before the size check.
 
 ## Pinned sources
 

@@ -66,6 +66,8 @@ EXPECT = {
     "go-literals-rej": {"go/scanner": ("offset", 58, "OD-13: contract reports the token start (54)")},
     "go-rename-b-rej": {"go/scanner": ("offset", 37, "OD-13: contract reports the token start (36)")},
     "go-escapes-vt-raw-rej": {"go/scanner": ("offset", 9, "OD-13: contract reports the token start (5)")},
+    "rust-s1-string-digit-expr-rej": {"proc-macro2": ("offset", 8, "proc-macro2 has no reserved-prefix rule; it reports the unterminated string at 8, the contract reserved-token at 7")},
+    "rust-q11-shebang-first-line-only-rej": {"proc-macro2": ("offset", 10, "proc-macro2 has no reserved-prefix rule; it reports the unterminated string at 10, the contract reserved-token at 8")},
     "rust-empty-rej": {"proc-macro2": ("accepts", None, "OD-1"), "rustc": ("accepts", None, "OD-1: Reference removes a leading BOM")},
     "rust-shebang-rej": {"proc-macro2": ("accepts", None, "OD-1"), "rustc": ("accepts", None, "OD-1: Reference removes a leading BOM")},
     "rust-q8b-bare-shebang-rej": {"proc-macro2": ("accepts", None, "OD-1"), "rustc": ("accepts", None, "OD-1: Reference removes a leading BOM")},
@@ -352,6 +354,15 @@ def main():
                 else:
                     got = ("offset", int(err))
                 count(f"rust error proc-macro2 {outcome(v['id'], 'proc-macro2', *got, problems, notes)}")
+                # Agreement with a tool that lacks a rule is not confirmation: re-apply the contract's own
+                # error-offset rules (including the reserved-prefix rule) to the recorded result.
+                code, off = res["error"]["code"], res["error"]["offset"]
+                if code not in cv.ENCODING_CODES and cv.first_invalid_utf8(data) is None \
+                        and cv.first_forbidden(data.decode("utf-8"), "rust") is None:
+                    try:
+                        cv.check_error_offset(code, off, data, cv.PROFILES[("rust2024-tokens", "draft-1")])
+                    except cv.CheckError as exc:
+                        problems.append(f"{v['id']}: recorded result breaks a contract rule: {exc}")
                 count(f"rust error rustc {outcome(v['id'], 'rustc', 'agree' if not accepted else 'accepts', None, problems, notes)}")
             else:
                 mine = [("literal" if t["class"] in ("int", "float", "char", "byte", "string", "rawstring", "bytestring",

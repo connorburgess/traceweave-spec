@@ -89,9 +89,8 @@ def build(lang, vid, desc, src, toks=None, err=None, tags=()):
 
 
 # ---- M1.2 metadata: derivation, vector classes and one-to-one paired rejections ----
-DERIVATION_NOTE = ("hand: the expected lexical outcome (token classes and texts, inserted ';', error code and the "
-                   "defect position) is written by hand in this file; spans are located by searching the hand-written "
-                   "token text in source order; k-gram hashes, window selections and fingerprints are computed from it")
+DERIVATION_NOTE = (  # verbatim from ROADMAP.md, Definitions; tools/check_requirement_map.py keeps them in sync
+    "A vector is hand-derived when both of these hold: (a) Judgments are written by a person. Every judgment the contract leaves to a reader is written by a person from the contract text. That covers the token boundaries, classes and texts; inserted tokens; the outcome status; and the error code and the position of the defect. For matching vectors it also covers which regions match, and the outcome. (b) Arithmetic is computed and rechecked. Everything that is pure arithmetic over those judgments is computed by the specification's own checker or builder, which is not an implementation under test. That covers byte spans located from the hand-written token texts, SHA-256 hashes, window selection, fingerprints, digests and canonical bytes. At least one independent recomputation, by a clean-room reviewer or a second checker, confirms it. A vector whose lexical layer was first produced by a tool and then reviewed is not hand-derived, and must be labelled otherwise.")
 KEY_ORDER = ["id", "derivation", "derivationNote", "tags", "vectorClasses", "description", "inputBase64", "inputText",
              "inputDisplay", "pairedRejection", "pairedPositive", "result"]
 M12_CLASSES = ["empty", "below-k+w-1", "unicode", "malformed", "repeated", "equal-minimum", "crlf-bom"]
@@ -208,19 +207,21 @@ RUST_PAIRS = [
     ("rust-q8-not-shebang-three-stars", ("rust-q8-not-shebang-three-stars-rej", "'€' inside the attribute", rp(b"[a]", "[a€]".encode()), "illegal-character", 9)),
     ("rust-q8b-shebang-lookahead-nel", ("rust-q8b-shebang-lookahead-nel-rej", "the attribute bracket is unclosed", rp(b"[a]", b"[a"), "unbalanced-delimiter", 4)),
     ("rust-q8b-bare-shebang", ("rust-q8b-bare-shebang-rej", "a UTF-8 BOM before the bare shebang", lambda s: b"\xef\xbb\xbf" + s, "bom", 0)),
-    ("rust-q11-shebang-first-line-only", ("rust-q11-shebang-first-line-only-rej", "an unclosed '\"' appended", lambda s: s + b"\"", "unterminated-literal", 10)),
+    ("rust-q11-shebang-first-line-only", ("rust-q11-shebang-first-line-only-rej", "a '\"' appended directly after the keyword fn: an identifier or keyword immediately followed by '\"' is a reserved prefix (section 5.3 step 3), reported at its start", lambda s: s + b"\"", "reserved-token", 8)),
     ("rust-s1-string-digit", ("rust-s1-string-digit-rej", "the digit replaced by '_' (SUFFIX cut)", rp(b"0", b"_"), "malformed-literal", 0)),
     ("rust-s1-char-digit", ("rust-s1-char-digit-rej", "the digit replaced by '_' (SUFFIX cut)", rp(b"0", b"_"), "malformed-literal", 0)),
     ("rust-s1-bytestring-digit", ("rust-s1-bytestring-digit-rej", "the digit replaced by '_' (SUFFIX cut)", rp(b"0", b"_"), "malformed-literal", 0)),
     ("rust-s1-rawstring-digit", ("rust-s1-rawstring-digit-rej", "the digit replaced by '_' (SUFFIX cut)", rp(b"0", b"_"), "malformed-literal", 0)),
     ("rust-s1-cstring-digit", ("rust-s1-cstring-digit-rej", "the digit replaced by '_' (SUFFIX cut)", rp(b"0", b"_"), "malformed-literal", 0)),
     ("rust-s1-byte-digit", ("rust-s1-byte-digit-rej", "the digit replaced by '_' (SUFFIX cut)", rp(b"0", b"_"), "malformed-literal", 0)),
-    ("rust-s1-string-digit-expr", ("rust-s1-string-digit-expr-rej", "an unclosed '\"' appended", lambda s: s + b"\"", "unterminated-literal", 8)),
+    ("rust-s1-string-digit-expr", ("rust-s1-string-digit-expr-rej", "a '\"' appended directly after the identifier y: a reserved prefix (section 5.3 step 3), reported at the identifier start", lambda s: s + b"\"", "reserved-token", 7)),
     ("rust-shebang-unresolved-body", ("rust-shebang-unresolved-body-rej", "an extra '}' appended", lambda s: s + b"}", "unbalanced-delimiter", b"}", "last")),
     ("rust-doc-comment-bracket", ("rust-doc-comment-bracket-rej", "the body loses its '}'", rp(b"{}", b"{"), "unbalanced-delimiter", b"{")),
 ]
 RUST_LIMIT_PAIRS = [("rust-limit-exact", "rust-limit-over")]
-NOTES = {"rust-err-invalid-utf8": "Offset first written as 9; the first toolchain cross-check showed the 0xFF byte is at 10, and the value was recounted by hand and corrected before any release."}
+NOTES = {"rust-s1-string-digit-expr-rej": "First recorded as unterminated-literal at 8, a hand misreading that missed the reserved-prefix rule; corrected by hand from section 5.3 step 3 after the non-author review.",
+         "rust-q11-shebang-first-line-only-rej": "First recorded as unterminated-literal at 10, a hand misreading that missed the reserved-prefix rule; corrected by hand from section 5.3 step 3 after the non-author review.",
+         "rust-err-invalid-utf8": "Offset first written as 9; the first toolchain cross-check showed the 0xFF byte is at 10, and the value was recounted by hand and corrected before any release."}
 
 
 def fmt(o, ind=0):
@@ -486,7 +487,7 @@ for x in pos:
 for pid, rid in CFG_PAIRS:
     next(x for x in pos if x["id"] == pid)["pairedRejection"] = rid
     nby[rid]["pairedPositive"] = pid
-dump({"contract": CONTRACT, "description": "negatives: configuration byte strings that MUST be rejected as unsupported-config (offset null); each is the shipped Go configuration with one change. boundaryPositives: configurations at the section 10 bounds that MUST be accepted.", "metadataRules": "m1.2", "derivationRule": "hand: each configuration is a hand-written one-change variant of a shipped configuration", "negatives": negs, "boundaryPositives": pos}, OUT / "config-negative.json")
+dump({"contract": CONTRACT, "description": "negatives: configuration byte strings that MUST be rejected as unsupported-config (offset null); each is the shipped Go configuration with one change. boundaryPositives: configurations at the section 10 bounds that MUST be accepted.", "metadataRules": "m1.2", "derivationRule": DERIVATION_NOTE, "negatives": negs, "boundaryPositives": pos}, OUT / "config-negative.json")
 print("negatives", len(negs), "positives", len(pos))
 
 # ---- shared normalized-stream exclusion rule (contract section 6), synthetic TEST-ONLY profile ----

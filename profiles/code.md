@@ -26,6 +26,8 @@ The normative definitions of the Go token profile `go-tokens` (version `draft-1`
 
 Each item of the "Before registering a profile" list above, answered for `go-tokens`/`draft-1` and `rust2024-tokens`/`draft-1`, with the section of the [extraction contract](../spec/extraction.md) that decides it. No item is open. `tools/check_requirement_map.py` checks that every item has a row with a working link in both columns. It is run by `tools/validate.py`.
 
+**Scope resolution is none** for the token baseline, by decision OD-7 in the [extraction contract](../spec/extraction.md#14-decisions). The scope-aware identifier-normalized channel this plan recommends above is a possible later profile. It is not part of `go-tokens` or `rust2024-tokens`.
+
 | Item | Go (`go-tokens`) | Rust (`rust2024-tokens`) |
 | --- | --- | --- |
 | Language and grammar revision | Go Programming Language Specification, "Language version go1.27 (May 26, 2026)", the copy in go1.27.3 pinned by SHA-256 ([§4 Authority](../spec/extraction.md#4-go-profile-go-tokens-version-draft-1)); identifier categories from Unicode 17.0.0 ([§3a](../spec/extraction.md#3a-unicode-data)) | The Rust Reference shipped with Rust 1.97.1, edition 2024, page digests pinned ([§5 Authority](../spec/extraction.md#5-rust-profile-rust2024-tokens-version-draft-1)); XID and NFC from Unicode 17.0.0 ([§3a](../spec/extraction.md#3a-unicode-data)) |

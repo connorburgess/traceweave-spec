@@ -621,6 +621,26 @@ def check_rust_token(t, text, ci, ce):
 
 # ---------------------------------------------------------------- per-vector checks
 
+def rust_reserved_prefix_at(text, ci):
+    """Contract section 5.3 step 3, applied by the checker itself. If the character at ci is '"', "'" or '#'
+    and is immediately preceded by a plain identifier or keyword (not raw, not a literal prefix, not a lifetime
+    name or literal suffix), return the identifier's start: scanning reaches the identifier first, and it is
+    reserved-token there. Otherwise return None."""
+    if ci >= len(text) or text[ci] not in "\"'#":
+        return None
+    j = ci
+    while j > 0 and xid_continue(text[j - 1]):
+        j -= 1
+    if j == ci or not (xid_start(text[j]) or text[j] == "_"):
+        return None
+    before = text[j - 1] if j > 0 else ""
+    if before in ("'", "\"", "#") or (before and (before.isdigit() or xid_continue(before))):
+        return None  # lifetime name, literal suffix or raw identifier: not a plain identifier
+    if text[j:ci] in ("r", "br", "cr", "b", "c"):
+        return None  # a literal prefix: the literal starts at j and is judged there
+    return j
+
+
 def check_error_offset(code, offset, data, spec):
     """Plausibility only: the character at the offset can start the failing construct."""
     text = data.decode("utf-8")
@@ -646,6 +666,13 @@ def check_error_offset(code, offset, data, spec):
         require("‌" in text[ci:] or "‍" in text[ci:], "no zero-width joiner after offset")
     elif code in ("malformed-literal", "reserved-token"):
         require(not c.isspace(), "offset at whitespace")
+    if spec["lang"] == "rust":
+        j = rust_reserved_prefix_at(text, ci)
+        if j is not None:
+            byte_j = len(text[:j].encode("utf-8"))
+            require(code == "reserved-token" and offset == byte_j,
+                    f"{c!r} at the offset directly follows the identifier {text[j:ci]!r}: section 5.3 step 3 makes "
+                    f"this reserved-token at {byte_j}, not {code} at {offset}")
 
 
 def check_vector(v, cfg, spec, stats):
@@ -898,11 +925,46 @@ def check_metadata(vectors, cfg, required, name="vectors"):
             require(rid in by, f"{name}:{vid}: positive vector without a pairedRejection in this file")
             require(by[rid]["result"]["status"] == "error", f"{name}:{vid}: pairedRejection {rid} is not an error vector")
             require(by[rid].get("pairedPositive") == vid, f"{name}:{vid}: {rid} does not pair back (not one-to-one)")
+    for v in vectors:  # prefix consistency of each paired rejection against its positive's token stream
+        rid = v.get("pairedRejection")
+        if v["result"]["status"] == "error" or rid not in by:
+            continue
+        check_prefix_consistency(v, by[rid], cfg, name)
     if required:
         present = {c for v in vectors for c in v["vectorClasses"]}
         require(present >= set(M12_CLASSES), f"{name}: missing M1.2 classes {sorted(set(M12_CLASSES) - present)}")
     positives = [v for v in vectors if v["result"]["status"] != "error"]
     return len(positives)
+
+
+def check_prefix_consistency(pos, rej, cfg, name):
+    """Every real token of the positive that ends at or before the rejection's error offset, over bytes the two
+    inputs share, must still pass the per-token lexical checks in the rejection's input. If one fails (for
+    example an identifier now directly followed by '"'), scanning would fail at that token: the recorded error
+    must be at or before its start."""
+    pdata, rdata = base64.b64decode(pos["inputBase64"]), base64.b64decode(rej["inputBase64"])
+    err = rej["result"]["error"]
+    if err["code"] in ENCODING_CODES:
+        return
+    try:
+        rtext = rdata.decode("utf-8")
+    except UnicodeDecodeError:
+        return
+    lang = PROFILES[(cfg["profile"], cfg["profileVersion"])]["lang"]
+    check = check_go_token if lang == "go" else check_rust_token
+    for t in pos["result"]["tokens"]:
+        s, e = t["span"]
+        if t.get("inserted") or e > err["offset"] or pdata[:e] != rdata[:e]:
+            continue
+        try:
+            ci, ce = len(rdata[:s].decode("utf-8")), len(rdata[:e].decode("utf-8"))
+        except UnicodeDecodeError:
+            continue  # a span that splits a character is rejected by the span checks
+        try:
+            check(t, rtext, ci, ce)
+        except CheckError as exc:
+            require(err["offset"] <= s, f"{name}:{rej['id']}: token {t['text']!r} at {s} of {pos['id']} is no longer valid "
+                                        f"in the rejection ({exc}); the first error is at or before {s}, not at {err['offset']}")
 
 
 def metadata_mutations(data):
@@ -1066,6 +1128,15 @@ def mutations(data, cfg, spec):
                 {"class": "punct", "text": ";", "span": [12, 13]}], "channels": {}}
             rebuild_channels(v["result"], cfg, spec)
         yield "U+2E2F accepted as XID", mutate("rust-err-u2e2f", accept_u2e2f, rehash=False)
+
+        def no_reserved_prefix_rule(vid, off):
+            def fn(v):
+                v["result"]["error"] = {"code": "unterminated-literal", "offset": off}
+            return fn
+        yield "wrong lexer without the reserved-prefix rule: rust-s1-string-digit-expr-rej", mutate(
+            "rust-s1-string-digit-expr-rej", no_reserved_prefix_rule("rust-s1-string-digit-expr-rej", 8))
+        yield "wrong lexer without the reserved-prefix rule: rust-q11-shebang-first-line-only-rej", mutate(
+            "rust-q11-shebang-first-line-only-rej", no_reserved_prefix_rule("rust-q11-shebang-first-line-only-rej", 10))
 
         def lifetime_as_char(v):
             ts = v["result"]["tokens"]

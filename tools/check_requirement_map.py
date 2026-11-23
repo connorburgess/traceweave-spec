@@ -11,11 +11,17 @@ M1.5, test-vectors/extraction/requirement-map.json against spec/extraction.md:
     negative fixture (an error vector, a negative configuration, or a
     self-test that rejects a violating corruption);
   * where a clause names expected error codes, every cited rejection carries one;
+  * an implementation-test clause cites tests of the implementation repository
+    as impl:<rev>:<path>:<name>; they are verified only when TW_IMPL_REPO names a
+    checkout of that repository (otherwise counted as unverified external);
   * an untestable clause gives a reason and is marked for spot-check, and at
     least min(10, untestable) clauses are marked for spot-check;
   * every cited id exists (vector ids, configuration entries, record vectors,
     check_vectors.py self-tests listed by --list-tests, other checkers' self-test
     names found in their source).
+
+M1.2: the derivationRule of every extraction vector file equals the definition
+of "hand-derived" in ROADMAP.md (Definitions), with Markdown emphasis removed.
 
 M1.1, profiles/code.md: the "Before registering a profile" list is parsed from
 its sentence; the "Registration item map" table must have one row per item, a
@@ -31,6 +37,7 @@ from __future__ import annotations
 
 import copy
 import json
+import os
 import re
 import subprocess
 import sys
@@ -101,9 +108,35 @@ def resolve(ident, ids):
     return "negative" if ident in ids["errors"] else "positive"
 
 
+def check_external(ident):
+    """impl:<rev>:<path>:<name>. True if verified against TW_IMPL_REPO, False if no checkout is configured."""
+    require(ident.startswith("impl:") and ident.count(":") >= 3, f"malformed implementation test id {ident}")
+    _, rev, path, name = ident.split(":", 3)
+    repo = os.environ.get("TW_IMPL_REPO")
+    if not repo:
+        return False
+    shown = subprocess.run(["git", "-C", repo, "show", f"{rev}:{path}"], capture_output=True, text=True)
+    require(shown.returncode == 0 and name in shown.stdout, f"implementation test not found: {ident}")
+    return True
+
+
+def check_derivation_rules():
+    road = (ROOT / "ROADMAP.md").read_text(encoding="utf-8")
+    sec = road.split("## Definitions", 1)[1].split("\n## ", 1)[0]
+    a = re.search(r"^- \*\*\(a\) (.*)$", sec, re.M).group(1)
+    b = re.search(r"^- \*\*\(b\) (.*)$", sec, re.M).group(1)
+    last = re.search(r"(A vector whose lexical layer was first produced by a tool.*?otherwise\.)", sec).group(1)
+    rule = ("A vector is hand-derived when both of these hold: (a) " + a + " (b) " + b + " " + last).replace("**", "")
+    for name in VECTOR_FILES + ["config-negative.json"]:
+        got = json.loads((XV / name).read_text(encoding="utf-8")).get("derivationRule")
+        require(got == rule, f"{name}: derivationRule differs from the ROADMAP.md definition of hand-derived")
+    return len(VECTOR_FILES) + 1
+
+
 def check_must_map(doc, rmap, ids):
     covered = [False] * len(doc)
-    stats = {"MUST": 0, "testable": 0, "untestable": 0, "definitional": 0, "spot-check": 0, "unmapped": 0}
+    stats = {"MUST": 0, "testable": 0, "implementation-test": 0, "untestable": 0, "definitional": 0, "spot-check": 0,
+             "unmapped": 0, "external-verified": 0, "external-unverified": 0}
     seen = set()
     for e in rmap["requirements"]:
         require(e["id"] not in seen, f"duplicate entry {e['id']}")
@@ -117,7 +150,7 @@ def check_must_map(doc, rmap, ids):
                 covered[i] = True
         for c in e["clauses"]:
             kind = c["kind"]
-            require(kind in ("testable", "untestable", "definitional"), f"{e['id']}: unknown kind {kind}")
+            require(kind in ("testable", "implementation-test", "untestable", "definitional"), f"{e['id']}: unknown kind {kind}")
             stats[kind] += 1
             if c.get("spotCheck"):
                 stats["spot-check"] += 1
@@ -133,10 +166,19 @@ def check_must_map(doc, rmap, ids):
                     code = ids["codes"].get(ident)
                     if code is not None and "codes" in c:
                         require(code in c["codes"], f"{e['id']}: negative fixture {ident} has code {code}, not one of {c['codes']}")
+            elif kind == "implementation-test":
+                require(c.get("tests") and c.get("reason") and c.get("spotCheck") is True,
+                        f"{e['id']}: implementation-test needs tests, a reason and spotCheck")
+                for ident in c["tests"]:
+                    stats["external-verified" if check_external(ident) else "external-unverified"] += 1
+                for ident in c.get("related", []):
+                    resolve(ident, ids)
             elif kind == "untestable":
                 require(c.get("reason") and c.get("spotCheck") is True, f"{e['id']}: untestable needs a reason and spotCheck")
                 for ident in c.get("related", []):
                     resolve(ident, ids)
+                for ident in c.get("relatedTests", []):
+                    check_external(ident)
             else:
                 require(c.get("reason"), f"{e['id']}: definitional needs a reason")
     for m in re.finditer(r"\bMUST\b", doc):
@@ -215,12 +257,16 @@ def main():
         stats = check_must_map(doc, rmap, ids)
         corruptions = self_test(doc, rmap, ids)
         items, constructs = check_item_map(CODE.read_text(encoding="utf-8"), doc)
+        rules = check_derivation_rules()
     except (MapError, KeyError, ValueError) as exc:
         print(f"FAIL requirement map: {exc}")
         return 1
     print(f"PASS M1.5 requirement map: MUST occurrences={stats['MUST']} unmapped={stats['unmapped']} "
-          f"testable={stats['testable']} untestable={stats['untestable']} definitional={stats['definitional']} "
-          f"marked-for-spot-check={stats['spot-check']} self-test-corruptions-rejected={corruptions}/{corruptions}")
+          f"testable={stats['testable']} implementation-test={stats['implementation-test']} untestable={stats['untestable']} "
+          f"definitional={stats['definitional']} marked-for-spot-check={stats['spot-check']} "
+          f"self-test-corruptions-rejected={corruptions}/{corruptions}; implementation tests verified="
+          f"{stats['external-verified']} unverified={stats['external-unverified']} (set TW_IMPL_REPO to verify)")
+    print(f"PASS M1.2 derivationRule: {rules} vector files state the ROADMAP.md definition of hand-derived verbatim")
     print(f"PASS M1.1 item map: {items} registration items and {constructs} named constructs, each answered for Go and Rust "
           f"with links to existing sections of spec/extraction.md")
     return 0

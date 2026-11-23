@@ -21,31 +21,48 @@ The script compares every expected output at `437d619` with the working tree, an
 
 **For the implementation repository.** A vector JSON digest change in the table below is a metadata change. Precedence checks that compare digests should take these new digests, because every previously vendored expected output is unchanged. Implementations should also reproduce the 60 new rejection vectors; M1.4 and M1.6 re-run on them.
 
+## Revision after the non-author review (2026-11-23)
+
+The core-gates review (`research/reviews/core-gates-m1-m2-review.md`) found two new rejection vectors with wrong expected results. Both were hand errors that missed the reserved-prefix rule of contract §5.3 step 3, and both were corrected by hand:
+
+| Vector | Was | Now |
+| --- | --- | --- |
+| `rust-s1-string-digit-expr-rej` | `unterminated-literal`@8 | `reserved-token`@7 |
+| `rust-q11-shebang-first-line-only-rej` | `unterminated-literal`@10 | `reserved-token`@8 |
+
+**These are the only vector results that changed.** Each of the two vectors also gained a `derivationNote` and a new description.
+
+The `derivationRule` header of every vector file now states the ROADMAP.md definition of hand-derived verbatim. That text is metadata only.
+
+`harness/compare_outputs.py 488086f` lists exactly these differences: the two vectors' results and descriptions, the six `derivationRule` headers, and the requirement map. `harness/compare_outputs.py 437d619` still passes, because both vectors were added after `437d619`. Implementations re-vendoring from `488086f` must take the new `rust.json`, and should confirm their results for the two vectors. Both implementations at `af3af2b` already produce the corrected results.
+
 ## Files
 
-| File | SHA-256 before (`437d619`) | SHA-256 after | Result |
-| --- | --- | --- | --- |
-| `test-vectors/extraction/README.md` | `00b8831c5fc24f16c6aaf3a379b1f9db8753a7724128179eaa0a80f7d8369cd3` | `1c2c52013713935ff72fe30e444fcf3174ab872f7a510c4e7ea494b58ac79fde` | changed (tooling or documentation) |
-| `test-vectors/extraction/check_vectors.py` | `9c3174976745a906f5214d52bd38cb5573d2465fb5ca02e06ceba1cb2d976be5` | `fb16cb25c5d8bc33fe8a29001262ed51606d6b547b89a380b598210d9718d15f` | changed (tooling or documentation) |
-| `test-vectors/extraction/config-exclusion-test.json` | `65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464` | `65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464` | identical |
-| `test-vectors/extraction/config-go-limit16.json` | `aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8` | `aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8` | identical |
-| `test-vectors/extraction/config-go.json` | `dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2` | `dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2` | identical |
-| `test-vectors/extraction/config-negative.json` | `413661ca3bf4d437099bd7828adc8582bd79ac8e467dc5c917dbc1c36a470d6c` | `2919909e3a3899db87bfb6ea8c2737310e0e21e40f141f7b3732abd63ad874ac` | metadata added (vector outputs unchanged; see compare_outputs.py) |
-| `test-vectors/extraction/config-rust-limit16.json` | `71d5ed27bea011f65a939e9c885170c6db138c5ae41084f8d214c15357c88716` | `71d5ed27bea011f65a939e9c885170c6db138c5ae41084f8d214c15357c88716` | identical |
-| `test-vectors/extraction/config-rust.json` | `64b34335e4a61383ada1403a2df97c2e45dba987bbf0c8ec21385e04104d1277` | `64b34335e4a61383ada1403a2df97c2e45dba987bbf0c8ec21385e04104d1277` | identical |
-| `test-vectors/extraction/exclusion-rule.json` | `bc65be980d5590eccf9d17ddaa4cc37c9b9ba4c955407a2edd0ec49ff5234f31` | `a5777bc12af49974ff0d3d8de889856f73ff82191d3df31f3127537e2a831ddb` | metadata added (vector outputs unchanged; see compare_outputs.py) |
-| `test-vectors/extraction/go.json` | `f81fede1bfc540d11d1f24fbaf661d4eaf19682c720d6bd796eaabc5caa9294b` | `984e0fa75d7db002b0fd6f66bd61c7818f0523bf082a2c661769a2f417b66c8c` | metadata added (vector outputs unchanged; see compare_outputs.py) |
-| `test-vectors/extraction/harness/build_vectors.py` | `7c7ec53d0ff7397c1da9ad9cea8d68bf24491d124982750fd5d297d48b6a6e99` | `10fe49f0ea4537011988e0427ff7bf9381d2d67259bb8fae1ccd233ce448e5c3` | changed (tooling or documentation) |
-| `test-vectors/extraction/harness/compare_outputs.py` | — | `a80c052eb560d937b51195ffc143a441c1618821e420529982da7505b783a51b` | new file |
-| `test-vectors/extraction/harness/crosscheck.py` | `31acb142346f8d0a04b6699007fd32b266594de7266158af9046d7a9f1bce0b0` | `6df0798f6bdaa30ff8b174d47e3134b3e846697e44694fad21405da8d9522f2a` | changed (tooling or documentation) |
-| `test-vectors/extraction/harness/gen_unicode_tables.py` | `4ca955fc1c2f770abbada54a7df55dbca78ae4eb59bbd890f82fcde99b729757` | `4ca955fc1c2f770abbada54a7df55dbca78ae4eb59bbd890f82fcde99b729757` | identical |
-| `test-vectors/extraction/harness/go/go.mod` | `df45563c21ad076eebd24f730e6c753392c4f110b2572c397f8d5dcd1b5f4d0c` | `df45563c21ad076eebd24f730e6c753392c4f110b2572c397f8d5dcd1b5f4d0c` | identical |
-| `test-vectors/extraction/harness/go/main.go` | `6b521d6fcc64753cc342e62e6a74697c34234e8c1312df55cfc39546bf9ca940` | `6b521d6fcc64753cc342e62e6a74697c34234e8c1312df55cfc39546bf9ca940` | identical |
-| `test-vectors/extraction/harness/rust/Cargo.lock` | `02e4a1012b12a9e1c3d0d746850c1521f09a51df24719c9a52f917a9a9d7b201` | `02e4a1012b12a9e1c3d0d746850c1521f09a51df24719c9a52f917a9a9d7b201` | identical |
-| `test-vectors/extraction/harness/rust/Cargo.toml` | `0092528d95419485b4923336043c8fa6503d10d7da5f8aedc9ceb83d47393e50` | `0092528d95419485b4923336043c8fa6503d10d7da5f8aedc9ceb83d47393e50` | identical |
-| `test-vectors/extraction/harness/rust/src/main.rs` | `eb75e7341eba56f570798f4770adbf6b1bcce384017dcf0d251f4bc10ac974e6` | `eb75e7341eba56f570798f4770adbf6b1bcce384017dcf0d251f4bc10ac974e6` | identical |
-| `test-vectors/extraction/limits-go.json` | `0d5d243ecb4605af934ef544027f0c6a7e88694be1a118fb32191874bfc95b94` | `9aa98d716d63a47f009aadf01edce330a6c4c7b11c6b0c893016bd9fa59e7388` | metadata added (vector outputs unchanged; see compare_outputs.py) |
-| `test-vectors/extraction/limits-rust.json` | `61ad316e717aed92d077759255fde118cc7e272d476d754d4d7224f21e249c6b` | `deaf38d72dc31c869ec3d69ba390d2b48aa23efc945dff815111a56d8d229fd3` | metadata added (vector outputs unchanged; see compare_outputs.py) |
-| `test-vectors/extraction/requirement-map.json` | — | `2a5a92badc397a15dc63483c7fae51efe823ffde29e878d96517135daa38669c` | new file |
-| `test-vectors/extraction/rust.json` | `21f3360c9e7c2394033e26548f35e8dddfdb723a35279c984c09967f96cc9590` | `420288aa27d67e1717430a0f28a8b9391b34af4b131728dcff7fa692fd6e7d73` | metadata added (vector outputs unchanged; see compare_outputs.py) |
-| `test-vectors/extraction/unicode-17.0.0-tables.json` | `9363b97eb849cb236c786098f017728ad04688782f07c2969afddf93b03ac29f` | `9363b97eb849cb236c786098f017728ad04688782f07c2969afddf93b03ac29f` | identical |
+"Before" is `437d619`; "previous" is `488086f`, the earlier state of this note; "after" is the current tree.
+
+| File | SHA-256 before (`437d619`) | SHA-256 previous (`488086f`) | SHA-256 after | Result in this revision |
+| --- | --- | --- | --- | --- |
+| `test-vectors/extraction/README.md` | `00b8831c5fc24f16c6aaf3a379b1f9db8753a7724128179eaa0a80f7d8369cd3` | `1c2c52013713935ff72fe30e444fcf3174ab872f7a510c4e7ea494b58ac79fde` | `f680337148f49ea800d3181e876085de8cfdab0adefb645c4ca1023910f4ed2d` | changed (tooling, documentation or map) |
+| `test-vectors/extraction/check_vectors.py` | `9c3174976745a906f5214d52bd38cb5573d2465fb5ca02e06ceba1cb2d976be5` | `fb16cb25c5d8bc33fe8a29001262ed51606d6b547b89a380b598210d9718d15f` | `1d9f3f7ce1145cd7c234abc9adf75439ad056487b2b3019e50b8af43ecd13c04` | changed (tooling, documentation or map) |
+| `test-vectors/extraction/config-exclusion-test.json` | `65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464` | `65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464` | `65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464` | unchanged in this revision |
+| `test-vectors/extraction/config-go-limit16.json` | `aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8` | `aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8` | `aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8` | unchanged in this revision |
+| `test-vectors/extraction/config-go.json` | `dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2` | `dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2` | `dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2` | unchanged in this revision |
+| `test-vectors/extraction/config-negative.json` | `413661ca3bf4d437099bd7828adc8582bd79ac8e467dc5c917dbc1c36a470d6c` | `2919909e3a3899db87bfb6ea8c2737310e0e21e40f141f7b3732abd63ad874ac` | `e4212a74136d79ef65f617f08e3d19bf51997c19030f9cb29619553e2ec855dd` | changed: derivationRule text only |
+| `test-vectors/extraction/config-rust-limit16.json` | `71d5ed27bea011f65a939e9c885170c6db138c5ae41084f8d214c15357c88716` | `71d5ed27bea011f65a939e9c885170c6db138c5ae41084f8d214c15357c88716` | `71d5ed27bea011f65a939e9c885170c6db138c5ae41084f8d214c15357c88716` | unchanged in this revision |
+| `test-vectors/extraction/config-rust.json` | `64b34335e4a61383ada1403a2df97c2e45dba987bbf0c8ec21385e04104d1277` | `64b34335e4a61383ada1403a2df97c2e45dba987bbf0c8ec21385e04104d1277` | `64b34335e4a61383ada1403a2df97c2e45dba987bbf0c8ec21385e04104d1277` | unchanged in this revision |
+| `test-vectors/extraction/exclusion-rule.json` | `bc65be980d5590eccf9d17ddaa4cc37c9b9ba4c955407a2edd0ec49ff5234f31` | `a5777bc12af49974ff0d3d8de889856f73ff82191d3df31f3127537e2a831ddb` | `6daef2a3fdfce8b69130fcdb05b9d3d350f83015e3104be85f3aa4ba3985f911` | changed: derivationRule text only |
+| `test-vectors/extraction/go.json` | `f81fede1bfc540d11d1f24fbaf661d4eaf19682c720d6bd796eaabc5caa9294b` | `984e0fa75d7db002b0fd6f66bd61c7818f0523bf082a2c661769a2f417b66c8c` | `bc7b45f5a5a153cf8c72fb0c628cc6a0b02bce3760303930a159abaa1075dbdf` | changed: derivationRule text only |
+| `test-vectors/extraction/harness/build_vectors.py` | `7c7ec53d0ff7397c1da9ad9cea8d68bf24491d124982750fd5d297d48b6a6e99` | `10fe49f0ea4537011988e0427ff7bf9381d2d67259bb8fae1ccd233ce448e5c3` | `d39661d8496e5d3746abb1b5295b984538e3f576c566dd2ffa0bc2183b09d148` | changed (tooling, documentation or map) |
+| `test-vectors/extraction/harness/compare_outputs.py` | — | `a80c052eb560d937b51195ffc143a441c1618821e420529982da7505b783a51b` | `a80c052eb560d937b51195ffc143a441c1618821e420529982da7505b783a51b` | unchanged in this revision |
+| `test-vectors/extraction/harness/crosscheck.py` | `31acb142346f8d0a04b6699007fd32b266594de7266158af9046d7a9f1bce0b0` | `6df0798f6bdaa30ff8b174d47e3134b3e846697e44694fad21405da8d9522f2a` | `7ac22da687a8cd75776e2d8a8830970bfbb7310324cb26cb5df3ef1d77e436fa` | changed (tooling, documentation or map) |
+| `test-vectors/extraction/harness/gen_unicode_tables.py` | `4ca955fc1c2f770abbada54a7df55dbca78ae4eb59bbd890f82fcde99b729757` | `4ca955fc1c2f770abbada54a7df55dbca78ae4eb59bbd890f82fcde99b729757` | `4ca955fc1c2f770abbada54a7df55dbca78ae4eb59bbd890f82fcde99b729757` | unchanged in this revision |
+| `test-vectors/extraction/harness/go/go.mod` | `df45563c21ad076eebd24f730e6c753392c4f110b2572c397f8d5dcd1b5f4d0c` | `df45563c21ad076eebd24f730e6c753392c4f110b2572c397f8d5dcd1b5f4d0c` | `df45563c21ad076eebd24f730e6c753392c4f110b2572c397f8d5dcd1b5f4d0c` | unchanged in this revision |
+| `test-vectors/extraction/harness/go/main.go` | `6b521d6fcc64753cc342e62e6a74697c34234e8c1312df55cfc39546bf9ca940` | `6b521d6fcc64753cc342e62e6a74697c34234e8c1312df55cfc39546bf9ca940` | `6b521d6fcc64753cc342e62e6a74697c34234e8c1312df55cfc39546bf9ca940` | unchanged in this revision |
+| `test-vectors/extraction/harness/rust/Cargo.lock` | `02e4a1012b12a9e1c3d0d746850c1521f09a51df24719c9a52f917a9a9d7b201` | `02e4a1012b12a9e1c3d0d746850c1521f09a51df24719c9a52f917a9a9d7b201` | `02e4a1012b12a9e1c3d0d746850c1521f09a51df24719c9a52f917a9a9d7b201` | unchanged in this revision |
+| `test-vectors/extraction/harness/rust/Cargo.toml` | `0092528d95419485b4923336043c8fa6503d10d7da5f8aedc9ceb83d47393e50` | `0092528d95419485b4923336043c8fa6503d10d7da5f8aedc9ceb83d47393e50` | `0092528d95419485b4923336043c8fa6503d10d7da5f8aedc9ceb83d47393e50` | unchanged in this revision |
+| `test-vectors/extraction/harness/rust/src/main.rs` | `eb75e7341eba56f570798f4770adbf6b1bcce384017dcf0d251f4bc10ac974e6` | `eb75e7341eba56f570798f4770adbf6b1bcce384017dcf0d251f4bc10ac974e6` | `eb75e7341eba56f570798f4770adbf6b1bcce384017dcf0d251f4bc10ac974e6` | unchanged in this revision |
+| `test-vectors/extraction/limits-go.json` | `0d5d243ecb4605af934ef544027f0c6a7e88694be1a118fb32191874bfc95b94` | `9aa98d716d63a47f009aadf01edce330a6c4c7b11c6b0c893016bd9fa59e7388` | `f3c30c9b20f1715e1d1a618b3789578362b607c2649ec040a1016887928b7072` | changed: derivationRule text only |
+| `test-vectors/extraction/limits-rust.json` | `61ad316e717aed92d077759255fde118cc7e272d476d754d4d7224f21e249c6b` | `deaf38d72dc31c869ec3d69ba390d2b48aa23efc945dff815111a56d8d229fd3` | `dc6b56552021dbff8e34355fd32600b659e538c5697a80dc636b92820e1bc2a6` | changed: two vector results corrected (below); derivationRule text |
+| `test-vectors/extraction/requirement-map.json` | — | `2a5a92badc397a15dc63483c7fae51efe823ffde29e878d96517135daa38669c` | `11d9c6737c2782b379a88a02a7942837321bddbe38f8f9bbae8a58e231d2e761` | changed (tooling, documentation or map) |
+| `test-vectors/extraction/rust.json` | `21f3360c9e7c2394033e26548f35e8dddfdb723a35279c984c09967f96cc9590` | `420288aa27d67e1717430a0f28a8b9391b34af4b131728dcff7fa692fd6e7d73` | `3293f7997317cc97492934d684eac1ef6f8937ef5abe6bccd6f25db3acdf0ace` | changed: two vector results corrected (below); derivationRule text |
+| `test-vectors/extraction/unicode-17.0.0-tables.json` | `9363b97eb849cb236c786098f017728ad04688782f07c2969afddf93b03ac29f` | `9363b97eb849cb236c786098f017728ad04688782f07c2969afddf93b03ac29f` | `9363b97eb849cb236c786098f017728ad04688782f07c2969afddf93b03ac29f` | unchanged in this revision |

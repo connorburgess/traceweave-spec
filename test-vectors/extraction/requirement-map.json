@@ -92,9 +92,12 @@
         {
           "must": "MUST be made before reading the content",
           "kind": "untestable",
-          "reason": "whether bytes are read is not visible in the result; vectors fix only the outcome",
+          "reason": "whether bytes are read is not visible in the result; vectors fix only the outcome. The implementations' over-limit regular-file test would still pass if the file were read, so it does not fail on violation",
           "related": ["go-limit-over", "rust-limit-over"],
-          "spotCheck": true
+          "spotCheck": true,
+          "relatedTests": [
+            "impl:af3af2b:go/cmd/traceweave-go/main_test.go:Over-limit regular file: reported from its size, without reading"
+          ]
         }
       ]
     },
@@ -105,16 +108,22 @@
       "clauses": [
         {
           "must": "MUST stop reading after maxInputBytes + 1 bytes",
-          "kind": "untestable",
-          "reason": "reading is not visible in the result",
-          "related": ["go-limit-over"],
+          "kind": "implementation-test",
+          "reason": "process tests: an endless stdin must still end in input-too-large (it never ends if read past the limit), and the reader returns exactly limit bytes",
+          "tests": [
+            "impl:af3af2b:go/cmd/traceweave-go/main_test.go:TestStreamingAndExitStatus",
+            "impl:af3af2b:crates/tw-extract/src/lib.rs:read_input_stops_at_limit"
+          ],
           "spotCheck": true
         },
         {
           "must": "MUST NOT process any byte beyond maxInputBytes",
-          "kind": "untestable",
-          "reason": "once the size verdict is input-too-large no output depends on later bytes; the precedence vectors fix the verdict, not the processing",
-          "related": ["go-limit-precedence", "rust-limit-precedence"],
+          "kind": "implementation-test",
+          "reason": "process tests: the record for the first limit+1 bytes equals the record for the whole input, and its digest and length are null",
+          "tests": [
+            "impl:af3af2b:crates/tw-extract/src/lib.rs:uncomputed_values_are_null",
+            "impl:af3af2b:go/cmd/traceweave-go/main_test.go:TestStreamingAndExitStatus"
+          ],
           "spotCheck": true
         }
       ]
@@ -479,9 +488,10 @@
         {
           "must": "MUST be O(N)",
           "kind": "untestable",
-          "reason": "performance is not observable in vector bytes; measured by the implementations' adversarial runs, not by these vectors",
+          "reason": "performance is not observable in vector bytes; the implementations' adversarial probe measures time and memory at the bounds but asserts no limit, so no test fails on violation",
           "related": [],
-          "spotCheck": true
+          "spotCheck": true,
+          "relatedTests": ["impl:af3af2b:xcheck/probes/adversarial.py:Worst-case time and memory"]
         }
       ]
     },
@@ -493,9 +503,10 @@
         {
           "must": "MUST NOT cause rescanning",
           "kind": "untestable",
-          "reason": "performance; not observable in vector bytes",
+          "reason": "performance; the adversarial probe times nested comments, unterminated literals and 8 MiB identifiers but asserts no limit",
           "related": [],
-          "spotCheck": true
+          "spotCheck": true,
+          "relatedTests": ["impl:af3af2b:xcheck/probes/adversarial.py:8MiB identifier"]
         }
       ]
     },
@@ -506,9 +517,9 @@
       "clauses": [
         {
           "must": "MUST be linear in the identifier length",
-          "kind": "untestable",
-          "reason": "performance; not observable in vector bytes",
-          "related": [],
+          "kind": "implementation-test",
+          "reason": "timing test: 1 MiB adversarial identifiers must finish within 5 s (a quadratic insertion sort took 126 s); Go only, the Rust lane has the adversarial probe measurement",
+          "tests": ["impl:af3af2b:go/internal/unidata/unidata_test.go:TestNFCLinearTime"],
           "spotCheck": true
         }
       ]
@@ -520,9 +531,9 @@
       "clauses": [
         {
           "must": "MUST NOT be quadratic",
-          "kind": "untestable",
-          "reason": "performance; not observable in vector bytes",
-          "related": [],
+          "kind": "implementation-test",
+          "reason": "timing test over runs of non-starters ('a' + (U+0301 U+0316)*, 1 MiB) with a 5 s bound; Go only",
+          "tests": ["impl:af3af2b:go/internal/unidata/unidata_test.go:TestNFCLinearTime"],
           "spotCheck": true
         }
       ]

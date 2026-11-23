@@ -8,7 +8,7 @@
   "window": 4,
   "requiredCoverage": false,
   "metadataRules": "m1.2",
-  "derivationRule": "hand: the expected lexical outcome (token classes and texts, inserted ';', error code and the defect position) is written by hand in this file; spans are located by searching the hand-written token text in source order; k-gram hashes, window selections and fingerprints are computed from it",
+  "derivationRule": "A vector is hand-derived when both of these hold: (a) Judgments are written by a person. Every judgment the contract leaves to a reader is written by a person from the contract text. That covers the token boundaries, classes and texts; inserted tokens; the outcome status; and the error code and the position of the defect. For matching vectors it also covers which regions match, and the outcome. (b) Arithmetic is computed and rechecked. Everything that is pure arithmetic over those judgments is computed by the specification's own checker or builder, which is not an implementation under test. That covers byte spans located from the hand-written token texts, SHA-256 hashes, window selection, fingerprints, digests and canonical bytes. At least one independent recomputation, by a clean-room reviewer or a second checker, confirms it. A vector whose lexical layer was first produced by a tool and then reviewed is not hand-derived, and must be labelled otherwise.",
   "vectors": [
     {
       "id": "rust-limit-exact",
