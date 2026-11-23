@@ -75,3 +75,7 @@ The protocol moved to `m3-eval-draft-5` (lane 11 audit: fold-S outcome count, `k
 - acquisition-time rejections are refused in a manifest that is not acquired (`E-STATUS`).
 
 The self-test now also builds three acquired variants that must pass (one with no rejection, and a Rust and a Go A25 rejection, each replaced by continuing the walk with synthetic facts) and four acquired variants that must fail, for 51 rejected cases in all.
+
+## Draft-7
+
+The protocol moved to `m3-eval-draft-7` (rulings O1–O8). Nothing in it touches the manifest, schema or checker, so the manifest keeps `protocolVersion` `m3-eval-draft-6` and is unchanged.

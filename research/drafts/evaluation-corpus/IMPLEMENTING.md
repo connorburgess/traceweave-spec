@@ -1,6 +1,6 @@
 # Implementing the M3 evaluation harness
 
-Brief for whoever builds the harness in the implementation repository (`traceweave`, owner column `I`), against protocol [`m3-eval-draft-6`](../evaluation-protocol.md). The protocol governs; this list only orders the work. Decided on 2026-11-23: budget **`1/20`** per unordered repository search, acquisition approved with mechanical replacements, corpus root `~/traceweave-eval` named by `TRACEWEAVE_EVAL_DIR`.
+Brief for whoever builds the harness in the implementation repository (`traceweave`, owner column `I`), against protocol [`m3-eval-draft-7`](../evaluation-protocol.md). The protocol governs; this list only orders the work. Decided on 2026-11-23: budget **`1/20`** per unordered repository search, acquisition approved with mechanical replacements, corpus root `~/traceweave-eval` named by `TRACEWEAVE_EVAL_DIR`.
 
 **Conventions for every script.**
 - Exit status: 0 success, 1 a checked condition failed (invalid input, mismatch, refusal), 2 usage, environment, I/O or abort. M3.6 adds 3 (negative-result).
@@ -56,3 +56,10 @@ From the rulings in [protocol §19](../evaluation-protocol.md#19-harness-rulings
 9. **Checks (B8, S-b).** Record checked ids; `counts` recomputes the expected ids from the fixed moduli and exits 1 on any difference.
 10. **Verdict (B7).** Write `eval/results/heldout/searches.jsonl`; `m36-verdict` reads it, `counts.json` and `eligibility.json` from the first held-out result commit with `git show`, recomputes A, N and the exclusion bound, cross-checks the summaries (difference: exit 2), refuses a dirty tree, and prints the suppression counts.
 11. **Tests.** Add S-a (an abstaining search must alarm end to end), S-b and S-c; state the 6–8 GB scratch need in TESTING.md.
+
+## Changes for draft-7
+
+From the O1–O8 rows of [protocol §19](../evaluation-protocol.md#19-harness-rulings-m3-eval-draft-6). Most adopt what the harness already does at `d4502e0`. Remaining work:
+- **O1:** once `main` has `traceweave-go --version` (owner: the implementation repository's Go lane), read both binaries' commits from `--version`; until then, report-document provenance as now.
+- **O2:** confirm `path-case-collision` uses Unicode 17.0.0 full case folding and excludes every colliding path; keep `path-unsafe`.
+- **O5:** implement reference-file batching of large searches before the held-out run if the pilot shows any search near the 75% memory line; otherwise such a search aborts the run.
