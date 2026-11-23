@@ -94,7 +94,7 @@ The table shows which case each vector covers:
 
 **Header fields** (every file in this directory):
 - `metadataRules: "m1.2"` switches on the checks below.
-- `derivationRule` states what `derivation: hand` means (next paragraph).
+- `derivationRule` states what `derivation: hand` means (next paragraph). In `config-negative.json` it is the ROADMAP definition alone. In the five vector files it is the definition followed by how it applies to them.
 
 **Per-vector fields:**
 - `derivation: "hand"` on every vector and every configuration entry. The values are 183 vectors and 31 configurations, all `hand`; no other value occurs.
@@ -104,12 +104,8 @@ The table shows which case each vector covers:
 
 **What `hand` means.** It means exactly the definition in [ROADMAP.md, Definitions](../../ROADMAP.md#definitions). Each file states it verbatim in `derivationRule`, and `tools/check_requirement_map.py` fails if the two texts differ. Applied here:
 - **(a) Judgments written by a person.** Every token class and text, every inserted `;`, every outcome status, every error code and every defect position is written by hand in `harness/build_vectors.py` from the contract text.
-- **(b) Arithmetic computed and rechecked.** The builder computes three things:
-  - spans, located from the hand-written token texts, or given by hand where a search would mislocate;
-  - each new rejection's offset, as the index of its hand-chosen defect;
-  - k-gram hashes, window selections and fingerprints.
-
-  `check_vectors.py` recomputes all of it independently, and so did the clean-room review.
+- **(b) Arithmetic computed and rechecked.** The arithmetic over those judgments is computed by this specification's own builder, `harness/build_vectors.py`, not by an implementation under test. That covers byte spans, normalized values, k-gram hashes, window selections and fingerprints, plus each new rejection's offset as the index of its hand-chosen defect. `check_vectors.py` recomputes all of it independently, and the clean-room review recomputed all 65 output-producing vectors and agrees.
+- **Spans.** A token's span is located by searching for its hand-written text in source order. The exception is vectors marked `spanStarts: hand`, whose start offsets are hand-written because a search would land on the wrong text. Only one vector is marked, `rust-q11-shebang-first-line-only` (`#!/*⏎*/ fn`): a search for `*` finds the `*` inside the skipped shebang line at offset 3, but the token is at 5. The checker enforces the rule both ways. In an unmarked vector, the search must reproduce every start. A marked vector must contain at least one start the search would mislocate.
 
 **No vector's lexical layer was first produced by a tool.** No expected output was copied from go/scanner, proc-macro2, rustc or either implementation; toolchains and implementations were run only afterwards, as checks.
 
@@ -142,8 +138,8 @@ The table shows which case each vector covers:
 - `go.json` and `rust.json` each contain all seven classes;
 - every file in this directory declares `metadataRules`.
 
-Metadata self-tests add 6 corruptions per vector file and 3 per configuration file. Each must be rejected:
-- per vector file: derivation removed, derivation `computed`, pair removed, a shared rejection, a rejection that does not pair back, a class label dropped;
+Metadata self-tests add 7 corruptions per vector file and 3 per configuration file. Each must be rejected:
+- per vector file: derivation removed, derivation `computed`, pair removed, a shared rejection, a rejection that does not pair back, the `spanStarts` mark removed or added, a class label dropped;
 - per configuration file: derivation removed, a positive without its pair, two positives sharing a negative.
 
 The two cases the gate names, a vector without `derivation` and a positive without its pair, also fail the CLI on a standalone corrupted `go.json` (exit 1).
@@ -183,11 +179,11 @@ Output on 2026-11-22 (Python 3.14.6, `unicodedata` 16.0.0):
 
 ```
 PASS config-negative.json: 28/28 invalid configurations rejected, 3/3 boundary configurations accepted
-PASS go.json profile=go-tokens/draft-1 config=dfbc5fe3517e9da6... vectors=49 tokens=170 (inserted ';'=21) identifiers=61 kgrams=228 fingerprints=82 tie-windows=11 errors=33 (lexical offsets plausibility-only: 27) pairs=2 positives=16 paired-one-to-one mutations-rejected=19/19
-PASS rust.json profile=rust2024-tokens/draft-1 config=64b34335e4a61383... vectors=118 tokens=322 (inserted ';'=0) identifiers=103 kgrams=384 fingerprints=146 tie-windows=10 errors=76 (lexical offsets plausibility-only: 63) pairs=2 positives=42 paired-one-to-one mutations-rejected=22/22
-PASS limits-go.json profile=go-tokens/draft-1 config=aa86722255afbf50... vectors=3 tokens=8 (inserted ';'=1) identifiers=1 kgrams=8 fingerprints=2 tie-windows=0 errors=2 (lexical offsets plausibility-only: 0) pairs=0 positives=1 paired-one-to-one mutations-rejected=6/6
-PASS limits-rust.json profile=rust2024-tokens/draft-1 config=71d5ed27bea011f6... vectors=3 tokens=7 (inserted ';'=0) identifiers=2 kgrams=6 fingerprints=2 tie-windows=0 errors=2 (lexical offsets plausibility-only: 0) pairs=0 positives=1 paired-one-to-one mutations-rejected=6/6
-PASS exclusion-rule.json profile=go-tokens-exclusion-test/draft-1 config=65ae9f23f38b060e... vectors=10 tokens=36 (inserted ';'=4) identifiers=15 kgrams=24 fingerprints=9 tie-windows=0 errors=5 (lexical offsets plausibility-only: 3) pairs=0 positives=5 paired-one-to-one mutations-rejected=10/10
+PASS go.json profile=go-tokens/draft-1 config=dfbc5fe3517e9da6... vectors=49 tokens=170 (inserted ';'=21) identifiers=61 kgrams=228 fingerprints=82 tie-windows=11 errors=33 (lexical offsets plausibility-only: 27) pairs=2 positives=16 paired-one-to-one mutations-rejected=20/20
+PASS rust.json profile=rust2024-tokens/draft-1 config=64b34335e4a61383... vectors=118 tokens=322 (inserted ';'=0) identifiers=103 kgrams=384 fingerprints=146 tie-windows=10 errors=76 (lexical offsets plausibility-only: 63) pairs=2 positives=42 paired-one-to-one mutations-rejected=23/23
+PASS limits-go.json profile=go-tokens/draft-1 config=aa86722255afbf50... vectors=3 tokens=8 (inserted ';'=1) identifiers=1 kgrams=8 fingerprints=2 tie-windows=0 errors=2 (lexical offsets plausibility-only: 0) pairs=0 positives=1 paired-one-to-one mutations-rejected=7/7
+PASS limits-rust.json profile=rust2024-tokens/draft-1 config=71d5ed27bea011f6... vectors=3 tokens=7 (inserted ';'=0) identifiers=2 kgrams=6 fingerprints=2 tie-windows=0 errors=2 (lexical offsets plausibility-only: 0) pairs=0 positives=1 paired-one-to-one mutations-rejected=7/7
+PASS exclusion-rule.json profile=go-tokens-exclusion-test/draft-1 config=65ae9f23f38b060e... vectors=10 tokens=36 (inserted ';'=4) identifiers=15 kgrams=24 fingerprints=9 tie-windows=0 errors=5 (lexical offsets plausibility-only: 3) pairs=0 positives=5 paired-one-to-one mutations-rejected=11/11
 ```
 
 The checker verifies the following:
@@ -372,7 +368,7 @@ Its self-test of 6 map corruptions must all be rejected.
 ```
 python3 -I tools/check_requirement_map.py
 PASS M1.5 requirement map: MUST occurrences=28 unmapped=0 testable=17 implementation-test=4 untestable=5 definitional=2 marked-for-spot-check=10 self-test-corruptions-rejected=6/6; implementation tests verified=0 unverified=6 (set TW_IMPL_REPO to verify)
-PASS M1.2 derivationRule: 6 vector files state the ROADMAP.md definition of hand-derived verbatim
+PASS M1.2 derivationRule: 6 files state the ROADMAP.md definition of hand-derived verbatim, the 5 vector files with its application
 PASS M1.1 item map: 13 registration items and 6 named constructs, each answered for Go and Rust with links to existing sections of spec/extraction.md
 ```
 

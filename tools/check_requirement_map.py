@@ -20,8 +20,10 @@ M1.5, test-vectors/extraction/requirement-map.json against spec/extraction.md:
     check_vectors.py self-tests listed by --list-tests, other checkers' self-test
     names found in their source).
 
-M1.2: the derivationRule of every extraction vector file equals the definition
-of "hand-derived" in ROADMAP.md (Definitions), with Markdown emphasis removed.
+M1.2: the derivationRule of every extraction vector file starts with the
+definition of "hand-derived" in ROADMAP.md (Definitions), verbatim with Markdown
+emphasis removed; the five vector files then state how it applies (builder, not
+an implementation under test; independent recomputation; spanStarts rule).
 
 M1.1, profiles/code.md: the "Before registering a profile" list is parsed from
 its sentence; the "Registration item map" table must have one row per item, a
@@ -128,8 +130,12 @@ def check_derivation_rules():
     last = re.search(r"(A vector whose lexical layer was first produced by a tool.*?otherwise\.)", sec).group(1)
     rule = ("A vector is hand-derived when both of these hold: (a) " + a + " (b) " + b + " " + last).replace("**", "")
     for name in VECTOR_FILES + ["config-negative.json"]:
-        got = json.loads((XV / name).read_text(encoding="utf-8")).get("derivationRule")
-        require(got == rule, f"{name}: derivationRule differs from the ROADMAP.md definition of hand-derived")
+        got = json.loads((XV / name).read_text(encoding="utf-8")).get("derivationRule") or ""
+        require(got.startswith(rule), f"{name}: derivationRule does not start with the ROADMAP.md definition of hand-derived")
+        if name in VECTOR_FILES:  # the application to these vectors (review section 11)
+            for phrase in ("computed by this specification's own builder", "not by an implementation under test",
+                           "independently recomputed", "spanStarts: hand"):
+                require(phrase in got, f"{name}: derivationRule application lacks {phrase!r}")
     return len(VECTOR_FILES) + 1
 
 
@@ -266,7 +272,7 @@ def main():
           f"definitional={stats['definitional']} marked-for-spot-check={stats['spot-check']} "
           f"self-test-corruptions-rejected={corruptions}/{corruptions}; implementation tests verified="
           f"{stats['external-verified']} unverified={stats['external-unverified']} (set TW_IMPL_REPO to verify)")
-    print(f"PASS M1.2 derivationRule: {rules} vector files state the ROADMAP.md definition of hand-derived verbatim")
+    print(f"PASS M1.2 derivationRule: {rules} files state the ROADMAP.md definition of hand-derived verbatim, the 5 vector files with its application")
     print(f"PASS M1.1 item map: {items} registration items and {constructs} named constructs, each answered for Go and Rust "
           f"with links to existing sections of spec/extraction.md")
     return 0

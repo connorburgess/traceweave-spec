@@ -925,6 +925,22 @@ def check_metadata(vectors, cfg, required, name="vectors"):
             require(rid in by, f"{name}:{vid}: positive vector without a pairedRejection in this file")
             require(by[rid]["result"]["status"] == "error", f"{name}:{vid}: pairedRejection {rid} is not an error vector")
             require(by[rid].get("pairedPositive") == vid, f"{name}:{vid}: {rid} does not pair back (not one-to-one)")
+    for v in vectors:  # span rule stated in derivationRule: a source-order search reproduces every start unless marked
+        if v["result"]["status"] == "error":
+            require("spanStarts" not in v, f"{name}:{v['id']}: spanStarts on an error vector")
+            continue
+        data, pos, mislocated = base64.b64decode(v["inputBase64"]), 0, 0
+        for t in v["result"]["tokens"]:
+            if t.get("inserted"):
+                continue
+            found = data.find(t["text"].encode("utf-8"), pos)
+            mislocated += found != t["span"][0]
+            pos = t["span"][1]
+        if v.get("spanStarts") == "hand":
+            require(mislocated > 0, f"{name}:{v['id']}: spanStarts hand, but a search reproduces every start")
+        else:
+            require("spanStarts" not in v and mislocated == 0,
+                    f"{name}:{v['id']}: {mislocated} token start(s) differ from the source-order search; mark spanStarts: hand")
     for v in vectors:  # prefix consistency of each paired rejection against its positive's token stream
         rid = v.get("pairedRejection")
         if v["result"]["status"] == "error" or rid not in by:
@@ -990,6 +1006,7 @@ def metadata_mutations(data):
             ps[0]["pairedRejection"] = ps[0]["id"]
     yield "two positives share one rejection", mut(share)
     yield "rejection does not pair back", mut(lambda vs: first(vs, True).pop("pairedPositive"))
+    yield "spanStarts mark removed", mut(lambda vs: [v.pop("spanStarts") for v in vs if "spanStarts" in v] or vs[0].setdefault("spanStarts", "hand"))
     yield "vectorClasses label dropped", mut(lambda vs: vs[0]["vectorClasses"].pop() if vs[0]["vectorClasses"] else vs[0]["vectorClasses"].append("empty"))
 
 

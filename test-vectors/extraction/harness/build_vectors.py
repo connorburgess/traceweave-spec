@@ -65,6 +65,7 @@ def build(lang, vid, desc, src, toks=None, err=None, tags=()):
             tokens.append({"class": "punct", "text": ";", "span": [end, end], "inserted": True}); continue
         b = text.encode()
         i = t[2] if len(t) > 2 and isinstance(t[2], int) else src.index(b, pos)  # explicit start where search would mislocate
+        if len(t) > 2 and isinstance(t[2], int): v["spanStarts"] = "hand"
         assert src[i:i + len(b)] == b and i >= pos, (vid, text)
         tokens.append({"class": cls, "text": text, "span": [i, i + len(b)]}); pos = i + len(b)
     res = {"status": "ok" if len(tokens) >= K else "insufficient-tokens", "tokenCount": len(tokens), "tokens": tokens, "channels": {}}
@@ -89,9 +90,18 @@ def build(lang, vid, desc, src, toks=None, err=None, tags=()):
 
 
 # ---- M1.2 metadata: derivation, vector classes and one-to-one paired rejections ----
-DERIVATION_NOTE = (  # verbatim from ROADMAP.md, Definitions; tools/check_requirement_map.py keeps them in sync
+VECTOR_RULE_APPLICATION = (
+    "Applied to these vectors: the arithmetic over the hand-written judgments (byte spans, normalized values, "
+    "k-gram hashes, window selections and fingerprints) is computed by this specification's own builder, "
+    "harness/build_vectors.py, not by an implementation under test, and is independently recomputed by "
+    "check_vectors.py and by a clean-room review. A token's span is located by searching for its hand-written text "
+    "in source order, except in vectors marked spanStarts: hand, whose start offsets are hand-written because a "
+    "search would land on the wrong text (for example a character that also occurs in a skipped shebang line); the "
+    "checker requires the search to reproduce every start in unmarked vectors.")
+DEFINITION = (  # verbatim from ROADMAP.md, Definitions; tools/check_requirement_map.py keeps them in sync
     "A vector is hand-derived when both of these hold: (a) Judgments are written by a person. Every judgment the contract leaves to a reader is written by a person from the contract text. That covers the token boundaries, classes and texts; inserted tokens; the outcome status; and the error code and the position of the defect. For matching vectors it also covers which regions match, and the outcome. (b) Arithmetic is computed and rechecked. Everything that is pure arithmetic over those judgments is computed by the specification's own checker or builder, which is not an implementation under test. That covers byte spans located from the hand-written token texts, SHA-256 hashes, window selection, fingerprints, digests and canonical bytes. At least one independent recomputation, by a clean-room reviewer or a second checker, confirms it. A vector whose lexical layer was first produced by a tool and then reviewed is not hand-derived, and must be labelled otherwise.")
-KEY_ORDER = ["id", "derivation", "derivationNote", "tags", "vectorClasses", "description", "inputBase64", "inputText",
+DERIVATION_NOTE = DEFINITION + " " + VECTOR_RULE_APPLICATION
+KEY_ORDER = ["id", "derivation", "derivationNote", "spanStarts", "tags", "vectorClasses", "description", "inputBase64", "inputText",
              "inputDisplay", "pairedRejection", "pairedPositive", "result"]
 M12_CLASSES = ["empty", "below-k+w-1", "unicode", "malformed", "repeated", "equal-minimum", "crlf-bom"]
 
@@ -487,7 +497,7 @@ for x in pos:
 for pid, rid in CFG_PAIRS:
     next(x for x in pos if x["id"] == pid)["pairedRejection"] = rid
     nby[rid]["pairedPositive"] = pid
-dump({"contract": CONTRACT, "description": "negatives: configuration byte strings that MUST be rejected as unsupported-config (offset null); each is the shipped Go configuration with one change. boundaryPositives: configurations at the section 10 bounds that MUST be accepted.", "metadataRules": "m1.2", "derivationRule": DERIVATION_NOTE, "negatives": negs, "boundaryPositives": pos}, OUT / "config-negative.json")
+dump({"contract": CONTRACT, "description": "negatives: configuration byte strings that MUST be rejected as unsupported-config (offset null); each is the shipped Go configuration with one change. boundaryPositives: configurations at the section 10 bounds that MUST be accepted.", "metadataRules": "m1.2", "derivationRule": DEFINITION, "negatives": negs, "boundaryPositives": pos}, OUT / "config-negative.json")
 print("negatives", len(negs), "positives", len(pos))
 
 # ---- shared normalized-stream exclusion rule (contract section 6), synthetic TEST-ONLY profile ----

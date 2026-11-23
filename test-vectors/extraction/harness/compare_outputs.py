@@ -28,7 +28,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 DIR = "test-vectors/extraction"
-ALLOWED_NEW = {"derivation", "derivationNote", "vectorClasses", "pairedRejection", "pairedPositive"}
+ALLOWED_NEW = {"derivation", "derivationNote", "spanStarts", "vectorClasses", "pairedRejection", "pairedPositive"}
 ALLOWED_NEW_HEADER = {"metadataRules", "derivationRule"}
 OUTPUT_FIELDS = ("inputBase64", "inputText", "inputDisplay", "result")
 
