@@ -17,11 +17,11 @@ Updated 2026-11-23 after the owner decisions of that day. Implementation reposit
 
 | Gates | Work | State |
 | --- | --- | --- |
-| I1 (M1.4, M1.6) | Go and Rust extractors, hand-written lexers | Merged; [I1 review](reviews/implementation-merge-i1-review.md) `9c03c95`. The spec branch is public at `dec460e` (2026-11-23; [public history map](public-history-map.md)). Next: re-vendor from the promoted paths at a pushed public commit and pass `check-spec-pin --strict`; M1.4 is not met until then ([owner decisions of 2026-11-23](../ROADMAP.md#owner-decisions-2026-11-23)) |
-| I2 (M2.1–M2.11) | Catalogue, comparison and report, two implementations | Merged at `82b02ab`; [I2 review](reviews/implementation-merge-i2-review.md) `de9a5b7`. M2.5 and M2.8 met |
+| I1 (M1.4, M1.6) | Go and Rust extractors | I1 exit met at implementation `main` `6d35308`, re-vendored from published `c06b214` with the strict pin 43/43. M1.4 and M1.6 wait only on M1.2's per-vector metadata and paired rejection vectors |
+| I2 (M2.1–M2.11) | Catalogue, comparison and report | M2.1, M2.4, M2.5, M2.8, M2.10 and M2.11 met. Open: M2.2 (manifest), M2.3 and M2.6 (vendor class; 5 `mixed` vectors), M2.7 (review packets, not started), M2.9 (candidate-generation record); the plan's `scripts/walkthrough` |
 | Post-I2 integration | The A6 behavioural rules B1–B10 ([contract](../spec/catalogue-report.md) §6.8) and the [behaviour checklist](../test-vectors/matching/behaviour-checklist.md) | In progress on implementation branches (`i2-rust` and others); not yet on `main` or reviewed. Next engineering for M2:<br>- `scripts/offline` wrapper (M2.1)<br>- frozen fixture manifest (M2.2)<br>- vendor control class (M2.3, M2.6; OD-C19)<br>- B10 rebuild-from-clean-clone check (M2.4)<br>- review packets (M2.7, not started)<br>- candidate-generation record keyed by `bodySha256` (M2.9)<br>- the I2 review's follow-ups F1–F4 |
 | Behavioural follow-up rulings | A5–A8 rules, including OD-C39–OD-C47 | Confirmed 2026-11-23 by the coordinator under the owner's delegation ([owner decisions of 2026-11-23](../ROADMAP.md#owner-decisions-2026-11-23)) |
-| M1.1, M1.5 | Item map against `profiles/code.md`; requirement map of MUSTs to failing checks | Open, engineering |
+| M1.1, M1.2, M1.5 | Item map against `profiles/code.md`; per-vector `derivation: hand` metadata and paired rejection vectors; requirement map | Open, engineering. M1.3 met at the promotion |
 | M3.1–M3.3 | M3 evaluation protocol (`m3-eval-draft-3`) and corpus acquisition | M3.0 met: 1 in 20, met at 132 searches if alarms ≤ 6. Acquisition of the 48 repositories into `~/traceweave-eval` is approved, with the licence recheck failing closed. Next: acquire, freeze splits and config, run ([owner decisions of 2026-11-23](../ROADMAP.md#owner-decisions-2026-11-23)) |
 | TS.1–TS.3, TXT.1–TXT.3 | `ts-tokens` and `text-plain` profiles | Frozen for stage 1 and registered in the draft contract. Not yet implemented in the implementation repository |
 | IMGF.1, IMGF.5 | Image profile item map; second implementation with a C++ reference build | Open. IMGF.2–IMGF.4 met (`ec0cf67`) |
@@ -34,10 +34,16 @@ Updated 2026-11-23 after the owner decisions of that day. Implementation reposit
 | Implementation CI | `scripts/check` as a hosted workflow in the implementation repository | In progress. Enabling hosted CI follows the push decision |
 | Owner | M2E.0; TXT.0, TXT.5, TXT.8; IMGF.6; for image marks, real-image sets, non-commercial or unclear-licence weights and GPU spend | Still owner-blocked. Push done: public `roadmap-v2` at `dec460e`, with CI pending. Pending execution: the implementation re-vendor and strict pin check. The local branch is never pushed; only regenerated public history is, as fast-forwards ([owner decisions of 2026-11-23](../ROADMAP.md#owner-decisions-2026-11-23); [owner decision on image marks and C2PA](../ROADMAP.md#owner-decision-2026-11-23-image-marks-and-c2pa)) |
 
-Closed with evidence: M0.1–M0.4, M2.5, M2.8, M2.10, M2.11, M3.0, M4.1, M4.2, IMGF.2–IMGF.4 and IMG.0–IMG.4. Everything else is open.
+Closed with evidence: M0.1–M0.4, M1.3, M2.1, M2.4, M2.5, M2.8, M2.10, M2.11, M3.0, M4.1, M4.2, IMGF.2–IMGF.4 and IMG.0–IMG.4. Everything else is open.
 
 ## Planned items
 
+- **Status, 2026-11-23.**
+  - **Implementation repository:** private on GitHub, with CI configured; first runs pending, and Linux untested until they pass.
+  - **`py-tokens` draft-1:** clean-room review in `0db8b44`, disposition pending.
+  - **Registration record:** draft reviewed in `5c3d9c5`, fixes in progress; A2A section in `1dd9c1f`.
+  - **Evaluation:** protocol `m3-eval-draft-7`; harness under review, not cleared to run; a real run needs about 65 GB free disk as designed.
+  - **Websites:** both live as of 2026-11-23 at <https://traceweave.org> and <https://docs.traceweave.org>. The WEB browser tool is still planned.
 - **Registration record (M4), planned direction of 2026-11-23.** For people who want to protect their work, a timestamped, signed registration record serves that need, rather than marks. A design lane is drafting `research/drafts/registration-record.md` and `research/lanes/13-timestamp-evidence-review.md`.
 - **SK.3–SK.5 (A2A).** The owner wants content registered at creation time, including by AI agents. Planned; design in progress; no implementation lane. Any hosted signing or witness service is an owner decision (SK.5).
 - **WEB.0–WEB.6 (browser tool and testing page).** Requested by the owner on 2026-11-23 as a roadmap item, not for building yet. Planned; not started; no lane assigned. It follows M3.4 unless the owner overrides, and the owner decides when it starts and where it is hosted (WEB.0). See the [roadmap](../ROADMAP.md#later-profiles-and-sequence).
