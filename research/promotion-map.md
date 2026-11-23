@@ -4,6 +4,8 @@ Promoted on 2026-11-23 under the owner's delegation, as a series of local commit
 
 **Files moved: 84. Byte-identical: 57. Changed: 27** (8 JSON files, listed below; the rest are Markdown documents and scripts).
 
+**Later change:** M1.2 metadata was added to `test-vectors/extraction/` after this promotion; the new digests and the before/after proof are in [extraction-vector-metadata-map.md](extraction-vector-metadata-map.md).
+
 ## Directory and document mapping
 
 | Old | New |

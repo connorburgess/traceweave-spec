@@ -7,13 +7,18 @@
   "k": 5,
   "window": 4,
   "requiredCoverage": false,
+  "metadataRules": "m1.2",
+  "derivationRule": "hand: the expected lexical outcome (token classes and texts, inserted ';', error code and the defect position) is written by hand in this file; spans are located by searching the hand-written token text in source order; k-gram hashes, window selections and fingerprints are computed from it",
   "vectors": [
     {
       "id": "go-limit-exact",
+      "derivation": "hand",
       "tags": ["limits"],
+      "vectorClasses": [],
       "description": "Input of exactly maxInputBytes=16 bytes is accepted.",
       "inputBase64": "eHkgOj0gMSArIDIgKyAzCg==",
       "inputText": "xy := 1 + 2 + 3\n",
+      "pairedRejection": "go-limit-over",
       "result": {
         "status": "ok",
         "tokenCount": 8,
@@ -56,15 +61,20 @@
     },
     {
       "id": "go-limit-over",
+      "derivation": "hand",
       "tags": ["limits", "malformed"],
+      "vectorClasses": ["malformed"],
       "description": "17 bytes with maxInputBytes=16.",
       "inputBase64": "eHl6IDo9IDEgKyAyICsgMwo=",
       "inputText": "xyz := 1 + 2 + 3\n",
+      "pairedPositive": "go-limit-exact",
       "result": {"status": "error", "error": {"code": "input-too-large", "offset": 0}}
     },
     {
       "id": "go-limit-precedence",
+      "derivation": "hand",
       "tags": ["limits", "malformed"],
+      "vectorClasses": ["unicode", "malformed"],
       "description": "18 bytes that are also invalid UTF-8: the size check runs first.",
       "inputBase64": "eCA6PSAi/yIgKyAxICsgMjMK",
       "inputText": null,

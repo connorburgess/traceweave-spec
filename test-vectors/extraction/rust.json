@@ -7,14 +7,19 @@
   "k": 5,
   "window": 4,
   "requiredCoverage": true,
+  "metadataRules": "m1.2",
+  "derivationRule": "hand: the expected lexical outcome (token classes and texts, inserted ';', error code and the defect position) is written by hand in this file; spans are located by searching the hand-written token text in source order; k-gram hashes, window selections and fingerprints are computed from it",
   "lexingCheck": "Token streams are hand-derived; check_vectors.py re-verifies lexical invariants and harness/crosscheck.py compares them with go/scanner, proc-macro2 and rustc.",
   "vectors": [
     {
       "id": "rust-empty",
+      "derivation": "hand",
       "tags": ["empty"],
+      "vectorClasses": ["empty", "below-k+w-1"],
       "description": "Empty input: zero tokens, no k-grams.",
       "inputBase64": "",
       "inputText": "",
+      "pairedRejection": "rust-empty-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 0,
@@ -27,10 +32,13 @@
     },
     {
       "id": "rust-short",
+      "derivation": "hand",
       "tags": ["short"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Four tokens is fewer than k=5.",
       "inputBase64": "bGV0IHggPSAx",
       "inputText": "let x = 1",
+      "pairedRejection": "rust-short-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 4,
@@ -54,10 +62,13 @@
     },
     {
       "id": "rust-exact-k",
+      "derivation": "hand",
       "tags": ["exact-k"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Exactly k=5 tokens: one k-gram, partial window selects it.",
       "inputBase64": "bGV0IHggPSAxOw==",
       "inputText": "let x = 1;",
+      "pairedRejection": "rust-exact-k-rej",
       "result": {
         "status": "ok",
         "tokenCount": 5,
@@ -87,10 +98,13 @@
     },
     {
       "id": "rust-unicode",
+      "derivation": "hand",
       "tags": ["unicode"],
+      "vectorClasses": ["unicode"],
       "description": "NFC Unicode identifiers, multi-byte string and char literals; spans are UTF-8 byte offsets.",
       "inputBase64": "bGV0IGdyw7bDn2U6ICZzdHIgPSAibmHDr3ZlIOKYgyDkuJbnlYwiOwpsZXQgzrsgPSAnw6knOwo=",
       "inputText": "let größe: &str = \"naïve ☃ 世界\";\nlet λ = 'é';\n",
+      "pairedRejection": "rust-unicode-rej",
       "result": {
         "status": "ok",
         "tokenCount": 13,
@@ -156,10 +170,13 @@
     },
     {
       "id": "rust-literals",
+      "derivation": "hand",
       "tags": ["literals"],
+      "vectorClasses": [],
       "description": "Integer/float forms with suffixes, '2.' float, tuple-index float, raw/byte/raw-byte/C strings.",
       "inputBase64": "bGV0IHYgPSBbMHhGRl91OCwgMV8wMDAsIDBvMTcsIDBiMTAxMCwgMS41ZTMsIDIuLCAzZjMyXTsKbGV0IHMgPSByIyJyYXcgInEiIiM7IGxldCBiID0gYidcbic7IGxldCBicyA9IGJyIlxkIjsgbGV0IGMgPSBjImhpIjsKbGV0IHQgPSBwLjAuMTsK",
       "inputText": "let v = [0xFF_u8, 1_000, 0o17, 0b1010, 1.5e3, 2., 3f32];\nlet s = r#\"raw \"q\"\"#; let b = b'\\n'; let bs = br\"\\d\"; let c = c\"hi\";\nlet t = p.0.1;\n",
+      "pairedRejection": "rust-literals-rej",
       "result": {
         "status": "ok",
         "tokenCount": 46,
@@ -480,10 +497,13 @@
     },
     {
       "id": "rust-lifetimes-chars",
+      "derivation": "hand",
       "tags": ["lifetimes", "chars"],
+      "vectorClasses": [],
       "description": "Lifetimes versus char literals, 'static kept under normalization, raw identifier, single-character punctuation for '->'.",
       "inputBase64": "Zm4gciNtYXRjaDwnYT4oeDogJidhIHN0ciwgeTogJidzdGF0aWMgc3RyKSAtPiBjaGFyIHsgJ2EnIH0=",
       "inputText": "fn r#match<'a>(x: &'a str, y: &'static str) -> char { 'a' }",
+      "pairedRejection": "rust-lifetimes-chars-rej",
       "result": {
         "status": "ok",
         "tokenCount": 24,
@@ -616,10 +636,13 @@
     },
     {
       "id": "rust-shebang",
+      "derivation": "hand",
       "tags": ["shebang"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "A first line starting '#!' not followed by '[' is a shebang and is skipped.",
       "inputBase64": "IyEvdXNyL2Jpbi9lbnYgcnVuLWNhcmdvLXNjcmlwdApmbiBtYWluKCkge30K",
       "inputText": "#!/usr/bin/env run-cargo-script\nfn main() {}\n",
+      "pairedRejection": "rust-shebang-rej",
       "result": {
         "status": "ok",
         "tokenCount": 6,
@@ -656,10 +679,13 @@
     },
     {
       "id": "rust-inner-attribute",
+      "derivation": "hand",
       "tags": ["shebang"],
+      "vectorClasses": [],
       "description": "'#!' followed by '[' is an inner attribute, not a shebang.",
       "inputBase64": "IyFbYWxsb3coZGVhZF9jb2RlKV0KZm4gbWFpbigpIHt9Cg==",
       "inputText": "#![allow(dead_code)]\nfn main() {}\n",
+      "pairedRejection": "rust-inner-attribute-rej",
       "result": {
         "status": "ok",
         "tokenCount": 14,
@@ -729,10 +755,13 @@
     },
     {
       "id": "rust-doc-comment",
+      "derivation": "hand",
       "tags": ["comments"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Doc comments are dropped like other comments (rustc treats them as doc attributes).",
       "inputBase64": "Ly8vIEFkZHMuCi8vISBpbm5lcgovKiogYmxvY2sgZG9jICovCmZuIGFkZCgpIHt9Cg==",
       "inputText": "/// Adds.\n//! inner\n/** block doc */\nfn add() {}\n",
+      "pairedRejection": "rust-doc-comment-rej",
       "result": {
         "status": "ok",
         "tokenCount": 6,
@@ -769,10 +798,13 @@
     },
     {
       "id": "rust-repeated",
+      "derivation": "hand",
       "tags": ["repeated", "equal-minimum"],
+      "vectorClasses": ["repeated", "equal-minimum"],
       "description": "Ten identical tokens: all k-grams identical, every window ties, rightmost minimum wins.",
       "inputBase64": "KyArICsgKyArICsgKyArICsgKw==",
       "inputText": "+ + + + + + + + + +",
+      "pairedRejection": "rust-repeated-rej",
       "result": {
         "status": "ok",
         "tokenCount": 10,
@@ -829,10 +861,13 @@
     },
     {
       "id": "rust-equal-minimum",
+      "derivation": "hand",
       "tags": ["repeated", "equal-minimum"],
+      "vectorClasses": ["repeated", "equal-minimum"],
       "description": "Period-3 token sequence: every window of 4 contains a repeated k-gram, so ties on the minimum are guaranteed.",
       "inputBase64": "e3h9IHt4fSB7eH0ge3h9",
       "inputText": "{x} {x} {x} {x}",
+      "pairedRejection": "rust-equal-minimum-rej",
       "result": {
         "status": "ok",
         "tokenCount": 12,
@@ -893,10 +928,13 @@
     },
     {
       "id": "rust-format-a",
+      "derivation": "hand",
       "tags": ["trivia-pair"],
+      "vectorClasses": [],
       "description": "Reference for the comment/whitespace pair.",
       "inputBase64": "Zm4gYWRkKGE6IGkzMiwgYjogaTMyKSAtPiBpMzIgewogICAgYSArIGIKfQo=",
       "inputText": "fn add(a: i32, b: i32) -> i32 {\n    a + b\n}\n",
+      "pairedRejection": "rust-format-a-rej",
       "result": {
         "status": "ok",
         "tokenCount": 19,
@@ -984,10 +1022,13 @@
     },
     {
       "id": "rust-format-b",
+      "derivation": "hand",
       "tags": ["trivia-pair", "comments"],
+      "vectorClasses": ["crlf-bom"],
       "description": "Same tokens as rust-format-a with line and nested block comments and different whitespace; fingerprint hashes must be identical.",
       "inputBase64": "Ly8gbGluZSBjb21tZW50DQpmbiBhZGQoYTppMzIsYjppMzIpLT5pMzJ7Lyogb3V0ZXIgLyogbmVzdGVkICovIHN0aWxsIGNvbW1lbnQgKi9hK2IgLy8gdGFpbA0KfQ==",
       "inputText": "// line comment\r\nfn add(a:i32,b:i32)->i32{/* outer /* nested */ still comment */a+b // tail\r\n}",
+      "pairedRejection": "rust-format-b-rej",
       "result": {
         "status": "ok",
         "tokenCount": 19,
@@ -1075,10 +1116,13 @@
     },
     {
       "id": "rust-rename-a",
+      "derivation": "hand",
       "tags": ["rename-pair"],
+      "vectorClasses": [],
       "description": "Reference for the rename pair.",
       "inputBase64": "Zm4gYWRkKGE6IGkzMiwgYjogaTMyKSAtPiBpMzIgeyBhICsgYiB9",
       "inputText": "fn add(a: i32, b: i32) -> i32 { a + b }",
+      "pairedRejection": "rust-rename-a-rej",
       "result": {
         "status": "ok",
         "tokenCount": 19,
@@ -1166,10 +1210,13 @@
     },
     {
       "id": "rust-rename-b",
+      "derivation": "hand",
       "tags": ["rename-pair"],
+      "vectorClasses": [],
       "description": "Identifiers renamed: exact hashes differ, normalized hashes equal rust-rename-a.",
       "inputBase64": "Zm4gc3VtKHg6IGkzMiwgeTogaTMyKSAtPiBpMzIgeyB4ICsgeSB9",
       "inputText": "fn sum(x: i32, y: i32) -> i32 { x + y }",
+      "pairedRejection": "rust-rename-b-rej",
       "result": {
         "status": "ok",
         "tokenCount": 19,
@@ -1256,7 +1303,10 @@
     },
     {
       "id": "rust-err-invalid-utf8",
+      "derivation": "hand",
+      "derivationNote": "Offset first written as 9; the first toolchain cross-check showed the 0xFF byte is at 10, and the value was recounted by hand and corrected before any release.",
       "tags": ["malformed"],
+      "vectorClasses": ["unicode", "malformed"],
       "description": "Byte 0xFF inside a string literal: invalid UTF-8.",
       "inputBase64": "bGV0IHMgPSAiYf9iIjs=",
       "inputText": null,
@@ -1265,7 +1315,9 @@
     },
     {
       "id": "rust-err-bom",
+      "derivation": "hand",
       "tags": ["malformed"],
+      "vectorClasses": ["unicode", "malformed", "crlf-bom"],
       "description": "Leading byte order mark: rejected (stricter than the Reference, which removes it).",
       "inputBase64": "77u/Zm4gbWFpbigpIHt9Cg==",
       "inputText": "﻿fn main() {}\n",
@@ -1273,7 +1325,9 @@
     },
     {
       "id": "rust-err-nul",
+      "derivation": "hand",
       "tags": ["malformed"],
+      "vectorClasses": ["malformed"],
       "description": "NUL inside a string literal: rejected (stricter than the Reference).",
       "inputBase64": "bGV0IHMgPSAiYQAiOw==",
       "inputText": "let s = \"a\u0000\";",
@@ -1281,7 +1335,9 @@
     },
     {
       "id": "rust-err-isolated-cr",
+      "derivation": "hand",
       "tags": ["malformed"],
+      "vectorClasses": ["malformed"],
       "description": "CR not followed by LF: rejected (stricter than the Reference, which treats it as whitespace here).",
       "inputBase64": "bGV0IGEgPSAxOw1sZXQgYiA9IDI7",
       "inputText": "let a = 1;\rlet b = 2;",
@@ -1289,7 +1345,9 @@
     },
     {
       "id": "rust-err-unterminated-nested-comment",
+      "derivation": "hand",
       "tags": ["malformed", "comments"],
+      "vectorClasses": ["malformed"],
       "description": "Nested block comment: the inner '*/' closes only the inner level.",
       "inputBase64": "Zm4gZigpIHt9IC8qIG91dGVyIC8qIGlubmVyICovIHN0aWxsIG9wZW4=",
       "inputText": "fn f() {} /* outer /* inner */ still open",
@@ -1297,7 +1355,9 @@
     },
     {
       "id": "rust-err-unterminated-string",
+      "derivation": "hand",
       "tags": ["malformed"],
+      "vectorClasses": ["malformed"],
       "description": "String literal never closed.",
       "inputBase64": "bGV0IHMgPSAiYWJjOwo=",
       "inputText": "let s = \"abc;\n",
@@ -1305,7 +1365,9 @@
     },
     {
       "id": "rust-err-unbalanced",
+      "derivation": "hand",
       "tags": ["malformed"],
+      "vectorClasses": ["malformed"],
       "description": "Closing '}' while '(' is open.",
       "inputBase64": "Zm4gZigpIHsgKDEgfQ==",
       "inputText": "fn f() { (1 }",
@@ -1313,7 +1375,9 @@
     },
     {
       "id": "rust-err-char-two-codepoints",
+      "derivation": "hand",
       "tags": ["malformed", "lifetimes"],
+      "vectorClasses": ["malformed"],
       "description": "'ab' is neither a char literal nor a lifetime.",
       "inputBase64": "bGV0IGMgPSAnYWInOw==",
       "inputText": "let c = 'ab';",
@@ -1321,7 +1385,9 @@
     },
     {
       "id": "rust-err-reserved-prefix",
+      "derivation": "hand",
       "tags": ["malformed"],
+      "vectorClasses": ["malformed"],
       "description": "Identifier immediately followed by '\"' is a reserved prefix in edition 2021+.",
       "inputBase64": "bGV0IHMgPSBmIngiOw==",
       "inputText": "let s = f\"x\";",
@@ -1329,7 +1395,9 @@
     },
     {
       "id": "rust-err-non-nfc-identifier",
+      "derivation": "hand",
       "tags": ["malformed", "unicode"],
+      "vectorClasses": ["unicode", "malformed"],
       "description": "Identifier 'e' + U+0301 is valid XID but not NFC: rejected rather than normalized.",
       "inputBase64": "bGV0IGXMgSA9IDE7",
       "inputText": "let é = 1;",
@@ -1337,10 +1405,13 @@
     },
     {
       "id": "rust-unicode-boundary",
+      "derivation": "hand",
       "tags": ["unicode", "unicode-boundary"],
+      "vectorClasses": ["below-k+w-1", "unicode"],
       "description": "XID boundary code points accepted by Rust: U+2160 (XID_Start), U+00B7 and U+0345 (XID_Continue); all NFC.",
       "inputBase64": "bGV0IHjihaAgPSB4wrd5ICsgeM2FOw==",
       "inputText": "let xⅠ = x·y + xͅ;",
+      "pairedRejection": "rust-unicode-boundary-rej",
       "result": {
         "status": "ok",
         "tokenCount": 7,
@@ -1380,7 +1451,9 @@
     },
     {
       "id": "rust-err-u2e2f",
+      "derivation": "hand",
       "tags": ["malformed", "unicode-boundary"],
+      "vectorClasses": ["unicode", "malformed"],
       "description": "U+2E2F VERTICAL TILDE is Pattern_Syntax, not XID: illegal character after the identifier 'a' (Go accepts it as Lm).",
       "inputBase64": "bGV0IGHiuK8gPSAxOw==",
       "inputText": "let aⸯ = 1;",
@@ -1388,7 +1461,9 @@
     },
     {
       "id": "rust-err-u200d",
+      "derivation": "hand",
       "tags": ["malformed", "unicode-boundary"],
+      "vectorClasses": ["unicode", "malformed"],
       "description": "U+200D is XID_Continue in Unicode 17.0 but forbidden in identifiers by [ident.zero-width-chars].",
       "inputBase64": "bGV0IHjigI0gPSAxOw==",
       "inputText": "let x‍ = 1;",
@@ -1396,7 +1471,9 @@
     },
     {
       "id": "rust-err-non-nfc-suffix",
+      "derivation": "hand",
       "tags": ["malformed", "unicode-boundary"],
+      "vectorClasses": ["unicode", "malformed"],
       "description": "Literal suffix 'u8' + 'e' + U+0301 is not NFC; offset is the literal start.",
       "inputBase64": "bGV0IG4gPSAxX3U4ZcyBOw==",
       "inputText": "let n = 1_u8é;",
@@ -1404,7 +1481,9 @@
     },
     {
       "id": "rust-err-non-nfc-raw-ident",
+      "derivation": "hand",
       "tags": ["malformed", "unicode-boundary"],
+      "vectorClasses": ["unicode", "malformed"],
       "description": "Raw identifier r#e + U+0301 is not NFC; offset is the token start (the 'r').",
       "inputBase64": "bGV0IHIjZcyBID0gMTs=",
       "inputText": "let r#é = 1;",
@@ -1412,7 +1491,9 @@
     },
     {
       "id": "rust-err-non-nfc-before-quote",
+      "derivation": "hand",
       "tags": ["malformed", "unicode-boundary"],
+      "vectorClasses": ["unicode", "malformed"],
       "description": "Non-NFC identifier immediately followed by '\"': the NFC check precedes the reserved-prefix check.",
       "inputBase64": "bGV0IHMgPSBlzIEieCI7",
       "inputText": "let s = é\"x\";",
@@ -1420,7 +1501,9 @@
     },
     {
       "id": "rust-err-string-underscore-suffix",
+      "derivation": "hand",
       "tags": ["malformed", "literals"],
+      "vectorClasses": ["malformed"],
       "description": "'_' after a string with no XID_Continue after it: the Reference SUFFIX cut makes this an error, not a string plus '_'.",
       "inputBase64": "bGV0IHMgPSAieCJfOw==",
       "inputText": "let s = \"x\"_;",
@@ -1428,7 +1511,9 @@
     },
     {
       "id": "rust-err-char-underscore-suffix",
+      "derivation": "hand",
       "tags": ["malformed", "literals"],
+      "vectorClasses": ["malformed"],
       "description": "Same suffix cut after a char literal.",
       "inputBase64": "bGV0IGMgPSAnYSdfOw==",
       "inputText": "let c = 'a'_;",
@@ -1436,10 +1521,13 @@
     },
     {
       "id": "rust-literal-suffixes",
+      "derivation": "hand",
       "tags": ["literals"],
+      "vectorClasses": [],
       "description": "Suffixes are part of literal tokens: '_' followed by XID_Continue is a valid suffix; 0x1f32 is a hex int; 1e3f32 a float.",
       "inputBase64": "bSEoIngiX2EgJ2Mnc2Z4IDFfdTggMHgxZjMyIDFlM2YzMiBiInkiX3opOw==",
       "inputText": "m!(\"x\"_a 'c'sfx 1_u8 0x1f32 1e3f32 b\"y\"_z);",
+      "pairedRejection": "rust-literal-suffixes-rej",
       "result": {
         "status": "ok",
         "tokenCount": 11,
@@ -1497,10 +1585,13 @@
     },
     {
       "id": "rust-raw-lifetime",
+      "derivation": "hand",
       "tags": ["lifetimes"],
+      "vectorClasses": [],
       "description": "Raw lifetimes (edition 2021+) are single lifetime tokens; normalized to empty like other lifetimes.",
       "inputBase64": "Zm4gZjwnciNmbj4oeDogJidyI2ZuIHU4KSB7fQ==",
       "inputText": "fn f<'r#fn>(x: &'r#fn u8) {}",
+      "pairedRejection": "rust-raw-lifetime-rej",
       "result": {
         "status": "ok",
         "tokenCount": 14,
@@ -1569,7 +1660,9 @@
     },
     {
       "id": "rust-err-reserved-raw-lifetime",
+      "derivation": "hand",
       "tags": ["malformed", "lifetimes"],
+      "vectorClasses": ["malformed"],
       "description": "'r#_ is RESERVED_RAW_LIFETIME.",
       "inputBase64": "Zm4gZjwnciNfPigpIHt9",
       "inputText": "fn f<'r#_>() {}",
@@ -1577,7 +1670,9 @@
     },
     {
       "id": "rust-err-pounds",
+      "derivation": "hand",
       "tags": ["malformed"],
+      "vectorClasses": ["malformed"],
       "description": "'##' is RESERVED_POUNDS in edition 2024.",
       "inputBase64": "YSAjIyBi",
       "inputText": "a ## b",
@@ -1585,10 +1680,13 @@
     },
     {
       "id": "rust-cstring-escapes",
+      "derivation": "hand",
       "tags": ["literals"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "C string with byte, Unicode and ASCII escapes.",
       "inputBase64": "bGV0IGMgPSBjImFceDQxXHV7ZTl9XG4iOw==",
       "inputText": "let c = c\"a\\x41\\u{e9}\\n\";",
+      "pairedRejection": "rust-cstring-escapes-rej",
       "result": {
         "status": "ok",
         "tokenCount": 5,
@@ -1618,7 +1716,9 @@
     },
     {
       "id": "rust-err-cstring-nul-escape",
+      "derivation": "hand",
       "tags": ["malformed", "literals"],
+      "vectorClasses": ["malformed"],
       "description": "C strings forbid the \\0 escape.",
       "inputBase64": "bGV0IGMgPSBjIlwwIjs=",
       "inputText": "let c = c\"\\0\";",
@@ -1626,7 +1726,9 @@
     },
     {
       "id": "rust-err-raw-too-many-hashes",
+      "derivation": "hand",
       "tags": ["malformed", "literals"],
+      "vectorClasses": ["malformed"],
       "description": "A raw string with 256 '#' exceeds the 255 limit.",
       "inputBase64": "ciMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMieCIjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj",
       "inputText": "r################################################################################################################################################################################################################################################################\"x\"################################################################################################################################################################################################################################################################",
@@ -1634,7 +1736,9 @@
     },
     {
       "id": "rust-err-cr-in-literal",
+      "derivation": "hand",
       "tags": ["malformed"],
+      "vectorClasses": ["malformed"],
       "description": "Isolated CR inside a string literal: rejected by the forbidden-code-point scan.",
       "inputBase64": "bGV0IHMgPSAiYQ1iIjs=",
       "inputText": "let s = \"a\rb\";",
@@ -1642,7 +1746,9 @@
     },
     {
       "id": "rust-err-mid-bom",
+      "derivation": "hand",
       "tags": ["malformed"],
+      "vectorClasses": ["unicode", "malformed", "crlf-bom"],
       "description": "U+FEFF inside a string literal (not at offset 0) is rejected.",
       "inputBase64": "bGV0IHMgPSAi77u/Ijs=",
       "inputText": "let s = \"﻿\";",
@@ -1650,10 +1756,13 @@
     },
     {
       "id": "rust-shebang-unterminated-comment",
+      "derivation": "hand",
       "tags": ["shebang"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Shebang look-ahead: an unterminated block comment counts as comment, so '#!' starts a shebang (matches rustc).",
       "inputBase64": "IyEvKngKZm4gbWFpbigpIHt9",
       "inputText": "#!/*x\nfn main() {}",
+      "pairedRejection": "rust-shebang-unterminated-comment-rej",
       "result": {
         "status": "ok",
         "tokenCount": 6,
@@ -1690,10 +1799,13 @@
     },
     {
       "id": "rust-q1-raw-extra-hash",
+      "derivation": "hand",
       "tags": ["question", "literals"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Q1: a raw string ends at the first '\"' followed by n '#'; the extra '#' is punctuation.",
       "inputBase64": "ciMiYSIjIw==",
       "inputText": "r#\"a\"##",
+      "pairedRejection": "rust-q1-raw-extra-pounds",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 2,
@@ -1715,15 +1827,20 @@
     },
     {
       "id": "rust-q1-raw-extra-pounds",
+      "derivation": "hand",
       "tags": ["malformed", "question", "literals"],
+      "vectorClasses": ["malformed"],
       "description": "Q1: after the raw string, '##' is RESERVED_POUNDS.",
       "inputBase64": "ciMiYSIjIyM=",
       "inputText": "r#\"a\"###",
+      "pairedPositive": "rust-q1-raw-extra-hash",
       "result": {"status": "error", "error": {"code": "reserved-token", "offset": 6}}
     },
     {
       "id": "rust-q2-open-then-unterminated",
+      "derivation": "hand",
       "tags": ["malformed", "question"],
+      "vectorClasses": ["malformed"],
       "description": "Q2: errors in scan order; the unterminated string comes before the end-of-input delimiter check.",
       "inputBase64": "KCAiYWJj",
       "inputText": "( \"abc",
@@ -1731,7 +1848,9 @@
     },
     {
       "id": "rust-q2-open-then-illegal",
+      "derivation": "hand",
       "tags": ["malformed", "question"],
+      "vectorClasses": ["unicode", "malformed"],
       "description": "Q2: scan order: illegal character before the unclosed '('.",
       "inputBase64": "KCDigqw=",
       "inputText": "( €",
@@ -1739,7 +1858,9 @@
     },
     {
       "id": "rust-q2-unclosed-innermost",
+      "derivation": "hand",
       "tags": ["malformed", "question"],
+      "vectorClasses": ["malformed"],
       "description": "Q2: two unclosed openers at end of input: the innermost '[' is reported.",
       "inputBase64": "KCBbIHg=",
       "inputText": "( [ x",
@@ -1747,7 +1868,9 @@
     },
     {
       "id": "rust-q3-byte-unclosed",
+      "derivation": "hand",
       "tags": ["malformed", "question", "literals"],
+      "vectorClasses": ["malformed"],
       "description": "Q3: char and byte literals have no unterminated state: b'a at end of input is malformed.",
       "inputBase64": "Yidh",
       "inputText": "b'a",
@@ -1755,10 +1878,13 @@
     },
     {
       "id": "rust-q4-cstring-xff",
+      "derivation": "hand",
       "tags": ["question", "literals"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Q4: C strings accept \\x escapes 01-FF.",
       "inputBase64": "YyJceGZmIg==",
       "inputText": "c\"\\xff\"",
+      "pairedRejection": "rust-q4-cstring-x00",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 1,
@@ -1771,15 +1897,20 @@
     },
     {
       "id": "rust-q4-cstring-x00",
+      "derivation": "hand",
       "tags": ["malformed", "question", "literals"],
+      "vectorClasses": ["malformed"],
       "description": "Q4: \\x00 in a C string is malformed.",
       "inputBase64": "YyJceDAwIg==",
       "inputText": "c\"\\x00\"",
+      "pairedPositive": "rust-q4-cstring-xff",
       "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 0}}
     },
     {
       "id": "rust-q4-cstring-u-zero",
+      "derivation": "hand",
       "tags": ["malformed", "question", "literals"],
+      "vectorClasses": ["malformed"],
       "description": "Q4: any \\u{...} spelling of zero (here \\u{0_0}) is malformed in a C string.",
       "inputBase64": "YyJcdXswXzB9Ig==",
       "inputText": "c\"\\u{0_0}\"",
@@ -1787,10 +1918,13 @@
     },
     {
       "id": "rust-q5-raw-lifetime-hash",
+      "derivation": "hand",
       "tags": ["question", "lifetimes"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Q5: a raw lifetime followed by '#' is not reserved: lifetime then '#'.",
       "inputBase64": "J3IjYSM=",
       "inputText": "'r#a#",
+      "pairedRejection": "rust-q5-raw-lifetime-hash-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 2,
@@ -1812,7 +1946,9 @@
     },
     {
       "id": "rust-q6-lifetime-nfc-first",
+      "derivation": "hand",
       "tags": ["malformed", "question", "lifetimes", "unicode-boundary"],
+      "vectorClasses": ["unicode", "malformed"],
       "description": "Q6: lifetime checks run NFC, then zero-width, then the '#' reservation.",
       "inputBase64": "J2XMgSM=",
       "inputText": "'é#",
@@ -1820,7 +1956,9 @@
     },
     {
       "id": "rust-q6-lifetime-zwj-before-hash",
+      "derivation": "hand",
       "tags": ["malformed", "question", "lifetimes", "unicode-boundary"],
+      "vectorClasses": ["unicode", "malformed"],
       "description": "Q6: zero-width check precedes the '#' reservation.",
       "inputBase64": "J2HigI0j",
       "inputText": "'a‍#",
@@ -1828,7 +1966,9 @@
     },
     {
       "id": "rust-q7-unterminated-escape",
+      "derivation": "hand",
       "tags": ["malformed", "question", "literals"],
+      "vectorClasses": ["malformed"],
       "description": "Q7: termination is decided first (escape-aware): '\"\\q' has no closing quote.",
       "inputBase64": "Ilxx",
       "inputText": "\"\\q",
@@ -1836,7 +1976,9 @@
     },
     {
       "id": "rust-q7-closed-bad-escape",
+      "derivation": "hand",
       "tags": ["malformed", "question", "literals"],
+      "vectorClasses": ["malformed"],
       "description": "Q7: closed literal with an unknown escape is malformed.",
       "inputBase64": "IlxxIg==",
       "inputText": "\"\\q\"",
@@ -1844,7 +1986,9 @@
     },
     {
       "id": "rust-q7-raw-byte-unterminated",
+      "derivation": "hand",
       "tags": ["malformed", "question", "literals"],
+      "vectorClasses": ["unicode", "malformed"],
       "description": "Q7: an unterminated raw byte string is unterminated even though its content is not ASCII.",
       "inputBase64": "YnIiw6k=",
       "inputText": "br\"é",
@@ -1852,10 +1996,13 @@
     },
     {
       "id": "rust-q8-shebang-outer-line-doc",
+      "derivation": "hand",
       "tags": ["question", "shebang"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Q8: in the shebang look-ahead '///' is a doc comment, i.e. content, so line 1 is a shebang (Reference SHEBANG, rustc).",
       "inputBase64": "IyEvLy94ClthXQ==",
       "inputText": "#!///x\n[a]",
+      "pairedRejection": "rust-q8-shebang-outer-line-doc-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 3,
@@ -1878,10 +2025,13 @@
     },
     {
       "id": "rust-q8-shebang-inner-line-doc",
+      "derivation": "hand",
       "tags": ["question", "shebang"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Q8: '//!' is a doc comment: shebang.",
       "inputBase64": "IyEvLyF4ClthXQ==",
       "inputText": "#!//!x\n[a]",
+      "pairedRejection": "rust-q8-shebang-inner-line-doc-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 3,
@@ -1904,10 +2054,13 @@
     },
     {
       "id": "rust-q8-shebang-outer-block-doc",
+      "derivation": "hand",
       "tags": ["question", "shebang"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Q8: '/** d */' is a doc comment: shebang through end of input (no LF), zero tokens.",
       "inputBase64": "IyEvKiogZCAqL1thXQ==",
       "inputText": "#!/** d */[a]",
+      "pairedRejection": "rust-q8-shebang-outer-block-doc-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 0,
@@ -1920,10 +2073,13 @@
     },
     {
       "id": "rust-q8-shebang-inner-block-doc",
+      "derivation": "hand",
       "tags": ["question", "shebang"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Q8: '/*! d */' is a doc comment: shebang, zero tokens.",
       "inputBase64": "IyEvKiEgZCAqL1thXQ==",
       "inputText": "#!/*! d */[a]",
+      "pairedRejection": "rust-q8-shebang-inner-block-doc-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 0,
@@ -1936,10 +2092,13 @@
     },
     {
       "id": "rust-q8-not-shebang-four-slashes",
+      "derivation": "hand",
       "tags": ["question", "shebang"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Q8: '////x' is an ordinary comment, so the look-ahead reaches '[': not a shebang.",
       "inputBase64": "IyEvLy8veApbYV0=",
       "inputText": "#!////x\n[a]",
+      "pairedRejection": "rust-q8-not-shebang-four-slashes-rej",
       "result": {
         "status": "ok",
         "tokenCount": 5,
@@ -1969,10 +2128,13 @@
     },
     {
       "id": "rust-q8-not-shebang-empty-block",
+      "derivation": "hand",
       "tags": ["question", "shebang"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Q8: '/**/' is an ordinary comment: not a shebang.",
       "inputBase64": "IyEvKiovW2Fd",
       "inputText": "#!/**/[a]",
+      "pairedRejection": "rust-q8-not-shebang-empty-block-rej",
       "result": {
         "status": "ok",
         "tokenCount": 5,
@@ -2002,10 +2164,13 @@
     },
     {
       "id": "rust-q8-not-shebang-three-stars",
+      "derivation": "hand",
       "tags": ["question", "shebang"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Q8: '/***/' is an ordinary comment: not a shebang.",
       "inputBase64": "IyEvKioqL1thXQ==",
       "inputText": "#!/***/[a]",
+      "pairedRejection": "rust-q8-not-shebang-three-stars-rej",
       "result": {
         "status": "ok",
         "tokenCount": 5,
@@ -2035,10 +2200,13 @@
     },
     {
       "id": "rust-q8b-shebang-lookahead-nel",
+      "derivation": "hand",
       "tags": ["question", "shebang"],
+      "vectorClasses": ["below-k+w-1", "unicode"],
       "description": "Q8b: U+0085 is white space in the look-ahead: '[' follows, not a shebang.",
       "inputBase64": "IyHChVthXQ==",
       "inputText": "#![a]",
+      "pairedRejection": "rust-q8b-shebang-lookahead-nel-rej",
       "result": {
         "status": "ok",
         "tokenCount": 5,
@@ -2068,10 +2236,13 @@
     },
     {
       "id": "rust-q8b-bare-shebang",
+      "derivation": "hand",
       "tags": ["question", "shebang"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Q8b: a bare '#!' is a shebang: zero tokens.",
       "inputBase64": "IyE=",
       "inputText": "#!",
+      "pairedRejection": "rust-q8b-bare-shebang-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 0,
@@ -2084,7 +2255,9 @@
     },
     {
       "id": "rust-q9-unassigned",
+      "derivation": "hand",
       "tags": ["malformed", "question", "unicode-boundary"],
+      "vectorClasses": ["unicode", "malformed"],
       "description": "Q9: U+0378 is not XID_Continue: illegal character after 'x'. The assigned table is informative only.",
       "inputBase64": "eM24",
       "inputText": "x͸",
@@ -2092,10 +2265,13 @@
     },
     {
       "id": "rust-q11-shebang-first-line-only",
+      "derivation": "hand",
       "tags": ["question", "shebang"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Q11: the shebang covers line 1 only, even when a block comment opened on it closes later.",
       "inputBase64": "IyEvKgoqLyBmbg==",
       "inputText": "#!/*\n*/ fn",
+      "pairedRejection": "rust-q11-shebang-first-line-only-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 3,
@@ -2118,10 +2294,13 @@
     },
     {
       "id": "rust-s1-string-digit",
+      "derivation": "hand",
       "tags": ["question", "literals"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "S1/Q11: a digit cannot start a SUFFIX, so a literal directly followed by a digit is two tokens (rustc accepts).",
       "inputBase64": "IngiMA==",
       "inputText": "\"x\"0",
+      "pairedRejection": "rust-s1-string-digit-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 2,
@@ -2140,10 +2319,13 @@
     },
     {
       "id": "rust-s1-char-digit",
+      "derivation": "hand",
       "tags": ["question", "literals"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "S1/Q11: a digit cannot start a SUFFIX, so a literal directly followed by a digit is two tokens (rustc accepts).",
       "inputBase64": "J2EnMA==",
       "inputText": "'a'0",
+      "pairedRejection": "rust-s1-char-digit-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 2,
@@ -2162,10 +2344,13 @@
     },
     {
       "id": "rust-s1-bytestring-digit",
+      "derivation": "hand",
       "tags": ["question", "literals"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "S1/Q11: a digit cannot start a SUFFIX, so a literal directly followed by a digit is two tokens (rustc accepts).",
       "inputBase64": "YiJ4IjA=",
       "inputText": "b\"x\"0",
+      "pairedRejection": "rust-s1-bytestring-digit-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 2,
@@ -2187,10 +2372,13 @@
     },
     {
       "id": "rust-s1-rawstring-digit",
+      "derivation": "hand",
       "tags": ["question", "literals"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "S1/Q11: a digit cannot start a SUFFIX, so a literal directly followed by a digit is two tokens (rustc accepts).",
       "inputBase64": "ciJ4IjA=",
       "inputText": "r\"x\"0",
+      "pairedRejection": "rust-s1-rawstring-digit-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 2,
@@ -2212,10 +2400,13 @@
     },
     {
       "id": "rust-s1-cstring-digit",
+      "derivation": "hand",
       "tags": ["question", "literals"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "S1/Q11: a digit cannot start a SUFFIX, so a literal directly followed by a digit is two tokens (rustc accepts).",
       "inputBase64": "YyJ4IjA=",
       "inputText": "c\"x\"0",
+      "pairedRejection": "rust-s1-cstring-digit-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 2,
@@ -2237,10 +2428,13 @@
     },
     {
       "id": "rust-s1-byte-digit",
+      "derivation": "hand",
       "tags": ["question", "literals"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "S1/Q11: a digit cannot start a SUFFIX, so a literal directly followed by a digit is two tokens (rustc accepts).",
       "inputBase64": "YidhJzA=",
       "inputText": "b'a'0",
+      "pairedRejection": "rust-s1-byte-digit-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 2,
@@ -2259,10 +2453,13 @@
     },
     {
       "id": "rust-s1-string-digit-expr",
+      "derivation": "hand",
       "tags": ["question", "literals"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "S1/Q11: a digit cannot start a SUFFIX, so a literal directly followed by a digit is two tokens (rustc accepts).",
       "inputBase64": "IngiMSArIHk=",
       "inputText": "\"x\"1 + y",
+      "pairedRejection": "rust-s1-string-digit-expr-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 4,
@@ -2286,10 +2483,13 @@
     },
     {
       "id": "rust-shebang-unresolved-body",
+      "derivation": "hand",
       "tags": ["shebang"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Shebang then a body that lexes but would fail name resolution (exercises the cross-check: only the remainder is macro-wrapped).",
       "inputBase64": "IyEvdXNyL2Jpbi9lbnYgeApmbiBmKCkgeyB5IH0=",
       "inputText": "#!/usr/bin/env x\nfn f() { y }",
+      "pairedRejection": "rust-shebang-unresolved-body-rej",
       "result": {
         "status": "ok",
         "tokenCount": 7,
@@ -2329,10 +2529,13 @@
     },
     {
       "id": "rust-doc-comment-bracket",
+      "derivation": "hand",
       "tags": ["comments"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "A doc comment containing ']' is dropped (exercises the cross-check filter for proc-macro2's synthesized doc tokens).",
       "inputBase64": "Ly8vIGFdCmZuIGYoKSB7fQ==",
       "inputText": "/// a]\nfn f() {}",
+      "pairedRejection": "rust-doc-comment-bracket-rej",
       "result": {
         "status": "ok",
         "tokenCount": 6,
@@ -2366,6 +2569,446 @@
           }
         }
       }
+    },
+    {
+      "id": "rust-empty-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["unicode", "malformed", "crlf-bom"],
+      "description": "Paired rejection of rust-empty: the empty input replaced by a lone UTF-8 BOM.",
+      "inputBase64": "77u/",
+      "inputText": "﻿",
+      "pairedPositive": "rust-empty",
+      "result": {"status": "error", "error": {"code": "bom", "offset": 0}}
+    },
+    {
+      "id": "rust-short-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-short: a CR not followed by LF appended.",
+      "inputBase64": "bGV0IHggPSAxDQ==",
+      "inputText": "let x = 1\r",
+      "pairedPositive": "rust-short",
+      "result": {"status": "error", "error": {"code": "isolated-cr", "offset": 9}}
+    },
+    {
+      "id": "rust-exact-k-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-exact-k: an unmatched ')' appended.",
+      "inputBase64": "bGV0IHggPSAxOyk=",
+      "inputText": "let x = 1;)",
+      "pairedPositive": "rust-exact-k",
+      "result": {"status": "error", "error": {"code": "unbalanced-delimiter", "offset": 10}}
+    },
+    {
+      "id": "rust-unicode-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["unicode", "malformed"],
+      "description": "Paired rejection of rust-unicode: the identifier spelled with o + U+0308 (not NFC).",
+      "inputBase64": "bGV0IGdyb8yIw59lOiAmc3RyID0gIm5hw692ZSDimIMg5LiW55WMIjsKbGV0IM67ID0gJ8OpJzsK",
+      "inputText": "let größe: &str = \"naïve ☃ 世界\";\nlet λ = 'é';\n",
+      "pairedPositive": "rust-unicode",
+      "result": {"status": "error", "error": {"code": "non-nfc-identifier", "offset": 4}}
+    },
+    {
+      "id": "rust-literals-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-literals: float exponent without digits (1.5e).",
+      "inputBase64": "bGV0IHYgPSBbMHhGRl91OCwgMV8wMDAsIDBvMTcsIDBiMTAxMCwgMS41ZSwgMi4sIDNmMzJdOwpsZXQgcyA9IHIjInJhdyAicSIiIzsgbGV0IGIgPSBiJ1xuJzsgbGV0IGJzID0gYnIiXGQiOyBsZXQgYyA9IGMiaGkiOwpsZXQgdCA9IHAuMC4xOwo=",
+      "inputText": "let v = [0xFF_u8, 1_000, 0o17, 0b1010, 1.5e, 2., 3f32];\nlet s = r#\"raw \"q\"\"#; let b = b'\\n'; let bs = br\"\\d\"; let c = c\"hi\";\nlet t = p.0.1;\n",
+      "pairedPositive": "rust-literals",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 39}}
+    },
+    {
+      "id": "rust-lifetimes-chars-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-lifetimes-chars: the char literal holds two characters.",
+      "inputBase64": "Zm4gciNtYXRjaDwnYT4oeDogJidhIHN0ciwgeTogJidzdGF0aWMgc3RyKSAtPiBjaGFyIHsgJ2FiJyB9",
+      "inputText": "fn r#match<'a>(x: &'a str, y: &'static str) -> char { 'ab' }",
+      "pairedPositive": "rust-lifetimes-chars",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 54}}
+    },
+    {
+      "id": "rust-shebang-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["unicode", "malformed", "crlf-bom"],
+      "description": "Paired rejection of rust-shebang: a UTF-8 BOM before the shebang.",
+      "inputBase64": "77u/IyEvdXNyL2Jpbi9lbnYgcnVuLWNhcmdvLXNjcmlwdApmbiBtYWluKCkge30K",
+      "inputText": "﻿#!/usr/bin/env run-cargo-script\nfn main() {}\n",
+      "pairedPositive": "rust-shebang",
+      "result": {"status": "error", "error": {"code": "bom", "offset": 0}}
+    },
+    {
+      "id": "rust-inner-attribute-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-inner-attribute: the attribute loses its ']'.",
+      "inputBase64": "IyFbYWxsb3coZGVhZF9jb2RlKQpmbiBtYWluKCkge30K",
+      "inputText": "#![allow(dead_code)\nfn main() {}\n",
+      "pairedPositive": "rust-inner-attribute",
+      "result": {"status": "error", "error": {"code": "unbalanced-delimiter", "offset": 2}}
+    },
+    {
+      "id": "rust-doc-comment-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-doc-comment: the block doc comment loses its '*/'.",
+      "inputBase64": "Ly8vIEFkZHMuCi8vISBpbm5lcgovKiogYmxvY2sgZG9jCmZuIGFkZCgpIHt9Cg==",
+      "inputText": "/// Adds.\n//! inner\n/** block doc\nfn add() {}\n",
+      "pairedPositive": "rust-doc-comment",
+      "result": {"status": "error", "error": {"code": "unterminated-comment", "offset": 20}}
+    },
+    {
+      "id": "rust-repeated-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-repeated: the last '+' replaced by a backquote.",
+      "inputBase64": "KyArICsgKyArICsgKyArICsgYA==",
+      "inputText": "+ + + + + + + + + `",
+      "pairedPositive": "rust-repeated",
+      "result": {"status": "error", "error": {"code": "illegal-character", "offset": 18}}
+    },
+    {
+      "id": "rust-equal-minimum-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-equal-minimum: the third block loses its '}'.",
+      "inputBase64": "e3h9IHt4fSB7eCB7eH0=",
+      "inputText": "{x} {x} {x {x}",
+      "pairedPositive": "rust-equal-minimum",
+      "result": {"status": "error", "error": {"code": "unbalanced-delimiter", "offset": 8}}
+    },
+    {
+      "id": "rust-format-a-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-format-a: the closing '}' replaced by ')'.",
+      "inputBase64": "Zm4gYWRkKGE6IGkzMiwgYjogaTMyKSAtPiBpMzIgewogICAgYSArIGIKKQo=",
+      "inputText": "fn add(a: i32, b: i32) -> i32 {\n    a + b\n)\n",
+      "pairedPositive": "rust-format-a",
+      "result": {"status": "error", "error": {"code": "unbalanced-delimiter", "offset": 42}}
+    },
+    {
+      "id": "rust-format-b-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed", "crlf-bom"],
+      "description": "Paired rejection of rust-format-b: the outer block comment loses its final '*/'.",
+      "inputBase64": "Ly8gbGluZSBjb21tZW50DQpmbiBhZGQoYTppMzIsYjppMzIpLT5pMzJ7Lyogb3V0ZXIgLyogbmVzdGVkICovIHN0aWxsIGNvbW1lbnQgYStiIC8vIHRhaWwNCn0=",
+      "inputText": "// line comment\r\nfn add(a:i32,b:i32)->i32{/* outer /* nested */ still comment a+b // tail\r\n}",
+      "pairedPositive": "rust-format-b",
+      "result": {"status": "error", "error": {"code": "unterminated-comment", "offset": 42}}
+    },
+    {
+      "id": "rust-rename-a-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-rename-a: a CR not followed by LF before the final '}'.",
+      "inputBase64": "Zm4gYWRkKGE6IGkzMiwgYjogaTMyKSAtPiBpMzIgeyBhICsgYg19",
+      "inputText": "fn add(a: i32, b: i32) -> i32 { a + b\r}",
+      "pairedPositive": "rust-rename-a",
+      "result": {"status": "error", "error": {"code": "isolated-cr", "offset": 37}}
+    },
+    {
+      "id": "rust-rename-b-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-rename-b: a string directly after the identifier y (reserved prefix).",
+      "inputBase64": "Zm4gc3VtKHg6IGkzMiwgeTogaTMyKSAtPiBpMzIgeyB4ICsgeSJ6IiB9",
+      "inputText": "fn sum(x: i32, y: i32) -> i32 { x + y\"z\" }",
+      "pairedPositive": "rust-rename-b",
+      "result": {"status": "error", "error": {"code": "reserved-token", "offset": 36}}
+    },
+    {
+      "id": "rust-unicode-boundary-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["unicode", "malformed"],
+      "description": "Paired rejection of rust-unicode-boundary: U+0345 replaced by U+200D.",
+      "inputBase64": "bGV0IHjihaAgPSB4wrd5ICsgeOKAjTs=",
+      "inputText": "let xⅠ = x·y + x‍;",
+      "pairedPositive": "rust-unicode-boundary",
+      "result": {"status": "error", "error": {"code": "malformed-identifier", "offset": 18}}
+    },
+    {
+      "id": "rust-literal-suffixes-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-literal-suffixes: the suffix '_a' cut to '_'.",
+      "inputBase64": "bSEoIngiXyAnYydzZnggMV91OCAweDFmMzIgMWUzZjMyIGIieSJfeik7",
+      "inputText": "m!(\"x\"_ 'c'sfx 1_u8 0x1f32 1e3f32 b\"y\"_z);",
+      "pairedPositive": "rust-literal-suffixes",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 3}}
+    },
+    {
+      "id": "rust-raw-lifetime-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-raw-lifetime: the first raw lifetime renamed 'r#_ (reserved).",
+      "inputBase64": "Zm4gZjwnciNfPih4OiAmJ3IjZm4gdTgpIHt9",
+      "inputText": "fn f<'r#_>(x: &'r#fn u8) {}",
+      "pairedPositive": "rust-raw-lifetime",
+      "result": {"status": "error", "error": {"code": "reserved-token", "offset": 5}}
+    },
+    {
+      "id": "rust-cstring-escapes-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-cstring-escapes: \\u{e9} replaced by the zero escape \\u{0}.",
+      "inputBase64": "bGV0IGMgPSBjImFceDQxXHV7MH1cbiI7",
+      "inputText": "let c = c\"a\\x41\\u{0}\\n\";",
+      "pairedPositive": "rust-cstring-escapes",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 8}}
+    },
+    {
+      "id": "rust-shebang-unterminated-comment-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-shebang-unterminated-comment: the body loses its '}'.",
+      "inputBase64": "IyEvKngKZm4gbWFpbigpIHs=",
+      "inputText": "#!/*x\nfn main() {",
+      "pairedPositive": "rust-shebang-unterminated-comment",
+      "result": {"status": "error", "error": {"code": "unbalanced-delimiter", "offset": 16}}
+    },
+    {
+      "id": "rust-q5-raw-lifetime-hash-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-q5-raw-lifetime-hash: the lifetime is not raw, so '#' after it is reserved.",
+      "inputBase64": "J2Ej",
+      "inputText": "'a#",
+      "pairedPositive": "rust-q5-raw-lifetime-hash",
+      "result": {"status": "error", "error": {"code": "reserved-token", "offset": 0}}
+    },
+    {
+      "id": "rust-q8-shebang-outer-line-doc-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-q8-shebang-outer-line-doc: the bracket after the shebang is unclosed.",
+      "inputBase64": "IyEvLy94Clth",
+      "inputText": "#!///x\n[a",
+      "pairedPositive": "rust-q8-shebang-outer-line-doc",
+      "result": {"status": "error", "error": {"code": "unbalanced-delimiter", "offset": 7}}
+    },
+    {
+      "id": "rust-q8-shebang-inner-line-doc-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-q8-shebang-inner-line-doc: an extra ']' after the shebang.",
+      "inputBase64": "IyEvLyF4ClthXV0=",
+      "inputText": "#!//!x\n[a]]",
+      "pairedPositive": "rust-q8-shebang-inner-line-doc",
+      "result": {"status": "error", "error": {"code": "unbalanced-delimiter", "offset": 10}}
+    },
+    {
+      "id": "rust-q8-shebang-outer-block-doc-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-q8-shebang-outer-block-doc: a NUL appended (inside the shebang line, still forbidden).",
+      "inputBase64": "IyEvKiogZCAqL1thXQA=",
+      "inputText": "#!/** d */[a]\u0000",
+      "pairedPositive": "rust-q8-shebang-outer-block-doc",
+      "result": {"status": "error", "error": {"code": "nul", "offset": 13}}
+    },
+    {
+      "id": "rust-q8-shebang-inner-block-doc-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-q8-shebang-inner-block-doc: an isolated CR appended (inside the shebang line, still forbidden).",
+      "inputBase64": "IyEvKiEgZCAqL1thXQ0=",
+      "inputText": "#!/*! d */[a]\r",
+      "pairedPositive": "rust-q8-shebang-inner-block-doc",
+      "result": {"status": "error", "error": {"code": "isolated-cr", "offset": 13}}
+    },
+    {
+      "id": "rust-q8-not-shebang-four-slashes-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-q8-not-shebang-four-slashes: the attribute bracket is unclosed.",
+      "inputBase64": "IyEvLy8veApbYQ==",
+      "inputText": "#!////x\n[a",
+      "pairedPositive": "rust-q8-not-shebang-four-slashes",
+      "result": {"status": "error", "error": {"code": "unbalanced-delimiter", "offset": 8}}
+    },
+    {
+      "id": "rust-q8-not-shebang-empty-block-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-q8-not-shebang-empty-block: the attribute bracket is closed by ')'.",
+      "inputBase64": "IyEvKiovW2Ep",
+      "inputText": "#!/**/[a)",
+      "pairedPositive": "rust-q8-not-shebang-empty-block",
+      "result": {"status": "error", "error": {"code": "unbalanced-delimiter", "offset": 8}}
+    },
+    {
+      "id": "rust-q8-not-shebang-three-stars-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["unicode", "malformed"],
+      "description": "Paired rejection of rust-q8-not-shebang-three-stars: '€' inside the attribute.",
+      "inputBase64": "IyEvKioqL1th4oKsXQ==",
+      "inputText": "#!/***/[a€]",
+      "pairedPositive": "rust-q8-not-shebang-three-stars",
+      "result": {"status": "error", "error": {"code": "illegal-character", "offset": 9}}
+    },
+    {
+      "id": "rust-q8b-shebang-lookahead-nel-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["unicode", "malformed"],
+      "description": "Paired rejection of rust-q8b-shebang-lookahead-nel: the attribute bracket is unclosed.",
+      "inputBase64": "IyHChVth",
+      "inputText": "#![a",
+      "pairedPositive": "rust-q8b-shebang-lookahead-nel",
+      "result": {"status": "error", "error": {"code": "unbalanced-delimiter", "offset": 4}}
+    },
+    {
+      "id": "rust-q8b-bare-shebang-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["unicode", "malformed", "crlf-bom"],
+      "description": "Paired rejection of rust-q8b-bare-shebang: a UTF-8 BOM before the bare shebang.",
+      "inputBase64": "77u/IyE=",
+      "inputText": "﻿#!",
+      "pairedPositive": "rust-q8b-bare-shebang",
+      "result": {"status": "error", "error": {"code": "bom", "offset": 0}}
+    },
+    {
+      "id": "rust-q11-shebang-first-line-only-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-q11-shebang-first-line-only: an unclosed '\"' appended.",
+      "inputBase64": "IyEvKgoqLyBmbiI=",
+      "inputText": "#!/*\n*/ fn\"",
+      "pairedPositive": "rust-q11-shebang-first-line-only",
+      "result": {"status": "error", "error": {"code": "unterminated-literal", "offset": 10}}
+    },
+    {
+      "id": "rust-s1-string-digit-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-s1-string-digit: the digit replaced by '_' (SUFFIX cut).",
+      "inputBase64": "IngiXw==",
+      "inputText": "\"x\"_",
+      "pairedPositive": "rust-s1-string-digit",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 0}}
+    },
+    {
+      "id": "rust-s1-char-digit-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-s1-char-digit: the digit replaced by '_' (SUFFIX cut).",
+      "inputBase64": "J2EnXw==",
+      "inputText": "'a'_",
+      "pairedPositive": "rust-s1-char-digit",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 0}}
+    },
+    {
+      "id": "rust-s1-bytestring-digit-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-s1-bytestring-digit: the digit replaced by '_' (SUFFIX cut).",
+      "inputBase64": "YiJ4Il8=",
+      "inputText": "b\"x\"_",
+      "pairedPositive": "rust-s1-bytestring-digit",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 0}}
+    },
+    {
+      "id": "rust-s1-rawstring-digit-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-s1-rawstring-digit: the digit replaced by '_' (SUFFIX cut).",
+      "inputBase64": "ciJ4Il8=",
+      "inputText": "r\"x\"_",
+      "pairedPositive": "rust-s1-rawstring-digit",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 0}}
+    },
+    {
+      "id": "rust-s1-cstring-digit-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-s1-cstring-digit: the digit replaced by '_' (SUFFIX cut).",
+      "inputBase64": "YyJ4Il8=",
+      "inputText": "c\"x\"_",
+      "pairedPositive": "rust-s1-cstring-digit",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 0}}
+    },
+    {
+      "id": "rust-s1-byte-digit-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-s1-byte-digit: the digit replaced by '_' (SUFFIX cut).",
+      "inputBase64": "YidhJ18=",
+      "inputText": "b'a'_",
+      "pairedPositive": "rust-s1-byte-digit",
+      "result": {"status": "error", "error": {"code": "malformed-literal", "offset": 0}}
+    },
+    {
+      "id": "rust-s1-string-digit-expr-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-s1-string-digit-expr: an unclosed '\"' appended.",
+      "inputBase64": "IngiMSArIHki",
+      "inputText": "\"x\"1 + y\"",
+      "pairedPositive": "rust-s1-string-digit-expr",
+      "result": {"status": "error", "error": {"code": "unterminated-literal", "offset": 8}}
+    },
+    {
+      "id": "rust-shebang-unresolved-body-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-shebang-unresolved-body: an extra '}' appended.",
+      "inputBase64": "IyEvdXNyL2Jpbi9lbnYgeApmbiBmKCkgeyB5IH19",
+      "inputText": "#!/usr/bin/env x\nfn f() { y }}",
+      "pairedPositive": "rust-shebang-unresolved-body",
+      "result": {"status": "error", "error": {"code": "unbalanced-delimiter", "offset": 29}}
+    },
+    {
+      "id": "rust-doc-comment-bracket-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of rust-doc-comment-bracket: the body loses its '}'.",
+      "inputBase64": "Ly8vIGFdCmZuIGYoKSB7",
+      "inputText": "/// a]\nfn f() {",
+      "pairedPositive": "rust-doc-comment-bracket",
+      "result": {"status": "error", "error": {"code": "unbalanced-delimiter", "offset": 14}}
     }
   ]
 }

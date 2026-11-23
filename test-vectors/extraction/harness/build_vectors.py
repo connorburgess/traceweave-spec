@@ -87,6 +87,142 @@ def build(lang, vid, desc, src, toks=None, err=None, tags=()):
     v["result"] = res
     return v
 
+
+# ---- M1.2 metadata: derivation, vector classes and one-to-one paired rejections ----
+DERIVATION_NOTE = ("hand: the expected lexical outcome (token classes and texts, inserted ';', error code and the "
+                   "defect position) is written by hand in this file; spans are located by searching the hand-written "
+                   "token text in source order; k-gram hashes, window selections and fingerprints are computed from it")
+KEY_ORDER = ["id", "derivation", "derivationNote", "tags", "vectorClasses", "description", "inputBase64", "inputText",
+             "inputDisplay", "pairedRejection", "pairedPositive", "result"]
+M12_CLASSES = ["empty", "below-k+w-1", "unicode", "malformed", "repeated", "equal-minimum", "crlf-bom"]
+
+
+def vector_classes(v):
+    src = base64.b64decode(v["inputBase64"]); res = v["result"]
+    c = []
+    if src == b"": c.append("empty")
+    if res["status"] != "error" and res["tokenCount"] < K + W - 1: c.append("below-k+w-1")
+    if any(b >= 0x80 for b in src): c.append("unicode")
+    if res["status"] == "error": c.append("malformed")
+    if "repeated" in v["tags"]: c.append("repeated")
+    if "equal-minimum" in v["tags"]: c.append("equal-minimum")
+    if b"\r\n" in src or b"\xef\xbb\xbf" in src: c.append("crlf-bom")
+    return c
+
+
+def finalize(lang, vecs, pairs, notes=None):
+    """Attach derivation metadata and one-to-one pairs. pairs: (positive id, existing rejection id) or
+    (positive id, (new id, defect description, transform, code, anchor[, "last"])). The offset of a new rejection
+    is the position of its hand-chosen defect: the index of `anchor` in the transformed input (or an integer)."""
+    by = {v["id"]: v for v in vecs}
+    for pid, spec in pairs:
+        p = by[pid]
+        assert p["result"]["status"] != "error" and "pairedRejection" not in p, pid
+        if isinstance(spec, str):
+            rid = spec
+        else:
+            rid, defect, fn, code, anchor, *opt = spec
+            src0 = base64.b64decode(p["inputBase64"]); src = fn(src0)
+            assert src != src0, rid
+            off = anchor if isinstance(anchor, int) else (src.rindex(anchor) if opt == ["last"] else src.index(anchor))
+            nv = build(lang, rid, f"Paired rejection of {pid}: {defect}.", src, err=(code, off), tags=["malformed", "paired-rejection"])
+            vecs.append(nv); by[rid] = nv
+        r = by[rid]
+        assert r["result"]["status"] == "error" and "pairedPositive" not in r, rid
+        p["pairedRejection"] = rid; r["pairedPositive"] = pid
+    for v in vecs:
+        assert v["result"]["status"] == "error" or "pairedRejection" in v, f"unpaired positive {v['id']}"
+        v["derivation"] = "hand"
+        if notes and v["id"] in notes: v["derivationNote"] = notes[v["id"]]
+        v["vectorClasses"] = vector_classes(v)
+        ordered = {k: v[k] for k in KEY_ORDER if k in v}
+        assert len(ordered) == len(v), set(v) - set(ordered)
+        v.clear(); v.update(ordered)
+    return vecs
+
+
+def rp(old, new, count=1):
+    return lambda s: s.replace(old, new, count)
+
+
+def rp_last(old, new):
+    return lambda s: (lambda i: s[:i] + new + s[i + len(old):])(s.rindex(old))
+
+
+GO_PAIRS = [
+    ("go-empty", ("go-empty-rej", "the empty input replaced by a lone UTF-8 BOM", lambda s: b"\xef\xbb\xbf", "bom", 0)),
+    ("go-short", "go-err-nul"),
+    ("go-exact-k", ("go-exact-k-rej", "'@' (no Go token starts with it) appended to the last line", rp(b"1\n", b"1@\n"), "illegal-character", b"@")),
+    ("go-unicode", ("go-unicode-rej", "the rune literal holds two snowmen", rp("'☃'".encode(), "'☃☃'".encode()), "malformed-literal", "'☃☃'".encode())),
+    ("go-literals", ("go-literals-rej", "hex float exponent without digits (0x1p)", rp(b"0x1p-2", b"0x1p"), "malformed-literal", b"0x1p ")),
+    ("go-semicolon-comments", ("go-semicolon-comments-rej", "the general comment loses its closing '/'", rp(b"*/", b"*"), "unterminated-comment", b"/*")),
+    ("go-repeated", ("go-repeated-rej", "the last '+' replaced by '?'", rp_last(b"+", b"?"), "illegal-character", b"?")),
+    ("go-equal-minimum", ("go-equal-minimum-rej", "a BOM inserted at the start of line 3", rp(b"x++\nx++\nx++", b"x++\nx++\n\xef\xbb\xbfx++"), "bom", 8)),
+    ("go-format-a", ("go-format-a-rej", "a stray quote after 'b' opens a rune that a newline ends", rp(b"a + b\n", b"a + b'\n"), "unterminated-literal", b"'")),
+    ("go-format-b", ("go-format-b-rej", "the last general comment loses its closing '/'", rp(b"/* plain */", b"/* plain *"), "unterminated-comment", b"/* plain")),
+    ("go-rename-a", ("go-rename-a-rej", "U+00B7 after the last identifier", rp(b"a + b }", "a + b· }".encode()), "illegal-character", "·".encode())),
+    ("go-rename-b", ("go-rename-b-rej", "the last operand replaced by the invalid octal '09'", rp(b"x + y }", b"x + 09 }"), "malformed-literal", b"09")),
+    ("go-unicode-boundary", ("go-unicode-boundary-rej", "U+0660 (Nd) moved to the start of the second identifier", rp("x٠".encode(), "٠x".encode()), "illegal-character", "٠".encode())),
+    ("go-raw-string-cr", ("go-raw-string-cr-rej", "the raw string loses its closing backquote", rp(b"b` +", b"b +"), "unterminated-literal", b"`")),
+    ("go-q12-line-directive", ("go-q12-line-directive-rej", "the comment loses its closing '/'", rp(b"*/", b"*"), "unterminated-comment", 0)),
+    ("go-escapes-vt-raw", ("go-escapes-vt-raw-rej", "the \\x escape has a non-hex digit", rp(b"\\x41", b"\\x4G"), "malformed-literal", b"\"\\x4G")),
+]
+GO_LIMIT_PAIRS = [("go-limit-exact", "go-limit-over")]
+EXCL_PAIRS = [
+    ("excl-semi-newlines", ("excl-semi-newlines-rej", "'#' after the last identifier", rp(b"d\n", b"d#\n"), "illegal-character", b"#")),
+    ("excl-semi-explicit", ("excl-semi-explicit-rej", "a NUL appended", lambda s: s + b"\x00", "nul", 16)),
+    ("excl-ok-normalized-empty", ("excl-ok-normalized-empty-rej", "an unclosed '\"' appended", lambda s: s + b"\"", "unterminated-literal", 5)),
+    ("excl-insufficient", ("excl-insufficient-rej", "an unclosed backquote appended", lambda s: s + b"`", "unterminated-literal", 3)),
+    ("excl-partial-window", ("excl-partial-window-rej", "byte 0xFF appended", lambda s: s + b"\xff", "invalid-utf8", 9)),
+]
+RUST_PAIRS = [
+    ("rust-empty", ("rust-empty-rej", "the empty input replaced by a lone UTF-8 BOM", lambda s: b"\xef\xbb\xbf", "bom", 0)),
+    ("rust-short", ("rust-short-rej", "a CR not followed by LF appended", lambda s: s + b"\r", "isolated-cr", 9)),
+    ("rust-exact-k", ("rust-exact-k-rej", "an unmatched ')' appended", lambda s: s + b")", "unbalanced-delimiter", 10)),
+    ("rust-unicode", ("rust-unicode-rej", "the identifier spelled with o + U+0308 (not NFC)", rp("größe".encode(), "größe".encode()), "non-nfc-identifier", 4)),
+    ("rust-literals", ("rust-literals-rej", "float exponent without digits (1.5e)", rp(b"1.5e3", b"1.5e"), "malformed-literal", b"1.5e")),
+    ("rust-lifetimes-chars", ("rust-lifetimes-chars-rej", "the char literal holds two characters", rp(b"{ 'a' }", b"{ 'ab' }"), "malformed-literal", b"'ab'")),
+    ("rust-shebang", ("rust-shebang-rej", "a UTF-8 BOM before the shebang", lambda s: b"\xef\xbb\xbf" + s, "bom", 0)),
+    ("rust-inner-attribute", ("rust-inner-attribute-rej", "the attribute loses its ']'", rp(b"dead_code)]", b"dead_code)"), "unbalanced-delimiter", 2)),
+    ("rust-doc-comment", ("rust-doc-comment-rej", "the block doc comment loses its '*/'", rp(b"/** block doc */", b"/** block doc"), "unterminated-comment", b"/**")),
+    ("rust-repeated", ("rust-repeated-rej", "the last '+' replaced by a backquote", rp_last(b"+", b"`"), "illegal-character", b"`")),
+    ("rust-equal-minimum", ("rust-equal-minimum-rej", "the third block loses its '}'", lambda s: b"{x} {x} {x {x}", "unbalanced-delimiter", 8)),
+    ("rust-format-a", ("rust-format-a-rej", "the closing '}' replaced by ')'", rp(b"a + b\n}", b"a + b\n)"), "unbalanced-delimiter", b")\n", "last")),
+    ("rust-format-b", ("rust-format-b-rej", "the outer block comment loses its final '*/'", rp(b" still comment */a+b", b" still comment a+b"), "unterminated-comment", b"/* outer")),
+    ("rust-rename-a", ("rust-rename-a-rej", "a CR not followed by LF before the final '}'", rp(b"a + b }", b"a + b\r}"), "isolated-cr", b"\r")),
+    ("rust-rename-b", ("rust-rename-b-rej", "a string directly after the identifier y (reserved prefix)", rp(b"x + y }", b"x + y\"z\" }"), "reserved-token", b"y\"")),
+    ("rust-unicode-boundary", ("rust-unicode-boundary-rej", "U+0345 replaced by U+200D", rp("xͅ;".encode(), "x‍;".encode()), "malformed-identifier", "x‍".encode())),
+    ("rust-literal-suffixes", ("rust-literal-suffixes-rej", "the suffix '_a' cut to '_'", rp(b"\"x\"_a", b"\"x\"_"), "malformed-literal", 3)),
+    ("rust-raw-lifetime", ("rust-raw-lifetime-rej", "the first raw lifetime renamed 'r#_ (reserved)", rp(b"'r#fn>", b"'r#_>"), "reserved-token", 5)),
+    ("rust-cstring-escapes", ("rust-cstring-escapes-rej", "\\u{e9} replaced by the zero escape \\u{0}", rp(b"\\u{e9}", b"\\u{0}"), "malformed-literal", 8)),
+    ("rust-shebang-unterminated-comment", ("rust-shebang-unterminated-comment-rej", "the body loses its '}'", rp(b"{}", b"{"), "unbalanced-delimiter", b"{")),
+    ("rust-q1-raw-extra-hash", "rust-q1-raw-extra-pounds"),
+    ("rust-q4-cstring-xff", "rust-q4-cstring-x00"),
+    ("rust-q5-raw-lifetime-hash", ("rust-q5-raw-lifetime-hash-rej", "the lifetime is not raw, so '#' after it is reserved", rp(b"'r#a#", b"'a#"), "reserved-token", 0)),
+    ("rust-q8-shebang-outer-line-doc", ("rust-q8-shebang-outer-line-doc-rej", "the bracket after the shebang is unclosed", rp(b"[a]", b"[a"), "unbalanced-delimiter", 7)),
+    ("rust-q8-shebang-inner-line-doc", ("rust-q8-shebang-inner-line-doc-rej", "an extra ']' after the shebang", rp(b"[a]", b"[a]]"), "unbalanced-delimiter", 10)),
+    ("rust-q8-shebang-outer-block-doc", ("rust-q8-shebang-outer-block-doc-rej", "a NUL appended (inside the shebang line, still forbidden)", lambda s: s + b"\x00", "nul", 13)),
+    ("rust-q8-shebang-inner-block-doc", ("rust-q8-shebang-inner-block-doc-rej", "an isolated CR appended (inside the shebang line, still forbidden)", lambda s: s + b"\r", "isolated-cr", 13)),
+    ("rust-q8-not-shebang-four-slashes", ("rust-q8-not-shebang-four-slashes-rej", "the attribute bracket is unclosed", rp(b"[a]", b"[a"), "unbalanced-delimiter", 8)),
+    ("rust-q8-not-shebang-empty-block", ("rust-q8-not-shebang-empty-block-rej", "the attribute bracket is closed by ')'", rp(b"[a]", b"[a)"), "unbalanced-delimiter", 8)),
+    ("rust-q8-not-shebang-three-stars", ("rust-q8-not-shebang-three-stars-rej", "'€' inside the attribute", rp(b"[a]", "[a€]".encode()), "illegal-character", 9)),
+    ("rust-q8b-shebang-lookahead-nel", ("rust-q8b-shebang-lookahead-nel-rej", "the attribute bracket is unclosed", rp(b"[a]", b"[a"), "unbalanced-delimiter", 4)),
+    ("rust-q8b-bare-shebang", ("rust-q8b-bare-shebang-rej", "a UTF-8 BOM before the bare shebang", lambda s: b"\xef\xbb\xbf" + s, "bom", 0)),
+    ("rust-q11-shebang-first-line-only", ("rust-q11-shebang-first-line-only-rej", "an unclosed '\"' appended", lambda s: s + b"\"", "unterminated-literal", 10)),
+    ("rust-s1-string-digit", ("rust-s1-string-digit-rej", "the digit replaced by '_' (SUFFIX cut)", rp(b"0", b"_"), "malformed-literal", 0)),
+    ("rust-s1-char-digit", ("rust-s1-char-digit-rej", "the digit replaced by '_' (SUFFIX cut)", rp(b"0", b"_"), "malformed-literal", 0)),
+    ("rust-s1-bytestring-digit", ("rust-s1-bytestring-digit-rej", "the digit replaced by '_' (SUFFIX cut)", rp(b"0", b"_"), "malformed-literal", 0)),
+    ("rust-s1-rawstring-digit", ("rust-s1-rawstring-digit-rej", "the digit replaced by '_' (SUFFIX cut)", rp(b"0", b"_"), "malformed-literal", 0)),
+    ("rust-s1-cstring-digit", ("rust-s1-cstring-digit-rej", "the digit replaced by '_' (SUFFIX cut)", rp(b"0", b"_"), "malformed-literal", 0)),
+    ("rust-s1-byte-digit", ("rust-s1-byte-digit-rej", "the digit replaced by '_' (SUFFIX cut)", rp(b"0", b"_"), "malformed-literal", 0)),
+    ("rust-s1-string-digit-expr", ("rust-s1-string-digit-expr-rej", "an unclosed '\"' appended", lambda s: s + b"\"", "unterminated-literal", 8)),
+    ("rust-shebang-unresolved-body", ("rust-shebang-unresolved-body-rej", "an extra '}' appended", lambda s: s + b"}", "unbalanced-delimiter", b"}", "last")),
+    ("rust-doc-comment-bracket", ("rust-doc-comment-bracket-rej", "the body loses its '}'", rp(b"{}", b"{"), "unbalanced-delimiter", b"{")),
+]
+RUST_LIMIT_PAIRS = [("rust-limit-exact", "rust-limit-over")]
+NOTES = {"rust-err-invalid-utf8": "Offset first written as 9; the first toolchain cross-check showed the 0xFF byte is at 10, and the value was recounted by hand and corrected before any release."}
+
+
 def fmt(o, ind=0):
     c = json.dumps(o, ensure_ascii=False, separators=(", ", ": "))
     if len(c) + ind <= 110 or not isinstance(o, (dict, list)) or not o:
@@ -294,11 +430,12 @@ lim["rust"].append(build("rust", "rust-limit-exact", "Input of exactly maxInputB
 lim["rust"].append(build("rust", "rust-limit-over", "17 bytes with maxInputBytes=16.", b"let abcd = 1 + 2;", err=("input-too-large", 0), tags=["limits", "malformed"]))
 lim["rust"].append(build("rust", "rust-limit-precedence", "17 bytes that also contain NUL: the size check runs first.", b"let a = \"\x00\" + 12;", err=("input-too-large", 0), tags=["limits", "malformed"]))
 for lang, vecs in lim.items():
+    finalize(lang, vecs, GO_LIMIT_PAIRS if lang == "go" else RUST_LIMIT_PAIRS)
     cb = config_bytes(lang, 16)
     (OUT / f"config-{lang}-limit16.json").write_bytes(cb)
     dump({"contract": CONTRACT, "profile": PROFILES[lang], "profileVersion": PVER, "configFile": f"config-{lang}-limit16.json",
           "configSha256": hashlib.sha256(cb).hexdigest(), "k": K, "window": W, "requiredCoverage": False,
-          "vectors": vecs}, OUT / f"limits-{lang}.json")
+          "metadataRules": "m1.2", "derivationRule": DERIVATION_NOTE, "vectors": vecs}, OUT / f"limits-{lang}.json")
     print("limits", lang, len(vecs))
 
 base = config_bytes("go").decode()
@@ -336,12 +473,20 @@ negs = [
 ]
 for n in negs:
     n["expectedResult"] = {"status": "error", "error": {"code": "unsupported-config", "offset": None}}
+    n["derivation"] = "hand"
 pos = [{"id": i, "reason": r, "configBase64": base64.b64encode(t.encode()).decode()} for i, r, t in [
   ("cfg-bounds-min", "k, window and maxInputBytes at their lower bound 1", base.replace('"k":5', '"k":1').replace('"window":4', '"window":1').replace('1048576', '1')),
   ("cfg-bounds-max", "k, window and maxInputBytes at their upper bounds 16, 128, 8388608", base.replace('"k":5', '"k":16').replace('"window":4', '"window":128').replace('1048576', '8388608')),
   ("cfg-rust-bounds-max", "Rust profile at the upper bounds", config_bytes("rust").decode().replace('"k":5', '"k":16').replace('"window":4', '"window":128').replace('1048576', '8388608')),
 ]]
-dump({"contract": CONTRACT, "description": "negatives: configuration byte strings that MUST be rejected as unsupported-config (offset null); each is the shipped Go configuration with one change. boundaryPositives: configurations at the section 10 bounds that MUST be accepted.", "negatives": negs, "boundaryPositives": pos}, OUT / "config-negative.json")
+CFG_PAIRS = [("cfg-bounds-min", "cfg-k-zero"), ("cfg-bounds-max", "cfg-k-above-bound"), ("cfg-rust-bounds-max", "cfg-window-above-bound")]
+nby = {n["id"]: n for n in negs}
+for x in pos:
+    x["derivation"] = "hand"
+for pid, rid in CFG_PAIRS:
+    next(x for x in pos if x["id"] == pid)["pairedRejection"] = rid
+    nby[rid]["pairedPositive"] = pid
+dump({"contract": CONTRACT, "description": "negatives: configuration byte strings that MUST be rejected as unsupported-config (offset null); each is the shipped Go configuration with one change. boundaryPositives: configurations at the section 10 bounds that MUST be accepted.", "metadataRules": "m1.2", "derivationRule": "hand: each configuration is a hand-written one-change variant of a shipped configuration", "negatives": negs, "boundaryPositives": pos}, OUT / "config-negative.json")
 print("negatives", len(negs), "positives", len(pos))
 
 # ---- shared normalized-stream exclusion rule (contract section 6), synthetic TEST-ONLY profile ----
@@ -357,19 +502,23 @@ e("excl-insufficient", "Fewer than k exact tokens: insufficient-tokens; tokenInd
   b"x;y", [(I, "x"), (P, ";"), (I, "y"), (P, ";", A)], tags=["exclusion-empty"])
 e("excl-partial-window", "Normalized stream of exactly k kept tokens out of 8 exact: one normalized k-gram whose span covers excluded ';' bytes; partial window in both channels.",
   b"f(a);g(b)", [(I, "f"), (P, "("), (I, "a"), (P, ")"), (P, ";"), (I, "g"), (P, "("), (I, "b"), (P, ")"), (P, ";", A)], tags=["exclusion-span"])
+finalize("goexcl", ex, EXCL_PAIRS)
 cb = config_bytes("goexcl")
 (OUT / "config-exclusion-test.json").write_bytes(cb)
 dump({"contract": CONTRACT, "profile": PROFILES["goexcl"], "profileVersion": PVER, "configFile": "config-exclusion-test.json",
       "configSha256": hashlib.sha256(cb).hexdigest(), "k": K, "window": W, "requiredCoverage": False,
+      "metadataRules": "m1.2", "derivationRule": DERIVATION_NOTE,
       "description": "TEST-ONLY synthetic profile: Go lexing (section 4) with normalizedExclusions [punct ';']. It pins the shared section 6-8 rule for profiles that declare exclusions; it is not a profile to implement. The TypeScript vectors (ts-tokens draft-2) are the real-profile evidence.",
       "vectors": ex}, OUT / "exclusion-rule.json")
 print("exclusion", len(ex))
 
 for lang, vecs in (("go", go), ("rust", rs)):
+    finalize(lang, vecs, GO_PAIRS if lang == "go" else RUST_PAIRS, NOTES)
     cb = config_bytes(lang)
     (OUT / f"config-{lang}.json").write_bytes(cb)
     dump({"contract": CONTRACT, "profile": PROFILES[lang], "profileVersion": PVER, "configFile": f"config-{lang}.json",
           "configSha256": hashlib.sha256(cb).hexdigest(), "k": K, "window": W, "requiredCoverage": True,
+          "metadataRules": "m1.2", "derivationRule": DERIVATION_NOTE,
           "lexingCheck": "Token streams are hand-derived; check_vectors.py re-verifies lexical invariants and harness/crosscheck.py compares them with go/scanner, proc-macro2 and rustc.",
           "vectors": vecs}, OUT / f"{lang}.json")
     print(lang, len(vecs))

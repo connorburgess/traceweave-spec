@@ -203,8 +203,40 @@ def validate_config(raw: bytes):
     return cfg
 
 
+def check_config_metadata(data, name="config-negative.json"):
+    """M1.2: every configuration entry is hand-derived; boundary positives pair one-to-one with negatives."""
+    require(data.get("metadataRules") == "m1.2", f"{name}: metadataRules must be m1.2")
+    neg = {n["id"]: n for n in data["negatives"]}
+    for item in data["negatives"] + data["boundaryPositives"]:
+        require(item.get("derivation") == "hand", f"{name}:{item['id']}: derivation must be 'hand'")
+    for x in data["boundaryPositives"]:
+        rid = x.get("pairedRejection")
+        require(rid in neg, f"{name}:{x['id']}: pairedRejection must name a negative configuration")
+        require(neg[rid].get("pairedPositive") == x["id"], f"{name}:{x['id']}: {rid} does not pair back")
+    paired = [n for n in data["negatives"] if "pairedPositive" in n]
+    require(len(paired) == len(data["boundaryPositives"]), f"{name}: pairing is not one-to-one")
+
+
+def config_metadata_mutations(data):
+    def mut(fn):
+        d = copy.deepcopy(data)
+        fn(d)
+        return d
+    yield "config negative without derivation", mut(lambda d: d["negatives"][0].pop("derivation"))
+    yield "boundary positive without pairedRejection", mut(lambda d: d["boundaryPositives"][0].pop("pairedRejection"))
+    yield "two boundary positives share a negative", mut(
+        lambda d: d["boundaryPositives"][1].__setitem__("pairedRejection", d["boundaryPositives"][0]["pairedRejection"]))
+
+
 def check_negative_configs(path: Path):
     data = strict_json(path)
+    check_config_metadata(data)
+    for name, d in config_metadata_mutations(data):
+        try:
+            check_config_metadata(d)
+        except (CheckError, KeyError):
+            continue
+        raise CheckError(f"{path.name}: metadata mutation not detected: {name}")
     want = {"status": "error", "error": {"code": "unsupported-config", "offset": None}}
     for item in data["negatives"]:
         require(item["expectedResult"] == want, f"{path.name}:{item['id']}: expectedResult must be {want}")
@@ -827,6 +859,78 @@ def exclusion_mutations(data, cfg, spec):
     yield "tokenIndices omitted", variant(drop_indices)
 
 
+M12_CLASSES = ["empty", "below-k+w-1", "unicode", "malformed", "repeated", "equal-minimum", "crlf-bom"]
+
+
+def expected_classes(v, cfg):
+    """The M1.2 classes a vector belongs to, derived from its input and result (independent of the builder)."""
+    data = base64.b64decode(v["inputBase64"])
+    res = v["result"]
+    ok = res["status"] != "error"
+    flags = {
+        "empty": len(data) == 0,
+        "below-k+w-1": ok and res["tokenCount"] < cfg["k"] + cfg["window"] - 1,
+        "unicode": any(b > 0x7F for b in data),
+        "malformed": not ok,
+        "repeated": "repeated" in v["tags"],
+        "equal-minimum": "equal-minimum" in v["tags"],
+        "crlf-bom": b"\r\n" in data or b"\xef\xbb\xbf" in data,
+    }
+    return [c for c in M12_CLASSES if flags[c]]
+
+
+def check_metadata(vectors, cfg, required, name="vectors"):
+    """M1.2: derivation metadata, labelled classes, and one-to-one positive/rejection pairs within the file."""
+    by = {v["id"]: v for v in vectors}
+    for v in vectors:
+        vid = v["id"]
+        require(v.get("derivation") == "hand", f"{name}:{vid}: derivation must be 'hand'")
+        require(v.get("vectorClasses") == expected_classes(v, cfg),
+                f"{name}:{vid}: vectorClasses {v.get('vectorClasses')} != {expected_classes(v, cfg)}")
+        if v["result"]["status"] == "error":
+            require("pairedRejection" not in v, f"{name}:{vid}: an error vector cannot have a pairedRejection")
+            pid = v.get("pairedPositive")
+            if pid is not None:
+                require(pid in by and by[pid].get("pairedRejection") == vid, f"{name}:{vid}: {pid} does not pair back")
+        else:
+            require("pairedPositive" not in v, f"{name}:{vid}: a positive vector cannot have a pairedPositive")
+            rid = v.get("pairedRejection")
+            require(rid in by, f"{name}:{vid}: positive vector without a pairedRejection in this file")
+            require(by[rid]["result"]["status"] == "error", f"{name}:{vid}: pairedRejection {rid} is not an error vector")
+            require(by[rid].get("pairedPositive") == vid, f"{name}:{vid}: {rid} does not pair back (not one-to-one)")
+    if required:
+        present = {c for v in vectors for c in v["vectorClasses"]}
+        require(present >= set(M12_CLASSES), f"{name}: missing M1.2 classes {sorted(set(M12_CLASSES) - present)}")
+    positives = [v for v in vectors if v["result"]["status"] != "error"]
+    return len(positives)
+
+
+def metadata_mutations(data):
+    base = data["vectors"]
+
+    def mut(fn):
+        vs = copy.deepcopy(base)
+        fn(vs)
+        return vs
+
+    def first(vs, error):
+        return next(v for v in vs if (v["result"]["status"] == "error") == error and (error is False or "pairedPositive" in v))
+
+    yield "derivation removed", mut(lambda vs: vs[0].pop("derivation"))
+    yield "derivation 'computed'", mut(lambda vs: vs[0].__setitem__("derivation", "computed"))
+    yield "positive without pairedRejection", mut(lambda vs: first(vs, False).pop("pairedRejection"))
+
+    def share(vs):
+        ps = [v for v in vs if v["result"]["status"] != "error"]
+        if len(ps) > 1:
+            ps[1]["pairedRejection"] = ps[0]["pairedRejection"]
+        else:
+            ps[0]["pairedRejection"] = ps[0]["id"]
+    yield "two positives share one rejection", mut(share)
+    yield "rejection does not pair back", mut(lambda vs: first(vs, True).pop("pairedPositive"))
+    yield "vectorClasses label dropped", mut(lambda vs: vs[0]["vectorClasses"].pop() if vs[0]["vectorClasses"] else vs[0]["vectorClasses"].append("empty"))
+
+
 def load(path):
     data = strict_json(path)
     raw = (path.parent / data["configFile"]).read_bytes()
@@ -837,8 +941,10 @@ def load(path):
     return data, cfg, PROFILES[(cfg["profile"], cfg["profileVersion"])]
 
 
-def run_vectors(vectors, cfg, spec, required, name="vectors"):
+def run_vectors(vectors, cfg, spec, required, name="vectors", metadata=False):
     stats = dict.fromkeys(STAT_KEYS, 0)
+    if metadata:
+        stats["positives-paired"] = check_metadata(vectors, cfg, required, name)
     ids = set()
     for v in vectors:
         require(v["id"] not in ids, f"duplicate id {v['id']}")
@@ -978,12 +1084,13 @@ def mutations(data, cfg, spec):
         yield "shebang look-ahead skips '///'", mutate("rust-q8-shebang-outer-line-doc", doc_skipped)
 
 
-def mutation_self_test(data, cfg, spec, required):
+def mutation_self_test(data, cfg, spec, required, metadata=False):
     names, missed = [], []
-    for name, vectors in mutations(data, cfg, spec):
+    meta = list(metadata_mutations(data)) if metadata else []
+    for name, vectors in (list(mutations(data, cfg, spec)) if required else []) + meta:
         names.append(name)
         try:
-            run_vectors(vectors, cfg, spec, required)
+            run_vectors(vectors, cfg, spec, required, metadata=metadata)
             missed.append(name)
         except CheckError:
             pass
@@ -991,9 +1098,35 @@ def mutation_self_test(data, cfg, spec, required):
     return len(names)
 
 
+TOKEN_INDICES_TEST = "tokenIndices emitted without exclusions"
+
+
+def list_tests():
+    """Every self-test name, one per line as FILE<TAB>NAME, for mechanical citation (tools/check_requirement_map.py)."""
+    data = strict_json(HERE / "config-negative.json")
+    for name, _ in config_metadata_mutations(data):
+        print(f"config-negative.json\t{name}")
+    for f in DEFAULT_FILES:
+        data, cfg, spec = load(HERE / f)
+        names = []
+        if data.get("requiredCoverage"):
+            names += [n for n, _ in mutations(data, cfg, spec)]
+            if not spec["exclusions"]:
+                names.append(TOKEN_INDICES_TEST)
+        if data.get("metadataRules") == "m1.2":
+            names += [n for n, _ in metadata_mutations(data)]
+        if spec["exclusions"]:
+            names += [n for n, _ in exclusion_mutations(data, cfg, spec)]
+        for n in names:
+            print(f"{f}\t{n}")
+    return 0
+
+
 def main(argv):
     global TABLES
     TABLES = Tables(HERE / TABLES_FILE)
+    if argv == ["--list-tests"]:
+        return list_tests()
     paths = [Path(a) for a in argv] or [HERE / f for f in DEFAULT_FILES]
     failed = False
     try:
@@ -1008,29 +1141,31 @@ def main(argv):
         try:
             data, cfg, spec = load(path)
             required = data.get("requiredCoverage", False)
-            s = run_vectors(data["vectors"], cfg, spec, required, path.name)
-            muts = mutation_self_test(data, cfg, spec, required) if required else 0
+            metadata = data.get("metadataRules") == "m1.2"
+            require(metadata or path.parent != HERE, "vector files in this directory must declare metadataRules m1.2")
+            s = run_vectors(data["vectors"], cfg, spec, required, path.name, metadata)
+            muts = mutation_self_test(data, cfg, spec, required, metadata) if (required or metadata) else 0
             if spec["exclusions"]:
                 check_exclusion_rule(data["vectors"], spec)
                 names, missed = [], []
                 for name, vectors in exclusion_mutations(data, cfg, spec):
                     names.append(name)
                     try:
-                        run_vectors(vectors, cfg, spec, False)
+                        run_vectors(vectors, cfg, spec, False, metadata=metadata)
                         check_exclusion_rule(vectors, spec)
                         missed.append(name)
                     except (CheckError, KeyError, ValueError):
                         pass
                 require(not missed, f"exclusion mutations not detected: {missed}")
-                muts, required = len(names), True
+                muts, required = muts + len(names), True
             elif required:
                 vs = copy.deepcopy(data["vectors"])  # a profile without exclusions must not emit tokenIndices
                 v = next(x for x in vs if x["result"]["status"] == "ok")
                 ch = v["result"]["channels"]["normalized"]
                 v["result"]["channels"]["normalized"] = dict({"tokenIndices": list(range(len(v["result"]["tokens"])))}, **ch)
                 try:
-                    run_vectors(vs, cfg, spec, required)
-                    raise CheckError("tokenIndices accepted on a profile without exclusions")
+                    run_vectors(vs, cfg, spec, required, metadata=metadata)
+                    raise CheckError(f"{TOKEN_INDICES_TEST}: tokenIndices accepted on a profile without exclusions")
                 except CheckError as exc:
                     require("tokenIndices accepted" not in str(exc), str(exc))
                 muts += 1
@@ -1044,7 +1179,8 @@ def main(argv):
               f"identifiers={s['identifiers']} kgrams={s['kgrams']} fingerprints={s['fingerprints']} "
               f"tie-windows={s['tie-windows']} errors={s['errors']} "
               f"(lexical offsets plausibility-only: {s['lexical-offsets-plausibility-only']}) pairs={s['pairs']}"
-              + (f" mutations-rejected={muts}/{muts}" if required else ""))
+              + (f" positives={s.get('positives-paired', 0)} paired-one-to-one" if metadata else "")
+              + (f" mutations-rejected={muts}/{muts}" if (required or metadata) else ""))
     print(f"Unicode tables {TABLES_FILE} sha256={TABLES_SHA256[:16]}...; NFC via Python unicodedata "
           f"{unicodedata.unidata_version} for characters assigned in both 16.0 and 17.0 only.")
     print("Not a lexer: token streams are validated, not produced; exact lexical error offsets are compared "

@@ -11,9 +11,9 @@ Revision status (before promotion): draft for review, 2026-11-22. These vectors 
 | `config-go.json`, `config-rust.json` | Exact configuration bytes (contract §10), 1 MiB limit. Do not reformat: the digest covers the trailing LF. |
 | `config-go-limit16.json`, `config-rust-limit16.json` | The same with `maxInputBytes` 16, used by the limit files |
 | `config-negative.json` | `negatives`: 28 configuration byte strings that MUST be rejected, each with its `expectedResult` (`unsupported-config`, offset `null`). `boundaryPositives`: 3 configurations at the §10 bounds that MUST be accepted |
-| `go.json` | 34 vectors for `go-tokens`/`draft-1`: 16 accepted inputs and 18 errors |
-| `rust.json` | 78 vectors for `rust2024-tokens`/`draft-1`: 42 accepted inputs and 36 errors |
-| `exclusion-rule.json`, `config-exclusion-test.json` | 5 vectors for the shared normalized-stream exclusion rule (contract §6, OD-23), using the **test-only** synthetic profile `go-tokens-exclusion-test`: Go lexing with `punct` `;` excluded from `normalized`. Not a profile to implement |
+| `go.json` | 49 vectors for `go-tokens`/`draft-1`: 16 accepted inputs and 33 errors (15 of them paired rejections added for M1.2) |
+| `rust.json` | 118 vectors for `rust2024-tokens`/`draft-1`: 42 accepted inputs and 76 errors (40 of them paired rejections added for M1.2) |
+| `exclusion-rule.json`, `config-exclusion-test.json` | 10 vectors (5 positives and their 5 paired rejections) for the shared normalized-stream exclusion rule (contract §6, OD-23), using the **test-only** synthetic profile `go-tokens-exclusion-test`: Go lexing with `punct` `;` excluded from `normalized`. Not a profile to implement |
 | `limits-go.json`, `limits-rust.json` | 3 vectors each: exactly the limit, over the limit, and over the limit plus another defect, showing the size check runs first |
 | `unicode-17.0.0-tables.json` | Pinned identifier tables derived from UCD 17.0.0 (contract §3a), SHA-256 `9363b97e…3ac29f` |
 | `check_vectors.py` | Independent checker, standard library only |
@@ -87,6 +87,70 @@ The table shows which case each vector covers:
 
 **Hand-check example** (`go-equal-minimum`, input `x++\nx++\nx++\nx++\n`, tokens `x ++ ;` repeated four times, exact channel). The 8 k-gram hashes repeat with period 3: `55e1d04e…`, `d4aafb7b…`, `1d99e08d…`, and so on. The window at positions 2–5 holds `1d99e08d…` at both 2 and 5. The rightmost rule selects 5. The selections are `[2, 2, 5, 5, 5]`, so the fingerprints are at `[2, 5]`.
 
+## M1.2 metadata (2026-11-23): derivation, classes and paired rejections
+
+**What changed.** Metadata fields were added, plus 60 new rejection vectors. No input, expected token, span, k-gram, hash, window selection, fingerprint, error code or offset of any existing vector changed. Configuration files and the Unicode table are byte-identical. This is proven by `harness/compare_outputs.py 437d619` (see below). Digests for re-vendoring are in [research/extraction-vector-metadata-map.md](../../research/extraction-vector-metadata-map.md).
+
+**Header fields** (every file in this directory):
+- `metadataRules: "m1.2"` switches on the checks below.
+- `derivationRule` states what `derivation: hand` means (next paragraph).
+
+**Per-vector fields:**
+- `derivation: "hand"` on every vector and every configuration entry. The values are 183 vectors and 31 configurations, all `hand`; no other value occurs.
+- `vectorClasses`: the M1.2 classes the vector belongs to.
+- `pairedRejection` on every positive vector, naming a rejection in the same file. The rejection names it back with `pairedPositive`.
+- `derivationNote` on one vector, `rust-err-invalid-utf8`. Its offset was first written as 9; the first toolchain cross-check showed the byte is at 10, and the value was recounted by hand.
+
+**What `hand` covers, and what it does not.** The token classes, token texts, inserted `;` tokens, error codes and defect positions are written by hand in `harness/build_vectors.py` from the contract. Three things are mechanical:
+- **Spans** are located by searching the hand-written token text in source order, except where a start offset is given by hand. Every accepted vector's spans also agree token for token with go/scanner or proc-macro2 (section 2).
+- **Error offsets of the new rejections** are the position of the hand-chosen defect: the index of its hand-written defect text.
+- **k-gram hashes, window selections and fingerprints** are computed. SHA-256 cannot be derived by hand. The checker recomputes them independently.
+
+No vector's expected lexical outcome was computed by an extractor and then reviewed, so `hand` is the only value. Spans and hashes are not claimed as hand-counted.
+
+**Paired rejections, one to one.**
+- **Coverage.** All 65 positive vectors are paired: Go 16, Rust 42, the two limit files 1 each, and the exclusion file 5. The 3 boundary-positive configurations pair with 3 negative configurations.
+- **New rejections.** 60 are new. Each is the positive's own input with one hand-chosen defect, and its description names the defect.
+- **Reused rejections.** 5 existing rejections already were such a defect and are reused: `go-err-nul` for `go-short`, `go-limit-over`, `rust-limit-over`, `rust-q1-raw-extra-pounds` and `rust-q4-cstring-x00`.
+- **Unpaired rejections.** Error vectors without a `pairedPositive` remain standalone rejections.
+
+**The seven M1.2 classes**, labelled in `vectorClasses` and derived from content:
+
+| Class | Definition (checked by the checker) |
+| --- | --- |
+| `empty` | Input has zero bytes |
+| `below-k+w-1` | Accepted, with fewer than `k + w − 1` (8) tokens |
+| `unicode` | Input contains a byte above 0x7F |
+| `malformed` | Result is an error |
+| `repeated` | Tagged `repeated` (repeated token runs, duplicate hashes kept) |
+| `equal-minimum` | Tagged `equal-minimum`; the checker requires an actual tied window |
+| `crlf-bom` | Input contains CRLF or the UTF-8 BOM bytes |
+
+**Enforcement.** `check_vectors.py`, run by `tools/validate.py`, enforces all of the following:
+- `derivation` is `hand` on every vector and configuration entry;
+- `vectorClasses` equals the recomputed classes;
+- every positive's `pairedRejection` names an error vector in the same file that pairs back, and no rejection is shared;
+- `go.json` and `rust.json` each contain all seven classes;
+- every file in this directory declares `metadataRules`.
+
+Metadata self-tests add 6 corruptions per vector file and 3 per configuration file. Each must be rejected:
+- per vector file: derivation removed, derivation `computed`, pair removed, a shared rejection, a rejection that does not pair back, a class label dropped;
+- per configuration file: derivation removed, a positive without its pair, two positives sharing a negative.
+
+The two cases the gate names, a vector without `derivation` and a positive without its pair, also fail the CLI on a standalone corrupted `go.json` (exit 1).
+
+**Toolchain agreement for the new rejections.**
+- **Go:** 16 of the 20 new rejections fail in go/scanner at the same offset. The other 4 are listed: a BOM (OD-1), and three offsets after the token start (OD-13).
+- **Rust:** rustc rejects 31 of the 40 new rejections. The other 9 are listed: BOM (OD-1), isolated CR and NUL (OD-2), non-NFC (OD-3), and ZWJ (OD-19).
+
+**Before/after proof:**
+
+```
+python3 -I test-vectors/extraction/harness/compare_outputs.py 437d619
+compare_outputs: files=12, identical-bytes=6, vectors-compared=123, vectors-added=60, configs-compared=31, configs-added=0
+PASS: every expected output present at 437d619 is unchanged; only vectors, configuration entries and the metadata fields ['derivation', 'derivationNote', 'derivationRule', 'metadataRules', 'pairedPositive', 'pairedRejection', 'vectorClasses'] were added
+```
+
 ## 1. Checker: `check_vectors.py`
 
 ```
@@ -97,11 +161,11 @@ Output on 2026-11-22 (Python 3.14.6, `unicodedata` 16.0.0):
 
 ```
 PASS config-negative.json: 28/28 invalid configurations rejected, 3/3 boundary configurations accepted
-PASS go.json profile=go-tokens/draft-1 config=dfbc5fe3517e9da6... vectors=34 tokens=170 (inserted ';'=21) identifiers=61 kgrams=228 fingerprints=82 tie-windows=11 errors=18 (lexical offsets plausibility-only: 14) pairs=2 mutations-rejected=13/13
-PASS rust.json profile=rust2024-tokens/draft-1 config=64b34335e4a61383... vectors=78 tokens=322 (inserted ';'=0) identifiers=103 kgrams=384 fingerprints=146 tie-windows=10 errors=36 (lexical offsets plausibility-only: 30) pairs=2 mutations-rejected=14/14
-PASS limits-go.json profile=go-tokens/draft-1 config=aa86722255afbf50... vectors=3 tokens=8 (inserted ';'=1) identifiers=1 kgrams=8 fingerprints=2 tie-windows=0 errors=2 (lexical offsets plausibility-only: 0) pairs=0
-PASS limits-rust.json profile=rust2024-tokens/draft-1 config=71d5ed27bea011f6... vectors=3 tokens=7 (inserted ';'=0) identifiers=2 kgrams=6 fingerprints=2 tie-windows=0 errors=2 (lexical offsets plausibility-only: 0) pairs=0
-PASS exclusion-rule.json profile=go-tokens-exclusion-test/draft-1 config=65ae9f23f38b060e... vectors=5 tokens=36 (inserted ';'=4) identifiers=15 kgrams=24 fingerprints=9 tie-windows=0 errors=0 (lexical offsets plausibility-only: 0) pairs=0 mutations-rejected=4/4
+PASS go.json profile=go-tokens/draft-1 config=dfbc5fe3517e9da6... vectors=49 tokens=170 (inserted ';'=21) identifiers=61 kgrams=228 fingerprints=82 tie-windows=11 errors=33 (lexical offsets plausibility-only: 27) pairs=2 positives=16 paired-one-to-one mutations-rejected=19/19
+PASS rust.json profile=rust2024-tokens/draft-1 config=64b34335e4a61383... vectors=118 tokens=322 (inserted ';'=0) identifiers=103 kgrams=384 fingerprints=146 tie-windows=10 errors=76 (lexical offsets plausibility-only: 63) pairs=2 positives=42 paired-one-to-one mutations-rejected=20/20
+PASS limits-go.json profile=go-tokens/draft-1 config=aa86722255afbf50... vectors=3 tokens=8 (inserted ';'=1) identifiers=1 kgrams=8 fingerprints=2 tie-windows=0 errors=2 (lexical offsets plausibility-only: 0) pairs=0 positives=1 paired-one-to-one mutations-rejected=6/6
+PASS limits-rust.json profile=rust2024-tokens/draft-1 config=71d5ed27bea011f6... vectors=3 tokens=7 (inserted ';'=0) identifiers=2 kgrams=6 fingerprints=2 tie-windows=0 errors=2 (lexical offsets plausibility-only: 0) pairs=0 positives=1 paired-one-to-one mutations-rejected=6/6
+PASS exclusion-rule.json profile=go-tokens-exclusion-test/draft-1 config=65ae9f23f38b060e... vectors=10 tokens=36 (inserted ';'=4) identifiers=15 kgrams=24 fingerprints=9 tie-windows=0 errors=5 (lexical offsets plausibility-only: 3) pairs=0 positives=5 paired-one-to-one mutations-rejected=10/10
 ```
 
 The checker verifies the following:
@@ -206,14 +270,14 @@ Output on 2026-11-22 (go1.27.3 darwin/arm64, rustc 1.97.1):
 tables: go unicode + unicode-ident 1.0.24 vs pinned 17.0.0 tables: MATCH
   go accepted agree: 21
   go accepted expected: 1
-  go error agree: 12
-  go error expected: 8
+  go error agree: 28
+  go error expected: 12
   rust accepted proc-macro2 agree: 43
   rust accepted rustc accepts: 43
-  rust error proc-macro2 agree: 21
-  rust error proc-macro2 expected: 17
-  rust error rustc agree: 28
-  rust error rustc expected: 10
+  rust error proc-macro2 agree: 43
+  rust error proc-macro2 expected: 35
+  rust error rustc agree: 59
+  rust error rustc expected: 19
 PASS: no unexpected divergence
 ```
 

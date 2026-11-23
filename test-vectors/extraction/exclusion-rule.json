@@ -7,14 +7,19 @@
   "k": 5,
   "window": 4,
   "requiredCoverage": false,
+  "metadataRules": "m1.2",
+  "derivationRule": "hand: the expected lexical outcome (token classes and texts, inserted ';', error code and the defect position) is written by hand in this file; spans are located by searching the hand-written token text in source order; k-gram hashes, window selections and fingerprints are computed from it",
   "description": "TEST-ONLY synthetic profile: Go lexing (section 4) with normalizedExclusions [punct ';']. It pins the shared section 6-8 rule for profiles that declare exclusions; it is not a profile to implement. The TypeScript vectors (ts-tokens draft-2) are the real-profile evidence.",
   "vectors": [
     {
       "id": "excl-semi-newlines",
+      "derivation": "hand",
       "tags": ["exclusion-pair"],
+      "vectorClasses": [],
       "description": "Exclusion pair, reference side: Go-lexed, two inserted ';' are excluded from normalized only. Normalized positions index the 6 kept tokens; spans stay original bytes and cross the excluded ';'.",
       "inputBase64": "YSA6PSBiCmMgOj0gZAo=",
       "inputText": "a := b\nc := d\n",
+      "pairedRejection": "excl-semi-newlines-rej",
       "result": {
         "status": "ok",
         "tokenCount": 8,
@@ -56,10 +61,13 @@
     },
     {
       "id": "excl-semi-explicit",
+      "derivation": "hand",
       "tags": ["exclusion-pair"],
+      "vectorClasses": [],
       "description": "Exclusion pair: the same statements on one line with explicit ';' and an extra ';'. Exact differs (9 tokens), normalized is identical to excl-semi-newlines.",
       "inputBase64": "YSA6PSBiOyBjIDo9IGQ7Ow==",
       "inputText": "a := b; c := d;;",
+      "pairedRejection": "excl-semi-explicit-rej",
       "result": {
         "status": "ok",
         "tokenCount": 9,
@@ -106,10 +114,13 @@
     },
     {
       "id": "excl-ok-normalized-empty",
+      "derivation": "hand",
       "tags": ["exclusion-empty"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Status follows the exact count (5 >= k): ok with one exact k-gram, while the normalized stream keeps 1 token and is empty (no k-grams, windowSelections [], partialWindow false).",
       "inputBase64": "YTs7Ozs=",
       "inputText": "a;;;;",
+      "pairedRejection": "excl-ok-normalized-empty-rej",
       "result": {
         "status": "ok",
         "tokenCount": 5,
@@ -140,10 +151,13 @@
     },
     {
       "id": "excl-insufficient",
+      "derivation": "hand",
       "tags": ["exclusion-empty"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Fewer than k exact tokens: insufficient-tokens; tokenIndices still lists the kept tokens.",
       "inputBase64": "eDt5",
       "inputText": "x;y",
+      "pairedRejection": "excl-insufficient-rej",
       "result": {
         "status": "insufficient-tokens",
         "tokenCount": 4,
@@ -168,10 +182,13 @@
     },
     {
       "id": "excl-partial-window",
+      "derivation": "hand",
       "tags": ["exclusion-span"],
+      "vectorClasses": [],
       "description": "Normalized stream of exactly k kept tokens out of 8 exact: one normalized k-gram whose span covers excluded ';' bytes; partial window in both channels.",
       "inputBase64": "ZihhKTtnKGIp",
       "inputText": "f(a);g(b)",
+      "pairedRejection": "excl-partial-window-rej",
       "result": {
         "status": "ok",
         "tokenCount": 10,
@@ -219,6 +236,62 @@
           }
         }
       }
+    },
+    {
+      "id": "excl-semi-newlines-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of excl-semi-newlines: '#' after the last identifier.",
+      "inputBase64": "YSA6PSBiCmMgOj0gZCMK",
+      "inputText": "a := b\nc := d#\n",
+      "pairedPositive": "excl-semi-newlines",
+      "result": {"status": "error", "error": {"code": "illegal-character", "offset": 13}}
+    },
+    {
+      "id": "excl-semi-explicit-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of excl-semi-explicit: a NUL appended.",
+      "inputBase64": "YSA6PSBiOyBjIDo9IGQ7OwA=",
+      "inputText": "a := b; c := d;;\u0000",
+      "pairedPositive": "excl-semi-explicit",
+      "result": {"status": "error", "error": {"code": "nul", "offset": 16}}
+    },
+    {
+      "id": "excl-ok-normalized-empty-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of excl-ok-normalized-empty: an unclosed '\"' appended.",
+      "inputBase64": "YTs7Ozsi",
+      "inputText": "a;;;;\"",
+      "pairedPositive": "excl-ok-normalized-empty",
+      "result": {"status": "error", "error": {"code": "unterminated-literal", "offset": 5}}
+    },
+    {
+      "id": "excl-insufficient-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["malformed"],
+      "description": "Paired rejection of excl-insufficient: an unclosed backquote appended.",
+      "inputBase64": "eDt5YA==",
+      "inputText": "x;y`",
+      "pairedPositive": "excl-insufficient",
+      "result": {"status": "error", "error": {"code": "unterminated-literal", "offset": 3}}
+    },
+    {
+      "id": "excl-partial-window-rej",
+      "derivation": "hand",
+      "tags": ["malformed", "paired-rejection"],
+      "vectorClasses": ["unicode", "malformed"],
+      "description": "Paired rejection of excl-partial-window: byte 0xFF appended.",
+      "inputBase64": "ZihhKTtnKGIp/w==",
+      "inputText": null,
+      "inputDisplay": "f(a);g(b)\\xff",
+      "pairedPositive": "excl-partial-window",
+      "result": {"status": "error", "error": {"code": "invalid-utf8", "offset": 9}}
     }
   ]
 }

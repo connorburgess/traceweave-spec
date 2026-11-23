@@ -7,13 +7,18 @@
   "k": 5,
   "window": 4,
   "requiredCoverage": false,
+  "metadataRules": "m1.2",
+  "derivationRule": "hand: the expected lexical outcome (token classes and texts, inserted ';', error code and the defect position) is written by hand in this file; spans are located by searching the hand-written token text in source order; k-gram hashes, window selections and fingerprints are computed from it",
   "vectors": [
     {
       "id": "rust-limit-exact",
+      "derivation": "hand",
       "tags": ["limits"],
+      "vectorClasses": ["below-k+w-1"],
       "description": "Input of exactly maxInputBytes=16 bytes is accepted.",
       "inputBase64": "bGV0IGFiYyA9IDEgKyAyOw==",
       "inputText": "let abc = 1 + 2;",
+      "pairedRejection": "rust-limit-over",
       "result": {
         "status": "ok",
         "tokenCount": 7,
@@ -53,15 +58,20 @@
     },
     {
       "id": "rust-limit-over",
+      "derivation": "hand",
       "tags": ["limits", "malformed"],
+      "vectorClasses": ["malformed"],
       "description": "17 bytes with maxInputBytes=16.",
       "inputBase64": "bGV0IGFiY2QgPSAxICsgMjs=",
       "inputText": "let abcd = 1 + 2;",
+      "pairedPositive": "rust-limit-exact",
       "result": {"status": "error", "error": {"code": "input-too-large", "offset": 0}}
     },
     {
       "id": "rust-limit-precedence",
+      "derivation": "hand",
       "tags": ["limits", "malformed"],
+      "vectorClasses": ["malformed"],
       "description": "17 bytes that also contain NUL: the size check runs first.",
       "inputBase64": "bGV0IGEgPSAiACIgKyAxMjs=",
       "inputText": "let a = \"\u0000\" + 12;",
