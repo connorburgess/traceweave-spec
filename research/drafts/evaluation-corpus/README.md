@@ -83,3 +83,7 @@ The protocol moved to `m3-eval-draft-7` (rulings O1–O8). Nothing in it touches
 ## Draft-8
 
 The protocol moved to `m3-eval-draft-8` (direct-check shape, unbatched caching check, disk figures and a 10 GB minimum margin). The manifest, schema and checker are unchanged; the manifest keeps `protocolVersion` `m3-eval-draft-6`.
+
+## Draft-9
+
+The protocol moved to `m3-eval-draft-9` (pair completeness for batched comparisons). The manifest, schema and checker are unchanged; the manifest keeps `protocolVersion` `m3-eval-draft-6`.

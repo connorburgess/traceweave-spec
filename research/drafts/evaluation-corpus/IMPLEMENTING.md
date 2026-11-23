@@ -1,6 +1,6 @@
 # Implementing the M3 evaluation harness
 
-Brief for whoever builds the harness in the implementation repository (`traceweave`, owner column `I`), against protocol [`m3-eval-draft-8`](../evaluation-protocol.md). The protocol governs; this list only orders the work. Decided on 2026-11-23: budget **`1/20`** per unordered repository search, acquisition approved with mechanical replacements, corpus root `~/traceweave-eval` named by `TRACEWEAVE_EVAL_DIR`.
+Brief for whoever builds the harness in the implementation repository (`traceweave`, owner column `I`), against protocol [`m3-eval-draft-9`](../evaluation-protocol.md). The protocol governs; this list only orders the work. Decided on 2026-11-23: budget **`1/20`** per unordered repository search, acquisition approved with mechanical replacements, corpus root `~/traceweave-eval` named by `TRACEWEAVE_EVAL_DIR`.
 
 **Conventions for every script.**
 - Exit status: 0 success, 1 a checked condition failed (invalid input, mismatch, refusal), 2 usage, environment, I/O or abort. M3.6 adds 3 (negative-result).
@@ -69,3 +69,7 @@ From the O1–O8 rows of [protocol §19](../evaluation-protocol.md#19-harness-ru
 - **Direct check:** exactly the selected pairs, one `compare` per checked reference file and configuration, as implemented at `75b84eb`; no change.
 - **Caching check:** stays unbatched (whole reference against whole candidate catalogue); no change.
 - **Disk:** refuse `TRACEWEAVE_EVAL_MIN_FREE_GB` below 10 (exit 2); record the margin used in `identity.json`; falling below it mid-run is an abort (exit 2).
+
+## Changes for draft-9
+
+- **Pair completeness (review N4):** for every batched or cache-assembled comparison (negative searches, positive cases, tuning, pilot, direct checks), compute the expected pair set from the two catalogues' artifact lists, require every expected pair id exactly once, and record expected and assembled counts plus a SHA-256 over the sorted pair ids; a difference is exit 2. `counts.json` carries these for held-out negatives and positives, and `m36-verdict` recomputes the expected sets from the committed eligible-file records (exit 2 on a mismatch).
