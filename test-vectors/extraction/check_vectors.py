@@ -1481,7 +1481,7 @@ def main(argv):
               f"vectors={len(data['vectors'])} tokens={s['tokens']} (inserted ';'={s['inserted']}) "
               f"identifiers={s['identifiers']} kgrams={s['kgrams']} fingerprints={s['fingerprints']} "
               f"tie-windows={s['tie-windows']} errors={s['errors']} "
-              f"(lexical offsets checked by rule: {s["lexical-offsets-plausibility-only"]}) pairs={s['pairs']}"
+              f"(lexical offsets checked by rule: {s['lexical-offsets-plausibility-only']}) pairs={s['pairs']}"
               + (f" positives={s.get('positives-paired', 0)} paired-one-to-one" if metadata else "")
               + (f" mutations-rejected={muts}/{muts}" if (required or metadata) else "")
               + (" offset-shifts-rejected " + " ".join(f"{c}={r}/{t}" for c, (r, t) in sorted(shifts.items())) if shifts else ""))
