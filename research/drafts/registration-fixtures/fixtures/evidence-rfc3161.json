@@ -1,27 +1,34 @@
 {
   "fixture": {
     "kind": "evidence",
-    "description": "RFC 3161 token placeholder over the DSSE signature.",
+    "description": "RFC 3161 placeholder over the raw bytes of signature 0.",
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
-    "bundle": "fixtures/bundle-two-roots.json"
+    "bundle": "fixtures/bundle-three-roots.json"
   },
   "object": {
-    "evidenceVersion": "traceweave-time-evidence-draft-1",
+    "evidenceVersion": "traceweave-time-evidence-draft-2",
     "type": "rfc3161",
     "placeholder": true,
     "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
     "target": {
       "kind": "dsse-signature",
       "signatureIndex": 0,
-      "sha256": "91b0dacf9f52a6ee3c1921f75a659f5b7857ca252f5abf6017cf8e8071f45bfc"
+      "sha256": "e59031b6f83a60965267836dd4fc278ab4444d416ded328b19a82a065032d6b7"
     },
     "root": {
       "kind": "tsa-certificate-chain",
-      "id": "placeholder-tsa-a"
+      "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
     },
     "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT",
-    "statedTime": {
+    "rfc3161": {
       "genTime": "2026-11-23T10:00:00Z",
+      "policyOid": "2.999.1",
+      "nonce": "5a17c0de00000001",
+      "requestNonce": "5a17c0de00000001",
+      "signerCertificate": {
+        "notBefore": "2026-01-01T00:00:00Z",
+        "notAfter": "2031-01-01T00:00:00Z"
+      },
       "accuracySeconds": 1
     }
   }

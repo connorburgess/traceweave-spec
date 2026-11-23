@@ -1,25 +1,29 @@
 #!/usr/bin/env python3
-"""Check the illustrative registration-record fixtures against ../registration-record.md.
+"""Check the illustrative registration-record fixtures (draft-2) against ../registration-record.md.
 
 Standard library only; Python 3.11 or later. This is not a registration verifier.
-It verifies the fixtures' Ed25519 signatures (a public, test-only key) and the
-structural rules of the design. It never verifies a time-stamp token, an
-OpenTimestamps proof, a log entry or a cosignature: every time evidence here is a
-labelled placeholder, and the checker rejects one that is not labelled.
+It verifies the fixtures' Ed25519 signatures (public, test-only keys) under the
+strict rule set of the design (section 10.1) and the structural and outcome rules of
+the design. It never verifies a time-stamp token, an OpenTimestamps proof, a log
+entry or a cosignature: every time evidence here is a labelled placeholder, and the
+checker rejects one that is not labelled.
 
 Every fixture in fixtures/ must produce no failure code. Every fixture in
 negative/ must produce exactly its expected code (plus any listed in
-expect.alsoReported). The run also checks that every failure code appears in the
-design document, so the two cannot drift apart.
+expect.alsoReported). Files in aux/ are inputs referenced by other fixtures. The
+run also performs (1) Ed25519 and PAE self-tests, (2) a wrong-implementation
+self-test: plausible wrong verifier outputs are built in memory and each must be
+rejected, and (3) a drift check: every failure code appears in the design document.
 
 Usage: python3 -I check_registration.py [--verbose]
-Exit status 0 when every fixture behaves as expected, 1 otherwise.
+Exit status 0 when everything behaves as expected, 1 otherwise.
 """
 
 from __future__ import annotations
 
 import base64
 import binascii
+import copy
 import hashlib
 import json
 import re
@@ -33,15 +37,16 @@ DOC = HERE.parent / "registration-record.md"
 
 STATEMENT_TYPE = "https://in-toto.io/Statement/v1"
 PAYLOAD_TYPE = "application/vnd.in-toto+json"
-PREDICATE_TYPE = "https://traceweave.org/predicate/registration/draft-1"
-KEY_EVENT_TYPE = "https://traceweave.org/predicate/key-event/draft-1"
-REGISTRATION_VERSION = "traceweave-registration-draft-1"
-BUNDLE_VERSION = "traceweave-registration-bundle-draft-1"
-EVIDENCE_VERSION = "traceweave-time-evidence-draft-1"
-RESULT_VERSION = "traceweave-registration-verification-draft-1"
-LINK_VERSION = "traceweave-registration-link-draft-1"
-RENDERING_VERSION = "traceweave-registration-rendering-draft-1"
-KEY_EVENT_VERSION = "traceweave-key-event-draft-1"
+PREDICATE_TYPE = "https://traceweave.org/predicate/registration/draft-2"
+KEY_EVENT_TYPE = "https://traceweave.org/predicate/key-event/draft-2"
+REGISTRATION_VERSION = "traceweave-registration-draft-2"
+BUNDLE_VERSION = "traceweave-registration-bundle-draft-2"
+EVIDENCE_VERSION = "traceweave-time-evidence-draft-2"
+RESULT_VERSION = "traceweave-registration-verification-draft-2"
+LINK_VERSION = "traceweave-registration-link-draft-2"
+RENDERING_VERSION = "traceweave-registration-rendering-draft-2"
+KEY_EVENT_VERSION = "traceweave-key-event-draft-2"
+SET_VERSION = "traceweave-registration-set-draft-2"
 WITNESS_TYPE = "https://traceweave.org/predicate/witness/draft-1"
 WITNESS_VERSION = "traceweave-witness-draft-1"
 WITNESS_REQUEST_VERSION = "traceweave-witness-request-draft-1"
@@ -56,40 +61,59 @@ FIXTURE_NOTICE = ("Illustrative fixture for research/drafts/registration-record.
 PLACEHOLDER_NOTICE = ("PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued "
                       "it and it cannot be verified. Times in it are invented for illustration.")
 NOT_SHOWN = ["authorship", "originality", "first-creation", "ownership", "permission"]
-REQUIRED_SENTENCES = [
-    "This record shows that the content existed, and that this key signed a statement naming it, no later than the time shown.",
-    "It does not show who created the content, that it is original, that the registrant was first to create it, or who owns it.",
-    "First to register is not first to create.",
-]
+SENTENCE_LIMITS = ("It does not show who created the content, that it is original, that the registrant was first to "
+                   "create it, who owns it, or that its use is permitted.")
+SENTENCE_FIRST = "First to register is not first to create."
+REQUIRED_SENTENCES = [SENTENCE_LIMITS, SENTENCE_FIRST]
 AGENT_SENTENCE = ("A registration made by or through an agent shows which key signed it and, for a hosted witness, which "
                   "authenticated caller presented the digest; it does not show whether a person or an agent created the "
                   "content, or on whose behalf.")
 
-EVIDENCE_ROOT = {"rfc3161": "tsa-certificate-chain", "opentimestamps": "bitcoin-proof-of-work",
-                 "rekor-v2": "log-key", "cosigned-checkpoint": "witness-key"}
+EVIDENCE_TYPES = {"rfc3161": ("tsa-certificate-chain", "rfc3161"), "opentimestamps": ("bitcoin-proof-of-work", "opentimestamps"),
+                  "rekor-v2": ("log-key", "rekorV2"), "cosigned-checkpoint": ("witness-key", "checkpoint")}
 OTS_MARGIN = timedelta(seconds=7200)
+RETAIN_REASONS = {"unspecified", "affiliationChanged", "superseded", "cessationOfOperation"}  # RFC 3161 section 4 item 1
+ALL_REASONS = RETAIN_REASONS | {"keyCompromise", None}
+EVIDENCE_OUTCOMES = {"valid", "invalid", "wrong-target", "pending", "untrusted-root", "unsupported", "wrong-policy",
+                     "revoked", "placeholder", "placeholder-assumed-valid"}
 
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
+HEX16 = re.compile(r"^[0-9a-f]{16}$")
+OID = re.compile(r"^[0-2](\.(0|[1-9][0-9]*))+$")
 SUBJECT_NAME = re.compile(r"^[a-z0-9][a-z0-9._-]{0,63}$")
 TIME = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
 SINGLE_VERDICT_KEYS = {"authentic", "isauthentic", "verdict", "overall", "overallresult", "verified"}
 AUTHORSHIP_KEYS = {"author", "authorship", "owner", "ownership", "creator", "original", "originality"}
+# Closed lists (design section 4.6).
 FORBIDDEN_KEYS = {"fingerprints", "tokens", "source", "text", "content", "catalogueBytes", "opening", "nonceHex", "inputBase64"}
 TIME_KEYS = {"provedAt", "timestamp", "notAfter", "genTime", "registeredAt", "recordedAt", "time", "provedTime"}
-AUTHORSHIP_TEXT = re.compile(
-    r"(?i)\b(prove[sd]?|proof|establish(es|ed)?|confirm(s|ed)?|show(s|n)?|demonstrat(es|ed))\b[^.]*"
-    r"\b(author(ship)?|own(s|er|ership)?|original(ity)?|creat(ed|or)|copyright)\b")
-NEGATED = re.compile(r"(?i)\b(does not|do not|is not|cannot|never|not)\b")
+DENY_TEXT = re.compile(
+    r"(?i)\b(author\w*|wrote|written|belongs?|yours?|claim to|registered to you|first to create|priority|creat(ed|or|ion of)|"
+    r"own(s|ed|er|ership)?|original\w*|copyright|prove[sdn]?|proof|establish\w*|authentic\w*|verified|genuine|legitimate)\b")
+T = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)"
+K = r"([0-9a-f]{16})"
+TEMPLATES = {
+    "title": re.compile(r"^Registration of ([a-z0-9][a-z0-9._-]{0,63}) \(SHA-256 [0-9a-f]{8}…[0-9a-f]{4}\)\.$"),
+    "digest": re.compile(r"^Content digest: (matches the file you supplied|does not match the file you supplied|not checked, because no file was supplied)\.$"),
+    "signature": re.compile(r"^Signature by key " + K + r": (valid|invalid|unknown key); signer (trusted|not trusted|disputed by a key event|not evaluated) under your policy\.$"),
+    "bound": re.compile(r"^This record shows that the content existed, and that key " + K + r" signed a statement naming it, no later than " + T + r"( \(according to one time source only\))?\.$"),
+    "sources": re.compile(r"^Time sources for key " + K + r": (\d+) independent, (\d+) required; the earliest single source says " + T + r"\.$"),
+    "no-bound": re.compile(r"^No proved time for key " + K + r"\.$"),
+    "claimed": re.compile(r"^Creation time claimed by the registrant, not proved: " + T + r"\.$"),
+    "witness": re.compile(r"^Witnessed: the caller ([A-Za-z0-9._-]+) presented the signature digest at " + T + r" by the witness's clock\.$"),
+}
 
 CODES = [
     "authorship-claim", "catalogue-does-not-open", "catalogue-not-report-input", "catalogue-unsalted",
     "claimed-as-proved", "duplicate-key", "envelope-shape", "evidence-shape", "evidence-wrong-target",
-    "fixture-shape", "forbidden-field", "key-event-shape", "log-time-claimed", "nonce-invalid", "notice-missing",
-    "pending-counted", "placeholder-unlabelled", "possession-mismatch", "predicate-type", "profile-mismatch",
-    "provenance-shape", "quorum-miscount", "report-digest", "result-mismatch", "signature-invalid",
+    "fixture-shape", "forbidden-field", "key-bound-misattributed", "key-event-ignored", "key-event-shape",
+    "log-time-claimed", "nonce-invalid", "nonce-reused", "notice-missing", "pending-counted", "placeholder-unlabelled",
+    "possession-mismatch", "predicate-type", "profile-mismatch", "provenance-shape", "quorum-miscount",
+    "rendering-unlisted-line", "report-digest", "result-mismatch", "root-not-anchored", "signature-invalid",
     "single-verdict", "statement-digest", "statement-shape", "subject-mismatch", "subject-name",
-    "time-in-statement", "content-on-wire", "a2a-shape", "mcp-tool-shape", "witness-shape",
+    "time-in-statement", "tsa-nonce-mismatch",
+    "content-on-wire", "a2a-shape", "mcp-tool-shape", "witness-shape",
 ]
 
 # A2A 1.0 field names (ProtoJSON of specification/a2a.proto at tag v1.0.1); required fields first.
@@ -116,12 +140,15 @@ class Dup(ValueError):
     pass
 
 
-# ------------------------------------------------------------------ Ed25519 (RFC 8032 section 5.1)
+# ------------------------------------------------------------------ Ed25519, strict profile (design section 10.1)
+# RFC 8032 section 5.1.7 cofactorless verification, plus: S < L; A and R must be canonical
+# encodings (y < p, and x = 0 never encoded with the sign bit set); A must not have small order.
 
 P = 2 ** 255 - 19
 Q = 2 ** 252 + 27742317777372353535851937790883648493
 D = -121665 * pow(121666, P - 2, P) % P
 SQRT_M1 = pow(2, (P - 1) // 4, P)
+IDENTITY = (0, 1, 1, 0)
 
 
 def _add(a, b):
@@ -134,7 +161,7 @@ def _add(a, b):
 
 
 def _mul(s, pt):
-    acc = (0, 1, 1, 0)
+    acc = IDENTITY
     while s > 0:
         if s & 1:
             acc = _add(acc, pt)
@@ -149,10 +176,10 @@ def _equal(a, b):
 
 def _recover_x(y, sign):
     if y >= P:
-        return None
+        return None  # non-canonical y
     x2 = (y * y - 1) * pow(D * y * y + 1, P - 2, P) % P
     if x2 == 0:
-        return None if sign else 0
+        return None if sign else 0  # x = 0 with the sign bit set is non-canonical
     x = pow(x2, (P + 3) // 8, P)
     if (x * x - x2) % P:
         x = x * SQRT_M1 % P
@@ -209,7 +236,8 @@ def ed25519_sign(seed, msg):
     return big_r + s.to_bytes(32, "little")
 
 
-def ed25519_verify(pub, msg, sig):
+def ed25519_verify(pub, msg, sig, strict=True):
+    """strict=False exists only for the wrong-implementation self-test."""
     if len(pub) != 32 or len(sig) != 64:
         return False
     a = _decompress(pub)
@@ -217,9 +245,10 @@ def ed25519_verify(pub, msg, sig):
     if a is None or r is None:
         return False
     s = int.from_bytes(sig[32:], "little")
-    if s >= Q:
-        return False
-    return _equal(_mul(s, G), _add(r, _mul(_hq(sig[:32] + pub + msg), a)))
+    if strict:
+        if s >= Q or _equal(_mul(8, a), IDENTITY):
+            return False
+    return _equal(_mul(s % Q if not strict else s, G), _add(r, _mul(_hq(sig[:32] + pub + msg), a)))
 
 
 # ------------------------------------------------------------------ helpers
@@ -237,6 +266,10 @@ def strict_loads(text):
         raise ValueError("non-finite number")
 
     return json.loads(text, object_pairs_hook=pairs, parse_constant=constant)
+
+
+def load_fixture(rel):
+    return strict_loads((HERE / rel).read_text(encoding="utf-8"))["object"]
 
 
 def jcs(value):
@@ -277,12 +310,12 @@ def parse_time(text):
 
 
 def fmt_time(value):
-    return value.strftime("%Y-%m-%dT%H:%M:%SZ")
+    return None if value is None else value.strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def load_source(ref):
     """Resolve 'path#selector' to bytes. Selectors: an extraction vector id (its inputBase64),
-    or a JSON pointer starting with '/' (canonical bytes of that value)."""
+    or a JSON pointer starting with '/' (the JCS bytes of that value; design section 9)."""
     path, _, sel = ref.partition("#")
     data = json.loads((ROOT / path).read_text(encoding="utf-8"))
     if sel.startswith("/"):
@@ -303,6 +336,14 @@ def walk_keys(value, path=""):
     elif isinstance(value, list):
         for i, item in enumerate(value):
             yield from walk_keys(item, f"{path}/{i}")
+
+
+def shape(obj, spec, code, out):
+    required, optional = spec
+    if not isinstance(obj, dict) or not required <= set(obj) or set(obj) - required - optional:
+        out.add(code)
+        return False
+    return True
 
 
 # ------------------------------------------------------------------ statements
@@ -383,43 +424,6 @@ def check_statement(st, artifacts, out):
 
 # ------------------------------------------------------------------ envelopes and evidence
 
-def open_envelope(env, keys, out):
-    """Return (payload bytes, statement, list of signature bytes or None per signature, outcomes)."""
-    if not isinstance(env, dict) or set(env) != {"payloadType", "payload", "signatures"} or env["payloadType"] != PAYLOAD_TYPE:
-        out.add("envelope-shape")
-        return None
-    payload = b64d(env["payload"])
-    sigs = env["signatures"]
-    if payload is None or not isinstance(sigs, list) or not sigs:
-        out.add("envelope-shape")
-        return None
-    sig_bytes, outcomes = [], []
-    for s in sigs:
-        raw = b64d(s.get("sig")) if isinstance(s, dict) else None
-        if raw is None or set(s) != {"keyid", "sig"}:
-            out.add("envelope-shape")
-            return None
-        sig_bytes.append(raw)
-        pub = keys.get(s["keyid"])
-        if pub is None:
-            outcomes.append("unknown-key")
-            out.add("signature-invalid")
-        elif ed25519_verify(pub, pae(PAYLOAD_TYPE, payload), raw):
-            outcomes.append("valid")
-        else:
-            outcomes.append("invalid")
-            out.add("signature-invalid")
-    try:
-        st = strict_loads(payload.decode("utf-8"))
-    except Dup:
-        out.add("duplicate-key")
-        return None
-    except (ValueError, UnicodeDecodeError):
-        out.add("statement-shape")
-        return None
-    return payload, st, sig_bytes, outcomes
-
-
 def read_keys(material, out):
     keys = {}
     entries = material.get("publicKeys") if isinstance(material, dict) else None
@@ -437,62 +441,118 @@ def read_keys(material, out):
     return keys
 
 
+def open_envelope(env, keys, out):
+    """Design section 10 steps 1-2. Key lookup: the keyid hint must name a key in the bundle;
+    a missing or unmatched hint is `unknown-key` (no trial verification against other keys)."""
+    if not isinstance(env, dict) or set(env) != {"payloadType", "payload", "signatures"} or env["payloadType"] != PAYLOAD_TYPE:
+        out.add("envelope-shape")
+        return None
+    payload = b64d(env["payload"])
+    sigs = env["signatures"]
+    if payload is None or not isinstance(sigs, list) or not sigs:
+        out.add("envelope-shape")
+        return None
+    sig_bytes, outcomes, kids = [], [], []
+    for s in sigs:
+        raw = b64d(s.get("sig")) if isinstance(s, dict) else None
+        if raw is None or set(s) - {"keyid", "sig"}:
+            out.add("envelope-shape")
+            return None
+        sig_bytes.append(raw)
+        kids.append(s.get("keyid"))
+        pub = keys.get(s.get("keyid"))
+        if pub is None:
+            outcomes.append("unknown-key")
+            out.add("signature-invalid")
+        elif ed25519_verify(pub, pae(PAYLOAD_TYPE, payload), raw):
+            outcomes.append("valid")
+        else:
+            outcomes.append("invalid")
+            out.add("signature-invalid")
+    try:
+        st = strict_loads(payload.decode("utf-8"))
+    except Dup:
+        out.add("duplicate-key")
+        return None
+    except (ValueError, UnicodeDecodeError):
+        out.add("statement-shape")
+        return None
+    return payload, st, sig_bytes, outcomes, kids
+
+
 def check_evidence(ev, sig_bytes, out):
-    """Structural and target checks. Returns (notAfter or None, pending flag)."""
+    """Structural, target and producer-obligation checks (design section 6). Returns a summary dict or None."""
     base = {"evidenceVersion", "type", "placeholder", "notice", "target", "root", "token"}
-    if not isinstance(ev, dict) or not base <= set(ev) or ev.get("type") not in EVIDENCE_ROOT \
-            or ev.get("evidenceVersion") != EVIDENCE_VERSION:
+    if not isinstance(ev, dict) or ev.get("type") not in EVIDENCE_TYPES or ev.get("evidenceVersion") != EVIDENCE_VERSION:
         out.add("evidence-shape")
-        return None, False
+        return None
+    root_kind, body_key = EVIDENCE_TYPES[ev["type"]]
+    if set(ev) - base - {body_key, "statedTime"} or not base <= set(ev):
+        out.add("evidence-shape")
+        return None
     if ev["placeholder"] is not True or ev["notice"] != PLACEHOLDER_NOTICE or not str(ev["token"]).startswith("PLACEHOLDER"):
         out.add("placeholder-unlabelled")
     tgt, root = ev["target"], ev["root"]
     if not isinstance(tgt, dict) or set(tgt) != {"kind", "signatureIndex", "sha256"} or tgt["kind"] != "dsse-signature" \
             or not isinstance(tgt["signatureIndex"], int) or not 0 <= tgt["signatureIndex"] < len(sig_bytes):
         out.add("evidence-shape")
-        return None, False
+        return None
     if sha(sig_bytes[tgt["signatureIndex"]]) != tgt["sha256"]:
         out.add("evidence-wrong-target")
-    if not isinstance(root, dict) or set(root) != {"kind", "id"} or root["kind"] != EVIDENCE_ROOT[ev["type"]]:
+    if not isinstance(root, dict) or set(root) != {"kind", "anchorSha256"} or not HEX64.match(str(root.get("anchorSha256"))):
+        out.add("root-not-anchored")
+        return None
+    if root["kind"] != root_kind:
         out.add("evidence-shape")
-        return None, False
-    kind = ev["type"]
-    extra = set(ev) - base
-    stated = ev.get("statedTime")
-    if kind == "rekor-v2":
-        if "statedTime" in ev:
-            out.add("log-time-claimed")
-        if extra - {"statedTime", "logIndex"}:
-            out.add("evidence-shape")
-        return None, False
-    if kind == "opentimestamps":
-        status = ev.get("status")
-        if status not in ("complete", "pending") or extra - {"statedTime", "status"}:
-            out.add("evidence-shape")
-            return None, False
+        return None
+    summary = {"type": ev["type"], "signatureIndex": tgt["signatureIndex"], "anchor": root["anchorSha256"],
+               "kind": root_kind, "pending": False, "time": None, "accuracy": None, "policyOid": None, "cert": None}
+    if "statedTime" in ev:
+        out.add("log-time-claimed" if ev["type"] == "rekor-v2" else "evidence-shape")
+        return None
+    body = ev.get(body_key)
+    if ev["type"] == "rekor-v2":
+        if not isinstance(body, dict) or set(body) - {"logIndex"}:
+            out.add("log-time-claimed" if isinstance(body, dict) and {"genTime", "integratedTime"} & set(body) else "evidence-shape")
+            return None
+        return summary
+    if not isinstance(body, dict):
+        out.add("evidence-shape")
+        return None
+    if ev["type"] == "opentimestamps":
+        status = body.get("status")
         if status == "pending":
-            if "statedTime" in ev:
+            if set(body) != {"status"}:
                 out.add("pending-counted")
-            return None, True
-        if not isinstance(stated, dict) or set(stated) != {"blockTime"} or not TIME.match(str(stated["blockTime"])):
+            summary["pending"] = True
+            return summary
+        if status != "complete" or set(body) != {"status", "blockTime"} or not TIME.match(str(body["blockTime"])):
             out.add("evidence-shape")
-            return None, False
-        return parse_time(stated["blockTime"]) + OTS_MARGIN, False
-    if kind == "rfc3161":
-        if extra != {"statedTime"} or not isinstance(stated, dict) or set(stated) != {"genTime", "accuracySeconds"} \
-                or not TIME.match(str(stated["genTime"])) or not isinstance(stated["accuracySeconds"], int):
+            return None
+        summary["time"] = parse_time(body["blockTime"]) + OTS_MARGIN
+        return summary
+    if ev["type"] == "cosigned-checkpoint":
+        if set(body) != {"cosignatureTime"} or not TIME.match(str(body["cosignatureTime"])):
             out.add("evidence-shape")
-            return None, False
-        return parse_time(stated["genTime"]) + timedelta(seconds=stated["accuracySeconds"]), False
-    if extra != {"statedTime"} or not isinstance(stated, dict) or set(stated) != {"cosignatureTime"} \
-            or not TIME.match(str(stated["cosignatureTime"])):
+            return None
+        summary["time"] = parse_time(body["cosignatureTime"])
+        return summary
+    req = {"genTime", "policyOid", "nonce", "requestNonce", "signerCertificate"}
+    if not req <= set(body) or set(body) - req - {"accuracySeconds"} or not TIME.match(str(body["genTime"])) \
+            or not OID.match(str(body["policyOid"])) or not HEX16.match(str(body["nonce"])) or not HEX16.match(str(body["requestNonce"])) \
+            or not isinstance(body.get("accuracySeconds", 0), int) or not isinstance(body["signerCertificate"], dict) \
+            or set(body["signerCertificate"]) != {"notBefore", "notAfter"} \
+            or not all(TIME.match(str(v)) for v in body["signerCertificate"].values()):
         out.add("evidence-shape")
-        return None, False
-    return parse_time(stated["cosignatureTime"]), False
+        return None
+    if body["nonce"] != body["requestNonce"]:
+        out.add("tsa-nonce-mismatch")
+    summary.update(time=parse_time(body["genTime"]), accuracy=body.get("accuracySeconds"), policyOid=body["policyOid"],
+                   cert=(parse_time(body["signerCertificate"]["notBefore"]), parse_time(body["signerCertificate"]["notAfter"])))
+    return summary
 
 
-def check_bundle(bundle, artifacts, out):
-    """Returns a context dict for later checks, or None."""
+def check_bundle(bundle, artifacts, out, statement_check=check_statement):
     if not isinstance(bundle, dict) or set(bundle) != {"bundleVersion", "envelope", "verificationMaterial", "timeEvidence"} \
             or bundle["bundleVersion"] != BUNDLE_VERSION or not isinstance(bundle["timeEvidence"], list):
         out.add("envelope-shape")
@@ -501,51 +561,151 @@ def check_bundle(bundle, artifacts, out):
     opened = open_envelope(bundle["envelope"], keys, out)
     if opened is None:
         return None
-    payload, st, sig_bytes, sig_outcomes = opened
-    check_statement(st, artifacts, out)
-    evidence = []
-    for ev in bundle["timeEvidence"]:
-        not_after, pending = check_evidence(ev, sig_bytes, out)
-        evidence.append((ev, not_after, pending))
-    return {"payload": payload, "statement": st, "sigs": sig_bytes, "sigOutcomes": sig_outcomes,
-            "keyids": [s["keyid"] for s in bundle["envelope"]["signatures"]], "evidence": evidence}
+    payload, st, sig_bytes, sig_outcomes, kids = opened
+    statement_check(st, artifacts, out)
+    evidence = [check_evidence(ev, sig_bytes, out) for ev in bundle["timeEvidence"]]
+    return {"payload": payload, "statement": st, "sigs": sig_bytes, "sigOutcomes": sig_outcomes, "keyids": kids,
+            "keys": keys, "evidence": evidence}
 
 
-# ------------------------------------------------------------------ verification result
+# ------------------------------------------------------------------ verification (design section 10)
 
-def expected_result(ctx, artifacts, policy, simulated, bundle_sha):
+def evidence_outcome(e, policy, simulated):
+    """Returns (outcome, notAfter datetime or None) for one evidence summary under the policy."""
+    if e is None:
+        return "invalid", None
+    if e["pending"]:
+        return "pending", None
+    root = next((r for r in policy["timeRoots"] if r["anchorSha256"] == e["anchor"] and r["kind"] == e["kind"]), None)
+    if root is None:
+        return "untrusted-root", None
+    not_after = e["time"]
+    if e["type"] == "rfc3161":
+        if e["policyOid"] not in root.get("policyOids", []):
+            return "wrong-policy", None
+        if not e["cert"][0] <= e["time"] <= e["cert"][1]:
+            return "invalid", None
+        for rev in policy.get("tsaRevocations", []):
+            if rev["anchorSha256"] == e["anchor"]:
+                # RFC 3161 section 4 items 1-2: no reasonCode, or keyCompromise, invalidates every token of that key.
+                if rev["reasonCode"] not in RETAIN_REASONS or e["time"] >= parse_time(rev["revokedAt"]):
+                    return "revoked", None
+        accuracy = e["accuracy"] if e["accuracy"] is not None else root.get("accuracySeconds")
+        if accuracy is None:
+            return "unsupported", None
+        not_after = e["time"] + timedelta(seconds=accuracy)
+    outcome = "placeholder-assumed-valid" if simulated else "placeholder"
+    return outcome, not_after if simulated else None
+
+
+def signature_bounds(evs, policy, n_sigs):
+    """Per-signature bounds (F1): only evidence targeting that signature counts; roots are counted
+    by the policy's independence group (F2)."""
+    groups = {r["anchorSha256"]: r["independenceGroup"] for r in policy["timeRoots"]}
+    per_sig = [dict() for _ in range(n_sigs)]
+    for idx, outcome, not_after in evs:
+        if outcome in ("valid", "placeholder-assumed-valid") and not_after is not None:
+            g = groups[idx["anchor"]]
+            cur = per_sig[idx["signatureIndex"]].get(g)
+            per_sig[idx["signatureIndex"]][g] = not_after if cur is None else min(cur, not_after)
+    out = []
+    for i, gmap in enumerate(per_sig):
+        b = sorted(gmap.values())
+        q = policy["quorum"]
+        out.append({"anyRoot": b[0] if b else None, "quorum": b[q - 1] if len(b) >= q else None, "distinct": len(b)})
+    return out
+
+
+def key_event_effects(event_paths, policy, simulated, out):
+    """Design section 8: key events are a verification input. Returns (event outcomes, list of applied events)."""
+    outcomes, applied, successors = [], [], {}
+    for i, rel in enumerate(event_paths):
+        bundle = load_fixture(rel)
+        inner = set()
+        ctx = check_bundle(bundle, {}, inner, statement_check=lambda st, a, o: check_key_event_statement(st, o))
+        if ctx is None or inner - {"signature-invalid"}:
+            out.add("key-event-shape")
+            continue
+        pred = ctx["statement"]["predicate"]
+        target = pred["keyid"]
+        signer = ctx["keyids"][0]
+        evs = [(e, *evidence_outcome(e, policy, simulated)) for e in ctx["evidence"] if e is not None]
+        bound = signature_bounds(evs, policy, len(ctx["sigs"]))[0]
+        proved = bound["quorum"]
+        if ctx["sigOutcomes"][0] != "valid":
+            outcome = "invalid-signature"
+        elif signer != target and successors.get(target) != signer:
+            outcome = "ignored-unauthorized"
+        elif proved is None:
+            outcome = "ignored-no-proved-time"
+        else:
+            outcome = "applied"
+            event = {"keyid": target, "event": pred["event"], "provedAt": proved,
+                     "claimedFrom": parse_time(pred["compromisedNotBefore"]) if "compromisedNotBefore" in pred else None,
+                     "successor": keyid(bytes.fromhex(pred["successorPublicKeyHex"])) if "successorPublicKeyHex" in pred else None}
+            applied.append(event)
+            if event["successor"]:
+                successors[target] = event["successor"]
+        outcomes.append({"index": i, "keyid": target, "event": pred["event"], "outcome": outcome, "provedAt": fmt_time(proved)})
+    return outcomes, applied
+
+
+def signer_trust(kid, sig_outcome, bound, policy, applied):
+    if sig_outcome != "valid":
+        return "not-evaluated"
+    trusted = set(policy["trustedKeyids"])
+    b = bound["quorum"] or bound["anyRoot"]
+    for ev in applied:  # a successor named by an applied rotation inherits trust from its proved time on
+        if ev["successor"] == kid and ev["keyid"] in trusted and b is not None and b >= ev["provedAt"]:
+            trusted.add(kid)
+    status = "trusted" if kid in trusted else "untrusted"
+    if status != "trusted":
+        return status
+    lookback = timedelta(seconds=policy["compromiseLookbackSeconds"])
+    for ev in applied:
+        if ev["keyid"] != kid:
+            continue
+        if ev["event"] == "compromised":
+            start = max(ev["claimedFrom"], ev["provedAt"] - lookback)
+            if b is None or b >= ev["provedAt"]:
+                status = "untrusted"
+            elif b >= start and status == "trusted":
+                status = "disputed"
+        elif b is None or b >= ev["provedAt"]:  # retired or rotated: nothing new expected from this key
+            status = "untrusted"
+    return status
+
+
+def expected_result(ctx, artifacts, policy, simulated, bundle_sha, event_paths, out):
     st = ctx["statement"]
     pred = st["predicate"]
-    subjects = st["subject"]
-    ev_out, per_root = [], {}
-    for ev, not_after, pending in ctx["evidence"]:
-        root = ev["root"]["id"]
-        if pending:
-            outcome = "pending"
-        elif root not in policy["acceptedRoots"]:
-            outcome = "untrusted-root"
-        else:
-            outcome = "placeholder-assumed-valid" if simulated else "placeholder"
-        counted = outcome in ("valid", "placeholder-assumed-valid")
-        ev_out.append({"index": len(ev_out), "type": ev["type"], "root": root, "outcome": outcome,
-                       "notAfter": fmt_time(not_after) if counted and not_after else None})
-        if counted and not_after:
-            per_root[root] = min(per_root.get(root, not_after), not_after)
-    bounds = sorted(per_root.values())
-    q = policy["quorum"]
-    any_root = fmt_time(bounds[0]) if bounds else None
-    quorum = fmt_time(bounds[q - 1]) if len(bounds) >= q else None
-    time = {"outcome": "quorum-met" if quorum else ("below-quorum" if bounds else "none-valid"),
-            "quorum": q, "distinctRoots": len(bounds), "notAfterAnyRoot": any_root, "notAfterQuorum": quorum}
+    evs = []
+    ev_out = []
+    for i, e in enumerate(ctx["evidence"]):
+        outcome, not_after = evidence_outcome(e, policy, simulated)
+        evs.append((e, outcome, not_after))
+        ev_out.append({"index": i, "signatureIndex": e["signatureIndex"] if e else None, "type": e["type"] if e else None,
+                       "anchorSha256": e["anchor"] if e else None, "outcome": outcome, "notAfter": fmt_time(not_after)})
+    bounds = signature_bounds([x for x in evs if x[0] is not None], policy, len(ctx["sigs"]))
+    ke_out, applied = key_event_effects(event_paths, policy, simulated, out)
+    time = []
+    for i, (kid, b) in enumerate(zip(ctx["keyids"], bounds)):
+        valid_sig = ctx["sigOutcomes"][i] == "valid"
+        time.append({"signatureIndex": i, "keyid": kid,
+                     "outcome": ("quorum-met" if b["quorum"] else ("below-quorum" if b["anyRoot"] else "none-valid")) if valid_sig else "none-valid",
+                     "quorum": policy["quorum"], "distinctRoots": b["distinct"] if valid_sig else 0,
+                     "notAfterAnyRoot": fmt_time(b["anyRoot"]) if valid_sig else None,
+                     "notAfterQuorum": fmt_time(b["quorum"]) if valid_sig else None})
+    statement_bound = min((b["anyRoot"] for i, b in enumerate(bounds) if b["anyRoot"] and ctx["sigOutcomes"][i] == "valid"), default=None)
     created = pred.get("claims", {}).get("createdAt")
     if created is None:
-        claim = {"value": None, "status": "absent"}
-    elif any_root and parse_time(created) > bounds[0]:
-        claim = {"value": created, "status": "after-proved-bound"}
+        claim = {"value": None, "status": "absent", "comparedWith": fmt_time(statement_bound)}
+    elif statement_bound and parse_time(created) > statement_bound:
+        claim = {"value": created, "status": "after-proved-bound", "comparedWith": fmt_time(statement_bound)}
     else:
-        claim = {"value": created, "status": "claimed-only"}
+        claim = {"value": created, "status": "claimed-only", "comparedWith": fmt_time(statement_bound)}
     subj, poss = [], []
-    for i, s in enumerate(subjects):
+    for i, s in enumerate(st["subject"]):
         art = artifacts.get(i)
         subj.append({"index": i, "outcome": "not-supplied" if art is None else ("match" if sha(art) == s["digest"]["sha256"] else "mismatch")})
         poss.append({"index": i, "outcome": "not-supplied" if art is None else
@@ -553,14 +713,16 @@ def expected_result(ctx, artifacts, policy, simulated, bundle_sha):
     return {
         "resultVersion": RESULT_VERSION,
         "simulated": simulated,
-        "inputs": {"bundleSha256": bundle_sha, "artifacts": [{"subjectIndex": i, "sha256": sha(a)} for i, a in sorted(artifacts.items())]},
+        "inputs": {"bundleSha256": bundle_sha, "artifacts": [{"subjectIndex": i, "sha256": sha(a)} for i, a in sorted(artifacts.items())],
+                   "keyEvents": [sha((HERE / p).read_bytes()) for p in event_paths]},
         "policy": policy,
         "outcomes": {
             "envelope": "ok",
             "statement": "ok",
             "signatures": [{"index": i, "keyid": k, "outcome": o} for i, (k, o) in enumerate(zip(ctx["keyids"], ctx["sigOutcomes"]))],
-            "signerTrust": [{"index": i, "outcome": ("trusted" if k in policy["trustedKeyids"] else "untrusted") if o == "valid" else "not-evaluated"}
-                            for i, (k, o) in enumerate(zip(ctx["keyids"], ctx["sigOutcomes"]))],
+            "keyEvents": ke_out,
+            "signerTrust": [{"index": i, "outcome": signer_trust(k, o, b, policy, applied)}
+                            for i, (k, o, b) in enumerate(zip(ctx["keyids"], ctx["sigOutcomes"], bounds))],
             "subjects": subj,
             "possession": poss,
             "catalogue": "not-supplied" if "catalogue" in pred else "not-committed",
@@ -572,6 +734,28 @@ def expected_result(ctx, artifacts, policy, simulated, bundle_sha):
     }
 
 
+POLICY_KEYS = {"quorum", "timeRoots", "trustedKeyids", "tsaRevocations", "compromiseLookbackSeconds"}
+
+
+def check_policy(policy, out):
+    if not isinstance(policy, dict) or set(policy) != POLICY_KEYS or not isinstance(policy["quorum"], int) or policy["quorum"] < 1:
+        out.add("result-mismatch")
+        return False
+    for r in policy["timeRoots"]:
+        if not isinstance(r, dict) or not {"anchorSha256", "kind", "independenceGroup"} <= set(r) \
+                or set(r) - {"anchorSha256", "kind", "independenceGroup", "accuracySeconds", "policyOids"}:
+            out.add("root-not-anchored" if isinstance(r, dict) and "id" in r else "result-mismatch")
+            return False
+        if not HEX64.match(str(r["anchorSha256"])):
+            out.add("root-not-anchored")
+            return False
+    for rev in policy["tsaRevocations"]:
+        if set(rev) != {"anchorSha256", "revokedAt", "reasonCode"} or rev["reasonCode"] not in ALL_REASONS:
+            out.add("result-mismatch")
+            return False
+    return True
+
+
 def check_result(res, meta, out):
     for key, _ in walk_keys(res):
         k = key.lower()
@@ -581,33 +765,46 @@ def check_result(res, meta, out):
             out.add("authorship-claim")
     if not isinstance(res, dict) or res.get("notShown") != NOT_SHOWN:
         out.add("notice-missing")
+    if not check_policy(res.get("policy"), out):
+        return
     bundle_path = HERE / meta["bundle"]
     bundle = strict_loads(bundle_path.read_text(encoding="utf-8"))["object"]
     artifacts = {a["subjectIndex"]: load_source(a["source"]) for a in meta.get("artifacts", [])}
     inner = set()
     ctx = check_bundle(bundle, artifacts, inner)
-    if ctx is None or inner - {"subject-mismatch", "possession-mismatch"}:
+    if ctx is None or inner - {"subject-mismatch", "possession-mismatch", "signature-invalid"}:
         out.add("result-mismatch")
         return
-    exp = expected_result(ctx, artifacts, res.get("policy", {}), res.get("simulated"), sha(bundle_path.read_bytes()))
-    if not isinstance(res.get("policy"), dict) or set(res["policy"]) != {"quorum", "acceptedRoots", "trustedKeyids"}:
-        out.add("result-mismatch")
-        return
+    exp = expected_result(ctx, artifacts, res["policy"], res.get("simulated"), sha(bundle_path.read_bytes()),
+                          meta.get("keyEvents", []), out)
     got_o, exp_o = res.get("outcomes", {}), exp["outcomes"]
-    got_t, exp_t = got_o.get("time", {}), exp_o["time"]
+    got_t, exp_t = got_o.get("time", []), exp_o["time"]
     claimed = exp_o["claimedCreatedAt"]["value"]
-    if claimed and claimed in (got_t.get("notAfterAnyRoot"), got_t.get("notAfterQuorum")) and claimed not in (exp_t["notAfterAnyRoot"], exp_t["notAfterQuorum"]):
-        out.add("claimed-as-proved")
-    for got, want in zip(got_o.get("timeEvidence", []), exp_o["timeEvidence"]):
-        if want["outcome"] == "pending" and got.get("outcome") != "pending":
+    for g, w in zip(got_t, exp_t):
+        if claimed and claimed in (g.get("notAfterAnyRoot"), g.get("notAfterQuorum")) and claimed not in (w["notAfterAnyRoot"], w["notAfterQuorum"]):
+            out.add("claimed-as-proved")
+        if g.get("keyid") != w["keyid"] or (not w["notAfterAnyRoot"] and (g.get("notAfterAnyRoot") or g.get("notAfterQuorum"))):
+            out.add("key-bound-misattributed")  # a bound reported for a signature that has no evidence of its own
+        elif g.get("distinctRoots") != w["distinctRoots"] or (g.get("notAfterQuorum") and not w["notAfterQuorum"]):
+            out.add("quorum-miscount")
+    if len(got_t) != len(exp_t):
+        out.add("key-bound-misattributed")
+    for g, w in zip(got_o.get("timeEvidence", []), exp_o["timeEvidence"]):
+        if w["outcome"] == "pending" and g.get("outcome") != "pending":
             out.add("pending-counted")
-    if got_t.get("distinctRoots") != exp_t["distinctRoots"] or (got_t.get("notAfterQuorum") and not exp_t["notAfterQuorum"]):
-        out.add("quorum-miscount")
+    for g, w in zip(got_o.get("signerTrust", []), exp_o["signerTrust"]):
+        if w["outcome"] in ("disputed", "untrusted") and g.get("outcome") == "trusted" and exp_o["keyEvents"]:
+            out.add("key-event-ignored")
+    if got_o.get("keyEvents") != exp_o["keyEvents"] and len(got_o.get("keyEvents", [])) < len(exp_o["keyEvents"]):
+        out.add("key-event-ignored")
+    for g in got_o.get("timeEvidence", []):
+        if g.get("outcome") not in EVIDENCE_OUTCOMES:
+            out.add("result-mismatch")
     if res != exp and not out:
         out.add("result-mismatch")
 
 
-# ------------------------------------------------------------------ link and rendering
+# ------------------------------------------------------------------ link, registration set and rendering
 
 def check_link(link, meta, out):
     keys = {"linkVersion", "report", "registration", "links", "catalogueOpening", "notShown"}
@@ -620,7 +817,7 @@ def check_link(link, meta, out):
     body = report["body"]
     if sha(jcs(body)) != link["report"]["bodySha256"] or report["provenance"]["bodySha256"] != link["report"]["bodySha256"]:
         out.add("report-digest")
-    bundle = strict_loads((HERE / link["registration"]["bundle"]).read_text(encoding="utf-8"))["object"]
+    bundle = load_fixture(link["registration"]["bundle"])
     inner = set()
     ctx = check_bundle(bundle, {}, inner)
     if ctx is None or inner:
@@ -646,36 +843,93 @@ def check_link(link, meta, out):
             out.add("catalogue-not-report-input")
 
 
+def check_set(obj, meta, out):
+    """Registrations by one producer: nonces must be fresh (design section 4.2). Only checkable across records."""
+    if not isinstance(obj, dict) or set(obj) != {"setVersion", "registrations"} or obj["setVersion"] != SET_VERSION:
+        out.add("fixture-shape")
+        return
+    seen = set()
+    for rel in obj["registrations"]:
+        inner = set()
+        ctx = check_bundle(load_fixture(rel), {}, inner)
+        if ctx is None or inner:
+            out.add("fixture-shape")
+            continue
+        nonce = ctx["statement"]["predicate"]["nonce"]
+        if nonce in seen:
+            out.add("nonce-reused")
+        seen.add(nonce)
+
+
 def check_rendering(ren, meta, out):
+    """Allow-list of line templates (design section 11), checked against the result they render."""
     if not isinstance(ren, dict) or not {"renderingVersion", "result", "lines"} <= set(ren) <= {"renderingVersion", "result", "lines", "context"} \
             or ren["renderingVersion"] != RENDERING_VERSION or ren.get("context", "creator") not in ("creator", "agent"):
         out.add("fixture-shape")
         return
     lines = ren["lines"]
-    required = REQUIRED_SENTENCES + ([AGENT_SENTENCE] if ren.get("context") == "agent" else [])
-    for sentence in required:
+    fixed = REQUIRED_SENTENCES + ([AGENT_SENTENCE] if ren.get("context") == "agent" else [])
+    for sentence in fixed:
         if sentence not in lines:
             out.add("notice-missing")
-    result = strict_loads((HERE / ren["result"]).read_text(encoding="utf-8"))["object"]
+    result = load_fixture(ren["result"])
+    times = {t["keyid"]: t for t in result["outcomes"]["time"]}
     claimed = result["outcomes"]["claimedCreatedAt"]["value"]
+    bound_keys = set()
     for line in lines:
-        if line in REQUIRED_SENTENCES or line == AGENT_SENTENCE:
+        if line in fixed:
             continue
-        if AUTHORSHIP_TEXT.search(line) and not NEGATED.search(line):
-            out.add("authorship-claim")
-        if re.search(r"(?i)\bauthentic(ated|ity)?\b|\bverified\b(?!\s+separately)", line):
-            out.add("single-verdict")
-        if claimed and claimed in line and "claimed" not in line.lower():
-            out.add("claimed-as-proved")
+        kind, m = next(((k, rx.match(line)) for k, rx in TEMPLATES.items() if rx.match(line)), (None, None))
+        if kind is None:
+            out.add("rendering-unlisted-line")
+            if DENY_TEXT.search(line):
+                out.add("authorship-claim")
+            if re.search(r"(?i)\b(authentic\w*|verified|genuine)\b", line):
+                out.add("single-verdict")
+            if claimed and claimed in line:
+                out.add("claimed-as-proved")
+            continue
+        if kind == "bound":
+            kid, when, single = m.group(1), m.group(2), m.group(3)
+            t = times.get(kid)
+            expected = None if t is None else (t["notAfterQuorum"] if t["notAfterQuorum"] else t["notAfterAnyRoot"])
+            if when == claimed and when != expected:
+                out.add("claimed-as-proved")
+            elif t is None or expected is None or when != expected or bool(single) != (t["notAfterQuorum"] is None):
+                out.add("key-bound-misattributed")
+            bound_keys.add(kid)
+        elif kind == "sources":
+            t = times.get(m.group(1))
+            if t is None or (int(m.group(2)), int(m.group(3)), m.group(4)) != (t["distinctRoots"], t["quorum"], t["notAfterAnyRoot"]):
+                out.add("key-bound-misattributed")
+        elif kind == "claimed" and m.group(1) != claimed:
+            out.add("result-mismatch")
+    for kid, t in times.items():
+        if t["notAfterAnyRoot"] and kid not in bound_keys:
+            out.add("notice-missing")
 
 
-def shape(obj, spec, code, out):
-    required, optional = spec
-    if not isinstance(obj, dict) or not required <= set(obj) or set(obj) - required - optional:
-        out.add(code)
-        return False
-    return True
+# ------------------------------------------------------------------ key events
 
+def check_key_event_statement(st, out):
+    pred = st.get("predicate", {}) if isinstance(st, dict) else {}
+    ok = (isinstance(st, dict) and st.get("predicateType") == KEY_EVENT_TYPE and isinstance(pred, dict)
+          and pred.get("eventVersion") == KEY_EVENT_VERSION and pred.get("event") in ("retired", "rotated", "compromised")
+          and HEX16.match(str(pred.get("keyid")))
+          and (pred.get("event") == "rotated") == ("successorPublicKeyHex" in pred)
+          and (pred.get("event") == "compromised") == ("compromisedNotBefore" in pred)
+          and set(pred) <= {"eventVersion", "keyid", "event", "successorPublicKeyHex", "compromisedNotBefore"})
+    if not ok:
+        out.add("key-event-shape")
+
+
+def check_key_event(bundle, meta, out):
+    inner = set()
+    check_bundle(bundle, {}, inner, statement_check=lambda st, a, o: check_key_event_statement(st, o))
+    out.update(inner)
+
+
+# ------------------------------------------------------------------ A2A and MCP (design section 19)
 
 def check_card(card, meta, out):
     """A2A 1.0 Agent Card, checked against the proto field lists (no published JSON Schema is committed)."""
@@ -700,7 +954,7 @@ def check_card(card, meta, out):
     for skill in card["skills"]:
         if not shape(skill, A2A_SKILL, "a2a-shape", out):
             continue
-        if REQUIRED_SENTENCES[2] not in skill["description"]:
+        if SENTENCE_FIRST not in skill["description"]:
             out.add("notice-missing")
         if wire == "digests-only" and set(skill.get("inputModes", card["defaultInputModes"])) - {"application/json"}:
             out.add("content-on-wire")
@@ -741,7 +995,7 @@ def check_request(req, meta, out):
         out.add("a2a-shape")
         return
     if meta.get("bundle"):
-        bundle = strict_loads((HERE / meta["bundle"]).read_text(encoding="utf-8"))["object"]
+        bundle = load_fixture(meta["bundle"])
         if d["presented"]["sha256"] != sha(b64d(bundle["envelope"]["signatures"][0]["sig"])):
             out.add("evidence-wrong-target")
 
@@ -754,7 +1008,7 @@ def check_witness_bundle(wb, presented, out):
     opened = open_envelope(wb["envelope"], keys, out)
     if opened is None:
         return
-    _, st, sigs, _ = opened
+    _, st, sigs, _, _ = opened
     pred = st.get("predicate") if isinstance(st, dict) else None
     if st.get("predicateType") != WITNESS_TYPE or not isinstance(pred, dict):
         out.add("witness-shape")
@@ -782,7 +1036,7 @@ def check_task(task, meta, out):
     if task["status"].get("state") not in A2A_STATES or set(task["status"]) - {"state", "message", "timestamp"}:
         out.add("a2a-shape")
         return
-    req = strict_loads((HERE / meta["request"]).read_text(encoding="utf-8"))["object"]
+    req = load_fixture(meta["request"])
     presented = [p["data"] for p in req["message"]["parts"] if "data" in p][0]["presented"]["sha256"]
     arts = task.get("artifacts", [])
     if task["status"]["state"] != "TASK_STATE_COMPLETED" or len(arts) != 1 or not shape(arts[0], A2A_ARTIFACT, "a2a-shape", out):
@@ -802,10 +1056,9 @@ def check_mcp_tool(tool, meta, out):
         return
     if not MCP_NAME.match(tool["name"]) or tool["inputSchema"].get("type") != "object":
         out.add("mcp-tool-shape")
-    if REQUIRED_SENTENCES[2] not in tool.get("description", ""):
+    if SENTENCE_FIRST not in tool.get("description", ""):
         out.add("notice-missing")
     ann = tool.get("annotations", {})
-    # Registration contacts time services and adds a new record each call.
     if ann.get("readOnlyHint", False) or ann.get("openWorldHint", True) is not True or ann.get("idempotentHint", False) \
             or ann.get("destructiveHint", True) is not False:
         out.add("mcp-tool-shape")
@@ -814,65 +1067,41 @@ def check_mcp_tool(tool, meta, out):
             out.add("forbidden-field")
 
 
-def check_key_event(bundle, meta, out):
-    inner = set()
-    if not isinstance(bundle, dict) or set(bundle) != {"bundleVersion", "envelope", "verificationMaterial", "timeEvidence"}:
-        out.add("key-event-shape")
-        return
-    keys = read_keys(bundle["verificationMaterial"], inner)
-    opened = open_envelope(bundle["envelope"], keys, inner)
-    out.update(inner & {"signature-invalid", "duplicate-key", "envelope-shape"})
-    if opened is None:
-        return
-    _, st, sig_bytes, _ = opened
-    pred = st.get("predicate", {}) if isinstance(st, dict) else {}
-    if st.get("predicateType") != KEY_EVENT_TYPE or pred.get("eventVersion") != KEY_EVENT_VERSION \
-            or pred.get("event") not in ("retired", "rotated", "compromised") or pred.get("keyid") not in keys \
-            or (pred.get("event") == "rotated") != ("successorPublicKeyHex" in pred) \
-            or (pred.get("event") == "compromised") != ("compromisedNotBefore" in pred):
-        out.add("key-event-shape")
-    for ev in bundle["timeEvidence"]:
-        check_evidence(ev, sig_bytes, out)
-
-
 # ------------------------------------------------------------------ driver
 
-def check_file(path):
+CHECKS = {}
+
+
+def check_object(kind, obj, meta):
     out = set()
-    try:
-        doc = strict_loads(path.read_text(encoding="utf-8"))
-    except Dup:
-        return {"duplicate-key"}, None
-    meta, obj = doc.get("fixture", {}), doc.get("object")
-    if set(doc) != {"fixture", "object"} or meta.get("notice") != FIXTURE_NOTICE:
-        out.add("fixture-shape")
     artifacts = {a["subjectIndex"]: load_source(a["source"]) for a in meta.get("artifacts", [])}
-    kind = meta.get("kind")
     if kind == "statement":
         check_statement(obj, artifacts, out)
     elif kind == "bundle":
         check_bundle(obj, artifacts, out)
     elif kind == "evidence":
-        bundle = strict_loads((HERE / meta["bundle"]).read_text(encoding="utf-8"))["object"]
-        sigs = [b64d(s["sig"]) for s in bundle["envelope"]["signatures"]]
-        check_evidence(obj, sigs, out)
-    elif kind == "verification-result":
-        check_result(obj, meta, out)
-    elif kind == "report-link":
-        check_link(obj, meta, out)
-    elif kind == "rendering":
-        check_rendering(obj, meta, out)
-    elif kind == "a2a-agent-card":
-        check_card(obj, meta, out)
-    elif kind == "a2a-request":
-        check_request(obj, meta, out)
-    elif kind == "a2a-task":
-        check_task(obj, meta, out)
-    elif kind == "mcp-tool":
-        check_mcp_tool(obj, meta, out)
-    elif kind == "key-event":
-        check_key_event(obj, meta, out)
+        bundle = load_fixture(meta["bundle"])
+        check_evidence(obj, [b64d(s["sig"]) for s in bundle["envelope"]["signatures"]], out)
+    elif kind in CHECKS:
+        CHECKS[kind](obj, meta, out)
     else:
+        out.add("fixture-shape")
+    return out
+
+
+CHECKS.update({"verification-result": check_result, "report-link": check_link, "rendering": check_rendering,
+               "key-event": check_key_event, "registration-set": check_set, "a2a-agent-card": check_card,
+               "a2a-request": check_request, "a2a-task": check_task, "mcp-tool": check_mcp_tool})
+
+
+def check_file(path):
+    try:
+        doc = strict_loads(path.read_text(encoding="utf-8"))
+    except Dup:
+        return {"duplicate-key"}, None
+    meta, obj = doc.get("fixture", {}), doc.get("object")
+    out = check_object(meta.get("kind"), obj, meta)
+    if set(doc) != {"fixture", "object"} or meta.get("notice") != FIXTURE_NOTICE:
         out.add("fixture-shape")
     return out, meta
 
@@ -887,9 +1116,88 @@ def self_test():
     sig2 = ed25519_sign(seed2, b"\x72")
     assert sig2.hex() == ("92a009a9f0d4cab8720e820b5f642540a2b27b5416503f8fb3762223ebdb69da"
                           "085ac1e43e15996e458f3613d0f11d8c387b2eaeb4302aeeb00d291612bb0c00")
-    assert ed25519_verify(ed25519_public(seed2), b"\x72", sig2)
-    assert not ed25519_verify(ed25519_public(seed2), b"\x73", sig2)
+    pub2 = ed25519_public(seed2)
+    assert ed25519_verify(pub2, b"\x72", sig2)
+    assert not ed25519_verify(pub2, b"\x73", sig2)
     assert pae("http://example.com/HelloWorld", b"hello world") == b"DSSEv1 29 http://example.com/HelloWorld 11 hello world"
+
+
+def wrong_implementation_self_test(verbose):
+    """Each entry builds a plausible wrong output in memory; the checker must report at least one code."""
+    cases = []
+    s = int.from_bytes(bytes.fromhex("92a009a9f0d4cab8720e820b5f642540a2b27b5416503f8fb3762223ebdb69da"
+                                     "085ac1e43e15996e458f3613d0f11d8c387b2eaeb4302aeeb00d291612bb0c00")[32:], "little")
+    seed2 = bytes.fromhex("4ccd089b28ff96da9db6c346ec114e0f5b8a319f35aba624da8cf6ed4fb8a6fb")
+    sig2 = ed25519_sign(seed2, b"\x72")
+    malleated = sig2[:32] + (s + Q).to_bytes(32, "little")
+    pub2 = ed25519_public(seed2)
+    small = (1).to_bytes(32, "little")  # the identity point: small order
+    forged = small + (0).to_bytes(32, "little")
+    cases.append(("lenient Ed25519 accepts S >= L", ed25519_verify(pub2, b"\x72", malleated, strict=False),
+                  not ed25519_verify(pub2, b"\x72", malleated)))
+    cases.append(("lenient Ed25519 accepts a small-order key with R = identity, S = 0 for any message",
+                  ed25519_verify(small, b"any message", forged, strict=False), not ed25519_verify(small, b"any message", forged)))
+    noncanon = (P + 1).to_bytes(32, "little")  # y = p + 1, a non-canonical encoding of y = 1
+    cases.append(("non-canonical point encoding", True, _decompress(noncanon) is None))
+
+    def mutated(rel, fn):
+        doc = strict_loads((HERE / rel).read_text(encoding="utf-8"))
+        obj = copy.deepcopy(doc["object"])
+        fn(obj)
+        return check_object(doc["fixture"]["kind"], obj, doc["fixture"])
+
+    def set_quorum_to_earliest(r):
+        r["outcomes"]["time"][0]["notAfterQuorum"] = r["outcomes"]["time"][0]["notAfterAnyRoot"]
+
+    def statement_level_bound(r):
+        r["outcomes"]["time"][1].update({k: r["outcomes"]["time"][0][k] for k in ("notAfterAnyRoot", "notAfterQuorum", "distinctRoots", "outcome")})
+
+    def ignore_key_events(r):
+        r["outcomes"]["signerTrust"][0]["outcome"] = "trusted"
+        r["outcomes"]["keyEvents"] = []
+
+    def drop_margin(r):
+        for e in r["outcomes"]["timeEvidence"]:
+            if e["type"] == "opentimestamps" and e["notAfter"]:
+                e["notAfter"] = e["notAfter"].replace("13:12:00", "11:12:00")
+
+    def label_roots(r):
+        for root in r["policy"]["timeRoots"]:
+            root["id"] = "tsa"
+
+    def same_group_twice(r):
+        r["policy"]["timeRoots"][1]["independenceGroup"] = r["policy"]["timeRoots"][0]["independenceGroup"] + "-other"
+
+    def base64_target(e):
+        e["target"]["sha256"] = sha(e["token"].encode())  # digest over text, not the raw signature bytes
+
+    def ignore_revocation(r):
+        for e in r["outcomes"]["timeEvidence"]:
+            if e["outcome"] == "revoked":
+                e["outcome"] = "placeholder-assumed-valid"
+
+    for name, rel, fn in [
+        ("two-root bound taken as the earliest", "fixtures/verification-result.json", set_quorum_to_earliest),
+        ("co-signer inherits the first signature's bound (W8)", "fixtures/verification-result-cosigned.json", statement_level_bound),
+        ("key events ignored (W10)", "fixtures/verification-result-compromise-recent.json", ignore_key_events),
+        ("OpenTimestamps margin dropped", "fixtures/verification-result.json", drop_margin),
+        ("roots identified by producer labels (W3)", "fixtures/verification-result.json", label_roots),
+        ("RFC 3161 revocation ignored", "fixtures/verification-result-revoked.json", ignore_revocation),
+        ("target over text instead of signature bytes", "fixtures/evidence-rfc3161.json", base64_target),
+    ]:
+        got = mutated(rel, fn)
+        cases.append((name, True, bool(got)))
+    for line in ["This registration establishes your claim to sum.go.", "sum.go is registered to you as its creator.",
+                 "This record proves you wrote sum.go.", "Registered first: sum.go belongs to key cd76d6c6b4bb50ab."]:
+        got = mutated("fixtures/rendering.json", lambda r, line=line: r["lines"].insert(1, line))
+        cases.append((f"rendering {line!r} (W12)", True, "authorship-claim" in got))
+    failures = 0
+    for name, wrong_accepts, caught in cases:
+        ok = wrong_accepts and caught
+        failures += not ok
+        if verbose or not ok:
+            print(f"{'ok  ' if ok else 'FAIL'} wrong-implementation: {name}")
+    return failures, len(cases)
 
 
 def main(argv):
@@ -903,29 +1211,34 @@ def main(argv):
             got, meta = check_file(path)
             if folder == "fixtures":
                 want = set()
+            elif meta is None:  # unparseable on purpose: expectation is in the file name
+                want = {path.stem.removeprefix("neg-")}
             else:
-                expect = (meta or {}).get("expect") if meta else None
-                if meta is None:  # unparseable on purpose: expectation is in the file name
-                    want = {path.stem.removeprefix("neg-")}
-                else:
-                    want = {expect["code"], *expect.get("alsoReported", [])} if expect else {"<missing expect>"}
+                expect = meta.get("expect")
+                want = {expect["code"], *expect.get("alsoReported", [])} if expect else {"<missing expect>"}
             ok = got == want
             failures += not ok
             if verbose or not ok:
                 print(f"{'ok  ' if ok else 'FAIL'} {folder}/{path.name}: got {sorted(got)} want {sorted(want)}")
+    wrong_failures, wrong_count = wrong_implementation_self_test(verbose)
+    failures += wrong_failures
     text = DOC.read_text(encoding="utf-8")
     missing = [c for c in CODES if f"`{c}`" not in text]
     if missing:
         failures += 1
         print("FAIL doc-drift: codes not in the design document:", ", ".join(missing))
-    unused = set(CODES)
+    exercised = set()
     for path in (HERE / "negative").glob("*.json"):
         try:
-            unused.discard(strict_loads(path.read_text(encoding="utf-8"))["fixture"]["expect"]["code"])
+            exercised.add(strict_loads(path.read_text(encoding="utf-8"))["fixture"]["expect"]["code"])
         except Dup:
-            unused.discard(path.stem.removeprefix("neg-"))
-    print(f"{counts['fixtures']} positive fixtures, {counts['negative']} negative fixtures, "
-          f"{len(CODES)} codes ({len(CODES) - len(unused)} exercised by a negative); "
+            exercised.add(path.stem.removeprefix("neg-"))
+    unexercised = sorted(set(CODES) - exercised)
+    if unexercised:
+        failures += 1
+        print("FAIL codes without a negative fixture:", ", ".join(unexercised))
+    print(f"{counts['fixtures']} positive fixtures, {counts['negative']} negative fixtures, {wrong_count} wrong-implementation "
+          f"cases, {len(CODES)} codes ({len(CODES) - len(unexercised)} exercised by a negative); "
           f"{'all as expected' if not failures else f'{failures} failure(s)'}")
     return 1 if failures else 0
 

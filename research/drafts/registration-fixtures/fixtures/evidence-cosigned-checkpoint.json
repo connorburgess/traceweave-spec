@@ -1,26 +1,26 @@
 {
   "fixture": {
     "kind": "evidence",
-    "description": "Witness-cosigned checkpoint placeholder; the cosignature time is the witness's clock.",
+    "description": "Witness-cosigned checkpoint placeholder; the witness's clock.",
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
-    "bundle": "fixtures/bundle-two-roots.json"
+    "bundle": "fixtures/bundle-three-roots.json"
   },
   "object": {
-    "evidenceVersion": "traceweave-time-evidence-draft-1",
+    "evidenceVersion": "traceweave-time-evidence-draft-2",
     "type": "cosigned-checkpoint",
     "placeholder": true,
     "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
     "target": {
       "kind": "dsse-signature",
       "signatureIndex": 0,
-      "sha256": "91b0dacf9f52a6ee3c1921f75a659f5b7857ca252f5abf6017cf8e8071f45bfc"
+      "sha256": "e59031b6f83a60965267836dd4fc278ab4444d416ded328b19a82a065032d6b7"
     },
     "root": {
       "kind": "witness-key",
-      "id": "placeholder-witness-a"
+      "anchorSha256": "98d31930761dae5957aa209096346cbf1d5a24f6f73f97f6dcd2a20c86153b0b"
     },
     "token": "PLACEHOLDER-NOT-A-COSIGNED-CHECKPOINT-OBJECT",
-    "statedTime": {
+    "checkpoint": {
       "cosignatureTime": "2026-11-23T10:05:00Z"
     }
   }

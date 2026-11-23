@@ -1,21 +1,21 @@
 {
   "fixture": {
     "kind": "report-link",
-    "description": "Links the registration to the candidate's digest instead of the registered reference.",
+    "description": "Links the candidate's digest instead of the registered reference.",
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
     "expect": {
       "code": "subject-mismatch"
     }
   },
   "object": {
-    "linkVersion": "traceweave-registration-link-draft-1",
+    "linkVersion": "traceweave-registration-link-draft-2",
     "report": {
       "path": "test-vectors/matching/example-report.json",
       "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
     },
     "registration": {
-      "bundle": "fixtures/bundle-two-roots.json",
-      "statementSha256": "cae2bc522355bfcf37f0307ed71b3893e90ff3b9543b28fed5cfb7d76258a214"
+      "bundle": "fixtures/bundle-three-roots.json",
+      "statementSha256": "65f303458eab730a5003cc036856f43d16212d3fe1b70217679d77aed9bcf150"
     },
     "links": [
       {

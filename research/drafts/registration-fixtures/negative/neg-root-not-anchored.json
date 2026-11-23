@@ -1,0 +1,38 @@
+{
+  "fixture": {
+    "kind": "evidence",
+    "description": "Root named by a producer-written label instead of a trust anchor (W3).",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "bundle": "fixtures/bundle-three-roots.json",
+    "expect": {
+      "code": "root-not-anchored"
+    }
+  },
+  "object": {
+    "evidenceVersion": "traceweave-time-evidence-draft-2",
+    "type": "rfc3161",
+    "placeholder": true,
+    "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+    "target": {
+      "kind": "dsse-signature",
+      "signatureIndex": 0,
+      "sha256": "e59031b6f83a60965267836dd4fc278ab4444d416ded328b19a82a065032d6b7"
+    },
+    "root": {
+      "kind": "tsa-certificate-chain",
+      "id": "my-favourite-tsa"
+    },
+    "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT",
+    "rfc3161": {
+      "genTime": "2026-11-23T10:00:00Z",
+      "policyOid": "2.999.1",
+      "nonce": "5a17c0de00000001",
+      "requestNonce": "5a17c0de00000001",
+      "signerCertificate": {
+        "notBefore": "2026-01-01T00:00:00Z",
+        "notAfter": "2031-01-01T00:00:00Z"
+      },
+      "accuracySeconds": 1
+    }
+  }
+}

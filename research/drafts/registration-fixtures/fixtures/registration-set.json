@@ -1,0 +1,14 @@
+{
+  "fixture": {
+    "kind": "registration-set",
+    "description": "Two registrations by one producer: nonces differ.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing."
+  },
+  "object": {
+    "setVersion": "traceweave-registration-set-draft-2",
+    "registrations": [
+      "fixtures/bundle-three-roots.json",
+      "fixtures/bundle-second-work.json"
+    ]
+  }
+}

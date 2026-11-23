@@ -3,7 +3,7 @@
     "kind": "a2a-request",
     "description": "Presents the artifact digest instead of the signature digest.",
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
-    "bundle": "fixtures/bundle-two-roots.json",
+    "bundle": "fixtures/bundle-three-roots.json",
     "expect": {
       "code": "evidence-wrong-target"
     }

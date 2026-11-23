@@ -21,44 +21,51 @@
         "parts": [
           {
             "data": {
-              "bundleVersion": "traceweave-registration-bundle-draft-1",
+              "bundleVersion": "traceweave-registration-bundle-draft-2",
               "envelope": {
                 "payloadType": "application/vnd.in-toto+json",
-                "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYXV0aG9yIjoicGxhY2Vob2xkZXItc3ViamVjdC0wMDAxIiwiY2FsbGVyIjp7Imlzc3VlciI6Imh0dHBzOi8vaXNzdWVyLmV4YW1wbGUuaW52YWxpZCIsInNjaGVtZSI6Im9wZW5JZENvbm5lY3QiLCJzdWJqZWN0IjoicGxhY2Vob2xkZXItc3ViamVjdC0wMDAxIn0sIm5vdFNob3duIjpbImF1dGhvcnNoaXAiLCJvcmlnaW5hbGl0eSIsImZpcnN0LWNyZWF0aW9uIiwib3duZXJzaGlwIiwicGVybWlzc2lvbiJdLCJwcmVzZW50ZWRLaW5kIjoiZHNzZS1zaWduYXR1cmUtc2hhMjU2IiwicmVjZWl2ZWRBdCI6IjIwMjYtMTEtMjNUMTA6MDA6MDJaIiwicmVxdWVzdE1lc3NhZ2VJZCI6IjBmNmMyYThlLWlsbHVzdHJhdGl2ZS0wMDAxIiwid2l0bmVzc1ZlcnNpb24iOiJ0cmFjZXdlYXZlLXdpdG5lc3MtZHJhZnQtMSJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUvd2l0bmVzcy9kcmFmdC0xIiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6IjkxYjBkYWNmOWY1MmE2ZWUzYzE5MjFmNzVhNjU5ZjViNzg1N2NhMjUyZjVhYmY2MDE3Y2Y4ZTgwNzFmNDViZmMifSwibmFtZSI6InByZXNlbnRlZC1kaWdlc3QifV19",
+                "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYXV0aG9yIjoicGxhY2Vob2xkZXItc3ViamVjdC0wMDAxIiwiY2FsbGVyIjp7Imlzc3VlciI6Imh0dHBzOi8vaXNzdWVyLmV4YW1wbGUuaW52YWxpZCIsInNjaGVtZSI6Im9wZW5JZENvbm5lY3QiLCJzdWJqZWN0IjoicGxhY2Vob2xkZXItc3ViamVjdC0wMDAxIn0sIm5vdFNob3duIjpbImF1dGhvcnNoaXAiLCJvcmlnaW5hbGl0eSIsImZpcnN0LWNyZWF0aW9uIiwib3duZXJzaGlwIiwicGVybWlzc2lvbiJdLCJwcmVzZW50ZWRLaW5kIjoiZHNzZS1zaWduYXR1cmUtc2hhMjU2IiwicmVjZWl2ZWRBdCI6IjIwMjYtMTEtMjNUMTA6MDA6MDJaIiwicmVxdWVzdE1lc3NhZ2VJZCI6IjBmNmMyYThlLWlsbHVzdHJhdGl2ZS0wMDAxIiwid2l0bmVzc1ZlcnNpb24iOiJ0cmFjZXdlYXZlLXdpdG5lc3MtZHJhZnQtMSJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUvd2l0bmVzcy9kcmFmdC0xIiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6ImU1OTAzMWI2ZjgzYTYwOTY1MjY3ODM2ZGQ0ZmMyNzhhYjQ0NDRkNDE2ZGVkMzI4YjE5YTgyYTA2NTAzMmQ2YjcifSwibmFtZSI6InByZXNlbnRlZC1kaWdlc3QifV19",
                 "signatures": [
                   {
-                    "keyid": "fb759683b6b4dc99",
-                    "sig": "P90Jrjz86U/sIolRIXMZv060tNcQTiR+J37vvUlR3a0MD8BBmYCHNA5yqxR8uY72jYlwR1mZuX8xYBKd0FynCw=="
+                    "keyid": "e4fbf7d5d9e35ceb",
+                    "sig": "wNVi722bMY+EhOyI4qDCKxMsnEu36SP3JGkXRTgIKM21NTDzbToIJBzK0CNVu1w9n5uhVMy2zb1yJ1jWSl+IBQ=="
                   }
                 ]
               },
               "verificationMaterial": {
                 "publicKeys": [
                   {
-                    "keyid": "fb759683b6b4dc99",
+                    "keyid": "e4fbf7d5d9e35ceb",
                     "alg": "ed25519",
-                    "publicKeyHex": "41bf95fdff75787859f2d80b361c04f7d9237a0df0281a4f68d6badcba9e29d1"
+                    "publicKeyHex": "853a91d0be5489505ebc265f8cb668135c4d3c8d620b313b1b39983d02215580"
                   }
                 ]
               },
               "timeEvidence": [
                 {
-                  "evidenceVersion": "traceweave-time-evidence-draft-1",
+                  "evidenceVersion": "traceweave-time-evidence-draft-2",
                   "type": "rfc3161",
                   "placeholder": true,
                   "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
                   "target": {
                     "kind": "dsse-signature",
                     "signatureIndex": 0,
-                    "sha256": "5267c6b21a01a0f0f45f8683a5628e5c0a4ebbc139b2aeb8af925b138c5082f9"
+                    "sha256": "12a5d66a0845d5194111f8d152162bde2a86fa0644f88b4567f265735c475174"
                   },
                   "root": {
                     "kind": "tsa-certificate-chain",
-                    "id": "placeholder-tsa-a"
+                    "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
                   },
                   "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT",
-                  "statedTime": {
-                    "genTime": "2026-11-23T10:00:00Z",
+                  "rfc3161": {
+                    "genTime": "2026-11-23T10:00:03Z",
+                    "policyOid": "2.999.1",
+                    "nonce": "5a17c0de00000001",
+                    "requestNonce": "5a17c0de00000001",
+                    "signerCertificate": {
+                      "notBefore": "2026-01-01T00:00:00Z",
+                      "notAfter": "2031-01-01T00:00:00Z"
+                    },
                     "accuracySeconds": 1
                   }
                 }

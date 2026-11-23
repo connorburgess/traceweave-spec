@@ -1,7 +1,7 @@
 {
   "fixture": {
     "kind": "bundle",
-    "description": "Possession digest computed without the file (copied from elsewhere).",
+    "description": "Possession digest not computed from the content.",
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
     "artifacts": [
       {
@@ -14,83 +14,118 @@
     }
   },
   "object": {
-    "bundleVersion": "traceweave-registration-bundle-draft-1",
+    "bundleVersion": "traceweave-registration-bundle-draft-2",
     "envelope": {
       "payloadType": "application/vnd.in-toto+json",
-      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2F0YWxvZ3VlIjp7InByb2ZpbGUiOnsiY29uZmlnU2hhMjU2IjoiZGZiYzVmZTM1MTdlOWRhNjUxODljZjJlZjMyYzQ2NTViNWVjNjYyNDQxZjJlNzFmNTA4NTQzYTBhNWM4ZjdiMiIsImlkIjoiZ28tdG9rZW5zIiwidmVyc2lvbiI6ImRyYWZ0LTEifSwic2NoZW1lIjoic2hhMjU2LXNhbHRlZC1jYXRhbG9ndWUtdjEiLCJzaGEyNTYiOiJjMTRmY2Y2NGFmMDAwZjg4N2YzNzIzNGJiMGQzOTQzN2NjZjgwYmE5YmQ2ZDA3MjE2YmE1ZmVhODJiNjMzYjE1In0sImNsYWltcyI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTIwVDA5OjAwOjAwWiJ9LCJjb250ZW50S2luZCI6InNvdXJjZS1jb2RlIiwiaW1wbGVtZW50YXRpb24iOnsiY29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIm5hbWUiOiJidWlsZF9maXh0dXJlcy5weSIsInZlcnNpb24iOiJkcmFmdC0xIn0sIm5vbmNlIjoiYzU3NTE0Y2QwMDkxMGFmNGFmYjg0NDNkMzIzMWM5N2U4OTYzM2QwNTAzNTU0MWFhYTFlZjRhNDA0MzUwYTdhYyIsInBvc3Nlc3Npb24iOlt7InNjaGVtZSI6InNoYTI1Ni1zYWx0ZWQtcG9zc2Vzc2lvbi12MSIsInNoYTI1NiI6IjBlZGQ0NTg1NzY2ZjRhNGYxNzBhNGJiNTEyZGI2MTE4ZmQ5Y2UwODc4YWIzNTA5YzNmODg5N2Q4MGM4ODFiMzAiLCJzdWJqZWN0SW5kZXgiOjB9XSwicmVnaXN0cmF0aW9uVmVyc2lvbiI6InRyYWNld2VhdmUtcmVnaXN0cmF0aW9uLWRyYWZ0LTEiLCJzcGVjQ29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUvcmVnaXN0cmF0aW9uL2RyYWZ0LTEiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiOTc0YzhkMGFkMTQ0YzNjMzllOWYxY2U0MTA3NDBmNDQ5ZjYyM2JmZmQyOWM3NTBlOGVkM2JkNjg2NDBiNjk3YyJ9LCJuYW1lIjoic3VtLmdvIn1dfQ==",
+      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2F0YWxvZ3VlIjp7InByb2ZpbGUiOnsiY29uZmlnU2hhMjU2IjoiZGZiYzVmZTM1MTdlOWRhNjUxODljZjJlZjMyYzQ2NTViNWVjNjYyNDQxZjJlNzFmNTA4NTQzYTBhNWM4ZjdiMiIsImlkIjoiZ28tdG9rZW5zIiwidmVyc2lvbiI6ImRyYWZ0LTEifSwic2NoZW1lIjoic2hhMjU2LXNhbHRlZC1jYXRhbG9ndWUtdjEiLCJzaGEyNTYiOiJjMTRmY2Y2NGFmMDAwZjg4N2YzNzIzNGJiMGQzOTQzN2NjZjgwYmE5YmQ2ZDA3MjE2YmE1ZmVhODJiNjMzYjE1In0sImNsYWltcyI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTIwVDA5OjAwOjAwWiJ9LCJjb250ZW50S2luZCI6InNvdXJjZS1jb2RlIiwiaW1wbGVtZW50YXRpb24iOnsiY29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIm5hbWUiOiJidWlsZF9maXh0dXJlcy5weSIsInZlcnNpb24iOiJkcmFmdC0yIn0sIm5vbmNlIjoiYzU3NTE0Y2QwMDkxMGFmNGFmYjg0NDNkMzIzMWM5N2U4OTYzM2QwNTAzNTU0MWFhYTFlZjRhNDA0MzUwYTdhYyIsInBvc3Nlc3Npb24iOlt7InNjaGVtZSI6InNoYTI1Ni1zYWx0ZWQtcG9zc2Vzc2lvbi12MSIsInNoYTI1NiI6IjBlZGQ0NTg1NzY2ZjRhNGYxNzBhNGJiNTEyZGI2MTE4ZmQ5Y2UwODc4YWIzNTA5YzNmODg5N2Q4MGM4ODFiMzAiLCJzdWJqZWN0SW5kZXgiOjB9XSwicmVnaXN0cmF0aW9uVmVyc2lvbiI6InRyYWNld2VhdmUtcmVnaXN0cmF0aW9uLWRyYWZ0LTIiLCJzcGVjQ29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUvcmVnaXN0cmF0aW9uL2RyYWZ0LTIiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiOTc0YzhkMGFkMTQ0YzNjMzllOWYxY2U0MTA3NDBmNDQ5ZjYyM2JmZmQyOWM3NTBlOGVkM2JkNjg2NDBiNjk3YyJ9LCJuYW1lIjoic3VtLmdvIn1dfQ==",
       "signatures": [
         {
-          "keyid": "cd76d6c6b4bb50ab",
-          "sig": "dmpUVHn4piZyUt1XY2QxRSJydDmb4e1wu5tcrlnMu+E+rGWPOrCUXKCkWzPyTTOjkjFhVLcq1Zn6Z/QdsJi3Cw=="
+          "keyid": "18c3eead08646614",
+          "sig": "Ih9P77UUhzS43bkytxdg9ygqkw6mtnuMPbbUDUAzFfSgpWMhzhtU2pmxt1DtJbh8k+AIlCRDfSWp7Q4U7XE+DQ=="
         }
       ]
     },
     "verificationMaterial": {
       "publicKeys": [
         {
-          "keyid": "cd76d6c6b4bb50ab",
+          "keyid": "18c3eead08646614",
           "alg": "ed25519",
-          "publicKeyHex": "dfb5f64a7aa2a2519c091c93088912cdaa4e6663a607e4a22d302a37b562ffd6"
+          "publicKeyHex": "d0fb7f8f8f5c8fa2cf9ce29ca36d85058df67eef34d57df07791870339056704"
         }
       ]
     },
     "timeEvidence": [
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-1",
+        "evidenceVersion": "traceweave-time-evidence-draft-2",
         "type": "rfc3161",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "03a18dd689d4822061e4940f1919a21f4f09f334c9c23078b2bf72bfaae5d6a0"
+          "sha256": "f5e7f2a9b1e2873c94bbdb99e85a7336dee5061a52090cfb8397cf6113d4700d"
         },
         "root": {
           "kind": "tsa-certificate-chain",
-          "id": "placeholder-tsa-a"
+          "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
         },
         "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT",
-        "statedTime": {
+        "rfc3161": {
           "genTime": "2026-11-23T10:00:00Z",
+          "policyOid": "2.999.1",
+          "nonce": "5a17c0de00000001",
+          "requestNonce": "5a17c0de00000001",
+          "signerCertificate": {
+            "notBefore": "2026-01-01T00:00:00Z",
+            "notAfter": "2031-01-01T00:00:00Z"
+          },
           "accuracySeconds": 1
         }
       },
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-1",
+        "evidenceVersion": "traceweave-time-evidence-draft-2",
+        "type": "rfc3161",
+        "placeholder": true,
+        "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+        "target": {
+          "kind": "dsse-signature",
+          "signatureIndex": 0,
+          "sha256": "f5e7f2a9b1e2873c94bbdb99e85a7336dee5061a52090cfb8397cf6113d4700d"
+        },
+        "root": {
+          "kind": "tsa-certificate-chain",
+          "anchorSha256": "b17252a48ba9c0e7d0f9ae5315caa20e2f28fd7ed6a83582b75353de217547f5"
+        },
+        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT",
+        "rfc3161": {
+          "genTime": "2026-11-23T10:00:05Z",
+          "policyOid": "2.999.2",
+          "nonce": "5a17c0de00000002",
+          "requestNonce": "5a17c0de00000002",
+          "signerCertificate": {
+            "notBefore": "2026-01-01T00:00:00Z",
+            "notAfter": "2031-01-01T00:00:00Z"
+          }
+        }
+      },
+      {
+        "evidenceVersion": "traceweave-time-evidence-draft-2",
         "type": "opentimestamps",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "03a18dd689d4822061e4940f1919a21f4f09f334c9c23078b2bf72bfaae5d6a0"
+          "sha256": "f5e7f2a9b1e2873c94bbdb99e85a7336dee5061a52090cfb8397cf6113d4700d"
         },
         "root": {
           "kind": "bitcoin-proof-of-work",
-          "id": "bitcoin-mainnet"
+          "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6"
         },
         "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT",
-        "status": "complete",
-        "statedTime": {
+        "opentimestamps": {
+          "status": "complete",
           "blockTime": "2026-11-23T11:12:00Z"
         }
       },
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-1",
+        "evidenceVersion": "traceweave-time-evidence-draft-2",
         "type": "rekor-v2",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "03a18dd689d4822061e4940f1919a21f4f09f334c9c23078b2bf72bfaae5d6a0"
+          "sha256": "f5e7f2a9b1e2873c94bbdb99e85a7336dee5061a52090cfb8397cf6113d4700d"
         },
         "root": {
           "kind": "log-key",
-          "id": "placeholder-log-2026"
+          "anchorSha256": "a119903304b41261ee88a9892057782ac7f9011894981a60348d75ef35b622c4"
         },
         "token": "PLACEHOLDER-NOT-A-REKOR-V2-OBJECT",
-        "logIndex": 0
+        "rekorV2": {
+          "logIndex": 0
+        }
       }
     ]
   }

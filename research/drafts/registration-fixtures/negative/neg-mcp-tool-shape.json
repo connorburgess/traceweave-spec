@@ -1,7 +1,7 @@
 {
   "fixture": {
     "kind": "mcp-tool",
-    "description": "Registration tool that declares itself closed-world and idempotent.",
+    "description": "Registration tool declared closed-world and idempotent.",
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
     "expect": {
       "code": "mcp-tool-shape"

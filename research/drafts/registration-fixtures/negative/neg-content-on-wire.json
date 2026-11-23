@@ -3,7 +3,7 @@
     "kind": "a2a-request",
     "description": "Sends the file itself as a raw part to the hosted witness.",
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
-    "bundle": "fixtures/bundle-two-roots.json",
+    "bundle": "fixtures/bundle-three-roots.json",
     "expect": {
       "code": "content-on-wire"
     }
@@ -18,7 +18,7 @@
             "requestVersion": "traceweave-witness-request-draft-1",
             "presented": {
               "kind": "dsse-signature-sha256",
-              "sha256": "91b0dacf9f52a6ee3c1921f75a659f5b7857ca252f5abf6017cf8e8071f45bfc"
+              "sha256": "e59031b6f83a60965267836dd4fc278ab4444d416ded328b19a82a065032d6b7"
             }
           },
           "mediaType": "application/json"

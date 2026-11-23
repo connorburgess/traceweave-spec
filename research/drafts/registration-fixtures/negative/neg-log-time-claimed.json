@@ -1,32 +1,33 @@
 {
   "fixture": {
     "kind": "evidence",
-    "description": "Rekor v2 placeholder that claims a time; Rekor v2 has none.",
+    "description": "Rekor v2 placeholder that claims a time.",
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
-    "bundle": "fixtures/bundle-two-roots.json",
+    "bundle": "fixtures/bundle-three-roots.json",
     "expect": {
       "code": "log-time-claimed"
     }
   },
   "object": {
-    "evidenceVersion": "traceweave-time-evidence-draft-1",
+    "evidenceVersion": "traceweave-time-evidence-draft-2",
     "type": "rekor-v2",
     "placeholder": true,
     "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
     "target": {
       "kind": "dsse-signature",
       "signatureIndex": 0,
-      "sha256": "91b0dacf9f52a6ee3c1921f75a659f5b7857ca252f5abf6017cf8e8071f45bfc"
+      "sha256": "e59031b6f83a60965267836dd4fc278ab4444d416ded328b19a82a065032d6b7"
     },
     "root": {
       "kind": "log-key",
-      "id": "placeholder-log-2026"
+      "anchorSha256": "a119903304b41261ee88a9892057782ac7f9011894981a60348d75ef35b622c4"
     },
     "token": "PLACEHOLDER-NOT-A-REKOR-V2-OBJECT",
-    "logIndex": 0,
+    "rekorV2": {
+      "logIndex": 0
+    },
     "statedTime": {
-      "genTime": "2026-11-23T10:00:00Z",
-      "accuracySeconds": 1
+      "genTime": "2026-11-23T10:00:00Z"
     }
   }
 }
