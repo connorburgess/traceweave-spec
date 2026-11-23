@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/connorburgess/traceweave-spec/blob/main/schemas/review-packet.schema.json",
+  "title": "Traceweave review-packet record (traceweave-review-packet-draft-1)",
+  "description": "A separate record that links one region of a comparison report body to UC-2 origin or dependency evidence (spec/catalogue-report.md section 6.9, roadmap M2.7). It references the body by bodySha256 and the region by its region key; it is never part of the report. It has no rights-verdict, permission, ownership, score or free-text field: a rights review reaches its conclusion elsewhere. The region key must exist in the referenced body; check_gates.py enforces that.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "origin",
+    "region",
+    "report",
+    "reviewPacketVersion"
+  ],
+  "properties": {
+    "reviewPacketVersion": {
+      "const": "traceweave-review-packet-draft-1"
+    },
+    "report": {
+      "$ref": "#/$defs/reportRef"
+    },
+    "region": {
+      "$ref": "#/$defs/regionKey"
+    },
+    "origin": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ownOrigin"
+        },
+        {
+          "$ref": "#/$defs/vendoredDependency"
+        },
+        {
+          "$ref": "#/$defs/historicalCopy"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "artifactId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "channelName": {
+      "type": "string",
+      "pattern": "^[a-z]+$",
+      "maxLength": 32
+    },
+    "label": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._+-]{1,64}$"
+    },
+    "reportRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bodySha256"
+      ],
+      "properties": {
+        "bodySha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "regionKey": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidateId",
+        "firstSeed",
+        "mode",
+        "referenceId"
+      ],
+      "properties": {
+        "candidateId": {
+          "$ref": "#/$defs/artifactId"
+        },
+        "firstSeed": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/$defs/count"
+          }
+        },
+        "mode": {
+          "$ref": "#/$defs/channelName"
+        },
+        "referenceId": {
+          "$ref": "#/$defs/artifactId"
+        }
+      }
+    },
+    "licence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identifier",
+        "textSha256"
+      ],
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9.+-]{1,64}$"
+        },
+        "textSha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "ownOrigin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactSha256",
+        "kind",
+        "repositoryCommit"
+      ],
+      "properties": {
+        "artifactSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "kind": {
+          "const": "own-origin"
+        },
+        "repositoryCommit": {
+          "$ref": "#/$defs/commit"
+        }
+      }
+    },
+    "vendoredDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "licence",
+        "package",
+        "upstreamArtifactSha256"
+      ],
+      "properties": {
+        "kind": {
+          "const": "vendored-dependency"
+        },
+        "licence": {
+          "$ref": "#/$defs/licence"
+        },
+        "package": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "version"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9._/-]{0,127}$"
+            },
+            "version": {
+              "$ref": "#/$defs/label"
+            }
+          }
+        },
+        "upstreamArtifactSha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "historicalCopy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "licence",
+        "sourceArtifactSha256",
+        "sourceCommit"
+      ],
+      "properties": {
+        "kind": {
+          "const": "historical-copy"
+        },
+        "licence": {
+          "$ref": "#/$defs/licence"
+        },
+        "sourceArtifactSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "sourceCommit": {
+          "$ref": "#/$defs/commit"
+        }
+      }
+    }
+  }
+}

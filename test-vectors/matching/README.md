@@ -14,7 +14,13 @@ Revision status (before promotion): draft for review, 2026-11-22. These vectors 
 | `comparison-config.json` | Exact comparison configuration bytes (contract §4), SHA-256 `39345e9c…147333` |
 | `comparison-config-negative.json` | 22 configurations that MUST be rejected |
 | `extraction-go.json`, `extraction-rust.json` | 17 new synthetic inputs (15 Go, 2 Rust) in the [extraction vector](../extraction/README.md) format, with the shipped 1 MiB configurations |
-| `matching.json` | 76 matching vectors |
+| `matching.json` | 83 matching vectors |
+| `extraction-go-gates.json` | A13: three Go inputs (a vendored helper, a host with a reformatted fragment, a second non-ASCII prefix), checked by `../extraction/check_vectors.py` and by go/scanner |
+| `extraction-py.json`, `config-py.json` | A13: verbatim copies of three frozen `py-tokens` draft-1 vectors and their configuration (`research/drafts/extraction-vectors-python/` at 58c25a9); `check_gates.py` checks they are identical |
+| `m22-fixture-manifest.json` | A13, M2.2: the frozen fixture manifest (SHA-256 `9674ce2ed114919318a8108dfbb1a724e5eb10424bef35d811f81b23b30f1887`) |
+| `review-packets.json`, `licence-texts/` | A13, M2.7: review-packet fixtures and the archived synthetic licence texts they reference by digest |
+| `candidate-generation.json` | A13, M2.9: candidate-generation fixtures |
+| `build_gates.py`, `check_gates.py` | Builder and independent checker of the three gate files (`check_gates.py` is run by `tools/validate.py`) |
 | `behaviour-checklist.md` | A6–A12: 66 numbered behavioural conformance items (working-tree markers, override scope, exit statuses, location values, stdout, provenance, atomic writes and temporaries, symbolic links, per-platform default location, message hygiene), each an observable command outcome, for implementations to script |
 | `comparison-config-bounds.json` | A5: 4 configurations above the seed and region bounds (MUST be rejected) and 4 at or just below them (MUST be accepted) |
 | `config-three-channel-test.json`, `extraction-go-classes.json` | Amendment A3: the TEST-ONLY three-channel profile's configuration, and two Go inputs with equal class sequences |
@@ -69,6 +75,9 @@ The checker rejects a corrupted copy that relabels a `computed-then-reviewed` mo
 | Channel lists (A3, TEST-ONLY profile `go-tokens-three-channel-test`, channels `exact`, `normalized`, `classes`) | `tc-rename` (exact no match; normalized and classes match), `tc-classes-only` (only `classes` matches), `tc-format-suppressed` (suppression per mode, three `distinctHashes` keys), `tc-mode-mismatch-three-on-two`, `tc-mode-mismatch-two-on-three` |
 | Real `text-plain` (A4; records from `../extraction-text/records-text-plain.json`, modes `exact`, `folded`, `skeleton`, `minRegionDistinctHashes` 1, `mergeGap` 8) | `text-plain-three-modes`: identical and reflowed copies match in all three modes; the Cyrillic homoglyph variant matches only in `skeleton` (seed (7,7)); unrelated text shares nothing. Expectations derived by hand from the recorded fingerprints |
 | I2 rulings (A5) | `k1-extraction-bounds-k17`, `k1-extraction-bounds-max-input` (out-of-bound `extractionConfig` with a correct digest: `malformed-catalogue`), `k1-extraction-bounds-at-bound` (k 16, window 128 accepted); `k3-lone-surrogate`, `k3-non-integer-number` (`malformed-catalogue` at step 1); `k4-depth-64` (within the limit: `unsupported-catalogue`), `k4-depth-65` (`malformed-catalogue`); `bounds-seeds-above`, `bounds-regions-above` (rejected), `bounds-at-limits` (accepted). In `records.json`: `cat-k2-text-plain-registered`, `cat-builder-hash-not-rederived`, `build-tokencount-mismatch`, `build-unregistered-profile`, `build-empty-artifact-list` |
+| Vendor control class (A13, OD-C19) | `vendor-suppressed` (both projects vendor `vendor.strutil.go`; with the vendor catalogue bound as the suppression catalogue the vendored pair is one diagonal-0 region, `common-only`, still listed with counts), `vendor-unsuppressed` (the same without it: the vendored file matches completely) |
+| M2.2 additions (A13) | `go-formatted-fragment-in-host` (GO_SUM reformatted inside a large host; same tokens, localized match), `go-non-ascii-shift-2` (hand-derived: spans shift by 15 bytes for an 11-code-point prefix) |
+| `py-tokens` (A13, registered as specified, not implemented) | `py-empty-span-self` (the catalogue stores the empty-span fingerprint `[35, 35)`; normalized mode is `computed-then-reviewed`), `py-equal-starts` (consecutive fingerprints with equal span starts are valid), `rv-py-empty-span-region` (synthetic: a region whose spans are empty, `[30, 30)` and `[20, 20)`, carried unchanged) |
 | Caps | `go-output-caps`, `go-output-caps-2` (region truncation with uncapped counts; seed limit at and above the limit); `go-cap-straddles-ambiguous`, `-mirror` (a listed region stays ambiguous when its partner is truncated) |
 | Invariance | `go-invariance-three-references`, `go-invariance-plus-unrelated` (3 ok references sharing the copied loop; adding an unrelated reference changes no pair; checked as an invariance group) |
 | Suppression definition and order | `go-suppression-artifact-count` (artifactCount counts ok, insufficient and error entries: 3); `go-suppression-unexpected` (`none` plus a supplied catalogue is rejected); `go-suppression-order-binding-before-reference`, `-binding-before-validity`, `-malformed-bound`, `-candidate-validity-first`, `-candidate-config-first`, `-profile-before-config` |
@@ -96,6 +105,34 @@ Body digests and outcomes per vector are in `matching.json`. `build_vectors.py` 
 
 **Text-plain records (A4).** `check_matching.py` validates all 60 frozen records of `../extraction-text/records-text-plain.json` (owned by the text lane): named configuration and digests, canonical bytes, schema, declared channel order, closed error codes, Q10 nulls, input digests, and all 1,023 k-gram hashes and window selections recomputed from the recorded values. How the `folded` and `skeleton` values are derived is checked by the text lane's own checker, not here.
 
+## Gate fixtures (A13: M2.2, M2.7, M2.9)
+
+`check_gates.py` (standard library; it imports `check_matching.py`, never the builders) prints:
+
+```
+PASS extraction-py.json: 3 vectors and config-py.json are verbatim copies of the frozen py-tokens draft-1 files
+PASS M2.2 m22-fixture-manifest.json (frozen 9674ce2ed1149193...): 4 rows, 11 cases, spans 56/56 equal to the recomputed bodies
+PASS M2.7 review-packets.json: 4 valid packets (3 origin kinds), 55 rejections as stated, 1 report-body rejection
+PASS M2.9 candidate-generation.json: 4 retrieval paths (3 give the base body byte for byte, 1 different set), 7 invalid records rejected, 4 report bodies with rank/score/index rejected
+PASS gate corruption self-test: rejected 13/13
+```
+
+- **M2.2.** The manifest is frozen: its SHA-256 is pinned in `check_gates.py`, so any change must change that digest in the same commit. For each of the four UC-1 example-matrix rows it lists hand-derived positive cases (and, for the last row, companion cases) with their input digests, catalogue and body digests, and the half-open UTF-8 byte spans of every listed region per mode. The checker recomputes every body and requires every span to match.
+- **M2.7.** See contract §6.9. Valid packets cover own origin, a vendored dependency (also on its `common-only` region) and a historical copy. Rejections cover one per required field of each kind, a region key or mode absent from the referenced body, an unknown body, a mismatched own-origin digest, an unarchived licence text, and the forbidden fields (`rightsVerdict`, `permitted`, `owner`, `score`, `note`, `licenceCompatible`).
+- **M2.9.** See contract §6.10. Three retrieval paths, in different orders, rebuild the candidate catalogue of `text-plain-three-modes` from records and give its body byte for byte. A subset changes the catalogue digest, the count and the pairs.
+
+## Derivation (A13)
+
+Every vector has a `derivation` label, and every mode of every hand expectation has its own. Six modes are `computed-then-reviewed`:
+- the five pre-A13 cases listed above;
+- `py-empty-span-self` normalized: the frozen input's layout-only k-grams repeat, which I had not derived.
+
+These cannot be claimed as hand-derived and are not re-labelled. A re-derivation written now would still follow a computation already seen. M2.2's positive cases and every M2.3 control class rest on `hand` vectors only (contract §11, A13).
+
+The vendor class's first input, a `Reverse` helper, repeated a normalized 5-gram in its swap line. That broke the hand expectation of a single diagonal-0 region in both vendor vectors, and the candidate also shared a function-signature 5-gram with the then-chosen app file. Both inputs were replaced and the expectations kept:
+- the helper became `PadLeft`, whose 28 normalized 5-grams were listed and checked distinct by hand;
+- the app file became `mv-go-classes-a`.
+
 ## Checking
 
 ```
@@ -108,12 +145,12 @@ python3 -I test-vectors/matching/build_vectors.py   # regenerates every file byt
 `check_matching.py` output on 2026-11-22 (Python 3.14.6), with per-item lines omitted:
 
 ```
-PASS matching.json: vectors=76 catalogues-rebuilt=112 synthetic-catalogues=30 fabricated-catalogues=15 pairs=71 regions=171 reportable=96 rejected-reports=27 comparison-config-negatives=22/22 + channel-list and bound negatives 9/9 rejected, bound positives accepted; example-report.json valid
-  rule situations (vectors each, minimum 2): match-over-ambiguous=2, match-over-weaker=2, ambiguous-over-weaker=2, below-over-common=3, region-repeats-hash=4, mixed-common-region=2, merge-split-at-gap-plus-one=2, merge-join-at-gap=21, span-overlap-without-shared-position=3, truncated=4, seed-limit=2, ambiguity-before-cap=2
+PASS matching.json: vectors=83 catalogues-rebuilt=125 synthetic-catalogues=32 fabricated-catalogues=15 pairs=84 regions=189 reportable=112 rejected-reports=27 comparison-config-negatives=22/22 + channel-list and bound negatives 9/9 rejected, bound positives accepted; example-report.json valid
+  rule situations (vectors each, minimum 2): match-over-ambiguous=2, match-over-weaker=2, ambiguous-over-weaker=2, below-over-common=3, region-repeats-hash=5, mixed-common-region=2, merge-split-at-gap-plus-one=2, merge-join-at-gap=27, span-overlap-without-shared-position=3, truncated=4, seed-limit=2, ambiguity-before-cap=2
 PASS corruption self-test: rejected 68/68
 PASS catalogue rule self-test (no extraction records used): 42/42 as stated
 PASS required-field self-test: 706/706 single-field deletions handled (required fields rejected, optional provenance field accepted)
-PASS wrong-implementation self-test: rejected 33/33
+PASS wrong-implementation self-test: rejected 35/35
 PASS records-text-plain.json (text lane, external): 60/60 records valid, 1023 k-gram hashes recomputed from recorded values
 PASS records.json: records=29 (null input fields: 4) catalogues-from-records=7 (2 equal to matching.json catalogues, 1 to a rebuild from extraction vectors, 1 from re-derived records, 1 from text-plain records) build-rejections=6
 PASS record corruption self-test: rejected 55/55

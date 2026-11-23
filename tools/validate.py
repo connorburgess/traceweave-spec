@@ -112,12 +112,16 @@ VECTOR_CHECKERS = (
         "test-vectors/extraction/check_vectors.py",
         "test-vectors/matching/extraction-go.json",
         "test-vectors/matching/extraction-rust.json",
+        "test-vectors/matching/extraction-go-classes.json",
+        "test-vectors/matching/extraction-go-gates.json",
     )),
     ("matching (with self-tests)", ("test-vectors/matching/check_matching.py",)),
+    ("matching gates M2.2 manifest, M2.7 review packets, M2.9 candidate generation (with self-tests)",
+     ("test-vectors/matching/check_gates.py",)),
     ("typescript", ("test-vectors/extraction-typescript/check_vectors.py",)),
     ("text", ("test-vectors/extraction-text/check_text_vectors.py",)),
 )
-PROMOTED_SCHEMAS = ("catalogue", "report", "record")
+PROMOTED_SCHEMAS = ("catalogue", "report", "record", "review-packet", "candidate-generation")
 
 
 def run_checker(arguments, cwd=ROOT):

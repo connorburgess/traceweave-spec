@@ -1,0 +1,882 @@
+{
+ "manifestVersion": "traceweave-m22-fixture-manifest-draft-1",
+ "note": "Frozen M2.2 fixture manifest. Each UC-1 example-matrix row has at least one positive case derived by hand (derivation 'hand'). Spans are half-open UTF-8 byte offsets [start, end). An implementation passes M2.2 only if, for every case, its catalogues and body reproduce these digests and every listed span (N/N).",
+ "matchingVectorsFile": "matching.json",
+ "rows": [
+  {
+   "row": "exact",
+   "exampleMatrixRow": "Exact reference/candidate",
+   "useCase": "UC-1",
+   "cases": [
+    {
+     "vectorId": "go-identical",
+     "role": "positive",
+     "derivation": "hand",
+     "referenceCatalogueSha256": "b0355010c15b3ffffe3c2b6874dd0f6852361a9774604c8144af1b7a122debca",
+     "candidateCatalogueSha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+     "bodySha256": "998c64c296e40f641b300ba6cf4f12a060aece5dd861eb4552962b23578013ad",
+     "artifacts": [
+      {
+       "side": "reference",
+       "id": "sum.go",
+       "inputSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "byteLength": 127
+      },
+      {
+       "side": "candidate",
+       "id": "copy.go",
+       "inputSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "byteLength": 127
+      }
+     ],
+     "expectedSpans": [
+      {
+       "reference": "sum.go",
+       "candidate": "copy.go",
+       "mode": "exact",
+       "outcome": "match",
+       "regions": [
+        {
+         "firstSeed": [
+          2,
+          2
+         ],
+         "referenceSpan": [
+          16,
+          124
+         ],
+         "candidateSpan": [
+          16,
+          124
+         ],
+         "status": "reportable"
+        }
+       ]
+      },
+      {
+       "reference": "sum.go",
+       "candidate": "copy.go",
+       "mode": "normalized",
+       "outcome": "match",
+       "regions": [
+        {
+         "firstSeed": [
+          0,
+          0
+         ],
+         "referenceSpan": [
+          0,
+          126
+         ],
+         "candidateSpan": [
+          0,
+          126
+         ],
+         "status": "reportable"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "vectorId": "rust-identical",
+     "role": "positive",
+     "derivation": "hand",
+     "referenceCatalogueSha256": "6572dbfb4f44e41cd97452609db0d95ef440aada1ce67d436de06e51adcbc9b2",
+     "candidateCatalogueSha256": "049dfc64732e8d3cf50d12bacd96c48dbbfb98200735f2f2096f2eb3499d8499",
+     "bodySha256": "e44a31c591f303cfe42c7abcbdd1cd611d7e5e273007cfd8c52f64f103023e02",
+     "artifacts": [
+      {
+       "side": "reference",
+       "id": "l.rs",
+       "inputSha256": "c4c50fc08f5cfab88d4968022dffad3e35a26b3034e95b592d12a9ecd1a79320",
+       "byteLength": 59
+      },
+      {
+       "side": "candidate",
+       "id": "m.rs",
+       "inputSha256": "c4c50fc08f5cfab88d4968022dffad3e35a26b3034e95b592d12a9ecd1a79320",
+       "byteLength": 59
+      }
+     ],
+     "expectedSpans": [
+      {
+       "reference": "l.rs",
+       "candidate": "m.rs",
+       "mode": "exact",
+       "outcome": "match",
+       "regions": [
+        {
+         "firstSeed": [
+          1,
+          1
+         ],
+         "referenceSpan": [
+          3,
+          59
+         ],
+         "candidateSpan": [
+          3,
+          59
+         ],
+         "status": "reportable"
+        }
+       ]
+      },
+      {
+       "reference": "l.rs",
+       "candidate": "m.rs",
+       "mode": "normalized",
+       "outcome": "match",
+       "regions": [
+        {
+         "firstSeed": [
+          3,
+          3
+         ],
+         "referenceSpan": [
+          11,
+          57
+         ],
+         "candidateSpan": [
+          11,
+          57
+         ],
+         "status": "reportable"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "row": "formatted-fragment-in-large-host",
+   "exampleMatrixRow": "Formatted fragment in a large host",
+   "useCase": "UC-1",
+   "cases": [
+    {
+     "vectorId": "go-formatted-fragment-in-host",
+     "role": "positive",
+     "derivation": "hand",
+     "referenceCatalogueSha256": "b0355010c15b3ffffe3c2b6874dd0f6852361a9774604c8144af1b7a122debca",
+     "candidateCatalogueSha256": "8ed81fd5a4a62530804126d6c39d8820dc35ee5bc73eab736bb7200df74c6080",
+     "bodySha256": "fc251d9ec4deb1add9b937d890037c8ffbb2a0a7aa56793a26efb5650630fbbb",
+     "artifacts": [
+      {
+       "side": "reference",
+       "id": "sum.go",
+       "inputSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "byteLength": 127
+      },
+      {
+       "side": "candidate",
+       "id": "host.go",
+       "inputSha256": "933aa0c9e696db1d938ebc61cec8d542890a5b3fabb32fc5cded4e445f0dec90",
+       "byteLength": 413
+      }
+     ],
+     "expectedSpans": [
+      {
+       "reference": "sum.go",
+       "candidate": "host.go",
+       "mode": "exact",
+       "outcome": "match",
+       "regions": [
+        {
+         "firstSeed": [
+          2,
+          44
+         ],
+         "referenceSpan": [
+          16,
+          124
+         ],
+         "candidateSpan": [
+          187,
+          358
+         ],
+         "status": "reportable"
+        }
+       ]
+      },
+      {
+       "reference": "sum.go",
+       "candidate": "host.go",
+       "mode": "normalized",
+       "outcome": "match",
+       "regions": [
+        {
+         "firstSeed": [
+          0,
+          42
+         ],
+         "referenceSpan": [
+          0,
+          126
+         ],
+         "candidateSpan": [
+          171,
+          360
+         ],
+         "status": "reportable"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "vectorId": "go-function-in-host",
+     "role": "positive",
+     "derivation": "hand",
+     "referenceCatalogueSha256": "b0355010c15b3ffffe3c2b6874dd0f6852361a9774604c8144af1b7a122debca",
+     "candidateCatalogueSha256": "2a600048cc6d1958e02af702a3c7ecbcc40d734026f134ce61fa0017a89624d1",
+     "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be",
+     "artifacts": [
+      {
+       "side": "reference",
+       "id": "sum.go",
+       "inputSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "byteLength": 127
+      },
+      {
+       "side": "candidate",
+       "id": "host.go",
+       "inputSha256": "50f4fd96a1f7481e4686b66e29f2259d3e0ff83650563b4a1719631ecc03a89d",
+       "byteLength": 309
+      }
+     ],
+     "expectedSpans": [
+      {
+       "reference": "sum.go",
+       "candidate": "host.go",
+       "mode": "exact",
+       "outcome": "match",
+       "regions": [
+        {
+         "firstSeed": [
+          2,
+          44
+         ],
+         "referenceSpan": [
+          16,
+          124
+         ],
+         "candidateSpan": [
+          146,
+          254
+         ],
+         "status": "reportable"
+        }
+       ]
+      },
+      {
+       "reference": "sum.go",
+       "candidate": "host.go",
+       "mode": "normalized",
+       "outcome": "match",
+       "regions": [
+        {
+         "firstSeed": [
+          0,
+          42
+         ],
+         "referenceSpan": [
+          0,
+          126
+         ],
+         "candidateSpan": [
+          130,
+          256
+         ],
+         "status": "reportable"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "vectorId": "go-comments-whitespace",
+     "role": "positive",
+     "derivation": "hand",
+     "referenceCatalogueSha256": "74ea0ef4fcdc6fc942306eb87882d7dfac2c48211e4b4a1a1d77c1caa0d2f164",
+     "candidateCatalogueSha256": "f0c4a0be2d16d289643e590873e9e3cb58a8c4a40279b146b4fa726db3bde899",
+     "bodySha256": "cda4b5172c0c863394ea0707fd43f4ff824a7f9c7799361e04da6c77b7c4b2b9",
+     "artifacts": [
+      {
+       "side": "reference",
+       "id": "a.go",
+       "inputSha256": "66b27e4b006c89b0f66411d35fd02d6159cdfae0eb1ea64093679757f7bdb57e",
+       "byteLength": 41
+      },
+      {
+       "side": "candidate",
+       "id": "b.go",
+       "inputSha256": "2040f8a6a89ffb19cf8679237c132caf505b0184bbce7dffdf7c988162e3df96",
+       "byteLength": 68
+      }
+     ],
+     "expectedSpans": [
+      {
+       "reference": "a.go",
+       "candidate": "b.go",
+       "mode": "exact",
+       "outcome": "match",
+       "regions": [
+        {
+         "firstSeed": [
+          1,
+          1
+         ],
+         "referenceSpan": [
+          5,
+          40
+         ],
+         "candidateSpan": [
+          18,
+          68
+         ],
+         "status": "reportable"
+        }
+       ]
+      },
+      {
+       "reference": "a.go",
+       "candidate": "b.go",
+       "mode": "normalized",
+       "outcome": "match",
+       "regions": [
+        {
+         "firstSeed": [
+          2,
+          2
+         ],
+         "referenceSpan": [
+          8,
+          38
+         ],
+         "candidateSpan": [
+          21,
+          54
+         ],
+         "status": "reportable"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "row": "rename-shadowing",
+   "exampleMatrixRow": "Identifier rename and shadowing",
+   "useCase": "UC-1",
+   "cases": [
+    {
+     "vectorId": "go-renamed",
+     "role": "positive",
+     "derivation": "hand",
+     "referenceCatalogueSha256": "20b84aa3810c524ed90bf74687b165a3b7f9df9796bbdf8287b34d183d3369c5",
+     "candidateCatalogueSha256": "a46179edf724f6375d5eaf9faca3a801d8fe68fd8b3c289274c218f5c14766ea",
+     "bodySha256": "becb38f65b8d536245a63f04330a8d2b2d4ca78ef57f1ab40307a58c318bc116",
+     "artifacts": [
+      {
+       "side": "reference",
+       "id": "a.go",
+       "inputSha256": "cca3c276657b738fcc5043029be8188ec921edb79fde89b12e2d0c285ccfa717",
+       "byteLength": 40
+      },
+      {
+       "side": "candidate",
+       "id": "b.go",
+       "inputSha256": "90443261423efc77765d029820f51b47973232214a8df0576ff873697bf160a2",
+       "byteLength": 40
+      }
+     ],
+     "expectedSpans": [
+      {
+       "reference": "a.go",
+       "candidate": "b.go",
+       "mode": "exact",
+       "outcome": "no-shared-fingerprints",
+       "regions": []
+      },
+      {
+       "reference": "a.go",
+       "candidate": "b.go",
+       "mode": "normalized",
+       "outcome": "match",
+       "regions": [
+        {
+         "firstSeed": [
+          2,
+          2
+         ],
+         "referenceSpan": [
+          8,
+          37
+         ],
+         "candidateSpan": [
+          8,
+          37
+         ],
+         "status": "reportable"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "vectorId": "go-shadowing",
+     "role": "positive",
+     "derivation": "hand",
+     "referenceCatalogueSha256": "66cd9df7ab1f4d031eaeb83940198a8eebe643ae31f3573baa986a16ba76a1c5",
+     "candidateCatalogueSha256": "0af0a8446b5a1bd66dd5a9ded3de8794498d872fb23c5770266fda356b469c68",
+     "bodySha256": "5aa399da5ab5fd3bcf98cdd3432dbe6d52f218b2f3d904fb203c8f82e54182d6",
+     "artifacts": [
+      {
+       "side": "reference",
+       "id": "a.go",
+       "inputSha256": "4ec3b69cc4b9ee02754b4c4b7093267550640d2b4b927cd637931e781d42d04b",
+       "byteLength": 72
+      },
+      {
+       "side": "candidate",
+       "id": "b.go",
+       "inputSha256": "b7a099df318aae6659e8fe30ae0dde4c302b6970abe4df9345f1cbad185c8dea",
+       "byteLength": 72
+      }
+     ],
+     "expectedSpans": [
+      {
+       "reference": "a.go",
+       "candidate": "b.go",
+       "mode": "exact",
+       "outcome": "match",
+       "regions": [
+        {
+         "firstSeed": [
+          2,
+          2
+         ],
+         "referenceSpan": [
+          6,
+          38
+         ],
+         "candidateSpan": [
+          6,
+          38
+         ],
+         "status": "reportable"
+        }
+       ]
+      },
+      {
+       "reference": "a.go",
+       "candidate": "b.go",
+       "mode": "normalized",
+       "outcome": "match",
+       "regions": [
+        {
+         "firstSeed": [
+          2,
+          2
+         ],
+         "referenceSpan": [
+          6,
+          71
+         ],
+         "candidateSpan": [
+          6,
+          71
+         ],
+         "status": "reportable"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "vectorId": "rust-renamed",
+     "role": "positive",
+     "derivation": "hand",
+     "referenceCatalogueSha256": "556949b4736e396636679fdcf15c0cba4ec044cc46ae08875266c7e586732a3f",
+     "candidateCatalogueSha256": "cee632f49ed1dfb9a06c0bbc04c6de43dd734191143c19fb071bf1c8e28245b6",
+     "bodySha256": "c4ccf10dba702ed84d9db342c35ef888a36f2df3092d570c6dab7385692f33fe",
+     "artifacts": [
+      {
+       "side": "reference",
+       "id": "a.rs",
+       "inputSha256": "3185b6705c81fa457ff05a9d15a97405e2b747ea4bc3848f0f4f73558f5aef0a",
+       "byteLength": 39
+      },
+      {
+       "side": "candidate",
+       "id": "b.rs",
+       "inputSha256": "3674c59b2ca417d5c6d7e1e274a0b8dcc1565995bf459711cfbaa5c1265323f0",
+       "byteLength": 39
+      }
+     ],
+     "expectedSpans": [
+      {
+       "reference": "a.rs",
+       "candidate": "b.rs",
+       "mode": "exact",
+       "outcome": "below-minimum-evidence",
+       "regions": []
+      },
+      {
+       "reference": "a.rs",
+       "candidate": "b.rs",
+       "mode": "normalized",
+       "outcome": "match",
+       "regions": [
+        {
+         "firstSeed": [
+          1,
+          1
+         ],
+         "referenceSpan": [
+          3,
+          37
+         ],
+         "candidateSpan": [
+          3,
+          37
+         ],
+         "status": "reportable"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "row": "unicode-repeated-minima-tiny",
+   "exampleMatrixRow": "Unicode / repeated minima / tiny file",
+   "useCase": "UC-1",
+   "cases": [
+    {
+     "vectorId": "go-non-ascii-shift-2",
+     "role": "positive",
+     "derivation": "hand",
+     "referenceCatalogueSha256": "9ff266b98341470ef4ebcf2cb2b58a4a1c4b65ab7bf534ac2858e5451da767b9",
+     "candidateCatalogueSha256": "76e69181a9146032accc7f97f3195d8045b841b041241b11e8dc696fd40f9774",
+     "bodySha256": "09bdeb1903bd0e853f63cd88eb38554c0ed565e4288ad0ad950265cbf86508a1",
+     "artifacts": [
+      {
+       "side": "reference",
+       "id": "g.go",
+       "inputSha256": "1953ff73fe61a3fc2dce2eccf3beb9db223ea1959135be03ce710390896618a0",
+       "byteLength": 91
+      },
+      {
+       "side": "candidate",
+       "id": "h.go",
+       "inputSha256": "6dd5be5cd6d8838d79d88720b0dc66d5c1c8868d5286b445dfee32fe13b53c45",
+       "byteLength": 106
+      }
+     ],
+     "expectedSpans": [
+      {
+       "reference": "g.go",
+       "candidate": "h.go",
+       "mode": "exact",
+       "outcome": "match",
+       "regions": [
+        {
+         "firstSeed": [
+          2,
+          2
+         ],
+         "referenceSpan": [
+          12,
+          88
+         ],
+         "candidateSpan": [
+          27,
+          103
+         ],
+         "status": "reportable"
+        }
+       ]
+      },
+      {
+       "reference": "g.go",
+       "candidate": "h.go",
+       "mode": "normalized",
+       "outcome": "match",
+       "regions": [
+        {
+         "firstSeed": [
+          2,
+          2
+         ],
+         "referenceSpan": [
+          12,
+          90
+         ],
+         "candidateSpan": [
+          27,
+          105
+         ],
+         "status": "reportable"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "vectorId": "go-periodic-distinct",
+     "role": "companion",
+     "derivation": "hand",
+     "referenceCatalogueSha256": "23db97b255aee42b68e5fc1e414d00927c70c13cbd84d9b491dcdfe0f5ae5fb5",
+     "candidateCatalogueSha256": "a1d1ae7b37557cef076927636f2d02e9c6af6444a9de1dd7054af6854f9f67ee",
+     "bodySha256": "3d857803a87fe96cce509cb488d9e511533c11725fbbdc6b08dc3fbd0e31f106",
+     "artifacts": [
+      {
+       "side": "reference",
+       "id": "x.go",
+       "inputSha256": "1606b8c90ccbb437917cb028ab311129b79e1eab7fbfe2b9921e0281d692747c",
+       "byteLength": 16
+      },
+      {
+       "side": "candidate",
+       "id": "x6.go",
+       "inputSha256": "7e651bb0bf68e3896beeec0dec63681c02e9ca23d7facc787ef8824600b26f7e",
+       "byteLength": 24
+      }
+     ],
+     "expectedSpans": [
+      {
+       "reference": "x.go",
+       "candidate": "x6.go",
+       "mode": "exact",
+       "outcome": "below-minimum-evidence",
+       "regions": [
+        {
+         "firstSeed": [
+          2,
+          2
+         ],
+         "referenceSpan": [
+          3,
+          13
+         ],
+         "candidateSpan": [
+          3,
+          13
+         ],
+         "status": "below-minimum-evidence"
+        },
+        {
+         "firstSeed": [
+          2,
+          5
+         ],
+         "referenceSpan": [
+          3,
+          13
+         ],
+         "candidateSpan": [
+          7,
+          17
+         ],
+         "status": "below-minimum-evidence"
+        },
+        {
+         "firstSeed": [
+          2,
+          8
+         ],
+         "referenceSpan": [
+          3,
+          13
+         ],
+         "candidateSpan": [
+          11,
+          21
+         ],
+         "status": "below-minimum-evidence"
+        },
+        {
+         "firstSeed": [
+          2,
+          11
+         ],
+         "referenceSpan": [
+          3,
+          9
+         ],
+         "candidateSpan": [
+          15,
+          21
+         ],
+         "status": "below-minimum-evidence"
+        },
+        {
+         "firstSeed": [
+          5,
+          2
+         ],
+         "referenceSpan": [
+          7,
+          13
+         ],
+         "candidateSpan": [
+          3,
+          9
+         ],
+         "status": "below-minimum-evidence"
+        }
+       ]
+      },
+      {
+       "reference": "x.go",
+       "candidate": "x6.go",
+       "mode": "normalized",
+       "outcome": "below-minimum-evidence",
+       "regions": [
+        {
+         "firstSeed": [
+          1,
+          1
+         ],
+         "referenceSpan": [
+          1,
+          15
+         ],
+         "candidateSpan": [
+          1,
+          15
+         ],
+         "status": "below-minimum-evidence"
+        },
+        {
+         "firstSeed": [
+          1,
+          4
+         ],
+         "referenceSpan": [
+          1,
+          15
+         ],
+         "candidateSpan": [
+          5,
+          19
+         ],
+         "status": "below-minimum-evidence"
+        },
+        {
+         "firstSeed": [
+          1,
+          7
+         ],
+         "referenceSpan": [
+          1,
+          15
+         ],
+         "candidateSpan": [
+          9,
+          23
+         ],
+         "status": "below-minimum-evidence"
+        },
+        {
+         "firstSeed": [
+          1,
+          10
+         ],
+         "referenceSpan": [
+          1,
+          11
+         ],
+         "candidateSpan": [
+          13,
+          23
+         ],
+         "status": "below-minimum-evidence"
+        },
+        {
+         "firstSeed": [
+          1,
+          13
+         ],
+         "referenceSpan": [
+          1,
+          7
+         ],
+         "candidateSpan": [
+          17,
+          23
+         ],
+         "status": "below-minimum-evidence"
+        },
+        {
+         "firstSeed": [
+          4,
+          1
+         ],
+         "referenceSpan": [
+          5,
+          15
+         ],
+         "candidateSpan": [
+          1,
+          11
+         ],
+         "status": "below-minimum-evidence"
+        },
+        {
+         "firstSeed": [
+          7,
+          1
+         ],
+         "referenceSpan": [
+          9,
+          15
+         ],
+         "candidateSpan": [
+          1,
+          7
+         ],
+         "status": "below-minimum-evidence"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "vectorId": "go-insufficient-tokens",
+     "role": "companion",
+     "derivation": "hand",
+     "referenceCatalogueSha256": "b0355010c15b3ffffe3c2b6874dd0f6852361a9774604c8144af1b7a122debca",
+     "candidateCatalogueSha256": "e2843a4390c53e13817a3e308efb293dc48ec56640f5ab99cbb8df639bf4f65a",
+     "bodySha256": "991781319800be4b773dab67270f00e91317963dd9cfbe38aa4aabbc31a48b8b",
+     "artifacts": [
+      {
+       "side": "reference",
+       "id": "sum.go",
+       "inputSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "byteLength": 127
+      },
+      {
+       "side": "candidate",
+       "id": "short.go",
+       "inputSha256": "e4068c3a09bf6ddfe5e9922da6984961d90a5f7dad3d5436a201b1888e2e84d8",
+       "byteLength": 7
+      }
+     ],
+     "expectedSpans": [
+      {
+       "reference": "sum.go",
+       "candidate": "short.go",
+       "pairOutcome": "insufficient-tokens"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

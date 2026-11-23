@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/connorburgess/traceweave-spec/blob/main/schemas/candidate-generation.schema.json",
+  "title": "Traceweave candidate-generation record (traceweave-candidate-generation-draft-1)",
+  "description": "A separate record, keyed by a report body's bodySha256, stating how the candidate catalogue was generated: exhaustive, or the SHA-256 of the selected candidate-id set (spec/catalogue-report.md section 6.10, roadmap M2.9). Index ranking is not evidence: there is no rank, score or position field, and none of this enters the report body. check_gates.py checks the digests against the catalogue and body.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "candidateCatalogueSha256",
+    "candidateGenerationVersion",
+    "generation",
+    "report"
+  ],
+  "properties": {
+    "candidateGenerationVersion": {
+      "const": "traceweave-candidate-generation-draft-1"
+    },
+    "report": {
+      "$ref": "#/$defs/reportRef"
+    },
+    "candidateCatalogueSha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "generation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "method"
+          ],
+          "properties": {
+            "method": {
+              "const": "exhaustive"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "index",
+            "method",
+            "selectedIdsSha256"
+          ],
+          "properties": {
+            "index": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "version"
+              ],
+              "properties": {
+                "name": {
+                  "$ref": "#/$defs/label"
+                },
+                "version": {
+                  "$ref": "#/$defs/label"
+                }
+              }
+            },
+            "method": {
+              "const": "selected"
+            },
+            "selectedIdsSha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "artifactId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+    },
+    "channelName": {
+      "type": "string",
+      "pattern": "^[a-z]+$",
+      "maxLength": 32
+    },
+    "label": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._+-]{1,64}$"
+    },
+    "reportRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bodySha256"
+      ],
+      "properties": {
+        "bodySha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  }
+}

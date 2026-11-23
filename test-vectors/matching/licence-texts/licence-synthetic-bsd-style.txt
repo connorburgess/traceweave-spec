@@ -1,0 +1,2 @@
+Synthetic licence text for a Traceweave test fixture (BSD-style placeholder).
+It is not a real licence and grants nothing.
