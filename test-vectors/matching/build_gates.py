@@ -27,6 +27,23 @@ import build_vectors as bv  # noqa: E402
 MANIFEST_VERSION = "traceweave-m22-fixture-manifest-draft-1"
 PACKET_VERSION = "traceweave-review-packet-draft-2"
 CANDGEN_VERSION = "traceweave-candidate-generation-draft-1"
+RULE = bv.ROADMAP_DEFINITION   # ROADMAP.md, Definitions (M2.6); each file adds how it applies
+MANIFEST_RULE = RULE + (
+    " Applied to this manifest: which vectors serve as positive and companion cases of each UC-1 example-matrix row is "
+    "written by hand; each case's derivation label is the matching vector's own (matching.json derivationRule). The "
+    "listed digests, outcomes and spans are copied by build_gates.py from the bodies build_vectors.py computed, and "
+    "check_gates.py recomputes every body and requires every digest and span to match.")
+PACKET_RULE = RULE + (
+    " Applied to these fixtures: each packet's origin kind, side, region, package and commit, each rejection's "
+    "corrupted field and expected verdict (schema or semantic), and the archived licence texts are written by hand from "
+    "spec/catalogue-report.md section 6.9. Region keys and artifact, body and licence-text digests are copied or "
+    "computed by build_gates.py from matching.json bodies, and check_gates.py recomputes the bodies and re-checks "
+    "every packet.")
+CANDGEN_RULE = RULE + (
+    " Applied to these fixtures: the retrieval orders, the selected subset, each invalid record's defect and each "
+    "rejected report field are written by hand from spec/catalogue-report.md section 6.10. Catalogues, bodies and "
+    "id-set digests are computed by build_gates.py with build_vectors.py's functions, and check_gates.py rebuilds "
+    "them independently.")
 
 
 def sha(b: bytes) -> str:
@@ -101,6 +118,7 @@ def build_manifest(vecs):
                     "regions only (regionsListed 'reportable'); companion cases list every region ('all'). Other regions are "
                     "covered by the body digest. An implementation passes M2.2 only if, for every case, its catalogues and body "
                     "reproduce these digests and every listed span (N/N).",
+            "derivationRule": MANIFEST_RULE,
             "matchingVectorsFile": "matching.json", "rows": rows}
 
 
@@ -260,6 +278,7 @@ def build_packets(vecs):
     return {"packetVersion": PACKET_VERSION,
             "note": "M2.7 review-packet fixtures (spec/catalogue-report.md §6.9). Bodies are matching.json bodies; licence texts are "
                     "archived under licence-texts/ and referenced by SHA-256.",
+            "derivationRule": PACKET_RULE,
             "licenceTexts": [{"file": f"licence-texts/{n}", "sha256": d_} for n, d_ in lic.items()],
             "valid": valid, "invalid": invalid, "reportRejections": [report_reject]}
 
@@ -342,6 +361,7 @@ def build_candgen(vecs):
                     "paths and orders gives a byte-identical catalogue and body; a different candidate set changes the catalogue "
                     "digest, the candidate count and the pairs. selectedIdsSha256 is the SHA-256 of the RFC 8785 array of the "
                     "selected candidate ids sorted by bytes.",
+            "derivationRule": CANDGEN_RULE,
             "baseVector": "matching.json#text-plain-three-modes", "retrievals": out,
             "invalidRecords": bad_records, "reportRejections": rejections}
 

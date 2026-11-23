@@ -13,11 +13,11 @@ Revision status (before promotion): draft for review, 2026-11-22. These vectors 
 | `../../schemas/catalogue.schema.json`, `../../schemas/report.schema.json` | Canonical copies of the draft JSON Schema 2020-12 (draft-2). They use only the keywords `check_matching.py` interprets |
 | `comparison-config.json` | Exact comparison configuration bytes (contract §4), SHA-256 `39345e9c…147333` |
 | `comparison-config-negative.json` | 22 configurations that MUST be rejected |
-| `extraction-go.json`, `extraction-rust.json` | 17 new synthetic inputs (15 Go, 2 Rust) in the [extraction vector](../extraction/README.md) format, with the shipped 1 MiB configurations |
-| `matching.json` | 83 matching vectors |
-| `extraction-go-gates.json` | A13: three Go inputs (a vendored helper, a host with a reformatted fragment, a second non-ASCII prefix), checked by `../extraction/check_vectors.py` and by go/scanner |
+| `extraction-go.json`, `extraction-rust.json` | 17 new synthetic inputs (15 Go, 2 Rust) in the [extraction vector](../extraction/README.md) format, with the shipped 1 MiB configurations. Token streams are hand-written literals (`HAND_TOKENS` in `build_vectors.py`), each vector `derivation: hand` |
+| `matching.json` | 90 matching vectors, with a `derivationRule` (ROADMAP.md definition and how it applies) |
+| `extraction-go-gates.json` | A13: three Go inputs (a vendored helper, a host with a reformatted fragment, a second non-ASCII prefix), hand-written token streams like `extraction-go.json`, checked by `../extraction/check_vectors.py` |
 | `extraction-py.json`, `config-py.json` | A13: verbatim copies of three frozen `py-tokens` draft-1 vectors and their configuration (`research/drafts/extraction-vectors-python/` at 58c25a9); `check_gates.py` checks they are identical |
-| `m22-fixture-manifest.json` | A13, M2.2: the frozen fixture manifest (SHA-256 `3fe1f8e729442239cc3230f01c9745594ea6d3a8fdf026bd99066efa3c69620f`, re-frozen in A14) |
+| `m22-fixture-manifest.json` | A13, M2.2: the frozen fixture manifest (SHA-256 `349bd14953082dcef95e00c40d22972a708654d270819ba7ae7366444dc7fb34`, re-frozen in A14) |
 | `review-packets.json`, `licence-texts/` | A13, M2.7: review-packet fixtures (`traceweave-review-packet-draft-2` since A14) and the archived synthetic licence texts they reference by digest |
 | `candidate-generation.json` | A13, M2.9: candidate-generation fixtures |
 | `build_gates.py`, `check_gates.py` | Builder and independent checker of the three gate files (`check_gates.py` is run by `tools/validate.py`) |
@@ -113,17 +113,21 @@ Body digests and outcomes per vector are in `matching.json`. `build_vectors.py` 
 
 ```
 PASS extraction-py.json: 3 vectors and config-py.json are verbatim copies of the frozen py-tokens draft-1 files
-PASS M2.2 m22-fixture-manifest.json (frozen 3fe1f8e729442239...): 4 rows, 11 cases, spans 56/56 equal to the recomputed bodies
+PASS M2.2 m22-fixture-manifest.json (frozen 349bd14953082dce...): 4 rows, 11 cases, spans 56/56 equal to the recomputed bodies
 PASS M2.7 review-packets.json: 4 valid packets (3 origin kinds), 67 rejections as stated, 1 report-body rejection
 PASS M2.9 candidate-generation.json: 4 retrieval paths (3 give the base body byte for byte, 1 different set), 7 invalid records rejected, 4 report bodies with rank/score/index rejected
-PASS gate corruption self-test: rejected 18/18
+PASS gate corruption self-test: rejected 19/19
 ```
 
 - **M2.2.** The manifest is frozen: its SHA-256 is pinned in `check_gates.py`, so any change must change that digest in the same commit. For each of the four UC-1 example-matrix rows it lists hand-derived positive cases (and, for the last row, companion cases) with their input digests, catalogue and body digests, and the half-open UTF-8 byte spans of its regions per mode: reportable regions only for positive cases (`regionsListed: "reportable"`), every region for companion cases (`"all"`, A14). The checker recomputes every body and requires every span to match.
 - **M2.7.** See contract §6.9. Valid packets cover own origin, a vendored dependency (also on its `common-only` region) and a historical copy. Rejections cover one per required field of each kind, a region key or mode absent from the referenced body, a non-first seed, an unknown body, an unarchived licence text, and the forbidden fields (`rightsVerdict`, `permitted`, `owner`, `score`, `note`, `licenceCompatible`, `permitted` inside `package`, a licence `identifier`). Since A14 each origin names a `side` whose digest must equal the body pair's digest for that side, and a historical copy's source must be the other side's digest; the review's P1b (a vendored packet re-pointed at `go-identical`) and an unbound source digest are rejected. `upstreamArtifactSha256` is a claim the body cannot check (contract §6.9).
 - **M2.9.** See contract §6.10. Three retrieval paths, in different orders, rebuild the candidate catalogue of `text-plain-three-modes` from records and give its body byte for byte. A subset changes the catalogue digest, the count and the pairs.
 
-## Derivation (A13)
+## Derivation (A13, A15)
+
+Every file states the [ROADMAP.md definition](../../ROADMAP.md#definitions) of hand-derived in a `derivationRule` field, followed by how it applies to that file (A15): `matching.json`, the four extraction files of this directory, `m22-fixture-manifest.json`, `review-packets.json` and `candidate-generation.json`.
+
+**Hand-written token streams (A15).** The 22 synthetic inputs of `extraction-go.json` (15), `extraction-rust.json` (2), `extraction-go-classes.json` (2) and `extraction-go-gates.json` (3) used to take their token streams from the builder's mini-lexer `lex()`: a tool-made lexical layer, which the [core-gates review](../../research/reviews/core-gates-m1-m2-review.md) §11 found under 48 `hand` vectors and 7 of the 11 M2.2 cases. Their tokens are now written by hand from `spec/extraction.md` as literal lists (`HAND_TOKENS` in `build_vectors.py`), in the form `../extraction/harness/build_vectors.py` uses: class and text in source order, and each inserted Go semicolon. Spans are located by a source-order search for each text. One start is hand-written because the search would land in a comment: `total` in `mv-go-host-formatted` (byte 238, marked `spanStarts: hand`). `lex()` is kept only as a cross-check, and the builder stops if it disagrees. All 22 hand-written lists agreed with it, and every record, catalogue, body and digest is byte-identical to before. `check_matching.py` fails a vector labelled `hand` if any artifact it is built from does not come from an extraction vector or record labelled `hand`, or from a literal catalogue. Its derivation self-test relabels four source vectors as tool-lexed and drops the rule text, and requires each to fail (5/5).
 
 Every vector has a `derivation` label, and every mode of every hand expectation has its own. Six modes are `computed-then-reviewed`:
 - the five pre-A13 cases listed above;
@@ -149,6 +153,8 @@ python3 -I test-vectors/matching/build_vectors.py   # regenerates every file byt
 ```
 PASS matching.json: vectors=90 catalogues-rebuilt=136 synthetic-catalogues=32 fabricated-catalogues=20 pairs=86 regions=193 reportable=112 rejected-reports=32 comparison-config-negatives=22/22 + channel-list and bound negatives 9/9 rejected, bound positives accepted; example-report.json valid
   rule situations (vectors each, minimum 2): match-over-ambiguous=2, match-over-weaker=2, ambiguous-over-weaker=2, below-over-common=3, region-repeats-hash=5, mixed-common-region=2, merge-split-at-gap-plus-one=2, merge-join-at-gap=29, span-overlap-without-shared-position=3, truncated=4, seed-limit=2, ambiguity-before-cap=2
+PASS derivation (M2.6): derivationRule states the ROADMAP.md definition; 84 hand vectors rest only on hand-written token streams, hand records or literal catalogues; 6 mixed
+PASS derivation self-test: rejected 5/5
 PASS corruption self-test: rejected 68/68
 PASS catalogue rule self-test (no extraction records used): 42/42 as stated
 PASS required-field self-test: 706/706 single-field deletions handled (required fields rejected, optional provenance field accepted)
@@ -250,7 +256,7 @@ The reviewer's own scripts (`variants.py`, `cleanroom.py` in their scratch direc
 - The `jsonschema` library in `.venv` validated all 259 valid instances: 153 catalogues, 76 bodies, 29 records and the report document. It rejected 4 record corruptions (`inputBytes`, `contract` key, `inserted:false`, missing `kgrams`) in addition to the earlier body corruptions below. It rejected 8 structural corruptions: extra field, rank, origin, float, class/code mismatch, draft-1 region field, provenance note, and source text in the implementation name.
 
 **What the checker cannot do.**
-- It does not lex. Token streams rest on `check_vectors.py` and the toolchain comparison above.
+- It does not lex. Token streams are hand-written (A15) and rest on `check_vectors.py`; the toolchain comparison above was run on the earlier, lexer-produced streams, which are byte-identical to the hand-written ones.
 - It shares an author with `build_vectors.py`.
 - Synthetic and fabricated catalogues are checked for shape, digest and expected outcome, not rebuilt.
 - No independent draft-2 implementation exists.

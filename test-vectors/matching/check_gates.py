@@ -32,7 +32,7 @@ import check_matching as cm  # noqa: E402
 
 # Frozen M2.2 manifest (roadmap M2.2 "frozen manifest"). Changing the manifest requires changing this digest in
 # the same commit, which makes every change to the frozen fixture set visible in review.
-M22_MANIFEST_SHA256 = "3fe1f8e729442239cc3230f01c9745594ea6d3a8fdf026bd99066efa3c69620f"
+M22_MANIFEST_SHA256 = "349bd14953082dcef95e00c40d22972a708654d270819ba7ae7366444dc7fb34"
 PACKET_SCHEMA = cm.HERE.parent.parent / "schemas" / "review-packet.schema.json"
 CANDGEN_SCHEMA = cm.HERE.parent.parent / "schemas" / "candidate-generation.schema.json"
 
@@ -258,7 +258,17 @@ def candgen_semantic(rec, bodies):
 
 # ------------------------------------------------------------------ self-test and main
 
+def check_rules(m, pk, cg):
+    """M2.6: each gate fixture file states the ROADMAP.md definition of hand-derived, then how it applies."""
+    rule = cm.roadmap_definition()
+    for name, d in (("m22-fixture-manifest.json", m), ("review-packets.json", pk), ("candidate-generation.json", cg)):
+        got = d.get("derivationRule", "")
+        cm.need(got.startswith(rule) and len(got) > len(rule) and "Applied to" in got,
+                f"{name}: derivationRule must be the ROADMAP.md definition followed by its application")
+
+
 def run_all(m, pk, cg, ctx, frozen=True):
+    check_rules(m, pk, cg)
     return check_manifest(m, ctx, frozen), check_packets(pk, ctx), check_candgen(cg, ctx)
 
 
@@ -289,6 +299,7 @@ def corruptions(m, pk, cg):
     yield "packet-vendored-digest-moved", pp(lambda d: d["valid"][1]["packet"]["origin"].__setitem__("vendoredArtifactSha256", "6" * 64))
     yield "packet-historical-source-moved", pp(lambda d: d["valid"][3]["packet"]["origin"].__setitem__("sourceArtifactSha256", "5" * 64))
     yield "packet-licence-identifier-added", pp(lambda d: d["valid"][1]["packet"]["origin"]["licence"].__setitem__("identifier", "MIT"))
+    yield "candgen-derivation-rule-dropped", cc(lambda d: d.pop("derivationRule"))
     yield "packet-missing-fixture-dropped", pp(lambda d: d["invalid"].pop(0))
     yield "packet-licence-file-digest", pp(lambda d: d["licenceTexts"][0].__setitem__("sha256", "8" * 64))
     yield "candgen-order-changes-body", cc(lambda d: d["retrievals"][1].__setitem__("expectedBodySha256", "9" * 64))

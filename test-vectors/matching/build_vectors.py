@@ -45,9 +45,9 @@ TEST_CONTEXT = [True]   # the builder accepts the TEST-ONLY list except when wri
 CONFIG_3CH = (b'{"contract":"traceweave-token-winnow-draft-1","profile":"go-tokens-three-channel-test","profileVersion":"draft-1",'
               b'"channels":["exact","normalized","classes"],"k":5,"window":4,"hash":"sha256-first8-u64be","maxInputBytes":1048576}\n')
 
-# ------------------------------------------------------------------ mini lexers
-# Only the constructs used by the new synthetic inputs. Their output is validated
-# by ../extraction/check_vectors.py, not trusted.
+# ------------------------------------------------------------------ mini lexers (cross-check only)
+# Only the constructs used by the new synthetic inputs. Since the M2.6 hand-derivation ruling the token streams are
+# the hand-written HAND_TOKENS below; lex() only cross-checks them, and main() stops if the two disagree.
 
 GO_KW = set("break case chan const continue default defer else fallthrough for func go goto if import "
             "interface map package range return select struct switch type var".split())
@@ -127,6 +127,187 @@ def lex(text: str, lang: str):
     return toks
 
 
+# ------------------------------------------------------------------ hand-written token streams (M2.6, ROADMAP Definitions (a))
+# Written by hand from spec/extraction.md (Go and Rust profiles) for the 22 synthetic matching inputs, in the same form
+# as ../extraction/harness/build_vectors.py: (class, text) in source order, (P, ";", A) for a Go inserted semicolon
+# (zero-width, at the end of the previous token), and an optional third element giving a hand-written start offset where
+# a search for the text would land inside a comment. Spans are located by searching for each text in source order
+# (arithmetic, ROADMAP Definitions (b)). lex() above is kept only as a cross-check: main() requires it to agree.
+A = "AUTO"
+I, P, KW, S, N = "ident", "punct", "keyword", "string", "int"
+
+
+def go_sum(name, total_start=None):
+    """GO_SUM's tokens under another function name (same token stream as GO_SUM_FMT)."""
+    total = (I, "total") if total_start is None else (I, "total", total_start)
+    return [(KW, "func"), (I, name), (P, "("), (I, "values"), (P, "["), (P, "]"), (I, "int"), (P, ")"), (I, "int"), (P, "{"),
+            total, (P, ":="), (N, "0"), (P, ";", A),
+            (KW, "for"), (I, "_"), (P, ","), (I, "v"), (P, ":="), (KW, "range"), (I, "values"), (P, "{"),
+            (KW, "if"), (I, "v"), (P, ">"), (N, "0"), (P, "{"),
+            (I, "total"), (P, "+="), (I, "v"), (P, ";", A),
+            (P, "}"), (P, ";", A),
+            (P, "}"), (P, ";", A),
+            (KW, "return"), (I, "total"), (P, ";", A),
+            (P, "}"), (P, ";", A)]
+
+
+GO_HOST_HEAD = [(KW, "package"), (I, "stats"), (P, ";", A),
+                (KW, "type"), (I, "Point"), (KW, "struct"), (P, "{"),
+                (I, "X"), (P, ","), (I, "Y"), (I, "float64"), (P, ";", A),
+                (P, "}"), (P, ";", A),
+                (KW, "func"), (P, "("), (I, "p"), (I, "Point"), (P, ")"), (I, "String"), (P, "("), (P, ")"), (I, "string"), (P, "{"),
+                (KW, "return"), (I, "fmt"), (P, "."), (I, "Sprintf"), (P, "("), (S, '"(%g, %g)"'), (P, ","),
+                (I, "p"), (P, "."), (I, "X"), (P, ","), (I, "p"), (P, "."), (I, "Y"), (P, ")"), (P, ";", A),
+                (P, "}"), (P, ";", A)]
+GO_HOST_TAIL = [(KW, "var"), (I, "names"), (P, "="), (KW, "map"), (P, "["), (I, "string"), (P, "]"), (I, "bool"), (P, "{"),
+                (S, '"a"'), (P, ":"), (I, "true"), (P, ","), (S, '"b"'), (P, ":"), (I, "false"), (P, "}"), (P, ";", A)]
+GO_ERR_RETURN = [(KW, "if"), (I, "err"), (P, "!="), (I, "nil"), (P, "{"), (KW, "return"), (I, "err"), (P, ";", A),
+                 (P, "}"), (P, ";", A)]
+GO_NONASCII_TOKS = [(KW, "func"), (I, "größe"), (P, "("), (I, "näme"), (I, "string"), (P, ")"), (I, "string"), (P, "{"),
+                    (I, "grüße"), (P, ":="), (S, '"héllo, 世界"'), (P, ";", A),
+                    (KW, "return"), (I, "grüße"), (P, "+"), (I, "näme"), (P, ";", A),
+                    (P, "}"), (P, ";", A)]
+
+
+def go_shadow(inner):
+    return [(KW, "func"), (I, "f"), (P, "("), (I, "ok"), (I, "bool"), (P, ")"), (I, "int"), (P, "{"),
+            (I, "x"), (P, ":="), (N, "1"), (P, ";", A),
+            (KW, "if"), (I, "ok"), (P, "{"),
+            (I, inner), (P, ":="), (N, "2"), (P, ";", A),
+            (I, "x"), (P, "+="), (I, inner), (P, ";", A),
+            (P, "}"), (P, ";", A),
+            (KW, "return"), (I, "x"), (P, ";", A),
+            (P, "}"), (P, ";", A)]
+
+
+# "total" on GO_SUM_FMT's second line: a search would find the "total" in the first line's comment. Hand count:
+# GO_HOST_FMT's prefix up to "func sumPositive" is 171 bytes (14 + 1 + 20 + 14 + 2 + 1 + 33 + 42 + 2 + 1 + 41), and
+# GO_SUM_FMT's first line is 63 bytes, then 4 spaces: 171 + 63 + 4 = 238.
+GO_HOST_FMT_TOTAL_START = 238
+
+RUST_SUM_TOKS = [(KW, "fn"), (I, "sum_positive"), (P, "("), (I, "values"), (P, ":"), (P, "&"), (P, "["), (I, "i32"), (P, "]"),
+                 (P, ")"), (P, "-"), (P, ">"), (I, "i32"), (P, "{"),
+                 (KW, "let"), (KW, "mut"), (I, "total"), (P, "="), (N, "0"), (P, ";"),
+                 (KW, "for"), (I, "v"), (KW, "in"), (I, "values"), (P, "{"),
+                 (KW, "if"), (P, "*"), (I, "v"), (P, ">"), (N, "0"), (P, "{"),
+                 (I, "total"), (P, "+"), (P, "="), (P, "*"), (I, "v"), (P, ";"),
+                 (P, "}"),
+                 (P, "}"),
+                 (I, "total"),
+                 (P, "}")]
+RUST_HOST_HEAD = [(KW, "use"), (I, "std"), (P, ":"), (P, ":"), (I, "fmt"), (P, ";"),
+                  (KW, "pub"), (KW, "struct"), (I, "Point"), (P, "{"),
+                  (I, "x"), (P, ":"), (I, "f64"), (P, ","),
+                  (I, "y"), (P, ":"), (I, "f64"), (P, ","),
+                  (P, "}"),
+                  (KW, "impl"), (I, "fmt"), (P, ":"), (P, ":"), (I, "Display"), (KW, "for"), (I, "Point"), (P, "{"),
+                  (KW, "fn"), (I, "fmt"), (P, "("), (P, "&"), (KW, "self"), (P, ","), (I, "f"), (P, ":"), (P, "&"), (KW, "mut"),
+                  (I, "fmt"), (P, ":"), (P, ":"), (I, "Formatter"), (P, ")"), (P, "-"), (P, ">"),
+                  (I, "fmt"), (P, ":"), (P, ":"), (I, "Result"), (P, "{"),
+                  (I, "write"), (P, "!"), (P, "("), (I, "f"), (P, ","), (S, '"({}, {})"'), (P, ","),
+                  (KW, "self"), (P, "."), (I, "x"), (P, ","), (KW, "self"), (P, "."), (I, "y"), (P, ")"),
+                  (P, "}"),
+                  (P, "}")]
+
+HAND_TOKENS = {
+    "mv-go-sum": go_sum("sumPositive"),
+    "mv-go-host": GO_HOST_HEAD + go_sum("sumPositive") + GO_HOST_TAIL,
+    "mv-go-partial": [(KW, "func"), (I, "logPositive"), (P, "("), (I, "total"), (I, "int"), (P, ","), (I, "values"), (P, "..."),
+                      (I, "int"), (P, ")"), (I, "int"), (P, "{"),
+                      (KW, "for"), (I, "_"), (P, ","), (I, "v"), (P, ":="), (KW, "range"), (I, "values"), (P, "{"),
+                      (KW, "if"), (I, "v"), (P, ">"), (N, "0"), (P, "{"),
+                      (I, "total"), (P, "+="), (I, "v"), (P, ";", A),
+                      (P, "}"), (P, ";", A),
+                      (P, "}"), (P, ";", A),
+                      (KW, "return"), (I, "total"), (P, "*"), (N, "2"), (P, ";", A),
+                      (P, "}"), (P, ";", A)],
+    "mv-go-twice": go_sum("sumA") + go_sum("sumB"),
+    "mv-go-pair": [(KW, "type"), (I, "Pair"), (KW, "struct"), (P, "{"),
+                   (I, "Key"), (I, "string"), (P, ";", A),
+                   (I, "Value"), (P, "["), (P, "]"), (I, "byte"), (P, ";", A),
+                   (P, "}"), (P, ";", A)],
+    "mv-go-b1": [(KW, "func"), (I, "load"), (P, "("), (I, "path"), (I, "string"), (P, ")"), (I, "error"), (P, "{"),
+                 (I, "data"), (P, ","), (I, "err"), (P, ":="), (I, "os"), (P, "."), (I, "ReadFile"), (P, "("), (I, "path"), (P, ")"),
+                 (P, ";", A)]
+                + GO_ERR_RETURN
+                + [(I, "cache"), (P, "="), (I, "data"), (P, ";", A),
+                   (KW, "return"), (I, "nil"), (P, ";", A),
+                   (P, "}"), (P, ";", A)],
+    "mv-go-b2": [(KW, "func"), (I, "save"), (P, "("), (I, "w"), (I, "io"), (P, "."), (I, "Writer"), (P, ")"), (I, "error"), (P, "{"),
+                 (I, "_"), (P, ","), (I, "err"), (P, ":="), (I, "w"), (P, "."), (I, "Write"), (P, "("), (I, "buf"), (P, ")"), (P, ";", A)]
+                + GO_ERR_RETURN
+                + [(I, "buf"), (P, "="), (I, "buf"), (P, "["), (P, ":"), (N, "0"), (P, "]"), (P, ";", A),
+                   (KW, "return"), (I, "nil"), (P, ";", A),
+                   (P, "}"), (P, ";", A)],
+    "mv-go-b3": [(KW, "func"), (I, "flush"), (P, "("), (I, "sink"), (I, "Sink"), (P, ")"), (I, "error"), (P, "{"),
+                 (I, "err"), (P, ":="), (I, "sink"), (P, "."), (I, "Flush"), (P, "("), (P, ")"), (P, ";", A)]
+                + GO_ERR_RETURN
+                + [(I, "stamp"), (P, "="), (I, "now"), (P, ";", A),
+                   (KW, "return"), (I, "nil"), (P, ";", A),
+                   (P, "}"), (P, ";", A)],
+    "mv-go-put": [(KW, "type"), (I, "Store"), (KW, "struct"), (P, "{"), (I, "m"), (KW, "map"), (P, "["), (I, "string"), (P, "]"),
+                  (I, "int"), (P, "}"), (P, ";", A),
+                  (KW, "func"), (P, "("), (I, "s"), (P, "*"), (I, "Store"), (P, ")"), (I, "Put"), (P, "("), (I, "k"), (I, "string"),
+                  (P, ","), (I, "v"), (I, "int"), (P, ")"), (I, "error"), (P, "{"),
+                  (KW, "if"), (I, "err"), (P, ":="), (I, "s"), (P, "."), (I, "check"), (P, "("), (I, "k"), (P, ")"), (P, ";"),
+                  (I, "err"), (P, "!="), (I, "nil"), (P, "{"),
+                  (KW, "return"), (I, "err"), (P, ";", A),
+                  (P, "}"), (P, ";", A),
+                  (I, "s"), (P, "."), (I, "m"), (P, "["), (I, "k"), (P, "]"), (P, "="), (I, "v"), (P, ";", A),
+                  (KW, "return"), (I, "nil"), (P, ";", A),
+                  (P, "}"), (P, ";", A)],
+    "mv-go-nonascii": GO_NONASCII_TOKS,
+    "mv-go-nonascii-prefixed": GO_NONASCII_TOKS,       # the comment line adds no token
+    "mv-go-independent": [(KW, "func"), (I, "positiveTotal"), (P, "("), (I, "xs"), (P, "["), (P, "]"), (I, "int"), (P, ")"),
+                          (P, "("), (I, "sum"), (I, "int"), (P, ")"), (P, "{"),
+                          (KW, "for"), (I, "i"), (P, ":="), (N, "0"), (P, ";"), (I, "i"), (P, "<"), (I, "len"), (P, "("), (I, "xs"),
+                          (P, ")"), (P, ";"), (I, "i"), (P, "++"), (P, "{"),
+                          (KW, "if"), (I, "xs"), (P, "["), (I, "i"), (P, "]"), (P, ">"), (N, "0"), (P, "{"),
+                          (I, "sum"), (P, "+="), (I, "xs"), (P, "["), (I, "i"), (P, "]"), (P, ";", A),
+                          (P, "}"), (P, ";", A),
+                          (P, "}"), (P, ";", A),
+                          (KW, "return"), (P, ";", A),
+                          (P, "}"), (P, ";", A)],
+    "mv-go-shadow-a": go_shadow("y"),
+    "mv-go-shadow-b": go_shadow("x"),
+    "mv-go-periodic6": [(I, "x"), (P, "++"), (P, ";", A)] * 6,
+    "mv-go-classes-a": [(KW, "return"), (I, "x"), (P, "+"), (I, "f"), (P, "("), (N, "1"), (P, ")"), (P, ";", A),
+                        (KW, "break"), (P, ";", A),
+                        (I, "x"), (P, "++"), (P, ";", A)],
+    "mv-go-classes-b": [(KW, "defer"), (I, "y"), (P, "-"), (I, "g"), (P, "("), (N, "2"), (P, ")"), (P, ";", A),
+                        (KW, "continue"), (P, ";", A),
+                        (I, "y"), (P, "--"), (P, ";", A)],
+    "mv-go-vendor-lib": [(KW, "func"), (I, "PadLeft"), (P, "("), (I, "s"), (I, "string"), (P, ","), (I, "width"), (I, "int"), (P, ")"),
+                         (I, "string"), (P, "{"),
+                         (KW, "for"), (I, "len"), (P, "("), (I, "s"), (P, ")"), (P, "<"), (I, "width"), (P, "{"),
+                         (I, "s"), (P, "="), (S, '" "'), (P, "+"), (I, "s"), (P, ";", A),
+                         (P, "}"), (P, ";", A),
+                         (KW, "return"), (I, "s"), (P, ";", A),
+                         (P, "}"), (P, ";", A)],
+    "mv-go-host-formatted": GO_HOST_HEAD + go_sum("sumPositive", GO_HOST_FMT_TOTAL_START) + GO_HOST_TAIL,
+    "mv-go-nonascii-prefixed2": GO_NONASCII_TOKS,
+    "mv-rust-sum": RUST_SUM_TOKS,
+    "mv-rust-host": RUST_HOST_HEAD + RUST_SUM_TOKS,
+}
+
+
+def hand_stream(vid, text):
+    """Token records from the hand-written list: spans located by searching for each text in source order."""
+    src = text.encode()
+    toks, pos = [], 0
+    for t in HAND_TOKENS[vid]:
+        if len(t) > 2 and t[2] == A:
+            e = toks[-1]["span"][1]
+            toks.append({"class": "punct", "text": ";", "span": [e, e], "inserted": True})
+            continue
+        b = t[1].encode()
+        i = t[2] if len(t) > 2 else src.index(b, pos)
+        assert src[i:i + len(b)] == b and i >= pos, (vid, t)
+        toks.append({"class": t[0], "text": t[1], "span": [i, i + len(b)]})
+        pos = i + len(b)
+    return toks
+
+
 # ------------------------------------------------------------------ extraction (contract §6–§8)
 
 def lp(b: bytes) -> bytes:
@@ -184,10 +365,48 @@ def channels_for(tokens, cfg, lang):
     return out
 
 
+def roadmap_definition():
+    """ROADMAP.md, Definitions: the hand-derived rule as one paragraph, Markdown emphasis removed (same reading as
+    tools/check_requirement_map.py and check_matching.py)."""
+    road = (HERE.parent.parent / "ROADMAP.md").read_text(encoding="utf-8")
+    sec = road.split("## Definitions", 1)[1].split("\n## ", 1)[0]
+    a = re.search(r"^- \*\*\(a\) (.*)$", sec, re.M).group(1)
+    b = re.search(r"^- \*\*\(b\) (.*)$", sec, re.M).group(1)
+    last = re.search(r"(A vector whose lexical layer was first produced by a tool.*?otherwise\.)", sec).group(1)
+    return ("A vector is hand-derived when both of these hold: (a) " + a + " (b) " + b + " " + last).replace("**", "")
+
+
+ROADMAP_DEFINITION = roadmap_definition()
+EXTRACTION_RULE_APPLICATION = (
+    "Applied to these vectors: every token's class and text, and every inserted semicolon, is written by hand from "
+    "spec/extraction.md as a literal list in build_vectors.py (HAND_TOKENS), as in ../extraction/harness/build_vectors.py. "
+    "The arithmetic over those judgments (byte spans, normalized values, k-gram hashes, window selections and "
+    "fingerprints) is computed by this specification's own builder, not by an implementation under test, and is "
+    "independently recomputed by ../extraction/check_vectors.py and check_matching.py. A span is located by searching "
+    "for the token's hand-written text in source order, except in vectors marked spanStarts: hand, where a hand-written "
+    "start replaces a search that would land inside a comment. The builder's mini-lexer lex() is kept only as a "
+    "cross-check and must produce the same tokens; it produces no expected value.")
+MATCHING_RULE_APPLICATION = (
+    "Applied to these vectors: which regions match, their outcomes and every rejection code are written by hand in "
+    "each vector's handExpectations, per mode, before the body is computed. Every input token stream is hand-derived: a "
+    "vector labelled hand uses only extraction vectors and records labelled derivation hand (the matching lane's four "
+    "extraction files are hand-written literals in build_vectors.py) or catalogues written as literals in the "
+    "builder, and check_matching.py fails a hand vector that rests on any other lexical layer. Catalogues, report "
+    "bodies, spans, counts and digests are computed by build_vectors.py, the specification's own builder, and are "
+    "independently recomputed by check_matching.py and by a clean-room review. A vector labelled mixed, or a mode "
+    "labelled computed-then-reviewed, had values seen computed before they were written down (README, Derivation).")
+
+
 def extraction_record(vid, tags, desc, text, cfg, lang):
-    toks = lex(text, lang)
+    toks = hand_stream(vid, text)
+    cross = lex(text, lang)
+    if toks != cross:   # the contract decides which one is wrong; neither is silently preferred
+        bad = next(i for i, (a, b) in enumerate(zip(toks + [None] * len(cross), cross + [None] * len(toks))) if a != b)
+        raise SystemExit(f"{vid}: hand-written token {bad} {toks[bad] if bad < len(toks) else None} differs from the "
+                         f"lexer cross-check {cross[bad] if bad < len(cross) else None}")
     data = text.encode()
-    return {"id": vid, "tags": tags, "description": desc,
+    starts = {"spanStarts": "hand"} if any(len(t) > 2 and t[2] != A for t in HAND_TOKENS[vid]) else {}
+    return {"id": vid, "derivation": "hand", **starts, "tags": tags, "description": desc,
             "inputBase64": base64.b64encode(data).decode(), "inputText": text,
             "result": {"status": "ok" if len(toks) >= cfg["k"] else "insufficient-tokens",
                        "tokenCount": len(toks), "tokens": toks, "channels": channels_for(toks, cfg, lang)}}
@@ -849,8 +1068,10 @@ def main():
         d = {"contract": cfg["contract"], "profile": cfg["profile"], "profileVersion": cfg["profileVersion"],
              "configFile": f"../extraction/{cfgfile}", "configSha256": sha(cfg_raw),
              "k": cfg["k"], "window": cfg["window"], "requiredCoverage": False,
-             "lexingCheck": "New synthetic inputs for the matching vectors. Token streams are produced by build_vectors.py "
-                            "and validated by ../extraction/check_vectors.py; see README.md.",
+             "derivationRule": ROADMAP_DEFINITION + " " + EXTRACTION_RULE_APPLICATION,
+             "lexingCheck": "New synthetic inputs for the matching vectors. Token streams are hand-written literals "
+                            "(HAND_TOKENS in build_vectors.py); its mini-lexer lex() is only a cross-check that must "
+                            "agree. Re-verified by ../extraction/check_vectors.py; see README.md.",
              "vectors": [extraction_record(i, t, ds, tx, cfg, lang) for i, t, ds, tx in items]}
         (HERE / name).write_text(json.dumps(d, indent=1, ensure_ascii=False) + "\n")
 
@@ -1632,7 +1853,8 @@ def main():
                     "expectedReport": {"bodySha256": sha(canonical(body)), "body": body}})
         out.append(rec)
     doc = {"contract": "traceweave-catalogue-report-draft-2",
-           "note": "Draft research vectors, not files in test-vectors/. No detection-accuracy claim.",
+           "note": "Draft matching vectors (spec/catalogue-report.md). No detection-accuracy claim.",
+           "derivationRule": ROADMAP_DEFINITION + " " + MATCHING_RULE_APPLICATION,
            "comparisonConfigFile": "comparison-config.json", "comparisonConfigSha256": sha(COMPARISON_CONFIG),
            "requiredTags": sorted({"identical", "function-in-host", "large-host", "partial-copy", "trivia-pair", "rename-pair",
                                    "boilerplate", "suppression", "no-overlap", "config-mismatch", "profile-mismatch",

@@ -1199,6 +1199,97 @@ def situations(doc):
     return seen
 
 
+def roadmap_definition():
+    """The ROADMAP.md definition of hand-derived, as one paragraph with Markdown emphasis removed (M2.6)."""
+    road = (HERE.parent.parent / "ROADMAP.md").read_text(encoding="utf-8")
+    sec = road.split("## Definitions", 1)[1].split("\n## ", 1)[0]
+    a = re.search(r"^- \*\*\(a\) (.*)$", sec, re.M).group(1)
+    b = re.search(r"^- \*\*\(b\) (.*)$", sec, re.M).group(1)
+    last = re.search(r"(A vector whose lexical layer was first produced by a tool.*?otherwise\.)", sec).group(1)
+    return ("A vector is hand-derived when both of these hold: (a) " + a + " (b) " + b + " " + last).replace("**", "")
+
+
+# Matching-lane extraction files whose token streams are hand-written literals in build_vectors.py (M2.6).
+MATCHING_EXTRACTION_FILES = {"extraction-go.json": "mv-go-sum", "extraction-rust.json": "mv-rust-sum",   # file: a vector id
+                             "extraction-go-classes.json": "mv-go-classes-a", "extraction-go-gates.json": "mv-go-vendor-lib"}
+
+
+def lexical_derivations(v, ctx):
+    """(where, derivation) for every artifact a vector's catalogues are built from: the lexical layer it rests on."""
+    out = []
+    for side in SIDES:
+        entry = v.get(side)
+        if entry is None:
+            continue
+        if "fromRecords" in entry:
+            for a in entry["fromRecords"]["artifacts"]:
+                r = resolve_record(a["record"], ctx)
+                if "#" not in a["record"]:   # records.json: re-derived from an extraction vector's token stream
+                    out.append((f"{side} {a['record']} -> {r['source']}", ctx.sources.get(r["source"])[0].get("derivation")))
+                    continue
+                # another lane's records file: the record's own label, and the label of the vector it records
+                out.append((f"{side} {a['record']}", r.get("derivation")))
+                if "source" in r:
+                    fname, vid = r["source"].split("#", 1)
+                    full = (HERE / a["record"].split("#", 1)[0]).resolve().parent / fname
+                    sv = next(x for x in strict_loads(full.read_bytes())["vectors"] if x["id"] == vid)
+                    out.append((f"{side} {a['record']} -> {r['source']}", sv.get("derivation")))
+        elif "artifacts" in entry:
+            for a in entry["artifacts"]:
+                out.append((f"{side} {a['source']}", ctx.sources.get(a["source"])[0].get("derivation")))
+        else:   # synthetic or fabricated catalogue: written as literals in the builder, no token stream
+            need("synthetic" in entry or "fabricated" in entry, f"{side}: catalogue with no stated origin")
+            out.append((f"{side} literal catalogue", "hand"))
+    return out
+
+
+def check_derivations(doc, ctx):
+    """M2.6 (ROADMAP Definitions): a vector labelled hand MUST NOT rest on a token stream that a tool produced.
+    Every artifact of a hand vector must come from an extraction vector or record labelled derivation 'hand', or from
+    a literal catalogue; and each matching-lane extraction file must state the rule."""
+    rule = roadmap_definition()
+    need(doc.get("derivationRule", "").startswith(rule), "matching.json: derivationRule does not start with the ROADMAP.md definition")
+    hand = 0
+    for v in doc["vectors"]:
+        need(v["derivation"] in ("hand", "mixed"), f"{v['id']}: derivation must be hand or mixed")
+        if v["derivation"] != "hand":
+            continue
+        for where, der in lexical_derivations(v, ctx):
+            need(der == "hand", f"{v['id']}: labelled hand, but {where} has derivation {der!r} (a tool-produced lexical layer)")
+        hand += 1
+    for f in MATCHING_EXTRACTION_FILES:
+        ctx.sources.get(f"{f}#{MATCHING_EXTRACTION_FILES[f]}")   # loads the file
+        d = ctx.sources.files[f][0]
+        need(d.get("derivationRule", "").startswith(rule), f"{f}: derivationRule does not start with the ROADMAP.md definition")
+        need(all(x.get("derivation") == "hand" for x in d["vectors"]), f"{f}: every vector must carry derivation 'hand'")
+    return hand
+
+
+def derivation_self_test(doc, ctx):
+    """The derivation check must fail a hand vector whose input token stream is not hand-written."""
+    out = []
+    for f, vid in (("extraction-go.json", "mv-go-sum"), ("extraction-rust.json", "mv-rust-host"),
+                   ("extraction-go-gates.json", "mv-go-host-formatted"), ("../extraction/go.json", "go-format-a")):
+        rec = ctx.sources.get(f"{f}#{vid}")[0]
+        old = rec.get("derivation")
+        rec["derivation"] = "lexer-then-reviewed"
+        try:
+            check_derivations(doc, ctx)
+            out.append((f"{f}#{vid} tool-lexed", None))
+        except CheckError as exc:
+            out.append((f"{f}#{vid} tool-lexed", str(exc)))
+        finally:
+            rec["derivation"] = old
+    d = copy.deepcopy(doc)
+    d.pop("derivationRule", None)
+    try:
+        check_derivations(d, ctx)
+        out.append(("matching.json derivationRule removed", None))
+    except CheckError as exc:
+        out.append(("matching.json derivationRule removed", str(exc)))
+    return out
+
+
 def check_all(doc, ctx, negatives, example):
     stats = dict.fromkeys(("catalogues", "fabricated", "synthetic", "pairs", "regions", "reportable", "rejected"), 0)
     need(comparison_config((HERE / doc["comparisonConfigFile"]).read_bytes()) is not None, "shipped comparison config invalid")
@@ -2156,6 +2247,19 @@ def main(argv):
           f"comparison-config-negatives={len(negatives)}/{len(negatives)} + channel-list and bound negatives {stats['channelNegatives']}/{stats['channelNegatives']} rejected, bound positives accepted; example-report.json valid")
     print("  rule situations (vectors each, minimum 2): " + ", ".join(f"{k}={n}" for k, n in stats["situations"].items()))
     missed = []
+    try:
+        nhand = check_derivations(doc, ctx)
+    except CheckError as exc:
+        print(f"FAIL derivation (M2.6): {exc}")
+        return 1
+    print(f"PASS derivation (M2.6): derivationRule states the ROADMAP.md definition; {nhand} hand vectors rest only on "
+          f"hand-written token streams, hand records or literal catalogues; "
+          f"{sum(v['derivation'] == 'mixed' for v in doc['vectors'])} mixed")
+    dres = derivation_self_test(doc, ctx)
+    for name, msg in dres:
+        print(f"  derivation corruption {name}: {'REJECTED: ' + msg if msg else 'ACCEPTED (checker defect)'}")
+    missed += [n for n, msg in dres if msg is None]
+    print(f"{'PASS' if all(m for _, m in dres) else 'FAIL'} derivation self-test: rejected {sum(m is not None for _, m in dres)}/{len(dres)}")
     results = []
     for name, d, neg, ex in corruptions(doc, negatives, example):
         try:
