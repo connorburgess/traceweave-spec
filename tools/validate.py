@@ -120,6 +120,7 @@ VECTOR_CHECKERS = (
      ("test-vectors/matching/check_gates.py",)),
     ("typescript", ("test-vectors/extraction-typescript/check_vectors.py",)),
     ("text", ("test-vectors/extraction-text/check_text_vectors.py",)),
+    ("requirement map (M1.5) and registration item map (M1.1)", ("tools/check_requirement_map.py",)),
 )
 PROMOTED_SCHEMAS = ("catalogue", "report", "record", "review-packet", "candidate-generation")
 

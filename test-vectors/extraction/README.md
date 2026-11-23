@@ -16,7 +16,8 @@ Revision status (before promotion): draft for review, 2026-11-22. These vectors 
 | `exclusion-rule.json`, `config-exclusion-test.json` | 10 vectors (5 positives and their 5 paired rejections) for the shared normalized-stream exclusion rule (contract §6, OD-23), using the **test-only** synthetic profile `go-tokens-exclusion-test`: Go lexing with `punct` `;` excluded from `normalized`. Not a profile to implement |
 | `limits-go.json`, `limits-rust.json` | 3 vectors each: exactly the limit, over the limit, and over the limit plus another defect, showing the size check runs first |
 | `unicode-17.0.0-tables.json` | Pinned identifier tables derived from UCD 17.0.0 (contract §3a), SHA-256 `9363b97e…3ac29f` |
-| `check_vectors.py` | Independent checker, standard library only |
+| `check_vectors.py` | Independent checker, standard library only (`--list-tests` prints its self-test names) |
+| `requirement-map.json` | Gate M1.5 requirement map for `spec/extraction.md`, checked by `tools/check_requirement_map.py` (section 4) |
 | `harness/` | Toolchain cross-check: Go oracle, Rust oracle with `Cargo.lock`, the driver `crosscheck.py`, the table generator `gen_unicode_tables.py`, and `build_vectors.py`, which writes every vector and configuration file from hand-written token streams |
 
 Every vector has an `id`, `tags`, a `description`, `inputBase64` (the authoritative bytes) and `inputText`. `inputText` is the readable text, or `null` when the bytes are not UTF-8, in which case `inputDisplay` shows a backslash-escaped form. The `result` object holds one of the following:
@@ -329,6 +330,78 @@ python3 -I test-vectors/extraction/harness/gen_unicode_tables.py UCD_DIR OUT.jso
 ```
 
 `UCD_DIR` must contain the four UCD 17.0.0 files named in contract §3a, downloaded from <https://www.unicode.org/Public/17.0.0/ucd/>. The script refuses any file whose SHA-256 differs. On 2026-11-22 it reproduced `unicode-17.0.0-tables.json` byte for byte. The UCD files are not committed: they are public and pinned by digest.
+
+## 4. Requirement map (gate M1.5): `requirement-map.json`
+
+[requirement-map.json](requirement-map.json) maps every occurrence of the requirement keyword in [spec/extraction.md](../../spec/extraction.md) to clauses. Each clause is one of:
+- **testable:** it names vectors that fail when the requirement is violated (`failsOn`), at least one negative fixture, the violation, and why it fails. A negative fixture is an error vector, a negative configuration, or a self-test that rejects a violating corruption. Where it names `codes`, every cited rejection carries one of them.
+- **untestable:** it gives the reason, and is marked for spot-check.
+- **definitional:** it defines the keyword itself.
+
+`tools/check_requirement_map.py` checks the map mechanically. It is run by `tools/validate.py`:
+- Every keyword occurrence lies in a mapped sentence: **unmapped 0**.
+- Every mapped sentence still occurs verbatim, with one clause per keyword occurrence.
+- Every cited id exists. That covers vector ids, configuration entries, record vectors, `check_vectors.py --list-tests` names and other checkers' self-test names.
+- A self-test of 6 map corruptions must all be rejected: a dropped entry, a non-existent id, a positive vector used as a negative fixture, an untestable clause without spot-check, an edited sentence, and a fixture with another error code.
+
+```
+python3 -I tools/check_requirement_map.py
+PASS M1.5 requirement map: MUST occurrences=28 unmapped=0 testable=17 untestable=9 definitional=2 marked-for-spot-check=10 self-test-corruptions-rejected=6/6
+PASS M1.1 item map: 13 registration items and 6 named constructs, each answered for Go and Rust with links to existing sections of spec/extraction.md
+```
+
+**Counts.** 28 keyword occurrences in 24 sentences:
+- 17 testable clauses, each with failing vectors and negative fixtures;
+- 9 untestable clauses;
+- 2 definitional clauses.
+
+| Clause | Section | Requirement | Kind | Fails on (first 3) | Negative fixtures (first 3) |
+| --- | --- | --- | --- | --- | --- |
+| EX-00a | status | MUST | definitional | — | — |
+| EX-00b | status | MUST NOT | definitional | — | — |
+| EX-01 | §2 | MUST NOT carry partial tokens or fingerprints | testable | `rust-q2-open-then-unterminated`, `go-err-unterminated-string`, `rust-err-unbalanced` (+1) | `rust-q2-open-then-unterminated`, `go-format-a-rej` |
+| EX-02 | §2 | MUST NOT repair input | testable | `go-err-bom`, `rust-err-bom`, `go-err-unterminated-string` (+4) | `go-err-bom`, `rust-err-non-nfc-identifier`, `go-err-unterminated-string` |
+| EX-03a | §2 | MUST NOT emit an extraction result | **untestable** | — | — |
+| EX-03b | §2 | MUST surface the failure outside the result | **untestable** | — | — |
+| EX-04 | §3 | MUST be made before reading the content | **untestable** | — | — |
+| EX-05a | §3 | MUST stop reading after maxInputBytes + 1 bytes | **untestable** | — | — |
+| EX-05b | §3 | MUST NOT process any byte beyond maxInputBytes | **untestable** | — | — |
+| EX-06 | §3 | MUST be well-formed UTF-8 | testable | `go-err-invalid-utf8`, `rust-err-invalid-utf8`, `excl-partial-window-rej` | `go-err-invalid-utf8`, `rust-err-invalid-utf8`, `excl-partial-window-rej` |
+| EX-07 | §3 | MUST NOT split a UTF-8 sequence | testable | `go-unicode`, `rust-unicode`, `go-unicode-boundary` (+1) | `selftest:go.json:span cuts a UTF-8 character`, `selftest:rust.json:span cuts a UTF-8 character` |
+| EX-08 | §3a | MUST use tables generated from these files, or the committed derived table | testable | `go-unicode-boundary`, `go-err-u2160`, `go-err-u00b7` (+6) | `go-err-u2160`, `rust-err-u2e2f`, `selftest:go.json:U+2160 accepted as a Go letter` (+1) |
+| EX-09 | §3a | MUST NOT rely on a language runtime's or library's built-in Unicode data unless that data is shown to be identical | testable | `go-unicode-boundary`, `go-err-u2160`, `go-err-u0345` (+3) | `go-err-u0345`, `rust-err-u2e2f` |
+| EX-10 | §4.4 | MUST match exactly one of int_lit, float_lit or imaginary_lit | testable | `go-literals`, `go-err-malformed-number`, `go-err-hex-float-no-exponent` (+4) | `go-err-malformed-number`, `go-q11-imag-binary-digit`, `go-literals-rej` (+1) |
+| EX-11 | §4.5 | MUST be exactly one unicode_value or byte_value | testable | `go-unicode`, `go-unicode-rej` | `go-unicode-rej` |
+| EX-12 | §5.3 | MUST be NFC | testable | `rust-err-non-nfc-identifier`, `rust-err-non-nfc-suffix`, `rust-err-non-nfc-raw-ident` (+3) | `rust-err-non-nfc-identifier`, `rust-unicode-rej` |
+| EX-13 | §5.3 | MUST NOT contain U+200C or U+200D | testable | `rust-err-u200d`, `rust-q6-lifetime-zwj-before-hash`, `rust-unicode-boundary-rej` | `rust-err-u200d`, `rust-unicode-boundary-rej` |
+| EX-14 | §5.4 | MUST contain a digit | testable | `rust-literals`, `rust-literals-rej` | `rust-literals-rej` |
+| EX-15 | §5.5 | at least one xid_continue character MUST follow | testable | `rust-err-string-underscore-suffix`, `rust-err-char-underscore-suffix`, `rust-literal-suffixes-rej` (+3) | `rust-err-string-underscore-suffix`, `rust-s1-char-digit-rej`, `selftest:rust.json:'"x"_' split into string and '_'` |
+| EX-16 | §6 | MUST NOT emit tokenIndices | testable | `go-unicode`, `rust-unicode`, `go-format-a` (+1) | `selftest:go.json:tokenIndices emitted without exclusions`, `selftest:rust.json:tokenIndices emitted without exclusions` |
+| EX-17 | §9 | MUST make these available | testable | `go-unicode`, `rust-unicode`, `record:rec-go-ok` (+2) | `checker:test-vectors/matching/check_matching.py:record corruption self-test` |
+| EX-18 | §10 | MUST NOT fall back to another profile | testable | `cfg:cfg-unknown-profile`, `cfg:cfg-unknown-profile-version` | `cfg:cfg-unknown-profile`, `cfg:cfg-unknown-profile-version` |
+| EX-19a | §10 | MUST be rejected | testable | `cfg:cfg-whitespace`, `cfg:cfg-key-order`, `cfg:cfg-unknown-key` (+25) | `cfg:cfg-whitespace`, `cfg:cfg-key-order`, `cfg:cfg-unknown-key` (+25) |
+| EX-19b | §10 | MUST be accepted | testable | `cfg:cfg-bounds-min`, `cfg:cfg-bounds-max`, `cfg:cfg-rust-bounds-max` | `cfg:cfg-k-zero`, `cfg:cfg-k-above-bound`, `cfg:cfg-window-above-bound` |
+| EX-20 | §10a | MUST be O(N) | **untestable** | — | — |
+| EX-21 | §10a | MUST NOT cause rescanning | **untestable** | — | — |
+| EX-22 | §10a | MUST be linear in the identifier length | **untestable** | — | — |
+| EX-23 | §10a | MUST NOT be quadratic | **untestable** | — | — |
+
+**Spot-check sample for a non-author** (gate M1.5: at least 10, or all if fewer). The sample is all 9 untestable clauses, plus EX-09, which is only partly testable:
+
+| Clause | Section | Requirement | Why vectors cannot decide it |
+| --- | --- | --- | --- |
+| EX-03a | §2 | MUST NOT emit an extraction result | applies only to states the contract does not decide; by construction no vector can expect one (a vector would decide it) |
+| EX-03b | §2 | MUST surface the failure outside the result | process behavior outside the record; not observable in vector bytes |
+| EX-04 | §3 | MUST be made before reading the content | whether bytes are read is not visible in the result; vectors fix only the outcome |
+| EX-05a | §3 | MUST stop reading after maxInputBytes + 1 bytes | reading is not visible in the result |
+| EX-05b | §3 | MUST NOT process any byte beyond maxInputBytes | once the size verdict is input-too-large no output depends on later bytes; the precedence vectors fix the verdict, not the processing |
+| EX-09 | §3a | MUST NOT rely on a language runtime's or library's built-in Unicode data unless that data is shown to be identical | only differences at the tested boundary code points are caught; harness/crosscheck.py compares the full tables with Go's unicode package and unicode-ident 1.0.24 |
+| EX-20 | §10a | MUST be O(N) | performance is not observable in vector bytes; measured by the implementations' adversarial runs, not by these vectors |
+| EX-21 | §10a | MUST NOT cause rescanning | performance; not observable in vector bytes |
+| EX-22 | §10a | MUST be linear in the identifier length | performance; not observable in vector bytes |
+| EX-23 | §10a | MUST NOT be quadratic | performance; not observable in vector bytes |
+
+For each, the reviewer should confirm the clause really cannot be decided from vector bytes, and how an implementation is to be checked instead. For example: a streaming read test for EX-04 and EX-05; the implementations' adversarial timing runs for EX-20 to EX-23; the full-table comparison in `harness/crosscheck.py` for EX-09.
 
 ## Pinned sources
 

@@ -1,0 +1,531 @@
+{
+  "description": "Requirement map for gate M1.5: every MUST in spec/extraction.md (which contains the Go and Rust profiles) mapped to vectors or tests that fail when it is violated, or listed as untestable. Checked by tools/check_requirement_map.py.",
+  "document": "spec/extraction.md",
+  "idForms": {
+    "<id>": "a vector id in test-vectors/extraction/{go,rust,limits-go,limits-rust,exclusion-rule}.json",
+    "cfg:<id>": "an entry of test-vectors/extraction/config-negative.json",
+    "record:<id>": "a record vector in test-vectors/matching/records.json",
+    "selftest:<file>:<name>": "a check_vectors.py self-test (python3 -I test-vectors/extraction/check_vectors.py --list-tests)",
+    "checker:<path>:<text>": "a self-test of another checker, named by a string that occurs in that file"
+  },
+  "requirements": [
+    {
+      "id": "EX-00",
+      "section": "status",
+      "sentence": "\"MUST\" and \"MUST NOT\" describe what this draft proposes for an implementation claiming to follow it.",
+      "clauses": [
+        {"must": "MUST", "kind": "definitional", "reason": "defines the keyword"},
+        {"must": "MUST NOT", "kind": "definitional", "reason": "defines the keyword"}
+      ]
+    },
+    {
+      "id": "EX-01",
+      "section": "§2",
+      "sentence": "An error result MUST NOT carry partial tokens or fingerprints.",
+      "clauses": [
+        {
+          "must": "MUST NOT carry partial tokens or fingerprints",
+          "kind": "testable",
+          "violation": "an implementation emits the tokens scanned before the error",
+          "failsOn": [
+            "rust-q2-open-then-unterminated",
+            "go-err-unterminated-string",
+            "rust-err-unbalanced",
+            "go-format-a-rej"
+          ],
+          "negativeFixtures": ["rust-q2-open-then-unterminated", "go-format-a-rej"],
+          "failsBecause": "the expected result object is exactly {status, error}; extra tokens make the bytes differ",
+          "codes": ["unterminated-literal", "unbalanced-delimiter"]
+        }
+      ]
+    },
+    {
+      "id": "EX-02",
+      "section": "§2",
+      "sentence": "An implementation MUST NOT repair input:",
+      "clauses": [
+        {
+          "must": "MUST NOT repair input",
+          "kind": "testable",
+          "violation": "an implementation strips a BOM, closes a literal, skips a byte or NFC-normalizes",
+          "failsOn": [
+            "go-err-bom",
+            "rust-err-bom",
+            "go-err-unterminated-string",
+            "rust-err-unterminated-string",
+            "go-err-invalid-utf8",
+            "rust-err-non-nfc-identifier",
+            "rust-err-isolated-cr"
+          ],
+          "negativeFixtures": ["go-err-bom", "rust-err-non-nfc-identifier", "go-err-unterminated-string"],
+          "failsBecause": "each vector expects an error; a repaired input yields ok or a different code",
+          "codes": ["bom", "unterminated-literal", "non-nfc-identifier"]
+        }
+      ]
+    },
+    {
+      "id": "EX-03",
+      "section": "§2",
+      "sentence": "It MUST NOT emit an extraction result for it and MUST surface the failure outside the result, for example as a process error.",
+      "clauses": [
+        {
+          "must": "MUST NOT emit an extraction result",
+          "kind": "untestable",
+          "reason": "applies only to states the contract does not decide; by construction no vector can expect one (a vector would decide it)",
+          "related": [],
+          "spotCheck": true
+        },
+        {
+          "must": "MUST surface the failure outside the result",
+          "kind": "untestable",
+          "reason": "process behavior outside the record; not observable in vector bytes",
+          "related": [],
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "EX-04",
+      "section": "§3",
+      "sentence": "Where the input length is knowable before reading (a regular file's size, a declared content length), the check MUST be made before reading the content.",
+      "clauses": [
+        {
+          "must": "MUST be made before reading the content",
+          "kind": "untestable",
+          "reason": "whether bytes are read is not visible in the result; vectors fix only the outcome",
+          "related": ["go-limit-over", "rust-limit-over"],
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "EX-05",
+      "section": "§3",
+      "sentence": "Otherwise the implementation MUST stop reading after `maxInputBytes + 1` bytes and MUST NOT process any byte beyond `maxInputBytes`.",
+      "clauses": [
+        {
+          "must": "MUST stop reading after maxInputBytes + 1 bytes",
+          "kind": "untestable",
+          "reason": "reading is not visible in the result",
+          "related": ["go-limit-over"],
+          "spotCheck": true
+        },
+        {
+          "must": "MUST NOT process any byte beyond maxInputBytes",
+          "kind": "untestable",
+          "reason": "once the size verdict is input-too-large no output depends on later bytes; the precedence vectors fix the verdict, not the processing",
+          "related": ["go-limit-precedence", "rust-limit-precedence"],
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "EX-06",
+      "section": "§3",
+      "sentence": "**Encoding.** The input MUST be well-formed UTF-8 ([Unicode 17.0.0](https://www.unicode.org/versions/Unicode17.0.0/) §3.9, D92).",
+      "clauses": [
+        {
+          "must": "MUST be well-formed UTF-8",
+          "kind": "testable",
+          "violation": "an implementation accepts or replaces ill-formed bytes",
+          "failsOn": ["go-err-invalid-utf8", "rust-err-invalid-utf8", "excl-partial-window-rej"],
+          "negativeFixtures": ["go-err-invalid-utf8", "rust-err-invalid-utf8", "excl-partial-window-rej"],
+          "failsBecause": "invalid-utf8 at the first ill-formed byte is expected",
+          "codes": ["invalid-utf8"]
+        }
+      ]
+    },
+    {
+      "id": "EX-07",
+      "section": "§3",
+      "sentence": "A span MUST NOT split a UTF-8 sequence.",
+      "clauses": [
+        {
+          "must": "MUST NOT split a UTF-8 sequence",
+          "kind": "testable",
+          "violation": "spans counted in code points or UTF-16 units",
+          "failsOn": ["go-unicode", "rust-unicode", "go-unicode-boundary", "rust-unicode-boundary"],
+          "negativeFixtures": ["selftest:go.json:span cuts a UTF-8 character", "selftest:rust.json:span cuts a UTF-8 character"],
+          "failsBecause": "expected spans are byte offsets past multi-byte characters; other units give different spans"
+        }
+      ]
+    },
+    {
+      "id": "EX-08",
+      "section": "§3a",
+      "sentence": "An implementation MUST use tables generated from these files, or the committed derived table.",
+      "clauses": [
+        {
+          "must": "MUST use tables generated from these files, or the committed derived table",
+          "kind": "testable",
+          "violation": "identifier classes from another property or version",
+          "failsOn": [
+            "go-unicode-boundary",
+            "go-err-u2160",
+            "go-err-u00b7",
+            "go-err-u0345",
+            "go-err-u200d",
+            "go-q9-unassigned",
+            "rust-unicode-boundary",
+            "rust-err-u2e2f",
+            "rust-q9-unassigned"
+          ],
+          "negativeFixtures": [
+            "go-err-u2160",
+            "rust-err-u2e2f",
+            "selftest:go.json:U+2160 accepted as a Go letter",
+            "selftest:rust.json:U+2E2F accepted as XID"
+          ],
+          "failsBecause": "the boundary code points are classified differently by General_Category, XID and common library shortcuts",
+          "codes": ["illegal-character"]
+        }
+      ]
+    },
+    {
+      "id": "EX-09",
+      "section": "§3a",
+      "sentence": "It MUST NOT rely on a language runtime's or library's built-in Unicode data unless that data is shown to be identical.",
+      "clauses": [
+        {
+          "must": "MUST NOT rely on a language runtime's or library's built-in Unicode data unless that data is shown to be identical",
+          "kind": "testable",
+          "violation": "library data of another Unicode version or property",
+          "failsOn": [
+            "go-unicode-boundary",
+            "go-err-u2160",
+            "go-err-u0345",
+            "rust-unicode-boundary",
+            "rust-err-u2e2f",
+            "rust-err-u200d"
+          ],
+          "negativeFixtures": ["go-err-u0345", "rust-err-u2e2f"],
+          "failsBecause": "fails where the library differs at a tested code point",
+          "spotCheck": true,
+          "partial": "only differences at the tested boundary code points are caught; harness/crosscheck.py compares the full tables with Go's unicode package and unicode-ident 1.0.24",
+          "codes": ["illegal-character"]
+        }
+      ]
+    },
+    {
+      "id": "EX-10",
+      "section": "§4.4",
+      "sentence": "The consumed text MUST match exactly one of the spec productions `int_lit`, `float_lit` or `imaginary_lit`.",
+      "clauses": [
+        {
+          "must": "MUST match exactly one of int_lit, float_lit or imaginary_lit",
+          "kind": "testable",
+          "violation": "accepting a candidate that matches no production",
+          "failsOn": [
+            "go-literals",
+            "go-err-malformed-number",
+            "go-err-hex-float-no-exponent",
+            "go-q11-imag-binary-digit",
+            "go-q11-imag-octal-digit",
+            "go-literals-rej",
+            "go-rename-b-rej"
+          ],
+          "negativeFixtures": [
+            "go-err-malformed-number",
+            "go-q11-imag-binary-digit",
+            "go-literals-rej",
+            "selftest:go.json:'0b2i' accepted as imaginary"
+          ],
+          "failsBecause": "malformed-literal at the literal start is expected",
+          "codes": ["malformed-literal"]
+        }
+      ]
+    },
+    {
+      "id": "EX-11",
+      "section": "§4.5",
+      "sentence": "The body MUST be exactly one `unicode_value` or `byte_value`, otherwise the result is `malformed-literal` at the opening `'`.",
+      "clauses": [
+        {
+          "must": "MUST be exactly one unicode_value or byte_value",
+          "kind": "testable",
+          "violation": "accepting a rune with two characters",
+          "failsOn": ["go-unicode", "go-unicode-rej"],
+          "negativeFixtures": ["go-unicode-rej"],
+          "failsBecause": "'☃☃' is expected to be malformed-literal at the opening quote",
+          "codes": ["malformed-literal"]
+        }
+      ]
+    },
+    {
+      "id": "EX-12",
+      "section": "§5.3",
+      "sentence": "The text MUST be NFC, otherwise `non-nfc-identifier`.",
+      "clauses": [
+        {
+          "must": "MUST be NFC",
+          "kind": "testable",
+          "violation": "accepting or normalizing a non-NFC identifier",
+          "failsOn": [
+            "rust-err-non-nfc-identifier",
+            "rust-err-non-nfc-suffix",
+            "rust-err-non-nfc-raw-ident",
+            "rust-err-non-nfc-before-quote",
+            "rust-q6-lifetime-nfc-first",
+            "rust-unicode-rej"
+          ],
+          "negativeFixtures": ["rust-err-non-nfc-identifier", "rust-unicode-rej"],
+          "failsBecause": "non-nfc-identifier at the token start is expected",
+          "codes": ["non-nfc-identifier"]
+        }
+      ]
+    },
+    {
+      "id": "EX-13",
+      "section": "§5.3",
+      "sentence": "It MUST NOT contain U+200C or U+200D, otherwise `malformed-identifier`.",
+      "clauses": [
+        {
+          "must": "MUST NOT contain U+200C or U+200D",
+          "kind": "testable",
+          "violation": "accepting ZWJ as XID_Continue (as rustc does)",
+          "failsOn": ["rust-err-u200d", "rust-q6-lifetime-zwj-before-hash", "rust-unicode-boundary-rej"],
+          "negativeFixtures": ["rust-err-u200d", "rust-unicode-boundary-rej"],
+          "failsBecause": "malformed-identifier at the token start is expected",
+          "codes": ["malformed-identifier"]
+        }
+      ]
+    },
+    {
+      "id": "EX-14",
+      "section": "§5.4",
+      "sentence": "That run MUST contain a digit, otherwise the result is `malformed-literal`.",
+      "clauses": [
+        {
+          "must": "MUST contain a digit",
+          "kind": "testable",
+          "violation": "accepting an exponent without digits",
+          "failsOn": ["rust-literals", "rust-literals-rej"],
+          "negativeFixtures": ["rust-literals-rej"],
+          "failsBecause": "'1.5e' is expected to be malformed-literal",
+          "codes": ["malformed-literal"]
+        }
+      ]
+    },
+    {
+      "id": "EX-15",
+      "section": "§5.5",
+      "sentence": "at least one `xid_continue` character MUST follow, otherwise the result is `malformed-literal` at the literal start.",
+      "clauses": [
+        {
+          "must": "at least one xid_continue character MUST follow",
+          "kind": "testable",
+          "violation": "backtracking: a literal followed by the keyword '_'",
+          "failsOn": [
+            "rust-err-string-underscore-suffix",
+            "rust-err-char-underscore-suffix",
+            "rust-literal-suffixes-rej",
+            "rust-s1-string-digit-rej",
+            "rust-s1-byte-digit-rej",
+            "rust-literal-suffixes"
+          ],
+          "negativeFixtures": [
+            "rust-err-string-underscore-suffix",
+            "rust-s1-char-digit-rej",
+            "selftest:rust.json:'\"x\"_' split into string and '_'"
+          ],
+          "failsBecause": "malformed-literal at the literal start is expected",
+          "codes": ["malformed-literal"]
+        }
+      ]
+    },
+    {
+      "id": "EX-16",
+      "section": "§6",
+      "sentence": "A profile without exclusions MUST NOT emit `tokenIndices`.",
+      "clauses": [
+        {
+          "must": "MUST NOT emit tokenIndices",
+          "kind": "testable",
+          "violation": "a Go or Rust implementation writes tokenIndices",
+          "failsOn": ["go-unicode", "rust-unicode", "go-format-a", "rust-format-a"],
+          "negativeFixtures": [
+            "selftest:go.json:tokenIndices emitted without exclusions",
+            "selftest:rust.json:tokenIndices emitted without exclusions"
+          ],
+          "failsBecause": "expected normalized channels have no tokenIndices key; extra bytes differ"
+        }
+      ]
+    },
+    {
+      "id": "EX-17",
+      "section": "§9",
+      "sentence": "An extraction MUST make these available:",
+      "clauses": [
+        {
+          "must": "MUST make these available",
+          "kind": "testable",
+          "violation": "a record missing a listed field",
+          "failsOn": [
+            "go-unicode",
+            "rust-unicode",
+            "record:rec-go-ok",
+            "record:rec-go-lexical-error",
+            "record:rec-go-over-limit"
+          ],
+          "negativeFixtures": ["checker:test-vectors/matching/check_matching.py:record corruption self-test"],
+          "failsBecause": "the canonical record vectors fix every field; the record corruption self-test rejects missing fields"
+        }
+      ]
+    },
+    {
+      "id": "EX-18",
+      "section": "§10",
+      "sentence": "An implementation MUST NOT fall back to another profile.",
+      "clauses": [
+        {
+          "must": "MUST NOT fall back to another profile",
+          "kind": "testable",
+          "violation": "running an unknown profile or version as a known one",
+          "failsOn": ["cfg:cfg-unknown-profile", "cfg:cfg-unknown-profile-version"],
+          "negativeFixtures": ["cfg:cfg-unknown-profile", "cfg:cfg-unknown-profile-version"],
+          "failsBecause": "unsupported-config is expected",
+          "codes": ["unsupported-config"]
+        }
+      ]
+    },
+    {
+      "id": "EX-19",
+      "section": "§10",
+      "sentence": "lists 28 configurations that MUST be rejected, including one just above each bound, and 3 `boundaryPositives` at the bounds that MUST be accepted.",
+      "clauses": [
+        {
+          "must": "MUST be rejected",
+          "kind": "testable",
+          "violation": "accepting any negative configuration",
+          "failsOn": [
+            "cfg:cfg-whitespace",
+            "cfg:cfg-key-order",
+            "cfg:cfg-unknown-key",
+            "cfg:cfg-duplicate-key",
+            "cfg:cfg-missing-key",
+            "cfg:cfg-no-final-lf",
+            "cfg:cfg-crlf",
+            "cfg:cfg-channels-order",
+            "cfg:cfg-channels-subset",
+            "cfg:cfg-unknown-profile",
+            "cfg:cfg-unknown-profile-version",
+            "cfg:cfg-unknown-contract",
+            "cfg:cfg-unknown-hash",
+            "cfg:cfg-k-zero",
+            "cfg:cfg-k-above-bound",
+            "cfg:cfg-window-above-bound",
+            "cfg:cfg-max-above-bound",
+            "cfg:cfg-k-too-large",
+            "cfg:cfg-window-zero",
+            "cfg:cfg-max-zero",
+            "cfg:cfg-max-too-large",
+            "cfg:cfg-leading-zero",
+            "cfg:cfg-float",
+            "cfg:cfg-negative",
+            "cfg:cfg-string-number",
+            "cfg:cfg-escape",
+            "cfg:cfg-not-json",
+            "cfg:cfg-invalid-utf8"
+          ],
+          "negativeFixtures": [
+            "cfg:cfg-whitespace",
+            "cfg:cfg-key-order",
+            "cfg:cfg-unknown-key",
+            "cfg:cfg-duplicate-key",
+            "cfg:cfg-missing-key",
+            "cfg:cfg-no-final-lf",
+            "cfg:cfg-crlf",
+            "cfg:cfg-channels-order",
+            "cfg:cfg-channels-subset",
+            "cfg:cfg-unknown-profile",
+            "cfg:cfg-unknown-profile-version",
+            "cfg:cfg-unknown-contract",
+            "cfg:cfg-unknown-hash",
+            "cfg:cfg-k-zero",
+            "cfg:cfg-k-above-bound",
+            "cfg:cfg-window-above-bound",
+            "cfg:cfg-max-above-bound",
+            "cfg:cfg-k-too-large",
+            "cfg:cfg-window-zero",
+            "cfg:cfg-max-zero",
+            "cfg:cfg-max-too-large",
+            "cfg:cfg-leading-zero",
+            "cfg:cfg-float",
+            "cfg:cfg-negative",
+            "cfg:cfg-string-number",
+            "cfg:cfg-escape",
+            "cfg:cfg-not-json",
+            "cfg:cfg-invalid-utf8"
+          ],
+          "failsBecause": "each negative expects unsupported-config with offset null",
+          "codes": ["unsupported-config"]
+        },
+        {
+          "must": "MUST be accepted",
+          "kind": "testable",
+          "violation": "rejecting a configuration at a bound",
+          "failsOn": ["cfg:cfg-bounds-min", "cfg:cfg-bounds-max", "cfg:cfg-rust-bounds-max"],
+          "negativeFixtures": ["cfg:cfg-k-zero", "cfg:cfg-k-above-bound", "cfg:cfg-window-above-bound"],
+          "failsBecause": "the boundary positives must validate; their paired negatives just outside must not",
+          "codes": ["unsupported-config"]
+        }
+      ]
+    },
+    {
+      "id": "EX-20",
+      "section": "§10a",
+      "sentence": "For a fixed configuration, an implementation's time and working memory MUST be O(N), linear in the input length.",
+      "clauses": [
+        {
+          "must": "MUST be O(N)",
+          "kind": "untestable",
+          "reason": "performance is not observable in vector bytes; measured by the implementations' adversarial runs, not by these vectors",
+          "related": [],
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "EX-21",
+      "section": "§10a",
+      "sentence": "Nested comments, unterminated literals and long identifiers MUST NOT cause rescanning.",
+      "clauses": [
+        {
+          "must": "MUST NOT cause rescanning",
+          "kind": "untestable",
+          "reason": "performance; not observable in vector bytes",
+          "related": [],
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "EX-22",
+      "section": "§10a",
+      "sentence": "**NFC checking** MUST be linear in the identifier length.",
+      "clauses": [
+        {
+          "must": "MUST be linear in the identifier length",
+          "kind": "untestable",
+          "reason": "performance; not observable in vector bytes",
+          "related": [],
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "EX-23",
+      "section": "§10a",
+      "sentence": "Canonical reordering of a run of non-starters MUST NOT be quadratic.",
+      "clauses": [
+        {
+          "must": "MUST NOT be quadratic",
+          "kind": "untestable",
+          "reason": "performance; not observable in vector bytes",
+          "related": [],
+          "spotCheck": true
+        }
+      ]
+    }
+  ]
+}

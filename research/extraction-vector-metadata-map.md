@@ -1,6 +1,6 @@
 # Extraction vector metadata map (M1.2)
 
-Successor to [promotion-map.md](promotion-map.md) for `test-vectors/extraction/`, written 2026-11-23 on `roadmap-v2`. "Before" is each file at `437d619`, the last commit before this change. "After" is the file in the tree that adds the M1.2 metadata.
+Successor to [promotion-map.md](promotion-map.md) for `test-vectors/extraction/`, written 2026-11-23 on `roadmap-v2`. "Before" is each file at `437d619`, the last commit before this change. "After" is the file at the end of this series: the M1.2 metadata commit, then the M1.1/M1.5 commit, which added `requirement-map.json` and README text and changed no vector file.
 
 ## What changed, and what did not
 
@@ -25,7 +25,7 @@ The script compares every expected output at `437d619` with the working tree, an
 
 | File | SHA-256 before (`437d619`) | SHA-256 after | Result |
 | --- | --- | --- | --- |
-| `test-vectors/extraction/README.md` | `00b8831c5fc24f16c6aaf3a379b1f9db8753a7724128179eaa0a80f7d8369cd3` | `a9a28dad954c05a694e09fc72aaab21b4994ecfb3347ef2742935de85cc769f9` | changed (tooling or documentation) |
+| `test-vectors/extraction/README.md` | `00b8831c5fc24f16c6aaf3a379b1f9db8753a7724128179eaa0a80f7d8369cd3` | `1c2c52013713935ff72fe30e444fcf3174ab872f7a510c4e7ea494b58ac79fde` | changed (tooling or documentation) |
 | `test-vectors/extraction/check_vectors.py` | `9c3174976745a906f5214d52bd38cb5573d2465fb5ca02e06ceba1cb2d976be5` | `fb16cb25c5d8bc33fe8a29001262ed51606d6b547b89a380b598210d9718d15f` | changed (tooling or documentation) |
 | `test-vectors/extraction/config-exclusion-test.json` | `65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464` | `65ae9f23f38b060edbb4aa294a68f289f4a286af3dd8b5e23b8b8f97784d2464` | identical |
 | `test-vectors/extraction/config-go-limit16.json` | `aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8` | `aa86722255afbf50dc4c4772a718ad00f842192f442266203164c60d6dbdeea8` | identical |
@@ -46,5 +46,6 @@ The script compares every expected output at `437d619` with the working tree, an
 | `test-vectors/extraction/harness/rust/src/main.rs` | `eb75e7341eba56f570798f4770adbf6b1bcce384017dcf0d251f4bc10ac974e6` | `eb75e7341eba56f570798f4770adbf6b1bcce384017dcf0d251f4bc10ac974e6` | identical |
 | `test-vectors/extraction/limits-go.json` | `0d5d243ecb4605af934ef544027f0c6a7e88694be1a118fb32191874bfc95b94` | `9aa98d716d63a47f009aadf01edce330a6c4c7b11c6b0c893016bd9fa59e7388` | metadata added (vector outputs unchanged; see compare_outputs.py) |
 | `test-vectors/extraction/limits-rust.json` | `61ad316e717aed92d077759255fde118cc7e272d476d754d4d7224f21e249c6b` | `deaf38d72dc31c869ec3d69ba390d2b48aa23efc945dff815111a56d8d229fd3` | metadata added (vector outputs unchanged; see compare_outputs.py) |
+| `test-vectors/extraction/requirement-map.json` | — | `2a5a92badc397a15dc63483c7fae51efe823ffde29e878d96517135daa38669c` | new file |
 | `test-vectors/extraction/rust.json` | `21f3360c9e7c2394033e26548f35e8dddfdb723a35279c984c09967f96cc9590` | `420288aa27d67e1717430a0f28a8b9391b34af4b131728dcff7fa692fd6e7d73` | metadata added (vector outputs unchanged; see compare_outputs.py) |
 | `test-vectors/extraction/unicode-17.0.0-tables.json` | `9363b97eb849cb236c786098f017728ad04688782f07c2969afddf93b03ac29f` | `9363b97eb849cb236c786098f017728ad04688782f07c2969afddf93b03ac29f` | identical |

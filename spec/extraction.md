@@ -388,6 +388,19 @@ They were chosen because they keep the vectors small enough to check by hand, an
 
 ## 13. Requirement-to-check map
 
+**Requirement map (gate M1.5).** [requirement-map.json](../test-vectors/extraction/requirement-map.json) maps every sentence of this document that uses the requirement keyword, the Go and Rust profiles included, to one of two things:
+- vectors or self-tests that fail when the requirement is violated, with at least one negative fixture each;
+- an "untestable" entry, with its reason.
+
+`tools/check_requirement_map.py`, run by `tools/validate.py`, checks the map as follows:
+- every keyword occurrence is mapped, with 0 unmapped;
+- every mapped sentence is still in this document;
+- every cited id exists.
+
+The registration item map (gate M1.1) is in [profiles/code.md](../profiles/code.md#registration-item-map-go-and-rust-gate-m11).
+
+The table below is the older, requirement-to-check overview.
+
 Two tools check the vectors:
 - **checker:** [`check_vectors.py`](../test-vectors/extraction/check_vectors.py), standard library only;
 - **crosscheck:** [`harness/crosscheck.py`](../test-vectors/extraction/harness/crosscheck.py), which compares against go/scanner, proc-macro2 and rustc, offline.
