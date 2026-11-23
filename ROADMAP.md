@@ -2,7 +2,9 @@
 
 Status: active research roadmap, version 2, updated 2026-11-22. The 0.1.0-draft.1 scaffold validates record shapes and synthetic vectors. Separate experimental harnesses recover synthetic carrier states and cross-verify Go/Rust signatures; production reuse detection remains unimplemented. No dates and no detection guarantees are promised. See the [measured checkpoint](research/experiment-checkpoint.md), the [active work queue](research/work-queue.md) and the [implementation repository plan](docs/implementation-repo-plan.md).
 
-Start with [use cases](docs/use-cases.md), then [implementation patterns](docs/implementation-patterns.md) and the [source register](docs/sources.md). These planning documents do not change normative wire formats. The [independent review](research/reviews/roadmap-v2-review.md) of this version is kept with the other reviews.
+Start with [use cases](docs/use-cases.md), then [implementation patterns](docs/implementation-patterns.md) and the [source register](docs/sources.md). These planning documents do not change normative wire formats.
+
+**What the project is.** Traceweave is an open, non-commercial, independent specification, not a legal entity. Since 2026-11-23 the project has owned the domain `traceweave.org`, registered that day. It is intended for the documentation site and for stable specification and schema identifiers, and later for the browser tool (WEB). The [independent review](research/reviews/roadmap-v2-review.md) of this version is kept with the other reviews.
 
 ## Pilot languages
 
@@ -299,7 +301,7 @@ Removal and forgery counts are lower bounds on what an attacker can do. Full cou
 | RES.1 | E | Threat model: query leakage, enumeration, catalogue inference, membership disclosure, abuse. Public registration stays optional | S |
 | RES.2 | R | The adversary query model and the leakage metric are named and committed before running; then measured on synthetic catalogues with denominators | S/I |
 | RES.3 | E | Independent review filed, with every finding dispositioned | S |
-| **C2PA — mapping with interop fixtures** | | | |
+| **C2PA — mapping with interop fixtures** (`traceweave.org`, registered 2026-11-23, provides the owned namespace the mapping draft said was missing; the draft itself is updated by its own lane) | | | |
 | C2PA.1 | E | Mapping pinned to one C2PA version; each field mapped, unmapped or conflicting **Status: in progress** (2026-11-23 override of the after-M4 sequencing). | S |
 | C2PA.2 | E | Fixtures from a pinned open-source C2PA tool round-trip through a Traceweave adapter in both directions **Status: in progress.** | I |
 | C2PA.3 | E | README makes no compatibility claim until C2PA.2 passes **Status: in progress.** | S |
@@ -309,7 +311,7 @@ Removal and forgery counts are lower bounds on what an attacker can do. Full cou
 | **Later matching methods** (ROADMAP "Later") | | | |
 | STRUCT.1 | R | Structural/semantic matching compared with the token baseline on the M3 corpus and budget | I |
 | KEYED.1 | R | Keyed feature selection evaluated separately from embedding on the M3 corpus and budget | I |
-| **WEB — browser tool and testing page** (requested by the owner on 2026-11-23; **planned; not started; no lane assigned**) | | | |
+| **WEB — browser tool and testing page** (requested by the owner on 2026-11-23; **planned; not started; no lane assigned**). Purpose, as the owner described it: to make Traceweave accessible, not to earn revenue. It is free to use, with no accounts and no uploads | | | |
 | WEB.0 | O | The owner decides when to start WEB and where it is hosted. The sequence places WEB after M3.4, because a public tool should not come before the measurement; the owner can override this. WEB covers only implemented profiles: Go and Rust today; TypeScript, text and Python when implemented. A timestamping or transparency-log service is out of scope for WEB and belongs with M4. **Status: planned** | S |
 | WEB.1 | E | The Rust implementation compiles to WebAssembly. For every vendored extraction, record, catalogue and matching vector of the profiles it implements, the in-browser build's output is byte-identical to the command-line build's, k/k, run headless in CI. **Status: planned** | I |
 | WEB.2 | E | Nothing leaves the browser. The page works with the network denied after load. A test asserts 0 network requests during fingerprinting and comparison. No analytics, no uploads, and no storage beyond explicit user downloads. **Status: planned** | I |
