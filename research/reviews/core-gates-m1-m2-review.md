@@ -36,7 +36,7 @@ My script compares every file of `test-vectors/`, `schemas/`, `spec/` and `profi
   - `rust-q11-shebang-first-line-only-rej` (`#!/*⏎*/ fn"`) records `unterminated-literal`@10. The keyword `fn` followed by `"` is **`reserved-token`@8**; both implementations agree.
 
   Both recorded results match proc-macro2, which has no reserved-prefix rule. That is why `crosscheck.py` passes them, and `check_vectors.py` checks lexical offsets only for plausibility. **Fix:** correct the two expected results, or change the inputs so the intended defect comes first, and add a crosscheck `EXPECT` entry for the proc-macro2 reserved-prefix divergence. Better still, make `validate` (or the M1.4 runs) require both implementations to reproduce every rejection vector.
-- **The meaning of "hand".** `derivationRule` hand-writes token classes, texts, the inserted `;`, error codes and defect positions; spans are located by searching for those texts; hashes, windows and fingerprints are computed. This is the honest reading, because nobody hand-computes SHA-256. But the gate text "derivation: hand" does not say it. **Verdict: met with the wording clarified, after the two fixes.** The roadmap row or the vector README should define `hand` as the derivationRule does.
+- **The meaning of "hand".** Judged against the ROADMAP definition (ruling of 2026-11-23) in §11.
 
 ## 3. M1.1: the registration item map
 
@@ -121,21 +121,26 @@ The "Unicode / repeated minima / tiny file" row has one positive case (Unicode).
 | Gate | Specification side | What remains | Implementations must add |
 | --- | --- | --- | --- |
 | M1.1 | Met once code.md line 7 is reconciled (§3) | One sentence in `profiles/code.md` | Nothing |
-| M1.2 | **Not met** until the 2 wrong rejections are fixed; then met with "hand" clarified | §2 fixes; a crosscheck `EXPECT` entry; reproduction of rejections in validate or M1.4 | Reproduce all 60 new rejections (M1.4/M1.6) |
+| M1.2 | **Not met** until the 2 wrong rejections are fixed; the labels then meet the definition (§11) | §2 fixes; the §11 `derivationRule` wording; a crosscheck `EXPECT` entry | Reproduce all 60 new rejections (M1.4/M1.6) |
 | M1.5 | Met as worded | Optional: cite process and timing tests for EX-04/05 and EX-20–23 | Those tests exist; cite them |
 | M2.2 | Met (frozen, 56/56) | Optional: list or exclude the two below-minimum regions | Reproduce every digest and span N/N (owner I) |
 | M2.3 | Vendor vectors present | §7 text on vendor effects | Report the vendor class with its candidate count and denominator (owner I) |
-| M2.6 | Met for coverage; 6 `mixed` vectors disclosed (1 new) | Wording: M2.2/M2.3 rest on `hand` vectors only | I2 runs the 7 new vectors |
+| M2.6 | **Not met** under the definition: 48 `hand` vectors rest on lexer-made token streams (§11) | Hand-write those streams or relabel; add `derivationRule` to each file | I2 runs the 7 new vectors |
 | M2.7 | Met except the upstream/source digest tie (§8) | Tie the digests or state them as claims | I2 writes and validates packets |
 | M2.9 | Met | State that `exhaustive` is a claim | An index and two retrieval paths in I2 |
 | (OD-C64) | Unsound as a global rule (§6) | Make it profile-conditional | Keep strict validation for Go/Rust |
 
-**Decided in draft, pending owner confirmation** (catalogue side, amendment A13):
-- OD-C19, vendor code as the suppression catalogue plus a review packet;
-- OD-C61, the review packet;
-- OD-C62, the candidate-generation record;
-- OD-C63, the frozen M2.2 manifest;
-- OD-C64, empty spans and non-decreasing starts;
-- OD-C65, `py-tokens` registered as specified but not implemented.
+**Decided in draft, pending owner confirmation** (catalogue side, A13): OD-C19 (vendor code as the suppression catalogue plus a review packet), OD-C61 (the review packet), OD-C62 (the candidate-generation record), OD-C63 (the frozen M2.2 manifest), OD-C64 (empty spans, non-decreasing starts), OD-C65 (`py-tokens` registered, not implemented).
 
-The extraction side marks nothing as decided in draft. The owner would also be confirming the reading of "hand" in `derivationRule`, and "scope resolution: none".
+The extraction side marks nothing as decided in draft. The owner would also be confirming "scope resolution: none".
+
+## 11. Ruling applied: hand derivation (M1.2, M2.6)
+
+Rule: (a) a person writes every judgment from the contract; (b) the spec's own builder or checker computes the arithmetic, and an independent recomputation confirms it. A lexical layer first made by a tool and then reviewed is not `hand`. Reviewed at `3b6e9f3`; the uncommitted A14 edits in the tree were not reviewed.
+- **M1.2, (a) holds.** The builder `test-vectors/extraction/harness/build_vectors.py` imports only `base64`, `hashlib`, `json`, `sys` and `pathlib`. Every token list is written as literal tuples, and every rejection code and offset is a literal. Its only helpers are hashing, winnowing and list repetition (`[(P, "+")] * 10`), so no lexical layer is tool-produced. The 2 wrong rejections in §2 are hand errors, so they still need fixing but do not break the label.
+- **M1.2, (b) holds, with my recomputation as the confirmation.** I wrote a recomputation from `spec/extraction.md` §6–§8 alone and ran it on all 65 `ok`/`insufficient-tokens` vectors in the 5 files. It rebuilt the spans from the token texts, the normalized values, every k-gram hash, the windows, `partialWindow` and the fingerprints, and **65/65 agree**. The one span difference is `rust-q11-shebang-first-line-only`: `*` also occurs inside the skipped shebang, so the builder gives an explicit hand start (5) rather than searching. Rejection offsets are judgments under (a); §2 covers them.
+- **M1.2, the `derivationRule` text needs updating.** The text in all 5 files lacks two things. It never says the arithmetic is computed by the spec's builder, not an implementation, and confirmed independently (clause (b)). It also says spans are searched, but some starts are hand-written where a search would land on the wrong text. **Fix:** state (a) and (b) and the explicit-start case.
+- **M2.6, (a) fails for 48 of the 77 `hand` matching vectors.** Those 48 draw on `extraction-go.json`, `extraction-rust.json`, `extraction-go-gates.json` or `extraction-go-classes.json`. Those files' token streams are produced by `lex()` in `test-vectors/matching/build_vectors.py`: the file's own `lexingCheck` says so, and they carry no per-vector `derivation`. That is a tool-made lexical layer, reviewed at most. It includes 7 of the 11 M2.2 cases. The other 29 `hand` vectors are fine: 10 use frozen hand extraction vectors or the `extraction-py.json` copies, and 19 use hand-written synthetic catalogues. Their region and outcome judgments in `handExpectations` are hand-written. The 6 `mixed` vectors are correctly not labelled `hand`.
+- **M2.6 fix.** Write those 22 inputs' token lists by hand, as the extraction builder does, and keep `lex()` only as a cross-check. Alternatively, relabel the 48 vectors, which would leave M2.2 and M2.3 resting on non-`hand` vectors.
+- **M2.6, no rule text.** `matching.json`, `m22-fixture-manifest.json`, `review-packets.json` and `candidate-generation.json` have no `derivationRule` next to their labels. **Fix:** add one in the ruling's words.
+- **M2.6, (b) is confirmed by my clean room (§5, §9)** for the 7 new bodies, the 56 compared bodies, the 56 M2.2 spans and 33 digests. It does not recompute the lexer streams' fingerprints; the remedy above makes that unnecessary.
