@@ -144,3 +144,46 @@ Rule: (a) a person writes every judgment from the contract; (b) the spec's own b
 - **M2.6 fix.** Write those 22 inputs' token lists by hand, as the extraction builder does, and keep `lex()` only as a cross-check. Alternatively, relabel the 48 vectors, which would leave M2.2 and M2.3 resting on non-`hand` vectors.
 - **M2.6, no rule text.** `matching.json`, `m22-fixture-manifest.json`, `review-packets.json` and `candidate-generation.json` have no `derivationRule` next to their labels. **Fix:** add one in the ruling's words.
 - **M2.6, (b) is confirmed by my clean room (§5, §9)** for the 7 new bodies, the 56 compared bodies, the 56 M2.2 spans and 33 digests. It does not recompute the lexer streams' fingerprints; the remedy above makes that unnecessary.
+## Confirmation pass (HEAD `28f5b6d`: extraction `34eea25`, `a625c97`; catalogue `a77c657`, `28f5b6d`)
+
+**Method.** Scratch was a `git archive` copy under `$TMPDIR` (17 GB free beforehand), deleted afterwards. `.venv/bin/python tools/validate.py` **passes** (exit 0, jsonschema 4.23.0); the unit tests pass (9/9).
+
+**(2) Byte identity and recomputation.**
+- **Unchanged since `3b6e9f3`:** every earlier expected output except the two corrected rejections. That covers 183 extraction vectors, 28 config negatives, the 22 matching inputs and the 83 earlier matching vectors. Intended changes: headers, review packets (draft-2), the manifest, and 7 new vectors.
+- **My comparator:** 58/58 compared bodies of the 90 vectors, with their catalogue digests (the 32 rejected bodies are out of its scope). M2.2 against manifest `349bd149…`: 56/56 spans, 33/33 digests, 21/21 outcomes; exactly the reportable regions are listed.
+- **My extraction recomputation:** 87/87 (65 extraction vectors + 22 matching inputs). The only hand-written span starts, `*`@5 and `total`@238, are where a source-order search lands wrongly.
+
+**(1) Findings.**
+- **Extraction side, resolved:**
+  - The two rejections are now `reserved-token`@8 and @7 (`rust.json:2905`, `:2983`). `check_vectors.py:624–675` applies the reserved-prefix rule and `:955–983` checks each rejection against its positive. Restoring the old records fails `check_vectors.py`, and `crosscheck.py` now catches the old `s1` record.
+  - `derivationRule` (`go.json:11` and the other four files) gives the definition plus (b) and `spanStarts: hand` (`rust.json:2269`). Removing that mark fails the checker.
+  - `profiles/code.md:29` reconciles scope.
+  - EX-05/22/23 cite implementation tests (`requirement-map.json:105`, `:514`, `:528`); EX-22/23 cite only Go's `TestNFCLinearTime`.
+- **Extraction side, residual (low).** An offset moved *inside* the failing token passes `check_vectors.py`: 8 of 18 ±1 shifts of `reserved-token` offsets got through (e.g. `q11-rej`@9, `err-pounds`@3, `q1-raw-extra-pounds`@5). `crosscheck.py` passes the three I tried as well. Cause: `check_prefix_consistency` skips tokens that end after the offset. **Fix:** reject an offset strictly inside a positive's token over shared bytes.
+- **Catalogue side, resolved:** OD-C64 is profile-conditional (`catalogue-report.md:192`, `check_matching.py:607`). The vendor effects are stated with vectors (`:301`, OD-C66); the companion comparison instead of per-class reporting is acceptable. M2.3 is assigned to the implementations (`:619`). P1b and the source digest are bound (`:576`, `check_gates.py:144–147`). P3: identifier removed (`:584`). C2: stated as a claim (`:598`). `regionsListed` added (`:617`).
+- **Catalogue side, residual (minor).** `matching/extraction-py.json` and `matching/records.json` are `hand`-labelled but have no `derivationRule`. ROADMAP `:109` and `:238` still say the vendor class is missing and "5 mixed"; there are 6.
+
+**(3) Hand derivation.** I read ten `HAND_TOKENS` lists against `spec/extraction.md`, not against `lex()`: `mv-go-put`, `-partial`, `-independent`, `-classes-a`, `-classes-b`, `-nonascii-prefixed`, `-host-formatted`, `-vendor-lib`, `-b2` and `mv-rust-host`. All are correct: `;` insertion (including after a bare `return`), explicit `;`, `...`, `[:0]`, comments, Unicode identifiers, Rust single-character punctuation and `write!`. All 84 `hand` matching vectors rest only on `hand` records or literal catalogues.
+
+**(4) Corruptions.**
+- **Earlier misses, now caught:** P1b, P3, and W1/W2 rebuilt on `rust-identical` and `go-renamed`. P2, P4–P6, C1 and C3–C6 are still caught. C2 is still not caught, as the contract now states.
+- **New, all caught:**
+  - **N1.** `go-tokens` declared zero-width in the checker fails at `go-w1-reused-span-start`; a `zeroWidthTokens` field in a catalogue fails the schema.
+  - **N2.** Wrong-side digests fail all three ways: historical copy and source digests swapped, historical `side` flipped, and own-origin `side: candidate` with the reference digest.
+  - **N3.** Relabelling a `hand` vector's source fails three ways: `mv-go-sum` set to `computed-then-reviewed`, its label removed, and `go.json#go-format-a` set to `mixed`.
+
+**(6) Gates: specification side; what the implementations must add.**
+- **M1.1:** met; nothing to add.
+- **M1.2:** met. Re-vendor `extraction/rust.json` `7d53e9e6…` and the files whose headers changed: `go.json` `5eb7c2e2…`, `limits-go` `c70c60a1…`, `limits-rust` `b1f43876…`, `exclusion-rule` `8d5cb794…`, `config-negative` `e4212a74…`. Reproduce `reserved-token`@7 and @8 and every exact rejection offset (M1.4).
+- **M1.5:** met. Keep the cited tests, and add or cite a Rust timing test for EX-22/23.
+- **M2.2:** met. Reproduce 33 digests and 56 spans of `349bd149…` N/N.
+- **M2.3:** met as far as the specification can supply. Report each control class with its candidate count and denominator, **including vendor** (4 vectors).
+- **M2.6:** met, apart from the two rule texts above. Re-vendor `matching.json` `6652a8ce…` and the input files `405225d9…`, `0cc19730…`, `ba0b03b5…`, `0dfd8eb2…`. Implement zero-width-conditional span validation, and pass the 7 new vectors.
+- **M2.7:** met. Validate draft-2 packets (schema `8ebc4c8f…`, `review-packets.json` `9c91e501…`): side digest, source bound to the other side, no identifier. That is 4 valid and 67 invalid.
+- **M2.9:** met. Validate `candidate-generation.json` `bc98f970…`; build an index and two retrieval paths.
+
+**Owner would confirm (decided in draft).**
+- Catalogue: OD-C1–C16; A1 C21–C25; A2 (extraction OD-23); A3 C26–C28; A5 C29–C38; A6 C39–C47; A7 C48–C55; A8–A12 C56–C60; A13 C19 and C61–C65; A14 OD-C64 revised, C66 and C67, plus `exhaustive` as a claim and `regionsListed`; A15 OD-C68.
+- Extraction: OD-23 and Q10.
+
+**Verdicts.** Extraction side: **met**, with the low offset residual. Catalogue/report side: **met** on the specification side, with the two missing rule texts and stale ROADMAP cells as minor items.
