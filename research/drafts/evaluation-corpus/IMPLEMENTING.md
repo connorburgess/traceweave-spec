@@ -1,6 +1,6 @@
 # Implementing the M3 evaluation harness
 
-Brief for whoever builds the harness in the implementation repository (`traceweave`, owner column `I`), against protocol [`m3-eval-draft-7`](../evaluation-protocol.md). The protocol governs; this list only orders the work. Decided on 2026-11-23: budget **`1/20`** per unordered repository search, acquisition approved with mechanical replacements, corpus root `~/traceweave-eval` named by `TRACEWEAVE_EVAL_DIR`.
+Brief for whoever builds the harness in the implementation repository (`traceweave`, owner column `I`), against protocol [`m3-eval-draft-8`](../evaluation-protocol.md). The protocol governs; this list only orders the work. Decided on 2026-11-23: budget **`1/20`** per unordered repository search, acquisition approved with mechanical replacements, corpus root `~/traceweave-eval` named by `TRACEWEAVE_EVAL_DIR`.
 
 **Conventions for every script.**
 - Exit status: 0 success, 1 a checked condition failed (invalid input, mismatch, refusal), 2 usage, environment, I/O or abort. M3.6 adds 3 (negative-result).
@@ -51,7 +51,7 @@ From the rulings in [protocol §19](../evaluation-protocol.md#19-harness-rulings
 4. **Manifest (A25).** Copy the draft-3 `manifest-proposal.json`. After acquisition, write `eligibleFileCountAfterContentRules` in the walk facts of every repository that passed the path rules, and set `status: "acquired"` on the manifest and every entry; `verify_manifest.py` then accepts acquisition-time `too-few-eligible-files` rejections.
 5. **Cases.** Go top-level boundaries require `(`-depth 0 (A10); no repeated unit within a cell (A27); add vectors for both and for a boundary inside a block comment (A12).
 6. **Suppression (A26, S-c).** For a frequent hash whose snippet fails, add the whole fold-S file of its first occurrence (once per file). Record per catalogue: frequent hashes, kept snippets, fallback files, collateral hashes per channel. Refuse any non-fold-S source; record the fold-S and fold-E lists in `freeze.json` and check them in `tune`.
-7. **Pilot and estimates (B5, B6).** Time batched comparisons (one `compare` per search over the sampled files); run the 1-in-50 direct checks batched (one `compare` per search and configuration); include both CLIs and the direct checks in every estimate.
+7. **Pilot and estimates (B5, B6).** Time batched comparisons (one `compare` per search over the sampled files); run the 1-in-50 direct checks on exactly the selected pairs (one `compare` per checked reference file and configuration; draft-8 replaces the per-search batch first ruled here); include both CLIs and the direct checks in every estimate.
 8. **Memory (B4).** A watchdog sampling every child and the harness process at least once per second, killing at 75% of physical memory; optional batching of large searches by reference files.
 9. **Checks (B8, S-b).** Record checked ids; `counts` recomputes the expected ids from the fixed moduli and exits 1 on any difference.
 10. **Verdict (B7).** Write `eval/results/heldout/searches.jsonl`; `m36-verdict` reads it, `counts.json` and `eligibility.json` from the first held-out result commit with `git show`, recomputes A, N and the exclusion bound, cross-checks the summaries (difference: exit 2), refuses a dirty tree, and prints the suppression counts.
@@ -63,3 +63,9 @@ From the O1–O8 rows of [protocol §19](../evaluation-protocol.md#19-harness-ru
 - **O1:** once `main` has `traceweave-go --version` (owner: the implementation repository's Go lane), read both binaries' commits from `--version`; until then, report-document provenance as now.
 - **O2:** confirm `path-case-collision` uses Unicode 17.0.0 full case folding and excludes every colliding path; keep `path-unsafe`.
 - **O5:** implement reference-file batching of large searches before the held-out run if the pilot shows any search near the 75% memory line; otherwise such a search aborts the run.
+
+## Changes for draft-8
+
+- **Direct check:** exactly the selected pairs, one `compare` per checked reference file and configuration, as implemented at `75b84eb`; no change.
+- **Caching check:** stays unbatched (whole reference against whole candidate catalogue); no change.
+- **Disk:** refuse `TRACEWEAVE_EVAL_MIN_FREE_GB` below 10 (exit 2); record the margin used in `identity.json`; falling below it mid-run is an abort (exit 2).

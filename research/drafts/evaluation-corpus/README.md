@@ -79,3 +79,7 @@ The self-test now also builds three acquired variants that must pass (one with n
 ## Draft-7
 
 The protocol moved to `m3-eval-draft-7` (rulings O1–O8). Nothing in it touches the manifest, schema or checker, so the manifest keeps `protocolVersion` `m3-eval-draft-6` and is unchanged.
+
+## Draft-8
+
+The protocol moved to `m3-eval-draft-8` (direct-check shape, unbatched caching check, disk figures and a 10 GB minimum margin). The manifest, schema and checker are unchanged; the manifest keeps `protocolVersion` `m3-eval-draft-6`.
