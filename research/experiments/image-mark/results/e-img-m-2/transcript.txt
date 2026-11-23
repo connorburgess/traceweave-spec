@@ -1,0 +1,202 @@
+# e-img-m-2 measured run transcript. Paths: the worktree is shown as <wt> (= ~/traceweave-spec-imgmark-wt), the shared checkout as <main>.
+# Commands that ran outside the agent sandbox are marked [outside-sandbox].
+
+$ [outside-sandbox] git worktree add --detach <wt> d3af1ee07595bde53ff53fcce0f3880ad04fb62c
+Preparing worktree (detached HEAD d3af1ee)
+HEAD is now at d3af1ee Freeze image mark protocol e-img-m-2; retire e-img-m-1 unrun after its review
+exit 0
+
+# [outside-sandbox] from <wt>/research/experiments/image-mark
+$ python3 -I fetch_sources.py
+84/84 source files verified under third_party/
+exit 0
+
+# [outside-sandbox] from <wt>/research/experiments/image-mark
+$ /opt/homebrew/bin/python3.14 -m venv .venv
+exit 0
+
+$ .venv/bin/python -m pip install --no-cache-dir --no-index --find-links <main>/research/experiments/image-mark/wheelhouse --require-hashes --only-binary=:all: -r requirements.txt
+Looking in links: <main>/research/experiments/image-mark/wheelhouse
+Processing <main>/research/experiments/image-mark/wheelhouse/aiohappyeyeballs-2.7.1-py3-none-any.whl (from -r requirements.txt (line 6))
+Processing <main>/research/experiments/image-mark/wheelhouse/aiohttp-3.14.5-cp314-cp314-macosx_10_15_universal2.whl (from -r requirements.txt (line 8))
+Processing <main>/research/experiments/image-mark/wheelhouse/aiosignal-1.4.0-py3-none-any.whl (from -r requirements.txt (line 10))
+Processing <main>/research/experiments/image-mark/wheelhouse/anyio-4.16.0-py3-none-any.whl (from -r requirements.txt (line 12))
+Processing <main>/research/experiments/image-mark/wheelhouse/attrs-26.1.0-py3-none-any.whl (from -r requirements.txt (line 14))
+Processing <main>/research/experiments/image-mark/wheelhouse/certifi-2026.11.20-py3-none-any.whl (from -r requirements.txt (line 16))
+Processing <main>/research/experiments/image-mark/wheelhouse/charset_normalizer-3.5.2-cp314-cp314-macosx_10_15_universal2.whl (from -r requirements.txt (line 18))
+Processing <main>/research/experiments/image-mark/wheelhouse/click-8.5.1-py3-none-any.whl (from -r requirements.txt (line 20))
+Processing <main>/research/experiments/image-mark/wheelhouse/einops-0.8.2-py3-none-any.whl (from -r requirements.txt (line 22))
+Processing <main>/research/experiments/image-mark/wheelhouse/filelock-4.3.0-py3-none-any.whl (from -r requirements.txt (line 24))
+Processing <main>/research/experiments/image-mark/wheelhouse/frozenlist-1.8.0-cp314-cp314-macosx_10_13_universal2.whl (from -r requirements.txt (line 26))
+Processing <main>/research/experiments/image-mark/wheelhouse/fsspec-2026.9.0-py3-none-any.whl (from -r requirements.txt (line 28))
+Processing <main>/research/experiments/image-mark/wheelhouse/h11-0.16.0-py3-none-any.whl (from -r requirements.txt (line 30))
+Processing <main>/research/experiments/image-mark/wheelhouse/hf_xet-1.8.0-cp38-abi3-macosx_11_0_arm64.whl (from -r requirements.txt (line 32))
+Processing <main>/research/experiments/image-mark/wheelhouse/httpcore2-2.16.2-py3-none-any.whl (from -r requirements.txt (line 34))
+Processing <main>/research/experiments/image-mark/wheelhouse/httpx2-2.16.2-py3-none-any.whl (from -r requirements.txt (line 36))
+Processing <main>/research/experiments/image-mark/wheelhouse/huggingface_hub-2.4.0-py3-none-any.whl (from -r requirements.txt (line 38))
+Processing <main>/research/experiments/image-mark/wheelhouse/idna-3.20-py3-none-any.whl (from -r requirements.txt (line 40))
+Processing <main>/research/experiments/image-mark/wheelhouse/invisible_watermark-0.2.0-py3-none-any.whl (from -r requirements.txt (line 42))
+Processing <main>/research/experiments/image-mark/wheelhouse/jinja2-3.1.6-py3-none-any.whl (from -r requirements.txt (line 44))
+Processing <main>/research/experiments/image-mark/wheelhouse/lightning-2.6.6-py3-none-any.whl (from -r requirements.txt (line 46))
+Processing <main>/research/experiments/image-mark/wheelhouse/lightning_utilities-0.15.3-py3-none-any.whl (from -r requirements.txt (line 48))
+Processing <main>/research/experiments/image-mark/wheelhouse/markupsafe-3.0.4-cp314-cp314-macosx_11_0_arm64.whl (from -r requirements.txt (line 50))
+Processing <main>/research/experiments/image-mark/wheelhouse/mpmath-1.3.0-py3-none-any.whl (from -r requirements.txt (line 52))
+Processing <main>/research/experiments/image-mark/wheelhouse/multidict-7.2.1-cp314-cp314-macosx_10_15_universal2.whl (from -r requirements.txt (line 54))
+Processing <main>/research/experiments/image-mark/wheelhouse/networkx-3.7-py3-none-any.whl (from -r requirements.txt (line 56))
+Processing <main>/research/experiments/image-mark/wheelhouse/numpy-2.5.5-cp314-cp314-macosx_11_0_arm64.whl (from -r requirements.txt (line 58))
+Processing <main>/research/experiments/image-mark/wheelhouse/omegaconf-2.4.0-py3-none-any.whl (from -r requirements.txt (line 60))
+Processing <main>/research/experiments/image-mark/wheelhouse/opencv_python-5.1.0.95-cp37-abi3-macosx_15_0_arm64.whl (from -r requirements.txt (line 62))
+Processing <main>/research/experiments/image-mark/wheelhouse/packaging-26.3-py3-none-any.whl (from -r requirements.txt (line 64))
+Processing <main>/research/experiments/image-mark/wheelhouse/pillow-13.0.0-cp314-cp314-macosx_11_0_arm64.whl (from -r requirements.txt (line 66))
+Processing <main>/research/experiments/image-mark/wheelhouse/propcache-0.5.4-cp314-cp314-macosx_10_15_universal2.whl (from -r requirements.txt (line 68))
+Processing <main>/research/experiments/image-mark/wheelhouse/pytorch_lightning-2.6.6-py3-none-any.whl (from -r requirements.txt (line 70))
+Processing <main>/research/experiments/image-mark/wheelhouse/pywavelets-1.10.0-cp314-cp314-macosx_11_0_arm64.whl (from -r requirements.txt (line 72))
+Processing <main>/research/experiments/image-mark/wheelhouse/pyyaml-6.0.4-cp314-cp314-macosx_11_0_arm64.whl (from -r requirements.txt (line 74))
+Processing <main>/research/experiments/image-mark/wheelhouse/requests-2.34.2-py3-none-any.whl (from -r requirements.txt (line 76))
+Processing <main>/research/experiments/image-mark/wheelhouse/safetensors-0.8.0-cp310-abi3-macosx_11_0_arm64.whl (from -r requirements.txt (line 78))
+Processing <main>/research/experiments/image-mark/wheelhouse/setuptools-81.0.0-py3-none-any.whl (from -r requirements.txt (line 80))
+Processing <main>/research/experiments/image-mark/wheelhouse/six-1.17.0-py2.py3-none-any.whl (from -r requirements.txt (line 82))
+Processing <main>/research/experiments/image-mark/wheelhouse/sympy-1.14.0-py3-none-any.whl (from -r requirements.txt (line 84))
+Processing <main>/research/experiments/image-mark/wheelhouse/timm-0.9.16-py3-none-any.whl (from -r requirements.txt (line 86))
+Processing <main>/research/experiments/image-mark/wheelhouse/torch-2.11.0-cp314-cp314-macosx_11_0_arm64.whl (from -r requirements.txt (line 88))
+Processing <main>/research/experiments/image-mark/wheelhouse/torchmetrics-1.9.0-py3-none-any.whl (from -r requirements.txt (line 90))
+Processing <main>/research/experiments/image-mark/wheelhouse/torchvision-0.26.0-cp314-cp314-macosx_12_0_arm64.whl (from -r requirements.txt (line 92))
+Processing <main>/research/experiments/image-mark/wheelhouse/tqdm-4.70.1-py3-none-any.whl (from -r requirements.txt (line 94))
+Processing <main>/research/experiments/image-mark/wheelhouse/truststore-0.10.5-py3-none-any.whl (from -r requirements.txt (line 96))
+Processing <main>/research/experiments/image-mark/wheelhouse/typing_extensions-4.16.0-py3-none-any.whl (from -r requirements.txt (line 98))
+Processing <main>/research/experiments/image-mark/wheelhouse/urllib3-2.8.0-py3-none-any.whl (from -r requirements.txt (line 100))
+Processing <main>/research/experiments/image-mark/wheelhouse/yarl-1.25.1-cp314-cp314-macosx_10_15_universal2.whl (from -r requirements.txt (line 102))
+Installing collected packages: mpmath, urllib3, typing-extensions, truststore, tqdm, sympy, six, setuptools, safetensors, pyyaml, propcache, pillow, packaging, numpy, networkx, multidict, markupsafe, idna, hf-xet, h11, fsspec, frozenlist, filelock, einops, click, charset-normalizer, certifi, attrs, aiohappyeyeballs, yarl, requests, pywavelets, opencv-python, omegaconf, lightning-utilities, jinja2, httpcore2, anyio, aiosignal, torch, httpx2, aiohttp, torchvision, torchmetrics, invisible-watermark, huggingface-hub, timm, pytorch-lightning, lightning
+
+Successfully installed aiohappyeyeballs-2.7.1 aiohttp-3.14.5 aiosignal-1.4.0 anyio-4.16.0 attrs-26.1.0 certifi-2026.11.20 charset-normalizer-3.5.2 click-8.5.1 einops-0.8.2 filelock-4.3.0 frozenlist-1.8.0 fsspec-2026.9.0 h11-0.16.0 hf-xet-1.8.0 httpcore2-2.16.2 httpx2-2.16.2 huggingface-hub-2.4.0 idna-3.20 invisible-watermark-0.2.0 jinja2-3.1.6 lightning-2.6.6 lightning-utilities-0.15.3 markupsafe-3.0.4 mpmath-1.3.0 multidict-7.2.1 networkx-3.7 numpy-2.5.5 omegaconf-2.4.0 opencv-python-5.1.0.95 packaging-26.3 pillow-13.0.0 propcache-0.5.4 pytorch-lightning-2.6.6 pywavelets-1.10.0 pyyaml-6.0.4 requests-2.34.2 safetensors-0.8.0 setuptools-81.0.0 six-1.17.0 sympy-1.14.0 timm-0.9.16 torch-2.11.0 torchmetrics-1.9.0 torchvision-0.26.0 tqdm-4.70.1 truststore-0.10.5 typing-extensions-4.16.0 urllib3-2.8.0 yarl-1.25.1
+exit 0
+
+# [outside-sandbox] from <wt>/research/experiments/image-mark; TRACEWEAVE_EVAL_DIR=~/traceweave-eval; SB=(version 1)(allow default)(deny network*)
+$ sandbox-exec -p "$SB" python3 -I fetch_weights.py --verify
+        ok trustmark-Q-config sha256=43f37103f92efa8bd6b1c5902bb537cc12a981dc699fca19d9bb7de8c62d03d9
+        ok trustmark-Q-encoder sha256=dc382c3f6b4fd568b27d6fbb763d6ffc2d2587126d84afe9d5ee95b4c5d99826
+        ok trustmark-Q-decoder sha256=e3d9cea5406a26590735719f8f15cb10802b11852ae69047eaf4cf17214df781
+        ok trustmark-Q-remover-config sha256=d8ae92c8ad0135a5d085c295be8560fbb67af9b8f5ab46bbf25f4a1038a8626f
+        ok trustmark-Q-remover sha256=cb23dc28b69104ae551286f63da6e965d269f715a87748e3ae7fe0d790f7dc9a
+        ok pixelseal sha256=0c5665cff20eb6ce1b5aaa7d91c19dafb418bfee32d02dd3344e4ed60d9d75bd
+6/6 files verified under ~/traceweave-eval/models
+exit 0
+
+$ git rev-parse HEAD
+d3af1ee07595bde53ff53fcce0f3880ad04fb62c
+exit 0
+
+$ git status --porcelain --untracked-files=all  (empty expected)
+exit 0
+
+# [outside-sandbox] sandbox-exec deny-network
+$ sandbox-exec -p "$SB" .venv/bin/python -I -m unittest discover -s tests -t .
+....<wt>/research/experiments/image-mark/tests/test_harness.py:95: ResourceWarning: unclosed file <_io.BufferedWriter name='/var/folders/fw/j99xgfsx0hb4dcf5h7q6ft700000gn/T/tmp4zp6flgb/a/entries.jsonl'>
+  open(os.path.join(d, r, "entries.jsonl"), "wb").write(b"e\n")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<wt>/research/experiments/image-mark/tests/test_harness.py:96: ResourceWarning: unclosed file <_io.BufferedWriter name='/var/folders/fw/j99xgfsx0hb4dcf5h7q6ft700000gn/T/tmp4zp6flgb/a/queries.jsonl'>
+  open(os.path.join(d, r, "queries.jsonl"), "wb").write(q)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<wt>/research/experiments/image-mark/tests/test_harness.py:97: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/fw/j99xgfsx0hb4dcf5h7q6ft700000gn/T/tmp4zp6flgb/a/summary.json' mode='w' encoding='utf-8'>
+  json.dump({"resultsSha256": r, "runtime": {"torchThreads": 4}}, open(os.path.join(d, r, "summary.json"), "w"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<wt>/research/experiments/image-mark/tests/test_harness.py:95: ResourceWarning: unclosed file <_io.BufferedWriter name='/var/folders/fw/j99xgfsx0hb4dcf5h7q6ft700000gn/T/tmp4zp6flgb/b/entries.jsonl'>
+  open(os.path.join(d, r, "entries.jsonl"), "wb").write(b"e\n")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<wt>/research/experiments/image-mark/tests/test_harness.py:96: ResourceWarning: unclosed file <_io.BufferedWriter name='/var/folders/fw/j99xgfsx0hb4dcf5h7q6ft700000gn/T/tmp4zp6flgb/b/queries.jsonl'>
+  open(os.path.join(d, r, "queries.jsonl"), "wb").write(q)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<wt>/research/experiments/image-mark/tests/test_harness.py:97: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/fw/j99xgfsx0hb4dcf5h7q6ft700000gn/T/tmp4zp6flgb/b/summary.json' mode='w' encoding='utf-8'>
+  json.dump({"resultsSha256": r, "runtime": {"torchThreads": 4}}, open(os.path.join(d, r, "summary.json"), "w"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<wt>/research/experiments/image-mark/run_mark.py:483: ResourceWarning: unclosed file <_io.BufferedReader name='/var/folders/fw/j99xgfsx0hb4dcf5h7q6ft700000gn/T/tmp4zp6flgb/a/entries.jsonl'>
+  x, y = open(os.path.join(a, f), "rb").read(), open(os.path.join(b, f), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<wt>/research/experiments/image-mark/run_mark.py:483: ResourceWarning: unclosed file <_io.BufferedReader name='/var/folders/fw/j99xgfsx0hb4dcf5h7q6ft700000gn/T/tmp4zp6flgb/b/entries.jsonl'>
+  x, y = open(os.path.join(a, f), "rb").read(), open(os.path.join(b, f), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<wt>/research/experiments/image-mark/run_mark.py:483: ResourceWarning: unclosed file <_io.BufferedReader name='/var/folders/fw/j99xgfsx0hb4dcf5h7q6ft700000gn/T/tmp4zp6flgb/a/queries.jsonl'>
+  x, y = open(os.path.join(a, f), "rb").read(), open(os.path.join(b, f), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<wt>/research/experiments/image-mark/run_mark.py:483: ResourceWarning: unclosed file <_io.BufferedReader name='/var/folders/fw/j99xgfsx0hb4dcf5h7q6ft700000gn/T/tmp4zp6flgb/b/queries.jsonl'>
+  x, y = open(os.path.join(a, f), "rb").read(), open(os.path.join(b, f), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<wt>/research/experiments/image-mark/run_mark.py:486: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/fw/j99xgfsx0hb4dcf5h7q6ft700000gn/T/tmp4zp6flgb/a/summary.json' mode='r' encoding='utf-8'>
+  sa, sb = (json.load(open(os.path.join(d, "summary.json"))) for d in (a, b))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<wt>/research/experiments/image-mark/run_mark.py:486: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/fw/j99xgfsx0hb4dcf5h7q6ft700000gn/T/tmp4zp6flgb/b/summary.json' mode='r' encoding='utf-8'>
+  sa, sb = (json.load(open(os.path.join(d, "summary.json"))) for d in (a, b))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<wt>/research/experiments/image-mark/tests/test_harness.py:99: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/fw/j99xgfsx0hb4dcf5h7q6ft700000gn/T/tmp4zp6flgb/b/summary.json' mode='w' encoding='utf-8'>
+  json.dump({"resultsSha256": "b", "runtime": {"torchThreads": 8}}, open(os.path.join(d, "b", "summary.json"), "w"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....<wt>/research/experiments/image-mark/tests/test_harness.py:113: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/fw/j99xgfsx0hb4dcf5h7q6ft700000gn/T/tmprtp_rrtv/p.md' mode='w' encoding='utf-8'>
+  open(p, "w").write(body)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<wt>/research/experiments/image-mark/twmark/env.py:315: ResourceWarning: unclosed file <_io.BufferedReader name='/var/folders/fw/j99xgfsx0hb4dcf5h7q6ft700000gn/T/tmprtp_rrtv/p.md'>
+  text = open(path, "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<wt>/research/experiments/image-mark/tests/test_harness.py:115: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/fw/j99xgfsx0hb4dcf5h7q6ft700000gn/T/tmprtp_rrtv/p.md' mode='w' encoding='utf-8'>
+  open(p, "w").write(body.replace("0" * 64, computed))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+......entries.jsonl identical a2bbdb2de53523b8 a2bbdb2de53523b8
+queries.jsonl DIFFERENT 4355a46b19d348dc 53c234e5e8472b6a
+resultsSha256 and results DIFFERENT
+W3: INVALID (outputs differ, recorded inputs equal); rerun the pair on the pinned host (§6)
+entries.jsonl identical a2bbdb2de53523b8 a2bbdb2de53523b8
+queries.jsonl DIFFERENT 4355a46b19d348dc 53c234e5e8472b6a
+resultsSha256 and results DIFFERENT
+W3: NEGATIVE (outputs differ; inputs differ: runtime)
+[WARN]: `ffmpeg-python` not available, `SimpleVideoDataset` class will not be usable. Install it by `pip install ffmpeg-python`.
+<wt>/research/experiments/image-mark/.venv/lib/python3.14/site-packages/torch/jit/_script.py:1482: DeprecationWarning: `torch.jit.script` is not supported in Python 3.14+ and may break. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+<wt>/research/experiments/image-mark/.venv/lib/python3.14/site-packages/torch/jit/_script.py:1640: DeprecationWarning: `torch.jit.interface` is deprecated. Please use `torch.compile` instead.
+  warnings.warn(
+<wt>/research/experiments/image-mark/.venv/lib/python3.14/site-packages/timm/models/layers/__init__.py:49: DeprecationWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", DeprecationWarning)
+<wt>/research/experiments/image-mark/third_party/videoseal/videoseal/models/baselines.py:339: SyntaxWarning: "\;" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\;"? A raw string is also an option.
+  `pip install huggingface_hub; huggingface-cli download tangtianzhong/img-wm-torchscript --cache-dir .cache; mkdir ckpts; find .cache/models--tangtianzhong--img-wm-torchscript/snapshots/845dc751783db2a03a4b14ea600b0a4a9aba89aa -type l -exec cp --dereference {} ckpts/ \; sleep 5 ;rm -rf .cache`
+........
+----------------------------------------------------------------------
+Ran 22 tests in 48.375s
+
+OK
+exit 0
+
+# [outside-sandbox] sandbox-exec deny-network
+$ sandbox-exec -p "$SB" .venv/bin/python -I run_mark.py full --frozen-commit $FROZEN --require-network-denied --out out/full-1
+generated 200 images in 86.2s
+  tm: embedded 100 in 72.8s
+  tm: 2500 queries in 1002.7s
+[WARN]: `ffmpeg-python` not available, `SimpleVideoDataset` class will not be usable. Install it by `pip install ffmpeg-python`.
+  ps: embedded 100 in 161.2s
+  ps: 2500 queries in 2056.0s
+  dw: embedded 100 in 56.6s
+  dw: 2500 queries in 1150.0s
+done in 4295.2s; resultsSha256 6d87d2ccee6519dff43e9e8fe0c90abd360bca1f796f13d8aed4da53eb1a70bb; record errors 0
+exit 0
+
+# [outside-sandbox] sandbox-exec deny-network
+$ sandbox-exec -p "$SB" .venv/bin/python -I run_mark.py full --frozen-commit $FROZEN --require-network-denied --out out/full-2
+generated 200 images in 91.7s
+  tm: embedded 100 in 71.4s
+  tm: 2500 queries in 1150.0s
+[WARN]: `ffmpeg-python` not available, `SimpleVideoDataset` class will not be usable. Install it by `pip install ffmpeg-python`.
+  ps: embedded 100 in 178.7s
+  ps: 2500 queries in 3313.4s
+  dw: embedded 100 in 73.1s
+  dw: 2500 queries in 1440.8s
+done in 5996.4s; resultsSha256 6d87d2ccee6519dff43e9e8fe0c90abd360bca1f796f13d8aed4da53eb1a70bb; record errors 0
+exit 0
+
+# [outside-sandbox] sandbox-exec deny-network
+$ sandbox-exec -p "$SB" .venv/bin/python -I run_mark.py compare out/full-1 out/full-2
+entries.jsonl identical fc226ecabdb0c77d fc226ecabdb0c77d
+queries.jsonl identical d252937144c7bc77 d252937144c7bc77
+resultsSha256 and results equal
+W3: identical
+exit 0
+
+$ git status --porcelain --untracked-files=all  (empty expected)
+exit 0
+
