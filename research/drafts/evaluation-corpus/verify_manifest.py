@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the M3 corpus manifest (protocol m3-eval-draft-4). Standard library only.
+"""Check the M3 corpus manifest (protocol m3-eval-draft-6). Standard library only.
 
 Usage:
   python3 -I verify_manifest.py [MANIFEST] [--schema SCHEMA]   exit 0 valid, 1 invalid, 2 usage or I/O error
@@ -216,6 +216,7 @@ def licence_outcome(files, allow):
 
 def check(m):
     sel, exc = m["selection"], m["exclusions"]
+    acquisition_time = []
     allow = sel["licenceAllowlist"]
 
     # Exclusion lists cannot be weakened.
@@ -337,6 +338,8 @@ def check(m):
             if reason in PREFILTER_REASONS:
                 raise Invalid("E-WALK", f"{language} {p['fullName']}: {reason} does not apply")
             facts = w.get("facts")
+            if reason in NO_FACT_REASONS or reason in LINK_REASONS:
+                acquisition_time.append(p["fullName"])
             if reason in NO_FACT_REASONS:
                 if w["verdict"] != "rejected":
                     raise Invalid("E-WALK", f"{language} {p['fullName']}: verdict/reason mismatch")
@@ -359,6 +362,15 @@ def check(m):
                 derived = "too-few-eligible-files"
             if derived is None and facts["eligiblePathBytes"] > sel["maxEligiblePathBytes"]:
                 derived = "eligible-bytes-over-limit"
+            content_count = facts.get("eligibleFileCountAfterContentRules")
+            if derived is None and m["status"] == "acquired" and content_count is None:
+                raise Invalid("E-WALK", f"{language} {p['fullName']}: an acquired manifest needs "
+                                        "eligibleFileCountAfterContentRules for every repository that passed the path rules")
+            if derived is None and content_count is not None and content_count < sel["minEligiblePaths"]:
+                # Protocol 3.1 rule 8: too few eligible files after the content rules, decided at acquisition (A25).
+                derived = "too-few-eligible-files"
+                acquisition_time.append(p["fullName"])
+                replacements += 1
             if derived is None:
                 if w["verdict"] != "accepted" or reason is not None:
                     raise Invalid("E-WALK", f"{language} {p['fullName']}: facts require acceptance")
@@ -437,6 +449,13 @@ def check(m):
     if m["totals"] != want_totals:
         raise Invalid("E-TOTALS", "totals do not match the entries")
 
+    # Status: acquisition-time verdicts exist only in an acquired manifest, and entries carry the manifest's status.
+    for e in entries:
+        if e["status"] != m["status"]:
+            raise Invalid("E-STATUS", f"{e['fullName']}: entry status {e['status']!r}, manifest {m['status']!r}")
+    if m["status"] != "acquired" and acquisition_time:
+        raise Invalid("E-STATUS", f"acquisition-time rejections in a manifest that is not acquired: {acquisition_time[:3]}")
+
     return {"entries": len(entries), "digest": digest,
             "negativeSearches": sum(n * (n - 1) // 2 for n in (
                 len({e["splitGroup"] for e in entries if e["language"] == lang and e["split"] == "held-out"})
@@ -481,7 +500,7 @@ def mutations(m):
     yield mut("revision abbreviated", "E-SCHEMA", lambda b: entry(b).update(revision=entry(b)["revision"][:12]))
     yield mut("revision uppercase", "E-SCHEMA", lambda b: entry(b).update(revision=entry(b)["revision"].upper()))
     yield mut("unknown field", "E-SCHEMA", lambda b: entry(b).update(note="x"))
-    yield mut("status says acquired", "E-SCHEMA", lambda b: entry(b).update(status="acquired"))
+    yield mut("entry says acquired in a proposed manifest", "E-STATUS", lambda b: entry(b).update(status="acquired"))
     yield mut("redistribution planned", "E-SCHEMA", lambda b: entry(b)["redistribution"].update(projectRedistributesSource=True))
     yield mut("split value invalid", "E-SCHEMA", lambda b: entry(b).update(split="test"))
     yield mut("licence files empty", "E-SCHEMA", lambda b: entry(b)["licence"].update(files=[]))
@@ -560,7 +579,8 @@ def mutations(m):
         w["linkedTo"] = first_accepted["fullName"]
     yield mut("acquisition rejections above the replacement limit", "E-REPLACEMENTS", too_many_replacements)
     yield mut("older manifest version", "E-SCHEMA", lambda b: b.update(manifestVersion="traceweave-m3-corpus-manifest-draft-1"))
-    yield mut("older protocol version", "E-SCHEMA", lambda b: b.update(protocolVersion="m3-eval-draft-2"))
+    yield mut("older protocol version", "E-SCHEMA", lambda b: b.update(protocolVersion="m3-eval-draft-5"))
+    yield mut("unknown manifest status", "E-SCHEMA", lambda b: b.update(status="partly acquired"))
     yield mut("ordered search unit", "E-SCHEMA", lambda b: b["acquisition"].update(searchUnit="ordered repository pair"))
     yield mut("replacement limit above 8", "E-SCHEMA", lambda b: b["acquisition"].update(replacementLimitPerLanguage=9))
 
@@ -650,10 +670,135 @@ def licence_text_cases(m):
     yield ("text edited after recording", "E-LICENCE-TEXT") + with_text(SYNTHETIC_MIT, hashlib.sha256(SYNTHETIC_MIT + b" ").hexdigest())
 
 
+def make_acquired(m):
+    """The manifest as acquisition would leave it with no repository rejected: status acquired, and the
+    post-content-rule file count recorded for every accepted repository (equal to its path count here)."""
+    b = copy.deepcopy(m)
+    b["status"] = "acquired"
+    for e in b["entries"]:
+        e["status"] = "acquired"
+    for language in LANGUAGES:
+        for w in b["walks"][language]:
+            if w["verdict"] == "accepted":
+                w["facts"]["eligibleFileCountAfterContentRules"] = w["facts"]["eligiblePathCount"]
+    return b
+
+
+def recompute_split_and_totals(b):
+    for language in LANGUAGES:
+        groups = sorted({e["splitGroup"] for e in b["entries"] if e["language"] == language},
+                        key=lambda g: split_key(b["split"]["salt"], language, g))
+        held = set(groups[: len(groups) // 2])
+        for e in b["entries"]:
+            if e["language"] == language:
+                e["split"] = "held-out" if e["splitGroup"] in held else "tuning"
+    b["entries"].sort(key=lambda e: e["id"])
+    b["split"]["digest"] = hashlib.sha256("".join(split_lines(b["entries"])).encode("utf-8")).hexdigest()
+
+    def tot(sel_entries):
+        return {"repositories": len(sel_entries),
+                "githubSizeKiB": sum(e["size"]["githubSizeKiB"] for e in sel_entries),
+                "eligiblePathCount": sum(e["size"]["eligiblePathCount"] for e in sel_entries),
+                "eligiblePathBytes": sum(e["size"]["eligiblePathBytes"] for e in sel_entries)}
+    b["totals"] = {"all": tot(b["entries"])}
+    for language in LANGUAGES:
+        for split in ("held-out", "tuning"):
+            b["totals"][f"{language}/{split}"] = tot([e for e in b["entries"]
+                                                      if e["language"] == language and e["split"] == split])
+
+
+def make_acquisition_rejection(m, language="Rust", count=5):
+    """An acquired manifest in which the first accepted repository of `language` falls below the eligible-file
+    minimum after the content rules (protocol 3.1 rule 8, review item A25) and the walk continues to a
+    replacement. Facts of the replacement are synthetic but complete."""
+    b = make_acquired(m)
+    sel, exc = b["selection"], b["exclusions"]
+    walk = b["walks"][language]
+    # A rejection frees its owner (rules 1-3 are replayed), so pick an accepted repository whose owner the walk
+    # does not visit again.
+    def owner_of(w):
+        return w["fullName"].split("/")[0].lower()
+    x = next(w for w in walk if w["verdict"] == "accepted"
+             and sum(owner_of(v) == owner_of(w) for v in walk) == 1)
+    x["verdict"], x["reason"] = "rejected", "too-few-eligible-files"
+    x["facts"]["eligibleFileCountAfterContentRules"] = count
+    old = next(e for e in b["entries"] if e["fullName"] == x["fullName"])
+    b["entries"].remove(old)
+    order = sorted(b["pools"][language], key=lambda p: order_key(sel["orderSalt"], p["fullName"]))
+    owners = {e["owner"] for e in b["entries"] if e["language"] == language}
+    for p in order[len(walk):]:
+        owner = p["owner"].lower()
+        if owner in exc["excludedOwners"]:
+            walk.append({"fullName": p["fullName"], "verdict": "rejected",
+                         "reason": "excluded-owner-" + exc["excludedOwners"][owner]})
+        elif sel["listMarker"] in p["name"].lower() or any(sel["listMarker"] in t.lower() for t in p["topics"]):
+            walk.append({"fullName": p["fullName"], "verdict": "rejected", "reason": "list-repository"})
+        elif owner in owners:
+            walk.append({"fullName": p["fullName"], "verdict": "rejected", "reason": "owner-already-selected"})
+        else:
+            break
+    revision = "e" * 40
+    files = [dict(f, url=f"https://raw.githubusercontent.com/{p['fullName']}/{revision}/{f['path']}")
+             for f in old["licence"]["files"]]
+    facts = dict(x["facts"], revision=revision, licenceFiles=files)
+    facts["eligibleFileCountAfterContentRules"] = facts["eligiblePathCount"]
+    walk.append({"fullName": p["fullName"], "verdict": "accepted", "facts": facts})
+    new = copy.deepcopy(old)
+    new.update(id=entry_id(language, p["fullName"]), fullName=p["fullName"], owner=p["owner"].lower(),
+               url="https://github.com/" + p["fullName"], defaultBranch=p["defaultBranch"], revision=revision,
+               revisionResolvedAt=facts["resolvedAt"], topics=p["topics"], splitGroup=p["owner"].lower(),
+               rationale="Synthetic replacement for the A25 self-test; not a real lookup.")
+    new["licence"]["files"] = files
+    new["size"]["githubSizeKiB"] = p["sizeKiB"]
+    b["entries"].append(new)
+    recompute_split_and_totals(b)
+    return b
+
+
+def acquisition_cases(m):
+    """Yield (name, expected code or None, manifest) for the acquisition-time rules (review item A25)."""
+    yield "acquired manifest, no rejection", None, make_acquired(m)
+    yield "A25: too few eligible files after the content rules, replaced", None, make_acquisition_rejection(m)
+    yield "A25 in Go", None, make_acquisition_rejection(m, "Go", 9)
+
+    b = make_acquired(m)
+    w = next(w for w in b["walks"]["Go"] if w["verdict"] == "accepted")
+    del w["facts"]["eligibleFileCountAfterContentRules"]
+    yield "acquired manifest without the post-content-rule count", "E-WALK", b
+
+    b = make_acquisition_rejection(m)
+    w = next(w for w in b["walks"]["Rust"] if w.get("reason") == "too-few-eligible-files"
+             and "eligibleFileCountAfterContentRules" in w["facts"])
+    w["facts"]["eligibleFileCountAfterContentRules"] = 10
+    yield "too-few rejection with 10 files after the content rules", "E-WALK", b
+
+    b = make_acquisition_rejection(m)
+    b["status"] = "proposed, not acquired"
+    for e in b["entries"]:
+        e["status"] = "proposed, not acquired"
+    yield "acquisition-time rejection in a manifest not acquired", "E-STATUS", b
+
+    b = make_acquired(m)
+    b["entries"][0]["status"] = "proposed, not acquired"
+    yield "entry status differs from the manifest", "E-STATUS", b
+
+
 def self_test(m, schema):
     import tempfile
     verify(m, schema)
     rejected, failures = 0, []
+    for name, code, b in acquisition_cases(m):
+        try:
+            verify(b, schema)
+            if code is not None:
+                failures.append(f"accepted: {name}")
+        except Invalid as err:
+            if code is None:
+                failures.append(f"{name}: unexpected {err}")
+            elif err.code == code:
+                rejected += 1
+            else:
+                failures.append(f"{name}: expected {code}, got {err}")
     for name, code, b, files in licence_text_cases(m):
         with tempfile.TemporaryDirectory() as d:
             for (full, path), data in files.items():
@@ -727,8 +872,8 @@ def main(argv):
         rejected, failures = self_test(manifest, schema)
         for f in failures:
             print("FAIL", f)
-        print(f"self-test: manifest valid; {rejected} broken manifests and licence texts rejected with the expected code; "
-              f"{len(failures)} failures")
+        print(f"self-test: manifest valid; 3 acquired variants (including two A25 replacements) valid; "
+              f"{rejected} broken manifests and licence texts rejected with the expected code; {len(failures)} failures")
         return 0 if not failures and rejected >= 10 else 1
     try:
         info = verify(manifest, schema)

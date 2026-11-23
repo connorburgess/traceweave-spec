@@ -66,3 +66,12 @@ Only `protocolVersion`, now `m3-eval-draft-4`, which records the owner decisions
 ## Draft-5
 
 The protocol moved to `m3-eval-draft-5` (lane 11 audit: fold-S outcome count, `k` = 16, tuning table with the freeze, alarm audit, follow-ups). **The manifest is unchanged**, including its `protocolVersion` `m3-eval-draft-4`: no draft-5 rule touches selection, licences, groups or splits, and the checker's rules are the same. `IMPLEMENTING.md` follows draft-5.
+
+## Draft-6
+
+`manifestVersion` is now `traceweave-m3-corpus-manifest-draft-3` and `protocolVersion` `m3-eval-draft-6`; entries, walk and split digest are unchanged. The schema and checker gained (harness ruling A25):
+- `status` (manifest and entries) may be `acquired`; entries must carry the manifest's status;
+- the walk fact `eligibleFileCountAfterContentRules`, required in an acquired manifest for every repository that passed the path rules; below 10 it derives `too-few-eligible-files` as an acquisition-time rejection, counted against the replacement limit;
+- acquisition-time rejections are refused in a manifest that is not acquired (`E-STATUS`).
+
+The self-test now also builds three acquired variants that must pass (one with no rejection, and a Rust and a Go A25 rejection, each replaced by continuing the walk with synthetic facts) and four acquired variants that must fail, for 51 rejected cases in all.

@@ -1,12 +1,21 @@
 # M3 evaluation protocol: token-fingerprint baseline on Go and Rust
 
-Protocol version: `m3-eval-draft-5`. Status: **ready to freeze; frozen by the commit that precedes the first tuning run** (2026-11-23). Not run. No corpus has been acquired yet; acquisition is approved (§14.2). Roadmap gates M3.0–M3.6 and backlog item TW-05 ([roadmap](../../ROADMAP.md#m3--measure-usefulness)). Corpus proposal: [evaluation-corpus/](evaluation-corpus/README.md).
+Protocol version: `m3-eval-draft-6`. Status: **ready to freeze; frozen by the commit that precedes the first tuning run** (2026-11-23). Not run. No corpus has been acquired yet; acquisition is approved (§14.2). Roadmap gates M3.0–M3.6 and backlog item TW-05 ([roadmap](../../ROADMAP.md#m3--measure-usefulness)). Corpus proposal: [evaluation-corpus/](evaluation-corpus/README.md).
 
 Protocol digest (SHA-256, self-excluding): `0000000000000000000000000000000000000000000000000000000000000000` (all zeros: **not frozen yet**). The protocol is frozen by the spec-repository commit that fills in this digest, and that commit must precede the first tuning run (§2 step 6). The digest is the SHA-256 of this file's bytes with those 64 hex digits replaced by 64 zeros; the tuning runner and `freeze.json` (§8) repeat it, and both refuse to run if this file's digest differs.
 
 This is a research protocol. It changes nothing in `spec/`, `schemas/`, `profiles/` or `test-vectors/`. The owner decisions it needs are recorded in [§14](#14-decisions-that-need-the-owner): decided on 2026-11-23 (M3.0 budget **1/20**, acquisition approved, storage `~/traceweave-eval`), with the options and both recommendations kept as history. The harness scripts are listed in [IMPLEMENTING.md](evaluation-corpus/IMPLEMENTING.md).
 
 It fixes, before any result exists, what is measured and how each pass/fail becomes an exit code or a count. Where this draft leaves a number open, the number is chosen by a stated mechanical rule on the tuning split, never by looking at held-out data.
+
+**Changes from `m3-eval-draft-5`**: rulings on the harness author's 40 recorded ambiguities (A1–A40, `traceweave` `i3-eval` commit `c91ee91`, `eval/README.md`) and on the [non-author harness review](../reviews/evaluation-harness-review.md) (commit `20162a8`, B1–B8 and S-a–S-c). Every item is mapped to its section in [§19](#19-harness-rulings-m3-eval-draft-6). Budget, verdict rule, corpus and split are unchanged. The material ones:
+- **all measured bytes are committed blob contents at the pinned revision**, read with `git cat-file` under an isolated git environment, never working-tree bytes (§3.6);
+- **suppression (A26):** a frequent hash whose snippet cannot be extracted falls back to the whole fold-S file it first occurs in, so every frequent hash is suppressed in both languages; the effect on alarms is monotone and reported (§5.2);
+- the `u()` strings are fixed (§6.2), `rename` numbers by first binding site (§6.3), Go top-level boundaries need `(`-depth 0 (§6.1), and units do not repeat within a cell (§6.2);
+- lexing held-out files through `extract` with fingerprints discarded unread satisfies §2 (A1);
+- the verdict is recomputed from per-search records in the committed first held-out result commit (§12);
+- per-pair time is measured on batched comparisons, the estimate includes the direct checks, and a memory watchdog kills at 75% (§5.5);
+- the checker accepts an acquired manifest and the acquisition-time `too-few-eligible-files` rejection through a new fact (§3.1, A25).
 
 **Changes from `m3-eval-draft-4`**, from the [lane 11 audit](../lanes/11-report-audit.md) of two external design reviews (commit `d32b25c`, "Combined ranked list", items 1–3, and its follow-up list). Budget `1/20`, the verdict rule and the manifest are unchanged:
 - the timing pilot becomes the **fold-S outcome count**: outcome classes on all fold-S searches with no suppression catalogue, for every (`k`, `window`), reported as a table; a pre-declared rule adds `minRegionDistinctHashes` 8 and 12 to the grid if the most conservative configuration alarms on more than half of either language's fold-S searches (§5.5); fold S still never reaches held-out data or configuration selection;
@@ -97,7 +106,7 @@ Each step is a commit. Gate IDs in brackets.
 | 10 | Independent rerun | step 9 [M3.5] |
 | 11 | Verdict computed | steps 1, 9 [M3.6] |
 
-Before step 7, **no held-out file is fingerprinted, catalogued or compared**, and no held-out positive case is generated. Steps 3 and 4 read held-out files only to compute byte lengths, SHA-256 digests, the generated-file test, the token count and lexing status (§3.4), the token digest (§4.1) and dependency declarations (§4.1). Lexing is the profile's tokenizer only: no k-gram, hash or window is computed.
+Before step 7, **no held-out file is fingerprinted, catalogued or compared**, and no held-out positive case is generated. Steps 3 and 4 read held-out files only to compute byte lengths, SHA-256 digests, the generated-file test, the token count and lexing status (§3.4), the token digest (§4.1) and dependency declarations (§4.1). Lexing is the profile's tokenizer only. **Ruling A1:** the implementations have no lex-only command, so lexing runs `extract` (with the shipped configuration, `k` 5, `window` 4) and keeps only the status, error code, token count and token digest; fingerprints, k-grams and window selections are discarded unread, never written to a committed or derived file, and the child's output passes only through temporary files under `TRACEWEAVE_EVAL_DIR/tmp`, deleted after reading. This satisfies "no k-gram, hash or window is computed" in its purpose: nothing derived from them exists after the step.
 
 ## 3. Corpus
 
@@ -117,7 +126,7 @@ The rule is mechanical. Its inputs are a committed **pool snapshot** and a commi
    5. pinned tree listing truncated by the API → `tree-truncated`;
    6. licence check (§3.2) fails → `licence-file-missing`, `licence-unclassified` or `licence-not-allowed`;
    7. fewer than 10 eligible paths → `too-few-eligible-files`; eligible bytes above 20 MiB → `eligible-bytes-over-limit` (§3.3);
-   8. *at acquisition only:* the acquisition-time rules of §4.1 → `dependency-linked`, `duplicate-content`; the licence recheck of §3.6 → acquisition stops (no verdict, see there); fewer than 10 eligible files after the content rules of §3.4 → `too-few-eligible-files`;
+   8. *at acquisition only:* the acquisition-time rules of §4.1 → `dependency-linked`, `duplicate-content`; the licence recheck of §3.6 → acquisition stops (no verdict, see there); fewer than 10 eligible files after the content rules of §3.4 → `too-few-eligible-files`, recorded with the walk fact `eligibleFileCountAfterContentRules` (counted after the content rules and before the within-repository duplicate rule; ruling A25, A30). An acquired manifest records that fact for every repository that passed the path rules, and `verify_manifest.py` derives the verdict from it;
    9. otherwise `accepted`.
 4. **Stop** when 24 repositories per language are accepted (the proposed size; scale is an owner choice, §14.4).
 
@@ -171,7 +180,7 @@ The classifier is a screening rule, not a legal opinion. It checks the root lice
 - excluded files are counted per repository and per reason (`generated`, `lex-error`, `under-16-tokens`, `oversize`, and the path rules), with the repository's eligible-path count as denominator, in `counts.json`, in the metrics (§10) and beside the M3.6 verdict (§12);
 - **bound:** if, over the held-out split of a language, `lex-error` plus `under-16-tokens` exclusions exceed **5%** of the files passing the path and generated rules, or exceed 25% in any single held-out repository, M3.6 is an error, not a verdict.
 
-Symbolic links, submodules and non-UTF-8 paths are excluded. Inline Rust `#[cfg(test)]` modules stay in, because removing them needs a parser; this is stated in every Rust result.
+Symbolic links, submodules and non-UTF-8 paths are excluded. **Oversize** (ruling A4): `eligiblePathCount` and `eligiblePathBytes` exclude files over 1,048,576 bytes, which are counted in `oversizePathCount`; this is the convention the proposal manifest used. Inline Rust `#[cfg(test)]` modules stay in, because removing them needs a parser; this is stated in every Rust result.
 
 ### 3.5 Exclusions
 
@@ -182,7 +191,9 @@ Symbolic links, submodules and non-UTF-8 paths are excluded. Inline Rust `#[cfg(
 
 ### 3.6 Acquisition (after owner approval only)
 
-For each repository visited by the walk at acquisition, in walk order: `git init`, `git fetch --depth 1 https://github.com/<owner>/<repo> <revision>`, `git checkout --detach FETCH_HEAD`, inside the corpus root (§14.3). Git verifies every object's SHA-1 against the pinned commit. No build, test, build script, macro, package manager or acquired program is run; formatters run only on generated positive cases (§6.3). Then, per repository:
+For each repository visited by the walk at acquisition, in walk order: `git init --template=`, `git fetch --depth 1 --no-tags https://github.com/<owner>/<repo> <revision>`, inside the corpus root (§14.3). Git verifies every object's SHA-1 against the pinned commit.
+
+**All measured bytes are committed blob contents at the pinned revision.** Every byte the evaluation hashes, measures, lexes, fingerprints, classifies or transforms (source files, licence files, `go.mod` and `Cargo.toml`) is read as the blob content of the pinned commit's tree with `git cat-file blob <sha1>` (or `--batch`), and its SHA-1 is checked against the tree entry. Working-tree bytes are never used, so a repository's `.gitattributes` (`ident`, `eol`, filters), the operator's `core.autocrlf` and case-insensitive file systems cannot change them; a checkout, if made at all, is for human inspection only. Paths come from `git ls-tree -r -z` of the pinned commit. **Git environment** (review B2): `GIT_CONFIG_GLOBAL=/dev/null`, `GIT_CONFIG_NOSYSTEM=1`, `GIT_TERMINAL_PROMPT=0`, `protocol.allow=never` with `protocol.https.allow=always` (`file` only in the harness's own tests), hooks and LFS filters disabled, no submodule recursion, and a timeout on every git call (a timeout exits 2). No build, test, build script, macro, package manager or acquired program is run; formatters run only on generated positive cases (§6.3). Then, per repository:
 
 1. **Licence recheck, failing closed (M5).** List the root licence files again; each must exist with the recorded blob SHA-1; recompute each file's SHA-256 from the checked-out bytes and rerun `m3-licence-classifier-v1` on them (`verify_manifest.py --licence-dir`). Any difference in the set of files, a SHA-1, a SHA-256 or a classification makes acquisition **exit 1 and stop**. The manifest must then be revised and approved again; a mismatch is never resolved by replacement.
 2. Record every path's SHA-256, byte length and eligibility reason (§3.4), and the eligible files' token digests (§4.1).
@@ -226,7 +237,15 @@ Per language, sort tuning groups by `SHA-256("traceweave-m3-fold-v1\n" || langua
 
 ### 5.2 Suppression catalogue construction
 
-For a threshold *T*, a hash of channel *c* is **frequent** when it appears among the fingerprints of eligible files from at least *T* distinct fold-S groups. For each frequent hash, take its first occurrence in (group, path, position) order and cut the k-gram's span from that file into a **snippet artifact**: exactly the bytes of the k-gram span. Extract the snippet; keep it only if its fingerprints in channel *c* include the hash (Go semicolon insertion at a cut can change the last token), otherwise count it as `snippet-dropped`. The suppression catalogue is the catalogue of kept snippets, built by the ordinary builder (contract §3.8), so its digest binds into the comparison configuration as `suppressionCatalogueSha256`. Snippet bytes stay local; the catalogue is private. Suppression stays advisory (contract §5.2).
+For a threshold *T*, a hash of channel *c* is **frequent** when it appears among the fingerprints of eligible files from at least *T* distinct fold-S groups. For each frequent hash, take its first occurrence in (group, path, position) order and cut the k-gram's span from that file into a **snippet artifact**: exactly the bytes of the k-gram span. Extract the snippet; keep it if its fingerprints in channel *c* include the hash.
+
+**Fallback (ruling A26).** A snippet can fail: Go semicolon insertion at a cut can change the last token, and in Rust a k-gram with an unbalanced `(`, `[` or `{` does not lex at all (`unbalanced-delimiter`). The review measured 8 of 15 Rust frequent snippets dropped at `k` 5, `window` 4 and 44 of 81 at `k` 16, and real Rust boilerplate such as `) -> Result<…> {` is unbalanced. For each frequent hash whose snippet fails, the **whole fold-S file** of its first occurrence is added to the suppression catalogue instead (once per file), as an ordinary artifact from its real extraction record. That file's fingerprints include the hash by construction, so **every frequent hash is suppressed in both languages**.
+
+**Why this choice, and its effect on the false-alarm side.** Without the fallback, roughly half of Rust boilerplate could never be suppressed while Go's could, so the Rust result would measure a defect of the snippet mechanism rather than the method. The fallback has a cost: the added files' other hashes (**collateral hashes**, not frequent) also become common. Adding common hashes can only lower or keep a region's evidence (contract §5.6); it cannot create a reportable region, so for any pair it can turn an alarm into no alarm but never the reverse. **Alarms are therefore monotone non-increasing and recall is non-increasing as suppression grows**, at every *T*. Two safeguards follow: the selection rule (§5.4) maximizes recall among configurations within the fold-E bound, so collateral suppression that costs recall is penalized; and every suppression catalogue's counts are reported (frequent hashes, kept snippets, fallback files, collateral hashes per channel) in the tuning table, the freeze and beside the M3.6 verdict, so a verdict that rests on heavy collateral suppression is visible as such. Whole-file catalogues built from all fold-S files were rejected: they would make every fold-S hash common (in effect *T* = 1), which suppresses far more than boilerplate.
+
+**Empty catalogues and small folds** (A6). If no hash is frequent, the builder refuses an empty catalogue and that *T* acts as no suppression (`"none"` in the comparison configuration, recorded as `empty`); ties then prefer `none`. A *T* larger than the number of fold-S groups is always empty.
+
+The suppression catalogue is the catalogue of kept snippets and fallback files, built by the ordinary builder (contract §3.8), so its digest binds into the comparison configuration as `suppressionCatalogueSha256`. It is built from **fold S only**: the builder refuses any other repository, and the fold-S list is recorded in `freeze.json` and checked by `tune` and at the freeze (review S-c, B8). Snippet bytes stay local; the catalogue is private. Suppression stays advisory (contract §5.2).
 
 ### 5.3 Grid
 
@@ -249,6 +268,8 @@ All values are inside the extraction and comparison bounds (extraction §10, OD-
 ### 5.4 Selection rule
 
 On fold E, generate positive cases with the §6 generator (namespace `tuning`) and run all fold-E negative searches. For each configuration compute: *a* = false alarms per negative search (§1 alarm rule, unordered searches), and *r* = the unweighted mean, over transformation × bucket cells with at least 10 cases, of detected/cases.
+
+**Pooling (ruling A28).** One configuration is selected for both languages: *a* and *r* are pooled over Go and Rust; cells are language × transformation × bucket with unit kinds merged; suppression catalogues stay per language (one *T* for both).
 
 1. Eligible configurations: *a* ≤ budget / 2, the M3.0 budget halved as a margin for tuning-to-held-out drift. With the decided budget `1/20` this is *a* ≤ `1/40`, evaluated in integers as `alarms × 40 ≤ N_E` over the N_E fold-E searches of both languages together.
 2. Choose the eligible configuration with the largest *r*. Ties, in order: smaller *a*; smaller `k`; larger `minRegionDistinctHashes`; smaller `window`; *T* in the order none, 5, 3, 2.
@@ -277,16 +298,20 @@ Pair caching (§9) makes positives cheap: a positive comparison differs from an 
 **Fold-S outcome count and timing pilot (step 5), tuning split only.** This answers the external reviews' question whether `k` = 5 alarms on unrelated code (lane 11, R1), inside tuning and before the protocol digest is filled in.
 - **Searches:** all unordered fold-S searches of each language (about 15 per language), as defined in §1, with **no suppression catalogue** (*T* none). Fold S is otherwise only the suppression source; it is never used for configuration selection (§5.4 uses fold E) and never touches held-out data.
 - **Settings:** every (`k`, `window`) of the grid (12), and for each, every `minRegionDistinctHashes` value of the grid (seed sharing, §5.3).
-- **Recorded:** per language and configuration, the number of searches with an alarm (§1) and the counts per outcome class and code (`match`, `ambiguous`, `seed-limit-exceeded`, `not-compared`, `no-match` codes), per mode. Also, on 1,000 file pairs per language chosen with `u("pilot|" || language, j) mod n` (j = 0…999) over the bytewise-sorted fold-S pair list, per-pair wall time (median and 95th percentile) and peak RSS (`/usr/bin/time`).
+- **Recorded:** per language and configuration, the number of searches with an alarm (§1) and the counts per outcome class and code (`match`, `ambiguous`, `seed-limit-exceeded`, `not-compared`, `no-match` codes), per mode. Also, on 1,000 file pairs per language chosen with `u("pilot|" || language, j) mod n` (j = 0…999) over the bytewise-sorted list of all fold-S searches' file pairs (A35), the per-pair time and peak RSS. **Per-pair time (ruling B6, replaces A19's single-pair timing):** the sampled pairs are grouped by search and compared as **one batched `compare` per search** (reference catalogue of the sampled reference files, candidate catalogue of the sampled candidate files), by both implementations; *t* is the batch wall time divided by the number of pairs in the batch, recorded per setting as the median and 95th percentile over batches. Process start is thereby included once per batch, as in the real runs.
 - **Output:** `eval/pilot.json` and a report table "fold-S alarms by `k`, `window` and `minRegionDistinctHashes`", committed before step 6. The `k` = 5 rows are reported as the direct answer to R1, whatever they show.
 
 **Pre-declared grid rule (the only data-dependent grid change allowed).** Written here before the pilot runs. Let the most conservative configuration be `k` 16, `window` 16, `minRegionDistinctHashes` 6, *T* none. If it raises an alarm in **more than half** of the fold-S searches of **either** language (alarms × 2 > searches), `minRegionDistinctHashes` **8 and 12** are added to the grid (288 configurations), before the protocol digest is filled in and before any fold-E outcome is computed. Otherwise the grid stands at 192. No other grid value, rule or threshold may change in response to the pilot; `pilot.json` records which branch was taken.
 
 **Run budget.** Estimated tuning time = Σ over the 12 settings of (fold-E pair comparisons × that setting's 95th-percentile *t*) + extraction. If it exceeds **24 hours** on the pilot machine, the grid is reduced **before any fold-E outcome is computed**, by removing, in this order, `window` 16, then `k` 8, then `k` 12, then `window` 8, until the estimate fits; so `k` 5 and `k` 16, both ends, survive any reduction. The reduction is recorded in `pilot.json` and the freeze. Estimated held-out time is computed the same way and recorded.
 
-**Abort rules.** Tuning or the held-out run stops with exit 2 and **no verdict** if: its wall time exceeds 3 times its recorded estimate; any process exceeds 75% of the machine's physical memory; or a seed-sharing or pair-caching check differs. An aborted held-out run is reported as aborted; resuming requires a protocol revision.
+**Estimate contents (ruling B5).** Every estimate includes both implementations (A2), the 1-in-50 direct checks, which run **batched** (one `compare` per search and configuration over the checked files' catalogues), and, for held-out, the slowest setting (A19), because the frozen one is not yet known. If the grid does not fit after all four reductions, tuning refuses (exit 2).
 
-For orientation only: I2 measured 8 M seeds at 1.9 s and 1.4 GiB (Rust lane) and 4.2 s and 3.1 GiB (Go lane) per mode, worst-case periodic input ([contract §5.7](../../spec/catalogue-report.md#57-ambiguity-and-the-output-cap)). No real-file per-pair cost has been measured; the review's 1 ms per pair assumption gives about 1 hour for held-out negatives and about 4 hours for the fold-S count and the shared-seed tuning grid. The pilot replaces that assumption with a measurement.
+**Memory (ruling B4).** A watchdog samples the resident set size of every child process and of the harness process at least once per second, and kills the run the moment the sum exceeds 75% of physical memory. To stay under it, a runner may split one search into batches of reference files: pair outcomes are independent of other artifacts (contract §5.2), so the assembled body is the same, and the 1-in-50 caching check covers it.
+
+**Abort rules.** Tuning or the held-out run stops with exit 2 and **no verdict** if: its wall time exceeds 3 times its recorded estimate; the memory watchdog fires; or a seed-sharing or pair-caching check differs. An abort writes `identity.json` and `run.json` with `status: aborted` (A34). An aborted held-out run is reported as aborted; resuming requires a protocol revision.
+
+For orientation only: I2 measured 8 M seeds at 1.9 s and 1.4 GiB (Rust lane) and 4.2 s and 3.1 GiB (Go lane) per mode, worst-case periodic input ([contract §5.7](../../spec/catalogue-report.md#57-ambiguity-and-the-output-cap)). The harness review measured batched comparisons on standard-library code outside the corpus: at `k` 5, `window` 4 about 3.6–4.1 ms per pair (Rust CLI) and 5.9–8.7 ms (Go CLI); at `k` 8, `window` 8 0.7 and 1.4 ms; at `k` 16, `window` 16 0.3–0.4 and 0.6–0.7 ms. With both implementations and the direct checks batched, its estimates are 4–8.5 hours for the fold-S count, 4.5–10 hours of tuning comparisons plus the batched direct checks, and 1–10 hours held-out, depending on the frozen `k`. Peak memory at `k` 5 was about 0.6 MB per pair in the Rust CLI, so large searches need the batching above. Report bodies were 2–17 KB per pair; bodies of pairs that are `no-match` in both modes need not be kept once the per-pair record (§10) is written, which keeps derived data near the §14.2 estimate. The pilot replaces all of these with measurements on the corpus.
 
 ## 6. Positive set (held-out sources, generated after the freeze)
 
@@ -303,7 +328,7 @@ Write *tokens* for the exact stream of a file. **Depth** of a token is the numbe
 - **Statement end.** A `;` token (Go: explicit or inserted; Rust: explicit) or a `}` token, whose `{`-depth after it is ≥ 1 (that is, inside some block). **Go:** a `}` immediately followed by an inserted `;` is not itself a statement end; the inserted `;` is, so the pair counts once.
 - **Partial unit.** Inside a function unit's body, a token run [*i*, *j*] such that: token *i* is the first token after a `{` or after a statement end; token *j* is a statement end; `{`, `(` and `[` are each balanced over [*i*, *j*]; and every token in [*i*, *j*] has `{`-depth at least that of token *i*. The candidate list for a (file, bucket) is **every** such run whose token count is in the bucket, sorted by (path bytes, start offset, end offset). **Go:** token *i* is never an inserted `;` (the run starts at the next real token), so every run starts at a real token's first byte. For an inserted Go `;` as token *j*, the end offset is the end of the preceding token. Together with the statement-end rule, a run ending at `}` and the same run ending at its inserted `;` cannot both occur, so no two candidates are byte-identical.
 - **File unit.** A whole eligible file.
-- **Top-level boundary** (host insertion for function and file units). The byte after the first `\n` at or after the end of a token that ends a top-level item: Go, a `;` at `{`-depth 0 (explicit or inserted); Rust, a `;` or `}` after which the `{`-depth is 0. End of file counts as a boundary.
+- **Top-level boundary** (host insertion for function and file units). The byte after the first `\n` at or after the end of a token that ends a top-level item: Go, a `;` at `{`-depth 0 **and `(`-depth 0** (explicit or inserted; ruling A10, so a `;` inside `import ( … )` or `var ( … )` is not a boundary); Rust, a `;` or `}` after which the `{`-depth is 0. End of file counts as a boundary. The `\n` is searched in the raw bytes, so a boundary can fall inside a block comment or a multi-line raw string; that is accepted as written (A12). A statement end with no later `\n` gives no statement boundary.
 - **Statement boundary** (host insertion for partial units). The byte after the first `\n` at or after the end of a statement end inside a function unit.
 
 **Size bucket.** The unit's exact-channel token count on the source side (extraction §2):
@@ -318,7 +343,19 @@ Buckets are fixed independently of `k` and `window`, so B0 shows the floor below
 
 ### 6.2 Deterministic choice
 
-Every choice uses `u(id, j) = uint64be(SHA-256("tw-m3-gen-v1|" || namespace || "|" || id || "|" || decimal j)[0:8])` and picks item `u mod n` from a list sorted bytewise. The namespace is `tuning` or `held-out`. For cell (language, unit kind, bucket), slot *s* = 0, 1, …: the source repository is the (*s* mod R)-th of the split's R source repositories in split-hash order, skipping any that already have 3 units in the cell or no candidates; the source file is chosen by `u(cell|s, 0)` among its files with candidates; the unit by `u(cell|s, 1)` among that file's candidates; the host repository by `u(cell|s, 2)` among same-split, same-language repositories of other groups; the host file by `u(cell|s, 3)` among its eligible files that have at least one boundary of the needed kind; the boundary by `u(cell|s, 4)`. `split-mix` uses `u(cell|s, 5)` for its second boundary among the remaining ones, and the two halves go in boundary order. Each unit is sampled once and **every applicable transformation is applied to the same unit** (a paired design, §11).
+Every choice uses `u(id, j) = uint64be(SHA-256("tw-m3-gen-v1|" || namespace || "|" || id || "|" || decimal j)[0:8])` and picks item `u mod n` from a list sorted bytewise.
+
+**Exact id strings (ruling A7).** `<Language>` is `Go` or `Rust`; repositories are `owner/repo` as in the manifest; artifact ids are catalogue ids `f<index>` over the bytewise-sorted eligible paths, and a file-unit case's new file is `f<N>` with N the number of original artifacts (A31).
+- cell: `<Language>|<unitKind>|<bucket>` with `unitKind` in `file`, `function`, `partial`; the file cell is `<Language>|file|file` (one selection cell, bucket assigned after selection, A15);
+- slot id: `<cell>|<s>` (decimal s);
+- case id: `<lang>-<namespace>-<kind>-<bucket>-s<slot>-<transformation>`, lowercase;
+- namespace `tuning`: sources and hosts are fold-E repositories, in split-hash order; namespace `held-out`: held-out repositories;
+- pilot sample: namespace `tuning`, id `pilot|<Language>`;
+- seed-sharing check pair id: `<Language>|<ref repo>|<cand repo>|<ref id>|<cand id>` for negatives, `<Language>|positive|<source repo>|<ref id>|<candidate sha256>` for positives;
+- search id: `<Language>|<reference repo>|<candidate repo>` (reference first in split-hash order);
+- caching check id: the case id.
+
+**No repeated unit in a cell (ruling A27).** The unit candidates for slot *s* exclude units already chosen in the same cell (same source file and the same byte range); if none remains in the chosen file, that source repository is skipped for the slot as when it has no candidates. The namespace is `tuning` or `held-out`. For cell (language, unit kind, bucket), slot *s* = 0, 1, …: the source repository is the (*s* mod R)-th of the split's R source repositories in split-hash order, skipping any that already have 3 units in the cell or no candidates; the source file is chosen by `u(cell|s, 0)` among its files with candidates; the unit by `u(cell|s, 1)` among that file's candidates; the host repository by `u(cell|s, 2)` among same-split, same-language repositories of other groups; the host file by `u(cell|s, 3)` among its eligible files that have at least one boundary of the needed kind; the boundary by `u(cell|s, 4)`. `split-mix` uses `u(cell|s, 5)` for its second boundary among the remaining ones, and the two halves go in boundary order. Each unit is sampled once and **every applicable transformation is applied to the same unit** (a paired design, §11).
 
 ### 6.3 Transformations
 
@@ -329,7 +366,7 @@ Every choice uses `u(id, j) = uint64be(SHA-256("tw-m3-gen-v1|" || namespace || "
 | `comments-strip` | all | Every comment is replaced by `""` (line comments, whose span excludes the line break) or by `" "`, or by `"\n"` when a Go general comment contains a line break. Token stream identical (Rust doc comments are trivia in the profile) |
 | `comments-add` | all | After tokens 9, 19, 29, … (0-based) insert ` /* tw */ ` at the start of the following gap. Token stream identical |
 | `fmt` | **Rust only** | After placement, run `rustfmt --edition 2024 --config max_width=50,tab_spaces=2` (pinned version) on the whole host file, the unit wrapped in `/*tw-begin*/` and `/*tw-end*/` comments. Edition 2024 matches the `rust2024-tokens` profile; the crate's declared edition is ignored. The ground truth is the byte range between the markers after formatting; then both markers are deleted and spans adjusted. A non-zero exit or a lost, duplicated or reordered marker is `generation-failed`. If the bytes between the markers equal the pre-format unit bytes, the case is kept and flagged `identity`; identity cases are reported as their own count and recall is reported with and without them |
-| `rename` | all | **Bindings** are collected from the unit's tokens. Go: every `ident` in a maximal run `ident (, ident)*` immediately followed by `:=`; every `ident` immediately after `var` or `const`; and, for function units only, the name of the unit itself: the `ident` immediately after the unit's **first** token `func`, or, if that `func` is followed by a receiver `( … )`, the `ident` immediately after the receiver's closing `)`. Later `func` tokens in the unit (function literals such as `g := func(x int) int {…}`) contribute no binding, so a type name is never a binding. Rust: every `ident` immediately after `let`, `let mut`, `fn`, `for`, `mut` or `ref`. The texts `_`, `self` and `Self` are never bindings. Bindings are numbered in order of first occurrence and renamed `tw_v1`, `tw_v2`, …. **Occurrences:** every `ident` token in the unit whose exact text equals a binding is renamed, except one immediately preceded by `.`, or (Rust) by `::`. Tokens inside macro invocations are renamed like any others; string and character literals (including Rust format strings) and comments are never changed. A unit with no binding, or containing an `ident` that starts with `tw_v`, is `generation-failed` |
+| `rename` | all | **Bindings** are collected from the unit's tokens. Go: every `ident` in a maximal run `ident (, ident)*` immediately followed by `:=`; every `ident` immediately after `var` or `const`; and, for function units only, the name of the unit itself: the `ident` immediately after the unit's **first** token `func`, or, if that `func` is followed by a receiver `( … )`, the `ident` immediately after the receiver's closing `)`. Later `func` tokens in the unit (function literals such as `g := func(x int) int {…}`) contribute no binding, so a type name is never a binding. Rust: every `ident` immediately after `let`, `let mut`, `fn`, `for`, `mut` or `ref`. The texts `_`, `self` and `Self` are never bindings. Bindings are numbered in order of their **first binding site** (the token index of the first position where the collection rule fires for that text; ruling A8, which replaces "first occurrence": the two differ when a name is used before it is bound) and renamed `tw_v1`, `tw_v2`, …. **Occurrences:** every `ident` token in the unit whose exact text equals a binding is renamed, except one immediately preceded by `.`, or (Rust) by `::`, that is by two consecutive `:` tokens, since the profile lexes punctuation as single characters (A9). Tokens inside macro invocations are renamed like any others; string and character literals (including Rust format strings) and comments are never changed. A unit with no binding, or containing an `ident` that starts with `tw_v`, is `generation-failed` |
 | `reorder` | file | **Segments:** the file is cut after each top-level boundary (§6.1); a segment is the bytes from one cut to the next, so leading comments and attributes travel with the item after them. Segments whose first token is `package` or `import` (Go), or `use`, `mod`, `extern` or `#` followed by `!` (Rust), stay in place at the start; the other segments are written in reverse order. Ground truth is one segment per moved segment. Fewer than 2 moved segments is not applicable |
 | `split-mix` | function, partial | Let *n* be the unit's token count and the **cut candidates** its statement ends with at least one token before and after them. Cut after the candidate *b* minimizing \|*b* − ⌊*n*/2⌋\| (token index), **ties to the smaller *b***. The two halves are inserted at two different boundaries of the host file (§6.2). Two ground-truth segments. No candidate is not applicable |
 | `compound` | function, partial | Rust: `comments-strip`, then `rename`, then `fmt`. Go: `comments-strip`, then `rename`, then `ws` |
@@ -397,6 +434,8 @@ and a script check that the lexing commit in `freeze.json` equals the one in `ev
 
 M3.3 is met when every command exits 0. Timestamps are never consulted.
 
+**Generator identity (ruling A17).** The generator commit in `freeze.json` is the harness HEAD at the freeze; held-out generation refuses if any harness file changed since then. **Binaries (A2, B1).** Both implementations run every extraction, catalogue and comparison and must agree byte for byte (a disagreement is exit 1). Both binaries are clean stamped builds of one commit, read from each binary's own stamped version output; that commit is the acquisition lexing commit and the frozen lexing commit. **Fold-S list (B8).** `freeze.json` records the fold-S and fold-E repository lists; `tune` and the freeze check the suppression catalogues' sources against them. **Tuning table (A39).** `freeze` runs with `tuning-table.json` uncommitted so that both files enter one commit; any other uncommitted file is refused. **Non-empty check (A16).** Each ancestry variable must be non-empty.
+
 **What ancestry does not prove.** It shows commit order only. It cannot show that nobody ran held-out data before the freeze. The controls for that are procedural: the generator refuses the `held-out` namespace, and the held-out runner refuses to start, unless HEAD descends from `FREEZE`, the work tree is clean and the protocol digest in `freeze.json` matches. The first held-out result commit carries the runner's **identity record** (`eval/results/heldout/identity.json`: HEAD, clean-tree status, `freeze.json` digest, protocol digest, implementation and generator commits, start and end times, host OS and architecture). The report states this limit.
 
 ## 9. Running the held-out evaluation
@@ -405,7 +444,9 @@ Pair outcomes depend only on the two artifacts, the configuration and the suppre
 
 **Symmetry check (F4).** For negative searches with `u(search id, 2) mod 10 = 0`, the runner also runs the swapped comparison (*C* as reference). For every file pair and mode, the outcome class and code, `seedCount`, `regionCounts` and `truncatedRegions` must be equal with roles swapped. Any difference makes M3.6 an error (exit 2) and requires a protocol revision; it does not silently switch the unit.
 
-Resource measurement: every extraction batch and every comparison runs under `/usr/bin/time` (`-l` on macOS, `-v` on Linux), recording wall time and maximum resident set size, with operating system, architecture, CPU model, core count and memory recorded once per run.
+**Check counts are verified (review B8, S-b).** The run records the ids it checked for symmetry, caching and seed sharing; the counts script recomputes, from the search and case ids, which ids satisfy each modulus, and any difference (a missing or extra check) is exit 1. The moduli are fixed here and not read from configuration. **Clean tree (A18).** The held-out runner and counts script accept uncommitted files under `eval/results/heldout/` only, so that the first held-out result commit holds them together.
+
+Resource measurement (ruling A3): every extraction batch and every comparison is a child process whose wall time and maximum resident set size are read from `wait4(2)` resource usage (the counters `/usr/bin/time` prints), plus the watchdog samples of §5.5, with operating system, architecture, CPU model, core count and memory recorded once per run.
 
 ## 10. Metrics (M3.4): every figure with its denominator
 
@@ -426,7 +467,7 @@ Resource measurement: every extraction batch and every comparison runs under `/u
 | Runtime | wall seconds | extraction batches; comparisons | median, 95th percentile, maximum, total |
 | Peak memory | maximum RSS | as runtime | median, maximum |
 
-Counts are written to `eval/results/heldout/counts.json` (canonical JSON: sorted keys, no insignificant whitespace, integers only). Runtime and memory go to a separate `resources.json`, because they are not expected to reproduce exactly.
+Counts are written to `eval/results/heldout/counts.json` (canonical JSON: sorted keys, no insignificant whitespace, integers only), with the per-search records `searches.jsonl` (§12) and, per compared file pair, a record of its outcome codes per mode. **Miss reasons (A13):** for the union of modes, a missed case takes the first reason in §1 order over both modes; `truncated` needs outcome `match`, no qualifying listed region and `truncatedRegions > 0`, otherwise `mislocalized`. **Spurious (A14):** any other pair with `match` in either mode, or a reportable region of the ground-truth pair that overlaps no ground-truth candidate segment. **Exclusion-bound denominator (A30):** files passing the path rules, the size limit and the generated rule. Runtime and memory go to a separate `resources.json`, because they are not expected to reproduce exactly.
 
 ## 11. Intervals, dependence and what the sample can bound
 
@@ -449,13 +490,15 @@ So the proposed 48-repository corpus can **measure** a false-alarm count over 13
 
 ## 12. What M3.6 computes
 
-Inputs: `counts.json` (held-out) and `freeze.json`, whose budget must be `p/q` = **`1/20`** (§14.1); any other value is an error.
+Inputs: the per-search records and `counts.json` as committed in the **first held-out result commit** (read with `git show`, not from the working tree), and `freeze.json`, whose budget must be `p/q` = **`1/20`** (§14.1); any other value is an error. The script refuses a dirty work tree (exit 2).
+
+**Derived, not copied (ruling B7).** `eval/results/heldout/searches.jsonl` holds one canonical line per negative search: search id, language, labels, and per alarmed pair and mode the alarm reason. The script recomputes `A` and `N` from those lines, recomputes the exclusion bound from `eligibility.json`, and requires both to equal the summary in `counts.json` and the per-language figures there; any difference is exit 2. Editing a summary number therefore cannot change the verdict.
 
 - `A` = unordered negative searches with an alarm (§1); `N` = unordered negative searches.
 - **met** when `A × 20 ≤ N` (exact integer arithmetic; with N = 132 that is A ≤ 6); **negative-result** otherwise.
 - `N = 0`, a missing or mismatched freeze, a failed M3.3 check (including the lexing-commit equality), exclusions above the §3.4 bound, a non-zero symmetry or caching difference, or an aborted run is an error, not a verdict.
 
-The script exits 0 for met, 3 for negative-result, 2 for an error. No recall floor is applied; recall is reported without a pass line. The verdict uses the point estimate, as M3.6 states; the intervals of §11, the operating characteristics of §14.1 and the excluded-file counts per repository and reason are printed beside it and do not change it.
+The script exits 0 for met, 3 for negative-result, 2 for an error. No recall floor is applied; recall is reported without a pass line. The verdict uses the point estimate, as M3.6 states; the intervals of §11, the operating characteristics of §14.1, the excluded-file counts per repository and reason, and the frozen suppression catalogue's counts (frequent hashes, kept snippets, fallback files, collateral hashes; §5.2) are printed beside it and do not change it.
 
 ## 12a. Alarm audit (fixed before the freeze; never changes the verdict)
 
@@ -626,3 +669,63 @@ These run after M3.4, on the same frozen corpus, budget `1/20` and unit, as sepa
 | Bag-of-tokens second method | A different system under test (multiset of tokens per unit) compared with the frozen winnowing baseline on the same cases and negatives | Roadmap STRUCT.1 |
 | Keyed fingerprints | Whether per-relationship keyed hashes change any outcome (expected none) and their cost | Roadmap KEYED.1 and RES.1 |
 | Existing open winnowing scanner | A side-by-side run of an existing open-source winnowing scanner (SCANOSS-style) on the same held-out cases and negatives, at the same alarm rule | A pinned, licensed scanner version; no network calls from it during the run |
+
+## 19. Harness rulings (`m3-eval-draft-6`)
+
+Each item of the harness author's list (A1–A40, `traceweave` `i3-eval` `c91ee91`, `eval/README.md`) and of the [harness review](../reviews/evaluation-harness-review.md) (`20162a8`) is ruled here. "Adopted" means the interim choice is now protocol text; "changed" means the harness must change. The last column lists what the harness changes.
+
+| Item | Ruling | Section | Harness change |
+| --- | --- | --- | --- |
+| A1 lex-only | Adopted: `extract` with fingerprints discarded unread satisfies §2; temporaries under `TRACEWEAVE_EVAL_DIR/tmp` | §2 | move child-output temporaries from the system temp directory |
+| A2 both CLIs | Adopted: every output from both, byte-identical | §8 | none |
+| A3 resources | Adopted: `wait4` rusage replaces `/usr/bin/time` | §9 | none |
+| A4 oversize | Adopted: path counts exclude oversize files | §3.4 | none |
+| A5 odd folds | Adopted: fold S is the first ⌊n/2⌋ | §5.1 | none |
+| A6 empty catalogue | Adopted; a *T* above the fold-S group count is always empty | §5.2 | none |
+| A7 `u()` strings | Adopted verbatim | §6.2 | none |
+| A8 rename numbering | Changed text to the harness's choice: first binding site | §6.3 | none |
+| A9 `::` | Adopted: two `:` tokens | §6.3 | none |
+| A10 reorder | Segments as the harness has them; **changed**: a Go top-level boundary also needs `(`-depth 0 | §6.1 | add the `(`-depth condition and a vector |
+| A11 comments | Adopted (profile comment spans; shebang skipped) | §6.3 | none |
+| A12 boundary in comment | Adopted, letter as written | §6.1 | add a vector |
+| A13 miss reasons | Adopted | §10 | none |
+| A14 spurious | Adopted | §10 | none |
+| A15 file cell | Adopted | §6.2 | none |
+| A16 ancestry | Adopted: non-empty check | §8 | none |
+| A17 generator commit | Adopted | §8 | none |
+| A18 result commit | Adopted | §9 | none |
+| A19 pilot estimates | Changed: batched per-pair time (B6), direct checks in the estimate (B5), slowest setting for held-out kept | §5.5 | batch timing and checks |
+| A20 r with no 10-case cell | Adopted: r = 0, ties decide | §5.4 | none |
+| A21 not applicable vs failed | Adopted | §6.3 | none |
+| A22 replacement facts | Adopted; licence of replacements classified from blob text; reproduction replays recorded revisions | §3.6, §4.3 | read blobs (B2) |
+| A23 replacement limit | Adopted | §4.3 | none |
+| A24 rule order | Adopted: dependency, then duplicate, then too few files, each over all earlier accepted repositories | §4.1 | none |
+| A25 verifier | **Fixed in the spec**: `eligibleFileCountAfterContentRules` fact; `status` may be `acquired`; acquisition-time rejections allowed only when acquired | §3.1 | write the fact for every repository that passed the path rules, set `status: acquired` on the updated manifest and its entries, copy the draft-3 manifest |
+| A26 Rust snippets | **Changed**: whole-file fallback for failed snippets; collateral counts reported | §5.2 | implement fallback and counts |
+| A27 repeated units | **Changed**: no repeat within a cell | §6.2 | exclude used units |
+| A28 pooling | Adopted | §5.4 | none |
+| A29 tuning positives | Adopted | §5.4, §9 | none |
+| A30 bound denominator | Adopted | §10 | none |
+| A31 catalogue ids | Adopted | §6.2 | none |
+| A32 manifest parsing | Adopted | §4.1 | none |
+| A33 `fmt` ground truth | Adopted | §6.3 | none |
+| A34 aborts | Adopted | §5.5 | none |
+| A35 pilot sampling | Adopted | §5.5 | none |
+| A36–A38 audit | Adopted | §12a | none |
+| A39 table in freeze commit | Adopted | §8 | none |
+| A40 estimate excludes the count | Adopted | §5.5 | none |
+| Blob bytes | **Changed**: all measured bytes are committed blob contents at the pinned revision | §3.6 | read via `git cat-file`, verify SHA-1 |
+| B1 stamp reader | Commit read from each binary's stamped version output | §8 | a supported Go reader (with a main change) |
+| B2 git isolation | **Changed** | §3.6 | environment, protocols, timeouts |
+| B3 = A25 | as A25 | §3.1 | as A25 |
+| B4 memory | **Changed**: watchdog at 75% including the harness; batching of large searches allowed | §5.5 | watchdog |
+| B5 direct checks | **Changed**: batched and estimated | §5.5 | batch |
+| B6 per-pair time | **Changed**: batched timing | §5.5 | batch timing |
+| B7 verdict | **Changed**: recomputed from per-search records in the committed result commit; clean tree | §12 | `searches.jsonl`, recompute, `git show` |
+| B8 check counts, fold-S list | **Changed** | §5.2, §8, §9 | verify counts; record and check the lists |
+| S-a abstention sabotage | Test required: an end-to-end abstaining search must alarm | §1 | add the test |
+| S-b check-rate sabotage | Covered by B8 | §9 | add the test |
+| S-c suppression source | Covered by B8 (builder refuses non-fold-S) | §5.2 | add the test |
+| Suite scratch space | The harness documents its 6–8 GB need | — | TESTING.md |
+
+**What changes materially.** A26 changes Rust results: more hashes are common, so Rust alarms and recall can only fall or stay at a given *T* (§5.2); the counts beside the verdict show by how much the suppression rests on collateral hashes. A10 and A27 change which cases are generated, not how they are scored. B7, B8 and the blob rule change no correct result; they remove ways a wrong one could pass.

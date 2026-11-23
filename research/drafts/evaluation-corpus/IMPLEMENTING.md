@@ -1,6 +1,6 @@
 # Implementing the M3 evaluation harness
 
-Brief for whoever builds the harness in the implementation repository (`traceweave`, owner column `I`), against protocol [`m3-eval-draft-5`](../evaluation-protocol.md). The protocol governs; this list only orders the work. Decided on 2026-11-23: budget **`1/20`** per unordered repository search, acquisition approved with mechanical replacements, corpus root `~/traceweave-eval` named by `TRACEWEAVE_EVAL_DIR`.
+Brief for whoever builds the harness in the implementation repository (`traceweave`, owner column `I`), against protocol [`m3-eval-draft-6`](../evaluation-protocol.md). The protocol governs; this list only orders the work. Decided on 2026-11-23: budget **`1/20`** per unordered repository search, acquisition approved with mechanical replacements, corpus root `~/traceweave-eval` named by `TRACEWEAVE_EVAL_DIR`.
 
 **Conventions for every script.**
 - Exit status: 0 success, 1 a checked condition failed (invalid input, mismatch, refusal), 2 usage, environment, I/O or abort. M3.6 adds 3 (negative-result).
@@ -40,3 +40,19 @@ The §8 ancestry check (M3.3) is the five shell lines in the protocol plus the l
 6. Script 13 by a second person (M3.5); script 12 (M3.6), recorded in this repository; then script 12a (alarm audit).
 
 Follow-up measurements (protocol §18: adversarial transformations, an LLM-rewrite arm, bag-of-tokens, keyed fingerprints, an existing open winnowing scanner) are **not** part of this harness and start only after the first held-out result commit.
+
+## Changes the harness must make for draft-6
+
+From the rulings in [protocol §19](../evaluation-protocol.md#19-harness-rulings-m3-eval-draft-6). In order of the stages they touch:
+
+1. **Git and bytes (blob rule, B2).** Read every measured byte (source, licence, `go.mod`, `Cargo.toml`) with `git cat-file` from the pinned commit's tree, verifying each SHA-1; list paths with `git ls-tree -r -z`; never hash, lex or transform working-tree bytes. Run git with `GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 GIT_TERMINAL_PROMPT=0`, `protocol.allow=never`, `protocol.https.allow=always` (`file` only in tests) and a timeout per call.
+2. **Binaries (B1).** Read the commit from each binary's stamped version output, including a supported reader for the Go binary built by `stampbuild`; document the stamped build commands.
+3. **Temporaries (A1).** Child output goes through files under `TRACEWEAVE_EVAL_DIR/tmp`, deleted after reading, not the system temp directory.
+4. **Manifest (A25).** Copy the draft-3 `manifest-proposal.json`. After acquisition, write `eligibleFileCountAfterContentRules` in the walk facts of every repository that passed the path rules, and set `status: "acquired"` on the manifest and every entry; `verify_manifest.py` then accepts acquisition-time `too-few-eligible-files` rejections.
+5. **Cases.** Go top-level boundaries require `(`-depth 0 (A10); no repeated unit within a cell (A27); add vectors for both and for a boundary inside a block comment (A12).
+6. **Suppression (A26, S-c).** For a frequent hash whose snippet fails, add the whole fold-S file of its first occurrence (once per file). Record per catalogue: frequent hashes, kept snippets, fallback files, collateral hashes per channel. Refuse any non-fold-S source; record the fold-S and fold-E lists in `freeze.json` and check them in `tune`.
+7. **Pilot and estimates (B5, B6).** Time batched comparisons (one `compare` per search over the sampled files); run the 1-in-50 direct checks batched (one `compare` per search and configuration); include both CLIs and the direct checks in every estimate.
+8. **Memory (B4).** A watchdog sampling every child and the harness process at least once per second, killing at 75% of physical memory; optional batching of large searches by reference files.
+9. **Checks (B8, S-b).** Record checked ids; `counts` recomputes the expected ids from the fixed moduli and exits 1 on any difference.
+10. **Verdict (B7).** Write `eval/results/heldout/searches.jsonl`; `m36-verdict` reads it, `counts.json` and `eligibility.json` from the first held-out result commit with `git show`, recomputes A, N and the exclusion bound, cross-checks the summaries (difference: exit 2), refuses a dirty tree, and prints the suppression counts.
+11. **Tests.** Add S-a (an abstaining search must alarm end to end), S-b and S-c; state the 6–8 GB scratch need in TESTING.md.

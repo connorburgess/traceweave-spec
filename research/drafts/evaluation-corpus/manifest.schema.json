@@ -23,13 +23,16 @@
   ],
   "properties": {
     "manifestVersion": {
-      "const": "traceweave-m3-corpus-manifest-draft-2"
+      "const": "traceweave-m3-corpus-manifest-draft-3"
     },
     "status": {
-      "const": "proposed, not acquired"
+      "enum": [
+        "proposed, not acquired",
+        "acquired"
+      ]
     },
     "protocolVersion": {
-      "const": "m3-eval-draft-4"
+      "const": "m3-eval-draft-6"
     },
     "protocol": {
       "const": "research/drafts/evaluation-protocol.md"
@@ -534,6 +537,10 @@
                 "items": {
                   "$ref": "#/$defs/licenceFile"
                 }
+              },
+              "eligibleFileCountAfterContentRules": {
+                "type": "integer",
+                "minimum": 0
               }
             }
           },
@@ -570,7 +577,10 @@
           "pattern": "^(go|rust)-[a-z0-9.-]+$"
         },
         "status": {
-          "const": "proposed, not acquired"
+          "enum": [
+            "proposed, not acquired",
+            "acquired"
+          ]
         },
         "language": {
           "$ref": "#/$defs/language"

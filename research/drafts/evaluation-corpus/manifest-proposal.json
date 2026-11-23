@@ -1,7 +1,7 @@
 {
- "manifestVersion": "traceweave-m3-corpus-manifest-draft-2",
+ "manifestVersion": "traceweave-m3-corpus-manifest-draft-3",
  "status": "proposed, not acquired",
- "protocolVersion": "m3-eval-draft-4",
+ "protocolVersion": "m3-eval-draft-6",
  "protocol": "research/drafts/evaluation-protocol.md",
  "snapshotDate": "2026-11-22",
  "selection": {
