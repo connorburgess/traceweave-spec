@@ -38,6 +38,8 @@ Closed with evidence: M0.1–M0.4, M2.5, M2.8, M2.10, M2.11, M3.0, M4.1, M4.2, I
 
 ## Planned items
 
+- **Registration record (M4), planned direction of 2026-11-23.** For people who want to protect their work, a timestamped, signed registration record serves that need, rather than marks. A design lane is drafting `research/drafts/registration-record.md` and `research/lanes/13-timestamp-evidence-review.md`.
+- **SK.3–SK.5 (A2A).** The owner wants content registered at creation time, including by AI agents. Planned; design in progress; no implementation lane. Any hosted signing or witness service is an owner decision (SK.5).
 - **WEB.0–WEB.6 (browser tool and testing page).** Requested by the owner on 2026-11-23 as a roadmap item, not for building yet. Planned; not started; no lane assigned. It follows M3.4 unless the owner overrides, and the owner decides when it starts and where it is hosted (WEB.0). See the [roadmap](../ROADMAP.md#later-profiles-and-sequence).
 
 ## Completed evidence (progress records)

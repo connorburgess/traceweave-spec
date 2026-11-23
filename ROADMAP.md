@@ -16,6 +16,10 @@ Embedded marking and detection are a first-class research track alongside extrac
 
 **Finding (2026-11-23, image marks).** On the `e-img-m-2` evidence (synthetic images, [results recheck](research/reviews/image-mark-protocol-review.md#results-recheck-e-img-m-2)), an image mark can serve as a finding aid, but not as evidence of origin. The marks transfer between images without the key, and every copy was accepted. Evidence of origin must come from a signed, timestamped registration record (M4, and the C2PA mapping). The embedded-code results (the SYN records) remain negative. So does the embedded-text evidence (lane 09); TXT.8 stays formally open until a non-author confirms that reading.
 
+**Planned direction (2026-11-23).**
+- **Registration over marks.** The owner noted that many people want to protect their work. The coordinator's finding is that a timestamped, signed registration record (M4) serves that need, rather than marks. A design lane is drafting `research/drafts/registration-record.md` and `research/lanes/13-timestamp-evidence-review.md`; both are cited here once they exist.
+- **A2A.** The owner wants Traceweave to be A2A-enabled, so that content can be registered at creation time, including by AI agents. The planned gates SK.3–SK.5 are under the agent-skill milestone. No protocol details are fixed here.
+
 ## How progress is counted
 
 Every milestone is split into gates. A gate has an ID, a verifiable criterion, a type, a status and an owner. Embedded marking stays a first-class track alongside extracted fingerprints.
@@ -202,7 +206,7 @@ Counted on 2026-11-23 from the status columns above. In the later-profile table,
 | Gates | Total | Met | Negative-result | Open |
 | --- | --- | --- | --- | --- |
 | Core M0–M5 | 47 | 11 (M0.1, M0.2, M0.3, M0.4, M2.5, M2.8, M2.10, M2.11, M3.0, M4.1, M4.2) | 0 | 36 |
-| Later profiles, EXT and RC | 48 | 8 (IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4) | 0 | 40 (WEB.0–WEB.6 planned) |
+| Later profiles, EXT and RC | 51 | 8 (IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4) | 0 | 43 (WEB.0–WEB.6 and SK.3–SK.5 planned) |
 
 M0.1 is met on the second non-author recount (`3a640b3`). M2.5 and M2.8 are met on the [I2 review](research/reviews/implementation-merge-i2-review.md) (`de9a5b7`) of implementation `82b02ab`.
 
@@ -308,6 +312,9 @@ Removal and forgery counts are lower bounds on what an attacker can do. Full cou
 | **SK — agent skill** | | | |
 | SK.1 | E | Wraps only stable I2 commands; diagnostics pass through unchanged | I |
 | SK.2 | E | Canary strings seeded into catalogues, paths and keys appear 0 times in model-visible transcripts across all fixture runs | I |
+| SK.3 | E | **A2A design.** A design document exposes registration and verification as agent-callable skills. It is local-first, before any hosted signer, and only digests go on the wire. A non-author review is filed, with every finding dispositioned. The design draft is cited once it exists. **Status: planned; design in progress; no implementation lane** | S |
+| SK.4 | E | **A2A interoperability.** The agent card and skill descriptions validate against the published A2A schema, pinned to a version (0 errors). A conformance run against at least 1 independent A2A client or reference implementation passes, k/k. **Status: planned; design in progress; no implementation lane** | I |
+| SK.5 | O | **Hosted service.** The owner decides whether any hosted signing or witness service is operated, covering keys, cost and an accountable operator. Until then, nothing is hosted. **Status: planned; design in progress; no implementation lane** | S |
 | **Later matching methods** (ROADMAP "Later") | | | |
 | STRUCT.1 | R | Structural/semantic matching compared with the token baseline on the M3 corpus and budget | I |
 | KEYED.1 | R | Keyed feature selection evaluated separately from embedding on the M3 corpus and budget | I |
