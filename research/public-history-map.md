@@ -8,7 +8,7 @@ This history was produced from the local branch `roadmap-v2` so that it can be p
 
 ## Reproducing
 
-`python3 tools/public_history_scrub.py rewrite --branch NAME --source <source commit>` with the private rules file. The rules are not in this repository in any form. Rules file SHA-256: `145f2838fe85e95edf55df6133b67e5682bbb746e1e826462e2ea98546d08bdd`.
+`python3 tools/public_history_scrub.py rewrite --branch NAME --source <source commit>` with the private rules file. The rules are not in this repository in any form. Rules file SHA-256: `bba0a5aef2f81f5db4123b9b50bb64b24582cdd6d57989af344459bfeca338f9`.
 
 ## What was substituted, by category
 
@@ -31,7 +31,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 
 ## Verification of the commits listed here
 
-`python3 tools/public_history_scrub.py scan` over the 134 commits and 1483 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
+`python3 tools/public_history_scrub.py scan` over the 151 commits and 1678 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
 
 | Category | Hits |
 | --- | --- |
@@ -52,6 +52,15 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `b13cb68` | `b13cb6877711` | `ea027ebe5a68` |
 | `215145b` | `215145baaa79` | `7fb3d1ddb749` |
 | `3a640b3` | `3a640b3af721` | `d0c959799be2` |
+| `3b6e9f3` | `3b6e9f3f6922` | `1ce99d635839` |
+| `f84343b` | `f84343b19e68` | `6807cb9d96ca` |
+| `be51871` | `be51871217c3` | `c8b053ae1fb4` |
+| `34eea25` | `34eea2587916` | `da719106e7a9` |
+| `a625c97` | `a625c97d17b7` | `b4b5471f4ff5` |
+| `6f787a0` | `6f787a0630eb` | `5a3465ecb793` |
+| `a77c657` | `a77c65745a3d` | `5ddc71120540` |
+| `28f5b6d` | `28f5b6d88351` | `2211862b7172` |
+| `16ebc94` | `16ebc94f5c9a` | `4fd94d44cba9` |
 | `c512550` | `c512550ffd57` | `db8e60dbcae7` |
 | `f42156d` | `f42156dc5ba8` | `e397e59fa78e` |
 | `2fa2b58` | `2fa2b58f14c7` | `8c6980ee0787` |
@@ -63,7 +72,6 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `0db8b44` | `0db8b44097b6` | `c87655a88151` |
 | `c4848c1` | `c4848c16bf39` | `e290f735b5ac` |
 | `5c3d9c5` | `5c3d9c545d5f` | `dfe65e31dc7b` |
-| `85b1690` | `85b16907d25d` | `c71073b6244b` |
 | `6f39e50` | `6f39e50f3302` | `b47b8945b9d6` |
 | `0c7523c` | `0c7523c23613` | `52049a8a0591` |
 | `dbd109b` | `dbd109bce3cf` | `44179c47fe77` |
@@ -75,7 +83,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `ec0cf67` | `ec0cf67ca3c8` | `ee083b345a31` |
 | `6f39e50f33026c9f1d9526c2a566d6a447219667` | `6f39e50f3302` | `b47b8945b9d6` |
 
-Ancestry was checked for all 325 pairs of these 26 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
+Ancestry was checked for all 561 pairs of these 34 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
 
 ## All commits, oldest first
 
@@ -229,3 +237,20 @@ Ancestry was checked for all 325 pairs of these 26 ids in both directions: the r
 | 146 | `ff907ac47435` | `1ef9251b6a67` | kept | Add second confirmation pass to the evaluation harness review |
 | 147 | `85b16907d25d` | `c71073b6244b` | kept | Require pair completeness for every batched comparison in m3-eval-draft-9 |
 | 148 | `fc7b91baae3c` | `488ddf23da12` | kept | Record Linux CI, the frozen py-tokens profile, registration draft-2, m3-eval-draft-9, the visual identity and open name clearance |
+| 149 | `437d6195f804` | `65981d7ecd92` | kept | Update the public history map |
+| 150 | `9ce62c2fe4c8` | `7237c4367b99` | kept | Add M1.2 derivation metadata and one-to-one paired rejections to the extraction vectors |
+| 151 | `a9a5f7ee3a7f` | `725f01fcc25f` | kept | Add the vendor control class, py-tokens registration and M2.2 vectors |
+| 152 | `8dd65c3c3301` | `3e66916bbfbf` | kept | Add review packets, candidate-generation records and the M2.2 manifest |
+| 153 | `488086f6fd7f` | `8452135e2ff7` | kept | Add the M1.1 registration item map and the M1.5 requirement map for extraction |
+| 154 | `98e2fc487946` | `1555655777b5` | kept | Define hand-derived vectors and reference the definition from the vector gates |
+| 155 | `3b6e9f3f6922` | `1ce99d635839` | kept | Add non-author review of core gates M1.1, M1.2, M1.5, M2.2, M2.3, M2.6, M2.7 and M2.9 |
+| 156 | `41628be879a8` | `f396a4133b56` | kept | Fix the byte form of the pair-id digest in m3-eval-draft-10 |
+| 157 | `f84343b19e68` | `6807cb9d96ca` | kept | Apply the hand-derivation definition to M1.2 and M2.6 in the core gates review |
+| 158 | `34eea2587916` | `da719106e7a9` | kept | Apply the core-gates review to the extraction vectors and maps |
+| 159 | `a77c65745a3d` | `5ddc71120540` | kept | Apply the core-gates review to the catalogue and report contract |
+| 160 | `a625c97d17b7` | `b4b5471f4ff5` | kept | State how the hand-derivation rule applies to the extraction vectors |
+| 161 | `28f5b6d88351` | `2211862b7172` | kept | Write the matching inputs' token streams by hand and state the derivation rule |
+| 162 | `be51871217c3` | `c8b053ae1fb4` | kept | Add confirmation pass to the core gates review |
+| 163 | `16ebc94f5c9a` | `4fd94d44cba9` | kept | Require the derivation rule in every labelled matching file |
+| 164 | `6f787a0630eb` | `5a3465ecb793` | kept | Derive extraction error offsets per code and reject shifted offsets |
+| 165 | `1e322afb554a` | `84a1db071bcb` | kept | Mark M1.1, M1.2, M1.5, M2.6 and M2.7 met from the core gates review; record implementation work, confirmed draft items and the evaluation status |
