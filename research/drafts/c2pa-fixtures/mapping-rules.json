@@ -14,7 +14,8 @@
     "compatible",
     "interoperable"
   ],
-  "placeholderNamespace": "invalid.traceweave",
+  "proposedNamespace": "org.traceweave",
+  "proposedNamespaceStatus": "reverse-domain form of traceweave.org (registered 2026-11-23); every org.traceweave.* label, alg id and the predicate type are proposed identifiers, not registered anywhere",
   "standardLabels": [
     "c2pa.actions.v2",
     "c2pa.external-reference",
@@ -235,54 +236,54 @@
     "custom-assertion-report": {
       "source": "a report document {body, provenance} (traceweave-report-draft-2, catalogue-report.md 6)",
       "side": "c2pa",
-      "assertionLabel": "invalid.traceweave.comparison-report",
+      "assertionLabel": "org.traceweave.comparison-report",
       "placement": "gathered_assertions",
       "mapped": [
         {
           "tw": "/body",
-          "to": "/assertions/invalid.traceweave.comparison-report/body",
+          "to": "/assertions/org.traceweave.comparison-report/body",
           "type": "bstr",
           "conv": "jcs-bytes"
         },
         {
           "tw": "/provenance/bodySha256",
-          "to": "/assertions/invalid.traceweave.comparison-report/bodySha256",
+          "to": "/assertions/org.traceweave.comparison-report/bodySha256",
           "type": "bstr",
           "conv": "hex-to-bstr"
         },
         {
           "tw": "/provenance/comparisonConfigSha256",
-          "to": "/assertions/invalid.traceweave.comparison-report/comparisonConfigSha256",
+          "to": "/assertions/org.traceweave.comparison-report/comparisonConfigSha256",
           "type": "bstr",
           "conv": "hex-to-bstr"
         },
         {
           "tw": "/provenance/implementation/name",
-          "to": "/assertions/invalid.traceweave.comparison-report/producer/name",
+          "to": "/assertions/org.traceweave.comparison-report/producer/name",
           "type": "tstr",
           "conv": "text"
         },
         {
           "tw": "/provenance/implementation/version",
-          "to": "/assertions/invalid.traceweave.comparison-report/producer/version",
+          "to": "/assertions/org.traceweave.comparison-report/producer/version",
           "type": "tstr",
           "conv": "text"
         },
         {
           "tw": "/provenance/implementation/commit",
-          "to": "/assertions/invalid.traceweave.comparison-report/producer/commit",
+          "to": "/assertions/org.traceweave.comparison-report/producer/commit",
           "type": "tstr",
           "conv": "text"
         },
         {
           "tw": "/provenance/specCommit",
-          "to": "/assertions/invalid.traceweave.comparison-report/specCommit",
+          "to": "/assertions/org.traceweave.comparison-report/specCommit",
           "type": "tstr",
           "conv": "text"
         },
         {
           "tw": "/provenance/generatedAt",
-          "to": "/assertions/invalid.traceweave.comparison-report/generatedAt",
+          "to": "/assertions/org.traceweave.comparison-report/generatedAt",
           "type": "tdate",
           "conv": "tdate"
         }
@@ -311,7 +312,7 @@
     "intoto-statement-report": {
       "source": "a report document {body, provenance} carried as the predicate of an in-toto Statement v1 that names the candidate artifact and references the candidate's C2PA manifest",
       "side": "intoto",
-      "predicateType": "https://traceweave.invalid/predicate/comparison-report/draft-2",
+      "predicateType": "https://traceweave.org/predicate/comparison-report/draft-2",
       "mapped": [
         {
           "tw": "/body",

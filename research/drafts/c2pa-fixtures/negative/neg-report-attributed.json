@@ -354,7 +354,7 @@
           "hash": "not computed: no JUMBF box was serialized"
         },
         {
-          "url": "self#jumbf=c2pa.assertions/invalid.traceweave.comparison-report",
+          "url": "self#jumbf=c2pa.assertions/org.traceweave.comparison-report",
           "hash": "not computed: no JUMBF box was serialized"
         }
       ]
@@ -372,7 +372,7 @@
           }
         ]
       },
-      "invalid.traceweave.comparison-report": {
+      "org.traceweave.comparison-report": {
         "reportVersion": "traceweave-report-draft-2",
         "body": "'{\"candidateArtifactCount\":1,\"comparison\":{\"comparison\":\"traceweave-seed-merge-draft-2\",\"maxRegionsPerMode\":1000,\"maxSeedsPerMode\":100000,\"mergeGap\":4,\"minRegionDistinctHashes\":2,\"modes\":[\"exact\",\"normalized\"],\"parameterStatus\":\"experimental\",\"suppressionCatalogueSha256\":\"none\"},\"inputs\":{\"candidateCatalogueSha256\":\"2a600048cc6d1958e02af702a3c7ecbcc40d734026f134ce61fa0017a89624d1\",\"comparisonConfigSha256\":\"39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333\",\"referenceCatalogueSha256\":\"b0355010c15b3ffffe3c2b6874dd0f6852361a9774604c8144af1b7a122debca\",\"suppressionCatalogueSha256\":\"none\"},\"pairs\":[{\"candidate\":{\"id\":\"host.go\",\"sha256\":\"50f4fd96a1f7481e4686b66e29f2259d3e0ff83650563b4a1719631ecc03a89d\"},\"modes\":{\"exact\":{\"containment\":{\"candidateInReference\":{\"denominator\":39,\"numerator\":14},\"referenceInCandidate\":{\"denominator\":14,\"numerator\":14}},\"outcome\":{\"class\":\"match\",\"code\":\"match\"},\"regionCounts\":{\"belowMinimumEvidence\":0,\"commonOnly\":0,\"reportable\":1},\"regions\":[{\"ambiguous\":false,\"candidateSpan\":[146,254],\"distinctCommonHashes\":0,\"distinctHashes\":14,\"referenceSpan\":[16,124],\"seeds\":[[2,44],[3,45],[5,47],[8,50],[12,54],[16,58],[19,61],[21,63],[22,64],[24,66],[27,69],[29,71],[30,72],[33,75]],\"status\":\"reportable\"}],\"seedCount\":14,\"sharedCommonDistinctHashes\":0,\"similarity\":{\"jaccard\":{\"denominator\":39,\"numerator\":14}},\"truncatedRegions\":0},\"normalized\":{\"containment\":{\"candidateInReference\":{\"denominator\":42,\"numerator\":17},\"referenceInCandidate\":{\"denominator\":17,\"numerator\":17}},\"outcome\":{\"class\":\"match\",\"code\":\"match\"},\"regionCounts\":{\"belowMinimumEvidence\":0,\"commonOnly\":0,\"reportable\":1},\"regions\":[{\"ambiguous\":false,\"candidateSpan\":[130,256],\"distinctCommonHashes\":0,\"distinctHashes\":17,\"referenceSpan\":[0,126],\"seeds\":[[0,42],[4,46],[6,48],[7,49],[8,50],[9,51],[10,52],[14,56],[15,57],[18,60],[21,63],[25,67],[26,68],[27,69],[28,70],[32,74],[35,77]],\"status\":\"reportable\"}],\"seedCount\":17,\"sharedCommonDistinctHashes\":0,\"similarity\":{\"jaccard\":{\"denominator\":42,\"numerator\":17}},\"truncatedRegions\":0}},\"reference\":{\"id\":\"sum.go\",\"sha256\":\"974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c\"},\"status\":\"compared\"}],\"profile\":{\"configSha256\":\"dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2\",\"id\":\"go-tokens\",\"version\":\"draft-1\"},\"referenceArtifactCount\":1,\"reportVersion\":\"traceweave-report-draft-2\",\"resultKind\":\"token-fingerprint-comparison\",\"status\":\"compared\",\"suppression\":{\"status\":\"none\"}}'",
         "bodySha256": "h'081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be'",

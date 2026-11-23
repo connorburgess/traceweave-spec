@@ -210,7 +210,7 @@ class Checker:
         assertions = man.get("assertions", {})
         claim = man.get("claim", {})
         urls = {u.get("url") for field in ("created_assertions", "gathered_assertions") for u in claim.get(field, [])}
-        ns = self.rules["placeholderNamespace"] + "."
+        ns = self.rules["proposedNamespace"] + "."
         hard = []
         for label, body in assertions.items():
             base = re.sub(r"__\d+$", "", label)
@@ -264,7 +264,7 @@ class Checker:
         if set(digest) != {"sha256"} or not HEX64.match(digest.get("sha256", "")):
             self.fail("intoto-shape", "subject digest must be exactly one sha256")
         if st.get("predicateType") != rules["predicateType"]:
-            self.fail("intoto-shape", "predicateType is not the placeholder of the rules")
+            self.fail("intoto-shape", "predicateType is not the proposed predicate type of the rules")
         pred = st.get("predicate", {})
         if hashlib.sha256(jcs(pred.get("body"))).hexdigest() != pred.get("bodySha256"):
             self.fail("body-digest-mismatch", "predicate body does not hash to bodySha256")

@@ -25,7 +25,7 @@ These fixtures belong to the [C2PA mapping draft](../c2pa-mapping.md) (roadmap g
 | hashed URI hash | the text `not computed: no JUMBF box was serialized` |
 | claim signature | the text `absent: nothing was signed` |
 
-Custom labels, `alg` ids and the report predicate type use the placeholder namespace `invalid.traceweave` (domain `traceweave.invalid`, reserved by RFC 2606), because the project owns no domain. Placeholder `alg` ids are declared with `mapping.unregisteredAlg: true`.
+Custom labels, `alg` ids and the report predicate type use the namespace `org.traceweave`, the reverse-domain form of the project domain `traceweave.org`. They are **proposed identifiers, not registered anywhere**: no algorithm-list entry exists for any of them, and nothing is published at the predicate URL. Fixtures declare such `alg` ids with `mapping.unregisteredAlg: true`.
 
 ## What the checker enforces
 
@@ -34,8 +34,8 @@ For every fixture:
 - **Mapped fields:** every mapped source field present in the fixture appears at its target pointer, with the right type and value under its conversion (`hex-to-bstr`, `jcs-bytes`, `text`, `tdate`, `same`, `prefix:…`, `pixel-rect`). `hex-to-bstr-whole-file` also refuses a hard binding with exclusions.
 - **Declared losses:** every lossy, unmapped, opaque and conflicting rule that matches a source field is declared in `mapping`. A declared `carriedAt` must hold the source value. A declaration that is not a rule of its category is rejected, and every source leaf must be covered by some rule.
 - **Forbidden content:** forbidden keys anywhere (`similarityScore`, `score`, `confidence` and others) and forbidden pointers.
-- **C2PA side:** labels are standard or under the placeholder namespace. Every assertion is referenced by the claim, and every reference resolves. There is exactly one hard binding, and its algorithm is a 12.1 hash. Deprecated constructs are refused (`url`, `scope.extent`, `c2pa.watermarked`). `c2pa.watermarked.bound` needs a soft binding. The report assertion goes in `gathered_assertions` unless the signer ran the comparison, and its body bytes hash to its `bodySha256`. Soft-binding `alg` values are registered or declared unregistered. The signature is absent.
-- **in-toto side:** Statement v1 with one sha256 subject and the placeholder predicate type; the body hashes to `bodySha256`; the manifest reference is well formed; and its `relation` is consistent with the hard binding.
+- **C2PA side:** labels are standard or under the proposed `org.traceweave` namespace. Every assertion is referenced by the claim, and every reference resolves. There is exactly one hard binding, and its algorithm is a 12.1 hash. Deprecated constructs are refused (`url`, `scope.extent`, `c2pa.watermarked`). `c2pa.watermarked.bound` needs a soft binding. The report assertion goes in `gathered_assertions` unless the signer ran the comparison, and its body bytes hash to its `bodySha256`. Soft-binding `alg` values are registered or declared unregistered. The signature is absent.
+- **in-toto side:** Statement v1 with one sha256 subject and the proposed predicate type; the body hashes to `bodySha256`; the manifest reference is well formed; and its `relation` is consistent with the hard binding.
 - **Round trip:** the declared survivors and losses equal what the imported record actually contains. Nothing is invented, and every survivor comes from a mapped rule.
 - **Drift:** every rule pointer appears in backticks in the mapping document, and each source file still has the SHA-256 recorded at build time.
 

@@ -306,12 +306,12 @@
       {
         "field": "/profile",
         "reason": "carried only in bindingMetadata",
-        "carriedAt": "/assertions/c2pa.soft-binding/bindingMetadata/invalid.traceweave.profile"
+        "carriedAt": "/assertions/c2pa.soft-binding/bindingMetadata/org.traceweave.profile"
       },
       {
         "field": "/extractionConfig",
         "reason": "carried only in bindingMetadata; k, window and hash framing have no C2PA meaning",
-        "carriedAt": "/assertions/c2pa.soft-binding/bindingMetadata/invalid.traceweave.extractionConfig"
+        "carriedAt": "/assertions/c2pa.soft-binding/bindingMetadata/org.traceweave.extractionConfig"
       },
       {
         "field": "/artifact/channels/exact/fingerprints/*/position",
@@ -407,7 +407,7 @@
         "name": "whole file; sidecar manifest, no exclusions"
       },
       "c2pa.soft-binding": {
-        "alg": "invalid.traceweave.go-tokens.exact.draft-1",
+        "alg": "org.traceweave.go-tokens.exact.draft-1",
         "blocks": [
           {
             "scope": {},
@@ -468,12 +468,12 @@
         ],
         "name": "winnowed exact-channel fingerprints, one block each, in position order",
         "bindingMetadata": {
-          "invalid.traceweave.profile": {
+          "org.traceweave.profile": {
             "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
             "id": "go-tokens",
             "version": "draft-1"
           },
-          "invalid.traceweave.extractionConfig": {
+          "org.traceweave.extractionConfig": {
             "contract": "traceweave-token-winnow-draft-1",
             "profile": "go-tokens",
             "profileVersion": "draft-1",
@@ -489,7 +489,7 @@
         }
       },
       "c2pa.soft-binding__1": {
-        "alg": "invalid.traceweave.go-tokens.normalized.draft-1",
+        "alg": "org.traceweave.go-tokens.normalized.draft-1",
         "blocks": [
           {
             "scope": {},
@@ -562,12 +562,12 @@
         ],
         "name": "winnowed normalized-channel fingerprints, one block each, in position order",
         "bindingMetadata": {
-          "invalid.traceweave.profile": {
+          "org.traceweave.profile": {
             "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
             "id": "go-tokens",
             "version": "draft-1"
           },
-          "invalid.traceweave.extractionConfig": {
+          "org.traceweave.extractionConfig": {
             "contract": "traceweave-token-winnow-draft-1",
             "profile": "go-tokens",
             "profileVersion": "draft-1",

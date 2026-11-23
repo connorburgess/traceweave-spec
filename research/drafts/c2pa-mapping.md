@@ -43,7 +43,7 @@ Source: one entry of `traceweave-image-catalogue-draft-1` ([profile](extraction-
 
 | Traceweave pointer | C2PA location | Conversion | Status | Notes |
 | --- | --- | --- | --- | --- |
-| `/artifact/pdq/hash` | `/assertions/c2pa.soft-binding/blocks/0/value`, with `alg` set | 64 hex digits → 32-byte `bstr` | mapped | No `alg` value is ours to use (§2.1); the fixture uses the placeholder `invalid.traceweave.pdq.draft-2`, declared unregistered |
+| `/artifact/pdq/hash` | `/assertions/c2pa.soft-binding/blocks/0/value`, with `alg` set | 64 hex digits → 32-byte `bstr` | mapped | No `alg` value is ours to use (§2.1); the fixture uses `org.traceweave.pdq.draft-2`, a proposed identifier, not registered anywhere |
 | `/artifact/sha256` | `/assertions/c2pa.hash.data/hash` | hex → 32-byte `bstr`, `alg` `sha256` | mapped only for a **sidecar** manifest whose data hash has no `exclusions` | Otherwise conflicting (§4.1). JPEG and PNG normally use `c2pa.hash.boxes`, which has no single whole-file value |
 | `/artifact/pdq/quality` | `bindingMetadata` custom member | integer | lossy | The quality floor (`≤ 49` abstains) has no C2PA meaning |
 | `/profile` | `bindingMetadata` custom member | map | lossy | `alg` names an algorithm, not a profile triple bound to configuration bytes |
@@ -63,8 +63,8 @@ Source: the `sum.go` entry of the reference catalogue in `go-function-in-host` (
 
 | Traceweave pointer | C2PA location | Conversion | Status |
 | --- | --- | --- | --- |
-| `/artifact/channels/exact/fingerprints/*/hash` | `/assertions/c2pa.soft-binding/blocks/*/value` | 16 hex → 8-byte `bstr`, one block per fingerprint, in position order | mapped (placeholder `alg`) |
-| `/artifact/channels/normalized/fingerprints/*/hash` | `/assertions/c2pa.soft-binding__1/blocks/*/value` | the same, in a second assertion (multiple instances, C1 8.4) | mapped (placeholder `alg`) |
+| `/artifact/channels/exact/fingerprints/*/hash` | `/assertions/c2pa.soft-binding/blocks/*/value` | 16 hex → 8-byte `bstr`, one block per fingerprint, in position order | mapped (proposed, unregistered `alg`) |
+| `/artifact/channels/normalized/fingerprints/*/hash` | `/assertions/c2pa.soft-binding__1/blocks/*/value` | the same, in a second assertion (multiple instances, C1 8.4) | mapped (proposed, unregistered `alg`) |
 | `/artifact/sha256` | `/assertions/c2pa.hash.data/hash` | as in §1.2 | mapped (sidecar only) |
 | `/artifact/channels/exact/fingerprints/*/position`, `/artifact/channels/normalized/fingerprints/*/position` | block order | number lost, order kept | lossy |
 | `/profile`, `/extractionConfig` | `bindingMetadata` | map | lossy |
@@ -73,16 +73,16 @@ Source: the `sum.go` entry of the reference catalogue in `go-function-in-host` (
 
 ### 1.4 Comparison report → custom assertion (fixture f2)
 
-Source: [example-report.json](../../test-vectors/matching/example-report.json), whose body hashes to its `bodySha256` (`081d8600…d3be`, re-checked by the checker). Label: `invalid.traceweave.comparison-report`, a placeholder in the reserved `.invalid` domain, because the project owns no domain to namespace under (C1 8.2.1; D3).
+Source: [example-report.json](../../test-vectors/matching/example-report.json), whose body hashes to its `bodySha256` (`081d8600…d3be`, re-checked by the checker). Label: `org.traceweave.comparison-report`, the reverse-domain form of the project domain `traceweave.org` that C1 8.2.1 requires for entity-specific namespaces. It is a proposed identifier, not registered anywhere (D3).
 
 | Traceweave pointer | C2PA location | Conversion | Status |
 | --- | --- | --- | --- |
-| `/body` | `/assertions/invalid.traceweave.comparison-report/body` | the exact canonical body bytes (§3.3 of the contract) as one `bstr`, so `bodySha256` stays reproducible. A JSON content box (C1 11.5.1) could hold the same bytes; no tool was tested for re-serialization | mapped (bytes) |
-| `/provenance/bodySha256` | `/assertions/invalid.traceweave.comparison-report/bodySha256` | hex → `bstr`; the checker verifies it against the carried bytes | mapped |
-| `/provenance/comparisonConfigSha256` | `/assertions/invalid.traceweave.comparison-report/comparisonConfigSha256` | hex → `bstr` | mapped |
-| `/provenance/implementation/name`, `/provenance/implementation/version`, `/provenance/implementation/commit` | `/assertions/invalid.traceweave.comparison-report/producer/name`, `/assertions/invalid.traceweave.comparison-report/producer/version`, `/assertions/invalid.traceweave.comparison-report/producer/commit` | text | mapped. **Not** `claim_generator_info`: the program that ran the comparison is not the claim generator |
-| `/provenance/specCommit` | `/assertions/invalid.traceweave.comparison-report/specCommit` | text | mapped |
-| `/provenance/generatedAt` | `/assertions/invalid.traceweave.comparison-report/generatedAt` | text → `tdate` (tag 0) | mapped; still a claimed time, not a time-stamp |
+| `/body` | `/assertions/org.traceweave.comparison-report/body` | the exact canonical body bytes (§3.3 of the contract) as one `bstr`, so `bodySha256` stays reproducible. A JSON content box (C1 11.5.1) could hold the same bytes; no tool was tested for re-serialization | mapped (bytes) |
+| `/provenance/bodySha256` | `/assertions/org.traceweave.comparison-report/bodySha256` | hex → `bstr`; the checker verifies it against the carried bytes | mapped |
+| `/provenance/comparisonConfigSha256` | `/assertions/org.traceweave.comparison-report/comparisonConfigSha256` | hex → `bstr` | mapped |
+| `/provenance/implementation/name`, `/provenance/implementation/version`, `/provenance/implementation/commit` | `/assertions/org.traceweave.comparison-report/producer/name`, `/assertions/org.traceweave.comparison-report/producer/version`, `/assertions/org.traceweave.comparison-report/producer/commit` | text | mapped. **Not** `claim_generator_info`: the program that ran the comparison is not the claim generator |
+| `/provenance/specCommit` | `/assertions/org.traceweave.comparison-report/specCommit` | text | mapped |
+| `/provenance/generatedAt` | `/assertions/org.traceweave.comparison-report/generatedAt` | text → `tdate` (tag 0) | mapped; still a claimed time, not a time-stamp |
 | `/body/pairs/*/modes/*/outcome`, `/body/pairs/*/outcome`, `/body/rejection` | inside the body bytes | — | **opaque**: C2PA has no outcome classes, abstention reasons or rejection sides |
 | `/body/pairs/*/modes/*/regions/*/status`, `/body/comparison/minRegionDistinctHashes` | inside the body bytes | — | opaque: minimum evidence has no C2PA meaning |
 | `/body/inputs/suppressionCatalogueSha256`, `/body/suppression` | inside the body bytes | — | opaque: the suppression catalogue digest has no C2PA meaning |
@@ -94,7 +94,7 @@ The assertion goes in `gathered_assertions`, because `created_assertions` "are a
 
 ### 1.5 Comparison report → in-toto statement referencing a manifest (fixture f3)
 
-The report becomes the predicate, unchanged. The subject is the candidate artifact by SHA-256, because in-toto matches subjects "purely by digest" (C6). The predicate type `https://traceweave.invalid/predicate/comparison-report/draft-2` is a placeholder; no report predicate is defined yet.
+The report becomes the predicate, unchanged. The subject is the candidate artifact by SHA-256, because in-toto matches subjects "purely by digest" (C6). The predicate type `https://traceweave.org/predicate/comparison-report/draft-2` is a proposed identifier, not registered anywhere; no report predicate is defined or published yet, and the URL is an identifier, not a page.
 
 | Traceweave pointer | Statement location | Conversion | Status |
 | --- | --- | --- | --- |
@@ -179,13 +179,13 @@ To export ISCC, the profile would have to compute 256-bit Image-Codes (iscc-core
 
 From C1 16.3.7.4, C3 4.2.8 and the list README (C4):
 
-1. **A namespace the project owns.** `alg` must begin with an Internet domain name of the entity, reversed (C1 8.2.1). The project has none. `invalid.traceweave` is a placeholder in a reserved domain (D3).
+1. **A namespace the project owns.** `alg` must begin with an Internet domain name of the entity, reversed (C1 8.2.1). The project owns `traceweave.org` (registered 2026-11-23, as relayed by the coordinator; not independently checked here), so the namespace `org.traceweave` meets this item. Every `org.traceweave.*` label and `alg` in this draft is a proposed identifier, not registered anywhere (D3).
 2. **An entry** with `identifier` (assigned on entry), `alg`, `type` `fingerprint`, either `decodedMediaTypes` (`image` or `text`) or `encodedMediaTypes` (for example `text/x-go`), and `entryMetadata` with `description`, `dateEntered`, a **contact email**, and an `informationalUrl` that resolves to documentation of the algorithm and the byte format of `value`. `softBindingResolutionApis` is optional, and any URL in it must resolve.
 3. **One entry per algorithm version.** `identifier`, `alg` and `type` never change afterwards. A profile, configuration or threshold change would be a new entry.
 4. **A pull request** by someone affiliated with the algorithm's owner, or by a maintainer of the open-source algorithm or its fork. The C2PA Technical Working Group approves it under its own process and may remove entries.
 5. **A stated purpose of manifest recovery:** "The algorithm covered by the entry shall support embedding, extracting, or both, of a soft binding identifier for the purpose of manifest recovery" (README). A Traceweave comparison profile is not built for manifest recovery, so an entry would have to describe that use, which Traceweave does not run.
 
-Items 1, 2 (a public contact) and 4 are disclosures and owner decisions.
+Item 1 is now met by `traceweave.org`. Items 2 (a public contact), 4 and 5 remain open and are disclosures and owner decisions.
 
 ### 2.4 What the resolution API expects (C2)
 
@@ -281,7 +281,7 @@ The conversion in fixture f4 writes integers as floats with `unit` `pixel`. It d
 1. A claim signature as COSE_Sign1 over CBOR, with an X.509 chain in `x5chain` (10.3.2.4, 13.5). To reach "Trusted", the chain needs a trust anchor from the C2PA Trust List or one the user configures (13.4). Traceweave has DSSE with raw Ed25519 keys and no certificates.
 2. Exactly one hard binding per manifest (12.2.1). A report has no single asset.
 3. In a standard manifest, an actions assertion whose first action is `c2pa.created` or `c2pa.opened`, with ingredient assertions for opened assets (16.4.1.2). A comparison tool creates and opens no asset.
-4. Labels and `alg` ids under an owned Internet domain (8.2.1). The project owns none.
+4. ~~Labels and `alg` ids under an owned Internet domain (8.2.1).~~ **Closed:** the project owns `traceweave.org`, and the drafts use `org.traceweave.*`. The identifiers are proposed only; registering them (item 5) is still open.
 5. For a registered soft binding: a public contact, documentation of the value format, an approved pull request, and a manifest-recovery purpose (§2.3).
 6. For `io.iscc.v0`: 256-bit units including the Data-Code and Instance-Code, and no featureless codes (§2.2).
 7. CBOR (deterministic encoding for the claim, C1 10.1), JUMBF boxes, salted assertion hashing (8.6, 9.4.2.3), and hashed URIs. Traceweave has none of these.
@@ -305,7 +305,7 @@ The conversion in fixture f4 writes integers as floats with `unit` `pixel`. It d
 | --- | --- | --- | --- |
 | D1 | Which C2PA version C2PA.1 pins | 2.5 (current, October 2026); 2.4 (lane 10's reading) | 2.5. Check whether the C2PA.2 tool supports 2.5 before freezing |
 | D2 | How a report travels | A, B or C (§3) | B now; C optional and owner-gated |
-| D3 | Namespace for labels, `alg` ids and the report predicate type | Register a domain the project owns; keep the `.invalid` placeholder; use the project GitHub URL for in-toto only (C2PA labels need a domain) | Placeholder until the owner decides; nothing is published under it |
+| D3 | Namespace for labels, `alg` ids and the report predicate type | **Domain settled:** `traceweave.org` (2026-11-23). Open: which names to fix (`org.traceweave.comparison-report`, `org.traceweave.pdq.draft-2`, `org.traceweave.go-tokens.<channel>.draft-1`, predicate `https://traceweave.org/predicate/comparison-report/draft-2`), and whether to publish documentation at those URLs | Use `org.traceweave.*` as proposed identifiers; register or publish nothing until the owner decides |
 | D4 | PDQ soft-binding id | Register a Traceweave entry (needs D3 and a public contact); ask the PDQ maintainers for a neutral entry; reuse `com.originalpictures.pdq.1` | Do not export PDQ until decided. Reuse is not recommended (§2.1) |
 | D5 | ISCC export | New profile version emitting IEP-0020 sequences (256-bit Image-Code, Data-Code, Instance-Code, featureless test); no ISCC export | No export until a profile version and vectors exist |
 | D6 | Token-catalogue export | Never into manifests (privacy, §1.3); only keyed fingerprints after KEYED; register a code-token algorithm | Never into public manifests |
@@ -324,7 +324,7 @@ C2PA.3 forbids a compatibility claim until C2PA.2 passes. A claim needs **all** 
 3. **We read the tool's output:** manifests written by the tool (hard binding, soft binding, gathered custom assertion, external reference) pass through a Traceweave adapter. Every mapped field is recovered, and every lossy, opaque, unmapped or conflicting field is reported.
 4. **Round-trip record:** for each fixture, the fields that survived and the fields that were lost, both directions, with the checker passing.
 5. **Scope:** C2PA version, assertion labels, media types, manifest placement (embedded or sidecar) and validator state. "Trusted" is claimed only with a real trust-list signer.
-6. **Soft-binding status:** for each exported `alg`, either the registered entry and its commit, or the statement "unregistered placeholder".
+6. **Soft-binding status:** for each exported `alg`, either the registered entry and its commit, or the statement "proposed identifier, not registered anywhere".
 7. **Review:** a non-author recheck of the mapping (C2PA.1) and of statements 1–6.
 
 **Wording allowed until then** (exact):
@@ -358,4 +358,4 @@ Eighteen negative fixtures each change one thing in a positive fixture and must 
 | C2PA.2 | **Open.** No C2PA tool was available or run; no adapter exists; the fixtures are hand-written. D7 (tool download) and D10 (wording) need the owner |
 | C2PA.3 | **Met for now, by inspection on 2026-11-23:** the repository README has no C2PA claim, and `spec/attestations.md` says "No C2PA compatibility is claimed yet". Re-check whenever README text changes |
 
-**Needs the owner:** D3 (a domain, and any public contact for a list entry), D4 and D6 (whether fingerprints may leave the private catalogue at all), D7 (downloading and building a C2PA tool), D10 (the C2PA.2 wording), and any registration pull request.
+**Needs the owner:** D3 (fixing the `org.traceweave.*` names, any public contact for a list entry, and anything published under `traceweave.org`), D4 and D6 (whether fingerprints may leave the private catalogue at all), D7 (downloading and building a C2PA tool), D10 (the C2PA.2 wording), and any registration pull request.

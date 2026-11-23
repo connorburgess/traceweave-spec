@@ -48,17 +48,17 @@
       {
         "field": "/artifact/pdq/quality",
         "reason": "carried only in bindingMetadata, which a validator should not use (16.3.7.3.1); the quality floor and abstention it drives have no C2PA meaning",
-        "carriedAt": "/assertions/c2pa.soft-binding/bindingMetadata/invalid.traceweave.pdqQuality"
+        "carriedAt": "/assertions/c2pa.soft-binding/bindingMetadata/org.traceweave.pdqQuality"
       },
       {
         "field": "/profile",
         "reason": "carried only in bindingMetadata; the alg string names an algorithm, not a profile triple with a configuration digest",
-        "carriedAt": "/assertions/c2pa.soft-binding/bindingMetadata/invalid.traceweave.profile"
+        "carriedAt": "/assertions/c2pa.soft-binding/bindingMetadata/org.traceweave.profile"
       },
       {
         "field": "/matchingConfigSha256",
         "reason": "threshold and dihedral policy; C2PA leaves matching to the algorithm entry (16.3.7.5.1)",
-        "carriedAt": "/assertions/c2pa.soft-binding/bindingMetadata/invalid.traceweave.matchingConfigSha256"
+        "carriedAt": "/assertions/c2pa.soft-binding/bindingMetadata/org.traceweave.matchingConfigSha256"
       },
       {
         "field": "/artifact/decode/width",
@@ -146,7 +146,7 @@
         "name": "whole file; sidecar manifest, no exclusions"
       },
       "c2pa.soft-binding": {
-        "alg": "invalid.traceweave.pdq.draft-2",
+        "alg": "org.traceweave.pdq.draft-2",
         "blocks": [
           {
             "scope": {},
@@ -155,14 +155,14 @@
         ],
         "name": "PDQ 256-bit hash of the decoded image (profile section 4)",
         "bindingMetadata": {
-          "description": "Unregistered placeholder algorithm id; see c2pa-mapping.md section 2",
-          "invalid.traceweave.profile": {
+          "description": "Proposed identifier, not registered anywhere; see c2pa-mapping.md section 2",
+          "org.traceweave.profile": {
             "configSha256": "c740e92de69a47904fa81bb3614c086194717be856fa6a44d89ad6fdba3bb927",
             "id": "traceweave-image-fingerprint",
             "version": "draft-2"
           },
-          "invalid.traceweave.matchingConfigSha256": "fe3fa0395d3701fa5b1b55839063998eba528851d4f9e3dcaca62d3a0f6c97ac",
-          "invalid.traceweave.pdqQuality": 100
+          "org.traceweave.matchingConfigSha256": "fe3fa0395d3701fa5b1b55839063998eba528851d4f9e3dcaca62d3a0f6c97ac",
+          "org.traceweave.pdqQuality": 100
         }
       }
     },

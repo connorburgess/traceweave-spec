@@ -307,7 +307,7 @@
         }
       }
     ],
-    "predicateType": "https://traceweave.invalid/predicate/comparison-report/draft-2",
+    "predicateType": "https://traceweave.org/predicate/comparison-report/draft-2",
     "predicate": {
       "body": {
         "inputs": {

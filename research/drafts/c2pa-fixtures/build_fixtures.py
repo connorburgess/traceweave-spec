@@ -28,7 +28,7 @@ NOTICE = RULES["notice"]
 FIXTURE_VERSION = "traceweave-c2pa-fixture-draft-1"
 SIGNATURE = "absent: nothing was signed"
 NOT_COMPUTED = "not computed: no JUMBF box was serialized"
-NS = RULES["placeholderNamespace"]
+NS = RULES["proposedNamespace"]
 
 IMAGE_CATALOGUE = "research/experiments/image-fingerprint/results/e-img-f-2/full-1/catalogue.json"
 MATCHING = "test-vectors/matching/matching.json"
@@ -122,7 +122,7 @@ def image_c2pa(tw):
             "blocks": [{"scope": {}, "value": bstr(a["pdq"]["hash"])}],
             "name": "PDQ 256-bit hash of the decoded image (profile section 4)",
             "bindingMetadata": {
-                "description": "Unregistered placeholder algorithm id; see c2pa-mapping.md section 2",
+                "description": "Proposed identifier, not registered anywhere; see c2pa-mapping.md section 2",
                 META_PROFILE: tw["profile"],
                 META_MATCHING: tw["matchingConfigSha256"],
                 META_QUALITY: a["pdq"]["quality"],
@@ -499,7 +499,7 @@ def negatives(pos):
         negative(f5, "neg-round-trip-misdeclared", "round-trip-misdeclared", "PDQ quality is declared as surviving but is not in the imported record", misdeclare),
         negative(f4, "neg-conflict-undeclared", "conflict-undeclared", "the orientation basis conflict is not declared", basis_undeclared),
         negative(f2, "neg-report-attributed", "attribution", "the report is placed in created_assertions although the signer did not run the comparison", created_placement),
-        negative(f1, "neg-alg-unregistered", "alg-unregistered-undeclared", "a placeholder algorithm id is not declared as unregistered", unregistered),
+        negative(f1, "neg-alg-unregistered", "alg-unregistered-undeclared", "a proposed, unregistered algorithm id is not declared as unregistered", unregistered),
         negative(f1, "neg-signature-claimed", "signature-claimed", "the fixture claims a signature", signed),
         negative(f4, "neg-region-integer", "type-mismatch", "a region width is an integer; region-map coordinates are floats", integer_rect),
     ]
