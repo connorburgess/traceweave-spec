@@ -8,7 +8,7 @@ Start with [use cases](docs/use-cases.md), then [implementation patterns](docs/i
 
 ## Pilot languages
 
-Initial experimentation uses synthetic Go and Rust source code, with planned expansion to multiple media types. TypeScript/JavaScript, still images and text are owner-approved profile targets (2026-11-22; scope under [later profiles](#later-profiles-and-sequence)). Private applications are outside the current experimental scope. Shared evidence formats stay language-independent; transformations, safety conditions and build-pipeline tests are profile-specific. Python research tooling does not select Python as the marked language. See the [feasibility investigation](research/02-carrier-feasibility.md).
+Initial experimentation uses synthetic Go and Rust source code, with planned expansion to multiple media types. TypeScript/JavaScript, still images and text are owner-approved profile targets (2026-11-22; scope under [later profiles](#later-profiles-and-sequence)). Python is also a code-profile target. `py-tokens` draft-1 is frozen for stage-1 implementation (`58c25a9`): specified, not implemented (gates PY.1–PY.4). Private applications are outside the current experimental scope. Shared evidence formats stay language-independent; transformations, safety conditions and build-pipeline tests are profile-specific. Using Python for research tooling is a separate matter from the Python profile. See the [feasibility investigation](research/02-carrier-feasibility.md).
 
 ## Core tracks
 
@@ -88,7 +88,7 @@ Remaining: "every M1.2 vector". M1.2's set is not complete (see M1.2), so this g
 
 | ID | Type | Verifiable criterion | Status | Owner |
 | --- | --- | --- | --- | --- |
-| M2.1 | E | The walkthrough (extract → catalogue → compare → report) passes under `scripts/offline`. The wrapper first proves network denial with a probe that must fail | **met** on macOS. `scripts/offline` proves network denial first, then `scripts/check`, covering extract, catalogue, compare and report across conformance and the checklist, passes under it. Evidence: the non-author [I2 review](research/reviews/implementation-merge-i2-review.md), Confirmation 1; re-run at implementation `8feb5cf` (implementation `xcheck/REPORT-PIN.md` on `main` `6d35308`). Linux is untested until hosted CI passes; the wrapper refuses there rather than run unconfined | I |
+| M2.1 | E | The walkthrough (extract → catalogue → compare → report) passes under `scripts/offline`. The wrapper first proves network denial with a probe that must fail | **met** on macOS and Linux. `scripts/offline` proves network denial first, then `scripts/check`, covering extract, catalogue, compare and report across conformance and the checklist, passes under it. Evidence: the non-author [I2 review](research/reviews/implementation-merge-i2-review.md), Confirmation 1; re-run at implementation `8feb5cf` (implementation `xcheck/REPORT-PIN.md` on `main` `6d35308`). On Linux: the private implementation repository's CI passed on commit `af3af2b` on 2026-11-23, with jobs hygiene, check (ubuntu-latest) and check (macos-latest) all succeeding. It is the first passing Linux run, and the network-denial proof ran before `scripts/check` | I |
 | M2.2 | E | The frozen manifest has at least 1 positive case for each UC-1 example-matrix row: exact; formatted fragment in a large host; rename/shadowing; Unicode/repeated minima/tiny file. Passes only if every case's spans equal the expected UTF-8 byte spans (N/N) | open. (b) There is no frozen fixture manifest. The pin clause now holds: the vectors are vendored from published `c06b214`, and the strict check passes 43/43. Satisfied: one case per class, with spans N/N in both lanes | I |
 | M2.3 | E | Control classes, each with at least 1 case: independent same-task, common boilerplate/vendor, unrelated, malformed/unsupported. Passes when every class appears in the report with its candidate count and denominator. No threshold is set before M3 | open. (b) The vendor control class is absent (contract OD-C19 open). Same-task, boilerplate, unrelated and malformed controls are present, with counts and denominators ([I2 review](research/reviews/implementation-merge-i2-review.md) `de9a5b7` §7) | I |
 | M2.4 | E | Two runs produce an identical **canonical report body**, which excludes the provenance block. The comparison-config digest is in the body inputs, as the [draft contract](spec/catalogue-report.md) places it. The provenance block is checked separately: implementation commit and spec pin present and correct | **met**.
@@ -215,7 +215,7 @@ Counted on 2026-11-23 from the status columns above. In the later-profile table,
 | Gates | Total | Met | Negative-result | Open |
 | --- | --- | --- | --- | --- |
 | Core M0–M5 | 47 | 14 (M0.1, M0.2, M0.3, M0.4, M1.3, M2.1, M2.4, M2.5, M2.8, M2.10, M2.11, M3.0, M4.1, M4.2) | 0 | 33 |
-| Later profiles, EXT and RC | 51 | 8 (IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4) | 0 | 43 (WEB.0–WEB.6 and SK.3–SK.5 planned) |
+| Later profiles, EXT and RC | 55 | 8 (IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4) | 0 | 47 (WEB.0–WEB.6 and SK.3–SK.5 planned; PY.1–PY.4 specified, not implemented) |
 
 M0.1 is met on the second non-author recount (`3a640b3`). M2.5 and M2.8 are met on the [I2 review](research/reviews/implementation-merge-i2-review.md) (`de9a5b7`) of implementation `82b02ab`.
 
@@ -246,7 +246,7 @@ Owner-gated: TXT.5–TXT.6 (corpus download)
 After I2: SK   After M3.4: BIN, RES, STRUCT, KEYED, WEB (planned)
 ```
 
-**Implementation track status (2026-11-23).** The implementation repository now exists privately on GitHub, with CI configured. Its first runs are pending, and Linux is untested until they pass. Local `main` is at `6d35308`, re-vendored from the published spec commit `c06b214` at the promoted paths, with `spec.lock` status `published` (implementation `xcheck/REPORT-PIN.md` on `main` `6d35308`).
+**Implementation track status (2026-11-23).** The implementation repository exists privately on GitHub, with CI configured. CI passed on `af3af2b` on 2026-11-23, with jobs hygiene, check (ubuntu-latest) and check (macos-latest); this is the first passing Linux run. `main` is at `af3af2b`, where both CLIs have `--version-json`. The pin evidence below was recorded at `6d35308`, re-vendored from the published spec commit `c06b214` at the promoted paths, with `spec.lock` status `published` (implementation `xcheck/REPORT-PIN.md` on `main` `6d35308`).
 - **I0: exit met.** fmt, clippy, tests, vet and `go test` pass. `check-spec-pin --strict --mirror` passes 43/43, and conformance passes in both languages.
 - **I1: exit met.** Both extractors reproduce every vendored extraction vector, and `check-vector-precedence` passes. Differentials agree 100% on two seeds (14.3 M cases each). Gate M1.4 stays open only on the completeness of M1.2.
 - **I2: exit not met.**
@@ -255,10 +255,13 @@ After I2: SK   After M3.4: BIN, RES, STRUCT, KEYED, WEB (planned)
 - **I3–I5:** I3 (evaluation harness) is under review and not yet cleared to run; I4 and I5 have not started.
 
 **Other work (2026-11-23).**
-- **Python profile.** `py-tokens` draft-1 is in `research/drafts/` (`1c5c06a`), with a clean-room review (`0db8b44`) whose disposition is pending.
-- **Registration record (M4 direction).** The design is a draft, reviewed in `5c3d9c5`, with fixes in progress. It has an A2A section (`1dd9c1f`) for SK.3–SK.5.
-- **Evaluation.** The protocol is at `m3-eval-draft-7`, with the harness under review and not yet cleared to run. As currently designed, a real run needs about 65 GB of free disk.
+- **Python profile.** `py-tokens` draft-1 is frozen for stage-1 implementation (`58c25a9`), after the clean-room review (`0db8b44`). It is specified but not implemented (PY.1–PY.4).
+- **Registration record (M4 direction).** The design is at draft-2 (`c4848c1`), after review `5c3d9c5`; its confirmation review is pending. It has an A2A section for SK.3–SK.5. Implementation is blocked on an owner decision about contacting external time-stamping services.
+- **Evaluation.** The protocol is at `m3-eval-draft-9` (`85b1690`). The harness is under review, with two confirmation passes so far, and not yet cleared to run.
+  - Remaining items: a pair-completeness check for batched comparisons; a version bump; free disk on the run machine, 26 GB at the default margin or 16 GB at the minimum.
+  - The reviewer's expected machine time: pilot 7–12 h, tuning 12–20 h, held-out 1.5–17 h.
 - **Websites.** Both sites are live as of 2026-11-23, at <https://traceweave.org> and <https://docs.traceweave.org>, after review. The browser tool (WEB) is still planned and not started.
+- **Visual identity.** On 2026-11-23 the owner chose the "Evidence Ledger" identity with a green signal colour. It is applied to both websites. The brand kit lives outside this repository, and generated imagery is being prepared.
 
 **Owner override of the M3.4 ordering (recorded 2026-11-22).** Asked about TypeScript, images and text, the owner approved all three. Coordinator reading, recorded here as the decision:
 
@@ -278,6 +281,11 @@ The owner may narrow this reading. Core M1–M3 gates keep priority under the su
 | TS.2 | E | Hand-derived vectors cover the M1.2 classes plus the TS.1 classes | S |
 | TS.3 | E | Two implementations without a shared lexer match the TS.2 expected bytes | I |
 | TS.4 | E | Own M3 split, reported separately and not pooled | I |
+| **PY — Python code profile** (`py-tokens` draft-1, frozen for stage-1 implementation at `58c25a9`, after the [clean-room review](research/reviews/extraction-profile-python-review.md) `0db8b44`; **specified, not implemented**) | | | |
+| PY.1 | E | The profile covers the M1.1 list plus Python layout: NEWLINE, INDENT and DEDENT as zero-width tokens; line continuation; string and f-string literals; encoding declarations. Generated and vendored exclusions are stated. Draft decisions await owner confirmation and promotion to `profiles/`. **Status: specified, not implemented** | S |
+| PY.2 | E | Hand-derived vectors cover the M1.2 classes plus the PY.1 classes, including a layout-only k-gram with an empty span (`py-empty-span-fingerprint`). **Follow-up needed in the [catalogue contract](spec/catalogue-report.md):** an empty fingerprint span is valid at every k, not only at k = 1. **Status: specified, not implemented** | S |
+| PY.3 | E | Two implementations without a shared lexer match the PY.2 expected bytes. **Status: not implemented** | I |
+| PY.4 | E | Own M3 split, reported separately and not pooled. **Status: not implemented** | I |
 | **IMGF — still images, fingerprint-only first** ([lane 10](research/lanes/10-evidence-review.md)) | | | |
 | IMGF.1 | E | An image extraction profile answers every item in lane 10's "Extraction contract (fingerprints)" list, with 0 TBDs. The items are: decoder and version, EXIF orientation, colour conversion, alpha flattening, multi-frame policy, luminance formula, resize filter and size, border crop, hash algorithm and bit length, quality abstention threshold, dihedral variants and distance metric **Status: open.** The draft-2 profile ([extraction-profile-image.md](research/drafts/extraction-profile-image.md) §11) maps all 12 items, but two things remain. (1) The ISCC resize and grey steps (§5 steps 2–3) are still defined by Pillow's `BICUBIC` and rounding code rather than by a formula, which the review flagged as implementer discretion. (2) No non-author has counted the 12-item map for draft-2. | S |
 | IMGF.2 | E | **PDQ, exact:** on identical decoded RGB arrays, the profile's PDQ implementation equals the vendored ThreatExchange Python reference (commit `9f627fb1…`) in all 8 dihedral hashes and the quality score, k/k. This holds on the 30 pinned `pdq/data` files and on every input that a measured run cross-checks (protocol V4, `e-img-f-2`). **PDQ, vendor tolerance:** on the profile decode path, every hash is within 10 bits of the ThreatExchange C++ `reg_test` output for each vector with published quality ≥ 80 (the vendor README criterion), k/k. Every hash is within 16 bits of each comparable published Python output (the vendor unit-test criterion), k/k. Published quality scores are equal, k/k. Exact equality with published hashes is not required, because the vendor's own reference sets differ by up to 8 bits on identical files. **ISCC:** the hash core equals iscc-core 1.5.0 `data.json` `gen_image_code_v0`, k/k; the normalization steps are not covered by any published vector and are not claimed by this gate. A C++ reference build is not needed for this gate, but it is required for IMGF.5 and before any claim of exact interoperability. Wording from the [image protocol review](research/reviews/image-profile-protocol-review.md#imgf2-for-pdq-reproduced-with-proposed-gate-text) **Status: met** (frozen `6f39e50`, results `0c7523c`, [results recheck](research/reviews/image-profile-protocol-review.md#results-recheck-e-img-f-2) `dbd109b`). PDQ exact: port equals the vendored reference on 30/30 vector files and 1,400/1,400 extractions in each run. Tolerance: C++ within 10 bits 8/8; Python within 16 bits 12/12 and 18/18; published quality equal 8/8 (C++) and 12/12 (README). ISCC core 3/3. | I |
@@ -342,7 +350,7 @@ Removal and forgery counts are lower bounds on what an attacker can do. Full cou
 | EXT.1 | E | Named non-contributors review the spec, M3 methodology and M4 crypto (may reuse M4.6 if that reviewer qualifies). Reports filed; every finding dispositioned | S |
 | RC.1 | E | Every E gate in M1–M5 met; every R gate met or negative-result; every O gate recorded; EXT.1 met. If M2E.0 records that embedding is omitted, M2E.2–M2E.5 and M2E.7 are exempt | S |
 | RC.2 | E | Two implementations pass conformance levels 1–4 for every profile marked stable. Whether they need different implementers is an owner decision ([plan](docs/implementation-repo-plan.md#needs-the-owner)) | S+I |
-| RC.3 | E | Scope statement covering media, embedding (M2E.0) and signing (M5.4) | S |
+| RC.3 | E | Scope statement covering media, embedding (M2E.0) and signing (M5.4). Name clearance: open; owner to verify | S |
 
 ## Backlog and its gates
 

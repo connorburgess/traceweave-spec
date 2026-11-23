@@ -39,11 +39,13 @@ Closed with evidence: M0.1–M0.4, M1.3, M2.1, M2.4, M2.5, M2.8, M2.10, M2.11, M
 ## Planned items
 
 - **Status, 2026-11-23.**
-  - **Implementation repository:** private on GitHub, with CI configured; first runs pending, and Linux untested until they pass.
-  - **`py-tokens` draft-1:** clean-room review in `0db8b44`, disposition pending.
-  - **Registration record:** draft reviewed in `5c3d9c5`, fixes in progress; A2A section in `1dd9c1f`.
-  - **Evaluation:** protocol `m3-eval-draft-7`; harness under review, not cleared to run; a real run needs about 65 GB free disk as designed.
+  - **Implementation repository:** private on GitHub. CI passed on `af3af2b` (2026-11-23): hygiene, check on ubuntu-latest and check on macos-latest; the first passing Linux run. `main` is at `af3af2b`, where both CLIs have `--version-json`.
+  - **`py-tokens` draft-1:** frozen for stage-1 implementation (`58c25a9`, after review `0db8b44`). Specified, not implemented (PY.1–PY.4). Catalogue-contract follow-up: an empty fingerprint span is valid at every k.
+  - **Registration record:** draft-2 (`c4848c1`) after review `5c3d9c5`; confirmation review pending. Implementation is blocked on the owner decision about contacting external time-stamping services.
+  - **Evaluation:** protocol `m3-eval-draft-9` (`85b1690`). The harness is under review (two confirmation passes); still to do are the pair-completeness check for batched comparisons, a version bump, and 26 GB free disk (16 GB at the minimum margin). Expected machine time: pilot 7–12 h, tuning 12–20 h, held-out 1.5–17 h.
   - **Websites:** both live as of 2026-11-23 at <https://traceweave.org> and <https://docs.traceweave.org>. The WEB browser tool is still planned.
+  - **Visual identity:** the owner chose "Evidence Ledger" with a green signal colour (2026-11-23), applied to both websites. The brand kit is outside this repository; generated imagery is in preparation.
+  - **Name clearance:** open; owner to verify.
 - **Registration record (M4), planned direction of 2026-11-23.** For people who want to protect their work, a timestamped, signed registration record serves that need, rather than marks. A design lane is drafting `research/drafts/registration-record.md` and `research/lanes/13-timestamp-evidence-review.md`.
 - **SK.3–SK.5 (A2A).** The owner wants content registered at creation time, including by AI agents. Planned; design in progress; no implementation lane. Any hosted signing or witness service is an owner decision (SK.5).
 - **WEB.0–WEB.6 (browser tool and testing page).** Requested by the owner on 2026-11-23 as a roadmap item, not for building yet. Planned; not started; no lane assigned. It follows M3.4 unless the owner overrides, and the owner decides when it starts and where it is hosted (WEB.0). See the [roadmap](../ROADMAP.md#later-profiles-and-sequence).
