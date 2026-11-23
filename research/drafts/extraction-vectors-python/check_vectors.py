@@ -389,6 +389,9 @@ def check_vector(v, cfg, stats, lexer=pylex.Lexer):
         require(list(r["channels"][ch]) == list(want[ch]), f"{ch}: keys or key order")
         for key, val in want[ch].items():
             require(r["channels"][ch][key] == val, f"{ch}.{key} differs from recomputation")
+    if "empty-span" in v["tags"]:
+        require(any(f["span"][0] == f["span"][1] for f in want["exact"]["fingerprints"]),
+                "empty-span vector has no fingerprint with an empty span (profile §4.5)")
     stats["tokens"] += len(got)
     stats["layout"] += sum(1 for c, _, _ in got if c in LAYOUT)
     stats["kgrams"] += len(want["exact"]["kgrams"])
@@ -862,11 +865,44 @@ class WColonLongest(pylex.Lexer):
         return False
 
 
+class WDedentNoAlt(pylex.Lexer):
+    """Review W03: no tab-size-1 check after a dedent."""
+    def dedent_checks_alt(self):
+        return False
+
+
+class WNonAsciiAfterNumber(pylex.Lexer):
+    """Review W12: a non-ASCII character after a number is malformed."""
+    def number_follow_ok(self, s, k, i):
+        if k < self.n and ord(s[k]) >= 128:
+            return False
+        return super().number_follow_ok(s, k, i)
+
+
+class WSpecQuoteEnds(pylex.Lexer):
+    """Review W15: the closing quote inside a format spec ends the f-string (CPython's tokenizer)."""
+    def spec_closing_quote_is_error(self):
+        return False
+
+
+class WNamedEscapeBraceText(pylex.Lexer):
+    """Review W17: inside '\\N{...}' a '{' is text."""
+    def brace_in_named_escape_opens_field(self):
+        return False
+
+
+class WEofAtFieldBrace(pylex.Lexer):
+    """Review W19: end of input in a field reported at the field's '{'."""
+    def eof_in_field_offset(self, field):
+        return field["pos"]
+
+
 WRONG_LEXERS = [WTab4, WNoTabCheck, WNoEOFDedent, WBlankComment, WBracketNewline, WFStringPlain, WSoftKeywords,
                 WRawBackslash, WLoneCR, WCRLFTwo, WFormFeedIgnored, WBackslashIndentCPython, WSpecEscapes,
                 WNumberStrict, WNumberWordsAsPrefixes, WLegacyOctal, WRadixKeyword, WPrefixLoose,
                 WPrefixCaseSensitive, WNamedEscapeRaw, WDedentAtLineStart, WNewlineAtTokenEnd, WPythonUnicode,
-                WColonLongest]
+                WColonLongest, WDedentNoAlt, WNonAsciiAfterNumber, WSpecQuoteEnds, WNamedEscapeBraceText,
+                WEofAtFieldBrace]
 
 
 def wrong_lexer_test(docs):

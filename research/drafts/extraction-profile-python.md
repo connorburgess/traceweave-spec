@@ -1,6 +1,8 @@
 # Draft extraction profile: Python (`py-tokens`)
 
-Status: experimental draft for review, revision draft-1, 2026-11-23. Not normative and not frozen. Nothing here is a registered algorithm.
+Status: experimental draft, revision draft-1, 2026-11-23. **`py-tokens` `draft-1` is frozen for stage-1 implementation, pending owner confirmation of the decided-in-draft items** (§12; frozen files and digests in §17). Not promoted to `profiles/`; nothing here is a registered algorithm.
+
+The [clean-room review](../reviews/extraction-profile-python-review.md) of the first text (commit `1c5c06a`) reproduced all 98 vectors from the text alone. Its findings are resolved in §16. None of them changed a token, a hash or an existing vector, so the version stays `draft-1`.
 
 This document proposes a Python profile that plugs into the [extraction contract](../../spec/extraction.md) without changing any of its shared parts. It follows the shape of the [TypeScript profile](../../profiles/typescript.md). "MUST" describes what this draft proposes for an implementation claiming to follow it. Items marked "decided in draft" are pending owner confirmation. The open decisions are in §12.
 
@@ -19,7 +21,7 @@ The vectors, checker and harnesses are in [extraction-vectors-python/](extractio
 
 - **Language.** *The Python Language Reference*, chapter 2 "Lexical analysis", as shipped in the CPython source at tag `v3.14.6`: `Doc/reference/lexical_analysis.rst`, SHA-256 `fcec0275b9935e412b5f79e34e0cc7b4ca1fdd60e7d4828c416441e5994be723`. The online copy, [docs.python.org/3.14/reference/lexical_analysis.html](https://docs.python.org/3.14/reference/lexical_analysis.html), is mutable. Cited sections: Line structure (physical and logical lines, comments, encoding declarations, explicit and implicit line joining, blank lines, indentation, whitespace between tokens), Other tokens, Names (keywords, soft keywords, non-ASCII characters in names), Literals (strings, prefixes, escape sequences, bytes, raw strings, f-strings, t-strings, formal grammar for f-strings), Numeric literals, and Operators and delimiters. Where this profile restates the reference, the reference governs, except where §9 lists a deliberate departure.
 - **Grammar.** `Grammar/Tokens` at `v3.14.6` (SHA-256 `df3d2cdd8228a17594316b6feda01e3ea5c3fc2c679778cd7864398540bb3423`) and `Grammar/python.gram` (SHA-256 `34f0f9b2e8a22760ca4e6e7e56857cb22f4c73e0853e5452b7e93e48ddb17361`). `Lib/keyword.py` (SHA-256 `18c2be738c04ad20ad375f6a71db34b3823c7f40b0340f5294d0e89f3c9b093b`) gives the 35 keywords and 4 soft keywords; the local interpreter's copy has the same digest.
-- **Reference tokenizer (cross-check oracle, not the authority).** CPython **3.14.6**, the interpreter available locally, whose C tokenizer is `Parser/lexer/lexer.c` at `v3.14.6` (SHA-256 `1d863687835cc5aad4b2e1f20eb9bbae8a9b3c1ed147259b963f4da51cd604a8`). The cross-check drives it through `tokenize._generate_tokens_from_c_tokenizer(..., extra_tokens=False)` (the parser's own tokenizer, with identifier and numeric-literal checks on) and `tokenize.generate_tokens` (the same tokenizer in extra-tokens mode, for positions). Pinned version and local version are the same, so nothing in the cross-check is a version difference except the Unicode tables (§3.2).
+- **Reference tokenizer (cross-check oracle, not the authority).** CPython **3.14.6**, the interpreter available locally, whose C tokenizer is `Parser/lexer/lexer.c` at `v3.14.6` (SHA-256 `1d863687835cc5aad4b2e1f20eb9bbae8a9b3c1ed147259b963f4da51cd604a8`). The cross-check drives it through `tokenize._generate_tokens_from_c_tokenizer(..., extra_tokens=False)` (the parser's own tokenizer, with identifier and numeric-literal checks on) and `tokenize.generate_tokens` (the same tokenizer in extra-tokens mode, for positions). Pinned version and local version are the same, so nothing in the cross-check is a version difference except the Unicode tables (§3.2). **Line terminators are judged against `compile()`, not against the `tokenize` path**: the readline-driven tokenizer does not treat a lone CR as a line terminator (`x\ry\r` comes out as `x` and an OP `\ry`). `compile()` reads source with universal newlines (CR LF and lone CR become LF), and that is the behaviour the reference describes and this profile follows. The cross-check therefore applies the same translation itself before calling the tokenizer, with an offset map back to the original bytes (D-18).
 - **Unicode.** 17.0.0, per contract §3a. CPython 3.14.6 ships Unicode 16.0.0 (`unicodedata.unidata_version`).
 
 The sources were retrieved on 2026-11-23 from the `v3.14.6` tag of the CPython repository (an immutable reference) and are not committed.
@@ -52,7 +54,8 @@ The contract requires UTF-8. The reference allows other encodings through a PEP 
 
 - **A declaration is a comment and nothing more.** The extractor never decodes in another encoding (contract §2, no repair). Bytes that are not UTF-8 give `invalid-utf8` at the first bad byte, whatever the declaration says (vector `py-err-coding-latin1-bytes`; CPython 3.14.6 accepts that file, D-2).
 - **An all-ASCII file with a non-UTF-8 declaration is extracted normally** (`py-coding-latin1-ascii`). ASCII bytes mean the same in every encoding CPython accepts in a declaration. CPython rejects declarations of ASCII-incompatible codecs such as `utf-16` and `cp037` on such files (both checked on 3.14.6), so the token streams agree. The one edge left is `utf-7`, where `+` changes meaning; such files are not known to exist and would need a selection rule.
-- **Selection rule** (§2): a non-UTF-8 declaration together with any byte ≥ 0x80 excludes the file, recorded as "non-UTF-8 source". In the 3.14.6 standard library 3 files fail UTF-8 and 1 starts with a BOM, all of them deliberate test data (`test/encoded_modules/*`, `test/tokenizedata/*`).
+- **Selection rule** (§2): a non-UTF-8 declaration together with any byte ≥ 0x80 excludes the file, recorded as "non-UTF-8 source".
+- **Which declared names count as UTF-8** (decided in draft, PYOD-2): lowercase the declared name and replace `_` by `-`. It is UTF-8 if it equals `utf-8` or starts with `utf-8-` (CPython's tokenizer shortcut, which also covers `utf-8-sig`), or if it is one of `utf8`, `u8`, `utf`, `cp65001`, `utf8-ucs2` or `utf8-ucs4`, the CPython 3.14.6 codec aliases that resolve to UTF-8. Any other name is non-UTF-8. This list reproduces what CPython 3.14.6 decodes as UTF-8; it is a selection rule and never reaches the extractor. In the 3.14.6 standard library 3 files fail UTF-8 and 1 starts with a BOM, all of them deliberate test data (`test/encoded_modules/*`, `test/tokenizedata/*`).
 - **BOM.** The reference ignores an initial UTF-8 BOM. The contract rejects it at any offset (`bom`, OD-1), and this profile cannot change a shared rule (D-1, `py-err-bom`).
 
 ### 3.2 Identifier characters (reference "Names", "Non-ASCII characters in names")
@@ -88,7 +91,7 @@ A line terminator is LF, CR LF (one terminator) or a lone CR, as in the referenc
 
 `#` outside a literal starts a comment that runs to the next line terminator, exclusive, or to the end of input. Comments are trivia. Type comments (`# type: int`), shebang lines and encoding declarations are ordinary comments (`py-type-comment`, `py-shebang-coding`). Python has no block comment, so there is no `unterminated-comment`.
 
-A **blank line** is a logical line that holds only spaces, tabs, form feeds and possibly a comment, before its line terminator or the end of input. It produces no token and does not take part in indentation (`py-blank-comment-lines`, `py-comment-only`). This holds at any indentation, including a comment at column 0 inside a block.
+A **blank line** is a logical line that holds only spaces, tabs, form feeds and possibly a comment, before its line terminator or the end of input. It produces no token and does not take part in indentation (`py-blank-comment-lines`, `py-comment-only`). This holds at any indentation, including a comment at column 0 inside a block. **A `\` continuation in the leading white space does not change this:** if the physical line after the continuation holds only white space, a comment, or nothing before its terminator, the logical line is blank, as in CPython (`py-continuation-then-blank`).
 
 ### 4.4 Indentation (reference "Indentation")
 
@@ -99,12 +102,12 @@ At the start of each logical line, when no bracket or field is open, measure the
 
 The reference says a form feed at line start is ignored and elsewhere in leading white space has "an undefined effect (for instance, they may reset the space count to zero)". This profile pins the reset, which is what CPython does (`py-formfeed-indent`). Between tokens a form feed is white space (`py-formfeed-between`).
 
-**Backslash in the indentation.** If a `\` continuation occurs in the leading white space, the indentation is `(col, alt)` **at the first backslash**; white space after the continuation does not count. This is the reference's sentence "the whitespace up to the first backslash determines the indentation" (`py-backslash-indent`). CPython 3.14.6 departs when the backslash is at column 0 (it then counts the following line's spaces) and copies `col` into `alt` (D-3, `py-backslash-col0`).
+**Backslash in the indentation.** If a `\` continuation occurs in the leading white space, the indentation is `(col, alt)` **at the first backslash**; white space after the continuation does not count, and **later continuations in the same leading white space are skipped** (each still MUST be a valid continuation, §4.2). This is the reference's sentence "the whitespace up to the first backslash determines the indentation" (`py-backslash-indent`, `py-continuation-twice-indent`). CPython 3.14.6 departs when the backslash is at column 0 (it then counts the following line's spaces) and copies `col` into `alt` (D-3, `py-backslash-col0`).
 
 If the line is blank (§4.3), stop. Otherwise compare `(col, alt)` with the top of a stack that starts as `[(0, 0)]`:
 - **Equal `col`.** If `alt` differs, the result is `inconsistent-indentation`.
 - **Greater `col`.** If `alt` is not greater than the top's `alt`, `inconsistent-indentation`. Otherwise push and emit one INDENT.
-- **Smaller `col`.** Pop while `col` is smaller than the top's `col`, emitting one DEDENT per pop. Then if `col` differs from the new top's `col`, the result is `unmatched-dedent`. If `alt` differs, `inconsistent-indentation`.
+- **Smaller `col`.** Pop while `col` is smaller than the top's `col`, emitting one DEDENT per pop. Then if `col` differs from the new top's `col`, the result is `unmatched-dedent`. If `alt` differs from the new top's `alt`, `inconsistent-indentation` (`py-err-tab-dedent-alt`).
 
 Indentation errors are reported at the first byte of the line's first token. This two-width comparison is CPython's implementation of the reference's "mixes tabs and spaces in a way that makes the meaning dependent on the worth of a tab in spaces" (vectors `py-err-tab-vs-spaces`, `py-err-tab-indent-alt`, `py-err-tab4-dedent`, `py-tabs-consistent`, `py-err-unmatched-dedent`).
 
@@ -125,6 +128,8 @@ These three tokens carry Python's block structure and are kept in the token list
 CPython's ENDMARKER, NL and COMMENT tokens are not emitted. CPython's INDENT has the white space as its text and NEWLINE has `"\n"`; here both are empty, so the white-space width, the tab-or-space choice and CR LF versus LF never reach a hash (D-14).
 
 **Why zero-width.** With empty text, re-indenting a file (4 spaces to 2, spaces to tabs) leaves **both** channels' hashes unchanged, while block structure still changes them: only the number and order of INDENT and DEDENT tokens count. Line-joining style is invisible too, because a continuation produces no token (`py-linejoin-a/b`, `py-reindent-a/b`, both pairs checked to have identical exact and normalized hashes). This is consistent with the other profiles, whose exact channels also ignore white space.
+
+**Layout-only k-grams and empty spans.** Because these tokens are zero-width, a k-gram made only of layout tokens can have an **empty span**. At the default k = 5 this happens whenever a file ends four or more blocks deep: the last k-gram is NEWLINE followed by four DEDENTs, all at the input length, so its span is `[n, n)`, and it can be selected as a fingerprint (`py-empty-span-fingerprint`: span `[35, 35)`; the checker requires an empty-span fingerprint there). Layout-only k-grams inside a file have non-empty spans that cover only white space and comments. Such k-grams are identical across unrelated files and will be common hashes. **What the catalogue contract must say:** an empty span is a valid fingerprint span for `py-tokens` at every k, not only at k = 1, so a catalogue MUST store and a report MUST carry `[n, n)` unchanged, and a consumer MUST NOT treat it as an error or drop it. How M2 localization and suppression should treat layout-only k-grams belongs to the matching contract.
 
 ### 4.6 White space between tokens
 
@@ -191,6 +196,10 @@ The 48 tokens of the reference "Operators and delimiters" grammar, longest match
 
 `$`, `?` and `` ` `` (the reference: "Error (outside string literals and comments)"), every control character other than TAB, LF, CR and FF, and every non-ASCII character that cannot start or continue a name at that position: `illegal-character` at its offset. CPython's tokenizer returns OP for `$`, `?` and `` ` `` and leaves the rejection to the parser (D-7, `py-err-dollar`).
 
+### 5.7 Nesting: explicit stack required
+
+Brackets, f/t-strings, replacement fields and nested format-spec fields nest without a depth limit (D-9), so the only bound is `maxInputBytes`: about 350,000 levels within 1 MiB, 2.8 million within the 8 MiB contract bound. **An implementation MUST track nesting with an explicit stack, in memory linear in the input size (contract §10a). Recursion with one call per nesting level is non-conformant**, because it fails by stack overflow on inputs within `maxInputBytes`, which is a state the contract does not allow (contract §2: no result for an undecided state). Indentation levels are a stack too and fall under the same rule. Vectors `py-deep-brackets` (1,000 levels) and `py-deep-fstrings` (200 nested f-strings) are inside every allowed size limit; the review ran both lexers to about 349,000 levels.
+
 ## 6. f-strings and t-strings (PEP 701)
 
 ### 6.1 Structure
@@ -215,7 +224,7 @@ Inside a field the scanner is in normal mode (§4, §5): any token, including st
 - **`=`** (the debug specifier) and **`!`** (before a conversion) are ordinary punctuation, and the conversion letter is an `ident`. `!=` is one token by longest match.
 - A closer that does not match, such as `)` with the field on top, is `unbalanced-delimiter` at the closer (`py-err-fstring-mismatch`).
 
-**Spec mode** scans like literal mode, with three differences: the text is emitted as `fstring-middle`; **`{` always opens a nested field and `}` always closes the field** (no `{{`/`}}` escapes in a format spec: `py-fstring-spec-brace`, where `{{z}}` is a nested field holding a set display); and meeting the enclosing f-string's closing quote before the `}` is `unterminated-literal` at the f-string start. A line terminator in the spec of a single-quoted f-string is `unterminated-literal` at the f-string start (`py-err-fstring-spec-newline`); in a triple-quoted one it is spec text (`py-fstring-triple-spec`).
+**Spec mode** scans like literal mode, with three differences: the text is emitted as `fstring-middle`; **`{` always opens a nested field and `}` always closes the field** (no `{{`/`}}` escapes in a format spec: `py-fstring-spec-brace`, where `{{z}}` is a nested field holding a set display); and meeting the enclosing f-string's **closing delimiter** (one quote, or three for a triple-quoted f-string) before the `}` is `unterminated-literal` at the f-string start (`py-err-fstring-spec-quote`). Single quote characters inside the spec of a triple-quoted f-string are spec text (`py-fstring-triple-spec-quotes`). A line terminator in the spec of a single-quoted f-string is `unterminated-literal` at the f-string start (`py-err-fstring-spec-newline`); in a triple-quoted one it is spec text (`py-fstring-triple-spec`).
 
 CPython agrees with "no escapes in a spec" until a nested field has appeared in the spec, after which it treats `{{` as an escape (D-6, `py-fstring-spec-brace-after-field`). CPython also limits fields nested through specs to depth 2 ("expressions nested too deeply") and f-string nesting to 150; this profile has no limit (D-9).
 
@@ -224,13 +233,13 @@ CPython agrees with "no escapes in a spec" until a nested field has appeared in 
 In literal mode and spec mode, `\` and the next character are literal text, with these cases:
 - `\` before `{` or `}`: the backslash is text and the brace is processed normally, so `f'\{x}'` has a field (`py-fstring-backslash-brace`);
 - `\` before a line terminator: both are text (CR LF as one);
-- in a **non-raw** f/t-string, `\N{` starts a named escape: the next `}` is literal text and ends it. Inside it, `{` still opens a field and the closing quote and a line terminator act as usual, as in CPython. In a **raw** f-string `\N` is two characters of text and `{` opens a field (`py-fstring-named-escape`).
+- in a **non-raw** f/t-string, `\N{` starts a named escape: the next `}` is literal text and ends it. Inside it, `{` still opens a field (`py-fstring-named-escape-field`), and **that field ends the named escape**: after the field closes, a `}` is an ordinary literal-text brace (`f'\N{A{x}B}'` is `malformed-literal`, `py-err-fstring-named-escape-ended`). The closing delimiter and a line terminator act as usual inside the escape, as in CPython. In a **raw** f-string `\N` is two characters of text and `{` opens a field (`py-fstring-named-escape`).
 
 The escape's validity is not checked (§5.3).
 
 ### 6.4 End of input and errors inside f-strings
 
-At end of input, if a field is the innermost open construct, the result is `unterminated-literal` at the start of its f-string. If a bracket inside the field is innermost, it is `unbalanced-delimiter` at that bracket (contract §3 step 4). An error inside a field is reported where it occurs: `f'{x'` is `unterminated-literal` at the inner quote, offset 4 (`py-err-fstring-expr-unclosed`), where CPython reports "f-string: expecting '}'".
+At end of input, if a field is the innermost open construct, the result is `unterminated-literal` at the start of its f-string, not at the field's `{` (`py-err-fstring-eof-field`). If a bracket inside the field is innermost, it is `unbalanced-delimiter` at that bracket (contract §3 step 4). An error inside a field is reported where it occurs: `f'{x'` is `unterminated-literal` at the inner quote, offset 4 (`py-err-fstring-expr-unclosed`), where CPython reports "f-string: expecting '}'".
 
 ### 6.5 Normalized stream
 
@@ -300,7 +309,7 @@ The semicolon pair `py-semi-a/b` is shipped as a **negative** pair: the checker 
 | D-6 | `{{` in a format spec after a nested field (`f'{x:{y}{{z}}}'`) | grammar lists `{{` in FSTRING_MIDDLE generically | escape, but only after a nested field | always a nested field | One rule for the whole spec; CPython's behaviour depends on a flag cleared by the nested field |
 | D-7 | `$`, `?`, `` ` `` | "Error" | OP; the parser rejects | `illegal-character` | Reference; accept/reject agrees after parsing |
 | D-8 | Name characters new in Unicode 17.0.0 (4,647 start, 4,699 continue) | the `unicodedata` of the release | rejected (Unicode 16.0.0) | accepted | Contract §3a |
-| D-9 | Depth limits: 100 indentation levels, 200 brackets, 150 nested f-strings, field depth 2 inside specs | none stated, except "nested fields may not include more deeply nested replacement fields" | errors | no limits | Implementation limits, not lexical rules |
+| D-9 | Depth limits: 100 indentation levels, 200 brackets, 150 nested f-strings, field depth 2 inside specs | none stated, except "nested fields may not include more deeply nested replacement fields" | errors | no limits; an explicit stack is required (§5.7) | Implementation limits, not lexical rules (`py-deep-brackets`, `py-deep-fstrings`) |
 | D-10 | Error offsets | — | usually at the failing character | token start | Contract OD-13 |
 | D-11 | Closing quote inside a format spec (`f'{x:abc'`, `f'{x:abc' + y}`) | — | the tokenizer ends the f-string there and accepts the second example once a later `}` balances; the compiler rejects both ("expecting '}', or format specs") | `unterminated-literal` at the f-string start | The input is not valid Python either way; this names the cause at the lexical level |
 | D-12 | NFKC-equal names (`ﬁle`/`file`), `ｉｆ` | same name after NFKC; keywords on raw text | same | different exact values; `ｉｆ` is `ident` | Exact value is the original bytes (OD-9); normalized erases names |
@@ -309,6 +318,7 @@ The semicolon pair `py-semi-a/b` is shipped as a **negative** pair: the checker 
 | D-15 | f-string literal runs with `{{`, `}}`, `\N{...}` | one FSTRING_MIDDLE per run in the grammar | split into several FSTRING_MIDDLE tokens, and the escaped brace is dropped from the text | one `fstring-middle` with the original bytes | `text == input[span]`; matches the grammar |
 | D-16 | `\` at end of input, or `\` + terminator at end of input | — | "unexpected EOF" | `illegal-character` at `\` | Names the cause; both reject |
 | D-17 | Form feed inside leading white space | "undefined effect" | resets both counts | resets both counts | Pins the undefined case to CPython |
+| D-18 | Lone CR, through the `tokenize` readline path | a line terminator | `compile()`: a line terminator (universal newlines); `tokenize` readline: not one (`x\ry\r` gives OP `\ry`) | a line terminator | Follows the reference and `compile()`. The cross-check translates CR LF and CR to LF itself before calling the tokenizer (§1) |
 
 ## 10. Configuration
 
@@ -336,14 +346,14 @@ Digests: `py-tokens` `365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c
 | Prefixes (§5.3) | Checker: prefix letter set valid, class determined by the prefix, and no name of distinct prefix letters directly before a quote |
 | f/t-strings (§6) | Vectors tagged `fstring`/`tstring`; pylex re-lex; cross-check against CPython |
 | Unicode (§3.2) | Pinned table digest; `py-unicode-17`, `py-err-u2e2f`; cross-check sweep |
-| Normalized values, hashes, winnowing, ties, pairs (§7) | Checker recomputation with sort-based selection; 25 tie windows; format, re-indent, line-join and rename pairs equal where required; semicolon pair required to differ |
+| Normalized values, hashes, winnowing, ties, pairs (§7) | Checker recomputation with sort-based selection; tie windows in `py-repeated` and the deep-nesting vectors; an empty-span fingerprint required in `py-empty-span-fingerprint`; format, re-indent, line-join and rename pairs equal where required; semicolon pair required to differ |
 | Toolchain agreement | [harness/crosscheck.py](extraction-vectors-python/harness/crosscheck.py): vectors, standard library, Unicode sweep, differential fuzz |
 
-**Results, draft-1, 2026-11-23** (Python 3.14.6, the only interpreter used).
+**Results, draft-1 after the review fixes, 2026-11-23** (Python 3.14.6, the only interpreter used).
 
-- **Checker:** PASS. `py.json`: 95 vectors (60 accepted, 35 errors), 680 tokens of which 134 are layout tokens, 449 exact k-grams, 312 fingerprints, 25 tie windows, 5 pairs, all 17 classes. `limits-py.json`: 3 vectors. All 20 negative configurations rejected.
+- **Checker:** PASS. `py.json`: 107 vectors (68 accepted, 39 errors), 3,548 tokens of which 158 are layout tokens, 3,285 exact k-grams, 5,118 fingerprints, 5,580 tie windows (almost all in the two deep-nesting vectors), 5 pairs, all 17 classes. The 95 vectors of the reviewed text are byte-identical; the 12 added ones are listed in §16. `limits-py.json`: 3 vectors. All 20 negative configurations rejected.
 - **Vector-corruption self-test: 32 of 32 rejected**, 28 of them lexical. Each corrupted vector is rehashed so only the targeted layer is wrong. Examples: a dropped final DEDENT, DEDENT at the line start, NEWLINE before a trailing comment, NEWLINE inside brackets, blank-comment-line INDENT/DEDENT, `match` as keyword, `None` as ident, fullwidth `if` as keyword, `**=` and `->` split, `<>` merged, `..` merged, `0x_fF` as float, `09.5` split, `1if` merged, `b'w'` as string, `uu'x'` as one string, a whole f-string as one string, `{{c}}` split, `:=` taken inside a field, a t-string relabelled, wrong code, moved offsets, an invented code, a leftmost tie, a flipped hash bit, a `;` exclusion, and `tokenIndices` on a profile without exclusions.
-- **Wrong-lexer self-test: 24 of 24 rejected.** Each is a `pylex.Lexer` subclass with one rule changed. The vectors that reject each one:
+- **Wrong-lexer self-test: 29 of 29 rejected** (24, plus the 5 the review found accepted). Each is a `pylex.Lexer` subclass with one rule changed. The vectors that reject each one:
 
   | Wrong lexer | Rejected by |
   | --- | --- |
@@ -371,13 +381,18 @@ Digests: `py-tokens` `365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c
   | NEWLINE at the end of the last token | `py-format-b`, `py-continuation-blank`, `py-newline-after-comment`, `py-type-comment` |
   | the interpreter's Unicode 16.0.0 name tables | `py-unicode-17` |
   | `:=` wins over the spec `:` inside a field | `py-fstring-debug-walrus` |
+  | review W03: no tab-size-1 check after a dedent | `py-err-tab-dedent-alt` |
+  | review W12: a non-ASCII character after a number is malformed | `py-number-nonascii-follow` |
+  | review W15: the closing quote inside a spec ends the f-string | `py-err-fstring-spec-quote` |
+  | review W17: `{` inside `\N{...}` is text | `py-fstring-named-escape-field` |
+  | review W19: end of input in a field reported at the field's `{` | `py-err-fstring-eof-field` |
 
-- **Cross-check, vectors** (CPython 3.14.6). Of the 60 accepted vectors, 56 agree token for token and 4 diverge as tagged departures (`py-backslash-col0`, `py-unicode-17`, `py-ltgt`, `py-fstring-spec-brace-after-field`). Of the 31 lexical error vectors, 17 are rejected by CPython at the same offset, 13 at another offset, and 1 (`py-err-dollar`, D-7) only by CPython's parser. 4 pre-lexing vectors are not compared. **0 undocumented divergences.**
+- **Cross-check, vectors** (CPython 3.14.6). Of the 68 accepted vectors, 62 agree token for token and 6 diverge as tagged departures (`py-backslash-col0`, `py-unicode-17`, `py-ltgt`, `py-fstring-spec-brace-after-field`, and `py-deep-brackets` and `py-deep-fstrings` against CPython's depth limits, D-9). Of the 35 lexical error vectors, 18 are rejected by CPython at the same offset, 16 at another offset, and 1 (`py-err-dollar`, D-7) only by CPython's parser. 4 pre-lexing vectors are not compared. **0 undocumented divergences.**
 - **Cross-check, standard library** of the same interpreter: 1,852 `.py` files, 36.0 MB. **1,847 of 1,847 lexable files agree token for token** (5,909,005 tokens, with 76 middle-run merges and 39 dropped empty middles). 4 files fail the pre-lexing checks: 3 `invalid-utf8`, 1 `bom`, all deliberate test data. 1 file (`test/tokenizedata/badsyntax_3131.py`) is rejected by both at the same offset.
 - **Differential fuzz:** mutated standard-library snippets plus random concatenations of f-string, prefix, number and layout fragments, compared on accept/reject and token streams. Seed 11, 400,000 cases: 5,332 divergences, every one in a documented class (D-7 2,973, D-5 1,485, D-8 848, D-3 25, D-11 1); no other class. The full run's figures are in the [README](extraction-vectors-python/README.md#2-cross-check-against-cpython-3146). While writing the lexer, earlier fuzz runs found two real rule errors, both since fixed and pinned by vectors: `0or` (`py-err-radix-empty`) and whole-word matching for `and/else/for/not/or` (`py-err-number-whole-word`).
 - **Unicode sweep:** name start differs on 4,647 code points and continue on 4,699; all are accepted by the profile and rejected by CPython (D-8). None go the other way.
 
-**Limits.** The hand-written streams, `pylex.py`, the independent checks and the wrong-lexer variants are by one author from one text. Their agreement, and the CPython agreement, show the text was applied consistently and that it matches CPython. They do not show that two independent readers of this text would agree. That needs a clean-room review like the TypeScript one, and two implementations (§13). The standard library is well-formed Python; the fuzz covers malformed input only as far as its fragment list reaches.
+**Limits.** The hand-written streams, `pylex.py`, the independent checks and the wrong-lexer variants are by one author from one text. Their agreement, and the CPython agreement, show the text was applied consistently and that it matches CPython. The [clean-room review](../reviews/extraction-profile-python-review.md) then reproduced all 98 vectors of the reviewed text from the text alone, with four ambiguities and five unpinned rule choices, all resolved in §16. Two independent implementations (§13) remain the next gate. The standard library is well-formed Python; the fuzz covers malformed input only as far as its fragment list reaches.
 
 ## 12. Decisions
 
@@ -393,7 +408,7 @@ Digests: `py-tokens` `365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c
 | PYOD-6 | Indentation by the reference's backslash sentence, not CPython's column-0 quirk (D-3); form feed resets (D-17) | Authority first; the undefined case pinned to CPython |
 | PYOD-7 | Numbers: longest grammar match plus CPython 3.14's follow rule, including the radix check and whole-word exceptions (§5.4) | Accepts exactly what 3.14 accepts; no new behaviour invented |
 | PYOD-8 | Format spec: no `{{`/`}}` escapes; closing quote inside a spec is `unterminated-literal` (D-6, D-11) | One rule per mode |
-| PYOD-9 | No depth limits (D-9) | Limits are implementation details |
+| PYOD-9 | No depth limits (D-9); nesting MUST use an explicit stack, not recursion (§5.7) | Limits are implementation details; the stack rule keeps every input within `maxInputBytes` decidable |
 | PYOD-10 | f/t-string internals in stage 1 (§6.5, §13) | Finding the end needs the full field lexer anyway |
 
 **Must be settled before implementation:**
@@ -451,3 +466,36 @@ Digests: `py-tokens` `365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c
 | Token serialization | §7, contract §6 |
 | Hash parameters, window sizes, tie-breaking | Contract §7–§8 and OD-10 (k = 5, w = 4, rightmost minimum) |
 | Coordinate units | UTF-8 byte offsets, half-open (contract §3). The cross-check converts CPython's line/column code-point positions, after its CR LF/CR translation, back to the original input |
+
+## 16. Review dispositions
+
+The [clean-room review](../reviews/extraction-profile-python-review.md) of commit `1c5c06a` (review commit `0db8b44`) found:
+
+| Finding | Resolution |
+| --- | --- |
+| §3 W03, W12, W15, W17, W19: five wrong lexers the checker accepted (blocking) | One vector each, and the five variants added to the wrong-lexer self-test, which now rejects 29 of 29: `py-err-tab-dedent-alt` (W03), `py-number-nonascii-follow` (W12), `py-err-fstring-spec-quote` (W15, D-11), `py-fstring-named-escape-field` (W17), `py-err-fstring-eof-field` (W19) |
+| A1 does a field end a `\N{` named escape (blocking) | Yes (§6.3); `py-err-fstring-named-escape-ended` |
+| A2 continuation in leading white space followed by an empty or comment-only line (blocking) | The logical line is blank (§4.3); `py-continuation-then-blank` |
+| A3 a second continuation in the same leading white space (blocking) | Skipped; the indentation is fixed at the first (§4.4); `py-continuation-twice-indent` |
+| A4 a single quote in the spec of a triple-quoted f-string (blocking) | Only the closing delimiter, one or three quotes, counts (§6.2); `py-fstring-triple-spec-quotes` |
+| L2 recursion bounded only by input size (blocking) | §5.7: an explicit stack is required and per-level recursion is non-conformant; `py-deep-brackets` (1,000 levels) and `py-deep-fstrings` (200 levels) |
+| C2 oracle entry point for lone CR | §1 and D-18: judged against `compile()`; the cross-check translates CR LF and CR itself before calling the tokenizer |
+| L1 layout-only k-grams with empty spans | §4.5 note with what the catalogue contract must say; `py-empty-span-fingerprint`, whose empty-span fingerprint `[35, 35)` the checker requires |
+| L3 which encoding names count as UTF-8 | §3.1 list (PYOD-2) |
+
+**No token, hash or existing vector changed**: the 95 earlier vectors are byte-identical, the configuration digests are unchanged, and the version stays `draft-1`. `py-err-fstring-spec-quote` is not tagged `departure`, because CPython's tokenizer also rejects that input; D-11 applies only when a later `}` balances the field.
+
+## 17. Freeze record: `py-tokens` `draft-1`
+
+**Frozen for stage-1 implementation, pending owner confirmation of the decided-in-draft items** (§12: PYOD-1 to PYOD-10). Implementations target these exact bytes. Any change to them needs a new `profileVersion` (contract §10 versioning).
+
+| File (in [extraction-vectors-python/](extraction-vectors-python/README.md)) | SHA-256 |
+| --- | --- |
+| `py.json` (107 vectors) | `85de9fdf8c2469447bd20da890498d203013545f4f402802c218520118e2813a` |
+| `limits-py.json` (3 vectors) | `94b6d7b2f0c498be5bbafff3c92ecdcdac9de1beb6a5781b0cf8d5c5d7ff666a` |
+| `config-py.json` (= `configSha256`) | `365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c77b016` |
+| `config-py-limit16.json` | `02dd6c5790677df8175faada9fdb938613e26dc6ed886ec597fc642aea64c562` |
+| `config-negative-python.json` (20 negatives) | `509203a14b281cb87d4f80298b6f0b20cc25b53ee75dee43b82cd06218ba8522` |
+| `../../../test-vectors/extraction/unicode-17.0.0-tables.json` (shared, contract §3a) | `9363b97eb849cb236c786098f017728ad04688782f07c2969afddf93b03ac29f` |
+
+**The normative text** is this document's §1–§10, with `normalizedExclusions` empty. Its digest is the git blob at the commit that adds this record. `check_vectors.py`, `pylex.py` and the harness are verification tooling, not frozen artifacts. They may change without a version bump as long as the frozen bytes above still pass. The open decisions in §12 that must be settled before implementation (PYOD-4, PYOD-6, PYOD-1) are settled as currently written unless the owner rules otherwise; a different ruling is a new `profileVersion`.

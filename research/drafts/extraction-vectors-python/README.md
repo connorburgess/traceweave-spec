@@ -1,6 +1,6 @@
 # Draft Python extraction vectors (`py-tokens`, revision draft-1)
 
-Status: experimental draft for review, 2026-11-23. Not normative and not frozen. These go with the [draft Python profile](../extraction-profile-python.md), which plugs into the [extraction contract](../../../spec/extraction.md). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
+Status: experimental draft, 2026-11-23. **`py-tokens` `draft-1` vectors are frozen for stage-1 implementation, pending owner confirmation of the decided-in-draft items**; the digests are in [profile §17](../extraction-profile-python.md#17-freeze-record-py-tokens-draft-1). Not promoted to `test-vectors/`. The [clean-room review](../../reviews/extraction-profile-python-review.md) fixes are in [profile §16](../extraction-profile-python.md#16-review-dispositions). These go with the [draft Python profile](../extraction-profile-python.md), which plugs into the [extraction contract](../../../spec/extraction.md). They are research fixtures, not files in `test-vectors/`, and they make no detection-accuracy claim.
 
 ## Files
 
@@ -9,7 +9,7 @@ Status: experimental draft for review, 2026-11-23. Not normative and not frozen.
 | `config-py.json` | Exact configuration bytes (contract §10) for `py-tokens`/`draft-1`, 1 MiB limit. Do not reformat: the digest covers the trailing LF |
 | `config-py-limit16.json` | The same with `maxInputBytes` 16, used by `limits-py.json` |
 | `config-negative-python.json` | 20 configuration byte strings that MUST be rejected as `unsupported-config` (base64), each with its `expectedResult` |
-| `py.json` | 95 vectors: 60 accepted, 35 errors |
+| `py.json` | 107 vectors: 68 accepted, 39 errors |
 | `limits-py.json` | 3 vectors: exactly the limit, over it, and over it with a BOM (size is checked first) |
 | `pylex.py` | The checker's lexer, written from the profile text. Each rule choice is a method, so wrong-lexer variants can override one |
 | `check_vectors.py` | Checker, standard library only |
@@ -36,7 +36,8 @@ The Unicode identifier table is the shared, read-only [unicode-17.0.0-tables.jso
 | Numbers | `py-numbers`, `py-number-keyword`, `py-number-dot`, `py-err-number-ident`, `-legacy-octal`, `-number-underscore`, `-radix-empty`, `-number-whole-word`, `-exponent`, `-imag-digit`, `-number-dot-ident` |
 | Strings and prefixes | `py-string-prefixes`, `py-string-escapes`, `py-string-content-not-checked`, `py-raw-backslash`, `py-triple-quoted`, `py-implicit-concat`, `py-prefix-ident`, `py-err-prefix-ur`, `-prefix-fb`, `-unterminated-string`, `-unterminated-triple`, `-raw-odd-backslash` |
 | f- and t-strings | `py-fstring-basic`, `-nested-quotes`, `-debug-walrus`, `-multiline-expr`, `-named-escape`, `-backslash-brace`, `-triple-spec`, `-spec-brace`, `-spec-brace-after-field` (departure), `py-tstring`, `py-err-fstring-single-brace`, `-unterminated`, `-spec-newline`, `-expr-unclosed`, `-mismatch` |
-| Brackets | `py-err-unbalanced-closer`, `py-err-unclosed` |
+| Brackets and deep nesting (explicit stack, profile §5.7) | `py-err-unbalanced-closer`, `py-err-unclosed`, `py-deep-brackets`, `py-deep-fstrings` (both departures, D-9) |
+| Review additions | `py-err-tab-dedent-alt`, `py-number-nonascii-follow`, `py-err-fstring-spec-quote`, `py-fstring-named-escape-field`, `py-err-fstring-named-escape-ended`, `py-err-fstring-eof-field`, `py-continuation-then-blank`, `py-continuation-twice-indent`, `py-fstring-triple-spec-quotes`, `py-empty-span-fingerprint` (a fingerprint with span `[35, 35)`) |
 | Size | `py-limit-exact`, `py-limit-over`, `py-limit-over-bom` |
 
 ## 1. Checker
@@ -49,11 +50,11 @@ Output on 2026-11-23 (Python 3.14.6):
 
 ```
 PASS config-negative-python.json: 20/20 invalid configurations rejected
-PASS py.json profile=py-tokens/draft-1 config=365ba7be82646f65... vectors=95 tokens=680 (layout 134) kgrams=449 fingerprints=312 tie-windows=25 errors=35 (code and offset re-derived) pairs=5 classes=17
+PASS py.json profile=py-tokens/draft-1 config=365ba7be82646f65... vectors=107 tokens=3548 (layout 158) kgrams=3285 fingerprints=5118 tie-windows=5580 errors=39 (code and offset re-derived) pairs=5 classes=17
 PASS limits-py.json profile=py-tokens/draft-1 config=02dd6c5790677df8... vectors=3 tokens=8 (layout 2) kgrams=4 fingerprints=2 tie-windows=0 errors=2 (code and offset re-derived) pairs=0 classes=3
 PASS every accepted vector has derivation=hand and a pairedRejection that is an error vector
 PASS mutation self-test: 32/32 corruptions rejected (28 lexical)
-PASS wrong-lexer self-test: 24/24 wrong lexers rejected
+PASS wrong-lexer self-test: 29/29 wrong lexers rejected
 ```
 
 With `-v` it lists, for each wrong lexer, every vector that rejects it (profile §11 has the table).
@@ -74,7 +75,7 @@ With `-v` it lists, for each wrong lexer, every vector that rejects it (profile 
 
 **Mutation self-test.** 32 corruptions, each rehashed so only the targeted layer is wrong (profile §11 lists them).
 
-**Wrong-lexer self-test.** 24 `pylex.Lexer` subclasses, each with one rule changed, substituted for the profile's lexer. Every one must fail on at least one shipped vector, and every one does.
+**Wrong-lexer self-test.** 29 `pylex.Lexer` subclasses (the 24 of the reviewed text and the review's W03, W12, W15, W17, W19), each with one rule changed, substituted for the profile's lexer. Every one must fail on at least one shipped vector, and every one does.
 
 **Limits.** The streams, `pylex.py`, the independent checks and the variants were written by one author from one text. Agreement shows consistency and agreement with CPython, not that an independent reader would reach the same streams; that needs a clean-room review.
 
@@ -87,12 +88,12 @@ python3 -I harness/crosscheck.py --vectors --stdlib --unicode [--fuzz N --seed S
 
 Offline, standard library only. The script refuses any interpreter other than 3.14.6 unless `--any-version` is given. **Oracles:** the C tokenizer in parser mode (`tokenize._generate_tokens_from_c_tokenizer(..., extra_tokens=False)`) for accept/reject and error position, and `tokenize.generate_tokens` for token positions. CR LF and lone CR are translated to LF first, as CPython does, with an offset map back to the original input. Classes are compared coarsely: NAME, NUMBER, STRING. **Declared adjustments:** consecutive FSTRING_MIDDLE tokens are merged into one run (`fmid-merge`), and empty ones are dropped (`empty-fmid`).
 
-Run on 2026-11-23, CPython 3.14.6:
+Run on 2026-11-23 after the review fixes, CPython 3.14.6. Lone CR is judged against `compile()`; the readline path of `tokenize` does not treat it as a line terminator, so the harness translates CR LF and CR first (profile D-18).
 
 | Part | Result |
 | --- | --- |
-| Accepted vectors (60) | 56 agree token for token. 4 diverge, all tagged `departure`: `py-backslash-col0` (D-3), `py-unicode-17` (D-8), `py-ltgt` (D-5), `py-fstring-spec-brace-after-field` (D-6) |
-| Lexical error vectors (31) | 17 rejected by CPython at the same offset, 13 at another offset (OD-13 token start against CPython's failing character), 1 rejected only by CPython's parser (`py-err-dollar`, D-7, tagged `departure`) |
+| Accepted vectors (68) | 62 agree token for token. 6 diverge, all tagged `departure`: `py-backslash-col0` (D-3), `py-unicode-17` (D-8), `py-ltgt` (D-5), `py-fstring-spec-brace-after-field` (D-6), `py-deep-brackets` and `py-deep-fstrings` (D-9, CPython's depth limits) |
+| Lexical error vectors (35) | 18 rejected by CPython at the same offset, 16 at another offset (OD-13 token start against CPython's failing character), 1 rejected only by CPython's parser (`py-err-dollar`, D-7, tagged `departure`) |
 | Pre-lexing vectors (4) | Not compared |
 | Undocumented divergences | **0** |
 | Standard library of the interpreter: 1,852 `.py` files, 36,036,024 bytes | **1,847/1,847 lexable files agree**, 5,909,005 tokens, with 76 `fmid-merge` and 39 `empty-fmid` adjustments. 4 fail the pre-lexing checks (3 `invalid-utf8`, 1 `bom`; all deliberate test data). 1 (`test/tokenizedata/badsyntax_3131.py`) is rejected by both at the same offset |

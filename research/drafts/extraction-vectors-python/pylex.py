@@ -224,6 +224,22 @@ class Lexer:
     def whitespace(self, c):
         return c in " \t\f"
 
+    def dedent_checks_alt(self):
+        """§4.4: after popping, the tab-size-1 width must equal the new top's too."""
+        return True
+
+    def spec_closing_quote_is_error(self):
+        """§6.2: the enclosing f-string's closing delimiter inside a format spec is an error."""
+        return True
+
+    def brace_in_named_escape_opens_field(self):
+        """§6.3: inside '\\N{...}', '{' still opens a field (and ends the named escape)."""
+        return True
+
+    def eof_in_field_offset(self, field):
+        """§6.4: end of input with a field innermost is reported at the f/t-string start."""
+        return field["fstr"]["start"]
+
     # ------------------------------------------------------------ machinery
     def __init__(self, text):
         self.s = text
@@ -289,7 +305,8 @@ class Lexer:
         if self.stack:
             top = self.stack[-1]
             if top["kind"] in ("field", "fstr"):
-                raise LexError("unterminated-literal", top["fstr"]["start"] if top["kind"] == "field" else top["start"])
+                raise LexError("unterminated-literal",
+                               self.eof_in_field_offset(top) if top["kind"] == "field" else top["start"])
             raise LexError("unbalanced-delimiter", top["pos"])
         if self.line_has_tokens:
             self.emit("newline", n, n)
@@ -349,7 +366,7 @@ class Lexer:
                 pops += 1
             if col != self.ind[-1][0]:
                 raise LexError("unmatched-dedent", j)
-            if tabs and alt != self.ind[-1][1]:
+            if tabs and self.dedent_checks_alt() and alt != self.ind[-1][1]:
                 raise LexError("inconsistent-indentation", j)
             for _ in range(pops):
                 self.emit("dedent", pos, pos)
@@ -432,11 +449,12 @@ class Lexer:
             if not fs["triple"] and self.line_terminator_len(j):
                 raise LexError("unterminated-literal", fs["start"])
             if s.startswith(closing, j):
-                if spec:
+                if spec and self.spec_closing_quote_is_error():
                     raise LexError("unterminated-literal", fs["start"])
                 flush(j)
                 self.emit(cls + "-end", j, j + len(closing))
-                self.stack.pop()
+                while self.stack.pop() is not fs:  # only a wrong variant reaches this with fields open
+                    pass
                 return j + len(closing)
             if c == "\\":
                 k = j + 1
@@ -455,6 +473,9 @@ class Lexer:
                     j = k + 2
                     continue
                 j = k + 1
+                continue
+            if c == "{" and named and not self.brace_in_named_escape_opens_field():
+                j += 1
                 continue
             if c == "{":
                 if s.startswith("{{", j) and (not spec or self.spec_brace_escapes()):

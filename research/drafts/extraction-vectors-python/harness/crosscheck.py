@@ -180,6 +180,8 @@ def classify(text, mine, theirs):
             return "D-backslash-indent"
         if "invalid character" in msg or "non-printable" in msg:
             return "CPython rejects identifier character"
+        if "too many nested" in msg or "nested too deeply" in msg or "too many levels" in msg:
+            return "D-9 (CPython depth limit)"
         return f"CPython rejects, profile accepts: {theirs[1]}: {msg[:60]}"
     a, b = mine[1], theirs[1]
     texts_a = [text[s:e] for _, s, e in a if _ == "punct"]
