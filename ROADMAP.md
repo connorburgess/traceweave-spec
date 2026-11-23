@@ -12,6 +12,8 @@ Initial experimentation uses synthetic Go and Rust source code, with planned exp
 
 Embedded marking and detection are a first-class research track alongside extracted fingerprint matching. Provenance verification supports both. A baseline matcher is useful for comparison, but does not satisfy the embedding use case. No marking method is standardized yet.
 
+**Finding (2026-11-23, image marks).** On the `e-img-m-2` evidence (synthetic images, [results recheck](research/reviews/image-mark-protocol-review.md#results-recheck-e-img-m-2)), an image mark can serve as a finding aid, but not as evidence of origin. The marks transfer between images without the key, and every copy was accepted. Evidence of origin must come from a signed, timestamped registration record (M4, and the C2PA mapping). The embedded-code results (the SYN records) remain negative. So does the embedded-text evidence (lane 09); TXT.8 stays formally open until a non-author confirms that reading.
+
 ## How progress is counted
 
 Every milestone is split into gates. A gate has an ID, a verifiable criterion, a type, a status and an owner. Embedded marking stays a first-class track alongside extracted fingerprints.
@@ -193,12 +195,12 @@ On 2026-11-23 the owner approved two openings. Both are recorded here in paraphr
 
 ## Progress count
 
-Counted on 2026-11-22 from the status columns above. In the later-profile table, a row is open unless its criterion ends with a **Status** note; IMGF.2, IMGF.3 and IMGF.4 are met.
+Counted on 2026-11-23 from the status columns above. In the later-profile table, a row is open unless its criterion carries a **Status: met** note; IMGF.2–IMGF.4 and IMG.0–IMG.4 are met.
 
 | Gates | Total | Met | Negative-result | Open |
 | --- | --- | --- | --- | --- |
 | Core M0–M5 | 47 | 11 (M0.1, M0.2, M0.3, M0.4, M2.5, M2.8, M2.10, M2.11, M3.0, M4.1, M4.2) | 0 | 36 |
-| Later profiles, EXT and RC | 41 | 3 (IMGF.2, IMGF.3, IMGF.4) | 0 | 38 |
+| Later profiles, EXT and RC | 41 | 8 (IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4) | 0 | 33 |
 
 M0.1 is met on the second non-author recount (`3a640b3`). M2.5 and M2.8 are met on the [I2 review](research/reviews/implementation-merge-i2-review.md) (`de9a5b7`) of implementation `82b02ab`.
 
@@ -266,12 +268,20 @@ The owner may narrow this reading. Core M1–M3 gates keep priority under the su
 | IMGF.5 | E | Two implementations produce identical PDQ hashes and quality scores on the IMGF.2 vectors and the full frozen synthetic set. A ThreatExchange C++ reference build is one of the comparisons | I |
 | IMGF.6 | R | Any at-scale false-match measurement of our own: a held-out real image set, a frozen threshold, and per-query false matches against a stated catalogue size, each with its denominator. Owner-gated (real image sets); open until approved and run | I |
 | **IMG — image marks, later and owner-gated** ([lane 08](research/lanes/08-evidence-review.md), [lane 10](research/lanes/10-evidence-review.md)) | | | |
-| IMG.0 | O | Owner approves UC-7 ("a creator marks images they publish and later checks a candidate"), written like UC-6, and the TrustMark weight download. **This is a prerequisite of IMG.1–5**, which also start only after IMGF.4 closes. The 2026-11-22 override does not cover mark studies **Status: approved; use-case wording being drafted** ([owner decision on image marks and C2PA](#owner-decision-2026-11-23-image-marks-and-c2pa)). The weight download is approved once licences are checked. This gate is met only when UC-7 is merged into `docs/use-cases.md` and counted as worded. | S |
-| IMG.1 | E | Pin record: TrustMark code commit; weight SHA-256; code, weight and dependency licences; licensed non-private image set Not owner-blocked for synthetic images and permissively licensed weights. Real-image sets, non-commercial or unclear-licence weights, and GPU spend stay owner-gated. | I |
-| IMG.2 | E | Embed and detect pass with network denied after provisioning. Either `sandbox-exec` deny-network or `scripts/offline` (implementation repository) is acceptable, together with the harness network probe, which must fail first. This matches IMGF.4 ([image mark protocol review](research/reviews/image-mark-protocol-review.md), M3) | I |
-| IMG.3 | E | Frozen and committed before running: transformation list (JPEG, resize, crop, ReMark, and VAE regeneration only if its weight licence is accepted), PSNR floor, threshold, a `dwtDct` no-key negative control and a residual-transplant arm | I |
-| IMG.4 | R | Whole-message success per transformation; unmarked and wrong-key false detections; transplant result. Each has a denominator | I |
-| IMG.5 | E | IMGF and IMG results fit the lane-08 container fields, or a schema change goes through CONTRIBUTING | S |
+| IMG.0 | O | Owner approves UC-7 ("a creator marks images they publish and later checks a candidate"), written like UC-6, and the TrustMark weight download. **This is a prerequisite of IMG.1–5**, which also start only after IMGF.4 closes. The 2026-11-22 override does not cover mark studies **Status: met** (`3147237`). The owner approved the study and the weight download on 2026-11-23 ([owner decision on image marks and C2PA](#owner-decision-2026-11-23-image-marks-and-c2pa)); the lane 12 licence check cleared the weights. Under the owner's delegation of routine decisions, the coordinator accepted the reviewed UC-7 wording. It is merged as [UC-7](docs/use-cases.md#uc-7-recognize-a-marked-image), written like UC-6, and counted in the capability index (14 rows: the 13 M0.1 capabilities plus UC-7). | S |
+| IMG.1 | E | Pin record: TrustMark code commit; weight SHA-256; code, weight and dependency licences; licensed non-private image set Not owner-blocked for synthetic images and permissively licensed weights. Real-image sets, non-commercial or unclear-licence weights, and GPU spend stay owner-gated. **Status: met** (pins and licences: lane 12, re-verified at run time in results `a78aace`: 84/84 sources, 6/6 weight SHA-256, 0 environment deviations; [results recheck](research/reviews/image-mark-protocol-review.md#results-recheck-e-img-m-2) `d3d4788`). Coordinator decision, 2026-11-23: the deterministic, project-generated synthetic image set satisfies the "licensed non-private image set" clause for this study. Any real-image set stays owner-gated. | I |
+| IMG.2 | E | Embed and detect pass with network denied after provisioning. Either `sandbox-exec` deny-network or `scripts/offline` (implementation repository) is acceptable, together with the harness network probe, which must fail first. This matches IMGF.4 ([image mark protocol review](research/reviews/image-mark-protocol-review.md), M3) **Status: met** (results `a78aace`; [results recheck](research/reviews/image-mark-protocol-review.md#results-recheck-e-img-m-2) `d3d4788`). Steps ran under `sandbox-exec` deny-network, with the probe refused first; P1 was 100/100 for both learned schemes. | I |
+| IMG.3 | E | Frozen and committed before running: transformation list (JPEG, resize, crop, ReMark, and VAE regeneration only if its weight licence is accepted), PSNR floor, threshold, a `dwtDct` no-key negative control and a residual-transplant arm **Status: met** (frozen `d3af1ee`, protocol `e-img-m-2`, digest `cba36673…`; results `a78aace` descend from it, and code identity was verified; [results recheck](research/reviews/image-mark-protocol-review.md#results-recheck-e-img-m-2) `d3d4788`). | I |
+| IMG.4 | R | Whole-message success per transformation; unmarked and wrong-key false detections; transplant result. Each has a denominator **Status: met** (results `a78aace`, frozen `d3af1ee`, [results recheck](research/reviews/image-mark-protocol-review.md#results-recheck-e-img-m-2) `d3d4788`). **Headline counts, synthetic images only, out of 100 per condition, TrustMark-Q / PixelSeal.**
+- Clean: 100 / 100.
+- ReMark: 1 / 99.
+- JPEG quality 10: 48 / 18.
+- Residual transplant accepted: 82 / 90.
+- Keyless re-embed accepted: 100 / 100.
+- Wrong key, unmarked and wrong entry: 0 accepts (10,000, 20,000 and 9,900 comparisons per scheme).
+
+Removal and forgery counts are lower bounds on what an attacker can do. Full counts are in the recheck. | I |
+| IMG.5 | E | IMGF and IMG results fit the lane-08 container fields, or a schema change goes through CONTRIBUTING **Status: open.** One decision remains: where the six detection-record fields with no home in the lane-08 container should live. They are model digests, the statistic with its n, the threshold basis, the key and derivation id, embedding quality, and which bit positions are tested. The options are a container extension or a profile-specific record, under CONTRIBUTING. | S |
 | **TXT — text and documents** ([lane 09](research/lanes/09-evidence-review.md); proposed [UC-8](docs/use-cases.md#proposed-uc-8-find-reused-passages-in-prose)) | | | |
 | TXT.0 | O | Owner accepts the wording of proposed UC-8 in `docs/use-cases.md`, or amends it. Not a prerequisite of TXT.1–TXT.4 under the override | S |
 | TXT.1 | E | A text extraction profile answers every item of lane 09's "How the extraction contract could host a text profile", with 0 TBDs. Items: format front end (`plain`/`markdown`, pinned CommonMark version); BOM policy; the fold over pinned Unicode 17.0.0 files (NFKC, full case folding, delete Default_Ignorable_Code_Point, White_Space mapping, optional confusable channel pinned by `confusables.txt` digest); token rule, including scripts written without spaces; `exact` and `folded` channels with no stemming or stop words; span mapping of every folded token to its original half-open UTF-8 byte span; k and w in the config bytes; a closed error list; and a hash-framing string | S |

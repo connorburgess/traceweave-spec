@@ -26,7 +26,7 @@ Updated 2026-11-23 after the owner decisions of that day. Implementation reposit
 | TS.1–TS.3, TXT.1–TXT.3 | `ts-tokens` and `text-plain` profiles | Frozen for stage 1 and registered in the draft contract. Not yet implemented in the implementation repository |
 | IMGF.1, IMGF.5 | Image profile item map; second implementation with a C++ reference build | Open. IMGF.2–IMGF.4 met (`ec0cf67`) |
 | M2E.0, M2E.1 | Select a carrier or omit embedding | Open. [Lane 06](lanes/06-evidence-review.md) found no ready candidate |
-| IMG.0–IMG.5 | Image embedded-mark study on child lanes: UC-7 wording, then pin record, offline embed/detect, frozen protocol and results | Opened 2026-11-23 ([owner decision on image marks and C2PA](../ROADMAP.md#owner-decision-2026-11-23-image-marks-and-c2pa)). IMG.0 is approved, with the use-case wording being drafted. Synthetic images and permissively licensed weights only, after a licence check |
+| IMG.0–IMG.5 | Image embedded-mark study | IMG.0–IMG.4 met: UC-7 accepted (`3147237`); run `e-img-m-2`, with results `a78aace`, frozen `d3af1ee` and [recheck](reviews/image-mark-protocol-review.md#results-recheck-e-img-m-2) `d3d4788`. Finding: a finding aid, not evidence of origin (marks transfer without the key). Open: IMG.5, which needs a decision on where the six detection-record fields live. Real-image sets stay owner-gated |
 | C2PA.1–C2PA.3 | C2PA mapping pinned to one version; round-trip fixtures; no compatibility claim until they pass | In progress; sequencing override of 2026-11-23 ([owner decision on image marks and C2PA](../ROADMAP.md#owner-decision-2026-11-23-image-marks-and-c2pa)) |
 | Lane 11 | External feedback audit (`research/lanes/11-report-audit.md`, brief `research/prompts/11-external-feedback.md`) | In progress; a progress record, not a gate |
 | I3 (M3.1–M3.5) | Evaluation harness in the implementation repository: manifest and licence checks, frozen splits and config, held-out run | Started. Corpus acquisition is approved (owner decisions of 2026-11-23) |
@@ -34,7 +34,7 @@ Updated 2026-11-23 after the owner decisions of that day. Implementation reposit
 | Implementation CI | `scripts/check` as a hosted workflow in the implementation repository | In progress. Enabling hosted CI follows the push decision |
 | Owner | M2E.0; TXT.0, TXT.5, TXT.8; IMGF.6; for image marks, real-image sets, non-commercial or unclear-licence weights and GPU spend | Still owner-blocked. Push done: public `roadmap-v2` at `dec460e`, with CI pending. Pending execution: the implementation re-vendor and strict pin check. The local branch is never pushed; only regenerated public history is, as fast-forwards ([owner decisions of 2026-11-23](../ROADMAP.md#owner-decisions-2026-11-23); [owner decision on image marks and C2PA](../ROADMAP.md#owner-decision-2026-11-23-image-marks-and-c2pa)) |
 
-Closed with evidence: M0.1–M0.4, M2.5, M2.8, M2.10, M2.11, M3.0, M4.1, M4.2, and IMGF.2–IMGF.4. Everything else is open.
+Closed with evidence: M0.1–M0.4, M2.5, M2.8, M2.10, M2.11, M3.0, M4.1, M4.2, IMGF.2–IMGF.4 and IMG.0–IMG.4. Everything else is open.
 
 ## Completed evidence (progress records)
 
