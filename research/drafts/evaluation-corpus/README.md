@@ -87,3 +87,7 @@ The protocol moved to `m3-eval-draft-8` (direct-check shape, unbatched caching c
 ## Draft-9
 
 The protocol moved to `m3-eval-draft-9` (pair completeness for batched comparisons). The manifest, schema and checker are unchanged; the manifest keeps `protocolVersion` `m3-eval-draft-6`.
+
+## Draft-10
+
+The protocol moved to `m3-eval-draft-10` (byte form of the pair-id digest). The manifest, schema and checker are unchanged.
