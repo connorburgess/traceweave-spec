@@ -200,7 +200,7 @@ Counted on 2026-11-23 from the status columns above. In the later-profile table,
 | Gates | Total | Met | Negative-result | Open |
 | --- | --- | --- | --- | --- |
 | Core M0–M5 | 47 | 11 (M0.1, M0.2, M0.3, M0.4, M2.5, M2.8, M2.10, M2.11, M3.0, M4.1, M4.2) | 0 | 36 |
-| Later profiles, EXT and RC | 41 | 8 (IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4) | 0 | 33 |
+| Later profiles, EXT and RC | 48 | 8 (IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4) | 0 | 40 (WEB.0–WEB.6 planned) |
 
 M0.1 is met on the second non-author recount (`3a640b3`). M2.5 and M2.8 are met on the [I2 review](research/reviews/implementation-merge-i2-review.md) (`de9a5b7`) of implementation `82b02ab`.
 
@@ -234,7 +234,7 @@ I0 ► I1 ► I2 ► I3;  I4 after I0;  I5a after I2 and M2E.1 met;  I5b after I
 Now, by owner override (research and fingerprint-only): TS, IMGF, TXT.0–TXT.4, TXT.7, TXT.8
 Now, by owner decision of 2026-11-23: IMG.0–IMG.5 (synthetic images, permissive weights), C2PA.1–C2PA.3
 Owner-gated: TXT.5–TXT.6 (corpus download)
-After I2: SK   After M3.4: BIN, RES, STRUCT, KEYED
+After I2: SK   After M3.4: BIN, RES, STRUCT, KEYED, WEB (planned)
 ```
 
 **Implementation track status (2026-11-22).** The implementation repository is `<implementation repo>`; its `main` is at `82b02ab`, unpushed.
@@ -309,6 +309,14 @@ Removal and forgery counts are lower bounds on what an attacker can do. Full cou
 | **Later matching methods** (ROADMAP "Later") | | | |
 | STRUCT.1 | R | Structural/semantic matching compared with the token baseline on the M3 corpus and budget | I |
 | KEYED.1 | R | Keyed feature selection evaluated separately from embedding on the M3 corpus and budget | I |
+| **WEB — browser tool and testing page** (requested by the owner on 2026-11-23; **planned; not started; no lane assigned**) | | | |
+| WEB.0 | O | The owner decides when to start WEB and where it is hosted. The sequence places WEB after M3.4, because a public tool should not come before the measurement; the owner can override this. WEB covers only implemented profiles: Go and Rust today; TypeScript, text and Python when implemented. A timestamping or transparency-log service is out of scope for WEB and belongs with M4. **Status: planned** | S |
+| WEB.1 | E | The Rust implementation compiles to WebAssembly. For every vendored extraction, record, catalogue and matching vector of the profiles it implements, the in-browser build's output is byte-identical to the command-line build's, k/k, run headless in CI. **Status: planned** | I |
+| WEB.2 | E | Nothing leaves the browser. The page works with the network denied after load. A test asserts 0 network requests during fingerprinting and comparison. No analytics, no uploads, and no storage beyond explicit user downloads. **Status: planned** | I |
+| WEB.3 | E | Three flows must reproduce the command-line results. **Fingerprint:** dropped files yield a downloadable catalogue byte-identical to the command-line catalogue for the same inputs and config. **Compare:** two catalogues, or a catalogue and files, produce a report body with the same `bodySha256` as the command-line tool. **Verify:** loading a report re-runs it and shows whether the digest reproduces. Each flow is checked on a fixed fixture set, k/k. **Status: planned** | I |
+| WEB.4 | E | A testing page shows the sample and the transformed copy side by side. A sample or dropped file is edited by hand or by named transformations: reformat, rename identifiers, reorder declarations, copy a fragment, embed in unrelated code, insert tokens at the evasion interval. The matched regions and the outcome update live. The page shows the documented misses as plainly as the matches: a fixed set of at least 6 demonstrations, at least half ending in no match or below-minimum-evidence. A self-check confirms that identical input matches fully and that an unrelated sample does not match. **Status: planned** | I |
+| WEB.5 | E | The page states its experimental status. It says that a fingerprint or a match is not proof of ownership, authorship or copying. It also says that a catalogue made today says nothing about when the content existed; timestamped, signed records are M4. A non-author checks every sentence on the page against the README claim map (M5.2): 0 unmapped. **Status: planned** | S+I |
+| WEB.6 | E | Accessibility and performance budgets are decided by counts. Each flow can be completed keyboard-only (k/k flows). A stated maximum input size applies, with a clear refusal above it, tested at the limit and one byte over. Further budgets are frozen before WEB.1 starts. **Status: planned** | I |
 | **EXT and RC** | | | |
 | EXT.1 | E | Named non-contributors review the spec, M3 methodology and M4 crypto (may reuse M4.6 if that reviewer qualifies). Reports filed; every finding dispositioned | S |
 | RC.1 | E | Every E gate in M1–M5 met; every R gate met or negative-result; every O gate recorded; EXT.1 met. If M2E.0 records that embedding is omitted, M2E.2–M2E.5 and M2E.7 are exempt | S |

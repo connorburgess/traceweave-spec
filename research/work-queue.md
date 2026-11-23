@@ -36,6 +36,10 @@ Updated 2026-11-23 after the owner decisions of that day. Implementation reposit
 
 Closed with evidence: M0.1–M0.4, M2.5, M2.8, M2.10, M2.11, M3.0, M4.1, M4.2, IMGF.2–IMGF.4 and IMG.0–IMG.4. Everything else is open.
 
+## Planned items
+
+- **WEB.0–WEB.6 (browser tool and testing page).** Requested by the owner on 2026-11-23 as a roadmap item, not for building yet. Planned; not started; no lane assigned. It follows M3.4 unless the owner overrides, and the owner decides when it starts and where it is hosted (WEB.0). See the [roadmap](../ROADMAP.md#later-profiles-and-sequence).
+
 ## Completed evidence (progress records)
 
 - Initial four discovery lanes and the supplementary architecture comparison; see the [discovery checkpoint](discovery-checkpoint.md).
