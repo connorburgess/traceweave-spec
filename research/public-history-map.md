@@ -8,7 +8,7 @@ This history was produced from the local branch `roadmap-v2` so that it can be p
 
 ## Reproducing
 
-`python3 tools/public_history_scrub.py rewrite --branch NAME --source <source commit>` with the private rules file. The rules are not in this repository in any form. Rules file SHA-256: `f1a29ec6e1e7c34c5ed1995c19b490cd9c5bb79457674d929eca3cddb2582b16`.
+`python3 tools/public_history_scrub.py rewrite --branch NAME --source <source commit>` with the private rules file. The rules are not in this repository in any form. Rules file SHA-256: `145f2838fe85e95edf55df6133b67e5682bbb746e1e826462e2ea98546d08bdd`.
 
 ## What was substituted, by category
 
@@ -31,7 +31,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 
 ## Verification of the commits listed here
 
-`python3 tools/public_history_scrub.py scan` over the 106 commits and 1104 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
+`python3 tools/public_history_scrub.py scan` over the 134 commits and 1483 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
 
 | Category | Hits |
 | --- | --- |
@@ -48,25 +48,34 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 
 | Cited as | Old id | New id |
 | --- | --- | --- |
+| `58c25a9` | `58c25a9e13a9` | `62294bdd0ae5` |
 | `b13cb68` | `b13cb6877711` | `ea027ebe5a68` |
 | `215145b` | `215145baaa79` | `7fb3d1ddb749` |
 | `3a640b3` | `3a640b3af721` | `d0c959799be2` |
-| `9c03c95` | `9c03c95103bf` | `bf6b7b9acc56` |
-| `15a4b2d` | `15a4b2d93010` | `88128d114f26` |
+| `c512550` | `c512550ffd57` | `db8e60dbcae7` |
+| `f42156d` | `f42156dc5ba8` | `e397e59fa78e` |
 | `2fa2b58` | `2fa2b58f14c7` | `8c6980ee0787` |
 | `de9a5b7` | `de9a5b7131d9` | `863bca247a43` |
 | `4d0288f` | `4d0288ffe05a` | `5e29802eb91f` |
 | `95fb157` | `95fb157ec5bb` | `aebb49f51946` |
 | `0bc4e23` | `0bc4e23432ac` | `0766f3a39235` |
 | `409d486` | `409d486cc02c` | `dec460e84334` |
+| `0db8b44` | `0db8b44097b6` | `c87655a88151` |
+| `c4848c1` | `c4848c16bf39` | `e290f735b5ac` |
+| `5c3d9c5` | `5c3d9c545d5f` | `dfe65e31dc7b` |
+| `85b1690` | `85b16907d25d` | `c71073b6244b` |
 | `6f39e50` | `6f39e50f3302` | `b47b8945b9d6` |
 | `0c7523c` | `0c7523c23613` | `52049a8a0591` |
 | `dbd109b` | `dbd109bce3cf` | `44179c47fe77` |
 | `835f6c0` | `835f6c0df461` | `3ced88b0f2fc` |
+| `3147237` | `31472373d24c` | `7f1ec2fb48f5` |
+| `a78aace` | `a78aace574a6` | `d9c4efa5a883` |
+| `d3d4788` | `d3d4788ffe83` | `e95339bc4e48` |
+| `d3af1ee` | `d3af1ee07595` | `b91606abb533` |
 | `ec0cf67` | `ec0cf67ca3c8` | `ee083b345a31` |
 | `6f39e50f33026c9f1d9526c2a566d6a447219667` | `6f39e50f3302` | `b47b8945b9d6` |
 
-Ancestry was checked for all 136 pairs of these 17 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
+Ancestry was checked for all 325 pairs of these 26 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
 
 ## All commits, oldest first
 
@@ -192,3 +201,31 @@ Ancestry was checked for all 136 pairs of these 17 ids in both directions: the r
 | 118 | `2f584360c435` | `8b6713dac736` | kept | Add e-img-m-2 confirmation pass to the image mark protocol review |
 | 119 | `6ff7c835162c` | `bad6b5a1af1f` | kept | Accept sandbox-exec network denial with the harness probe in IMG.2 |
 | 120 | `992c4c98e534` | `c5f6c3f05093` | kept | Strengthen the pre-push guard and the scanner |
+| 121 | `83af8b7a1f01` | `d4ce66756004` | kept | Update the public history map |
+| 122 | `d16b5ac0228a` | `c06b2149e8e3` | kept | Pre-push hook: decide by the destination ref and keep the leak-free test |
+| 123 | `c5bedc137955` | `7f4d9072d6dc` | kept | Pre-push hook: pass the rules path to the scanner and tell hits from errors |
+| 124 | `20162a80ac05` | `33f252fda754` | kept | Add non-author review of the M3 evaluation harness |
+| 125 | `a17fc22d6db0` | `986d9bb4992b` | kept | Rule the 40 harness ambiguities and the harness review in m3-eval-draft-6 |
+| 126 | `a78aace574a6` | `d9c4efa5a883` | kept | Record the measured image mark run e-img-m-2: two identical full runs, counts per scheme |
+| 127 | `d3d4788ffe83` | `e95339bc4e48` | kept | Add e-img-m-2 results recheck to the image mark protocol review |
+| 128 | `31472373d24c` | `7f1ec2fb48f5` | kept | Accept UC-7 (recognize a marked image) with its verification plan |
+| 129 | `084369b752e5` | `a8e6f64b66da` | kept | Mark IMG.0-IMG.4 met from the e-img-m-2 recheck; record the image-mark finding and the synthetic-set decision |
+| 130 | `7f8d95382b16` | `cc264b65d4ed` | kept | Add the planned WEB milestone (browser tool and testing page) to the roadmap |
+| 131 | `4337924a59d9` | `6dd2fef9c8ee` | kept | State the project's non-commercial nature, record the traceweave.org domain, and add the WEB purpose |
+| 132 | `024e508ab1c5` | `b06c555eec18` | kept | C2PA mapping: use the org.traceweave namespace for proposed identifiers |
+| 133 | `087990589504` | `fb78e2e840bf` | kept | Record the registration-over-marks direction and add planned A2A gates SK.3-SK.5 |
+| 134 | `e3bac866fe52` | `1aa520e384d0` | kept | Rule harness open points O1-O8 in m3-eval-draft-7 |
+| 135 | `3d3197487a8e` | `efc42b1f33e5` | kept | Add lane 13 time-evidence review, registration record design draft and illustrative fixtures with checker |
+| 136 | `7271715ea71b` | `867fb306457b` | kept | Registration draft: correct the URL count in the verification record |
+| 137 | `5c3d9c545d5f` | `dfe65e31dc7b` | kept | Review the registration record draft, fixtures and lane 13 |
+| 138 | `1c5c06ad13ca` | `500771130564` | kept | Draft the Python token profile (py-tokens draft-1) with hand-derived vectors, checker and CPython 3.14.6 cross-check |
+| 139 | `1dd9c1fbb256` | `5499a00b4715` | kept | Registration draft: add registration at creation time and agent interoperability (A2A 1.0, MCP 2026-07-28), with agent fixtures and checks |
+| 140 | `e44f31583ada` | `0f9d642824e1` | kept | Add confirmation pass to the evaluation harness review |
+| 141 | `0db8b44097b6` | `c87655a88151` | kept | Add clean-room review of the Python token profile py-tokens draft-1 |
+| 142 | `de486c94f4e1` | `2befafa71d5f` | kept | Re-evaluate M1/M2 gates and implementation exits against the published pin; record live sites and the new project statement |
+| 143 | `58c25a9e13a9` | `62294bdd0ae5` | kept | Resolve the py-tokens draft-1 clean-room review and freeze it for stage-1 implementation |
+| 144 | `c4848c16bf39` | `e290f735b5ac` | kept | Registration record draft-2: resolve the non-author review (5c3d9c5) |
+| 145 | `a405f679adf5` | `035e9c6cc3d5` | kept | Rule the direct-check shape, the unbatched caching check and the disk margin in m3-eval-draft-8 |
+| 146 | `ff907ac47435` | `1ef9251b6a67` | kept | Add second confirmation pass to the evaluation harness review |
+| 147 | `85b16907d25d` | `c71073b6244b` | kept | Require pair completeness for every batched comparison in m3-eval-draft-9 |
+| 148 | `fc7b91baae3c` | `488ddf23da12` | kept | Record Linux CI, the frozen py-tokens profile, registration draft-2, m3-eval-draft-9, the visual identity and open name clearance |
