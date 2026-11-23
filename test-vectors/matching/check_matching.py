@@ -1214,6 +1214,27 @@ MATCHING_EXTRACTION_FILES = {"extraction-go.json": "mv-go-sum", "extraction-rust
                              "extraction-go-classes.json": "mv-go-classes-a", "extraction-go-gates.json": "mv-go-vendor-lib"}
 
 
+def has_derivation_label(x):
+    if isinstance(x, dict):
+        return "derivation" in x or any(has_derivation_label(v) for v in x.values())
+    return isinstance(x, list) and any(has_derivation_label(v) for v in x)
+
+
+def check_rule_files(replaced=None):
+    """M2.6: every JSON file in this directory that carries a derivation label states the ROADMAP.md definition in a
+    top-level derivationRule, followed by how it applies ("Applied to ...")."""
+    rule, n = roadmap_definition(), 0
+    for path in sorted(HERE.glob("*.json")):
+        d = (replaced or {}).get(path.name) or strict_loads(path.read_bytes())
+        if not has_derivation_label(d):
+            continue
+        got = d.get("derivationRule", "") if isinstance(d, dict) else ""
+        need(got.startswith(rule) and "Applied to" in got[len(rule):],
+             f"{path.name}: carries derivation labels but no derivationRule stating the ROADMAP.md definition and its application")
+        n += 1
+    return n
+
+
 def lexical_derivations(v, ctx):
     """(where, derivation) for every artifact a vector's catalogues are built from: the lexical layer it rests on."""
     out = []
@@ -1249,6 +1270,7 @@ def check_derivations(doc, ctx):
     a literal catalogue; and each matching-lane extraction file must state the rule."""
     rule = roadmap_definition()
     need(doc.get("derivationRule", "").startswith(rule), "matching.json: derivationRule does not start with the ROADMAP.md definition")
+    check_rule_files({"matching.json": doc})
     hand = 0
     for v in doc["vectors"]:
         need(v["derivation"] in ("hand", "mixed"), f"{v['id']}: derivation must be hand or mixed")
@@ -1287,6 +1309,14 @@ def derivation_self_test(doc, ctx):
         out.append(("matching.json derivationRule removed", None))
     except CheckError as exc:
         out.append(("matching.json derivationRule removed", str(exc)))
+    for name in ("records.json", "extraction-py.json", "m22-fixture-manifest.json"):
+        d = strict_loads((HERE / name).read_bytes())
+        d.pop("derivationRule", None)
+        try:
+            check_rule_files({name: d})
+            out.append((f"{name} derivationRule removed", None))
+        except CheckError as exc:
+            out.append((f"{name} derivationRule removed", str(exc)))
     return out
 
 
@@ -2252,7 +2282,7 @@ def main(argv):
     except CheckError as exc:
         print(f"FAIL derivation (M2.6): {exc}")
         return 1
-    print(f"PASS derivation (M2.6): derivationRule states the ROADMAP.md definition; {nhand} hand vectors rest only on "
+    print(f"PASS derivation (M2.6): {check_rule_files()} labelled files state the ROADMAP.md definition and its application; {nhand} hand vectors rest only on "
           f"hand-written token streams, hand records or literal catalogues; "
           f"{sum(v['derivation'] == 'mixed' for v in doc['vectors'])} mixed")
     dres = derivation_self_test(doc, ctx)

@@ -396,6 +396,14 @@ MATCHING_RULE_APPLICATION = (
     "independently recomputed by check_matching.py and by a clean-room review. A vector labelled mixed, or a mode "
     "labelled computed-then-reviewed, had values seen computed before they were written down (README, Derivation).")
 
+RECORDS_RULE_APPLICATION = (
+    "Applied to these records: each record names the extraction vector whose hand-written judgments it records "
+    "(source: token boundaries, classes, texts, inserted tokens, status, error code and offset), every one of them "
+    "labelled derivation hand; the configuration each record names, the build rejections and their reasons are "
+    "written by hand from spec/catalogue-report.md sections 2a and 3.8. The record bytes, their digests and the "
+    "catalogues built from records are computed by build_vectors.py, the specification's own builder, not by an "
+    "implementation under test, and check_matching.py recomputes them independently.")
+
 
 def extraction_record(vid, tags, desc, text, cfg, lang):
     toks = hand_stream(vid, text)
@@ -2141,6 +2149,7 @@ def build_records(sources, matching_out):
                    "explicitly: configFile (path relative to this file) or configBase64 (the exact bytes, used for rejected "
                    "configurations), plus configSha256 over those bytes. expectedRecordText is the UTF-8 decoding of the "
                    "exact record bytes, including the final LF; expectedRecordSha256 is over those bytes.",
+           "derivationRule": ROADMAP_DEFINITION + " " + RECORDS_RULE_APPLICATION,
            "records": records, "cataloguesFromRecords": cats, "catalogueBuildRejections": rej + extra_rej}
     (HERE / "records.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
     print(f"wrote {len(records)} record vectors, {len(cats)} catalogue-from-records vectors, {len(rej)} build rejections")
