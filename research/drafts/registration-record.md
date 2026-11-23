@@ -235,6 +235,9 @@ Rekor and witness cosigning are deferred: they add discoverability and split-vie
 | RD8 | Time-stamp target | Signature digest; statement digest; artifact digest | Signature digest (§6.1) |
 | RD9 | Many files | 64 subjects; a Merkle root over a file list | 64 now; a Merkle form later if creators need it |
 | RD10 | Identifiers | Predicate URLs under `traceweave.org` | Proposed only; publish nothing (shared with C2PA D3) |
+| RD12 | Architecture for registration at creation (§19) | (a) local-first with the creator key; (b) hosted witness over A2A; (c) custodial hosted signing | (a) first; (b) only as an optional extra root after SK.5; never (c) |
+| RD13 | Agent identity in the statement | None; claimed `claims.generator`; a delegated-identity field | None in draft 1; a claimed field only if the owner wants it (§19.5) |
+| RD14 | Local agent route | MCP over stdio; A2A on loopback; command line only | MCP over stdio first (no listener, no network authentication) |
 | RD11 | Renewal | Re-time-stamp the bundle; RFC 4998 evidence records | Re-time-stamping first; evidence records if a qualified archive is ever needed |
 
 ## 17. Needs the owner
@@ -245,13 +248,156 @@ Rekor and witness cosigning are deferred: they add discoverability and split-vie
 - Identity choices: whether I2 (OIDC accounts) is offered at all.
 - Publishing the predicate identifiers under `traceweave.org`.
 - The ROADMAP wording of §15 (M4.5 in particular), new REG gates, and the new use case.
+- Everything listed at the end of §19.7: any hosted witness or signer, its operator, keys and costs, accepted identity providers, agent-held keys, and the A2A extension and witness identifiers.
 - Legal questions. Lane 13 quotes eIDAS and the US Federal Rules of Evidence only; nothing here is legal advice.
 
 ## 18. Fixtures and checker
 
-See the [fixtures README](registration-fixtures/README.md). `check_registration.py` (standard library) verifies the fixtures' Ed25519 signatures with a public test-only key, recomputes digests, possession digests, the catalogue commitment and the expected verification result, and applies the rules above. It verifies no real time evidence. Failure codes: `authorship-claim`, `catalogue-does-not-open`, `catalogue-not-report-input`, `catalogue-unsalted`, `claimed-as-proved`, `duplicate-key`, `envelope-shape`, `evidence-shape`, `evidence-wrong-target`, `fixture-shape`, `forbidden-field`, `key-event-shape`, `log-time-claimed`, `nonce-invalid`, `notice-missing`, `pending-counted`, `placeholder-unlabelled`, `possession-mismatch`, `predicate-type`, `profile-mismatch`, `provenance-shape`, `quorum-miscount`, `report-digest`, `result-mismatch`, `signature-invalid`, `single-verdict`, `statement-digest`, `statement-shape`, `subject-mismatch`, `subject-name`, `time-in-statement`.
+See the [fixtures README](registration-fixtures/README.md). `check_registration.py` (standard library) verifies the fixtures' Ed25519 signatures with a public test-only key, recomputes digests, possession digests, the catalogue commitment and the expected verification result, and applies the rules above. It verifies no real time evidence. Failure codes: `authorship-claim`, `catalogue-does-not-open`, `catalogue-not-report-input`, `catalogue-unsalted`, `claimed-as-proved`, `duplicate-key`, `envelope-shape`, `evidence-shape`, `evidence-wrong-target`, `fixture-shape`, `forbidden-field`, `key-event-shape`, `log-time-claimed`, `nonce-invalid`, `notice-missing`, `pending-counted`, `placeholder-unlabelled`, `possession-mismatch`, `predicate-type`, `profile-mismatch`, `provenance-shape`, `quorum-miscount`, `report-digest`, `result-mismatch`, `signature-invalid`, `single-verdict`, `statement-digest`, `statement-shape`, `subject-mismatch`, `subject-name`, `time-in-statement`; for §19: `content-on-wire`, `a2a-shape`, `mcp-tool-shape`, `witness-shape`.
 
-## 19. Verification of this draft
+## 19. Registration at creation time and agent interoperability
+
+The owner wants content registered at the moment it is created, including by AI agents, over A2A. This section designs that from the protocol texts. Nothing was run against any agent, server or service.
+
+**Sources, read 2026-11-23 over read-only HTTP.**
+- **A1:** A2A at tag `v1.0.1`, commit `3303592588e388e62e0f69f701af531d2f4e3991`: [specification.md](https://github.com/a2aproject/A2A/blob/3303592588e388e62e0f69f701af531d2f4e3991/docs/specification.md) (its banner names `1.0.0` as the latest released version; the protocol version on the wire is `1.0`, §3.6), [a2a.proto](https://github.com/a2aproject/A2A/blob/3303592588e388e62e0f69f701af531d2f4e3991/specification/a2a.proto), [extensions](https://github.com/a2aproject/A2A/blob/3303592588e388e62e0f69f701af531d2f4e3991/docs/topics/extensions.md), [GOVERNANCE.md](https://github.com/a2aproject/A2A/blob/3303592588e388e62e0f69f701af531d2f4e3991/GOVERNANCE.md), [README](https://github.com/a2aproject/A2A/blob/3303592588e388e62e0f69f701af531d2f4e3991/README.md), [JSON artifact README](https://github.com/a2aproject/A2A/blob/3303592588e388e62e0f69f701af531d2f4e3991/specification/json/README.md). Apache-2.0.
+- **A1 governance:** "an open source project under the Linux Foundation, contributed by Google" (README). It is "governed by the Technical Steering Committee", with eight seats held by Google, Microsoft, Cisco, Amazon Web Services, Salesforce, ServiceNow, SAP and IBM Research, in a "Startup Phase" composition (GOVERNANCE.md).
+- **M1:** Model Context Protocol at commit `862397cec702e8f828713071da501cf56158e8fc`, revision `2026-07-28`, labelled "(latest)" in the [docs navigation](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/862397cec702e8f828713071da501cf56158e8fc/docs/docs.json): [tools](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/862397cec702e8f828713071da501cf56158e8fc/docs/specification/2026-07-28/server/tools.mdx), [stdio](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/862397cec702e8f828713071da501cf56158e8fc/docs/specification/2026-07-28/basic/transports/stdio.mdx), [authorization](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/862397cec702e8f828713071da501cf56158e8fc/docs/specification/2026-07-28/basic/authorization/index.mdx), [overview](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/862397cec702e8f828713071da501cf56158e8fc/docs/specification/2026-07-28/index.mdx), [schema.ts](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/862397cec702e8f828713071da501cf56158e8fc/schema/2026-07-28/schema.ts), [schema.json](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/862397cec702e8f828713071da501cf56158e8fc/schema/2026-07-28/schema.json), [GOVERNANCE.md](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/862397cec702e8f828713071da501cf56158e8fc/GOVERNANCE.md). MCP "has been established as Model Context Protocol a Series of LF Projects, LLC"; specifications are Apache-2.0 (GOVERNANCE.md).
+
+### 19.1 What the protocols give, and what they do not
+
+| Feature | What the text says (A1 unless marked) | Consequence for registration |
+| --- | --- | --- |
+| Normative source | "`spec/a2a.proto` is the single authoritative normative definition"; `a2a.json` is "a non-normative build artifact", "generated during builds and intentionally **not** committed" (§1.4; JSON README) | No published A2A JSON Schema could be validated against offline. The fixtures are checked against the proto field lists (§19.4) |
+| Agent Card | "A2A Servers **MUST** make an Agent Card available"; discovery at `https://{server_domain}/.well-known/agent-card.json` (§8.1, §8.2). Required fields in the proto: `name`, `description`, `supportedInterfaces`, `version`, `capabilities`, `defaultInputModes`, `defaultOutputModes`, `skills` | A card describes a service. It is not evidence about content |
+| Skills | `AgentSkill` requires `id`, `name`, `description`, `tags`; a skill "is largely a descriptive concept" (proto comment on `skills`) | Skill descriptions are where the §11 limit text must appear |
+| Tasks | `TaskState`: `SUBMITTED`, `WORKING`, `COMPLETED`, `FAILED`, `CANCELED`, `INPUT_REQUIRED`, `REJECTED`, `AUTH_REQUIRED` (proto) | §19.4 lifecycle |
+| Messages and artifacts | "Results SHOULD BE returned using Artifacts"; "Messages MUST NOT be considered a reliable delivery mechanism for critical information" (§3.7) | The witness statement is returned as an artifact, never only as a message |
+| Parts | A `Part` holds exactly one of `text`, `raw` (bytes), `url` or `data` (JSON), plus `metadata`, `filename`, `mediaType` (proto) | `raw` and `url` are how content would leave; the profile forbids them (§19.3) |
+| Transports | `protocolBinding` values `JSONRPC`, `GRPC`, `HTTP+JSON` (proto); "Production deployments **MUST** use encrypted communication" (§7.1) | A hosted witness is HTTPS only |
+| Authentication | "Identity information is handled at the protocol layer, not within A2A semantics" (§7); credentials are obtained "out-of-band" (§7.3); the server "**MUST** authenticate every incoming request" (§7.4). Schemes: API key, HTTP, OAuth 2.0, OpenID Connect, mutual TLS (proto `SecurityScheme`) | The witness can say which authenticated caller presented a digest. That caller identity is whatever the identity provider asserts |
+| Idempotency | "**Send Message** operations MAY be idempotent. Agents may utilize the messageId to detect duplicate messages" (§3.3.1) | §19.4 defines it for the witness |
+| Errors | Authentication, authorization, validation, resource and system categories, plus A2A errors such as `ContentTypeNotSupportedError`, `ExtensionSupportRequiredError`, `VersionNotSupportedError` (§3.3.2); "rate limit exceeded" is an example system error | §19.4 error mapping |
+| Signing and provenance | The only signing in the core is of the **Agent Card**, by JWS over the RFC 8785 canonical card (§8.4, §8.4.1). Nothing signs messages, tasks or artifacts, and the proto has no provenance field | A2A cannot carry evidence by itself. Registration evidence travels as Traceweave's own signed objects inside a `data` part |
+| Time | Timestamps are ISO 8601 UTC strings (§5.6.1). The extensions page lists a sample "Timestamp Extension" that adds timestamps to `metadata` (not read further) | Any A2A time is a claimed time, never time evidence |
+| Extensions | Declared in the card with `uri`, `description`, `required`, `params` (proto `AgentExtension`); "Anyone is able to define, publish, and implement an extension" (extensions page) | A Traceweave profile extension, proposed URI `https://traceweave.org/a2a/ext/registration/draft-1` (not published), declares `wire: digests-only` or `local-only` |
+| Versioning | Major.Minor only; patch numbers "SHOULD NOT be used in requests, responses and Agent Cards" (§3.6) | `protocolVersion: "1.0"`; `"1.0.1"` is rejected (`a2a-shape`) |
+| Discrepancy | The sample card in §8.5 uses a `security` field; the proto names it `security_requirements` (`securityRequirements` in JSON), holding `{"schemes": {…}}` | The fixtures follow the proto, which §1.4 makes normative |
+| MCP tools (M1) | Tools are "model-controlled"; "there **SHOULD** always be a human in the loop with the ability to deny tool invocations"; clients "**MUST** consider tool annotations to be untrusted unless they come from trusted servers"; servers "**MUST** … Rate limit tool invocations" (tools.mdx). Annotations: `readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint` (schema.ts) | The local route is an MCP tool whose annotations say it writes and reaches the network |
+| MCP stdio (M1) | "the client launches the MCP server as a subprocess"; implementations using stdio "**SHOULD NOT** follow this [authorization] specification, and instead retrieve credentials from the environment" | A local stdio tool needs no listener, no network authentication and no account |
+
+### 19.2 Two architectures and what each means
+
+**(a) Local-first (recommended first).** The creating tool or agent calls a local Traceweave tool when it writes a file. The local tool may be an MCP tool over stdio, a local A2A agent on loopback, or the command line. It does everything in §14 step 2 on the machine: digests, nonce, possession digests, optional catalogue and commitment. It signs with the **creator's** key and requests RFC 3161 and OpenTimestamps evidence over the signature digest. The trust meaning is exactly §1: this key signed a statement naming these bytes no later than T. Registering at creation time only makes T close to the moment of creation. It never proves the creation moment, and the bound is still an upper bound.
+
+**(b) Hosted Traceweave witness over A2A.** A remote agent receives **only the SHA-256 of a creator's DSSE signature**, after (a) has signed. It authenticates the caller and signs a **witness statement** (predicate type `https://traceweave.org/predicate/witness/draft-1`, proposed). The statement says: *this digest was presented at `receivedAt` by the witness's clock, by the caller authenticated as {scheme, issuer, subject}, in request `requestMessageId`*. The witness attaches its own RFC 3161 token over its signature, so its time does not rest on its own clock. The result returns as an A2A artifact. The creator adds it to the bundle as one more time evidence (proposed type `traceweave-witness`, root kind `witness-service-key`), counted as **one root** in the quorum (§6.3).
+
+"Signed by Traceweave" would mean only that: a presented digest, a time, an authenticated caller. It would **not** mean authorship or originality. It would not even mean that the caller held the content: the witness never sees content, and possession is shown by the creator's own possession digest (§4.3). A custodial variant, where the hosted service holds creators' keys and signs registrations for them, is **not recommended**. It would make the operator able to sign as any creator.
+
+**What operating (b) requires.**
+- **Key custody:** a hardware or cloud key service, rotation, a published key history, and a compromise procedure (§8 applies to the witness key too).
+- **Availability:** a stated service level. Registration must still succeed without the witness, because it is an extra root, never a required one.
+- **Abuse handling:** quotas, rate limits and refusal policies (§19.6).
+- **An accountable operator:** someone who answers for the key, the logs and incidents, and who can contract with a TSA.
+- **Cost:** hosting, the key service, monitoring, and any paid TSA.
+- **A retention and privacy policy:** caller identity, digest, time and IP address together are personal data about creative activity. This is not legal advice; the owner would need advice for any jurisdiction.
+
+**What the project's status implies.** Traceweave is an independent, non-commercial specification and "not a legal entity" (roadmap). It has no body that can be the accountable operator, sign a TSA contract, or promise availability. A witness run by volunteers that later stops leaves its past statements verifiable, because the bundle carries the witness key and its TSA token, but no new ones can be made. A hosted signer would turn the project into a trust anchor it cannot currently back. **Recommendation: build (a) first. Specify (b) as an optional evidence type, and operate nothing until SK.5 is decided.** The roadmap already says "Until then, nothing is hosted".
+
+### 19.3 What crosses the wire, and the privacy exposure
+
+| Hop | Architecture | What is sent | What the receiver learns |
+| --- | --- | --- | --- |
+| Creating agent → local Traceweave | (a) | File paths or bytes over stdio or loopback; **never leaves the machine** | — |
+| Local Traceweave → TSA | (a), (b) | An RFC 3161 request whose imprint is the SHA-256 of the signature, plus an optional request nonce | The digest, the requester's IP address and the time (lane 13, T1) |
+| Local Traceweave → OpenTimestamps calendars | (a), (b) | The same digest | The same; the client adds its own nonce (T4) |
+| Creator → hosted witness | (b) | TLS; the `A2A-Version` header; a credential (§7.3); a `SendMessageRequest` whose message has one `data` part `{"requestVersion": "traceweave-witness-request-draft-1", "presented": {"kind": "dsse-signature-sha256", "sha256": "…"}}` and the extension URI | Caller identity from the credential, the digest, the time, the IP address, the message id |
+| Hosted witness → creator | (b) | A `Task` with one artifact: the signed witness statement and its TSA evidence | — |
+
+**Neither source code nor fingerprints need to leave the machine.** The statement, possession digests and catalogue are built locally (§4). The only value any remote party needs is a 32-byte digest of a signature over a statement that contains a fresh 256-bit nonce. That digest reveals nothing about the content, even to someone holding a guessed file (§5). The fixtures enforce this. A `raw` or `url` part sent to the witness is rejected (`content-on-wire`), and so is a digests-only card served over plain HTTP. Fingerprints in a request are `forbidden-field`. Presenting the artifact digest instead of the signature digest is `evidence-wrong-target`: it would let the witness confirm guessed files.
+
+**Residual exposure.** The witness operator learns who registers, when, and how often. Repeated requests link a caller's registrations. If the operator ever publishes its records, that becomes a public activity log of identities. The witness statement given to the creator contains the caller identity, so disclosing that statement in a dispute discloses the identity too.
+
+### 19.4 Agent cards, skills, lifecycle, errors, idempotency and caller authentication
+
+Illustrative fixtures (labelled illustrative; no service exists):
+- `a2a-card-hosted-witness.json`: an OpenID Connect security scheme with a security requirement, HTTPS, one skill `witness-digest`, and the profile extension with `required: true` and `wire: digests-only`.
+- `a2a-card-local-registrar.json`: loopback interface, skills `register` and `verify`, `wire: local-only`.
+- `a2a-request-witness.json` and `a2a-task-witness.json`: the request and the completed task. The witness statement is really signed with a second public test-only key; its RFC 3161 evidence is a placeholder.
+- `mcp-tool-register.json`: the local MCP tool. Its inputs are paths. Its output is an opaque bundle id, never a path (SK.2). Its annotations are `readOnlyHint: false`, `destructiveHint: false`, `idempotentHint: false` (each call makes a new registration) and `openWorldHint: true` (it contacts time services).
+- `rendering-agent.json`: user-facing text for an agent-made registration.
+
+**Validation.** No A2A JSON Schema is published in the repository (§19.1), so the A2A fixtures were **not validated against a published schema**. The checker compares them with the field lists of `a2a.proto` at `v1.0.1`: required and allowed fields, bindings, Major.Minor version, part one-of, task states. The MCP tool fixture **was** validated against `$defs/Tool` of MCP `schema.json` at `862397ce` (SHA-256 `907dcebc…b551`), with the repository's pinned `jsonschema` 4.23.0: 0 errors. The negative `neg-mcp-tool-shape` is also schema-valid: it fails only a Traceweave rule.
+
+**Lifecycle.** `SUBMITTED` → `WORKING` (obtaining the TSA token) → `COMPLETED`, with exactly one artifact holding the witness bundle. `REJECTED` covers a policy refusal: quota exhausted, or a caller barred for abuse. `FAILED` covers a witness that could not obtain its TSA token; it gives no partial statement. `INPUT_REQUIRED` and `AUTH_REQUIRED` are not used: authentication happens up front (§7.4), and the request is complete or invalid.
+
+**Errors** (categories from A1 §3.3.2):
+
+| Condition | Error |
+| --- | --- |
+| Missing or invalid credential | Authentication error (HTTP 401) |
+| Malformed data part, wrong `requestVersion`, digest not 64 hex | Validation error (JSON-RPC `-32602`) |
+| A `raw`, `url` or `text` part | `ContentTypeNotSupportedError` |
+| Request without the profile extension | `ExtensionSupportRequiredError` |
+| `A2A-Version` not `1.0` | `VersionNotSupportedError` |
+| Rate limit or TSA outage | System error, with `Retry-After` |
+
+**Idempotency.** The witness keys requests on (authenticated caller, `messageId`). A retry with the same pair returns the same task and the same artifact. A new `messageId` for the same digest creates a second witness statement. That is correct, because each statement records one presentation.
+
+**Caller authentication.** Use OpenID Connect or OAuth 2.0 client credentials for agents, and mutual TLS for organisations. The witness records `{scheme, issuer, subject}` as authenticated by that issuer, nothing more. A hosted card should be signed with JWS (§8.4) and its key pinned in verifier policy, so a fake witness card is detectable.
+
+**Local route.** A2A §7.1 requires encryption for production deployments, so a loopback A2A listener is a development convenience. The preferred local route is MCP over stdio. It opens no listener, and its credentials come from the environment (M1 authorization).
+
+### 19.5 What an agent-made registration can and cannot evidence
+
+It **can** show that a particular key signed a statement naming these bytes no later than T. With (b), it also shows that a caller authenticated by a named issuer presented the signature digest at the witness's receipt time.
+
+It **cannot** show:
+- whether a person or an agent created the content;
+- whether the agent acted on a person's instruction;
+- on whose behalf it acted. An OAuth token held "on behalf of" a user shows delegated **authorization** to call the witness, not creation;
+- that the content came from that agent rather than being copied into its output.
+
+A key held by an agent runtime says nothing about the human. A key held by a person but used by their agent says nothing about which of them wrote the bytes.
+
+**Design choices.** The statement gets **no** creator or agent field in draft 1 (`authorship-claim` covers attempts). If the owner wants the generating tool recorded, add it later only as a claim (`claims.generator`), shown as claimed. By default, the creator key belongs to the person or organisation, and an agent uses it only through the local tool with the person's consent. MCP's "human in the loop" SHOULD applies.
+
+**Required wording.** Every rendering of an agent-made registration includes the three §11 sentences and this one (`notice-missing`):
+
+> A registration made by or through an agent shows which key signed it and, for a hosted witness, which authenticated caller presented the digest; it does not show whether a person or an agent created the content, or on whose behalf.
+
+### 19.6 Abuse and mitigations
+
+| Abuse | Mitigation | What remains |
+| --- | --- | --- |
+| Registering content one did not create, including mass registration of scraped content by agents to manufacture earlier records | None technical. §11 and §19.5 wording everywhere. The hosted witness offers **no** public lookup by digest, so it is not a registry that answers "who registered this?". Per-caller quotas | Anyone with a copy can register it. First to register is not first to create |
+| Flooding the hosted witness | Authentication on every request; per-caller rate limits and quotas (MCP servers "**MUST** … Rate limit tool invocations"); one 64-hex digest per request; refusal as `REJECTED` | Cost to the operator, which is why SK.5 must decide |
+| Flooding public TSAs and calendars from the local tool | One signature covers up to 64 subjects (§4.1); batch per work session | Each service's own limits apply |
+| Backdating through the witness | The caller cannot set `receivedAt`. The witness's own TSA token bounds its statement. The witness counts as one root, so q = 2 still needs an unrelated root | A compromised witness backdates its own statements only |
+| Claimed agent times presented as proof | A2A timestamps, timestamp-extension metadata and `claims.createdAt` are claimed only (§2) | — |
+| Replaying a witness response onto another registration | The statement names the exact signature digest (`evidence-wrong-target`) | — |
+| Prompt injection that makes an agent register or disclose | Only digests leave the machine; the tool's paths and outputs stay local; human confirmation; annotations treated as untrusted (M1) | An agent can still be induced to register something; that registration shows only what §19.5 allows |
+| A fake witness | JWS-signed card (A1 §8.4); witness key pinned in verifier policy | — |
+
+### 19.7 Roadmap mapping (proposed wording for the roadmap author)
+
+- **SK.1** (wraps stable I2 commands): the MCP tool and the local A2A registrar wrap `register` and `verify` once those commands exist and are stable. Diagnostics pass through unchanged.
+- **SK.2** (canaries): add "registration tools return opaque bundle ids; seeded paths, key material and nonces appear 0 times in model-visible output".
+- **SK.3** (A2A design): proposed addition: "Registration is local-first with the creator's key; a hosted witness, if any, receives only the SHA-256 of a DSSE signature and returns a signed witness statement as an A2A artifact. Design: `research/drafts/registration-record.md` §19." The non-author review stays required.
+- **SK.4** (A2A interoperability): A2A publishes no committed JSON Schema; `a2a.json` is generated from `a2a.proto`. **New wording needed:** "the agent card and skill descriptions validate against the JSON Schema generated from `specification/a2a.proto` at a pinned A2A tag, with the generator and its version recorded (0 errors)".
+- **SK.5** (hosted service, owner): add the operating requirements of §19.2 as the decision's checklist: key custody, accountable operator, availability, cost, retention and privacy policy, accepted identity providers, abuse policy.
+- **M4:** the witness becomes one more time-evidence type (`traceweave-witness`), counted as one root. The M4.5 decision record should say whether that type exists.
+- **New REG.5 (E, S):** the agent fixtures (cards, request, task, tool, renderings) are checked by `validate`; 0 `raw` or `url` parts and 0 fingerprints in any hosted-route fixture; every card skill and agent rendering carries the required sentences.
+
+**Needs the owner:**
+- running any hosted witness or signer (SK.5), and who operates it;
+- its keys, custody and costs;
+- which identity providers callers may use;
+- whether agents may hold their own registration keys by default;
+- publishing the extension URI and the witness predicate under `traceweave.org`;
+- the SK.3–SK.5 and REG wording above.
+
+## 20. Verification of this draft
 
 Run on 2026-11-23 on `roadmap-v2` (parent `0879905`), on this draft, lane 13 and the fixtures directory:
 
@@ -259,4 +405,5 @@ Run on 2026-11-23 on `roadmap-v2` (parent `0879905`), on this draft, lane 13 and
 - `build_fixtures.py` rerun: the rebuilt files are byte-identical to the committed ones (`git status` showed no change).
 - `tools/validate.py`: PASS. `python -m unittest discover -s tests`: 9 tests, OK. `tools/validate.py --links-all`: PASS. `tools/check_hygiene.py`: PASS. `git diff --cached --check`: no whitespace errors.
 - External URLs in this draft, lane 13 and the README: 28 requested, all answered. 24 returned 200 or 206 (one-byte range request) directly; the two EUR-Lex pages returned 202; RFC 5816 and RFC 9162 failed once on a timeout, then returned 301 to their `/info/` pages, which returned 200. The three predicate type and in-toto identifiers are names, not pages, and were not requested.
+- **§19 addition (same day, later).** `check_registration.py`: 17 positive fixtures give no code; each of the 38 negatives gives exactly its expected code; 35 codes, 31 exercised by a negative; the rebuild is byte-identical. The MCP tool fixture validates against MCP `schema.json` `$defs/Tool` (0 errors, `jsonschema` 4.23.0 from the repository's `.venv`). The A2A fixtures were not validated against a published A2A schema, because none is committed upstream. The 14 new external URLs (A2A and MCP sources pinned by commit) returned 206 to a one-byte range request. The repository checks were run again; results are in the commit that adds §19.
 - Not done: no real time-stamp token, proof, log entry or cosignature was requested or verified; no implementation exists.

@@ -1,0 +1,23 @@
+{
+  "fixture": {
+    "kind": "rendering",
+    "description": "Rendering says the agent created the content.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "expect": {
+      "code": "authorship-claim"
+    }
+  },
+  "object": {
+    "renderingVersion": "traceweave-registration-rendering-draft-1",
+    "result": "fixtures/verification-result.json",
+    "context": "agent",
+    "lines": [
+      "Registration of sum.go, made through an agent; signed by key cd76d6c6b4bb50ab.",
+      "This shows the agent created sum.go.",
+      "This record shows that the content existed, and that this key signed a statement naming it, no later than the time shown.",
+      "It does not show who created the content, that it is original, that the registrant was first to create it, or who owns it.",
+      "First to register is not first to create.",
+      "A registration made by or through an agent shows which key signed it and, for a hosted witness, which authenticated caller presented the digest; it does not show whether a person or an agent created the content, or on whose behalf."
+    ]
+  }
+}

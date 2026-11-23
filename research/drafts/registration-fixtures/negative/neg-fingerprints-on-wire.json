@@ -1,0 +1,35 @@
+{
+  "fixture": {
+    "kind": "a2a-request",
+    "description": "Sends fingerprints to the hosted witness.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "bundle": "fixtures/bundle-two-roots.json",
+    "expect": {
+      "code": "forbidden-field"
+    }
+  },
+  "object": {
+    "message": {
+      "messageId": "0f6c2a8e-illustrative-0001",
+      "role": "ROLE_USER",
+      "parts": [
+        {
+          "data": {
+            "requestVersion": "traceweave-witness-request-draft-1",
+            "presented": {
+              "kind": "dsse-signature-sha256",
+              "sha256": "91b0dacf9f52a6ee3c1921f75a659f5b7857ca252f5abf6017cf8e8071f45bfc"
+            },
+            "fingerprints": [
+              "9f3a52c1d07e4b21"
+            ]
+          },
+          "mediaType": "application/json"
+        }
+      ],
+      "extensions": [
+        "https://traceweave.org/a2a/ext/registration/draft-1"
+      ]
+    }
+  }
+}

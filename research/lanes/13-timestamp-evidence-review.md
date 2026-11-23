@@ -68,4 +68,4 @@ All read 2026-11-23, read-only. GitHub sources are pinned by commit (resolved th
 
 ## Validation and handoff
 
-Every external URL above was requested again after writing; the results are recorded in the [design's verification section](../drafts/registration-record.md#19-verification-of-this-draft). Nothing was submitted to any service. **Needs the owner:** using any TSA, calendar or log, even for a test token; choosing which public TSAs (and reading their terms); any qualified (paid) TSA; whether anything is ever written to a public log.
+Every external URL above was requested again after writing; the results are recorded in the [design's verification section](../drafts/registration-record.md#20-verification-of-this-draft). Nothing was submitted to any service. **Needs the owner:** using any TSA, calendar or log, even for a test token; choosing which public TSAs (and reading their terms); any qualified (paid) TSA; whether anything is ever written to a public log.

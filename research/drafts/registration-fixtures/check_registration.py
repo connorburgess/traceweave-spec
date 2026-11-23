@@ -42,6 +42,10 @@ RESULT_VERSION = "traceweave-registration-verification-draft-1"
 LINK_VERSION = "traceweave-registration-link-draft-1"
 RENDERING_VERSION = "traceweave-registration-rendering-draft-1"
 KEY_EVENT_VERSION = "traceweave-key-event-draft-1"
+WITNESS_TYPE = "https://traceweave.org/predicate/witness/draft-1"
+WITNESS_VERSION = "traceweave-witness-draft-1"
+WITNESS_REQUEST_VERSION = "traceweave-witness-request-draft-1"
+A2A_EXTENSION = "https://traceweave.org/a2a/ext/registration/draft-1"
 POSSESSION_SCHEME = "sha256-salted-possession-v1"
 POSSESSION_DOMAIN = b"Traceweave-Possession-v1\x00"
 CATALOGUE_SCHEME = "sha256-salted-catalogue-v1"
@@ -57,6 +61,9 @@ REQUIRED_SENTENCES = [
     "It does not show who created the content, that it is original, that the registrant was first to create it, or who owns it.",
     "First to register is not first to create.",
 ]
+AGENT_SENTENCE = ("A registration made by or through an agent shows which key signed it and, for a hosted witness, which "
+                  "authenticated caller presented the digest; it does not show whether a person or an agent created the "
+                  "content, or on whose behalf.")
 
 EVIDENCE_ROOT = {"rfc3161": "tsa-certificate-chain", "opentimestamps": "bitcoin-proof-of-work",
                  "rekor-v2": "log-key", "cosigned-checkpoint": "witness-key"}
@@ -72,7 +79,7 @@ FORBIDDEN_KEYS = {"fingerprints", "tokens", "source", "text", "content", "catalo
 TIME_KEYS = {"provedAt", "timestamp", "notAfter", "genTime", "registeredAt", "recordedAt", "time", "provedTime"}
 AUTHORSHIP_TEXT = re.compile(
     r"(?i)\b(prove[sd]?|proof|establish(es|ed)?|confirm(s|ed)?|show(s|n)?|demonstrat(es|ed))\b[^.]*"
-    r"\b(author(ship)?|own(s|er|ership)?|original(ity)?|created (it|this|the)|creator|copyright)\b")
+    r"\b(author(ship)?|own(s|er|ership)?|original(ity)?|creat(ed|or)|copyright)\b")
 NEGATED = re.compile(r"(?i)\b(does not|do not|is not|cannot|never|not)\b")
 
 CODES = [
@@ -82,8 +89,27 @@ CODES = [
     "pending-counted", "placeholder-unlabelled", "possession-mismatch", "predicate-type", "profile-mismatch",
     "provenance-shape", "quorum-miscount", "report-digest", "result-mismatch", "signature-invalid",
     "single-verdict", "statement-digest", "statement-shape", "subject-mismatch", "subject-name",
-    "time-in-statement",
+    "time-in-statement", "content-on-wire", "a2a-shape", "mcp-tool-shape", "witness-shape",
 ]
+
+# A2A 1.0 field names (ProtoJSON of specification/a2a.proto at tag v1.0.1); required fields first.
+A2A_CARD = ({"name", "description", "supportedInterfaces", "version", "capabilities", "defaultInputModes",
+             "defaultOutputModes", "skills"}, {"provider", "documentationUrl", "securitySchemes", "securityRequirements",
+                                               "signatures", "iconUrl"})
+A2A_INTERFACE = ({"url", "protocolBinding", "protocolVersion"}, {"tenant"})
+A2A_SKILL = ({"id", "name", "description", "tags"}, {"examples", "inputModes", "outputModes", "securityRequirements"})
+A2A_CAPS = (set(), {"streaming", "pushNotifications", "extensions", "extendedAgentCard"})
+A2A_EXT = ({"uri"}, {"description", "required", "params"})
+A2A_MESSAGE = ({"messageId", "role", "parts"}, {"contextId", "taskId", "metadata", "extensions", "referenceTaskIds"})
+A2A_PART_CONTENT = {"text", "raw", "url", "data"}
+A2A_PART_OTHER = {"metadata", "filename", "mediaType"}
+A2A_TASK = ({"id", "status"}, {"contextId", "artifacts", "history", "metadata"})
+A2A_ARTIFACT = ({"artifactId", "parts"}, {"name", "description", "metadata", "extensions"})
+A2A_STATES = {"TASK_STATE_SUBMITTED", "TASK_STATE_WORKING", "TASK_STATE_COMPLETED", "TASK_STATE_FAILED",
+              "TASK_STATE_CANCELED", "TASK_STATE_INPUT_REQUIRED", "TASK_STATE_REJECTED", "TASK_STATE_AUTH_REQUIRED"}
+LOOPBACK = re.compile(r"^http://(127\.0\.0\.1|\[::1\]|localhost)(:\d+)?/")
+MCP_TOOL = ({"name", "inputSchema"}, {"title", "description", "icons", "outputSchema", "annotations", "_meta"})
+MCP_NAME = re.compile(r"^[A-Za-z0-9_.-]{1,128}$")
 
 
 class Dup(ValueError):
@@ -621,17 +647,19 @@ def check_link(link, meta, out):
 
 
 def check_rendering(ren, meta, out):
-    if not isinstance(ren, dict) or set(ren) != {"renderingVersion", "result", "lines"} or ren["renderingVersion"] != RENDERING_VERSION:
+    if not isinstance(ren, dict) or not {"renderingVersion", "result", "lines"} <= set(ren) <= {"renderingVersion", "result", "lines", "context"} \
+            or ren["renderingVersion"] != RENDERING_VERSION or ren.get("context", "creator") not in ("creator", "agent"):
         out.add("fixture-shape")
         return
     lines = ren["lines"]
-    for sentence in REQUIRED_SENTENCES:
+    required = REQUIRED_SENTENCES + ([AGENT_SENTENCE] if ren.get("context") == "agent" else [])
+    for sentence in required:
         if sentence not in lines:
             out.add("notice-missing")
     result = strict_loads((HERE / ren["result"]).read_text(encoding="utf-8"))["object"]
     claimed = result["outcomes"]["claimedCreatedAt"]["value"]
     for line in lines:
-        if line in REQUIRED_SENTENCES:
+        if line in REQUIRED_SENTENCES or line == AGENT_SENTENCE:
             continue
         if AUTHORSHIP_TEXT.search(line) and not NEGATED.search(line):
             out.add("authorship-claim")
@@ -639,6 +667,151 @@ def check_rendering(ren, meta, out):
             out.add("single-verdict")
         if claimed and claimed in line and "claimed" not in line.lower():
             out.add("claimed-as-proved")
+
+
+def shape(obj, spec, code, out):
+    required, optional = spec
+    if not isinstance(obj, dict) or not required <= set(obj) or set(obj) - required - optional:
+        out.add(code)
+        return False
+    return True
+
+
+def check_card(card, meta, out):
+    """A2A 1.0 Agent Card, checked against the proto field lists (no published JSON Schema is committed)."""
+    if not shape(card, A2A_CARD, "a2a-shape", out):
+        return
+    caps = card["capabilities"]
+    if not shape(caps, A2A_CAPS, "a2a-shape", out):
+        return
+    exts = [e for e in caps.get("extensions", []) if shape(e, A2A_EXT, "a2a-shape", out) and e["uri"] == A2A_EXTENSION]
+    if len(exts) != 1 or exts[0].get("required") is not True or exts[0].get("params", {}).get("wire") not in ("digests-only", "local-only"):
+        out.add("a2a-shape")
+        return
+    wire = exts[0]["params"]["wire"]
+    for itf in card["supportedInterfaces"]:
+        if not shape(itf, A2A_INTERFACE, "a2a-shape", out):
+            continue
+        if itf["protocolBinding"] not in ("JSONRPC", "GRPC", "HTTP+JSON") or not re.match(r"^\d+\.\d+$", itf["protocolVersion"]):
+            out.add("a2a-shape")
+        local = bool(LOOPBACK.match(itf["url"]))
+        if (wire == "local-only" and not local) or (wire == "digests-only" and not itf["url"].startswith("https://")):
+            out.add("content-on-wire")
+    for skill in card["skills"]:
+        if not shape(skill, A2A_SKILL, "a2a-shape", out):
+            continue
+        if REQUIRED_SENTENCES[2] not in skill["description"]:
+            out.add("notice-missing")
+        if wire == "digests-only" and set(skill.get("inputModes", card["defaultInputModes"])) - {"application/json"}:
+            out.add("content-on-wire")
+    if wire == "digests-only" and not card.get("securityRequirements"):
+        out.add("a2a-shape")
+
+
+def check_wire_parts(parts, out):
+    for part in parts:
+        if not isinstance(part, dict) or len(set(part) & A2A_PART_CONTENT) != 1 or set(part) - A2A_PART_CONTENT - A2A_PART_OTHER:
+            out.add("a2a-shape")
+            continue
+        if "raw" in part or "url" in part:
+            out.add("content-on-wire")
+        for key, _ in walk_keys(part.get("data")):
+            if key in FORBIDDEN_KEYS:
+                out.add("forbidden-field")
+
+
+def check_request(req, meta, out):
+    """A2A SendMessageRequest to the hosted witness skill: digests only."""
+    if not isinstance(req, dict) or not {"message"} <= set(req) <= {"message", "configuration", "metadata", "tenant"} \
+            or not shape(req["message"], A2A_MESSAGE, "a2a-shape", out):
+        out.add("a2a-shape")
+        return
+    msg = req["message"]
+    if msg["role"] != "ROLE_USER" or A2A_EXTENSION not in msg.get("extensions", []):
+        out.add("a2a-shape")
+    check_wire_parts(msg["parts"], out)
+    datas = [p["data"] for p in msg["parts"] if isinstance(p, dict) and "data" in p]
+    if len(datas) != 1 or not isinstance(datas[0], dict):
+        out.add("a2a-shape")
+        return
+    d = datas[0]
+    if d.get("requestVersion") != WITNESS_REQUEST_VERSION or set(d) - {"requestVersion", "presented"} - FORBIDDEN_KEYS \
+            or not isinstance(d.get("presented"), dict) or set(d["presented"]) != {"kind", "sha256"} \
+            or d["presented"]["kind"] != "dsse-signature-sha256" or not HEX64.match(str(d["presented"]["sha256"])):
+        out.add("a2a-shape")
+        return
+    if meta.get("bundle"):
+        bundle = strict_loads((HERE / meta["bundle"]).read_text(encoding="utf-8"))["object"]
+        if d["presented"]["sha256"] != sha(b64d(bundle["envelope"]["signatures"][0]["sig"])):
+            out.add("evidence-wrong-target")
+
+
+def check_witness_bundle(wb, presented, out):
+    if not isinstance(wb, dict) or set(wb) != {"bundleVersion", "envelope", "verificationMaterial", "timeEvidence"}:
+        out.add("witness-shape")
+        return
+    keys = read_keys(wb["verificationMaterial"], out)
+    opened = open_envelope(wb["envelope"], keys, out)
+    if opened is None:
+        return
+    _, st, sigs, _ = opened
+    pred = st.get("predicate") if isinstance(st, dict) else None
+    if st.get("predicateType") != WITNESS_TYPE or not isinstance(pred, dict):
+        out.add("witness-shape")
+        return
+    for key, _ in walk_keys(pred):
+        if key.lower() in AUTHORSHIP_KEYS:
+            out.add("authorship-claim")
+    allowed = {"witnessVersion", "presentedKind", "receivedAt", "caller", "requestMessageId", "notShown"}
+    if set(pred) - allowed - {k for k in pred if k.lower() in AUTHORSHIP_KEYS} or pred.get("witnessVersion") != WITNESS_VERSION \
+            or pred.get("presentedKind") != "dsse-signature-sha256" or not TIME.match(str(pred.get("receivedAt"))) \
+            or not isinstance(pred.get("caller"), dict) or set(pred["caller"]) != {"scheme", "issuer", "subject"}:
+        out.add("witness-shape")
+    if pred.get("notShown") != NOT_SHOWN:
+        out.add("notice-missing")
+    if st["subject"][0]["digest"]["sha256"] != presented:
+        out.add("evidence-wrong-target")
+    for ev in wb["timeEvidence"]:
+        check_evidence(ev, sigs, out)
+
+
+def check_task(task, meta, out):
+    """A2A Task returned by the hosted witness: one artifact holding the witness bundle."""
+    if not shape(task, A2A_TASK, "a2a-shape", out):
+        return
+    if task["status"].get("state") not in A2A_STATES or set(task["status"]) - {"state", "message", "timestamp"}:
+        out.add("a2a-shape")
+        return
+    req = strict_loads((HERE / meta["request"]).read_text(encoding="utf-8"))["object"]
+    presented = [p["data"] for p in req["message"]["parts"] if "data" in p][0]["presented"]["sha256"]
+    arts = task.get("artifacts", [])
+    if task["status"]["state"] != "TASK_STATE_COMPLETED" or len(arts) != 1 or not shape(arts[0], A2A_ARTIFACT, "a2a-shape", out):
+        out.add("a2a-shape")
+        return
+    check_wire_parts(arts[0]["parts"], out)
+    datas = [p["data"] for p in arts[0]["parts"] if "data" in p]
+    if len(datas) != 1:
+        out.add("a2a-shape")
+        return
+    check_witness_bundle(datas[0], presented, out)
+
+
+def check_mcp_tool(tool, meta, out):
+    """MCP 2026-07-28 Tool definition for the local route (stdio). Field names from schema.ts."""
+    if not shape(tool, MCP_TOOL, "mcp-tool-shape", out):
+        return
+    if not MCP_NAME.match(tool["name"]) or tool["inputSchema"].get("type") != "object":
+        out.add("mcp-tool-shape")
+    if REQUIRED_SENTENCES[2] not in tool.get("description", ""):
+        out.add("notice-missing")
+    ann = tool.get("annotations", {})
+    # Registration contacts time services and adds a new record each call.
+    if ann.get("readOnlyHint", False) or ann.get("openWorldHint", True) is not True or ann.get("idempotentHint", False) \
+            or ann.get("destructiveHint", True) is not False:
+        out.add("mcp-tool-shape")
+    for key, _ in walk_keys(tool.get("outputSchema", {})):
+        if key in FORBIDDEN_KEYS - {"source"}:
+            out.add("forbidden-field")
 
 
 def check_key_event(bundle, meta, out):
@@ -689,6 +862,14 @@ def check_file(path):
         check_link(obj, meta, out)
     elif kind == "rendering":
         check_rendering(obj, meta, out)
+    elif kind == "a2a-agent-card":
+        check_card(obj, meta, out)
+    elif kind == "a2a-request":
+        check_request(obj, meta, out)
+    elif kind == "a2a-task":
+        check_task(obj, meta, out)
+    elif kind == "mcp-tool":
+        check_mcp_tool(obj, meta, out)
     elif kind == "key-event":
         check_key_event(obj, meta, out)
     else:

@@ -264,6 +264,143 @@ def build():
     raw = json.dumps(fixture("statement", "Duplicate key.", st), indent=2)
     (HERE / "negative" / "neg-duplicate-key.json").write_text(raw.replace('"contentKind": "source-code",', '"contentKind": "source-code",\n      "contentKind": "text",', 1), encoding="utf-8")
 
+    build_agent(sig)
+
+
+WITNESS_SEED = hashlib.sha256(b"traceweave witness fixture test key; public; never use").digest()
+WITNESS_PUB = C.ed25519_public(WITNESS_SEED)
+LIMIT = C.REQUIRED_SENTENCES[2]
+EXT = {"uri": C.A2A_EXTENSION, "description": "Traceweave registration profile (proposed; not published).", "required": True}
+
+
+def hosted_card(**changes):
+    card = {
+        "name": "Traceweave witness (illustrative)",
+        "description": "Illustrative only; no such service exists. Receives the SHA-256 of a creator's DSSE signature, never content or fingerprints, and returns a signed, time-stamped witness statement. " + LIMIT,
+        "supportedInterfaces": [{"url": "https://witness.example.invalid/a2a/v1", "protocolBinding": "JSONRPC", "protocolVersion": "1.0"}],
+        "provider": {"organization": "Traceweave (illustrative; no operator exists)", "url": "https://traceweave.org"},
+        "version": "0.0.0-illustrative",
+        "capabilities": {"streaming": False, "pushNotifications": False,
+                         "extensions": [dict(EXT, params={"wire": "digests-only"})]},
+        "securitySchemes": {"oidc": {"openIdConnectSecurityScheme": {"openIdConnectUrl": "https://issuer.example.invalid/.well-known/openid-configuration"}}},
+        "securityRequirements": [{"schemes": {"oidc": {"list": ["openid"]}}}],
+        "defaultInputModes": ["application/json"],
+        "defaultOutputModes": ["application/json"],
+        "skills": [{
+            "id": "witness-digest",
+            "name": "Witness a registration digest",
+            "description": "Records that the authenticated caller presented this signature digest at the witness's receipt time, signs a witness statement and attaches time evidence. It does not register content, check authorship or check originality. " + LIMIT,
+            "tags": ["traceweave", "registration", "witness", "timestamp"],
+            "examples": ['{"requestVersion": "traceweave-witness-request-draft-1", "presented": {"kind": "dsse-signature-sha256", "sha256": "<64 hex>"}}'],
+            "inputModes": ["application/json"],
+            "outputModes": ["application/json"],
+        }],
+    }
+    card.update(changes)
+    return card
+
+
+def local_card():
+    return {
+        "name": "Traceweave local registrar (illustrative)",
+        "description": "Illustrative only. Runs on the creator's machine, on loopback. Signs with the creator's own key and requests time evidence; only a signature digest leaves the machine. " + LIMIT,
+        "supportedInterfaces": [{"url": "http://127.0.0.1:8765/a2a/v1", "protocolBinding": "JSONRPC", "protocolVersion": "1.0"}],
+        "version": "0.0.0-illustrative",
+        "capabilities": {"streaming": True, "pushNotifications": False, "extensions": [dict(EXT, params={"wire": "local-only"})]},
+        "defaultInputModes": ["application/json"],
+        "defaultOutputModes": ["application/json"],
+        "skills": [
+            {"id": "register", "name": "Register files at creation", "tags": ["traceweave", "registration"],
+             "description": "Registers local files by path: hashes them, signs a registration statement with the creator key held by this tool, and requests time evidence. " + LIMIT},
+            {"id": "verify", "name": "Verify a registration", "tags": ["traceweave", "verification"],
+             "description": "Verifies a registration bundle against local files under the caller's policy and returns separate outcomes, never a single verdict. " + LIMIT},
+        ],
+    }
+
+
+def witness_request(presented, parts_extra=None, data_extra=None):
+    data = {"requestVersion": C.WITNESS_REQUEST_VERSION, "presented": {"kind": "dsse-signature-sha256", "sha256": presented}}
+    data.update(data_extra or {})
+    parts = [{"data": data, "mediaType": "application/json"}] + (parts_extra or [])
+    return {"message": {"messageId": "0f6c2a8e-illustrative-0001", "role": "ROLE_USER", "parts": parts, "extensions": [C.A2A_EXTENSION]}}
+
+
+def witness_task(presented, **pred_changes):
+    pred = {"witnessVersion": C.WITNESS_VERSION, "presentedKind": "dsse-signature-sha256", "receivedAt": "2026-11-23T10:00:02Z",
+            "caller": {"scheme": "openIdConnect", "issuer": "https://issuer.example.invalid", "subject": "placeholder-subject-0001"},
+            "requestMessageId": "0f6c2a8e-illustrative-0001", "notShown": C.NOT_SHOWN}
+    pred.update(pred_changes)
+    st = {"_type": C.STATEMENT_TYPE, "subject": [{"name": "presented-digest", "digest": {"sha256": presented}}],
+          "predicateType": C.WITNESS_TYPE, "predicate": pred}
+    env, wsig = envelope(st, seed=WITNESS_SEED, kid=C.keyid(WITNESS_PUB))
+    wb = {"bundleVersion": C.BUNDLE_VERSION, "envelope": env,
+          "verificationMaterial": {"publicKeys": [{"keyid": C.keyid(WITNESS_PUB), "alg": "ed25519", "publicKeyHex": WITNESS_PUB.hex()}]},
+          "timeEvidence": [ev_rfc3161(wsig)]}
+    return {"id": "task-illustrative-0001", "contextId": "ctx-illustrative-0001", "status": {"state": "TASK_STATE_COMPLETED"},
+            "artifacts": [{"artifactId": "witness-0001", "name": "witness statement",
+                           "parts": [{"data": wb, "mediaType": "application/json"}]}]}
+
+
+def mcp_tool(**changes):
+    tool = {
+        "name": "traceweave_register",
+        "title": "Register files with Traceweave (illustrative)",
+        "description": "Registers local files at creation time: hashes them, signs a registration statement with the creator key held by this local server, and requests time evidence. Only a signature digest leaves the machine. " + LIMIT,
+        "inputSchema": {"type": "object", "additionalProperties": False, "required": ["paths"],
+                        "properties": {"paths": {"type": "array", "minItems": 1, "maxItems": 64, "items": {"type": "string"}},
+                                       "claimedCreatedAt": {"type": "string", "description": "Optional claimed creation time; never shown as proved."}}},
+        "outputSchema": {"type": "object", "required": ["bundleId", "statementSha256", "timeEvidence"],
+                         "properties": {"bundleId": {"type": "string", "description": "Opaque id of the bundle in the private store; never a path (SK.2)."}, "statementSha256": {"type": "string"},
+                                        "timeEvidence": {"type": "array", "items": {"type": "object"}}}},
+        "annotations": {"readOnlyHint": False, "destructiveHint": False, "idempotentHint": False, "openWorldHint": True},
+    }
+    tool.update(changes)
+    return tool
+
+
+def build_agent(sig):
+    presented = C.sha(sig)
+    agent_meta = {"bundle": "fixtures/bundle-two-roots.json"}
+    write("fixtures", "a2a-card-hosted-witness", fixture("a2a-agent-card", "Illustrative A2A 1.0 Agent Card for a hosted witness (architecture b). Checked against the a2a.proto field lists only.", hosted_card()))
+    write("fixtures", "a2a-card-local-registrar", fixture("a2a-agent-card", "Illustrative A2A 1.0 Agent Card for a local registrar on loopback (architecture a).", local_card()))
+    write("fixtures", "a2a-request-witness", fixture("a2a-request", "SendMessageRequest to the witness: one data part with the signature digest.", witness_request(presented), **agent_meta))
+    write("fixtures", "a2a-task-witness", fixture("a2a-task", "Completed task: one artifact holding the signed witness statement and an RFC 3161 placeholder over the witness signature.",
+                                                   witness_task(presented), request="fixtures/a2a-request-witness.json"))
+    write("fixtures", "mcp-tool-register", fixture("mcp-tool", "Illustrative MCP 2026-07-28 Tool for the local route.", mcp_tool()))
+    ren = {"renderingVersion": C.RENDERING_VERSION, "result": "fixtures/verification-result.json", "context": "agent",
+           "lines": ["Registration of sum.go, made through an agent; signed by key " + KEYID + ".",
+                     "Witnessed: the caller placeholder-subject-0001 presented the signature digest at 2026-11-23T10:00:02Z by the witness's clock.",
+                     *C.REQUIRED_SENTENCES, C.AGENT_SENTENCE]}
+    write("fixtures", "rendering-agent", fixture("rendering", "User-facing text for a registration made through an agent.", ren))
+
+    neg = lambda name, doc: write("negative", f"neg-{name}", doc)
+    neg("content-on-wire", fixture("a2a-request", "Sends the file itself as a raw part to the hosted witness.",
+                                   witness_request(presented, parts_extra=[{"raw": base64.b64encode(ARTIFACT).decode(), "filename": "sum.go", "mediaType": "text/plain"}]),
+                                   "content-on-wire", **agent_meta))
+    neg("fingerprints-on-wire", fixture("a2a-request", "Sends fingerprints to the hosted witness.",
+                                        witness_request(presented, data_extra={"fingerprints": ["9f3a52c1d07e4b21"]}), "forbidden-field", **agent_meta))
+    neg("witness-wrong-digest", fixture("a2a-request", "Presents the artifact digest instead of the signature digest.",
+                                        witness_request(C.sha(ARTIFACT)), "evidence-wrong-target", **agent_meta))
+    bad = hosted_card()
+    bad["supportedInterfaces"][0]["protocolVersion"] = "1.0.1"
+    neg("a2a-shape", fixture("a2a-agent-card", "Patch version in protocolVersion (A2A 3.6: Major.Minor only).", bad, "a2a-shape"))
+    bad = hosted_card()
+    bad["skills"][0]["description"] = "Registers your work and proves you made it."
+    neg("card-notice-missing", fixture("a2a-agent-card", "Skill description without the limit sentence.", bad, "notice-missing"))
+    bad = hosted_card()
+    bad["supportedInterfaces"][0]["url"] = "http://witness.example.invalid/a2a/v1"
+    neg("hosted-plain-http", fixture("a2a-agent-card", "Digests-only witness offered over plain HTTP.", bad, "content-on-wire"))
+    neg("witness-authorship", fixture("a2a-task", "Witness statement asserts the caller is the author.",
+                                      witness_task(presented, author="placeholder-subject-0001"), "authorship-claim", request="fixtures/a2a-request-witness.json"))
+    neg("witness-shape", fixture("a2a-task", "Witness statement without the caller it authenticated.",
+                                 witness_task(presented, caller={"scheme": "none"}), "witness-shape", request="fixtures/a2a-request-witness.json"))
+    neg("mcp-tool-shape", fixture("mcp-tool", "Registration tool that declares itself closed-world and idempotent.",
+                                  mcp_tool(annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True, "openWorldHint": False}), "mcp-tool-shape"))
+    ren_bad = dict(ren, lines=ren["lines"][:-1])
+    neg("agent-notice-missing", fixture("rendering", "Agent-made registration without the agent sentence.", ren_bad, "notice-missing"))
+    ren_bad = dict(ren, lines=[ren["lines"][0], "This shows the agent created sum.go.", *ren["lines"][2:]])
+    neg("agent-authorship", fixture("rendering", "Rendering says the agent created the content.", ren_bad, "authorship-claim"))
+
 
 if __name__ == "__main__":
     build()

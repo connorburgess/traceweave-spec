@@ -1,0 +1,73 @@
+{
+  "fixture": {
+    "kind": "a2a-task",
+    "description": "Witness statement without the caller it authenticated.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "request": "fixtures/a2a-request-witness.json",
+    "expect": {
+      "code": "witness-shape"
+    }
+  },
+  "object": {
+    "id": "task-illustrative-0001",
+    "contextId": "ctx-illustrative-0001",
+    "status": {
+      "state": "TASK_STATE_COMPLETED"
+    },
+    "artifacts": [
+      {
+        "artifactId": "witness-0001",
+        "name": "witness statement",
+        "parts": [
+          {
+            "data": {
+              "bundleVersion": "traceweave-registration-bundle-draft-1",
+              "envelope": {
+                "payloadType": "application/vnd.in-toto+json",
+                "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2FsbGVyIjp7InNjaGVtZSI6Im5vbmUifSwibm90U2hvd24iOlsiYXV0aG9yc2hpcCIsIm9yaWdpbmFsaXR5IiwiZmlyc3QtY3JlYXRpb24iLCJvd25lcnNoaXAiLCJwZXJtaXNzaW9uIl0sInByZXNlbnRlZEtpbmQiOiJkc3NlLXNpZ25hdHVyZS1zaGEyNTYiLCJyZWNlaXZlZEF0IjoiMjAyNi0xMS0yM1QxMDowMDowMloiLCJyZXF1ZXN0TWVzc2FnZUlkIjoiMGY2YzJhOGUtaWxsdXN0cmF0aXZlLTAwMDEiLCJ3aXRuZXNzVmVyc2lvbiI6InRyYWNld2VhdmUtd2l0bmVzcy1kcmFmdC0xIn0sInByZWRpY2F0ZVR5cGUiOiJodHRwczovL3RyYWNld2VhdmUub3JnL3ByZWRpY2F0ZS93aXRuZXNzL2RyYWZ0LTEiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiOTFiMGRhY2Y5ZjUyYTZlZTNjMTkyMWY3NWE2NTlmNWI3ODU3Y2EyNTJmNWFiZjYwMTdjZjhlODA3MWY0NWJmYyJ9LCJuYW1lIjoicHJlc2VudGVkLWRpZ2VzdCJ9XX0=",
+                "signatures": [
+                  {
+                    "keyid": "fb759683b6b4dc99",
+                    "sig": "VmDhsopvYTAgxPb1sixfo30mA+tq1RdZnOkgZcdYpeTZAwcRxgcFFwgo9o5/t7D05UfZxY44lydXIoTXu4YJAw=="
+                  }
+                ]
+              },
+              "verificationMaterial": {
+                "publicKeys": [
+                  {
+                    "keyid": "fb759683b6b4dc99",
+                    "alg": "ed25519",
+                    "publicKeyHex": "41bf95fdff75787859f2d80b361c04f7d9237a0df0281a4f68d6badcba9e29d1"
+                  }
+                ]
+              },
+              "timeEvidence": [
+                {
+                  "evidenceVersion": "traceweave-time-evidence-draft-1",
+                  "type": "rfc3161",
+                  "placeholder": true,
+                  "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+                  "target": {
+                    "kind": "dsse-signature",
+                    "signatureIndex": 0,
+                    "sha256": "9fada748d6ee192762a1215c1aab1101d7b05839445b369e1a13b479f18bdcc2"
+                  },
+                  "root": {
+                    "kind": "tsa-certificate-chain",
+                    "id": "placeholder-tsa-a"
+                  },
+                  "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT",
+                  "statedTime": {
+                    "genTime": "2026-11-23T10:00:00Z",
+                    "accuracySeconds": 1
+                  }
+                }
+              ]
+            },
+            "mediaType": "application/json"
+          }
+        ]
+      }
+    ]
+  }
+}
