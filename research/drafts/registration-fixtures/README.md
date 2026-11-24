@@ -20,6 +20,9 @@ A fixture registers nothing and proves nothing.
 | `fixtures/a2a-card-local-registrar.json` | a2a-agent-card | Illustrative A2A 1.0 Agent Card for a local registrar on loopback (architecture a). |
 | `fixtures/a2a-request-witness.json` | a2a-request | SendMessageRequest to the witness: one data part with the signature digest. |
 | `fixtures/a2a-task-witness.json` | a2a-task | Completed task: one artifact holding the signed witness statement and the witness's RFC 3161 placeholder. |
+| `fixtures/bundle-ai-use-generated.json` | bundle | A registration carrying the registrant's own AI-use declaration: {'declared': 'generated', 'tool': 'ExampleModel-4.2'}. |
+| `fixtures/bundle-ai-use-modified.json` | bundle | A registration carrying the registrant's own AI-use declaration: {'declared': 'modified'}. |
+| `fixtures/bundle-ai-use-no-generative-ai.json` | bundle | A registration carrying the registrant's own AI-use declaration: {'declared': 'no-generative-ai'}. |
 | `fixtures/bundle-cosigned.json` | bundle | The same statement later co-signed by a second key; evidence covers signature 0 only. |
 | `fixtures/bundle-real.json` | bundle | Real-format evidence: a token from a local test-only TSA and an OpenTimestamps proof against a locally mined header file. |
 | `fixtures/bundle-renewed.json` | bundle | bundle-three-roots plus a renewal token (TSA B, 2030) over TSA A's token bytes. |
@@ -42,6 +45,10 @@ A fixture registers nothing and proves nothing.
 | `fixtures/mcp-tool-register.json` | mcp-tool | Illustrative MCP 2026-07-28 Tool for the local route. |
 | `fixtures/registration-set.json` | registration-set | Two registrations by one producer: nonces differ. |
 | `fixtures/rendering-agent.json` | rendering | User-facing text for a registration made through an agent. |
+| `fixtures/rendering-ai-use-absent.json` | rendering | No claim: the optional absent sentence; never shown as "no AI". |
+| `fixtures/rendering-ai-use-generated.json` | rendering | The fixed declaration sentence and the fixed not-checked sentence. |
+| `fixtures/rendering-ai-use-modified.json` | rendering | The fixed declaration sentence and the fixed not-checked sentence. |
+| `fixtures/rendering-ai-use-no-generative-ai.json` | rendering | The fixed declaration sentence and the fixed not-checked sentence. |
 | `fixtures/rendering-cosigned.json` | rendering | Text for the co-signed bundle: a bound sentence only for the key that has one. |
 | `fixtures/rendering.json` | rendering | User-facing text built only from the allowed templates. |
 | `fixtures/report-link.json` | report-link | Links the committed example comparison report to the registration, without changing the report. |
@@ -50,6 +57,9 @@ A fixture registers nothing and proves nothing.
 | `fixtures/text-reference-cosigned.json` | text-reference | The reference of fixtures/bundle-cosigned.json: tw1- + 130 bits of statementSha256 + a Luhn mod 32 check character. |
 | `fixtures/text-reference-second-work.json` | text-reference | The reference of fixtures/bundle-second-work.json: tw1- + 130 bits of statementSha256 + a Luhn mod 32 check character. |
 | `fixtures/text-reference-three-roots.json` | text-reference | The reference of fixtures/bundle-three-roots.json: tw1- + 130 bits of statementSha256 + a Luhn mod 32 check character. |
+| `fixtures/verification-result-ai-use-generated.json` | verification-result | The declaration is echoed as declared and not checked; trust and time are unchanged. |
+| `fixtures/verification-result-ai-use-modified.json` | verification-result | The declaration is echoed as declared and not checked; trust and time are unchanged. |
+| `fixtures/verification-result-ai-use-no-generative-ai.json` | verification-result | The declaration is echoed as declared and not checked; trust and time are unchanged. |
 | `fixtures/verification-result-chain-same-time.json` | verification-result | Enumeration finding: trust flows only through a rotation proved strictly after its signer became trusted. |
 | `fixtures/verification-result-claim-trusted-only.json` | verification-result | The claimed time is compared only with trusted signatures (S11): `claimed-only`. |
 | `fixtures/verification-result-compromise-early.json` | verification-result | An early-dated claim is clamped to the look-back window: `trusted`. |
@@ -136,7 +146,7 @@ A fixture registers nothing and proves nothing.
 | `aux/key-event-second-rotation-2028.json` | key-event | Eighteen months later, whoever obtained the old key rotates it again. |
 | `aux/verification-result-e1-flipped.json` | verification-result | Draft-4 behaviour with one extra rejected event (the flip), kept as input to the equivalence negative. |
 
-`negative/` holds 109 broken fixtures; each must produce exactly the codes listed below. `aux/` holds inputs that other fixtures refer to; they are not checked on their own.
+`negative/` holds 124 broken fixtures; each must produce exactly the codes listed below. `aux/` holds inputs that other fixtures refer to; they are not checked on their own.
 
 | Real-format file | SHA-256 (from `MANIFEST.json`) |
 | --- | --- |
@@ -197,6 +207,21 @@ The A2A fixtures are **not validated against a published A2A schema** (none is c
 | `neg-accuracy-assumed` | `result-mismatch` | A token without accuracy, and none in policy, counted anyway (A3). |
 | `neg-agent-authorship` | `authorship-claim` + `rendering-unlisted-line` | Rendering says the agent created the content. |
 | `neg-agent-notice-missing` | `notice-missing` | Agent-made registration without the agent sentence. |
+| `neg-ai-use-absent-as-none` | `result-mismatch` | Nothing declared, but rendered as a no-AI declaration. |
+| `neg-ai-use-as-property` | `ai-origin-claim` + `rendering-unlisted-line` | The declaration rendered as a property of the content. |
+| `neg-ai-use-authorship-in-tool` | `authorship-claim` | An authorship word smuggled into the tool identifier. |
+| `neg-ai-use-authorship-key` | `authorship-claim` | An authorship key smuggled into the claim. |
+| `neg-ai-use-changes-trust` | `ai-use-affected-outcome` | The declaration lowered the signer's trust. |
+| `neg-ai-use-extra-key` | `ai-use-shape` | An extra key in the claim. |
+| `neg-ai-use-human-written` | `ai-origin-claim` + `authorship-claim` + `rendering-unlisted-line` | No-AI declaration rendered as human authorship. |
+| `neg-ai-use-missing-value` | `ai-use-shape` | A tool without a declaration. |
+| `neg-ai-use-tool-email` | `ai-use-shape` | An e-mail address as tool identifier. |
+| `neg-ai-use-tool-name-with-space` | `ai-use-shape` | A name with a space as tool identifier. |
+| `neg-ai-use-tool-path` | `ai-use-shape` | A path as tool identifier. |
+| `neg-ai-use-tool-url` | `ai-use-shape` | A URL as tool identifier. |
+| `neg-ai-use-tool-with-none` | `ai-use-shape` | A tool named while declaring no generative AI. |
+| `neg-ai-use-unchecked-dropped` | `notice-missing` | The not-checked sentence dropped. |
+| `neg-ai-use-unknown-value` | `ai-use-shape` | A value outside the closed list. |
 | `neg-authorship-claim-0` | `authorship-claim` + `rendering-unlisted-line` | Rendering adds: This registration proves you are the author of sum.go. |
 | `neg-authorship-claim-1` | `authorship-claim` + `rendering-unlisted-line` | Rendering adds: This registration establishes your claim to sum.go. |
 | `neg-authorship-claim-2` | `authorship-claim` + `rendering-unlisted-line` | Rendering adds: sum.go is registered to you as its creator. |

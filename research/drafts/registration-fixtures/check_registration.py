@@ -116,6 +116,12 @@ TEMPLATES = {
     "claimed": re.compile(r"^Creation time claimed by the registrant, not proved: " + T + r"\.$"),
     "simulated": re.compile(r"^Simulated: time evidence is placeholder only\.$"),
     "reference": re.compile(r"^Reference: (tw1-[0-9A-HJKMNP-TV-Z]{27})\.$"),
+    "ai-generated": re.compile(r'^The registrant declared that this content was generated with an AI system \("AI \+ GENERATED" in the EU Code of Practice\)\.$'),
+    "ai-modified": re.compile(r'^The registrant declared that this content was modified with an AI system \("AI \+ MODIFIED" in the EU Code of Practice\)\.$'),
+    "ai-none": re.compile(r"^The registrant declared that no generative AI system was used\.$"),
+    "ai-tool": re.compile(r"^AI tool named by the registrant: ([A-Za-z0-9][A-Za-z0-9._+-]{0,63})\.$"),
+    "ai-unchecked": re.compile(r"^Traceweave did not check this declaration\.$"),
+    "ai-absent": re.compile(r"^The registrant made no declaration about AI use\.$"),
     "witness": re.compile(r"^Witnessed: the caller ([A-Za-z0-9._-]+) presented the signature digest no later than " + T + r", according to the witness's time-stamp authority\.$"),
 }
 
@@ -129,7 +135,7 @@ CODES = [
     "root-not-anchored", "signature-invalid", "single-verdict", "statement-digest", "statement-shape",
     "subject-mismatch", "subject-name", "time-in-statement", "tsa-eku-invalid", "tsa-imprint-mismatch",
     "tsa-nonce-mismatch", "tsa-signature-invalid", "tsa-signing-cert-mismatch", "trust-without-quorum", "simulated-unmarked", "extra-event-changed-result", "key-event-signatures",
-    "reference-shape", "reference-check", "reference-mismatch",
+    "reference-shape", "reference-check", "reference-mismatch", "ai-use-shape", "ai-origin-claim", "ai-use-affected-outcome",
     "content-on-wire", "a2a-shape", "mcp-tool-shape", "witness-shape",
 ]
 
@@ -155,6 +161,49 @@ MCP_NAME = re.compile(r"^[A-Za-z0-9_.-]{1,128}$")
 
 class Dup(ValueError):
     pass
+
+
+# ------------------------------------------------------------------ self-declared AI use (design 4.7)
+# Closed values, each mapped to a pinned source: the EU Code of Practice on Transparency of AI-Generated
+# Content (2026-06-10), Annex 1 icons; and the IPTC Digital Source Type scheme released 2024-10-23.
+IPTC = "http://cv.iptc.org/newscodes/digitalsourcetype/"
+AI_USE = {
+    "generated": ("AI + GENERATED", IPTC + "trainedAlgorithmicMedia"),
+    "modified": ("AI + MODIFIED", IPTC + "compositeWithTrainedAlgorithmicMedia"),
+    "no-generative-ai": (None, None),  # no Code icon; IPTC has no term that does not assert human creation
+}
+AI_TOOL = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._+-]{0,63}$")  # one token: no space, '/', ':', '@' or '\\'
+AI_ORIGIN_TEXT = re.compile(r"(?i)\b(ai[- ]generated|ai[- ]written|ai[- ]made|made by ai|human[- ](written|made|authored|created|generated)|"
+                            r"written by (a )?(human|person)|not ai)\b")
+
+
+def check_ai_use(ai, out):
+    """Design 4.7. Authorship keys anywhere inside the claim are `authorship-claim` (the section 4.6 key rule);
+    any other unknown key, an unknown value or a malformed tool token is `ai-use-shape`."""
+    if not isinstance(ai, dict):
+        out.add("ai-use-shape")
+        return
+    authorship = {k for k in ai if k.lower() in AUTHORSHIP_KEYS}
+    if authorship:
+        out.add("authorship-claim")
+    if "declared" not in ai or set(ai) - {"declared", "tool"} - authorship or ai["declared"] not in AI_USE:
+        out.add("ai-use-shape")
+        return
+    if "tool" in ai:
+        tool = ai["tool"]
+        if ai["declared"] == "no-generative-ai" or not isinstance(tool, str) or not AI_TOOL.match(tool):
+            out.add("ai-use-shape")  # a URL, path, e-mail address or name with spaces cannot match
+        elif DENY_TEXT.search(tool.replace("-", " ").replace("_", " ").replace(".", " ")):
+            out.add("authorship-claim")
+
+
+def declared_ai_use(pred):
+    ai = pred.get("claims", {}).get("aiUse")
+    if ai is None:
+        return None
+    icon, iptc = AI_USE[ai["declared"]]
+    return {"declared": ai["declared"], "tool": ai.get("tool"), "euCodeIcon": icon, "iptcDigitalSourceType": iptc,
+            "status": "declared-not-checked"}
 
 
 # ------------------------------------------------------------------ text reference (design 9.1, frozen)
@@ -473,8 +522,11 @@ def check_statement(st, artifacts, out):
             out.add("catalogue-unsalted")
     if "claims" in pred:
         claims = pred["claims"]
-        if not isinstance(claims, dict) or set(claims) - {"createdAt"} or not TIME.match(str(claims.get("createdAt", ""))):
+        if not isinstance(claims, dict) or set(claims) - {"createdAt", "aiUse"} or not claims \
+                or ("createdAt" in claims and not TIME.match(str(claims["createdAt"]))):
             out.add("statement-shape")
+        elif "aiUse" in claims:
+            check_ai_use(claims["aiUse"], out)
     for i, s in enumerate(subjects):
         if artifacts.get(i) is not None and sha(artifacts[i]) != s["digest"]["sha256"]:
             out.add("subject-mismatch")
@@ -1016,6 +1068,13 @@ def signer_trust(digest, sig_outcome, bound, policy, ok_events, all_applied):
     return status
 
 
+def ai_use_invalid(pred):
+    probe = set()
+    if "aiUse" in pred.get("claims", {}):
+        check_ai_use(pred["claims"]["aiUse"], probe)
+    return bool(probe)
+
+
 def expected_result(ctx, artifacts, policy, simulated, bundle_sha, event_paths, out):
     st = ctx["statement"]
     pred = st["predicate"]
@@ -1040,6 +1099,7 @@ def expected_result(ctx, artifacts, policy, simulated, bundle_sha, event_paths, 
     # S11: compare only with signatures whose signer is trusted.
     compared = min((b["anyRoot"] for b, tr in zip(bounds, trust) if b["anyRoot"] and tr == "trusted"), default=None)
     created = pred.get("claims", {}).get("createdAt")
+    declared = declared_ai_use(pred) if not ai_use_invalid(pred) else None
     if created is None:
         status = "absent"
     elif compared is None:
@@ -1071,6 +1131,7 @@ def expected_result(ctx, artifacts, policy, simulated, bundle_sha, event_paths, 
             "timeEvidence": ev_out,
             "time": time,
             "claimedCreatedAt": {"value": created, "status": status, "comparedWith": fmt_time(compared)},
+            **({"declaredAiUse": declared} if declared else {}),
         },
         "notShown": NOT_SHOWN,
     }
@@ -1164,6 +1225,8 @@ def check_result(res, meta, out):
             out.add("key-event-ignored")
     if got_o.get("keyEvents") != exp_o["keyEvents"] and not out:
         out.add("key-event-ignored")
+    if "declaredAiUse" in exp_o and (got_o.get("signerTrust") != exp_o["signerTrust"] or got_o.get("time") != exp_o["time"]):
+        out.add("ai-use-affected-outcome")  # design 4.7: a declaration never changes a trust or time outcome
     if res != exp and not out:
         out.add("result-mismatch")
 
@@ -1280,6 +1343,18 @@ def check_rendering(ren, meta, out):
         out.add("result-mismatch")
     claimed = result["outcomes"]["claimedCreatedAt"]["value"]
     bound_keys = set()
+    declared = result["outcomes"].get("declaredAiUse")
+    shown = {k for line in lines for k, rx in TEMPLATES.items() if k.startswith("ai-") and rx.match(line)}
+    want = {"generated": "ai-generated", "modified": "ai-modified", "no-generative-ai": "ai-none"}.get((declared or {}).get("declared"))
+    if declared:
+        if want not in shown or shown & {"ai-generated", "ai-modified", "ai-none", "ai-absent"} - {want}:
+            out.add("result-mismatch")
+        if "ai-unchecked" not in shown:
+            out.add("notice-missing")  # every declaration line comes with "Traceweave did not check this declaration."
+        if declared["tool"] and f"AI tool named by the registrant: {declared['tool']}." not in lines:
+            out.add("result-mismatch")
+    elif shown - {"ai-absent"}:
+        out.add("result-mismatch")  # nothing was declared, so nothing may be shown as declared (absent is never "no AI")
     for line in lines:
         if line in fixed:
             continue
@@ -1290,6 +1365,8 @@ def check_rendering(ren, meta, out):
                 out.add("authorship-claim")
             if ORDER_TEXT.search(line):
                 out.add("ordering-claim")
+            if AI_ORIGIN_TEXT.search(line):
+                out.add("ai-origin-claim")
             if re.search(r"(?i)\b(authentic\w*|verified|genuine)\b", line):
                 out.add("single-verdict")
             if claimed and claimed in line:
@@ -1712,6 +1789,22 @@ def wrong_implementation_self_test(verbose):
     # D6: rendering a simulated result without the marker.
     got = mutated("fixtures/rendering.json", lambda r: r["lines"].pop(0))
     cases.append(("simulated result rendered without the marker (D6)", True, "simulated-unmarked" in got))
+    # Design 4.7: self-declared AI use.
+    got = mutated("fixtures/rendering.json", lambda r: r["lines"].__setitem__(slice(-3, -3), [
+        "The registrant declared that no generative AI system was used.", "Traceweave did not check this declaration."]))
+    cases.append(("no declaration rendered as a no-AI declaration (4.7)", True, "result-mismatch" in got))
+    probe = set()
+    check_ai_use({"declared": "generated", "tool": "https://example.invalid/m"}, probe)
+    cases.append(("a URL accepted as tool identifier by a non-space pattern (4.7)", bool(re.match(r"^\S+$", "https://example.invalid/m")), "ai-use-shape" in probe))
+    probe = set()
+    check_ai_use({"declared": "generated", "tool": "author-assist"}, probe)
+    cases.append(("an authorship word accepted inside the tool identifier (4.7)", bool(AI_TOOL.match("author-assist")), "authorship-claim" in probe))
+    got = mutated("fixtures/rendering-ai-use-generated.json", lambda r: r["lines"].insert(1, "This content is AI-generated."))
+    cases.append(("declaration rendered as a property of the content (4.7)", True, "ai-origin-claim" in got))
+    got = mutated("fixtures/rendering-ai-use-generated.json", lambda r: r["lines"].remove("Traceweave did not check this declaration."))
+    cases.append(("not-checked sentence dropped (4.7)", True, "notice-missing" in got))
+    got = mutated("fixtures/verification-result-ai-use-modified.json", lambda r: r["outcomes"]["signerTrust"][0].update(outcome="disputed"))
+    cases.append(("declaration changes a trust outcome (4.7)", True, "ai-use-affected-outcome" in got))
     failures = 0
     for name, wrong_misbehaves, caught in cases:
         ok = wrong_misbehaves and caught

@@ -47,6 +47,8 @@ Gate IDs `NEXT.*` are proposals, like the REG gates in the design's §15.
 
 ## 2. Self-declared AI use (`claims.generator`)
 
+**Status: adopted on the owner's decision of 2026-11-24, as `claims.aiUse` in [design §4.7](registration-record.md#47-self-declared-ai-use-normative-owner-decision-2026-11-24).** The values come from the pinned EU Code icons and the IPTC scheme. The predicate version is unchanged, because the field is optional and draft-5 is unreleased. §4.7 governs where this sketch differs.
+
 **What it adds.** An optional statement by the registrant about whether, and which, AI tools were used, signed with the rest of the statement (L14 §4.2 floats this). It answers a question people ask, the way C2PA's `digitalSourceType` does, without Traceweave inferring anything.
 
 **Shape (proposal).**

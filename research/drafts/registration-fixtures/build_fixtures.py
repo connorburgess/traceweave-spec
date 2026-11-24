@@ -257,6 +257,14 @@ def render(result, name="sum.go", artifact=ARTIFACT, context=None, witness=None,
     if witness:
         lines.append(witness)
     lines.append(f"Reference: {reference_of(bundle_rel)}.")
+    ai = o.get("declaredAiUse")
+    if ai:
+        lines.append({"generated": 'The registrant declared that this content was generated with an AI system ("AI + GENERATED" in the EU Code of Practice).',
+                      "modified": 'The registrant declared that this content was modified with an AI system ("AI + MODIFIED" in the EU Code of Practice).',
+                      "no-generative-ai": "The registrant declared that no generative AI system was used."}[ai["declared"]])
+        if ai["tool"]:
+            lines.append(f"AI tool named by the registrant: {ai['tool']}.")
+        lines.append("Traceweave did not check this declaration.")
     if o["claimedCreatedAt"]["value"]:
         lines.append(f"Creation time claimed by the registrant, not proved: {o['claimedCreatedAt']['value']}.")
     return lines + C.REQUIRED_SENTENCES + ([C.AGENT_SENTENCE] if context == "agent" else [])
@@ -645,6 +653,7 @@ def build():
     rb_ref["lines"] = [f"Reference: {reference_of('fixtures/bundle-second-work.json')}." if l.startswith("Reference: ") else l for l in rb_ref["lines"]]
     write("negative", "neg-rendering-reference-mismatch", fixture("rendering", "A rendering shows the reference of another statement.", rb_ref, "reference-mismatch"))
 
+    build_ai_use(ren_doc)
     build_negatives(st, sig, three, result, rmeta, link, ren_doc, res_co, recent, res_claim)
     build_real()
     build_agent(sig, result)
@@ -898,6 +907,65 @@ def build_negatives(st, sig, three, result, rmeta, link, ren, res_co, recent, re
                                               bundle_of(e3, [tsa(s3[0], "a", "2026-11-25T00:00:00Z")]), "key-event-shape"))
     raw = json.dumps(fixture("statement", "Duplicate key.", st), indent=2)
     (HERE / "negative" / "neg-duplicate-key.json").write_text(raw.replace('"contentKind": "source-code",', '"contentKind": "source-code",\n      "contentKind": "text",', 1), encoding="utf-8")
+
+
+# ------------------------------------------------------------------ self-declared AI use (design 4.7)
+
+AI_CASES = {
+    "generated": {"declared": "generated", "tool": "ExampleModel-4.2"},
+    "modified": {"declared": "modified"},
+    "no-generative-ai": {"declared": "no-generative-ai"},
+}
+
+
+def build_ai_use(ren_doc):
+    neg = lambda name, doc: write("negative", f"neg-{name}", doc)
+    for name, ai in AI_CASES.items():
+        b, _ = three_roots(statement(**{"predicate.claims.aiUse": ai}))
+        rel = f"fixtures/bundle-ai-use-{name}.json"
+        write("fixtures", f"bundle-ai-use-{name}", fixture("bundle", f"A registration carrying the registrant's own AI-use declaration: {ai}.", b, artifacts=ART))
+        res = result_for(rel)
+        write("fixtures", f"verification-result-ai-use-{name}", fixture("verification-result", "The declaration is echoed as declared and not checked; trust and time are unchanged.",
+                                                                       res, bundle=rel, artifacts=ART))
+        write("fixtures", f"rendering-ai-use-{name}", fixture("rendering", "The fixed declaration sentence and the fixed not-checked sentence.",
+                                                               {"renderingVersion": C.RENDERING_VERSION, "result": f"fixtures/verification-result-ai-use-{name}.json",
+                                                                "lines": render(res, bundle_rel=rel)}))
+    absent = copy.deepcopy(ren_doc)
+    absent["lines"].insert(-3, "The registrant made no declaration about AI use.")
+    write("fixtures", "rendering-ai-use-absent", fixture("rendering", "No claim: the optional absent sentence; never shown as \"no AI\".", absent))
+
+    for name, ai, code, desc in [
+        ("unknown-value", {"declared": "assisted"}, "ai-use-shape", "A value outside the closed list."),
+        ("extra-key", {"declared": "generated", "share": "70%"}, "ai-use-shape", "An extra key in the claim."),
+        ("missing-value", {"tool": "ExampleModel-4.2"}, "ai-use-shape", "A tool without a declaration."),
+        ("tool-url", {"declared": "generated", "tool": "https://example.invalid/model"}, "ai-use-shape", "A URL as tool identifier."),
+        ("tool-path", {"declared": "generated", "tool": "models/example"}, "ai-use-shape", "A path as tool identifier."),
+        ("tool-email", {"declared": "generated", "tool": "someone@example.invalid"}, "ai-use-shape", "An e-mail address as tool identifier."),
+        ("tool-name-with-space", {"declared": "modified", "tool": "Jane Doe"}, "ai-use-shape", "A name with a space as tool identifier."),
+        ("tool-with-none", {"declared": "no-generative-ai", "tool": "ExampleModel-4.2"}, "ai-use-shape", "A tool named while declaring no generative AI."),
+        ("authorship-in-tool", {"declared": "generated", "tool": "author-assist"}, "authorship-claim", "An authorship word smuggled into the tool identifier."),
+        ("authorship-key", {"declared": "modified", "author": "placeholder"}, "authorship-claim", "An authorship key smuggled into the claim."),
+    ]:
+        b, _ = three_roots(statement(**{"predicate.claims.aiUse": ai}))
+        neg(f"ai-use-{name}", fixture("bundle", desc, b, code, artifacts=ART))
+    base = json.loads((HERE / "fixtures/rendering-ai-use-generated.json").read_text())["object"]
+    r = copy.deepcopy(base)
+    r["lines"].remove("Traceweave did not check this declaration.")
+    neg("ai-use-unchecked-dropped", fixture("rendering", "The not-checked sentence dropped.", r, "notice-missing"))
+    r = copy.deepcopy(base)
+    r["lines"].insert(1, "This content is AI-generated.")
+    neg("ai-use-as-property", fixture("rendering", "The declaration rendered as a property of the content.", r, "ai-origin-claim", ["rendering-unlisted-line"]))
+    r = copy.deepcopy(json.loads((HERE / "fixtures/rendering-ai-use-no-generative-ai.json").read_text())["object"])
+    r["lines"].insert(1, "This content is human-written.")
+    neg("ai-use-human-written", fixture("rendering", "No-AI declaration rendered as human authorship.", r, "ai-origin-claim", ["authorship-claim", "rendering-unlisted-line"]))
+    r = copy.deepcopy(ren_doc)
+    r["lines"][-3:-3] = ["The registrant declared that no generative AI system was used.", "Traceweave did not check this declaration."]
+    neg("ai-use-absent-as-none", fixture("rendering", "Nothing declared, but rendered as a no-AI declaration.", r, "result-mismatch"))
+    res = json.loads((HERE / "fixtures/verification-result-ai-use-generated.json").read_text())
+    obj = copy.deepcopy(res["object"])
+    obj["outcomes"]["signerTrust"][0]["outcome"] = "untrusted"
+    neg("ai-use-changes-trust", fixture("verification-result", "The declaration lowered the signer's trust.", obj, "ai-use-affected-outcome",
+                                        bundle="fixtures/bundle-ai-use-generated.json", artifacts=ART))
 
 
 # ------------------------------------------------------------------ agent fixtures (design section 19)

@@ -1,6 +1,6 @@
 # Registration record: design draft-5
 
-Status: research draft, draft-5 of 2026-11-24, with the follow-up `d74d0eb` and **§9.1, the text reference, frozen as normative on 2026-11-24** (no statement-format change). It resolves the "Draft-4 confirmation" section of the [draft-2 review](../reviews/registration-record-draft-2-review.md#draft-4-confirmation) (`2186523`), whose single blocking item is E1; §24 maps every item. Draft-4 (`dba683b`) resolved D1–D9 (§23), draft-3 (`5250eae`) B1–B3 and S1–S13 (§22), and draft-2 the first [review](../reviews/registration-record-review.md) (§21). Not normative. No schema, profile, vector or roadmap file is changed by this draft. **No external time-stamping service, calendar, log or witness was contacted.**
+Status: research draft, draft-5 of 2026-11-24, with the follow-up `d74d0eb` and **§9.1, the text reference, frozen as normative on 2026-11-24** (no statement-format change), and **§4.7, the optional self-declared AI-use claim, added on the owner's decision of 2026-11-24** (an optional field; version unchanged; no existing fixture changed). It resolves the "Draft-4 confirmation" section of the [draft-2 review](../reviews/registration-record-draft-2-review.md#draft-4-confirmation) (`2186523`), whose single blocking item is E1; §24 maps every item. Draft-4 (`dba683b`) resolved D1–D9 (§23), draft-3 (`5250eae`) B1–B3 and S1–S13 (§22), and draft-2 the first [review](../reviews/registration-record-review.md) (§21). Not normative. No schema, profile, vector or roadmap file is changed by this draft. **No external time-stamping service, calendar, log or witness was contacted.**
 
 **What changed from draft-4:**
 - **E1** (§8). Key events are now evaluated in two passes with no fixed point: standing first, then disputes, which never feed back. A compromise report never disputes the rotation that gives its own signer standing. The evaluation cannot oscillate, and a non-settling implementation is an error, never a verdict.
@@ -154,6 +154,53 @@ An all-zero or malformed nonce is rejected (`nonce-invalid`).
 - **Time keys** rejected anywhere in the predicate (`time-in-statement`): `provedAt`, `timestamp`, `notAfter`, `genTime`, `registeredAt`, `recordedAt`, `time`, `provedTime`.
 - **Content keys** rejected anywhere in the predicate, and in hosted-route requests (`forbidden-field`): `fingerprints`, `tokens`, `source`, `text`, `content`, `catalogueBytes`, `opening`, `nonceHex`, `inputBase64`.
 - Other unknown fields are rejected (`statement-shape`), and so is a wrong predicate type (`predicate-type`), including the types of earlier drafts.
+
+### 4.7 Self-declared AI use (normative; owner decision 2026-11-24)
+
+The first released predicate carries an **optional** claim, `claims.aiUse`: the registrant's own declaration about generative AI. It is signed with the rest of the statement and **never checked by Traceweave**.
+
+The name is not `generator`. "Generator" reads as "who generated it", which is the authorship reading this design forbids. The sources speak of disclosing AI generation or modification, and `aiUse` follows them.
+
+**Shape (closed).** `"aiUse": {"declared": <value>, "tool": <token, optional>}`. Any other key is `ai-use-shape`.
+
+| `declared` | Meaning (registrant's words, not checked) | EU Code of Practice icon | IPTC digital source type |
+| --- | --- | --- | --- |
+| `generated` | The content was generated with an AI system | "AI + GENERATED" (Annex 1, Figure 1: "fully AI-generated deep fakes or published text") | `trainedAlgorithmicMedia` ("Created using Generative AI") |
+| `modified` | The content was modified with an AI system | "AI + MODIFIED" (Annex 1, Figure 2: "AI-manipulated/partially modified") | `compositeWithTrainedAlgorithmicMedia` ("Edited using Generative AI") |
+| `no-generative-ai` | No generative AI system was used | none; the Code labels AI content only | none (see below) |
+
+**Absent means nothing was declared.** A statement without `aiUse` is never read, rendered or exported as "no AI" or "human-made".
+
+**Sources, pinned.**
+- **EU Code.** The [Code of Practice on Transparency of AI-Generated Content](https://ec.europa.eu/newsroom/dae/redirection/document/129555), 2026-06-10, the final text (38 pages, SHA-256 `7bd22c5a…bc28` of the PDF fetched 2026-11-24). Its labelling vocabulary is two icon texts in Annex 1, "AI + GENERATED" and "AI + MODIFIED", plus a basic "AI" icon, with Section 2 Measure 1.1 (b) encouraging "text indicating 'modified' or 'generated'". The Code has no finer taxonomy, so this list has exactly those two AI values.
+- **IPTC.** The [IPTC Digital Source Type scheme](https://cv.iptc.org/newscodes/digitalsourcetype/) (`http://cv.iptc.org/newscodes/digitalsourcetype/`), `dateReleased` 2024-10-23, CC BY 4.0, SHA-256 `e9178aa2…99a6` of the JSON fetched 2026-11-24.
+- **No IPTC term for `no-generative-ai`.** IPTC's nearest non-AI terms (`digitalCreation`, "Media created by a human using non-generative tools", and `humanEdits`) assert human creation. Mapping to them would turn a declaration into an authorship statement, so `no-generative-ai` maps to no IPTC term and is never exported as one.
+- Both sources are recorded in the [source register](../../docs/sources.md).
+
+**Tool identifier (optional).**
+- **Where allowed:** only with `generated` or `modified`.
+- **Pattern:** `^[A-Za-z0-9][A-Za-z0-9._+-]{0,63}$`, one token. It cannot hold a space, `/`, `:`, `@` or `\`, so URLs, paths, e-mail addresses and names written with a space are `ai-use-shape`.
+- **Limit:** a single-token personal name cannot be excluded mechanically. The rendering therefore calls it the "AI tool named by the registrant" and never makes it the subject of a sentence about a person.
+
+**How the authorship rule stays intact.**
+- **Key rule.** A key in `authorship`, `author`, `owner`, `ownership`, `creator`, `original` or `originality` (case-insensitive), **anywhere inside `aiUse`**, is `authorship-claim`.
+- **Value rule.** A tool token that, with `-`, `_` and `.` read as spaces, matches the §11 authorship deny-list (`author…`, `wrote`, `written`, `belongs`, `creator`, `created`, `own…`, `original…` and the rest) is `authorship-claim`.
+- **Why this keeps the rejection whole.** The claim's own names (`aiUse`, `declared`, `tool`, `generated`, `modified`, `no-generative-ai`) are on neither list, so the existing rejection is unchanged.
+
+**What it never affects.** A declaration changes **no** trust, time, key-event, digest or possession outcome. The verification result echoes it as `declaredAiUse: {declared, tool, euCodeIcon, iptcDigitalSourceType, status: "declared-not-checked"}`, present only when the statement carries the claim. A result whose other outcomes differ because of the claim is `ai-use-affected-outcome`.
+
+**Format and fixtures.**
+- **Format impact.** The predicate version stays `traceweave-registration-draft-5`. The field is optional, every existing draft-5 statement remains valid and byte-identical, and draft-5 is unreleased. A verifier built before this section rejects a statement carrying `aiUse` as `statement-shape`, which is the correct behaviour for an unknown field. **No existing fixture changed.**
+- **Positives:** `bundle-ai-use-*`, `verification-result-ai-use-*` and `rendering-ai-use-*` for each value, plus `rendering-ai-use-absent`.
+- **Negatives:** `neg-ai-use-*` for:
+  - an unknown value, an extra key, a missing value;
+  - a URL, path, e-mail or spaced name as tool, and a tool alongside `no-generative-ai`;
+  - an authorship word in the tool, and an authorship key;
+  - a dropped not-checked sentence;
+  - "AI-generated" and "human-written" as properties;
+  - an absent claim rendered as "no AI";
+  - a declaration that changes trust.
+- **Self-test:** six wrong-implementation cases.
 
 ## 5. What publishing each value reveals
 
@@ -475,7 +522,8 @@ Every step reports its own outcome, and a failure in one step does not change an
 9. **Each time evidence** (§6.2), offline from retained material, as of the policy's revocation dates. Per evidence: `valid` | `invalid` | `wrong-target` | `pending` | `untrusted-root` | `unsupported` | `wrong-policy` | `revoked` | `no-revocation-data` | `expired-unrenewed` | `insufficient-confirmations` | `path-invalid`, with its target, `notAfter` and `revocationDataAsOf`. In fixtures only, `placeholder`, or `placeholder-assumed-valid` when the result says `simulated: true`.
 10. **Bounds, per signature** (§6.4): `quorum-met` | `below-quorum` | `none-valid`, with `keyid`, `keySha256`, `quorum`, `distinctRoots`, `notAfterAnyRoot` and `notAfterQuorum`.
 11. **Claimed time.** `absent` | `claimed-only` | `after-proved-bound` | `not-compared`. The comparison is with the earliest `notAfterAnyRoot` over signatures whose signer is **`trusted`** (S11). An untrusted co-signer with one early source cannot change the registrant's outcome (`verification-result-claim-trusted-only`). With no trusted signature, the outcome is `not-compared`. The value compared with is reported as `comparedWith`.
-12. **Output** all outcomes, and the fixed `notShown` list: `authorship`, `originality`, `first-creation`, `ownership`, `permission`.
+12. **Declared AI use** (§4.7): if the statement carries `aiUse`, echo it as `declaredAiUse` with status `declared-not-checked`. It changes no other outcome (`ai-use-affected-outcome`).
+13. **Output** all outcomes, and the fixed `notShown` list: `authorship`, `originality`, `first-creation`, `ownership`, `permission`.
 
 A result must not:
 - add a combined verdict (`single-verdict`);
@@ -515,6 +563,10 @@ A registration does not show **authorship**, **originality**, **ownership** or *
 | `Simulated: time evidence is placeholder only.` | **Required as the first line** when the result says `simulated: true`, and forbidden otherwise (D6; `simulated-unmarked`) |
 | `Registration of <name> (SHA-256 <first 8 hex>…<last 4 hex>).` | subject |
 | `Reference: <tw1-reference>.` | §9.1; must equal the reference of the result's bundle |
+| `The registrant declared that this content was generated with an AI system ("AI + GENERATED" in the EU Code of Practice).` / `… was modified with an AI system ("AI + MODIFIED" in the EU Code of Practice).` / `The registrant declared that no generative AI system was used.` | §4.7 `declaredAiUse.declared`; must match it |
+| `AI tool named by the registrant: <tool>.` | §4.7 `declaredAiUse.tool`, if any |
+| `Traceweave did not check this declaration.` | **Required** with every declaration line (`notice-missing`) |
+| `The registrant made no declaration about AI use.` | Optional, only when nothing was declared; any declaration line without a declaration is `result-mismatch` |
 | `Content digest: matches the file you supplied.` / `does not match the file you supplied.` / `not checked, because no file was supplied.` | step 6 |
 | `Signature by key <key>: <valid/invalid/unknown key>; signer <trusted/not trusted/disputed by a key event/not evaluated> under your policy.` | steps 2, 4 |
 | `This record shows that the content existed, and that key <key> signed a statement naming it, no later than <T>.`, where T is that signature's `notAfterQuorum`; if quorum was not met, T is its `notAfterAnyRoot` and the line ends `… no later than <T> (according to one time source only).` | step 10, **one line per signature with a bound** |
@@ -538,6 +590,7 @@ The third sentence is new in draft-3 (S8). Each bound is an upper bound, so an e
 - A bound sentence for a key without that bound is `key-bound-misattributed`.
 - A bound sentence carrying the claimed time is `claimed-as-proved`.
 - A missing fixed sentence, or a missing bound sentence for a key that has a bound, is `notice-missing`.
+- **Never shown** (§4.7): "AI-generated", "AI-written" or "made by AI" as a property of the content; "human-written", "human-made", "written by a human" or "not AI"; any sentence with a person as subject. An unlisted line with such words is `ai-origin-claim`.
 - A rendering of a simulated result without the marker as its first line is `simulated-unmarked` (D6; review case `neg-simulated-unmarked`). A production renderer refuses simulated results outright (REG.4).
 
 The allow-list is a floor, not a wording review: REG.4 still needs a non-author to read every template.
@@ -597,10 +650,10 @@ ROADMAP.md M4.3–M4.6 are unchanged. M4.5 still asks for a decision on "the opt
 | M4.3 (amended) | E | "Negative cryptographic vectors (tampered payload, type or signature; untrusted key; malformed or duplicate-key payload; subject mismatch; and, for registrations, `evidence-wrong-target`, `tsa-imprint-mismatch`, `tsa-signature-invalid`, `tsa-eku-invalid`, `tsa-signing-cert-mismatch`, `tsa-nonce-mismatch`, `key-event-shape`, and the §10.1 Ed25519 edge vectors), each with a distinct reason code. `validate` checks them." | S |
 | M4.5 (replaced) | O+E | "A recorded owner decision selecting the time-evidence types for registration records (proposed: RFC 3161 from two unrelated TSAs, and OpenTimestamps), the default quorum (2), the compromise look-back (RD15), and whether any external service may be contacted for test tokens. In-toto adapter accept/reject fixtures and a trust-policy document, checked by `validate`." | S |
 | M4.6 (amended) | E | "Commitment, disclosure and key-event design (`research/drafts/registration-record.md` §4, §5, §8) reviewed by a named non-author. Report in `docs/reviews/`; every finding has a disposition." | S |
-| REG.1 | E | "`check_registration.py` exits 0 under `validate`: every positive fixture gives no code, every negative gives exactly its codes, every code has a negative, and the wrong-implementation self-test passes. The real-format vectors in `real-format/` verify with anchors computed from the pinned root certificate and from the header file plus pinned checkpoint. Their negatives are rejected: four token negatives (imprint, tampered, non-critical EKU, wrong ESS); two path negatives (TSA certificate issued by an end-entity certificate, and under an expired intermediate), each also rejected by `openssl ts -verify`; three OpenTimestamps negatives (other digest, unrelated chain, forked headers); and a pinned-root negative (the root file does not hash to the anchor). The gate fails if any of these is accepted. `enumerate_key_events.py` reports 0 violations: exhaustively at length ≤ 3 and on a seeded sample of 200,000 at length 4, over its 100-symbol alphabet with steps of ±10 and ±40 days and claimed starts of 2, 20 and 60 days, on all 13 invariants, and with 0 mismatches on its loading sample. Its mutation check finds violations in all three weakened rule sets, including the draft-4 fixed point." | S |
+| REG.1 | E | "`check_registration.py` exits 0 under `validate`: every positive fixture gives no code, every negative gives exactly its codes, every code has a negative, and the wrong-implementation self-test passes. The real-format vectors in `real-format/` verify with anchors computed from the pinned root certificate and from the header file plus pinned checkpoint. The §4.7 AI-use fixtures (each value, absent, and the 15 `neg-ai-use-*` negatives) behave as stated. The real-format negatives are rejected: four token negatives (imprint, tampered, non-critical EKU, wrong ESS); two path negatives (TSA certificate issued by an end-entity certificate, and under an expired intermediate), each also rejected by `openssl ts -verify`; three OpenTimestamps negatives (other digest, unrelated chain, forked headers); and a pinned-root negative (the root file does not hash to the anchor). The gate fails if any of these is accepted. `enumerate_key_events.py` reports 0 violations: exhaustively at length ≤ 3 and on a seeded sample of 200,000 at length 4, over its 100-symbol alphabet with steps of ±10 and ±40 days and claimed starts of 2, 20 and 60 days, on all 13 invariants, and with 0 mismatches on its loading sample. Its mutation check finds violations in all three weakened rule sets, including the draft-4 fixed point." | S |
 | REG.2 | E | "Two implementations, each with its own parser, produce verification results (§10) whose RFC 8785 canonical bytes are identical on every REG.1 fixture, including the §10.1 edge vectors and the two event orders. The comparison is over those canonical bytes, never over the implementations' own serializations." | I |
 | REG.3 | E | "After the owner approves the services: one RFC 3161 token from each of two unrelated TSAs, and one upgraded OpenTimestamps proof, over one synthetic registration (k = 3 evidences). Each is verified with the network denied, from retained chains and revocation data, and with the verifier's own header source and checkpoint (§6.2); 3/3 must be valid. Failure directions, each 1/1: wrong target, tampered token, wrong policy OID, wrong request nonce, and a forked header file. The revoked-certificate direction uses the local test TSA of §6.5, because a revocation cannot be produced on demand at a real TSA." | I |
-| REG.4 | E | "Every user-facing rendering uses only the §11 templates and the three fixed sentences, and shows keys with at least 128 bits of their SHA-256. A production renderer refuses to render a result with `simulated: true`. Fixture renderings of simulated results carry the marker line. A named non-author reviews the templates. Feeds M5.2 and WEB.5." | S+I |
+| REG.4 | E | "Every user-facing rendering uses only the §11 templates and the three fixed sentences, and shows keys with at least 128 bits of their SHA-256. A §4.7 declaration is shown only through its fixed sentence, always followed by "Traceweave did not check this declaration."; an absent claim is never shown as "no AI"; and no rendering presents AI or human origin as a property of the content or makes a sentence about a person. A production renderer refuses to render a result with `simulated: true`. Fixture renderings of simulated results carry the marker line. A named non-author reviews the templates. Feeds M5.2 and WEB.5." | S+I |
 | REG.5 | E | "The §19 agent fixtures are checked by `validate`: 0 `raw` or `url` parts and 0 fingerprints in hosted-route fixtures; every skill description and agent rendering carries the required sentences." | S |
 | UC-9 (proposed) | — | Owner wording. This draft supplies the limit text (§11); UC-3's "Signing alone proves neither ownership nor earlier existence" stays for signing alone | — |
 
@@ -661,7 +714,7 @@ See the [fixtures README](registration-fixtures/README.md). `check_registration.
 
 Placeholder time evidence is never verified (§6.5, S10).
 
-Failure codes: `authorship-claim`, `catalogue-does-not-open`, `catalogue-not-report-input`, `catalogue-unsalted`, `claimed-as-proved`, `duplicate-key`, `envelope-shape`, `evidence-shape`, `evidence-wrong-target`, `fixture-shape`, `forbidden-field`, `key-bound-misattributed`, `key-event-ignored`, `key-event-shape`, `key-identity-by-hint`, `log-time-claimed`, `nonce-invalid`, `nonce-reused`, `notice-missing`, `ordering-claim`, `pending-counted`, `placeholder-unlabelled`, `possession-mismatch`, `predicate-type`, `profile-mismatch`, `provenance-shape`, `quorum-miscount`, `rendering-unlisted-line`, `report-digest`, `result-mismatch`, `root-not-anchored`, `signature-invalid`, `single-verdict`, `statement-digest`, `statement-shape`, `subject-mismatch`, `subject-name`, `time-in-statement`, `trust-without-quorum`, `tsa-eku-invalid`, `tsa-imprint-mismatch`, `tsa-nonce-mismatch`, `tsa-signature-invalid`, `tsa-signing-cert-mismatch`, `simulated-unmarked`, `extra-event-changed-result`, `key-event-signatures`, `reference-shape`, `reference-check`, `reference-mismatch`; for §19: `content-on-wire`, `a2a-shape`, `mcp-tool-shape`, `witness-shape`.
+Failure codes: `authorship-claim`, `catalogue-does-not-open`, `catalogue-not-report-input`, `catalogue-unsalted`, `claimed-as-proved`, `duplicate-key`, `envelope-shape`, `evidence-shape`, `evidence-wrong-target`, `fixture-shape`, `forbidden-field`, `key-bound-misattributed`, `key-event-ignored`, `key-event-shape`, `key-identity-by-hint`, `log-time-claimed`, `nonce-invalid`, `nonce-reused`, `notice-missing`, `ordering-claim`, `pending-counted`, `placeholder-unlabelled`, `possession-mismatch`, `predicate-type`, `profile-mismatch`, `provenance-shape`, `quorum-miscount`, `rendering-unlisted-line`, `report-digest`, `result-mismatch`, `root-not-anchored`, `signature-invalid`, `single-verdict`, `statement-digest`, `statement-shape`, `subject-mismatch`, `subject-name`, `time-in-statement`, `trust-without-quorum`, `tsa-eku-invalid`, `tsa-imprint-mismatch`, `tsa-nonce-mismatch`, `tsa-signature-invalid`, `tsa-signing-cert-mismatch`, `simulated-unmarked`, `extra-event-changed-result`, `key-event-signatures`, `reference-shape`, `reference-check`, `reference-mismatch`, `ai-use-shape`, `ai-origin-claim`, `ai-use-affected-outcome`; for §19: `content-on-wire`, `a2a-shape`, `mcp-tool-shape`, `witness-shape`.
 
 ## 19. Registration at creation time and agent interoperability
 
@@ -816,9 +869,9 @@ Run on 2026-11-24 on `roadmap-v2` (parent `2186523`), over this draft, lane 13 a
   Only the local `openssl` was used; no external service was contacted.
 - **`check_registration.py`** (draft-5):
   - the Ed25519 and PAE self-tests pass;
-  - 76 positive fixtures give no code, and each of the 109 negative fixtures gives exactly its expected codes (after the draft-5 follow-up and §9.1);
-  - all 33 wrong-implementation cases behave as required;
-  - all 54 codes appear in this document and have a negative fixture;
+  - 86 positive fixtures give no code, and each of the 124 negative fixtures gives exactly its expected codes (after the draft-5 follow-up, §9.1 and §4.7);
+  - all 39 wrong-implementation cases behave as required;
+  - all 57 codes appear in this document and have a negative fixture;
   - the §9.1 check character detects every one of 53,568 single-character substitutions (the self-test asserts it).
 - **`enumerate_key_events.py`** (60 s, after the follow-up):
   - 1,010,100 sequences of length 1–3 exhaustively, and 200,000 sampled sequences of length 4, over 100 symbols: **0 violations** of the 13 invariants;
