@@ -86,6 +86,34 @@ All three were fixed, two in the hand values and one in the builder. The 8 vecto
 | `unicode-version`, `confusable` | `plain-unicode17-new` (U+0C5C, U+A7CE/U+A7CF, CJK Extension J), `plain-skeleton-single-pass` (U+048B) |
 | paired rejected inputs | `plain-err-reflow-nul`, `plain-err-reflow-invalid` (`input-rejected` pairs with `plain-reflow-a`) |
 
+## Table file conventions
+
+`text-tables-17.0.0.json` is derived from the six pinned files (profile §4) by `harness/gen_text_tables.py`. Implementations read it as follows (TXT.3 rulings T3, T4, TX-Q3 to TX-Q6). Every code point and range bound is an integer scalar value. Every range is inclusive (`[lo, hi]` covers `lo…hi`), and every list of ranges is sorted and non-overlapping.
+
+| Key | Form | Meaning |
+| --- | --- | --- |
+| `unicodeVersion`, `sources` | string; file name → SHA-256 | The data version and the digests of the six source files |
+| `classes.ignorable`, `classes.ideographic`, `classes.word` | `[lo, hi]` ranges | Classes I, C and W of profile §6, already disjoint and in precedence order. A code point in none of them is S |
+| `whiteSpace` | `[lo, hi]` ranges | White_Space. Informative: the generator asserts that all of these are S. No rule reads it |
+| `ccc` | `[lo, hi, c]` | Canonical_Combining_Class `c` (never 0) for every code point in the range; unlisted code points have class 0 |
+| `canonicalDecomposition` | `[cp, [m…]]`, sorted by `cp` | **One level** of canonical decomposition (UnicodeData field 5 without compatibility tags), one or two code points. NFD applies it **recursively** until no listed code point remains (285 entries need more than one level, for example U+1E14 → U+0112 U+0300 → U+0045 U+0304 U+0300). Then canonical ordering by `ccc` |
+| — (not in the table) | algorithmic | **Hangul** syllables U+AC00–U+D7A3 decompose and compose by the arithmetic of Unicode 17.0.0 §3.12 (UAX #15), not by table entries |
+| `fullCompositionExclusion` | `[lo, hi]` ranges | Full_Composition_Exclusion. The **primary composites** for NFC are the code points whose `canonicalDecomposition` has exactly two code points and which are not in this set (UAX #15 D114). Singletons and non-starter decompositions are in the set, so they never compose. Composition is then the standard UAX #15 algorithm plus Hangul |
+| `nfkcCasefold` | `[lo, hi, [m…]]` | NFKC_CF: **every** code point in `lo…hi` maps to the same sequence `m`. 157 entries are ranges, for example U+01C4–U+01C6 → U+0064 U+017E. `m` may be empty (27 entries, the Default_Ignorable ones), which deletes the code point. Unlisted code points map to themselves |
+| `confusables` | `[cp, [m…]]`, sorted by `cp` | The UTS #39 prototype of `cp`, never empty. The skeleton applies it **once**, not recursively (profile §8, `plain-skeleton-single-pass`). Unlisted code points are their own prototype |
+
+## Using these files for conformance
+
+These rules come from TXT.3 rulings T1, T2, T7, TX-Q1, TX-Q2 and TX-Q10 (profile §11, §17a).
+
+- **What conformance means for `text-plain` draft-1.** An implementation conforms when it emits, byte for byte:
+  - the record in `records-text-plain.json` for each entry's configuration and input bytes (60 records);
+  - the expected `result` for every vector in `text-plain.json` and `limits-text.json`;
+  - the `expectedResult` for every negative in `config-negative-text.json`.
+- **`boundaryPositives` "MUST be accepted"** means they pass profile §11 validation (steps 1–8) wherever the implementation validates configurations. An implementation without `text-markdown` still reports `unsupported-config` when *extracting* with `cfg-text-bounds-max`, because contract §10 step 7 requires a pair it implements. `cfg-text-bounds-min` is `text-plain`, so it extracts normally.
+- **`rejections.json` is the checker's self-test, not an extra requirement.** Each mutation is checked to differ from the expected result at its declared layer. So an implementation that equals every expected result already differs from every mutated one. Running the rejections against an implementation, and how it reports them, is implementation-defined. Both lanes chose to check that their output differs from each mutation at the declared layer, which is consistent with this.
+- **`text-markdown.json`, `config-text-markdown.json` and the 20 rejections of `md-*` vectors** are not conformance files while `text-markdown` is a draft and unregistered. Whether a tool runs them, and what it prints, is implementation-defined.
+
 ## 1. Checker
 
 ```

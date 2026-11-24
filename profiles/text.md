@@ -57,7 +57,9 @@ Processing follows contract §3 steps 0–2 unchanged. Step 3 (forbidden code po
 - **CR, CRLF and every other C0/C1 control except NUL** are separators (§6). There is no `isolated-cr` error.
 - **Noncharacters, private-use and unassigned code points** are accepted as separators. Unassigned code points inside Default_Ignorable ranges (for example U+2065) are ignorable (§6).
 
-**Closed error list:** `invalid-utf8`, `nul` and `input-too-large`, plus `unsupported-config` from §11. Offsets follow contract §2: `input-too-large` is at 0, `nul` at the NUL, and `unsupported-config` is `null`. The `invalid-utf8` offset is the first byte of the first maximal subpart of an ill-formed subsequence (Unicode 17.0.0 §3.9, D92/D93b): the byte at which a strict left-to-right decoder first fails. So a lone continuation byte, an overlong lead, the lead of an encoded surrogate and the lead of a truncated sequence are each reported at their own first byte (`plain-err-lone-continuation`@4, `-overlong`@0, `-surrogate`@3, `-truncated`@4, `-above-max`@0). The Markdown front end and the tokenizer cannot fail: every well-formed, NUL-free input yields `ok` or `insufficient-tokens`. **Abstention** is `insufficient-tokens`, meaning fewer than k tokens, including zero. The tokens are still listed.
+**Check order** (contract §3, restated; TXT.3 rulings T6): (0) configuration; (1) size: an input longer than `maxInputBytes` bytes is `input-too-large`, decided from the byte length before any decoding, and before reading where the length is known; an input of exactly `maxInputBytes` bytes is accepted (`limit-exact`); (2) the **whole** input is checked as strict UTF-8; (3) only then is it searched for NUL. So a NUL before an invalid byte still gives `invalid-utf8` (`plain-err-nul-then-invalid`), and an oversized input with an invalid byte gives `input-too-large` (`limit-over-invalid`).
+
+**Closed error list:** `invalid-utf8`, `nul` and `input-too-large`, plus `unsupported-config` from §11. Offsets follow contract §2: `input-too-large` is at 0, `nul` at the NUL, and `unsupported-config` is `null`. The `invalid-utf8` offset is the first byte of the first maximal subpart of an ill-formed subsequence (Unicode 17.0.0 §3.9, D92/D93b): the byte at which a strict left-to-right decoder first fails. The offset is a byte offset into the original input, as are all offsets and spans. So a lone continuation byte, an overlong lead, the lead of an encoded surrogate and the lead of a truncated sequence are each reported at their own first byte (`plain-err-lone-continuation`@4, `-overlong`@0, `-surrogate`@3, `-truncated`@4, `-above-max`@0). The Markdown front end and the tokenizer cannot fail: every well-formed, NUL-free input yields `ok` or `insufficient-tokens`. **Abstention** is `insufficient-tokens`, meaning fewer than k tokens, including zero. The tokens are still listed. `nul` is reported at the byte offset of the first U+0000.
 
 ## 4. Pinned Unicode data
 
@@ -196,6 +198,8 @@ Every token has three values. They share one token stream and one span list:
 
 NFKC_CF is NFKC, full case folding and deletion of Default_Ignorable_Code_Point, closed under repetition. The UCD's own warning for strings is to apply NFC after the per-character mapping. Step 1 adds NFD first, so that canonically equivalent inputs fold identically. With U+0345 COMBINING GREEK YPOGEGRAMMENI out of canonical order (`α`, U+0345, U+0301), mapping without NFD gives `αί`, not `άι`. Vectors `plain-combining-a`/`-b` pin this, and their paired rejection is exactly that wrong answer.
 
+**Classes inside the fold and the skeleton** (TXT.3 rulings T5, TX-Q8). Fold step 4 uses the §6 class of each code point of the value, taken from the pinned table. The skeleton's "Default_Ignorable" step uses the table's `ignorable` class, which is exactly Default_Ignorable_Code_Point. Markdown masks never apply there: they are byte ranges of the input, not properties of a value.
+
 No W or C code point folds to the empty string under these tables, even after step 4: a one-off computation with the checker's functions over all 149,872 of them found none, and 100 that contain separators before step 4. Since NFC never deletes code points, every token has a non-empty folded value.
 
 **What the fold does, by example:**
@@ -289,6 +293,8 @@ Validation is contract §10 steps 1–4 and 8 unchanged, and the steps below. `c
 
 There is no `format` key: the front end is the profile. [`config-negative-text.json`](../test-vectors/extraction-text/config-negative-text.json) has 13 configurations that MUST be rejected, each with its `expectedResult`. They include the code channels, two channels, reordered channels, the code contract string, `text-html`, `text-plain`/`draft-2`, the superseded `text-markdown`/`draft-1`, k = 17, `window` = 0, the size bound plus 1, whitespace, a missing LF and an extra `format` key. It also has 2 boundary configurations that MUST be accepted.
 
+**What "accepted" means for an implementation that does not implement `text-markdown`** (TXT.3 rulings T1, TX-Q1, TX-Q2). Validation steps 1–8 above define which configurations are *specified*. Both boundary configurations pass them, and an implementation MUST say so wherever it validates configurations. Contract §10 step 7 also requires a pair "the implementation implements" before it extracts. `text-markdown` is not normative and not registered, so a stage-1 implementation that implements only `text-plain` reports an `unsupported-config` record when it is asked to *extract* with `cfg-text-bounds-max` or `config-text-markdown.json`. That is not a failure of the boundary check. For such an implementation, `text-markdown.json` and the 20 rejections of `md-*` vectors are not applicable.
+
 A new `profileVersion` is minted on any change to any channel's bytes for some input, as the amended contract §10 now says: classes, the fold, the skeleton data or procedure, the masks, the token rule, errors or tables. That includes any move to Unicode 18.0.0. This is why the draft-1 → draft-2 Markdown changes give `text-markdown` a new version, even though no previously shipped Markdown vector's tokens or masks changed (§18).
 
 ### k and window
@@ -309,7 +315,7 @@ The vectors use these defaults, so they also test them. `plain-exact-k` has 8 to
 For a fixed configuration, time and working memory MUST be O(N) in the input length (contract §10a):
 - **Masks:** one pass (§5).
 - **Tokens:** one pass.
-- **Fold and skeleton:** per token. Canonical reordering MUST be linear, by a stable counting sort by combining class (the cross-check measured a quadratic sort at 126 s on 1 MiB).
+- **Fold and skeleton:** per token. Canonical reordering (UAX #15 canonical ordering: a stable sort of each run of non-starters by combining class) MUST give that result and MUST take time linear in the input. Only the result and the linear bound are normative; the sorting algorithm is implementation-defined (TXT.3 ruling TX-Q7). A stable 256-bucket counting sort is linear. So is an insertion sort used only for runs up to a fixed length, with a linear sort beyond it. An unbounded insertion sort is not: the cross-check measured a quadratic sort at 126 s on 1 MiB. No time constant is normative; tests may choose their own bound (ruling T8).
 
 **Value sizes**, bounded per code point from the pinned tables:
 - The folded value is at most 10 bytes per input byte (U+FDFA gives 3 → 30 bytes).
@@ -540,7 +546,28 @@ The vectors also cover ties, reflow, case, punctuation, numbers, hyphenation, pa
 
 The two vector-file digests changed from the previous freeze (`3888ee6f…`, `29ec0cc7…`) only because their `result` objects now use the contract §2a layout; no value or hash in them changed. The freeze now covers record bytes too: a stage-1 implementation MUST emit exactly the 60 records of `records-text-plain.json` for their configuration and input bytes. Any change to a `text-plain` channel's bytes for any input needs `draft-2` and a new configuration digest. `text-markdown` draft-2 is **not** frozen: the review's M1 and M2 and the previously unlisted CommonMark differences are fixed or listed here, but they await re-review.
 
+## 17a. Rulings on the two `text-plain` implementations' questions (TXT.3)
+
+The Go lane (branch `text-go`, `go/docs/contract-questions.md` T1–T8) and the Rust lane (branch `text-rust`, `docs/contract-questions.md` TX-Q1–TX-Q10) each recorded where this profile was silent or ambiguous. Both pass every `text-plain` vector, limit, record and configuration negative byte for byte. Where both lanes answered an item, they answered the same; the remaining items were decided by one lane only. So no ruling changes behaviour, no expected value changed, and no distinguishing vector was needed.
+
+| Item | Ruling | Written in |
+| --- | --- | --- |
+| T1, TX-Q1, TX-Q2: `text-markdown` and `cfg-text-bounds-max` | The boundary configurations are specified (they pass §11 steps 1–8). An implementation without `text-markdown` reports `unsupported-config` when extracting with them. `text-markdown.json` and its rejections are not applicable | §11 |
+| T2, TX-Q10: "passing" `rejections.json` | Conformance is byte equality with the expected results and records. The rejections are a checker self-test; an implementation that equals every expected result differs from every mutation by construction. Running them is allowed but implementation-defined | README, "Using these files for conformance" |
+| T3, TX-Q5: `nfkcCasefold` ranges | `[lo, hi, m]` maps every code point in `lo…hi` to `m`; unlisted code points map to themselves | README, "Table file conventions" |
+| T4, TX-Q3, TX-Q4, TX-Q6: normalization from the table | Decompositions are single-level and applied recursively. Hangul is algorithmic (Unicode §3.12) and not in the table. Primary composites are the two-code-point decompositions whose composite is not in `fullCompositionExclusion` (D114) | README, "Table file conventions" |
+| T5, TX-Q8: classes in the fold and skeleton | The §6 table classes, with no masks; the skeleton deletes the `ignorable` class | §8 |
+| T6: check order and offsets | Size (bytes, before decoding), then strict UTF-8 over the whole input, then NUL. All offsets are byte offsets; `invalid-utf8` at the start of the first maximal subpart | §3 |
+| TX-Q7: reordering algorithm | Only the canonical-ordering result and the linear bound are normative | §12 |
+| T7: running `text-markdown.json` | Implementation-defined. It is not a conformance file for a `text-plain`-only implementation | §11 |
+| T8: timing bounds | Implementation-defined; O(N) is normative, no constant is | §12 |
+| TX-Q9: which validation step reports a failure | Implementation-defined. Every failure of steps 1–8 is the same `unsupported-config` with offset `null`, so the step is not observable | This table |
+
+No lane needs to change code.
+
 ## 18. Change log
+
+**TXT.3 rulings (§17a):** wording only, in §3, §8, §11, §12 and the vectors README. No rule, vector, record or digest changed.
 
 **Record alignment (catalogue and report contract A3, commit `51ba163`):**
 - **Layout:**
