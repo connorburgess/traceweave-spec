@@ -127,7 +127,7 @@ CODES = [
     "provenance-shape", "quorum-miscount", "rendering-unlisted-line", "report-digest", "result-mismatch",
     "root-not-anchored", "signature-invalid", "single-verdict", "statement-digest", "statement-shape",
     "subject-mismatch", "subject-name", "time-in-statement", "tsa-eku-invalid", "tsa-imprint-mismatch",
-    "tsa-nonce-mismatch", "tsa-signature-invalid", "tsa-signing-cert-mismatch", "trust-without-quorum", "simulated-unmarked", "extra-event-changed-result",
+    "tsa-nonce-mismatch", "tsa-signature-invalid", "tsa-signing-cert-mismatch", "trust-without-quorum", "simulated-unmarked", "extra-event-changed-result", "key-event-signatures",
     "content-on-wire", "a2a-shape", "mcp-tool-shape", "witness-shape",
 ]
 
@@ -835,6 +835,12 @@ def load_event_bundles(items, policy, simulated, out):
     """Items are (bundle object, file digest). Used by the fixtures and by the enumeration's loading sample."""
     evs = []
     for bundle, file_digest in items:
+        sigs = bundle.get("envelope", {}).get("signatures") if isinstance(bundle, dict) and isinstance(bundle.get("envelope"), dict) else None
+        if not isinstance(sigs, list) or len(sigs) != 1:
+            # F1: a key event carries exactly one signature. Envelope signatures are unsigned, so a
+            # prepended foreign signature must be a named rejection, never a silent re-attribution.
+            out.add("key-event-signatures")
+            continue
         inner = set()
         ctx = check_bundle(bundle, {}, inner, statement_check=lambda st, a, o: check_key_event_statement(st, o))
         if ctx is None or inner - {"signature-invalid"}:
@@ -912,8 +918,11 @@ def evaluate_events(evs, policy):
         if c["event"] == "compromised":
             start = max(c["claimed"], c["E"] - lookback)
             for r in applied:
-                if r is not c and r["target"] == c["target"] and r["event"] in ("rotated", "retired") \
-                        and r["E"] >= start and r["hash"] != standing[c["hash"]]:
+                own = standing[c["hash"]]
+                # The exemption covers the report's own appointment: every rotation of the target to the
+                # report's signer (twins of one appointment, e.g. re-serialized statements; draft-5 review note).
+                if r is not c and r["target"] == c["target"] and r["event"] in ("rotated", "retired") and r["E"] >= start \
+                        and r["hash"] != own and not (own and r["event"] == "rotated" and r["successor"] == c["signer"]):
                     disputed.add(r["hash"])
     results = []
     for e in order:
@@ -1275,6 +1284,10 @@ def check_key_event_statement(st, out):
 
 
 def check_key_event(bundle, meta, out):
+    sigs = bundle.get("envelope", {}).get("signatures") if isinstance(bundle, dict) and isinstance(bundle.get("envelope"), dict) else None
+    if isinstance(sigs, list) and len(sigs) != 1:
+        out.add("key-event-signatures")  # F1
+        return
     inner = set()
     check_bundle(bundle, {}, inner, statement_check=lambda st, a, o: check_key_event_statement(st, o))
     out.update(inner)

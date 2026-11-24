@@ -554,6 +554,16 @@ def build():
     write("aux", "key-event-retired-later-proof", fixture("key-event", "The same signed retirement as key-event-retired, with a later proof.", retired_again))
     d_events["-same-statement-twice"] = (["aux/key-event-retired-later-proof.json", "aux/key-event-retired.json"], rmeta,
                                          "The same signed statement supplied twice is one event, with its earliest proved time.")
+    twin_st = json.loads(base64.b64decode(honest_rot["envelope"]["payload"]))
+    twin_payload = json.dumps(twin_st, indent=1).encode()  # the same rotation, serialized differently
+    env_tw, sigs_tw = envelope(twin_st, payload_override=None)
+    env_tw["payload"] = base64.b64encode(twin_payload).decode()
+    env_tw["signatures"][0]["sig"] = base64.b64encode(C.ed25519_sign(SEED, C.pae(C.PAYLOAD_TYPE, twin_payload))).decode()
+    twin_sig = base64.b64decode(env_tw["signatures"][0]["sig"])
+    write("aux", "key-event-rotation-honest-twin", fixture("key-event", "A second statement of the same rotation K->S (re-serialized), proved at the same time.",
+                                                            bundle_of(env_tw, [tsa(twin_sig, "a", "2026-11-26T00:00:00Z"), ots(twin_sig, "2026-11-26T01:00:00Z")])))
+    d_events["-e1-twin-rotation"] = (["aux/key-event-rotation-honest.json", "aux/key-event-rotation-honest-twin.json", "aux/key-event-compromise-by-successor.json"], succ_dec,
+                                     "Draft-5 review note: twin statements of one appointment at the same time are one appointment; the successor's report disputes neither.")
     for name, (evs, meta, desc) in d_events.items():
         vr(name, desc, result_for(meta["bundle"], artifacts=meta["artifacts"], events=evs), keyEvents=evs, **meta)
     write("fixtures", "result-equivalence-e1", fixture("result-equivalence", "E1: the same events with 0, 1 and 2 extra rejected events give byte-identical outcomes for the common events.",
@@ -711,6 +721,16 @@ def build_negatives(st, sig, three, result, rmeta, link, ren, res_co, recent, re
                                               "extra-event-changed-result"))
     vneg("event-identity-collision", "Enumeration finding: two signers of one statement collapsed into one event.",
          "fixtures/verification-result-same-statement-two-signers.json", lambda r: r["outcomes"].update(keyEvents=r["outcomes"]["keyEvents"][:1]), "key-event-ignored")
+    foreign = json.loads((HERE / "aux/key-event-rotation-honest.json").read_text())["object"]
+    foreign = copy.deepcopy(foreign)
+    foreign_sig = C.ed25519_sign(SEED_THIEF, C.pae(C.PAYLOAD_TYPE, base64.b64decode(foreign["envelope"]["payload"])))
+    foreign["envelope"]["signatures"].insert(0, {"keyid": KEYID_THIEF, "sig": base64.b64encode(foreign_sig).decode()})
+    foreign["verificationMaterial"]["publicKeys"].append({"keyid": KEYID_THIEF, "alg": "ed25519", "publicKeyHex": PUB_THIEF.hex()})
+    neg("key-event-two-signatures", fixture("key-event", "F1 (review case): a foreign signature prepended to a valid K-signed rotation.", foreign, "key-event-signatures"))
+    write("aux", "key-event-foreign-signature-prepended", fixture("key-event", "The F1 copy, used as an input to a result.", foreign))
+    vneg("result-with-foreign-signature", "F1: a result whose event files include the copy with a prepended foreign signature; the copy is a named rejection.",
+         "fixtures/verification-result-e1.json", lambda r: None, "key-event-signatures",
+         keyEvents=["aux/key-event-rotation-honest.json", "aux/key-event-compromise-by-successor.json", "aux/key-event-foreign-signature-prepended.json"])
     vneg("policy-negative-lookback", "Draft-4 review: a negative compromise look-back is refused.", "fixtures/verification-result-compromise-recent.json",
          lambda r: r["policy"].update(compromiseLookbackSeconds=-1), "result-mismatch")
     rb = copy.deepcopy(ren)

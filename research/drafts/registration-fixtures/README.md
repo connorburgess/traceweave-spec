@@ -55,6 +55,7 @@ A fixture registers nothing and proves nothing.
 | `fixtures/verification-result-e1-extra-1.json` | verification-result | E1 with one extra rejected event: same outcomes. |
 | `fixtures/verification-result-e1-extra-2.json` | verification-result | E1 with two extra rejected events: same outcomes. |
 | `fixtures/verification-result-e1-second-level.json` | verification-result | E1 one level down: the second successor's report about the first successor does not dispute its own appointment. |
+| `fixtures/verification-result-e1-twin-rotation.json` | verification-result | Draft-5 review note: twin statements of one appointment at the same time are one appointment; the successor's report disputes neither. |
 | `fixtures/verification-result-e1.json` | verification-result | E1: a successor's compromise report never disputes its own appointment; the successor stays trusted. |
 | `fixtures/verification-result-event-order-a.json` | verification-result | B2: retirement listed before the rotation it relies on; identical result to order b. |
 | `fixtures/verification-result-event-order-b.json` | verification-result | B2: the same two events in the other order; identical result to order a. |
@@ -114,6 +115,7 @@ A fixture registers nothing and proves nothing.
 | `aux/key-event-compromise-after-theft.json` | key-event | The owner reports the theft afterwards, from 2026-11-25T12:00. |
 | `aux/key-event-compromise-by-second-successor.json` | key-event | The second successor reports the first successor compromised from before its rotation. |
 | `aux/key-event-compromise-by-successor.json` | key-event | The successor reports the old key compromised 10 days after the rotation, from 5 days before it. |
+| `aux/key-event-foreign-signature-prepended.json` | key-event | The F1 copy, used as an input to a result. |
 | `aux/key-event-onward-rotation-same-time.json` | key-event | The successor rotates onward with the same proved time as its own rotation. |
 | `aux/key-event-onward-rotation.json` | key-event | The successor rotates onward, proved 2026-12-01T03:00. |
 | `aux/key-event-rejected-1.json` | key-event | An unauthorized event: the attacker's key signs a retirement of the old key. |
@@ -123,6 +125,7 @@ A fixture registers nothing and proves nothing.
 | `aux/key-event-retired.json` | key-event | The owner retires the key, proved 2026-11-26T03:00. |
 | `aux/key-event-rotation-after-retirement.json` | key-event | Whoever later holds the retired key rotates it to the thief. |
 | `aux/key-event-rotation-conflicting.json` | key-event | A second rotation of the same key to a different successor. |
+| `aux/key-event-rotation-honest-twin.json` | key-event | A second statement of the same rotation K->S (re-serialized), proved at the same time. |
 | `aux/key-event-rotation-honest.json` | key-event | The owner rotates the key to the successor, proved 2026-11-26T03:00. |
 | `aux/key-event-rotation-same-time.json` | key-event | A rotation to the thief with the same proved time as the retirement. |
 | `aux/key-event-rotation-to-thief-signed-by-thief.json` | key-event | The same rotation statement as key-event-rotation-to-thief, signed by the thief's key instead. |
@@ -130,7 +133,7 @@ A fixture registers nothing and proves nothing.
 | `aux/key-event-second-rotation-2028.json` | key-event | Eighteen months later, whoever obtained the old key rotates it again. |
 | `aux/verification-result-e1-flipped.json` | verification-result | Draft-4 behaviour with one extra rejected event (the flip), kept as input to the equivalence negative. |
 
-`negative/` holds 94 broken fixtures; each must produce exactly the codes listed below. `aux/` holds inputs that other fixtures refer to; they are not checked on their own.
+`negative/` holds 96 broken fixtures; each must produce exactly the codes listed below. `aux/` holds inputs that other fixtures refer to; they are not checked on their own.
 
 | Real-format file | SHA-256 (from `MANIFEST.json`) |
 | --- | --- |
@@ -226,6 +229,7 @@ The A2A fixtures are **not validated against a published A2A schema** (none is c
 | `neg-key-event-ignored` | `key-event-ignored` | A compromise event covering the bound is ignored; signer still `trusted` (W10). |
 | `neg-key-event-shape` | `key-event-shape` | Compromise event without its claimed start. |
 | `neg-key-event-subject-mismatch` | `key-event-shape` | B3: the event's keyid hint names the creator key but its subject digest names another key. |
+| `neg-key-event-two-signatures` | `key-event-signatures` | F1 (review case): a foreign signature prepended to a valid K-signed rotation. |
 | `neg-late-rotation-erases-chain` | `key-event-ignored` | D2 (review case): a much later second rotation disputes the honest chain; the successor reported untrusted. |
 | `neg-log-time-claimed` | `log-time-claimed` | Rekor v2 placeholder that claims a time. |
 | `neg-mcp-tool-shape` | `mcp-tool-shape` | Registration tool declared closed-world and idempotent. |
@@ -253,6 +257,7 @@ The A2A fixtures are **not validated against a published A2A schema** (none is c
 | `neg-renewal-wrong-target` | `evidence-wrong-target` | Renewal whose target digest is not the renewed token's bytes. |
 | `neg-report-digest` | `report-digest` | The link names a different report body. |
 | `neg-result-mismatch` | `result-mismatch` | An outcome value outside the closed list. |
+| `neg-result-with-foreign-signature` | `key-event-signatures` | F1: a result whose event files include the copy with a prepended foreign signature; the copy is a named rejection. |
 | `neg-retired-key-rotates-same-time` | `key-event-ignored` | D1 (review case): equal proved times; the thief's key reported trusted. |
 | `neg-retired-key-rotates` | `key-event-ignored` | D1 (review case): the thief's key reported trusted after a retired key's rotation. |
 | `neg-revocation-by-root` | `result-mismatch` | D5 (review case): one revoked TSA certificate invalidates every TSA under the same root. |

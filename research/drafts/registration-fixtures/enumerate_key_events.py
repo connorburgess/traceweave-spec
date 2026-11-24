@@ -14,8 +14,8 @@ Standard library only. Two parts:
 
 2. Loading sample. A seeded sample of sequences is rebuilt as real signed key-event bundles with the
    builder (Ed25519 signatures, subject digests, keyid hints, placeholder time evidence), with some
-   events tampered (bad signature), left without a proved time (one source only), or given a subject
-   that disagrees with the keyid. They are loaded through `load_event_bundles`, and the outcomes must
+   events tampered (bad signature), left without a proved time (one source only), given a subject
+   that disagrees with the keyid, or given a prepended foreign signature (rejected: one signature per event). They are loaded through `load_event_bundles`, and the outcomes must
    equal the dictionary path's.
 
 Model. Keys: K (the trusted original), S and S2 (honest successors), A (attacker).
@@ -357,7 +357,7 @@ def loading_sample(n, seed=20261124):
         evs = build(seq)
         items, dict_evs = [], []
         for i, e in enumerate(evs):
-            mode = rng.choice(["ok"] * 6 + ["bad-signature", "no-proved-time", "subject-mismatch"])
+            mode = rng.choice(["ok"] * 6 + ["bad-signature", "no-proved-time", "subject-mismatch", "foreign-signature"])
             if e["event"] == "compromised":  # a compromise claim is part of the statement
                 e["claimed"] = e["claimed"].replace(microsecond=0)
             pred = {}
@@ -380,6 +380,12 @@ def loading_sample(n, seed=20261124):
                 st["subject"][0]["digest"]["sha256"] = C.sha(B.PUB_CO if e["target"] != S2 else B.PUB)
                 env, sigs = B.envelope(st, signers=(keys[e["signer"]],))
                 bundle = B.bundle_of(env, [B.tsa(sigs[0], "a", gen), B.ots(sigs[0], block)], keys=(keys[e["signer"]],))
+                d = None
+            elif mode == "foreign-signature":  # F1: a prepended foreign signature is rejected, never re-attributed
+                payload = B.base64.b64decode(bundle["envelope"]["payload"])
+                fs = C.ed25519_sign(B.SEED_THIEF, C.pae(C.PAYLOAD_TYPE, payload))
+                bundle["envelope"]["signatures"].insert(0, {"keyid": B.KEYID_THIEF, "sig": B.base64.b64encode(fs).decode()})
+                bundle["verificationMaterial"]["publicKeys"].append({"keyid": B.KEYID_THIEF, "alg": "ed25519", "publicKeyHex": B.PUB_THIEF.hex()})
                 d = None
             items.append((bundle, f"sample-{i}"))
             if d is not None:
@@ -413,7 +419,7 @@ def loading_sample(n, seed=20261124):
                 print("   loaded:", summary(loaded))
                 print("   dicts :", summary(dict_evs))
                 print("   out   :", sorted(out))
-    print(f"loading sample: {n} sequences rebuilt as signed bundles (with tampered, single-source and subject-mismatch events); {mismatches} mismatches")
+    print(f"loading sample: {n} sequences rebuilt as signed bundles (with tampered, single-source, subject-mismatch and foreign-signature events); {mismatches} mismatches")
     return mismatches == 0
 
 
