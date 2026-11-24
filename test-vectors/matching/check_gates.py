@@ -143,7 +143,8 @@ def packet_code(pk, ctx, licences):
         return "body-unknown"
     body = ctx.recomputed_body(body_vid)
     key = pk["region"]
-    p = next((p for p in body["pairs"] if [p["reference"]["id"], p["candidate"]["id"]] == [key["referenceId"], key["candidateId"]]), None)
+    # a rejected body lists no pairs (§6.2): every region key is absent from it (A17)
+    p = next((p for p in body.get("pairs", []) if [p["reference"]["id"], p["candidate"]["id"]] == [key["referenceId"], key["candidateId"]]), None)
     if p is None or p["status"] != "compared":
         return "region-key-absent"
     if key["mode"] not in p["modes"]:
@@ -217,6 +218,9 @@ def ids_digest(ids):
     return sha(cm.canon_bytes(sorted(ids, key=lambda s: s.encode())))
 
 
+CANDGEN_EXTRA = [0, 0]
+
+
 def check_candgen(d, ctx):
     base = ctx.vectors[d["baseVector"].split("#", 1)[1]]
     cc = base["comparisonConfig"]
@@ -244,7 +248,7 @@ def check_candgen(d, ctx):
         rec = r["record"]
         errs = cm.schema_errors(ctx.candgen_schema, rec, ctx.candgen_schema)
         cm.need(not errs, f"{r['id']}: record schema: {errs[:1]}")
-        candgen_semantic(rec, {bsha: (body, cb)})
+        candgen_semantic(rec, {bsha: (body, cb)}, ctx.cm.cat_schema)
         cm.need(rec["generation"]["method"] != "selected" or
                 ids_digest([a["id"] for a in r["retrievalOrder"]]) == rec["generation"]["selectedIdsSha256"],
                 f"{r['id']}: selected ids digest is not that of the retrieved ids")
@@ -253,42 +257,74 @@ def check_candgen(d, ctx):
     for b in d["invalidRecords"]:
         errs = cm.schema_errors(ctx.candgen_schema, b["record"], ctx.candgen_schema)
         cm.need(b.get("code") in CANDGEN_CODES, f"{b['id']}: code must be one of the §6.10 rejection codes")
-        got = "malformed-record" if errs else candgen_code(b["record"], bodies, b.get("candidateCatalogue") != "withheld")
+        got = "malformed-record" if errs else candgen_code(
+            b["record"], {k: x for k, (x, _) in bodies.items()},
+            None if b.get("candidateCatalogue") == "withheld" else bodies.get(b["record"]["report"]["bodySha256"], (None, None))[1],
+            ctx.cm.cat_schema)
         cm.need(got == b["code"], f"{b['id']}: rejection code {got} differs from the fixture's {b['code']}")
     for b in d["validWithoutCandidateCatalogue"]:
         cm.need(b["record"]["generation"]["method"] == "exhaustive" and b["candidateCatalogue"] == "withheld"
                 and not cm.schema_errors(ctx.candgen_schema, b["record"], ctx.candgen_schema)
-                and candgen_code(b["record"], bodies, False) is None, f"{b['id']}: an exhaustive record needs no catalogue")
+                and candgen_code(b["record"], {k: x for k, (x, _) in bodies.items()}, None, ctx.cm.cat_schema) is None,
+                f"{b['id']}: an exhaustive record needs no catalogue")
+    # A17 (B3): records against rejected bodies; supplied catalogues that are not valid catalogues; record writers.
+    def supplied(ref):
+        if ref == "withheld":
+            return None
+        cm.need(ref["side"] == "candidate", "only candidate catalogues are supplied")
+        v = ctx.vectors[ref["vector"].split("#", 1)[1]]
+        _, raws, _ = cm.vector_inputs(v, ctx.doc, ctx.cm)
+        return raws["candidate"]
+    kind_bodies = {}
+    for c in d["bodyKindCases"]:
+        vid = c["body"].split("#", 1)[1]
+        body = ctx.recomputed_body(vid)
+        cm.need(sha(cm.canon_bytes(body)) == ctx.vectors[vid]["expectedReport"]["bodySha256"], f"{c['id']}: body digest")
+        kind_bodies[ctx.vectors[vid]["expectedReport"]["bodySha256"]] = body
+    for c in d["bodyKindCases"]:
+        cm.need(c["code"] is None or c["code"] in CANDGEN_CODES, f"{c['id']}: code must be one of the §6.10 rejection codes")
+        errs = cm.schema_errors(ctx.candgen_schema, c["record"], ctx.candgen_schema)
+        got = "malformed-record" if errs else candgen_code(c["record"], kind_bodies, supplied(c["candidateCatalogue"]),
+                                                            ctx.cm.cat_schema)
+        cm.need(got == c["code"], f"{c['id']}: result {got} differs from the fixture's {c['code']}")
+    for c in d["writerCases"]:
+        raw = supplied(c["candidateCatalogue"])
+        got = None if cm.catalogue_rejection(raw, ctx.cm.cat_schema)[1] is None else "candidate-catalogue-invalid"
+        cm.need(got == c["code"], f"{c['id']}: a writer {'refuses' if got else 'writes'}, fixture says {c['code']}")
     for b in d["reportRejections"]:
         cm.need(cm.schema_errors({"$ref": "#/$defs/body"}, b["body"], ctx.cm.rep_schema), f"{b['id']}: report schema accepted it")
+    CANDGEN_EXTRA[:] = [len(d["bodyKindCases"]), len(d["writerCases"])]
     return len(d["retrievals"]), same, len(d["invalidRecords"]), len(d["reportRejections"])
 
 
 CANDGEN_CODES = ("malformed-record", "body-unknown", "candidate-catalogue-mismatch", "candidate-catalogue-unavailable",
-                 "selected-ids-mismatch")
+                 "candidate-catalogue-invalid", "selected-ids-mismatch")
 
 
-def candgen_code(rec, bodies, catalogue_supplied=True):
-    """§6.10 (A16): the first failing check names the rejection; None for a valid record. The caller has applied the
-    strict-JSON and schema checks (malformed-record). bodies maps bodySha256 to (body, candidate catalogue bytes)."""
+def candgen_code(rec, bodies, catalogue, cat_schema):
+    """§6.10 (A16, A17): the first failing check names the rejection; None for a valid record. The caller has applied the
+    strict-JSON and schema checks (malformed-record). bodies maps bodySha256 to a body; catalogue is the supplied candidate
+    catalogue bytes, or None. The supplied bytes are compared by digest only; they are parsed only for the selected id set."""
     if rec["report"]["bodySha256"] not in bodies:
         return "body-unknown"
-    body, cb = bodies[rec["report"]["bodySha256"]]
+    body = bodies[rec["report"]["bodySha256"]]
     if rec["candidateCatalogueSha256"] != body["inputs"]["candidateCatalogueSha256"]:
         return "candidate-catalogue-mismatch"
+    if catalogue is not None and sha(catalogue) != rec["candidateCatalogueSha256"]:
+        return "candidate-catalogue-mismatch"
     if rec["generation"]["method"] == "selected":
-        if not catalogue_supplied:
+        if catalogue is None:
             return "candidate-catalogue-unavailable"
-        if sha(cb) != rec["candidateCatalogueSha256"]:
-            return "candidate-catalogue-mismatch"
-        ids = [a["id"] for a in cm.strict_loads(cb)["artifacts"]]
+        if cm.catalogue_rejection(catalogue, cat_schema)[1] is not None:
+            return "candidate-catalogue-invalid"
+        ids = [a["id"] for a in cm.strict_loads(catalogue)["artifacts"]]
         if rec["generation"]["selectedIdsSha256"] != ids_digest(ids):
             return "selected-ids-mismatch"
     return None
 
 
-def candgen_semantic(rec, bodies):
-    code = candgen_code(rec, bodies)
+def candgen_semantic(rec, bodies, cat_schema):
+    code = candgen_code(rec, {k: b for k, (b, _) in bodies.items()}, bodies[rec["report"]["bodySha256"]][1], cat_schema)
     cm.need(code is None, f"record rejected: {code}")
 
 
@@ -386,6 +422,13 @@ def corruptions(m, pk, cg):
         "code", "selected-ids-mismatch"))
     yield "candgen-withheld-catalogue-ignored", cc(lambda d: next(
         x for x in d["invalidRecords"] if x["id"] == "selected-without-candidate-catalogue").pop("candidateCatalogue"))
+    yield "candgen-b3-invalid-catalogue-accepted", cc(lambda d: next(x for x in d["bodyKindCases"]
+                                                                  if x["id"].endswith("-selected-invalid-catalogue")).__setitem__("code", None))
+    yield "candgen-b3-exhaustive-parses-catalogue", cc(lambda d: next(x for x in d["bodyKindCases"]
+                                                                   if x["id"].endswith("-exhaustive-invalid-catalogue")).__setitem__("code", "candidate-catalogue-invalid"))
+    yield "candgen-writer-accepts-invalid", cc(lambda d: d["writerCases"][0].__setitem__("code", None))
+    yield "packet-rejected-body-code", pp(lambda d: next(x for x in d["invalid"] if x["id"] == "body-kind-go-config-mismatch").__setitem__(
+        "code", "body-unknown"))
     yield "candgen-derivation-rule-dropped", cc(lambda d: d.pop("derivationRule"))
     yield "packet-missing-fixture-dropped", pp(lambda d: d["invalid"].pop(0))
     yield "packet-licence-file-digest", pp(lambda d: d["licenceTexts"][0].__setitem__("sha256", "8" * 64))
@@ -444,7 +487,8 @@ def main():
     print(f"PASS M2.7 review-packets.json: {pv} valid packets (3 origin kinds), {pi} rejections as stated, "
           f"{pr} report-body rejection")
     print(f"PASS M2.9 candidate-generation.json: {rn} retrieval paths ({same} give the base body byte for byte, 1 different set), "
-          f"{ci} invalid records rejected, {cr} report bodies with rank/score/index rejected")
+          f"{ci} invalid records rejected, {cr} report bodies with rank/score/index rejected, "
+          f"{CANDGEN_EXTRA[0]} record x body-kind cases and {CANDGEN_EXTRA[1]} writer cases as stated")
     try:
         ncls, nmem = check_m23(m23, ctx)
     except cm.CheckError as exc:

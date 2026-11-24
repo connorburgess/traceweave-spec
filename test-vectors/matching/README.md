@@ -116,15 +116,16 @@ Body digests and outcomes per vector are in `matching.json`. `build_vectors.py` 
 ```
 PASS extraction-py.json: 3 vectors and config-py.json are verbatim copies of the frozen py-tokens draft-1 files
 PASS M2.2 m22-fixture-manifest.json (frozen 349bd14953082dce...): 4 rows, 11 cases, spans 56/56 equal to the recomputed bodies
-PASS M2.7 review-packets.json: 4 valid packets (3 origin kinds), 67 rejections as stated, 1 report-body rejection
-PASS M2.9 candidate-generation.json: 4 retrieval paths (3 give the base body byte for byte, 1 different set), 8 invalid records rejected, 4 report bodies with rank/score/index rejected
+PASS M2.7 review-packets.json: 4 valid packets (3 origin kinds), 71 rejections as stated, 1 report-body rejection
+PASS M2.9 candidate-generation.json: 4 retrieval paths (3 give the base body byte for byte, 1 different set), 8 invalid records rejected, 4 report bodies with rank/score/index rejected, 22 record x body-kind cases and 7 writer cases as stated
 PASS M2.3 m23-control-classes.json: 5 classes, 30 member vectors (hand only); candidate counts, denominators and rejected comparisons equal to the recomputed bodies: independent-same-task 0/1; boilerplate 0/2; vendor 1/10; unrelated 0/1; malformed-unsupported 1/10 + 20 rejected
-PASS gate corruption self-test: rejected 30/30
+PASS gate corruption self-test: rejected 34/34
 ```
 
 - **M2.2.** The manifest is frozen: its SHA-256 is pinned in `check_gates.py`, so any change must change that digest in the same commit. For each of the four UC-1 example-matrix rows it lists hand-derived positive cases (and, for the last row, companion cases) with their input digests, catalogue and body digests, and the half-open UTF-8 byte spans of its regions per mode: reportable regions only for positive cases (`regionsListed: "reportable"`), every region for companion cases (`"all"`, A14). The checker recomputes every body and requires every span to match.
 - **M2.7.** See contract §6.9. Valid packets cover own origin, a vendored dependency (also on its `common-only` region) and a historical copy. Rejections cover one per required field of each kind, a region key or mode absent from the referenced body, a non-first seed, an unknown body, an unarchived licence text, and the forbidden fields (`rightsVerdict`, `permitted`, `owner`, `score`, `note`, `licenceCompatible`, `permitted` inside `package`, a licence `identifier`). Since A14 each origin names a `side` whose digest must equal the body pair's digest for that side, and a historical copy's source must be the other side's digest; the review's P1b (a vendored packet re-pointed at `go-identical`) and an unbound source digest are rejected. `upstreamArtifactSha256` is a claim the body cannot check (contract §6.9).
 - **M2.7 and M2.9 codes (A16).** Every invalid packet and invalid candidate-generation record carries the common rejection `code` of contract §6.9 / §6.10, and the checker requires its own code to equal it.
+- **Records and packets over any body (A17).** `candidate-generation.json` `bodyKindCases` and `writerCases` cover rejected bodies whose candidate catalogue is malformed (contract §6.10); `review-packets.json` keys 4 packets to bodies with no region at the key, including rejected bodies, which list no pairs (§6.9).
 - **M2.3 (A16).** See contract §6.12. Members are the `hand` vectors with a class tag; rejected comparisons are counted apart from the pair denominator.
 - **M2.9.** See contract §6.10. Three retrieval paths, in different orders, rebuild the candidate catalogue of `text-plain-three-modes` from records and give its body byte for byte. A subset changes the catalogue digest, the count and the pairs.
 

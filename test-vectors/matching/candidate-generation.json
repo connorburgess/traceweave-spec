@@ -974,6 +974,576 @@
    }
   }
  ],
+ "bodyKindCases": [
+  {
+   "id": "go-malformed-catalogue-rank-field",
+   "body": "matching.json#go-malformed-catalogue",
+   "candidateCatalogue": {
+    "vector": "matching.json#go-malformed-catalogue",
+    "side": "candidate"
+   },
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "272e1a754352b512cd46ca04c5c9c7890e51bb81481b905c0690428f517b6b4a"
+    },
+    "candidateCatalogueSha256": "71b3563bd18d2de7c09bd18a4e2380226a928786e025fa468882dc8e933c155d",
+    "generation": {
+     "method": "selected",
+     "index": {
+      "name": "toy-index",
+      "version": "1"
+     },
+     "selectedIdsSha256": "3b787323579ff58fcfef4d607c922af9e3df579e673b020b9796db5d34339fb0",
+     "rank": [
+      1,
+      2,
+      3,
+      4
+     ]
+    }
+   },
+   "code": "malformed-record",
+   "reason": "the record itself is checked first; the supplied catalogue is not read"
+  },
+  {
+   "id": "go-malformed-catalogue-selected-invalid-catalogue",
+   "body": "matching.json#go-malformed-catalogue",
+   "candidateCatalogue": {
+    "vector": "matching.json#go-malformed-catalogue",
+    "side": "candidate"
+   },
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "272e1a754352b512cd46ca04c5c9c7890e51bb81481b905c0690428f517b6b4a"
+    },
+    "candidateCatalogueSha256": "cbda616887960455e1b1de6a1d14cd64695ddc5c11af7b851465234b5b503348",
+    "generation": {
+     "method": "selected",
+     "selectedIdsSha256": "3169ba9e29527082ac0a22ae78e46eca5efc1f58ff2b47d42c36100b4d9252a8",
+     "index": {
+      "name": "toy-index",
+      "version": "1"
+     }
+    }
+   },
+   "code": "candidate-catalogue-invalid",
+   "reason": "the bytes match the digest but are not a valid catalogue, so the id set cannot be read"
+  },
+  {
+   "id": "go-malformed-catalogue-selected-withheld",
+   "body": "matching.json#go-malformed-catalogue",
+   "candidateCatalogue": "withheld",
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "272e1a754352b512cd46ca04c5c9c7890e51bb81481b905c0690428f517b6b4a"
+    },
+    "candidateCatalogueSha256": "cbda616887960455e1b1de6a1d14cd64695ddc5c11af7b851465234b5b503348",
+    "generation": {
+     "method": "selected",
+     "selectedIdsSha256": "3169ba9e29527082ac0a22ae78e46eca5efc1f58ff2b47d42c36100b4d9252a8",
+     "index": {
+      "name": "toy-index",
+      "version": "1"
+     }
+    }
+   },
+   "code": "candidate-catalogue-unavailable",
+   "reason": "selected, no catalogue supplied"
+  },
+  {
+   "id": "go-malformed-catalogue-selected-wrong-bytes",
+   "body": "matching.json#go-malformed-catalogue",
+   "candidateCatalogue": {
+    "vector": "matching.json#go-config-mismatch",
+    "side": "candidate"
+   },
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "272e1a754352b512cd46ca04c5c9c7890e51bb81481b905c0690428f517b6b4a"
+    },
+    "candidateCatalogueSha256": "cbda616887960455e1b1de6a1d14cd64695ddc5c11af7b851465234b5b503348",
+    "generation": {
+     "method": "selected",
+     "selectedIdsSha256": "3169ba9e29527082ac0a22ae78e46eca5efc1f58ff2b47d42c36100b4d9252a8",
+     "index": {
+      "name": "toy-index",
+      "version": "1"
+     }
+    }
+   },
+   "code": "candidate-catalogue-mismatch",
+   "reason": "the supplied bytes' digest is not the record's; decided by digest, no parsing"
+  },
+  {
+   "id": "go-malformed-catalogue-exhaustive-invalid-catalogue",
+   "body": "matching.json#go-malformed-catalogue",
+   "candidateCatalogue": {
+    "vector": "matching.json#go-malformed-catalogue",
+    "side": "candidate"
+   },
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "272e1a754352b512cd46ca04c5c9c7890e51bb81481b905c0690428f517b6b4a"
+    },
+    "candidateCatalogueSha256": "cbda616887960455e1b1de6a1d14cd64695ddc5c11af7b851465234b5b503348",
+    "generation": {
+     "method": "exhaustive"
+    }
+   },
+   "code": null,
+   "reason": "an exhaustive record is not checked against catalogue contents; supplying an invalid catalogue whose digest matches changes nothing"
+  },
+  {
+   "id": "go-malformed-catalogue-exhaustive-withheld",
+   "body": "matching.json#go-malformed-catalogue",
+   "candidateCatalogue": "withheld",
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "272e1a754352b512cd46ca04c5c9c7890e51bb81481b905c0690428f517b6b4a"
+    },
+    "candidateCatalogueSha256": "cbda616887960455e1b1de6a1d14cd64695ddc5c11af7b851465234b5b503348",
+    "generation": {
+     "method": "exhaustive"
+    }
+   },
+   "code": null,
+   "reason": "a record may annotate a rejected body"
+  },
+  {
+   "id": "go-malformed-catalogue-exhaustive-rekeyed",
+   "body": "matching.json#go-malformed-catalogue",
+   "candidateCatalogue": "withheld",
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "272e1a754352b512cd46ca04c5c9c7890e51bb81481b905c0690428f517b6b4a"
+    },
+    "candidateCatalogueSha256": "71b3563bd18d2de7c09bd18a4e2380226a928786e025fa468882dc8e933c155d",
+    "generation": {
+     "method": "exhaustive"
+    }
+   },
+   "code": "candidate-catalogue-mismatch",
+   "reason": "the record's candidate digest is not the body's inputs.candidateCatalogueSha256"
+  },
+  {
+   "id": "go-suppression-order-candidate-validity-first-rank-field",
+   "body": "matching.json#go-suppression-order-candidate-validity-first",
+   "candidateCatalogue": {
+    "vector": "matching.json#go-suppression-order-candidate-validity-first",
+    "side": "candidate"
+   },
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "6271a09afca54504d175e04496bc3d272fe8b8c674271c48d068db14a51a311c"
+    },
+    "candidateCatalogueSha256": "71b3563bd18d2de7c09bd18a4e2380226a928786e025fa468882dc8e933c155d",
+    "generation": {
+     "method": "selected",
+     "index": {
+      "name": "toy-index",
+      "version": "1"
+     },
+     "selectedIdsSha256": "3b787323579ff58fcfef4d607c922af9e3df579e673b020b9796db5d34339fb0",
+     "rank": [
+      1,
+      2,
+      3,
+      4
+     ]
+    }
+   },
+   "code": "malformed-record",
+   "reason": "the record itself is checked first; the supplied catalogue is not read"
+  },
+  {
+   "id": "go-suppression-order-candidate-validity-first-selected-invalid-catalogue",
+   "body": "matching.json#go-suppression-order-candidate-validity-first",
+   "candidateCatalogue": {
+    "vector": "matching.json#go-suppression-order-candidate-validity-first",
+    "side": "candidate"
+   },
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "6271a09afca54504d175e04496bc3d272fe8b8c674271c48d068db14a51a311c"
+    },
+    "candidateCatalogueSha256": "5465c202c98aa6f234b705080f93256036f7b597256522e41c31df43c2b246d9",
+    "generation": {
+     "method": "selected",
+     "selectedIdsSha256": "3169ba9e29527082ac0a22ae78e46eca5efc1f58ff2b47d42c36100b4d9252a8",
+     "index": {
+      "name": "toy-index",
+      "version": "1"
+     }
+    }
+   },
+   "code": "candidate-catalogue-invalid",
+   "reason": "the bytes match the digest but are not a valid catalogue, so the id set cannot be read"
+  },
+  {
+   "id": "go-suppression-order-candidate-validity-first-selected-withheld",
+   "body": "matching.json#go-suppression-order-candidate-validity-first",
+   "candidateCatalogue": "withheld",
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "6271a09afca54504d175e04496bc3d272fe8b8c674271c48d068db14a51a311c"
+    },
+    "candidateCatalogueSha256": "5465c202c98aa6f234b705080f93256036f7b597256522e41c31df43c2b246d9",
+    "generation": {
+     "method": "selected",
+     "selectedIdsSha256": "3169ba9e29527082ac0a22ae78e46eca5efc1f58ff2b47d42c36100b4d9252a8",
+     "index": {
+      "name": "toy-index",
+      "version": "1"
+     }
+    }
+   },
+   "code": "candidate-catalogue-unavailable",
+   "reason": "selected, no catalogue supplied"
+  },
+  {
+   "id": "go-suppression-order-candidate-validity-first-selected-wrong-bytes",
+   "body": "matching.json#go-suppression-order-candidate-validity-first",
+   "candidateCatalogue": {
+    "vector": "matching.json#go-config-mismatch",
+    "side": "candidate"
+   },
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "6271a09afca54504d175e04496bc3d272fe8b8c674271c48d068db14a51a311c"
+    },
+    "candidateCatalogueSha256": "5465c202c98aa6f234b705080f93256036f7b597256522e41c31df43c2b246d9",
+    "generation": {
+     "method": "selected",
+     "selectedIdsSha256": "3169ba9e29527082ac0a22ae78e46eca5efc1f58ff2b47d42c36100b4d9252a8",
+     "index": {
+      "name": "toy-index",
+      "version": "1"
+     }
+    }
+   },
+   "code": "candidate-catalogue-mismatch",
+   "reason": "the supplied bytes' digest is not the record's; decided by digest, no parsing"
+  },
+  {
+   "id": "go-suppression-order-candidate-validity-first-exhaustive-invalid-catalogue",
+   "body": "matching.json#go-suppression-order-candidate-validity-first",
+   "candidateCatalogue": {
+    "vector": "matching.json#go-suppression-order-candidate-validity-first",
+    "side": "candidate"
+   },
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "6271a09afca54504d175e04496bc3d272fe8b8c674271c48d068db14a51a311c"
+    },
+    "candidateCatalogueSha256": "5465c202c98aa6f234b705080f93256036f7b597256522e41c31df43c2b246d9",
+    "generation": {
+     "method": "exhaustive"
+    }
+   },
+   "code": null,
+   "reason": "an exhaustive record is not checked against catalogue contents; supplying an invalid catalogue whose digest matches changes nothing"
+  },
+  {
+   "id": "go-suppression-order-candidate-validity-first-exhaustive-withheld",
+   "body": "matching.json#go-suppression-order-candidate-validity-first",
+   "candidateCatalogue": "withheld",
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "6271a09afca54504d175e04496bc3d272fe8b8c674271c48d068db14a51a311c"
+    },
+    "candidateCatalogueSha256": "5465c202c98aa6f234b705080f93256036f7b597256522e41c31df43c2b246d9",
+    "generation": {
+     "method": "exhaustive"
+    }
+   },
+   "code": null,
+   "reason": "a record may annotate a rejected body"
+  },
+  {
+   "id": "go-suppression-order-candidate-validity-first-exhaustive-rekeyed",
+   "body": "matching.json#go-suppression-order-candidate-validity-first",
+   "candidateCatalogue": "withheld",
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "6271a09afca54504d175e04496bc3d272fe8b8c674271c48d068db14a51a311c"
+    },
+    "candidateCatalogueSha256": "71b3563bd18d2de7c09bd18a4e2380226a928786e025fa468882dc8e933c155d",
+    "generation": {
+     "method": "exhaustive"
+    }
+   },
+   "code": "candidate-catalogue-mismatch",
+   "reason": "the record's candidate digest is not the body's inputs.candidateCatalogueSha256"
+  },
+  {
+   "id": "k1-extraction-bounds-max-input-rank-field",
+   "body": "matching.json#k1-extraction-bounds-max-input",
+   "candidateCatalogue": {
+    "vector": "matching.json#k1-extraction-bounds-max-input",
+    "side": "candidate"
+   },
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "af89b884df507023e67d46e5cb2470d8a44639807c60d34aa7477700b3071f08"
+    },
+    "candidateCatalogueSha256": "71b3563bd18d2de7c09bd18a4e2380226a928786e025fa468882dc8e933c155d",
+    "generation": {
+     "method": "selected",
+     "index": {
+      "name": "toy-index",
+      "version": "1"
+     },
+     "selectedIdsSha256": "3b787323579ff58fcfef4d607c922af9e3df579e673b020b9796db5d34339fb0",
+     "rank": [
+      1,
+      2,
+      3,
+      4
+     ]
+    }
+   },
+   "code": "malformed-record",
+   "reason": "the record itself is checked first; the supplied catalogue is not read"
+  },
+  {
+   "id": "k1-extraction-bounds-max-input-selected-invalid-catalogue",
+   "body": "matching.json#k1-extraction-bounds-max-input",
+   "candidateCatalogue": {
+    "vector": "matching.json#k1-extraction-bounds-max-input",
+    "side": "candidate"
+   },
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "af89b884df507023e67d46e5cb2470d8a44639807c60d34aa7477700b3071f08"
+    },
+    "candidateCatalogueSha256": "fd1c532f756bc3a577098a265784a0f9b29a12b87f797095b9c3bff260040800",
+    "generation": {
+     "method": "selected",
+     "selectedIdsSha256": "3169ba9e29527082ac0a22ae78e46eca5efc1f58ff2b47d42c36100b4d9252a8",
+     "index": {
+      "name": "toy-index",
+      "version": "1"
+     }
+    }
+   },
+   "code": "candidate-catalogue-invalid",
+   "reason": "the bytes match the digest but are not a valid catalogue, so the id set cannot be read"
+  },
+  {
+   "id": "k1-extraction-bounds-max-input-selected-withheld",
+   "body": "matching.json#k1-extraction-bounds-max-input",
+   "candidateCatalogue": "withheld",
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "af89b884df507023e67d46e5cb2470d8a44639807c60d34aa7477700b3071f08"
+    },
+    "candidateCatalogueSha256": "fd1c532f756bc3a577098a265784a0f9b29a12b87f797095b9c3bff260040800",
+    "generation": {
+     "method": "selected",
+     "selectedIdsSha256": "3169ba9e29527082ac0a22ae78e46eca5efc1f58ff2b47d42c36100b4d9252a8",
+     "index": {
+      "name": "toy-index",
+      "version": "1"
+     }
+    }
+   },
+   "code": "candidate-catalogue-unavailable",
+   "reason": "selected, no catalogue supplied"
+  },
+  {
+   "id": "k1-extraction-bounds-max-input-selected-wrong-bytes",
+   "body": "matching.json#k1-extraction-bounds-max-input",
+   "candidateCatalogue": {
+    "vector": "matching.json#go-config-mismatch",
+    "side": "candidate"
+   },
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "af89b884df507023e67d46e5cb2470d8a44639807c60d34aa7477700b3071f08"
+    },
+    "candidateCatalogueSha256": "fd1c532f756bc3a577098a265784a0f9b29a12b87f797095b9c3bff260040800",
+    "generation": {
+     "method": "selected",
+     "selectedIdsSha256": "3169ba9e29527082ac0a22ae78e46eca5efc1f58ff2b47d42c36100b4d9252a8",
+     "index": {
+      "name": "toy-index",
+      "version": "1"
+     }
+    }
+   },
+   "code": "candidate-catalogue-mismatch",
+   "reason": "the supplied bytes' digest is not the record's; decided by digest, no parsing"
+  },
+  {
+   "id": "k1-extraction-bounds-max-input-exhaustive-invalid-catalogue",
+   "body": "matching.json#k1-extraction-bounds-max-input",
+   "candidateCatalogue": {
+    "vector": "matching.json#k1-extraction-bounds-max-input",
+    "side": "candidate"
+   },
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "af89b884df507023e67d46e5cb2470d8a44639807c60d34aa7477700b3071f08"
+    },
+    "candidateCatalogueSha256": "fd1c532f756bc3a577098a265784a0f9b29a12b87f797095b9c3bff260040800",
+    "generation": {
+     "method": "exhaustive"
+    }
+   },
+   "code": null,
+   "reason": "an exhaustive record is not checked against catalogue contents; supplying an invalid catalogue whose digest matches changes nothing"
+  },
+  {
+   "id": "k1-extraction-bounds-max-input-exhaustive-withheld",
+   "body": "matching.json#k1-extraction-bounds-max-input",
+   "candidateCatalogue": "withheld",
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "af89b884df507023e67d46e5cb2470d8a44639807c60d34aa7477700b3071f08"
+    },
+    "candidateCatalogueSha256": "fd1c532f756bc3a577098a265784a0f9b29a12b87f797095b9c3bff260040800",
+    "generation": {
+     "method": "exhaustive"
+    }
+   },
+   "code": null,
+   "reason": "a record may annotate a rejected body"
+  },
+  {
+   "id": "k1-extraction-bounds-max-input-exhaustive-rekeyed",
+   "body": "matching.json#k1-extraction-bounds-max-input",
+   "candidateCatalogue": "withheld",
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "af89b884df507023e67d46e5cb2470d8a44639807c60d34aa7477700b3071f08"
+    },
+    "candidateCatalogueSha256": "71b3563bd18d2de7c09bd18a4e2380226a928786e025fa468882dc8e933c155d",
+    "generation": {
+     "method": "exhaustive"
+    }
+   },
+   "code": "candidate-catalogue-mismatch",
+   "reason": "the record's candidate digest is not the body's inputs.candidateCatalogueSha256"
+  },
+  {
+   "id": "go-config-mismatch-selected-valid",
+   "body": "matching.json#go-config-mismatch",
+   "candidateCatalogue": {
+    "vector": "matching.json#go-config-mismatch",
+    "side": "candidate"
+   },
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "7e5441b99a288fa159c0f16fc18dee838b8be4a8523ed5fe619b3db8cedb7c6f"
+    },
+    "candidateCatalogueSha256": "c719df9129a54c8c79dc6634ac9eeaa629ad788e5115002cbe87316fe3129aef",
+    "generation": {
+     "method": "selected",
+     "selectedIdsSha256": "ffe01e5d720f31214d53581212e94d4b3a6098cdc932ba4adba9b4b427348993",
+     "index": {
+      "name": "toy-index",
+      "version": "1"
+     }
+    }
+   },
+   "code": null,
+   "reason": "a rejected (mismatch) body with a valid candidate catalogue: checked as for any body"
+  }
+ ],
+ "writerCases": [
+  {
+   "id": "write-exhaustive-go-malformed-catalogue",
+   "method": "exhaustive",
+   "candidateCatalogue": {
+    "vector": "matching.json#go-malformed-catalogue",
+    "side": "candidate"
+   },
+   "code": "candidate-catalogue-invalid",
+   "reason": "a writer validates the candidate catalogue (§3.6) and refuses an invalid one"
+  },
+  {
+   "id": "write-selected-go-malformed-catalogue",
+   "method": "selected",
+   "candidateCatalogue": {
+    "vector": "matching.json#go-malformed-catalogue",
+    "side": "candidate"
+   },
+   "code": "candidate-catalogue-invalid",
+   "reason": "a writer validates the candidate catalogue (§3.6) and refuses an invalid one"
+  },
+  {
+   "id": "write-exhaustive-go-suppression-order-candidate-validity-first",
+   "method": "exhaustive",
+   "candidateCatalogue": {
+    "vector": "matching.json#go-suppression-order-candidate-validity-first",
+    "side": "candidate"
+   },
+   "code": "candidate-catalogue-invalid",
+   "reason": "a writer validates the candidate catalogue (§3.6) and refuses an invalid one"
+  },
+  {
+   "id": "write-selected-go-suppression-order-candidate-validity-first",
+   "method": "selected",
+   "candidateCatalogue": {
+    "vector": "matching.json#go-suppression-order-candidate-validity-first",
+    "side": "candidate"
+   },
+   "code": "candidate-catalogue-invalid",
+   "reason": "a writer validates the candidate catalogue (§3.6) and refuses an invalid one"
+  },
+  {
+   "id": "write-exhaustive-k1-extraction-bounds-max-input",
+   "method": "exhaustive",
+   "candidateCatalogue": {
+    "vector": "matching.json#k1-extraction-bounds-max-input",
+    "side": "candidate"
+   },
+   "code": "candidate-catalogue-invalid",
+   "reason": "a writer validates the candidate catalogue (§3.6) and refuses an invalid one"
+  },
+  {
+   "id": "write-selected-k1-extraction-bounds-max-input",
+   "method": "selected",
+   "candidateCatalogue": {
+    "vector": "matching.json#k1-extraction-bounds-max-input",
+    "side": "candidate"
+   },
+   "code": "candidate-catalogue-invalid",
+   "reason": "a writer validates the candidate catalogue (§3.6) and refuses an invalid one"
+  },
+  {
+   "id": "write-exhaustive-go-config-mismatch",
+   "method": "exhaustive",
+   "candidateCatalogue": {
+    "vector": "matching.json#go-config-mismatch",
+    "side": "candidate"
+   },
+   "code": null,
+   "reason": "a valid catalogue: the writer writes a record whatever the comparison's outcome"
+  }
+ ],
  "reportRejections": [
   {
    "id": "report-rank-in-pair",

@@ -1886,6 +1886,114 @@
    "code": "region-key-absent"
   },
   {
+   "id": "body-kind-go-config-mismatch",
+   "reason": "A17: a rejected body (mismatch): no pairs",
+   "expect": "semantic",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "7e5441b99a288fa159c0f16fc18dee838b8be4a8523ed5fe619b3db8cedb7c6f"
+    },
+    "region": {
+     "referenceId": "sum.go",
+     "candidateId": "host.go",
+     "mode": "exact",
+     "firstSeed": [
+      2,
+      44
+     ]
+    },
+    "origin": {
+     "kind": "own-origin",
+     "side": "reference",
+     "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+     "repositoryCommit": "1111111111111111111111111111111111111111"
+    }
+   },
+   "code": "region-key-absent"
+  },
+  {
+   "id": "body-kind-go-malformed-catalogue",
+   "reason": "A17: a rejected body (unsupported input): no pairs",
+   "expect": "semantic",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "272e1a754352b512cd46ca04c5c9c7890e51bb81481b905c0690428f517b6b4a"
+    },
+    "region": {
+     "referenceId": "sum.go",
+     "candidateId": "host.go",
+     "mode": "exact",
+     "firstSeed": [
+      2,
+      44
+     ]
+    },
+    "origin": {
+     "kind": "own-origin",
+     "side": "reference",
+     "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+     "repositoryCommit": "1111111111111111111111111111111111111111"
+    }
+   },
+   "code": "region-key-absent"
+  },
+  {
+   "id": "body-kind-go-insufficient-tokens",
+   "reason": "A17: the named pair is not compared",
+   "expect": "semantic",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "991781319800be4b773dab67270f00e91317963dd9cfbe38aa4aabbc31a48b8b"
+    },
+    "region": {
+     "referenceId": "sum.go",
+     "candidateId": "short.go",
+     "mode": "exact",
+     "firstSeed": [
+      2,
+      44
+     ]
+    },
+    "origin": {
+     "kind": "own-origin",
+     "side": "reference",
+     "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+     "repositoryCommit": "1111111111111111111111111111111111111111"
+    }
+   },
+   "code": "region-key-absent"
+  },
+  {
+   "id": "body-kind-go-no-overlap",
+   "reason": "A17: the named pair is compared, but its mode lists no region",
+   "expect": "semantic",
+   "packet": {
+    "reviewPacketVersion": "traceweave-review-packet-draft-2",
+    "report": {
+     "bodySha256": "07246476afdaadc08282f3171202dd4f6904584ed4ee0a9046bf36bf68596021"
+    },
+    "region": {
+     "referenceId": "sum.go",
+     "candidateId": "pair.go",
+     "mode": "exact",
+     "firstSeed": [
+      2,
+      44
+     ]
+    },
+    "origin": {
+     "kind": "own-origin",
+     "side": "reference",
+     "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+     "repositoryCommit": "1111111111111111111111111111111111111111"
+    }
+   },
+   "code": "region-key-absent"
+  },
+  {
    "id": "licence-text-unarchived",
    "reason": "no archived licence text has this digest",
    "expect": "semantic",

@@ -258,6 +258,16 @@ def build_packets(vecs):
     d["region"]["firstSeed"] = list(reg["seeds"][1])
     invalid.append({"id": "non-first-seed-p2", "reason": "review P2: a region is keyed by its first seed only", "expect": "semantic",
                     "packet": d})
+    # A17: packets keyed to each kind of body without a region at the key (rejected bodies have no pairs).
+    for vid, ref_id, cand_id, why in (
+            ("go-config-mismatch", "sum.go", "host.go", "a rejected body (mismatch): no pairs"),
+            ("go-malformed-catalogue", "sum.go", "host.go", "a rejected body (unsupported input): no pairs"),
+            ("go-insufficient-tokens", "sum.go", "short.go", "the named pair is not compared"),
+            ("go-no-overlap", "sum.go", "pair.go", "the named pair is compared, but its mode lists no region")):
+        d = copy.deepcopy(valid[0]["packet"])
+        d["report"]["bodySha256"] = vecs[vid]["expectedReport"]["bodySha256"]
+        d["region"]["referenceId"], d["region"]["candidateId"] = ref_id, cand_id
+        invalid.append({"id": f"body-kind-{vid}", "reason": f"A17: {why}", "expect": "semantic", "packet": d})
     d = copy.deepcopy(base)
     d["origin"]["licence"]["textSha256"] = "4" * 64
     invalid.append({"id": "licence-text-unarchived", "reason": "no archived licence text has this digest", "expect": "semantic",
@@ -279,7 +289,9 @@ def build_packets(vecs):
         "own-origin-digest-mismatch": "side-digest-mismatch", "own-origin-wrong-side": "side-digest-mismatch",
         "vendored-repointed-p1b": "side-digest-mismatch", "vendored-digest-mismatch": "side-digest-mismatch",
         "historical-source-unbound": "historical-source-unbound", "historical-copy-digest-mismatch": "side-digest-mismatch",
-        "non-first-seed-p2": "region-key-absent", "licence-text-unarchived": "licence-text-unarchived"}
+        "non-first-seed-p2": "region-key-absent", "licence-text-unarchived": "licence-text-unarchived",
+        "body-kind-go-config-mismatch": "region-key-absent", "body-kind-go-malformed-catalogue": "region-key-absent",
+        "body-kind-go-insufficient-tokens": "region-key-absent", "body-kind-go-no-overlap": "region-key-absent"}
     for x in invalid:
         x["code"] = "malformed-packet" if x["expect"] == "schema" else semantic_codes[x["id"]]
     report_reject = {"id": "origin-inside-report", "reason": "origin links are never report fields; the report schema rejects them",
@@ -365,6 +377,66 @@ def build_candgen(vecs):
             entry["candidateCatalogue"] = "withheld"
         bad_records.append(entry)
     exhaustive = next(o["record"] for o in out if o["record"]["generation"]["method"] == "exhaustive")
+
+    # A17 (B3): records against rejected bodies, with supplied candidate catalogues that are not valid catalogues.
+    # Each case's expected code is written by hand from §6.10 (A17); digests are computed here.
+    def cand_bytes(vid):
+        c = vecs[vid]["candidate"]
+        return base64.b64decode(c["bytesBase64"]) if "bytesBase64" in c else bv.canonical(c["canonical"])
+
+    def keyed(rec, vid, **gen):
+        r = copy.deepcopy(rec)
+        r["report"]["bodySha256"] = vecs[vid]["expectedReport"]["bodySha256"]
+        r["candidateCatalogueSha256"] = vecs[vid]["expectedReport"]["body"]["inputs"]["candidateCatalogueSha256"]
+        if gen:
+            r["generation"] = gen
+        return r
+    sel_index = good["generation"]["index"]
+    body_cases = []
+    for vid in ("go-malformed-catalogue", "go-suppression-order-candidate-validity-first", "k1-extraction-bounds-max-input"):
+        assert sha(cand_bytes(vid)) == vecs[vid]["expectedReport"]["body"]["inputs"]["candidateCatalogueSha256"]
+        own = {"vector": f"matching.json#{vid}", "side": "candidate"}
+        rank = copy.deepcopy(next(b["record"] for b in bad_records if b["id"] == "rank-field"))
+        rank["report"]["bodySha256"] = vecs[vid]["expectedReport"]["bodySha256"]
+        sel = keyed(good, vid, method="selected", selectedIdsSha256=ids_digest(["a.txt"]), index=sel_index)
+        body_cases += [
+            {"id": f"{vid}-rank-field", "body": f"matching.json#{vid}", "candidateCatalogue": own, "record": rank,
+             "code": "malformed-record", "reason": "the record itself is checked first; the supplied catalogue is not read"},
+            {"id": f"{vid}-selected-invalid-catalogue", "body": f"matching.json#{vid}", "candidateCatalogue": own, "record": sel,
+             "code": "candidate-catalogue-invalid",
+             "reason": "the bytes match the digest but are not a valid catalogue, so the id set cannot be read"},
+            {"id": f"{vid}-selected-withheld", "body": f"matching.json#{vid}", "candidateCatalogue": "withheld", "record": sel,
+             "code": "candidate-catalogue-unavailable", "reason": "selected, no catalogue supplied"},
+            {"id": f"{vid}-selected-wrong-bytes", "body": f"matching.json#{vid}",
+             "candidateCatalogue": {"vector": "matching.json#go-config-mismatch", "side": "candidate"}, "record": sel,
+             "code": "candidate-catalogue-mismatch", "reason": "the supplied bytes' digest is not the record's; decided by digest, no parsing"},
+            {"id": f"{vid}-exhaustive-invalid-catalogue", "body": f"matching.json#{vid}", "candidateCatalogue": own,
+             "record": keyed(exhaustive, vid), "code": None,
+             "reason": "an exhaustive record is not checked against catalogue contents; supplying an invalid catalogue whose "
+                       "digest matches changes nothing"},
+            {"id": f"{vid}-exhaustive-withheld", "body": f"matching.json#{vid}", "candidateCatalogue": "withheld",
+             "record": keyed(exhaustive, vid), "code": None, "reason": "a record may annotate a rejected body"},
+            {"id": f"{vid}-exhaustive-rekeyed", "body": f"matching.json#{vid}", "candidateCatalogue": "withheld",
+             "record": dict(copy.deepcopy(exhaustive), report={"bodySha256": vecs[vid]["expectedReport"]["bodySha256"]}),
+             "code": "candidate-catalogue-mismatch",
+             "reason": "the record's candidate digest is not the body's inputs.candidateCatalogueSha256"},
+        ]
+    cm_ = "go-config-mismatch"
+    cm_ids = [a["id"] for a in json.loads(cand_bytes(cm_))["artifacts"]]
+    body_cases.append({"id": f"{cm_}-selected-valid", "body": f"matching.json#{cm_}",
+                       "candidateCatalogue": {"vector": f"matching.json#{cm_}", "side": "candidate"},
+                       "record": keyed(good, cm_, method="selected", selectedIdsSha256=ids_digest(cm_ids), index=sel_index),
+                       "code": None, "reason": "a rejected (mismatch) body with a valid candidate catalogue: checked as for any body"})
+    writer_cases = []
+    for vid in ("go-malformed-catalogue", "go-suppression-order-candidate-validity-first", "k1-extraction-bounds-max-input"):
+        for method in ("exhaustive", "selected"):
+            writer_cases.append({"id": f"write-{method}-{vid}", "method": method,
+                                 "candidateCatalogue": {"vector": f"matching.json#{vid}", "side": "candidate"},
+                                 "code": "candidate-catalogue-invalid",
+                                 "reason": "a writer validates the candidate catalogue (§3.6) and refuses an invalid one"})
+    writer_cases.append({"id": f"write-exhaustive-{cm_}", "method": "exhaustive",
+                         "candidateCatalogue": {"vector": f"matching.json#{cm_}", "side": "candidate"}, "code": None,
+                         "reason": "a valid catalogue: the writer writes a record whatever the comparison's outcome"})
     without_catalogue = [{"id": "exhaustive-without-candidate-catalogue", "candidateCatalogue": "withheld",
                           "reason": "A16: an exhaustive record needs no candidate catalogue; exhaustive is the producer's claim",
                           "record": copy.deepcopy(exhaustive)}]
@@ -386,6 +458,7 @@ def build_candgen(vecs):
             "derivationRule": CANDGEN_RULE,
             "baseVector": "matching.json#text-plain-three-modes", "retrievals": out,
             "invalidRecords": bad_records, "validWithoutCandidateCatalogue": without_catalogue,
+            "bodyKindCases": body_cases, "writerCases": writer_cases,
             "reportRejections": rejections}
 
 
