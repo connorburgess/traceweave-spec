@@ -410,3 +410,69 @@ Reviewed commit aab6717, 2026-11-24. Verdict: **confirmed, with changes.** Nothi
    - the default identity mode, I0 or I0′, and whether I2 is offered (RD4);
    - publishing the predicate identifiers under `traceweave.org` (RD10);
    - adopting the §15 ROADMAP text.
+
+## Addendum review: §4.7 and §9.1
+
+Reviewed commit e6444c9 (§4.7) and §9.1 as frozen at a726ab2, 2026-11-24. At e6444c9, `check_registration.py validate` passes: 86 positive and 124 negative fixtures, 39 wrong-implementation cases. Verdict: **§9.1 confirmed, with text notes. §4.7 not confirmed**, with one blocking item (A1). Everything else is should-fix or a note. One check could not be done: the EU Code PDF could not be fetched here (its server's TLS chain did not verify, and skipping verification is not allowed in this environment), so the Annex 1 icon texts are **not checked by me**.
+
+### §4.7, self-declared AI use
+
+**A1 (blocking): the tool token carries human-origin statements into an allowed rendering line.**
+- `check_ai_use` applies only the §11 authorship deny-list to `tool`. That list has no human-origin or negation words.
+- With `declared: modified`, these tools are accepted:
+  - `human-made`, `Human`, `Human-Only`, `100pct-human`, `Handwritten`, `hand-made`, `HumanAuthored`;
+  - `not-AI`, `no-AI`, `no-ai-used`;
+  - `by-Alice`, `Penned-by-Bob`, `me`, `myself`.
+- The rendering line `AI tool named by the registrant: human-made.` matches the `ai-tool` template, and lines that match a template are never run through `AI_ORIGIN_TEXT`. So a fixture rendering would pass while saying the content is human-made, which is exactly what §4.7 forbids.
+- The authorship list does catch `Own-work` and `written_by_human`. Extra keys are rejected: authorship keys as `authorship-claim`, others such as `humanOrigin` as `ai-use-shape`.
+- Unicode look-alikes are rejected by the ASCII-only pattern.
+- **Change:**
+  - Split the token at `-`, `_`, `.`, `+` and at case changes. Reject it as `ai-origin-claim` if any part is on a human-origin and negation list (`human`, `hand…`, `person`, `people`, `manual`, `penned`, `by`, `me`, `myself`, `self`, `not`, `no`, `non`, `without`, `free`, `only`), or matches `AI_ORIGIN_TEXT` or the authorship list.
+  - Add negatives for these cases.
+  - Alternatively, echo `tool` in the result but do not render it.
+- **The residual risk** (a one-word personal name such as `Alice`) is then acceptable as stated in §4.7: the line calls the token a tool and makes no statement about a person.
+- A minor point: `AI_TOOL` uses `$`, which also matches before a trailing newline, so the tool `"GPT\n"` is accepted. Use `\Z` or `fullmatch`.
+
+**Absent versus `no-generative-ai` (question 2): the distinction is sound in the checker.**
+- A no-AI line rendered for a result without a declaration is `result-mismatch`, and free text is `rendering-unlisted-line`.
+- But a result without a declaration simply has no `declaredAiUse`. A JSON consumer reading a missing field as "none" is outside the checker's reach.
+- Note: consider `declaredAiUse: {"status": "not-declared"}` in every result. The format is unreleased, so this costs nothing now.
+
+**Mappings (question 3).**
+- **IPTC:** I fetched the scheme JSON, and it hashes to the pinned `e9178aa2…99a6`, with `dateReleased` 2024-10-23.
+  - `trainedAlgorithmicMedia` is "Created using Generative AI".
+  - `compositeWithTrainedAlgorithmicMedia` is "Edited using Generative AI" ("augmentation, correction or enhancement using a Generative AI model").
+  - `digitalCreation` and `humanEdits` do assert human creation, so leaving `no-generative-ai` unmapped is right.
+  - Note: the scheme also has `compositeSynthetic` ("Mix or composite of several elements, at least one of which is Generative AI"). That is arguably closer to text in which some passages were AI-generated. State why `modified` maps to the "edited" term and not this one.
+- **EU Code:** not verified, as stated above.
+
+**No effect on outcomes (question 4).**
+- The checker enforces it: a whole-result comparison, plus `ai-use-affected-outcome`.
+- **Should-fix (text):** §4.7 does not say that `aiUse` is inside the signed statement. Adding, changing or removing it makes a different statement, signature, time evidence, `statementSha256` and `tw1-` reference. A declaration therefore cannot be added after registration without a new, later bound. Say so in §4.7, and in §9.1's "same statement, same reference" bullet.
+
+**Version (question 5).** Keeping `traceweave-registration-draft-5` is correct for an unreleased format with an optional field. A verifier from before §4.7 rejects the claim as `statement-shape`, not silently. The result also gained a field, so record both in a format change log, and fix the version at first release.
+
+**Fixed sentences and the never-shown list (question 6).**
+- Enforced:
+  - the declaration line matches the declared value;
+  - "Traceweave did not check this declaration." must be present (`notice-missing`);
+  - the tool line must equal the echoed tool;
+  - the not-declared line is allowed only when nothing was declared.
+- Not enforced: that the not-checked sentence sits next to the declaration. Note only.
+- The never-shown list need not change: AI use is shown, as a declaration.
+
+### §9.1, text reference
+
+- **Format and parsing: correct.**
+  - 26 Crockford characters carry exactly 130 bits, most significant bit first.
+  - Upper-case-only strict parsing is stated, and tools may only suggest corrections.
+  - Note: `REF_PATTERN` uses `$`, so a reference with a trailing newline gets past the shape check and fails as `reference-check` rather than `reference-shape`. That is a wrong code, not an acceptance; use `fullmatch`.
+- **Check character: the claims hold.** Over 2,000 random references:
+  - all 1,674,000 single substitutions are detected;
+  - 104 of 50,329 adjacent transpositions are missed, every one a swap of `0` and `Z`.
+  - **Not stated:** Luhn never detects a jump transposition (abc→cba): 48,447 of 48,447 were missed. Add it to the error-detection list, with the 0/Z case.
+- **Margins: right as stated.** Second preimage costs about 2¹³⁰ per target (2¹³⁰/N against any of N published references, still out of reach). A registrant's own collision costs about 2⁶⁵, with the nonce as a free variable.
+  - The "keep the full `statementSha256`" guidance belongs in the margins paragraph and in §9's report link, where it is now.
+  - **Should-fix:** also put it in the Lookup "Check" step. A registrant-chosen URL is exactly where an equivocating registrant serves different bundles to different people.
+- **Phishing and look-alikes (should-fix, text).** §9.1 has no text about look-alike references. Grinding a reference whose first and last four body characters match someone else's costs about 2⁴⁰ SHA-256 evaluations, which is cheap. Add: "compare the whole reference, or let the tool compare it; a matching start and end means nothing". The existing exposure bullets (anyone can register copied text; a page that verifies proves nothing) are right.
+- **Fixtures:** the listed positives and negatives cover shape, check, look-alike letters and mismatch. Add a jump-transposition negative that documents the miss, and a trailing-newline negative.
