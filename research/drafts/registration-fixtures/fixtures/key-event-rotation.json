@@ -5,14 +5,14 @@
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing."
   },
   "object": {
-    "bundleVersion": "traceweave-registration-bundle-draft-2",
+    "bundleVersion": "traceweave-registration-bundle-draft-3",
     "envelope": {
       "payloadType": "application/vnd.in-toto+json",
-      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiZXZlbnQiOiJyb3RhdGVkIiwiZXZlbnRWZXJzaW9uIjoidHJhY2V3ZWF2ZS1rZXktZXZlbnQtZHJhZnQtMiIsImtleWlkIjoiMThjM2VlYWQwODY0NjYxNCIsInN1Y2Nlc3NvclB1YmxpY0tleUhleCI6ImQxNzcyN2ZhM2FmZDNiYTYzMTdlNzczMWRiNjU2NDcxNzRhNzY2ZGE3MGI2NDdmMzI0NjJkNjk1MzFhNmZhNzMifSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vdHJhY2V3ZWF2ZS5vcmcvcHJlZGljYXRlL2tleS1ldmVudC9kcmFmdC0yIiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6IjE4YzNlZWFkMDg2NDY2MTRiYzg2MGJmNzQzNjlhYzFmMTNmYjE4ZjkxNGI0NDM0MDFjNTU0MmRlYmQwMDYzMTgifSwibmFtZSI6ImtleSJ9XX0=",
+      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiZXZlbnQiOiJyb3RhdGVkIiwiZXZlbnRWZXJzaW9uIjoidHJhY2V3ZWF2ZS1rZXktZXZlbnQtZHJhZnQtMyIsImtleWlkIjoiMThjM2VlYWQwODY0NjYxNCIsInN1Y2Nlc3NvclB1YmxpY0tleUhleCI6ImQxNzcyN2ZhM2FmZDNiYTYzMTdlNzczMWRiNjU2NDcxNzRhNzY2ZGE3MGI2NDdmMzI0NjJkNjk1MzFhNmZhNzMifSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vdHJhY2V3ZWF2ZS5vcmcvcHJlZGljYXRlL2tleS1ldmVudC9kcmFmdC0zIiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6IjE4YzNlZWFkMDg2NDY2MTRiYzg2MGJmNzQzNjlhYzFmMTNmYjE4ZjkxNGI0NDM0MDFjNTU0MmRlYmQwMDYzMTgifSwibmFtZSI6ImtleSJ9XX0=",
       "signatures": [
         {
           "keyid": "18c3eead08646614",
-          "sig": "gdpwuAqLI9KTmirerirk6cd9EjUK2UWWvNAuZZ3OU3Ba4TAHGnDhN+CHets5JGYTm0wayemzU9qDmjJlNbeoCw=="
+          "sig": "O2kuHoXEa3OTri1Rgf5QOvViP2SFi/dSRhDQZO6GTMiXVhPAzV7rbxs9oyTETOXpWUZ7HzuA9IWmbILB5KGMAQ=="
         }
       ]
     },
@@ -27,20 +27,20 @@
     },
     "timeEvidence": [
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-2",
+        "evidenceVersion": "traceweave-time-evidence-draft-3",
         "type": "rfc3161",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "ae20519d1930992ea99b8e194115c69de7313a82598b259f6e4a98cf1d5e89b2"
+          "sha256": "387ff722d1ec4ce4d17c2db6793f7d471bddc52d9cdcbd45cbb3ee7f790e4c15"
         },
         "root": {
           "kind": "tsa-certificate-chain",
           "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
         },
-        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT",
+        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-387ff722d1ec-tsa-a-2026-12-01T00:00:00Z",
         "rfc3161": {
           "genTime": "2026-12-01T00:00:00Z",
           "policyOid": "2.999.1",
@@ -54,20 +54,20 @@
         }
       },
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-2",
+        "evidenceVersion": "traceweave-time-evidence-draft-3",
         "type": "opentimestamps",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "ae20519d1930992ea99b8e194115c69de7313a82598b259f6e4a98cf1d5e89b2"
+          "sha256": "387ff722d1ec4ce4d17c2db6793f7d471bddc52d9cdcbd45cbb3ee7f790e4c15"
         },
         "root": {
           "kind": "bitcoin-proof-of-work",
           "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6"
         },
-        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT",
+        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-387ff722d1ec-btc-2026-12-01T01:00:00Z",
         "opentimestamps": {
           "status": "complete",
           "blockTime": "2026-12-01T01:00:00Z"

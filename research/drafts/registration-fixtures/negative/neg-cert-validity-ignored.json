@@ -15,10 +15,10 @@
     }
   },
   "object": {
-    "resultVersion": "traceweave-registration-verification-draft-2",
+    "resultVersion": "traceweave-registration-verification-draft-3",
     "simulated": true,
     "inputs": {
-      "bundleSha256": "6fa2b809bdf5d3ff8a98aaa25d6edb981685e5d84dc01fde34e9269bf0b33f43",
+      "bundleSha256": "7356578bbfa638df60543be8900737f018ea4ce8807bc82c8fcd819bc58943fc",
       "artifacts": [
         {
           "subjectIndex": 0,
@@ -56,13 +56,32 @@
           "anchorSha256": "a119903304b41261ee88a9892057782ac7f9011894981a60348d75ef35b622c4",
           "kind": "log-key",
           "independenceGroup": "log-a"
+        },
+        {
+          "anchorSha256": "e4fbf7d5d9e35ceb9fa59efd37544a3c41e1f0d0bb59057832a28b0cd2dab885",
+          "kind": "witness-service-key",
+          "independenceGroup": "witness-a"
         }
       ],
-      "trustedKeyids": [
-        "18c3eead08646614"
+      "trustedKeys": [
+        "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318"
       ],
-      "tsaRevocations": [],
-      "compromiseLookbackSeconds": 2592000
+      "revocationData": [
+        {
+          "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde",
+          "source": "PLACEHOLDER CRL of TSA operator A; not fetched",
+          "asOf": "2026-11-24T00:00:00Z",
+          "revocations": []
+        },
+        {
+          "anchorSha256": "b17252a48ba9c0e7d0f9ae5315caa20e2f28fd7ed6a83582b75353de217547f5",
+          "source": "PLACEHOLDER CRL of TSA operator B; not fetched",
+          "asOf": "2026-11-24T00:00:00Z",
+          "revocations": []
+        }
+      ],
+      "compromiseLookbackSeconds": 2592000,
+      "verificationTime": "2026-11-24T00:00:00Z"
     },
     "outcomes": {
       "envelope": "ok",
@@ -71,6 +90,7 @@
         {
           "index": 0,
           "keyid": "18c3eead08646614",
+          "keySha256": "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318",
           "outcome": "valid"
         }
       ],
@@ -97,25 +117,32 @@
       "timeEvidence": [
         {
           "index": 0,
-          "signatureIndex": 0,
+          "target": {
+            "signatureIndex": 0
+          },
           "type": "rfc3161",
           "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde",
           "outcome": "placeholder-assumed-valid",
-          "notAfter": "2026-11-23T10:00:01Z"
+          "notAfter": "2026-11-23T10:00:01Z",
+          "revocationDataAsOf": "2026-11-24T00:00:00Z"
         },
         {
           "index": 1,
-          "signatureIndex": 0,
+          "target": {
+            "signatureIndex": 0
+          },
           "type": "opentimestamps",
           "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6",
           "outcome": "placeholder-assumed-valid",
-          "notAfter": "2026-11-23T13:12:00Z"
+          "notAfter": "2026-11-23T13:12:00Z",
+          "revocationDataAsOf": null
         }
       ],
       "time": [
         {
           "signatureIndex": 0,
           "keyid": "18c3eead08646614",
+          "keySha256": "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318",
           "outcome": "below-quorum",
           "quorum": 2,
           "distinctRoots": 1,

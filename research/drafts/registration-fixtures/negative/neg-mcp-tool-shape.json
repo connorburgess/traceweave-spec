@@ -10,7 +10,7 @@
   "object": {
     "name": "traceweave_register",
     "title": "Register files with Traceweave (illustrative)",
-    "description": "Registers local files at creation time: hashes them, signs a registration statement with the creator key held by this local server, and requests time evidence. Only a signature digest leaves the machine. First to register is not first to create.",
+    "description": "Registers local files: hashes them, signs a registration statement with the registrant key held by this local server, and requests time evidence. Only a signature digest leaves the machine. First to register is not first to create.",
     "inputSchema": {
       "type": "object",
       "additionalProperties": false,

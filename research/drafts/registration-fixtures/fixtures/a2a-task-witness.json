@@ -1,7 +1,7 @@
 {
   "fixture": {
     "kind": "a2a-task",
-    "description": "Completed task: one artifact holding the signed witness statement and an RFC 3161 placeholder over the witness signature.",
+    "description": "Completed task: one artifact holding the signed witness statement and the witness's RFC 3161 placeholder.",
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
     "request": "fixtures/a2a-request-witness.json"
   },
@@ -18,14 +18,14 @@
         "parts": [
           {
             "data": {
-              "bundleVersion": "traceweave-registration-bundle-draft-2",
+              "bundleVersion": "traceweave-registration-bundle-draft-3",
               "envelope": {
                 "payloadType": "application/vnd.in-toto+json",
-                "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2FsbGVyIjp7Imlzc3VlciI6Imh0dHBzOi8vaXNzdWVyLmV4YW1wbGUuaW52YWxpZCIsInNjaGVtZSI6Im9wZW5JZENvbm5lY3QiLCJzdWJqZWN0IjoicGxhY2Vob2xkZXItc3ViamVjdC0wMDAxIn0sIm5vdFNob3duIjpbImF1dGhvcnNoaXAiLCJvcmlnaW5hbGl0eSIsImZpcnN0LWNyZWF0aW9uIiwib3duZXJzaGlwIiwicGVybWlzc2lvbiJdLCJwcmVzZW50ZWRLaW5kIjoiZHNzZS1zaWduYXR1cmUtc2hhMjU2IiwicmVjZWl2ZWRBdCI6IjIwMjYtMTEtMjNUMTA6MDA6MDJaIiwicmVxdWVzdE1lc3NhZ2VJZCI6IjBmNmMyYThlLWlsbHVzdHJhdGl2ZS0wMDAxIiwid2l0bmVzc1ZlcnNpb24iOiJ0cmFjZXdlYXZlLXdpdG5lc3MtZHJhZnQtMSJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUvd2l0bmVzcy9kcmFmdC0xIiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6ImU1OTAzMWI2ZjgzYTYwOTY1MjY3ODM2ZGQ0ZmMyNzhhYjQ0NDRkNDE2ZGVkMzI4YjE5YTgyYTA2NTAzMmQ2YjcifSwibmFtZSI6InByZXNlbnRlZC1kaWdlc3QifV19",
+                "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2FsbGVyIjp7Imlzc3VlciI6Imh0dHBzOi8vaXNzdWVyLmV4YW1wbGUuaW52YWxpZCIsInNjaGVtZSI6Im9wZW5JZENvbm5lY3QiLCJzdWJqZWN0IjoicGxhY2Vob2xkZXItc3ViamVjdC0wMDAxIn0sIm5vdFNob3duIjpbImF1dGhvcnNoaXAiLCJvcmlnaW5hbGl0eSIsImZpcnN0LWNyZWF0aW9uIiwib3duZXJzaGlwIiwicGVybWlzc2lvbiJdLCJwcmVzZW50ZWRLaW5kIjoiZHNzZS1zaWduYXR1cmUtc2hhMjU2IiwicmVjZWl2ZWRBdCI6IjIwMjYtMTEtMjNUMTA6MDA6MDJaIiwicmVxdWVzdE1lc3NhZ2VJZCI6IjBmNmMyYThlLWlsbHVzdHJhdGl2ZS0wMDAxIiwid2l0bmVzc1ZlcnNpb24iOiJ0cmFjZXdlYXZlLXdpdG5lc3MtZHJhZnQtMyJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUvd2l0bmVzcy9kcmFmdC0zIiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6IjM5NWVkNThhMjhmZjRiODI3MGVlM2JiYjQ5OGY5N2VhMzA3MTE1MTYyOTgxMWJiOTBkNzg0M2ZiODgzOTcxNmQifSwibmFtZSI6InByZXNlbnRlZC1kaWdlc3QifV19",
                 "signatures": [
                   {
                     "keyid": "e4fbf7d5d9e35ceb",
-                    "sig": "LRvYVfaHMaDMq/dloQ9lH3XUMaARM6xId0uLq/BKWezoan1sZpP/7+VL5gsZXucvv0O+0MBIOvyqPS8RIu69AA=="
+                    "sig": "Pzd8cOagCk+8gtR2BTEgnPQcACeNrGjl1aXyZcF1QR6H2uYHN4ioKNSmJUUBX104LoB9PUhSI/bCqVK4+hOkAQ=="
                   }
                 ]
               },
@@ -40,20 +40,20 @@
               },
               "timeEvidence": [
                 {
-                  "evidenceVersion": "traceweave-time-evidence-draft-2",
+                  "evidenceVersion": "traceweave-time-evidence-draft-3",
                   "type": "rfc3161",
                   "placeholder": true,
                   "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
                   "target": {
                     "kind": "dsse-signature",
                     "signatureIndex": 0,
-                    "sha256": "57cbe44f21e820de61c25e3fc087bd98c64a264ab615c4e5edfbf2e16354afbc"
+                    "sha256": "b831bff00d89a42dc74fb8dd2ebcf9f0f2f349902f9028a76e80480327bf50d3"
                   },
                   "root": {
                     "kind": "tsa-certificate-chain",
                     "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
                   },
-                  "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT",
+                  "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-b831bff00d89-tsa-a-2026-11-23T10:00:03Z",
                   "rfc3161": {
                     "genTime": "2026-11-23T10:00:03Z",
                     "policyOid": "2.999.1",

@@ -8,14 +8,14 @@
     }
   },
   "object": {
-    "linkVersion": "traceweave-registration-link-draft-2",
+    "linkVersion": "traceweave-registration-link-draft-3",
     "report": {
       "path": "test-vectors/matching/example-report.json",
       "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
     },
     "registration": {
       "bundle": "aux/bundle-other-catalogue.json",
-      "statementSha256": "f61364e31d9422ec193f7dbf7d8aa90e24b3e7c89b1dd9b2af3f644c457b292f"
+      "statementSha256": "1786004657830d50ff2069ba7b1f3123643d42f13c3b29ee356c80aae66af8f3"
     },
     "links": [
       {

@@ -1,14 +1,14 @@
 {
   "fixture": {
     "kind": "rendering",
-    "description": "Rendering without the two fixed limit sentences.",
+    "description": "Rendering without the three fixed sentences.",
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
     "expect": {
       "code": "notice-missing"
     }
   },
   "object": {
-    "renderingVersion": "traceweave-registration-rendering-draft-2",
+    "renderingVersion": "traceweave-registration-rendering-draft-3",
     "result": "fixtures/verification-result.json",
     "lines": [
       "Registration of sum.go (SHA-256 974c8d0a…697c).",

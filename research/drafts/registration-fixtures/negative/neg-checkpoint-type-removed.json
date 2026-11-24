@@ -1,0 +1,38 @@
+{
+  "fixture": {
+    "kind": "evidence",
+    "description": "The cosigned-checkpoint type is removed in draft-3 (S5).",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "bundle": "fixtures/bundle-three-roots.json",
+    "expect": {
+      "code": "evidence-shape"
+    }
+  },
+  "object": {
+    "evidenceVersion": "traceweave-time-evidence-draft-3",
+    "type": "cosigned-checkpoint",
+    "placeholder": true,
+    "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+    "target": {
+      "kind": "dsse-signature",
+      "signatureIndex": 0,
+      "sha256": "395ed58a28ff4b8270ee3bbb498f97ea3071151629811bb90d7843fb8839716d"
+    },
+    "root": {
+      "kind": "tsa-certificate-chain",
+      "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
+    },
+    "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-395ed58a28ff-tsa-a-2026-11-23T10:00:00Z",
+    "rfc3161": {
+      "genTime": "2026-11-23T10:00:00Z",
+      "policyOid": "2.999.1",
+      "nonce": "5a17c0de00000001",
+      "requestNonce": "5a17c0de00000001",
+      "signerCertificate": {
+        "notBefore": "2026-01-01T00:00:00Z",
+        "notAfter": "2031-01-01T00:00:00Z"
+      },
+      "accuracySeconds": 1
+    }
+  }
+}

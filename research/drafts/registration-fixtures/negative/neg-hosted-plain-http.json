@@ -9,7 +9,7 @@
   },
   "object": {
     "name": "Traceweave witness (illustrative)",
-    "description": "Illustrative only; no such service exists. Receives the SHA-256 of a creator's DSSE signature, never content or fingerprints, and returns a signed, time-stamped witness statement. First to register is not first to create.",
+    "description": "Illustrative only; no such service exists. Receives the SHA-256 of a registrant's DSSE signature, never content or fingerprints, and returns a signed, time-stamped witness statement. First to register is not first to create.",
     "supportedInterfaces": [
       {
         "url": "http://witness.example.invalid/a2a/v1",
@@ -64,7 +64,7 @@
       {
         "id": "witness-digest",
         "name": "Witness a registration digest",
-        "description": "Records that the authenticated caller presented this signature digest at the witness's receipt time, signs a witness statement and attaches time evidence. It does not register content, check authorship or check originality. First to register is not first to create.",
+        "description": "Records that the authenticated caller presented this signature digest, signs a witness statement and attaches the witness's own RFC 3161 token. It does not register content, check authorship or check originality. First to register is not first to create.",
         "tags": [
           "traceweave",
           "registration",
@@ -72,7 +72,7 @@
           "timestamp"
         ],
         "examples": [
-          "{\"requestVersion\": \"traceweave-witness-request-draft-1\", \"presented\": {\"kind\": \"dsse-signature-sha256\", \"sha256\": \"<64 hex>\"}}"
+          "{\"requestVersion\": \"traceweave-witness-request-draft-3\", \"presented\": {\"kind\": \"dsse-signature-sha256\", \"sha256\": \"<64 hex>\"}}"
         ],
         "inputModes": [
           "application/json"

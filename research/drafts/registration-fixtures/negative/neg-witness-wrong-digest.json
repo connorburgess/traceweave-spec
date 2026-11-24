@@ -15,7 +15,7 @@
       "parts": [
         {
           "data": {
-            "requestVersion": "traceweave-witness-request-draft-1",
+            "requestVersion": "traceweave-witness-request-draft-3",
             "presented": {
               "kind": "dsse-signature-sha256",
               "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"

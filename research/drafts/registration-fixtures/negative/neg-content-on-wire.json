@@ -15,10 +15,10 @@
       "parts": [
         {
           "data": {
-            "requestVersion": "traceweave-witness-request-draft-1",
+            "requestVersion": "traceweave-witness-request-draft-3",
             "presented": {
               "kind": "dsse-signature-sha256",
-              "sha256": "e59031b6f83a60965267836dd4fc278ab4444d416ded328b19a82a065032d6b7"
+              "sha256": "395ed58a28ff4b8270ee3bbb498f97ea3071151629811bb90d7843fb8839716d"
             }
           },
           "mediaType": "application/json"

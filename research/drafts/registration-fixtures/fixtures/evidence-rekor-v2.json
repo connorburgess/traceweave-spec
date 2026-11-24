@@ -6,20 +6,20 @@
     "bundle": "fixtures/bundle-three-roots.json"
   },
   "object": {
-    "evidenceVersion": "traceweave-time-evidence-draft-2",
+    "evidenceVersion": "traceweave-time-evidence-draft-3",
     "type": "rekor-v2",
     "placeholder": true,
     "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
     "target": {
       "kind": "dsse-signature",
       "signatureIndex": 0,
-      "sha256": "e59031b6f83a60965267836dd4fc278ab4444d416ded328b19a82a065032d6b7"
+      "sha256": "395ed58a28ff4b8270ee3bbb498f97ea3071151629811bb90d7843fb8839716d"
     },
     "root": {
       "kind": "log-key",
       "anchorSha256": "a119903304b41261ee88a9892057782ac7f9011894981a60348d75ef35b622c4"
     },
-    "token": "PLACEHOLDER-NOT-A-REKOR-V2-OBJECT",
+    "token": "PLACEHOLDER-NOT-A-REKOR-V2-OBJECT-395ed58a28ff-log",
     "rekorV2": {
       "logIndex": 0
     }

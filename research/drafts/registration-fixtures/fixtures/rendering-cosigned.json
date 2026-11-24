@@ -5,7 +5,7 @@
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing."
   },
   "object": {
-    "renderingVersion": "traceweave-registration-rendering-draft-2",
+    "renderingVersion": "traceweave-registration-rendering-draft-3",
     "result": "fixtures/verification-result-cosigned.json",
     "lines": [
       "Registration of sum.go (SHA-256 974c8d0a…697c).",
@@ -17,7 +17,8 @@
       "No proved time for key bdd28d703dac2451.",
       "Creation time claimed by the registrant, not proved: 2026-11-20T09:00:00Z.",
       "It does not show who created the content, that it is original, that the registrant was first to create it, who owns it, or that its use is permitted.",
-      "First to register is not first to create."
+      "First to register is not first to create.",
+      "Comparing the times of two registrations does not show which was made first."
     ]
   }
 }
