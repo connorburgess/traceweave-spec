@@ -8,7 +8,7 @@ This history was produced from the local branch `roadmap-v2` so that it can be p
 
 ## Reproducing
 
-`python3 tools/public_history_scrub.py rewrite --branch NAME --source <source commit>` with the private rules file. The rules are not in this repository in any form. Rules file SHA-256: `400af8cec19574349978e56f605f18ab26d16e1c85e7f5e7d99d21e658e2792e`.
+`python3 tools/public_history_scrub.py rewrite --branch NAME --source <source commit>` with the private rules file. The rules are not in this repository in any form. Rules file SHA-256: `39288af211d86f7a36623e420b958936e06030f148234e75ad0f5b3ff1a0a750`.
 
 ## What was substituted, by category
 
@@ -31,7 +31,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 
 ## Verification of the commits listed here
 
-`python3 tools/public_history_scrub.py scan` over the 155 commits and 1709 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
+`python3 tools/public_history_scrub.py scan` over the 167 commits and 2400 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
 
 | Category | Hits |
 | --- | --- |
@@ -63,7 +63,6 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `16ebc94` | `16ebc94f5c9a` | `4fd94d44cba9` |
 | `c512550` | `c512550ffd57` | `db8e60dbcae7` |
 | `f42156d` | `f42156dc5ba8` | `e397e59fa78e` |
-| `2fa2b58` | `2fa2b58f14c7` | `8c6980ee0787` |
 | `de9a5b7` | `de9a5b7131d9` | `863bca247a43` |
 | `4d0288f` | `4d0288ffe05a` | `5e29802eb91f` |
 | `95fb157` | `95fb157ec5bb` | `aebb49f51946` |
@@ -83,7 +82,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `ec0cf67` | `ec0cf67ca3c8` | `ee083b345a31` |
 | `6f39e50f33026c9f1d9526c2a566d6a447219667` | `6f39e50f3302` | `b47b8945b9d6` |
 
-Ancestry was checked for all 561 pairs of these 34 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
+Ancestry was checked for all 528 pairs of these 33 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
 
 ## All commits, oldest first
 
@@ -258,3 +257,15 @@ Ancestry was checked for all 561 pairs of these 34 ids in both directions: the r
 | 167 | `38fb2febd4a4` | `577f9ed36a27` | kept | Make the extraction checker run on Python 3.11 |
 | 168 | `be5fde3025df` | `ec3c8a8f794f` | kept | Add final pass to the evaluation harness review |
 | 169 | `c86eb022dd5a` | `bc25f8210275` | kept | Rule on the questions from the core-gates differential |
+| 170 | `a6851dd3b75c` | `5901aeff236a` | kept | Update the public history map |
+| 171 | `66aec94e47f3` | `c5808d69a8e9` | kept | Review registration record draft-2 (confirmation) |
+| 172 | `4cc2cc53c62b` | `60d645a44336` | kept | Rule on the text-plain implementations' questions (TXT.3): check order, boundary configurations, rejections, table conventions, reordering; wording only |
+| 173 | `5250eae2b4aa` | `f4286095482e` | kept | Registration record draft-3: resolve the draft-2 confirmation review (66aec94) |
+| 174 | `1c7043fef8a2` | `82c9bca0d4c3` | kept | Registration record draft-3 confirmation: key-event and real-format verification findings |
+| 175 | `dba683b29d9d` | `094b349513a9` | kept | Registration record draft-4: resolve the draft-3 confirmation (1c7043f) |
+| 176 | `21865235e8b0` | `3b3bd3337ca2` | kept | Registration record draft-4 confirmation: successor-signed compromise reports do not converge (E1) |
+| 177 | `aab67171571e` | `98ddb15d86df` | kept | Registration record draft-5: resolve the draft-4 confirmation (2186523), E1 |
+| 178 | `8b4a01943d5d` | `a3edac3f52cf` | kept | Registration record draft-5 confirmation: E1 resolved; confirmed with two should-fix items |
+| 179 | `d74d0eb0bdad` | `1a6a7ae55810` | kept | Registration record draft-5 follow-up: resolve F1 and F2 of the draft-5 confirmation (8b4a019) |
+| 180 | `545c51668d58` | `101a037efa32` | kept | Restore the M1.4 criterion and keep the M1.4, M2.4 and IMG.4 rows on one line each |
+| 181 | `3e9cf189b5d1` | `ae1a7f76d813` | kept | Rule on candidate-generation records over any body |
