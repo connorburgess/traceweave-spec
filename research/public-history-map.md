@@ -8,7 +8,7 @@ This history was produced from the local branch `roadmap-v2` so that it can be p
 
 ## Reproducing
 
-`python3 tools/public_history_scrub.py rewrite --branch NAME --source <source commit>` with the private rules file. The rules are not in this repository in any form. Rules file SHA-256: `bba0a5aef2f81f5db4123b9b50bb64b24582cdd6d57989af344459bfeca338f9`.
+`python3 tools/public_history_scrub.py rewrite --branch NAME --source <source commit>` with the private rules file. The rules are not in this repository in any form. Rules file SHA-256: `400af8cec19574349978e56f605f18ab26d16e1c85e7f5e7d99d21e658e2792e`.
 
 ## What was substituted, by category
 
@@ -31,7 +31,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 
 ## Verification of the commits listed here
 
-`python3 tools/public_history_scrub.py scan` over the 151 commits and 1678 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
+`python3 tools/public_history_scrub.py scan` over the 155 commits and 1709 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
 
 | Category | Hits |
 | --- | --- |
@@ -254,3 +254,7 @@ Ancestry was checked for all 561 pairs of these 34 ids in both directions: the r
 | 163 | `16ebc94f5c9a` | `4fd94d44cba9` | kept | Require the derivation rule in every labelled matching file |
 | 164 | `6f787a0630eb` | `5a3465ecb793` | kept | Derive extraction error offsets per code and reject shifted offsets |
 | 165 | `1e322afb554a` | `84a1db071bcb` | kept | Mark M1.1, M1.2, M1.5, M2.6 and M2.7 met from the core gates review; record implementation work, confirmed draft items and the evaluation status |
+| 166 | `5b6b1efe255e` | `1b10ba301175` | kept | Update the public history map |
+| 167 | `38fb2febd4a4` | `577f9ed36a27` | kept | Make the extraction checker run on Python 3.11 |
+| 168 | `be5fde3025df` | `ec3c8a8f794f` | kept | Add final pass to the evaluation harness review |
+| 169 | `c86eb022dd5a` | `bc25f8210275` | kept | Rule on the questions from the core-gates differential |
