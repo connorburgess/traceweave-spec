@@ -17,9 +17,9 @@
         }
       }
     ],
-    "predicateType": "https://traceweave.org/predicate/registration/draft-4",
+    "predicateType": "https://traceweave.org/predicate/registration/draft-5",
     "predicate": {
-      "registrationVersion": "traceweave-registration-draft-4",
+      "registrationVersion": "traceweave-registration-draft-5",
       "contentKind": "source-code",
       "nonce": "c57514cd00910af4afb8443d3231c97e89633d05035541aaa1ef4a404350a7ac",
       "possession": [
@@ -40,7 +40,7 @@
       },
       "implementation": {
         "name": "build_fixtures.py",
-        "version": "draft-4",
+        "version": "draft-5",
         "commit": "0000000000000000000000000000000000000000"
       },
       "specCommit": "0000000000000000000000000000000000000000",

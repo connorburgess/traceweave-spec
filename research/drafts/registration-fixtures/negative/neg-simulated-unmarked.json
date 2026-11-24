@@ -8,7 +8,7 @@
     }
   },
   "object": {
-    "renderingVersion": "traceweave-registration-rendering-draft-4",
+    "renderingVersion": "traceweave-registration-rendering-draft-5",
     "result": "fixtures/verification-result.json",
     "lines": [
       "Registration of sum.go (SHA-256 974c8d0a…697c).",

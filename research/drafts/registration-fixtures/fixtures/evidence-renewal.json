@@ -6,20 +6,20 @@
     "bundle": "fixtures/bundle-renewed.json"
   },
   "object": {
-    "evidenceVersion": "traceweave-time-evidence-draft-4",
+    "evidenceVersion": "traceweave-time-evidence-draft-5",
     "type": "rfc3161",
     "placeholder": true,
     "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
     "target": {
       "kind": "evidence-token",
       "evidenceIndex": 0,
-      "sha256": "2eccb2340b77e2c747a58e25f6dfb5045a4191ad06e08d9cdf71d84878f0043d"
+      "sha256": "36ea5e9bb4242f3eb1c38be6bc1421125cb620d87fa31e1ced6872e2805ad84a"
     },
     "root": {
       "kind": "tsa-certificate-chain",
       "anchorSha256": "b17252a48ba9c0e7d0f9ae5315caa20e2f28fd7ed6a83582b75353de217547f5"
     },
-    "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-f08e441cf7d3-tsa-b-2030-06-01T00:00:00Z-u1-renewal",
+    "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-817289222896-tsa-b-2030-06-01T00:00:00Z-u1-renewal",
     "rfc3161": {
       "genTime": "2030-06-01T00:00:00Z",
       "policyOid": "2.999.2",

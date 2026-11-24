@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the illustrative registration-record fixtures (draft-4) against ../registration-record.md.
+"""Check the illustrative registration-record fixtures (draft-5) against ../registration-record.md.
 
 Standard library only; Python 3.11 or later. This is not a registration verifier.
 It verifies the fixtures' Ed25519 signatures (public, test-only keys) under the
@@ -42,19 +42,20 @@ _spec.loader.exec_module(RF)
 
 STATEMENT_TYPE = "https://in-toto.io/Statement/v1"
 PAYLOAD_TYPE = "application/vnd.in-toto+json"
-PREDICATE_TYPE = "https://traceweave.org/predicate/registration/draft-4"
-KEY_EVENT_TYPE = "https://traceweave.org/predicate/key-event/draft-4"
-REGISTRATION_VERSION = "traceweave-registration-draft-4"
-BUNDLE_VERSION = "traceweave-registration-bundle-draft-4"
-EVIDENCE_VERSION = "traceweave-time-evidence-draft-4"
-RESULT_VERSION = "traceweave-registration-verification-draft-4"
-LINK_VERSION = "traceweave-registration-link-draft-4"
-RENDERING_VERSION = "traceweave-registration-rendering-draft-4"
-KEY_EVENT_VERSION = "traceweave-key-event-draft-4"
-SET_VERSION = "traceweave-registration-set-draft-4"
-WITNESS_TYPE = "https://traceweave.org/predicate/witness/draft-4"
-WITNESS_VERSION = "traceweave-witness-draft-4"
-WITNESS_REQUEST_VERSION = "traceweave-witness-request-draft-4"
+PREDICATE_TYPE = "https://traceweave.org/predicate/registration/draft-5"
+KEY_EVENT_TYPE = "https://traceweave.org/predicate/key-event/draft-5"
+REGISTRATION_VERSION = "traceweave-registration-draft-5"
+BUNDLE_VERSION = "traceweave-registration-bundle-draft-5"
+EVIDENCE_VERSION = "traceweave-time-evidence-draft-5"
+RESULT_VERSION = "traceweave-registration-verification-draft-5"
+LINK_VERSION = "traceweave-registration-link-draft-5"
+RENDERING_VERSION = "traceweave-registration-rendering-draft-5"
+KEY_EVENT_VERSION = "traceweave-key-event-draft-5"
+SET_VERSION = "traceweave-registration-set-draft-5"
+EQUIVALENCE_VERSION = "traceweave-result-equivalence-draft-5"
+WITNESS_TYPE = "https://traceweave.org/predicate/witness/draft-5"
+WITNESS_VERSION = "traceweave-witness-draft-5"
+WITNESS_REQUEST_VERSION = "traceweave-witness-request-draft-5"
 A2A_EXTENSION = "https://traceweave.org/a2a/ext/registration/draft-1"
 POSSESSION_SCHEME = "sha256-salted-possession-v1"
 POSSESSION_DOMAIN = b"Traceweave-Possession-v1\x00"
@@ -126,7 +127,7 @@ CODES = [
     "provenance-shape", "quorum-miscount", "rendering-unlisted-line", "report-digest", "result-mismatch",
     "root-not-anchored", "signature-invalid", "single-verdict", "statement-digest", "statement-shape",
     "subject-mismatch", "subject-name", "time-in-statement", "tsa-eku-invalid", "tsa-imprint-mismatch",
-    "tsa-nonce-mismatch", "tsa-signature-invalid", "tsa-signing-cert-mismatch", "trust-without-quorum", "simulated-unmarked",
+    "tsa-nonce-mismatch", "tsa-signature-invalid", "tsa-signing-cert-mismatch", "trust-without-quorum", "simulated-unmarked", "extra-event-changed-result",
     "content-on-wire", "a2a-shape", "mcp-tool-shape", "witness-shape",
 ]
 
@@ -621,6 +622,9 @@ def check_real_evidence(ev, target_sha, s, out):
         s["pending"] = not s["ots"] and any(k == RF.OTS_PENDING for k, _, _ in atts)
         return s
     except RF.Bad as bad:
+        if bad.code == "unsupported-algorithm":
+            s["unsupported"] = True  # D7: reported as the outcome `unsupported`, never as a forgery code
+            return s
         out.add(bad.code)
         return None
 
@@ -689,6 +693,8 @@ def _outcome(i, e, summaries, policy, simulated, memo):
         return "invalid", None
     if e["pending"]:
         return "pending", None
+    if e.get("unsupported"):
+        return "unsupported", None
     root = find_root(policy, e["anchors"][0], e["kind"])
     if root is None:
         return "untrusted-root", None
@@ -722,7 +728,7 @@ def _outcome(i, e, summaries, policy, simulated, memo):
             if height >= len(chain) or chain[height][36:68] != commitment or not RF.header_ok(chain, height) \
                     or not RF.linked_to_checkpoint(chain, height, cp["height"], cp["headerSha256"]):
                 continue
-            if cp["height"] - height < root.get("minConfirmations", 6):
+            if height > cp["height"] - root["minConfirmations"]:
                 return "insufficient-confirmations", None
             t = RF.header_time(chain[height]) + OTS_MARGIN
             best = t if best is None else min(best, t)
@@ -741,8 +747,8 @@ def _outcome(i, e, summaries, policy, simulated, memo):
             return "untrusted-root", None
         try:
             path = RF.validate_path(e["signer"], e["certs"], root_cert, e["time"])
-        except RF.Bad:
-            return "path-invalid", None
+        except RF.Bad as bad:
+            return ("unsupported" if bad.code == "unsupported-algorithm" else "path-invalid"), None
         e = dict(e, pathCerts=[c.sha256() for c in path])
     if e["policyOid"] not in root.get("policyOids", []):
         return "wrong-policy", None
@@ -822,9 +828,13 @@ FAR = datetime.max.replace(tzinfo=timezone.utc)
 
 
 def load_events(event_paths, policy, simulated, out):
+    return load_event_bundles([(load_fixture(rel), sha((HERE / rel).read_bytes())) for rel in event_paths], policy, simulated, out)
+
+
+def load_event_bundles(items, policy, simulated, out):
+    """Items are (bundle object, file digest). Used by the fixtures and by the enumeration's loading sample."""
     evs = []
-    for rel in event_paths:
-        bundle = load_fixture(rel)
+    for bundle, file_digest in items:
         inner = set()
         ctx = check_bundle(bundle, {}, inner, statement_check=lambda st, a, o: check_key_event_statement(st, o))
         if ctx is None or inner - {"signature-invalid"}:
@@ -832,70 +842,79 @@ def load_events(event_paths, policy, simulated, out):
             continue
         pred = ctx["statement"]["predicate"]
         bound = signature_bounds(ctx["evidence"], outcomes_for(ctx, policy, simulated), policy, len(ctx["sigs"]))[0]
-        evs.append({"hash": sha(ctx["payload"]), "file": sha((HERE / rel).read_bytes()),
+        # Event identity: SHA-256 of payload and signature. Two signers of one statement are two events
+        # (draft-5 enumeration finding); the same signed statement supplied twice is one event.
+        evs.append({"hash": sha(ctx["payload"] + ctx["sigs"][0]), "file": file_digest,
                     "target": ctx["statement"]["subject"][0]["digest"]["sha256"], "signer": ctx["keyDigests"][0],
                     "event": pred["event"], "E": bound["quorum"], "sigok": ctx["sigOutcomes"][0] == "valid",
                     "claimed": parse_time(pred["compromisedNotBefore"]) if "compromisedNotBefore" in pred else None,
                     "successor": sha(bytes.fromhex(pred["successorPublicKeyHex"])) if "successorPublicKeyHex" in pred else None})
-    return evs
+    merged = {}
+    for e in evs:  # the same signed statement with several proofs: keep the earliest proved time
+        cur = merged.get(e["hash"])
+        if cur is None or (e["E"] is not None and (cur["E"] is None or e["E"] < cur["E"])):
+            merged[e["hash"]] = e
+    return list(merged.values())
 
 
 def evaluate_events(evs, policy):
-    """Order-independent (B2): events are taken in order of proved time E, ties by payload digest, and an
-    event may rely only on events with a smaller E. Iterated to a fixed point, because a later compromise
-    can dispute an earlier rotation (B1).
+    """One pass in order of proved time E (ties by payload digest), then one pass of disputes (draft-5, E1).
+    It terminates by construction: there is no fixed point, so there is no pass limit and no unsettled state.
 
-    Supersession (D1, D2): the first applied `rotated` or `retired` event for key K supersedes K, disputed
-    or not. After it, events signed by K other than `compromised` are `ignored-superseded`, and so is any
-    later rotation or retirement of K by anyone. Two different supersessions of K at the same E are both
-    `disputed` (an equal-time tie must not be won by grinding the payload digest). Otherwise rotations are
-    disputed only by a compromise window: an applied `compromised` event for K disputes rotations and
-    retirements of K with E >= max(Tc, E_c - lookback)."""
+    Pass 1, standing. An event is authorized if it is signed by its target key, or by the successor named
+    in an applied rotation of that key with a smaller E, disputed or not. (A disputed rotation passes on no
+    trust, but its successor may still speak about the old key; that can only restrict.) Supersession (D1,
+    D2): the first applied rotation or retirement of K supersedes K; later events signed by K other than
+    `compromised`, and later rotations or retirements of K, are `ignored-superseded`. Pass 1 never looks at
+    disputes, so a dispute can never withdraw the standing of the event that caused it.
+
+    Pass 2, disputes. Two different supersessions of K with the same E are both disputed. An applied
+    `compromised` event for K disputes rotations and retirements of K with E >= max(Tc, E_c - lookback),
+    except the rotation that gives the report's own signer standing: a successor's report never disputes
+    its own appointment."""
     lookback = timedelta(seconds=policy["compromiseLookbackSeconds"])
     order = sorted(evs, key=lambda e: (e["E"] or FAR, e["hash"]))
-    disputed, state, applied, status = set(), None, [], {}
-    for _ in range(len(order) + 2):
-        applied, status, superseded = [], {}, {}
-        for e in order:
-            if not e["sigok"] or e["E"] is None:
-                continue
-            if not (e["signer"] == e["target"] or any(
-                    r["event"] == "rotated" and r["target"] == e["target"] and r["successor"] == e["signer"]
-                    and r["E"] < e["E"] and r["hash"] not in disputed for r in applied)):
+    applied, status, superseded, standing = [], {}, {}, {}
+    for e in order:
+        if not e["sigok"] or e["E"] is None:
+            continue
+        via = None
+        if e["signer"] != e["target"]:
+            via = next((r for r in applied if r["event"] == "rotated" and r["target"] == e["target"]
+                        and r["successor"] == e["signer"] and r["E"] < e["E"]), None)
+            if via is None:
                 status[e["hash"]] = "ignored-unauthorized"
                 continue
-            sup = e["event"] in ("rotated", "retired")
-            by_signer = superseded.get(e["signer"])
-            if by_signer is not None and e["event"] != "compromised" \
-                    and not (sup and e["target"] == e["signer"] and e["E"] == by_signer):
-                status[e["hash"]] = "ignored-superseded"
-                continue
-            by_target = superseded.get(e["target"])
-            if sup and by_target is not None and e["E"] > by_target:
-                status[e["hash"]] = "ignored-superseded"
-                continue
-            applied.append(e)
-            status[e["hash"]] = "applied"
-            if sup and e["target"] not in superseded:
-                superseded[e["target"]] = e["E"]
-        new = set()
-        ties = {}
-        for e in applied:
-            if e["event"] in ("rotated", "retired"):
-                ties.setdefault((e["target"], e["E"]), set()).add((e["event"], e["successor"], e["hash"]))
-        for group in ties.values():
-            if len({(ev, succ) for ev, succ, _ in group}) > 1:
-                new |= {h for _, _, h in group}
-        for c in applied:
-            if c["event"] == "compromised":
-                start = max(c["claimed"], c["E"] - lookback)
-                for r in applied:
-                    if r is not c and r["target"] == c["target"] and r["event"] in ("rotated", "retired") and r["E"] >= start:
-                        new.add(r["hash"])
-        key = (tuple(e["hash"] for e in applied), frozenset(new))
-        if key == state:
-            break
-        state, disputed = key, new
+        sup = e["event"] in ("rotated", "retired")
+        by_signer = superseded.get(e["signer"])
+        if by_signer is not None and e["event"] != "compromised" \
+                and not (sup and e["target"] == e["signer"] and e["E"] == by_signer):
+            status[e["hash"]] = "ignored-superseded"
+            continue
+        by_target = superseded.get(e["target"])
+        if sup and by_target is not None and e["E"] > by_target:
+            status[e["hash"]] = "ignored-superseded"
+            continue
+        applied.append(e)
+        status[e["hash"]] = "applied"
+        standing[e["hash"]] = via["hash"] if via else None
+        if sup and e["target"] not in superseded:
+            superseded[e["target"]] = e["E"]
+    disputed = set()
+    ties = {}
+    for e in applied:
+        if e["event"] in ("rotated", "retired"):
+            ties.setdefault((e["target"], e["E"]), set()).add((e["event"], e["successor"], e["hash"]))
+    for group in ties.values():
+        if len({(ev, succ) for ev, succ, _ in group}) > 1:
+            disputed |= {h for _, _, h in group}
+    for c in applied:
+        if c["event"] == "compromised":
+            start = max(c["claimed"], c["E"] - lookback)
+            for r in applied:
+                if r is not c and r["target"] == c["target"] and r["event"] in ("rotated", "retired") \
+                        and r["E"] >= start and r["hash"] != standing[c["hash"]]:
+                    disputed.add(r["hash"])
     results = []
     for e in order:
         if not e["sigok"]:
@@ -917,6 +936,10 @@ def signer_trust(digest, sig_outcome, bound, policy, ok_events, all_applied):
         return "not-evaluated"
     b = bound["quorum"]  # S1: event decisions use the quorum bound only
     trusted_from = {k: None for k in policy["trustedKeys"]}
+    for rk in policy.get("recoveryKeys", []):
+        # A recovery key replaces a trusted key, and only for bounds from its own notBefore (RD18).
+        if rk["recovers"] in policy["trustedKeys"] and rk["keySha256"] not in trusted_from:
+            trusted_from[rk["keySha256"]] = parse_time(rk["notBefore"])
     for r in sorted((e for e in ok_events if e["event"] == "rotated"), key=lambda e: (e["E"], e["hash"])):
         since = trusted_from.get(r["target"], FAR)
         # trust flows only through a rotation proved strictly after its signer became trusted
@@ -1006,7 +1029,7 @@ def expected_result(ctx, artifacts, policy, simulated, bundle_sha, event_paths, 
     }
 
 
-POLICY_KEYS = {"quorum", "timeRoots", "trustedKeys", "revocationData", "compromiseLookbackSeconds", "verificationTime"}
+POLICY_KEYS = {"quorum", "timeRoots", "trustedKeys", "recoveryKeys", "revocationData", "compromiseLookbackSeconds", "verificationTime"}
 ROOT_KEYS = {"anchorSha256", "kind", "independenceGroup", "accuracySeconds", "policyOids", "rootCertificate", "headerFile", "minConfirmations", "checkpoint"}
 
 
@@ -1017,8 +1040,13 @@ def check_policy(policy, out):
     if "trustedKeyids" in policy or any(HEX16.match(str(k)) for k in policy.get("trustedKeys", [])):
         out.add("key-identity-by-hint")  # B3: trust is by SHA-256 of the full key, never the 64-bit hint
         return False
-    if set(policy) != POLICY_KEYS or not isinstance(policy["quorum"], int) or policy["quorum"] < 1 \
-            or not all(HEX64.match(str(k)) for k in policy["trustedKeys"]) or not TIME.match(str(policy["verificationTime"])):
+    lb = policy.get("compromiseLookbackSeconds")
+    if set(policy) != POLICY_KEYS or not isinstance(policy["quorum"], int) or isinstance(policy["quorum"], bool) or policy["quorum"] < 1 \
+            or not all(HEX64.match(str(k)) for k in policy["trustedKeys"]) or not TIME.match(str(policy["verificationTime"])) \
+            or not isinstance(lb, int) or isinstance(lb, bool) or lb < 0 \
+            or not isinstance(policy["recoveryKeys"], list) \
+            or any(not isinstance(rk, dict) or set(rk) != {"keySha256", "recovers", "notBefore"} or not HEX64.match(str(rk["keySha256"]))
+                   or not HEX64.match(str(rk["recovers"])) or not TIME.match(str(rk["notBefore"])) for rk in policy["recoveryKeys"]):
         out.add("result-mismatch")
         return False
     for r in policy["timeRoots"]:
@@ -1028,6 +1056,12 @@ def check_policy(policy, out):
         if not HEX64.match(str(r["anchorSha256"])):
             out.add("root-not-anchored")
             return False
+        if r["kind"] == "bitcoin-proof-of-work" and "headerFile" in r:
+            mc, cp = r.get("minConfirmations"), r.get("checkpoint")
+            if not isinstance(mc, int) or isinstance(mc, bool) or mc < 1 or not isinstance(cp, dict) or set(cp) != {"height", "headerSha256"} \
+                    or not isinstance(cp["height"], int) or isinstance(cp["height"], bool) or cp["height"] < 0 or not HEX64.match(str(cp["headerSha256"])):
+                out.add("result-mismatch")  # draft-4 review: minConfirmations and the checkpoint shape are validated
+                return False
     for rd in policy["revocationData"]:
         if set(rd) != {"anchorSha256", "source", "asOf", "revocations"} or not TIME.match(str(rd["asOf"])) \
                 or any(set(rev) != {"certificateSha256", "revokedAt", "reasonCode"} or rev["reasonCode"] not in ALL_REASONS
@@ -1124,6 +1158,29 @@ def check_link(link, meta, out):
             out.add("catalogue-does-not-open")
         if sha(catalogue) != body["inputs"]["referenceCatalogueSha256"]:
             out.add("catalogue-not-report-input")
+
+
+def check_equivalence(obj, meta, out):
+    """E1: results for the same bundle whose event lists differ only by rejected events must agree,
+    byte for byte (RFC 8785), on everything except the inputs list and the extra events' own entries."""
+    if not isinstance(obj, dict) or set(obj) != {"equivalenceVersion", "results"} or obj["equivalenceVersion"] != EQUIVALENCE_VERSION \
+            or len(obj["results"]) < 2:
+        out.add("fixture-shape")
+        return
+    results = [load_fixture(rel) for rel in obj["results"]]
+    common = set.intersection(*({e["eventSha256"] for e in r["outcomes"]["keyEvents"]} for r in results))
+    for r in results:
+        extra = [e for e in r["outcomes"]["keyEvents"] if e["eventSha256"] not in common]
+        if any(e["outcome"] not in ("ignored-unauthorized", "ignored-superseded", "invalid-signature", "ignored-no-proved-time") for e in extra):
+            out.add("fixture-shape")  # only rejected events may differ
+    projected = []
+    for r in results:
+        q = copy.deepcopy(r)
+        q["inputs"].pop("keyEvents")
+        q["outcomes"]["keyEvents"] = [e for e in q["outcomes"]["keyEvents"] if e["eventSha256"] in common]
+        projected.append(jcs(q))
+    if len(set(projected)) != 1:
+        out.add("extra-event-changed-result")
 
 
 def check_set(obj, meta, out):
@@ -1388,7 +1445,7 @@ def check_object(kind, obj, meta):
 
 
 CHECKS.update({"verification-result": check_result, "report-link": check_link, "rendering": check_rendering,
-               "key-event": check_key_event, "registration-set": check_set, "a2a-agent-card": check_card,
+               "key-event": check_key_event, "registration-set": check_set, "result-equivalence": check_equivalence, "a2a-agent-card": check_card,
                "a2a-request": check_request, "a2a-task": check_task, "mcp-tool": check_mcp_tool})
 
 

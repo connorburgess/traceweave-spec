@@ -1,6 +1,14 @@
-# Registration record: design draft-4
+# Registration record: design draft-5
 
-Status: research draft, draft-4 of 2026-11-24. It resolves the "Draft-3 confirmation" section of the [draft-2 review](../reviews/registration-record-draft-2-review.md#draft-3-confirmation) (`1c7043f`). §23 maps D1–D9 and the gate-text items to sections and fixtures; every fix has the reviewer's reproducing case as a negative fixture. Draft-3 (`5250eae`) resolved that review's B1–B3 and S1–S13 (§22), and draft-2 resolved the first [review](../reviews/registration-record-review.md) (`5c3d9c5`; §21). Not normative. No schema, profile, vector or roadmap file is changed by this draft. **No external time-stamping service, calendar, log or witness was contacted.** Placeholder evidence is labelled as such. The real-format vectors (§6.5) come from a local test-only TSA run with `openssl` and from synthetic OpenTimestamps proofs against locally mined header files.
+Status: research draft, draft-5 of 2026-11-24. It resolves the "Draft-4 confirmation" section of the [draft-2 review](../reviews/registration-record-draft-2-review.md#draft-4-confirmation) (`2186523`), whose single blocking item is E1; §24 maps every item. Draft-4 (`dba683b`) resolved D1–D9 (§23), draft-3 (`5250eae`) B1–B3 and S1–S13 (§22), and draft-2 the first [review](../reviews/registration-record-review.md) (§21). Not normative. No schema, profile, vector or roadmap file is changed by this draft. **No external time-stamping service, calendar, log or witness was contacted.**
+
+**What changed from draft-4:**
+- **E1** (§8). Key events are now evaluated in two passes with no fixed point: standing first, then disputes, which never feed back. A compromise report never disputes the rotation that gives its own signer standing. The evaluation cannot oscillate, and a non-settling implementation is an error, never a verdict.
+- **Event identity** is the SHA-256 of payload and signature (an enumeration finding).
+- **Enumeration** (§8). It is widened: steps both shorter and longer than the look-back, three claimed starts, boundary and no-quorum probes, 13 invariants, and a sample run through real signed bundles. Its mutation check includes the draft-4 rule.
+- **Policy** (§6.3, §10). `minConfirmations` (≥ 1), the checkpoint shape and `compromiseLookbackSeconds` (non-negative integer) are validated. An attested height must be at most the checkpoint height minus `minConfirmations`. A real `recoveryKeys` field replaces the unbacked RD18 claim.
+- **RFC 3161** (§6.2). Unsupported algorithms (such as ECDSA) give the outcome `unsupported`, not a forgery code (D7). Path building backtracks past decoy certificates.
+- **Text.** The threat row states that a report inside the window loses the successor chain permanently. REG.1 is tied to the widened enumeration.
 
 **What changed from draft-3:**
 - **Supersession** (§8; D1, D2):
@@ -76,15 +84,15 @@ All version strings and predicate URLs are proposals in the `traceweave.org` nam
 
 | Object | Version string | Content | Fixture |
 | --- | --- | --- | --- |
-| Registration statement | `traceweave-registration-draft-4`; predicate type `https://traceweave.org/predicate/registration/draft-4` | in-toto Statement v1 (§4) | `statement.json` |
-| Bundle | `traceweave-registration-bundle-draft-4` | DSSE envelope with one or more signatures, public keys, time evidences | `bundle-three-roots.json`, `bundle-cosigned.json`, `bundle-second-work.json` |
-| Time evidence | `traceweave-time-evidence-draft-4` | One evidence: target (a signature, or the token of an earlier evidence for renewal), trust anchor, type-specific fields or a real-format token (§6) | `evidence-*.json` |
-| Witness statement | `traceweave-witness-draft-4`; predicate type `https://traceweave.org/predicate/witness/draft-4` | A hosted witness's signed statement, used as evidence type `traceweave-witness` (§6.2, §19) | `evidence-witness.json` |
-| Key event | `traceweave-key-event-draft-4`; predicate type `https://traceweave.org/predicate/key-event/draft-4` | Retire, rotate or report a key compromised, time-stamped like a registration (§8) | `key-event-*.json` |
-| Verification result | `traceweave-registration-verification-draft-4` | The closed outcomes of §10, with the policy used | `verification-result*.json` |
-| Report link | `traceweave-registration-link-draft-4` | Ties a comparison report to a registration without changing the report (§9) | `report-link.json` |
-| Registration set | `traceweave-registration-set-draft-4` | Several registrations by one producer, for the nonce-freshness check (§4.2) | `registration-set.json` |
-| Rendering | `traceweave-registration-rendering-draft-4` | User-facing lines from the §11 templates | `rendering*.json` |
+| Registration statement | `traceweave-registration-draft-5`; predicate type `https://traceweave.org/predicate/registration/draft-5` | in-toto Statement v1 (§4) | `statement.json` |
+| Bundle | `traceweave-registration-bundle-draft-5` | DSSE envelope with one or more signatures, public keys, time evidences | `bundle-three-roots.json`, `bundle-cosigned.json`, `bundle-second-work.json` |
+| Time evidence | `traceweave-time-evidence-draft-5` | One evidence: target (a signature, or the token of an earlier evidence for renewal), trust anchor, type-specific fields or a real-format token (§6) | `evidence-*.json` |
+| Witness statement | `traceweave-witness-draft-5`; predicate type `https://traceweave.org/predicate/witness/draft-5` | A hosted witness's signed statement, used as evidence type `traceweave-witness` (§6.2, §19) | `evidence-witness.json` |
+| Key event | `traceweave-key-event-draft-5`; predicate type `https://traceweave.org/predicate/key-event/draft-5` | Retire, rotate or report a key compromised, time-stamped like a registration (§8) | `key-event-*.json` |
+| Verification result | `traceweave-registration-verification-draft-5` | The closed outcomes of §10, with the policy used | `verification-result*.json` |
+| Report link | `traceweave-registration-link-draft-5` | Ties a comparison report to a registration without changing the report (§9) | `report-link.json` |
+| Registration set | `traceweave-registration-set-draft-5` | Several registrations by one producer, for the nonce-freshness check (§4.2) | `registration-set.json` |
+| Rendering | `traceweave-registration-rendering-draft-5` | User-facing lines from the §11 templates | `rendering*.json` |
 
 ## 4. The registration statement
 
@@ -92,9 +100,9 @@ All version strings and predicate URLs are proposals in the `traceweave.org` nam
 {
   "_type": "https://in-toto.io/Statement/v1",
   "subject": [{"name": "sum.go", "digest": {"sha256": "974c8d0a…697c"}}],
-  "predicateType": "https://traceweave.org/predicate/registration/draft-4",
+  "predicateType": "https://traceweave.org/predicate/registration/draft-5",
   "predicate": {
-    "registrationVersion": "traceweave-registration-draft-4",
+    "registrationVersion": "traceweave-registration-draft-5",
     "contentKind": "source-code",
     "nonce": "<64 hex: 32 fresh random bytes>",
     "possession": [{"subjectIndex": 0, "scheme": "sha256-salted-possession-v1", "sha256": "…"}],
@@ -194,14 +202,14 @@ A root identified by anything other than an anchor digest is rejected (`root-not
    - no certificate carries a critical extension the verifier does not understand;
    - the TSA certificate's keyUsage, if present, asserts digitalSignature or nonRepudiation.
 
-   Any failure is the outcome `path-invalid`. A signatures-only chain check is **not** enough: it accepts a TSA certificate issued by an end-entity certificate, and one under an expired intermediate, both of which `openssl ts -verify` rejects (`real-format/MANIFEST.json`; `verification-result-real-issued-by-end-entity`, `-expired-intermediate`).
+   Path building tries every candidate issuer and backtracks, because the SignedData `certificates` field is unsigned. A decoy inserted first must not turn a valid token into `path-invalid` (`verification-result-real-decoy-first`). Any failure is the outcome `path-invalid`. The leaf keyUsage check has no openssl cross-check, because openssl refuses to issue such a token. A signatures-only chain check is **not** enough: it accepts a TSA certificate issued by an end-entity certificate, and one under an expired intermediate, both of which `openssl ts -verify` rejects (`real-format/MANIFEST.json`; `verification-result-real-issued-by-end-entity`, `-expired-intermediate`).
 7. **Policy OID.** The token's `policy` must be one the verifier's policy lists for that anchor (outcome `wrong-policy`).
 8. **Certificate validity.** `genTime` must lie within the TSA certificate's validity (outcome `invalid`).
 9. **Revocation** (RFC 3161 §4 items 1–2; §6.7). An entry applies only to the certificate it names, the TSA certificate or an intermediate on the path (D5). Revocation **without** a reasonCode, or with `keyCompromise`, invalidates **every** token whose path includes that certificate, including past ones (outcome `revoked`). With reasonCode `unspecified`, `affiliationChanged`, `superseded` or `cessationOfOperation`, tokens before the revocation time stay valid (`verification-result-revoked-retaining`). Missing revocation data gives `no-revocation-data`.
 10. **Expiry.** If the verification time is after the TSA certificate's expiry, the token counts only through a renewal (§6.6); otherwise `expired-unrenewed`.
 **Supported algorithms (D7).**
 - **The checker:** RSA PKCS #1 v1.5 signatures with SHA-256 (`rsaEncryption` or `sha256WithRSAEncryption`), SHA-256 message digests, and ESSCertID (SHA-1) or ESSCertIDv2 with SHA-256, SHA-384 or SHA-512.
-- **Rejected by it as unsupported:** ECDSA, RSA-PSS and SHA-384/512 signatures. An implementation for REG.3 must support what the chosen TSAs actually issue, and state it.
+- **Reported as the outcome `unsupported`, never as a forgery code:** ECDSA, RSA-PSS and SHA-384/512 signatures (`verification-result-real-ecdsa`; openssl verifies that token). An implementation for REG.3 must support what the chosen TSAs actually issue, and state it.
 - **Not built:** high tag numbers, `subjectKeyIdentifier` signer identifiers, name constraints, policy mappings and revocation fetching.
 
 11. **Bound.** `notAfter = genTime + accuracy`, **rounded up to the whole second** when `genTime` or the accuracy has fractional parts (N1). Accuracy comes from the token, else from the verifier's policy for that anchor (RFC 3161 §2.4.2); with neither, the outcome is `unsupported` (A3).
@@ -213,7 +221,7 @@ A root identified by anything other than an anchor digest is rejected (`root-not
   - The attested block header is read from the verifier's **own** header source, never from a bundle. Its first header's SHA-256 is the anchor. The policy also pins a **checkpoint**: the SHA-256 of the raw header at a height of at least the attested height plus `minConfirmations`, taken from the verifier's own node (D3).
   - The checker verifies that the header's Merkle root equals the commitment, checks proof of work up to that height, and **links back from the checkpoint** through the previous-header hashes to the attested header.
   - Pinning the first header is not enough. Proof of work against each header's own `nBits` lets anyone re-mine an easy fork on top of it, with any attested time (`neg-real-ots-forked-headers`: 2001-01-01).
-  - Without a checkpoint the outcome is `unsupported`. With too few headers between the attested one and the checkpoint, it is `insufficient-confirmations`.
+  - Without a checkpoint the outcome is `unsupported`. The attested height must satisfy `height ≤ checkpoint.height − minConfirmations`, with `minConfirmations ≥ 1` validated in the policy; otherwise the outcome is `insufficient-confirmations`. Without that rule, a header file kept real up to the checkpoint and forged above it would pass, for an attested height above the checkpoint (draft-4 review; `neg-policy-min-confirmations-zero`).
   - It takes `blockTime` **from that header, never from the evidence** (N2).
 - **Offline.** "Verifiable offline" holds only with such a header source (T4: "a local Bitcoin Core node (a pruned node is fine)").
 - **Margin and its assumption.** `notAfter = blockTime + 7,200 s`. An upper bound on existence needs a header time that cannot lag the real mining time by much. Consensus gives only that a header time must exceed the median of the previous 11 blocks. That keeps the lag to roughly an hour **only under an honest-majority assumption**: most recent blocks were mined by honest miners with roughly correct clocks. The 7,200 s margin covers that with slack. The two-hour future rule bounds the other direction and does not justify the margin (draft-1 had this backwards). See RD6 for the alternative.
@@ -317,41 +325,59 @@ The key id is a lookup hint, not identity ([attestations](../../spec/attestation
 
 **Key events are statements too.** A key event is an in-toto statement whose single subject is the target key (digest = SHA-256 of the public key), with predicate `{eventVersion, keyid, event, successorPublicKeyHex (rotated only), compromisedNotBefore (compromised only)}`. It is signed and time-stamped like a registration. Its **proved time E** is its own quorum bound (§6.4); without one it is `ignored-no-proved-time`.
 
-**Evaluation is order-independent (B2).** Events are taken in order of E, with ties broken by the SHA-256 of the event payload. "Earlier" always means a smaller E, never a position in the input. The evaluation repeats until nothing changes, because a later compromise can dispute an earlier rotation. Supplying the same events in another order gives an identical result (`verification-result-event-order-a` and `-b`).
+**The procedure: two passes, no fixed point (draft-5, E1).** Key events are evaluated by a terminating procedure that cannot oscillate, by construction:
+1. **Identity.** Each event is identified by the SHA-256 of its payload **and** signature. One statement signed by two keys is two events; the same signed statement supplied twice is one event with its earliest proved time. (An enumeration finding: draft-4 used the payload alone, so a thief's re-signing of the owner's statement collided with it; `verification-result-same-statement-two-signers`, `neg-event-identity-collision`.)
+2. **Pass 1, standing,** in order of proved time E, with ties broken by the event identity. "Earlier" always means a smaller E, never a position in the input. Each event's status is decided once, from events with a smaller E:
+   - **Authorization.** It is authorized if signed by its target key, or by the successor named in an applied rotation of that key with a smaller E. The rotation may be disputed or not: a disputed rotation passes on no trust, but its successor may still speak about the old key, which can only restrict. Otherwise the event is `ignored-unauthorized`.
+   - **Supersession (D1, D2).** The first applied `rotated` or `retired` event for key K supersedes K. After it, events signed by K other than `compromised`, and later rotations or retirements of K by anyone, are `ignored-superseded`. A retired or rotated-away key cannot rotate again (`verification-result-retired-then-rotated`; `neg-retired-key-rotates`). A much later second rotation cannot erase the honest successor chain (`verification-result-late-second-rotation`; `neg-late-rotation-erases-chain`).
+   - **Pass 1 never consults disputes,** so nothing computed later can withdraw the standing of the event that caused it.
+3. **Pass 2, disputes,** over the events applied in pass 1:
+   - **Equal-time supersessions.** Two different supersessions of K at the same E are both `disputed`. An equal-time tie must not be won by grinding the identity that breaks ties (`verification-result-retired-and-rotated-same-time`).
+   - **Compromise windows.** An applied `compromised` event for K, with claimed start Tc and proved time E, defines `start = max(Tc, E − lookback)`. It disputes every applied rotation or retirement of K with proved time ≥ `start`, **except the rotation that gives the report's own signer standing**: a successor's report never disputes its own appointment.
+   - Disputes never feed back into pass 1. There is no iteration, so there is no pass limit, and no state in which the evaluation has "not settled". An implementation that iterates and fails to settle is wrong, and must report an error, never a verdict.
 
-**Authorization.** An event is authorized if it is signed by its target key, or by the successor named in an applied, undisputed rotation of that key with a smaller E. Otherwise it is `ignored-unauthorized`.
+**Why the own-standing exemption is the right answer (E1).**
+- **The honest flow.** K leaks, so the owner rotates K→S at T and then, with S, reports K compromised at T+10 d from T−5 d.
+  - **Draft-4** let that report dispute K→S, which removed S's standing to make the report, which removed the dispute, and so on. The result depended on the parity of the number of events supplied: adding one rejected event flipped S to `untrusted`, two flipped it back.
+  - **Draft-5:** K→S stays applied, the report is applied, S is **trusted**, and K's own signatures bounded in [T−5 d, T) are `disputed`. Adding 0, 1 or 2 rejected events gives byte-identical outcomes (`verification-result-e1`, `-e1-extra-1`, `-e1-extra-2`, checked by `result-equivalence-e1`; the draft-4 behaviour is the review case `neg-extra-event-changed-result`).
+- **Why this is right.** A successor's report is a statement by S that its own predecessor leaked. S has no reason to undercut the rotation that appointed it, and a report that could undo its own authority is self-defeating.
+- **The other case.** If the rotation itself was made by a thief, the owner reports with K, as the target's own key. That report has no appointment to protect, and it does dispute the thief's rotation (`verification-result-rotation-hijack`).
+- **One level down.** S2 reporting S within 30 days of S→S2 behaves the same (`verification-result-e1-second-level`).
 
-**Supersession (D1, D2).** The first applied `rotated` or `retired` event for key K **supersedes** K, whether or not it is later disputed. After it:
-- **Events signed by K are ignored.** Every later event (larger E) signed by K, other than `compromised`, is `ignored-superseded`. A retired or rotated-away key cannot rotate again: retirement on 2026-11-26 then a rotation to the thief in 2027 leaves the thief's key `untrusted` (`verification-result-retired-then-rotated`; review case `neg-retired-key-rotates`).
-- **Later supersessions of K are ignored.** Any later rotation or retirement of K, by anyone, is `ignored-superseded`. A second rotation of an already-rotated key eighteen months later cannot erase the honest successor chain (`verification-result-late-second-rotation`; review case `neg-late-rotation-erases-chain`).
-- **Equal proved times.** Two different supersessions of K at the same E (a retirement and a rotation, or two rotations) are both `disputed`. An equal-time tie must not be won by grinding the payload digest that breaks ties (`verification-result-retired-and-rotated-same-time`; review case `neg-retired-key-rotates-same-time`).
-- **Disputed events.** A disputed rotation or retirement still supersedes and still ends trust in K's own later signatures; it only fails to pass trust on.
+**Trust flows forward only.** A successor is trusted only through an applied, undisputed rotation proved **strictly after** its signer became trusted. The draft-4 enumeration found that equal-time K→S and S→S2 let S2 become trusted (`verification-result-chain-same-time`; `neg-chain-same-time`).
 
-**Compromise windows.** An applied `compromised` event for key K, with claimed start Tc and proved time E, defines `start = max(Tc, E − lookback)`.
-- Every applied `rotated` or `retired` event for K with proved time ≥ `start` becomes **`disputed`**. Within that window a thief holding K could have signed it.
-- **No trust flows through a disputed rotation.** Its successor gains nothing (`verification-result-rotation-hijack`).
-- A compromise signed by a superseded K is still applied, because the owner may be the one reporting it. But its window reaches back at most `lookback` from its own proved time. So a claim filed later than the look-back window after an honest rotation cannot dispute it (`verification-result-late-compromise-claim`).
-- Conflicting rotations of one key are disputed only at equal times or inside one compromise window. Outside those, the first supersession stands (`verification-result-rotation-conflict`).
+**Recovery keys (RD18).** The policy field `recoveryKeys: [{keySha256, recovers, notBefore}]` lists, in advance, a key that replaces a trusted key `recovers`. It is trusted only for bounds at or after `notBefore`, never retroactively. It does not sign events for the key it recovers; it is a new trust root with a start time (`verification-result-recovery-key`). Without such a field, the only in-band form would have been an extra `trustedKeys` entry, trusted for every bound. The draft-4 review rightly said that was not a recovery mechanism.
 
-**Trust flows forward only.** A successor is trusted only through an applied, undisputed rotation proved **strictly after** its signer became trusted. The enumeration found that a rotation K→S and an onward rotation S→S2 with the same proved time let S2 become trusted, although S's rotation was not proved after S was established. That is fixed (`verification-result-chain-same-time`; `neg-chain-same-time`).
-
-**Enumeration test.** `registration-fixtures/enumerate_key_events.py` checks every event sequence of length 1 to 4 over {rotate, retire, compromise} × {signed by the current honest key, the old key, the successor, an attacker} × {earlier, equal, later proved time}: 1,727,604 sequences. Proved-time steps are ±40 days, across the 30-day look-back. The invariants:
-- **I1 order independence.**
-- **I2** attacker-signed events change nothing.
-- **I3** events signed by a superseded key, other than compromise reports, are never applied.
-- **I4** no key is trusted at or after its own supersession or compromise start.
-- **I5** a successor is trusted only through an undisputed rotation from a key trusted at that time.
-- **I6** events signed with the old key later than the look-back window after the honest rotation never change the honest chain.
-- **I7** a thief's key is trusted only inside the theft window: the thief's rotation was the old key's first supersession, and no compromise starts at or before it.
-
-Result: **0 violations** (about 96 s). A mutation check runs the same invariants against two weakened rule sets: no supersession or disputes; and trust through disputed rotations. They find 8,289 and 5,184 violating sequences of length ≤ 3, so the invariants are not vacuous.
+**Enumeration test (widened for draft-5).** `registration-fixtures/enumerate_key_events.py` has two parts.
+- **Dictionary enumeration.**
+  - **Alphabet:** {rotate, retire} × {signed by the current honest key, the old key, the successor, an attacker} × 5 proved-time steps, plus {compromise} × the same four signers × 5 steps × 3 claimed starts: 100 symbols.
+  - **Steps and claims:** steps of −40, −10, 0, +10 and +40 days, so both shorter and longer than the 30-day look-back. Claimed starts 2, 20 and 60 days before the report.
+  - **Coverage:** every sequence of length 1 to 3 (1,010,100), and a seeded random sample of 200,000 sequences of length 4.
+  - **Probes:** each key at the final time, far before, at E − 1 s and E of every event, at start − 1 s and start of every compromise window, and without quorum.
+- **Loading sample.** 300 sampled sequences are rebuilt as **real signed key-event bundles** with the builder, and evaluated through `load_event_bundles`. Some events are tampered (bad signature), some left without a proved time (one source), and some given a subject that disagrees with the keyid. Outcomes must equal the dictionary path's.
+- **Invariants:**
+  - **I1** order independence;
+  - **I2** removing rejected events changes nothing (the draft-4 "attacker-signed events" form was wrong, because an attacker key gains standing legitimately once the old key rotates to it);
+  - **I3** supersession;
+  - **I4** no trust at or after a key's own supersession or compromise start;
+  - **I5** trust only through undisputed rotations from a trusted key;
+  - **I6** the honest chain is final after the window, against late events signed by the old key **or the successor**;
+  - **I7** the thief window;
+  - **I8** inside a compromise window the key is never trusted, and just below its start trust is as without the report;
+  - **I9** no-quorum signatures of touched keys are never trusted;
+  - **I10** adding a rejected event (a retirement, report or rotation by a key without standing) changes nothing;
+  - **I11** who may sign;
+  - **I12** equal-time supersessions are both disputed;
+  - **I13** a report never disputes its own appointment.
+- **Mutation check.** The same invariants are run on length ≤ 2 against three weakened rule sets: no supersession or disputes; trust through disputed rotations; and **the draft-4 fixed point**, which catches E1. Counts are in §20.
 
 **RD18 re-examined: what an honest owner sees.**
 - **Owner rotates first** (K→S), and K leaks later.
-  - Every event the thief signs with K is ignored, except a compromise report.
-  - A compromise report filed within the look-back window after the owner's rotation disputes it, and S loses trust. A thief who stole K before the owner rotated can always do this.
-  - A report filed later cannot. After the window, the honest chain is final.
-- **Thief rotates first** (K→A), and the owner then reports the compromise from before the thief's rotation, within the window: the thief's rotation is disputed and A gains nothing. The owner's own later rotation of K is ignored as superseded. The owner continues through an out-of-band link (I1 or I2) or a recovery key the verifier lists in advance (RD18).
+  - Everything the thief signs with K is ignored, except a compromise report.
+  - A report filed within the look-back window after the owner's rotation disputes it **permanently**: S never regains trust, and K cannot be rotated again. The owner must then recover through a pre-listed recovery key or out of band (I1, I2).
+  - After the window, the honest chain is final, whoever signs the late report (I6).
+  - **The owner's own successor-signed report never harms the owner's chain** (E1).
+- **Thief rotates first** (K→A), and the owner reports with K, from before the thief's rotation, within the window: the thief's rotation is disputed and A gains nothing. The owner's later rotation of K is ignored as superseded, so the owner continues with a recovery key or out of band.
 - **Owner retires K.** Nothing signed with K afterwards counts, except a compromise report, which can only reduce trust.
 
 **Effect on a signature by key D**, where B is that signature's **quorum bound** (S1):
@@ -387,13 +413,13 @@ This shows that the reference artifact compared in the report is byte-identical 
 **Inputs:**
 - a bundle;
 - optionally, the artifact bytes, a catalogue opening and key-event bundles;
-- the verifier's **policy**: `{quorum, timeRoots, trustedKeys, revocationData, compromiseLookbackSeconds, verificationTime}`. A result carries the policy it used, so its revocation date and verification time are on record (S3).
+- the verifier's **policy**: `{quorum, timeRoots, trustedKeys, recoveryKeys, revocationData, compromiseLookbackSeconds, verificationTime}`. The checker refuses a policy with a quorum below 1, a negative or non-integer look-back, `minConfirmations` below 1, a malformed checkpoint, or malformed recovery keys. A result carries the policy it used, so its revocation date and verification time are on record (S3).
 
 Every step reports its own outcome, and a failure in one step does not change another step's outcome.
 
 1. **Parse** strictly: no duplicate keys (`duplicate-key`); size limits as in the signing harness. Base64 fields may be standard or URL-safe, because DSSE says verifiers "MUST accept either" (S7; `bundle-url-safe`). Outcome `envelope`: `ok` | `malformed` (`envelope-shape`, which also covers one key signing twice: `neg-duplicate-signer`).
 2. **Signatures.** Look up each key by its `keyid` hint among the bundle's keys. A missing or unmatched hint gives `unknown-key`; there is no trial verification (A7). Verify under §10.1 over `PAE(payloadType, payload)` of the exact payload bytes. Per signature: `valid` | `invalid` | `unknown-key`, with `keySha256` (`signature-invalid`).
-3. **Key events,** evaluated in order of proved time (§8). Per event: `applied` | `disputed` | `ignored-superseded` | `ignored-unauthorized` | `ignored-no-proved-time` | `invalid-signature`.
+3. **Key events,** evaluated by the two-pass procedure of §8 (standing in order of proved time, then disputes). Per event: `applied` | `disputed` | `ignored-superseded` | `ignored-unauthorized` | `ignored-no-proved-time` | `invalid-signature`.
 4. **Signer trust**, from the policy's `trustedKeys` (by full key digest) and the events, using quorum bounds only (§8). Per signature: `trusted` | `untrusted` | `disputed` | `not-evaluated`.
 5. **Statement.** Strictly parse the payload and apply §4. Outcome `statement`: `ok` | `malformed` | `unsupported`.
 6. **Subject digests.** Per subject: `match` | `mismatch` | `not-supplied`.
@@ -485,7 +511,8 @@ The allow-list is a floor, not a wording review: REG.4 still needs a non-author 
 | Privacy leaks | Services, recipients | Only signature digests leave; fresh nonce; salted commitments; no fingerprints (§5) | Opening a catalogue reveals all of it; low-entropy content is confirmable after disclosure |
 | Service shutdown | TSA, calendar, log | Three sources; complete evidence verifiable offline from retained chains, retained revocation data and a pinned header source, **as of the revocation data's date** (§6.7) | An OpenTimestamps proof is lost if every calendar disappears before upgrade (T4) |
 | Algorithm ageing and certificate expiry | Time | Renewal evidence over the earlier token (§6.6), made before the TSA certificate expires; triggers: expiry approaching, any non-compromise revocation notice, reported weakness in SHA-256 or Ed25519 | A renewal must happen before the expiry or break. Hash-tree renewal for SHA-256 is outside this draft (§6.6). Renewal does not rescue a compromised TSA key |
-| Retired or rotated-away key used again | Whoever later holds the old key | Supersession: later events signed by it are ignored, except a compromise report; later rotations of it are ignored; equal-time conflicts are both disputed (§8; D1, D2) | A compromise report within the look-back window can still dispute the honest rotation |
+| Retired or rotated-away key used again | Whoever later holds the old key | Supersession: later events signed by it are ignored, except a compromise report; later rotations of it are ignored; equal-time conflicts are both disputed (§8; D1, D2) | A compromise report signed with the old key within the look-back window after the honest rotation disputes it **permanently**: the successor chain is lost and the key cannot be rotated again, so recovery needs a pre-listed recovery key or an out-of-band link |
+| A successor's report used against its own appointment | Anyone adding rejected events | Two passes, no fixed point; a report never disputes its own signer's appointment (§8; E1) | — |
 | Forked OpenTimestamps headers | Anyone supplying headers | Checkpoint pinned from the verifier's own node; linkage back from it (§6.2; D3) | A verifier without a checkpoint gets `unsupported` |
 | A TSA certificate minted under a CA by a non-CA certificate, or under an expired intermediate | Holder of any certificate under the root | RFC 5280 path validation at `genTime` (§6.2; D4) | Path checks this validator does not implement: name constraints, policies |
 | Stolen key rotated to the thief | Thief | A later compromise disputes rotations inside its window; no trust through a disputed rotation; conflicting rotations both disputed (§8; `verification-result-rotation-hijack`, `-rotation-conflict`) | Until the owner's compromise event is proved, a verifier without it sees the rotation as applied |
@@ -522,7 +549,7 @@ ROADMAP.md M4.3–M4.6 are unchanged. M4.5 still asks for a decision on "the opt
 | M4.3 (amended) | E | "Negative cryptographic vectors (tampered payload, type or signature; untrusted key; malformed or duplicate-key payload; subject mismatch; and, for registrations, `evidence-wrong-target`, `tsa-imprint-mismatch`, `tsa-signature-invalid`, `tsa-eku-invalid`, `tsa-signing-cert-mismatch`, `tsa-nonce-mismatch`, `key-event-shape`, and the §10.1 Ed25519 edge vectors), each with a distinct reason code. `validate` checks them." | S |
 | M4.5 (replaced) | O+E | "A recorded owner decision selecting the time-evidence types for registration records (proposed: RFC 3161 from two unrelated TSAs, and OpenTimestamps), the default quorum (2), the compromise look-back (RD15), and whether any external service may be contacted for test tokens. In-toto adapter accept/reject fixtures and a trust-policy document, checked by `validate`." | S |
 | M4.6 (amended) | E | "Commitment, disclosure and key-event design (`research/drafts/registration-record.md` §4, §5, §8) reviewed by a named non-author. Report in `docs/reviews/`; every finding has a disposition." | S |
-| REG.1 | E | "`check_registration.py` exits 0 under `validate`: every positive fixture gives no code, every negative gives exactly its codes, every code has a negative, and the wrong-implementation self-test passes. The real-format vectors in `real-format/` verify with anchors computed from the pinned root certificate and from the header file plus pinned checkpoint. Their negatives are rejected: four token negatives (imprint, tampered, non-critical EKU, wrong ESS); two path negatives (TSA certificate issued by an end-entity certificate, and under an expired intermediate), each also rejected by `openssl ts -verify`; three OpenTimestamps negatives (other digest, unrelated chain, forked headers); and a pinned-root negative (the root file does not hash to the anchor). The gate fails if any of these is accepted. `enumerate_key_events.py` reports 0 violations up to length 4, and its mutation check finds violations in both weakened rule sets." | S |
+| REG.1 | E | "`check_registration.py` exits 0 under `validate`: every positive fixture gives no code, every negative gives exactly its codes, every code has a negative, and the wrong-implementation self-test passes. The real-format vectors in `real-format/` verify with anchors computed from the pinned root certificate and from the header file plus pinned checkpoint. Their negatives are rejected: four token negatives (imprint, tampered, non-critical EKU, wrong ESS); two path negatives (TSA certificate issued by an end-entity certificate, and under an expired intermediate), each also rejected by `openssl ts -verify`; three OpenTimestamps negatives (other digest, unrelated chain, forked headers); and a pinned-root negative (the root file does not hash to the anchor). The gate fails if any of these is accepted. `enumerate_key_events.py` reports 0 violations: exhaustively at length ≤ 3 and on a seeded sample of 200,000 at length 4, over its 100-symbol alphabet with steps of ±10 and ±40 days and claimed starts of 2, 20 and 60 days, on all 13 invariants, and with 0 mismatches on its loading sample. Its mutation check finds violations in all three weakened rule sets, including the draft-4 fixed point." | S |
 | REG.2 | E | "Two implementations, each with its own parser, produce verification results (§10) whose RFC 8785 canonical bytes are identical on every REG.1 fixture, including the §10.1 edge vectors and the two event orders. The comparison is over those canonical bytes, never over the implementations' own serializations." | I |
 | REG.3 | E | "After the owner approves the services: one RFC 3161 token from each of two unrelated TSAs, and one upgraded OpenTimestamps proof, over one synthetic registration (k = 3 evidences). Each is verified with the network denied, from retained chains and revocation data, and with the verifier's own header source and checkpoint (§6.2); 3/3 must be valid. Failure directions, each 1/1: wrong target, tampered token, wrong policy OID, wrong request nonce, and a forked header file. The revoked-certificate direction uses the local test TSA of §6.5, because a revocation cannot be produced on demand at a real TSA." | I |
 | REG.4 | E | "Every user-facing rendering uses only the §11 templates and the three fixed sentences, and shows keys with at least 128 bits of their SHA-256. A production renderer refuses to render a result with `simulated: true`. Fixture renderings of simulated results carry the marker line. A named non-author reviews the templates. Feeds M5.2 and WEB.5." | S+I |
@@ -549,10 +576,10 @@ ROADMAP.md M4.3–M4.6 are unchanged. M4.5 still asks for a decision on "the opt
 | RD12 | Architecture for registration at creation (§19) | Local-first; hosted witness; custodial hosting | Local-first first; witness only as an optional extra source after SK.5; never custodial |
 | RD13 | Agent identity in the statement | None; claimed `claims.generator`; delegated-identity field | None in this draft (§19.5) |
 | RD14 | Local agent route | MCP over stdio; A2A on loopback; command line only | MCP over stdio first |
-| RD15 | Compromise look-back | 30 days; 90 days; no clamp | 30 days as the fixture default. **Owner/policy choice:** longer protects owners who discover theft late, shorter protects honest history from hostile claims |
+| RD15 | Compromise look-back (validated as a non-negative integer; 30 days is a placeholder for the owner, not derived from any expected discovery time) | 30 days; 90 days; no clamp | 30 days as the fixture default. **Owner/policy choice:** longer protects owners who discover theft late, shorter protects honest history from hostile claims |
 | RD16 | Ed25519 rule set (§10.1) | As specified; also reject small-order R; cofactored equation | As specified; record it with REG.2 vectors |
 | RD17 | Who may assert key events | The key and verified successors; plus policy-listed keys | The key and verified, undisputed successors by default; policy may add keys |
-| RD18 | Recovery after reporting a compromise (re-examined in draft-4) | Rotation by the compromised key (now ignored as superseded, or disputed); out-of-band link (I1 or I2); policy-listed recovery keys | Out of band, or a recovery key listed in advance in the verifier's policy. Under the draft-4 rules (§8), an honest owner who rotated first keeps the chain unless a compromise report lands within the look-back window; after that the chain is final. An owner whose key was rotated by a thief first must recover out of band |
+| RD18 | Recovery after reporting a compromise (re-examined in draft-4; policy field in draft-5) | Rotation by the compromised key (now ignored as superseded, or disputed); out-of-band link (I1 or I2); policy-listed recovery keys | Out of band, or a recovery key listed in advance in the verifier's policy field `recoveryKeys`, trusted from its `notBefore` only. Under the draft-4 and draft-5 rules (§8), an honest owner who rotated first keeps the chain unless a compromise report lands within the look-back window; after that the chain is final. An owner whose key was rotated by a thief first must recover out of band |
 | RD21 | Bitcoin header source for verification | Verifier's own node with a checkpoint; a header file shipped with a bundle | The verifier's own node and checkpoint only (D3) |
 | RD22 | Algorithms for real TSAs | RSA PKCS #1 v1.5 with SHA-256 only; add ECDSA, RSA-PSS, SHA-384/512 | Decide with REG.3 from the TSAs chosen (D7) |
 | RD19 | Witnessed checkpoints | Removed (draft-3); restore with an inclusion proof and checkpoint body | Removed until a log is in scope (S5, RD3) |
@@ -582,11 +609,11 @@ See the [fixtures README](registration-fixtures/README.md). `check_registration.
 - **It runs a wrong-implementation self-test.** Thirty-three plausible wrong verifiers, renderings and decoders are built in memory, and each must be rejected or shown to misbehave. Among them: B1 hijack and conflict, B2 list-order evaluation, B3 hint trust, S1 one-source trust, S4 witness double counting, S6 expiry ignored, S7 standard-only base64, S11 any-signer claim comparison, S2 an imprint-blind token check, two lenient Ed25519 verifiers, and for draft-4 the D1 and D2 cases, D3 a forked header file without a checkpoint, D4 a signatures-only chain check on both bad paths, and D6 an unmarked rendering.
 - **It runs a drift check.** Every failure code must appear here and have a negative fixture.
 
-`enumerate_key_events.py` is the key-event enumeration test (§8). It runs separately because it takes about 96 s.
+`enumerate_key_events.py` is the key-event enumeration test (§8). It runs separately: about a minute on the machine used here, with one process per core. A `result-equivalence` fixture kind checks that results differing only by rejected events agree byte for byte (`extra-event-changed-result`).
 
 Placeholder time evidence is never verified (§6.5, S10).
 
-Failure codes: `authorship-claim`, `catalogue-does-not-open`, `catalogue-not-report-input`, `catalogue-unsalted`, `claimed-as-proved`, `duplicate-key`, `envelope-shape`, `evidence-shape`, `evidence-wrong-target`, `fixture-shape`, `forbidden-field`, `key-bound-misattributed`, `key-event-ignored`, `key-event-shape`, `key-identity-by-hint`, `log-time-claimed`, `nonce-invalid`, `nonce-reused`, `notice-missing`, `ordering-claim`, `pending-counted`, `placeholder-unlabelled`, `possession-mismatch`, `predicate-type`, `profile-mismatch`, `provenance-shape`, `quorum-miscount`, `rendering-unlisted-line`, `report-digest`, `result-mismatch`, `root-not-anchored`, `signature-invalid`, `single-verdict`, `statement-digest`, `statement-shape`, `subject-mismatch`, `subject-name`, `time-in-statement`, `trust-without-quorum`, `tsa-eku-invalid`, `tsa-imprint-mismatch`, `tsa-nonce-mismatch`, `tsa-signature-invalid`, `tsa-signing-cert-mismatch`, `simulated-unmarked`; for §19: `content-on-wire`, `a2a-shape`, `mcp-tool-shape`, `witness-shape`.
+Failure codes: `authorship-claim`, `catalogue-does-not-open`, `catalogue-not-report-input`, `catalogue-unsalted`, `claimed-as-proved`, `duplicate-key`, `envelope-shape`, `evidence-shape`, `evidence-wrong-target`, `fixture-shape`, `forbidden-field`, `key-bound-misattributed`, `key-event-ignored`, `key-event-shape`, `key-identity-by-hint`, `log-time-claimed`, `nonce-invalid`, `nonce-reused`, `notice-missing`, `ordering-claim`, `pending-counted`, `placeholder-unlabelled`, `possession-mismatch`, `predicate-type`, `profile-mismatch`, `provenance-shape`, `quorum-miscount`, `rendering-unlisted-line`, `report-digest`, `result-mismatch`, `root-not-anchored`, `signature-invalid`, `single-verdict`, `statement-digest`, `statement-shape`, `subject-mismatch`, `subject-name`, `time-in-statement`, `trust-without-quorum`, `tsa-eku-invalid`, `tsa-imprint-mismatch`, `tsa-nonce-mismatch`, `tsa-signature-invalid`, `tsa-signing-cert-mismatch`, `simulated-unmarked`, `extra-event-changed-result`; for §19: `content-on-wire`, `a2a-shape`, `mcp-tool-shape`, `witness-shape`.
 
 ## 19. Registration at creation time and agent interoperability
 
@@ -732,19 +759,25 @@ A key held by an agent runtime says nothing about the human. A key held by a per
 
 ## 20. Verification of this draft
 
-Run on 2026-11-24 on `roadmap-v2` (parent `1c7043f`), over this draft, lane 13 and the fixtures directory:
+Run on 2026-11-24 on `roadmap-v2` (parent `2186523`), over this draft, lane 13 and the fixtures directory:
 
-- `make_real_vectors.py`, run once: it wrote 16 files to `real-format/`. `openssl ts -verify` results are recorded per token in `MANIFEST.json`: OK for the good token; FAILED for the tampered, non-critical-EKU, wrong-ESS, end-entity-issued and expired-intermediate tokens. Only the local `openssl` was used; no external service was contacted.
-- `check_registration.py` (draft-4):
+- **`make_real_vectors.py`,** run once. It wrote 19 files to `real-format/`. `MANIFEST.json` records `openssl ts -verify` for every token:
+  - OK: the good, valid-intermediate, decoy-first and ECDSA tokens, and the other-digest token against its own request;
+  - FAILED: the tampered, non-critical-EKU, wrong-ESS, end-entity-issued and expired-intermediate tokens.
+
+  Only the local `openssl` was used; no external service was contacted.
+- **`check_registration.py`** (draft-5):
   - the Ed25519 and PAE self-tests pass;
-  - 62 positive fixtures give no code, and each of the 89 negative fixtures gives exactly its expected codes;
+  - 72 positive fixtures give no code, and each of the 94 negative fixtures gives exactly its expected codes;
   - all 33 wrong-implementation cases behave as required;
-  - all 49 codes appear in this document and have a negative fixture.
-- `enumerate_key_events.py`: 1,727,604 sequences, 0 violations (107 s on the final run). The mutation check found 8,289 and 5,184 violating sequences in the two weakened rule sets.
-- `build_fixtures.py` rerun: the rebuilt files are byte-identical to the committed ones.
-- `tools/validate.py`, `python -m unittest discover -s tests`, `tools/validate.py --links-all`, `tools/check_hygiene.py --messages` and `git diff --cached --check`: results in the commit message of this change.
-- The MCP tool fixture still validates against MCP `schema.json` `$defs/Tool` (0 errors).
-- No new external URL was added.
+  - all 50 codes appear in this document and have a negative fixture.
+- **`enumerate_key_events.py`** (58 s):
+  - 1,010,100 sequences of length 1–3 exhaustively, and 200,000 sampled sequences of length 4, over 100 symbols: **0 violations** of the 13 invariants;
+  - the loading sample, 300 sequences as signed bundles: 0 mismatches;
+  - the mutation check at length ≤ 2: 345 violating sequences with no supersession or disputes, 430 with trust through disputed rotations, and **40 with the draft-4 fixed point**.
+- **Rebuild.** `build_fixtures.py` rerun gives byte-identical files.
+- **Repository checks:** `tools/validate.py`, `python -m unittest discover -s tests`, `tools/validate.py --links-all`, `tools/check_hygiene.py --messages` and `git diff --cached --check`. Results are in the commit message of this change.
+- **MCP.** The tool fixture still validates against MCP `schema.json` `$defs/Tool` (0 errors).
 - **Not done:** no token, proof, log entry or cosignature from any real service was requested or verified, and no implementation exists.
 
 ## 21. Review dispositions (draft-2)
@@ -832,3 +865,22 @@ Every item of the "Draft-3 confirmation" section of the [review](../reviews/regi
 | REG.3 gate text | k = 3 named; revoked-certificate direction uses the local test TSA; checkpoint pin | §15 | — |
 | REG.4 gate text | No rendering from a simulated result; 128-bit keys | §15 | — |
 | Own sweep: equal-time onward rotation | Trust flows only through a rotation proved strictly after its signer became trusted | §8 | `verification-result-chain-same-time`, `neg-chain-same-time`; `enumerate_key_events.py` |
+
+## 24. Resolution table (draft-5)
+
+Every item of the "Draft-4 confirmation" section of the [review](../reviews/registration-record-draft-2-review.md#draft-4-confirmation) (`2186523`).
+
+| Item | Resolution | Section | Fixtures and tests |
+| --- | --- | --- | --- |
+| **E1** a successor's compromise report does not converge; the result depends on the number of unrelated events | Two passes, no fixed point: standing decided once in proved-time order without consulting disputes; disputes never feed back; a report never disputes its own signer's appointment; no pass limit, and a non-settling implementation is an error | §8 | `verification-result-e1`, `-e1-extra-1`, `-e1-extra-2`, `result-equivalence-e1` (byte-identical), `-e1-second-level`; review cases `neg-e1-report-disputes-own-appointment`, `neg-extra-event-changed-result`; enumeration I2, I10, I13; mutation "draft-4 fixed point": 40 |
+| Enumeration misses E1 | Steps ±10 and ±40 days (shorter and longer than the look-back); claimed starts of 2, 20 and 60 days; probes at start − 1 s, start, E − 1 s, E and without quorum | §8 | `enumerate_key_events.py` |
+| Trust claims without an invariant | I8 window, I9 no quorum, I10 an added rejected event, I11 who may sign, I12 equal times, I6 widened to successor-signed late reports, I13 own standing | §8 | `enumerate_key_events.py` |
+| Enumeration bypasses event loading | A loading sample of 300 sequences as real signed bundles, with tampered, single-source and subject-mismatch events | §8 | `enumerate_key_events.py`; it found the identity defect (`verification-result-same-statement-two-signers`, `neg-event-identity-collision`, `-same-statement-twice`) |
+| `minConfirmations` unvalidated; forging above the checkpoint | `minConfirmations ≥ 1` and the checkpoint shape validated; attested height ≤ checkpoint − `minConfirmations` | §6.2, §10 | `neg-policy-min-confirmations-zero`; `realformat.linked_to_checkpoint` |
+| `compromiseLookbackSeconds` unvalidated | Non-negative integer; 30 days stated as a placeholder | §10, RD15 | `neg-policy-negative-lookback` |
+| Recovery keys have no field | `recoveryKeys: [{keySha256, recovers, notBefore}]`, trusted from `notBefore` only | §8, RD18 | `verification-result-recovery-key` |
+| Threat row omits the lost successor chain | Stated: a report within the window disputes the honest rotation permanently | §12, §8 | — |
+| D7 ECDSA reported as a forgery | Outcome `unsupported` | §6.2 | `verification-result-real-ecdsa` |
+| Path building does not backtrack | Every candidate issuer tried | §6.2 | `verification-result-real-decoy-first` |
+| Leaf keyUsage has no openssl cross-check | Stated (openssl refuses to issue such a token) | §6.2 | — |
+| REG.1 passes with E1 present | Tied to the widened enumeration, its loading sample and its three mutations | §15 | — |

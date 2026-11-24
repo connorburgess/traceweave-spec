@@ -8,7 +8,7 @@
     }
   },
   "object": {
-    "renderingVersion": "traceweave-registration-rendering-draft-4",
+    "renderingVersion": "traceweave-registration-rendering-draft-5",
     "result": "fixtures/verification-result.json",
     "context": "agent",
     "lines": [

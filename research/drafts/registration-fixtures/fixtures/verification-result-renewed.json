@@ -12,10 +12,10 @@
     ]
   },
   "object": {
-    "resultVersion": "traceweave-registration-verification-draft-4",
+    "resultVersion": "traceweave-registration-verification-draft-5",
     "simulated": true,
     "inputs": {
-      "bundleSha256": "43b834b6c3b40741c42750550b5a85e4a5380012df5e63e13aa1727c790fa93e",
+      "bundleSha256": "2c1707cc89911a19d5ca16e1ac77b43d41148b4326fdecc24ea7ef8375c89cd8",
       "artifacts": [
         {
           "subjectIndex": 0,
@@ -63,6 +63,7 @@
       "trustedKeys": [
         "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318"
       ],
+      "recoveryKeys": [],
       "revocationData": [
         {
           "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde",

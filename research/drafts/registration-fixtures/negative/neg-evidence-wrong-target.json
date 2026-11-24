@@ -9,20 +9,20 @@
     }
   },
   "object": {
-    "evidenceVersion": "traceweave-time-evidence-draft-4",
+    "evidenceVersion": "traceweave-time-evidence-draft-5",
     "type": "rfc3161",
     "placeholder": true,
     "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
     "target": {
       "kind": "dsse-signature",
       "signatureIndex": 0,
-      "sha256": "c1fdd36b5c8f643a42d837968b6e8b843ad042ebd2f1ec93069337106efc32db"
+      "sha256": "3f308f1831f6b07c49c0ad4bc28988d2b976b27daf13c8b94fb02e1dd352c93e"
     },
     "root": {
       "kind": "tsa-certificate-chain",
       "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
     },
-    "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-f08e441cf7d3-tsa-a-2026-11-23T10:00:00Z-u1",
+    "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-817289222896-tsa-a-2026-11-23T10:00:00Z-u1",
     "rfc3161": {
       "genTime": "2026-11-23T10:00:00Z",
       "policyOid": "2.999.1",

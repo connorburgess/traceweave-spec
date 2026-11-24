@@ -186,7 +186,17 @@ def main():
         run("req", "-newkey", "rsa:2048", "-nodes", "-keyout", "int.key", "-out", "int.csr", "-subj", "/CN=Traceweave TEST-ONLY expired intermediate (never trust)", cwd=tmp)
         run("x509", "-req", "-in", "int.csr", "-CA", "ca.pem", "-CAkey", "ca.key", "-out", "int.pem", "-not_before", "20200101000000Z",
             "-not_after", "20210101000000Z", "-extfile", "ca.cnf", "-extensions", "v3_int", "-set_serial", "5", cwd=tmp)
-        for name, ca, serial in (("tsa_by_ee", "ee", "6"), ("tsa_by_int", "int", "7")):
+        # Draft-5: a valid intermediate (with a decoy of the same name, for path building) and an ECDSA TSA (D7).
+        for name, serial in (("int2", "8"), ("decoy", "9")):
+            run("req", "-newkey", "rsa:2048", "-nodes", "-keyout", f"{name}.key", "-out", f"{name}.csr",
+                "-subj", "/CN=Traceweave TEST-ONLY valid intermediate (never trust)", cwd=tmp)
+            run("x509", "-req", "-in", f"{name}.csr", "-CA", "ca.pem", "-CAkey", "ca.key", "-out", f"{name}.pem", "-days", "1825",
+                "-extfile", "ca.cnf", "-extensions", "v3_int", "-set_serial", serial, cwd=tmp)
+        run("ecparam", "-name", "prime256v1", "-genkey", "-noout", "-out", "tsa_ec.key", cwd=tmp)
+        run("req", "-new", "-key", "tsa_ec.key", "-out", "tsa_ec.csr", "-subj", "/CN=Traceweave TEST-ONLY ECDSA tsa (never trust)", cwd=tmp)
+        run("x509", "-req", "-in", "tsa_ec.csr", "-CA", "ca.pem", "-CAkey", "ca.key", "-out", "tsa_ec.pem", "-days", "1825",
+            "-extfile", "ca.cnf", "-extensions", "v3_tsa", "-set_serial", "10", cwd=tmp)
+        for name, ca, serial in (("tsa_by_ee", "ee", "6"), ("tsa_by_int", "int", "7"), ("tsa_by_int2", "int2", "11")):
             run("req", "-newkey", "rsa:2048", "-nodes", "-keyout", f"{name}.key", "-out", f"{name}.csr",
                 "-subj", f"/CN=Traceweave TEST-ONLY {name} (never trust)", cwd=tmp)
             run("x509", "-req", "-in", f"{name}.csr", "-CA", f"{ca}.pem", "-CAkey", f"{ca}.key", "-out", f"{name}.pem", "-days", "1825",
@@ -198,10 +208,17 @@ def main():
                 "-out", f"r{label}.tsr", cwd=tmp)
             files[f"rfc3161-request{label}.der"] = (tmp / f"q{label}.tsq").read_bytes()
             files[f"rfc3161-response{label}.der"] = (tmp / f"r{label}.tsr").read_bytes()
-        for label, signer, chain_pem in (("-issued-by-end-entity", "tsa_by_ee", "ee.pem"), ("-expired-intermediate", "tsa_by_int", "int.pem")):
+        for label, signer, chain_pem in (("-issued-by-end-entity", "tsa_by_ee", "ee.pem"), ("-expired-intermediate", "tsa_by_int", "int.pem"),
+                                         ("-valid-intermediate", "tsa_by_int2", "int2.pem"), ("-ecdsa", "tsa_ec", "ca.pem")):
             run("ts", "-reply", "-config", "ts.cnf", "-queryfile", "q.tsq", "-signer", f"{signer}.pem", "-inkey", f"{signer}.key",
                 "-chain", chain_pem, "-out", f"r{label}.tsr", cwd=tmp)
             files[f"rfc3161-response{label}.der"] = (tmp / f"r{label}.tsr").read_bytes()
+        # Insert the decoy first into the unsigned certificates field: the token stays valid (draft-4 review note).
+        tree = RF.parse(files["rfc3161-response-valid-intermediate.der"])
+        sd = tree[1][1][0]
+        certs = next(c for c in sd.children if c.tag == 0xA0)
+        certs.children.insert(0, RF.parse(der("decoy.pem", tmp)))
+        files["rfc3161-response-decoy-first.der"] = RF.encode(tree)
         good = files["rfc3161-response.der"]
         fields = RF.parse_response(good)
         gt = fields["genTime"].strftime("%Y%m%d%H%M%S").encode()
@@ -221,10 +238,11 @@ def main():
             (tmp / "check.tsr").write_bytes(data)
             query = "q-other-digest.tsq" if "other-digest" in name else "q.tsq"
             res = subprocess.run([OPENSSL, "ts", "-verify", "-queryfile", query, "-in", "check.tsr", "-CAfile", "ca.pem",
-                                  "-untrusted", "ee.pem", "-untrusted", "int.pem"], cwd=tmp, capture_output=True, text=True)
+                                  "-untrusted", "ee.pem", "-untrusted", "int.pem", "-untrusted", "int2.pem"], cwd=tmp, capture_output=True, text=True)
             lines = [l for l in (res.stdout + res.stderr).splitlines() if "Verification" in l or "error" in l.lower()]
             manifest["opensslVerify"][name] = " | ".join(l.split(":", 5)[-1].strip() if "error" in l.lower() else l.strip() for l in lines[:3])
-        for name in ("ca.key", "tsa.key", "tsa_noncrit.key", "ee.key", "int.key", "tsa_by_ee.key", "tsa_by_int.key"):
+        for name in ("ca.key", "tsa.key", "tsa_noncrit.key", "ee.key", "int.key", "tsa_by_ee.key", "tsa_by_int.key",
+                     "int2.key", "decoy.key", "tsa_ec.key", "tsa_by_int2.key"):
             os.remove(tmp / name)
     nonce = hashlib.sha256(b"traceweave OpenTimestamps fixture nonce; test only").digest()[:16]
     leaf = hashlib.sha256(b"traceweave OpenTimestamps fixture other leaf; test only").digest()

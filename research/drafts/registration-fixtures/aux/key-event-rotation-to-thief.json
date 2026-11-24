@@ -5,14 +5,14 @@
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing."
   },
   "object": {
-    "bundleVersion": "traceweave-registration-bundle-draft-4",
+    "bundleVersion": "traceweave-registration-bundle-draft-5",
     "envelope": {
       "payloadType": "application/vnd.in-toto+json",
-      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiZXZlbnQiOiJyb3RhdGVkIiwiZXZlbnRWZXJzaW9uIjoidHJhY2V3ZWF2ZS1rZXktZXZlbnQtZHJhZnQtNCIsImtleWlkIjoiMThjM2VlYWQwODY0NjYxNCIsInN1Y2Nlc3NvclB1YmxpY0tleUhleCI6Ijk3MDExYzYzN2RjNmE4NWI2ZTE5ZjdmZjY2NWVmMDljMTExMGYwZDg4MTBlNmUzNzdmOTJkNWJjZDhlMjY3YWUifSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vdHJhY2V3ZWF2ZS5vcmcvcHJlZGljYXRlL2tleS1ldmVudC9kcmFmdC00Iiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6IjE4YzNlZWFkMDg2NDY2MTRiYzg2MGJmNzQzNjlhYzFmMTNmYjE4ZjkxNGI0NDM0MDFjNTU0MmRlYmQwMDYzMTgifSwibmFtZSI6ImtleSJ9XX0=",
+      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiZXZlbnQiOiJyb3RhdGVkIiwiZXZlbnRWZXJzaW9uIjoidHJhY2V3ZWF2ZS1rZXktZXZlbnQtZHJhZnQtNSIsImtleWlkIjoiMThjM2VlYWQwODY0NjYxNCIsInN1Y2Nlc3NvclB1YmxpY0tleUhleCI6Ijk3MDExYzYzN2RjNmE4NWI2ZTE5ZjdmZjY2NWVmMDljMTExMGYwZDg4MTBlNmUzNzdmOTJkNWJjZDhlMjY3YWUifSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vdHJhY2V3ZWF2ZS5vcmcvcHJlZGljYXRlL2tleS1ldmVudC9kcmFmdC01Iiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6IjE4YzNlZWFkMDg2NDY2MTRiYzg2MGJmNzQzNjlhYzFmMTNmYjE4ZjkxNGI0NDM0MDFjNTU0MmRlYmQwMDYzMTgifSwibmFtZSI6ImtleSJ9XX0=",
       "signatures": [
         {
           "keyid": "18c3eead08646614",
-          "sig": "G53JSz0/Lqrbsge+Rrju3L3FHdXddGPWDTYNs5xo9kq5OMUcawOQdp3yCmdA4PhIwGjuQbOuCqtAk74zYfXKBg=="
+          "sig": "XFfMEWU/qAxhTTsW5BueZbH0qTee64U3PZuHAS0qdBW6YoxUULRHw7YSvliAwFlBSBQpC4IeeLPmaSHfoDlVCw=="
         }
       ]
     },
@@ -27,20 +27,20 @@
     },
     "timeEvidence": [
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-4",
+        "evidenceVersion": "traceweave-time-evidence-draft-5",
         "type": "rfc3161",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "c45bb887aaec18bb7765359b1ce185e62523d825cc7151acb596e08a05298fd7"
+          "sha256": "bcfdd2619c6a3c517303b5e51b70a4750fa774e888febd98b441444f61d6f051"
         },
         "root": {
           "kind": "tsa-certificate-chain",
           "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
         },
-        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-c45bb887aaec-tsa-a-2026-11-26T00:00:00Z-u1",
+        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-bcfdd2619c6a-tsa-a-2026-11-26T00:00:00Z-u1",
         "rfc3161": {
           "genTime": "2026-11-26T00:00:00Z",
           "policyOid": "2.999.1",
@@ -55,20 +55,20 @@
         }
       },
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-4",
+        "evidenceVersion": "traceweave-time-evidence-draft-5",
         "type": "opentimestamps",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "c45bb887aaec18bb7765359b1ce185e62523d825cc7151acb596e08a05298fd7"
+          "sha256": "bcfdd2619c6a3c517303b5e51b70a4750fa774e888febd98b441444f61d6f051"
         },
         "root": {
           "kind": "bitcoin-proof-of-work",
           "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6"
         },
-        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-c45bb887aaec-btc-2026-11-26T01:00:00Z",
+        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-bcfdd2619c6a-btc-2026-11-26T01:00:00Z",
         "opentimestamps": {
           "status": "complete",
           "blockTime": "2026-11-26T01:00:00Z"

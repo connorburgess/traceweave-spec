@@ -5,14 +5,14 @@
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing."
   },
   "object": {
-    "bundleVersion": "traceweave-registration-bundle-draft-4",
+    "bundleVersion": "traceweave-registration-bundle-draft-5",
     "envelope": {
       "payloadType": "application/vnd.in-toto+json",
-      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY29tcHJvbWlzZWROb3RCZWZvcmUiOiIyMDI2LTExLTI1VDEyOjAwOjAwWiIsImV2ZW50IjoiY29tcHJvbWlzZWQiLCJldmVudFZlcnNpb24iOiJ0cmFjZXdlYXZlLWtleS1ldmVudC1kcmFmdC00Iiwia2V5aWQiOiIxOGMzZWVhZDA4NjQ2NjE0In0sInByZWRpY2F0ZVR5cGUiOiJodHRwczovL3RyYWNld2VhdmUub3JnL3ByZWRpY2F0ZS9rZXktZXZlbnQvZHJhZnQtNCIsInN1YmplY3QiOlt7ImRpZ2VzdCI6eyJzaGEyNTYiOiIxOGMzZWVhZDA4NjQ2NjE0YmM4NjBiZjc0MzY5YWMxZjEzZmIxOGY5MTRiNDQzNDAxYzU1NDJkZWJkMDA2MzE4In0sIm5hbWUiOiJrZXkifV19",
+      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY29tcHJvbWlzZWROb3RCZWZvcmUiOiIyMDI2LTExLTI1VDEyOjAwOjAwWiIsImV2ZW50IjoiY29tcHJvbWlzZWQiLCJldmVudFZlcnNpb24iOiJ0cmFjZXdlYXZlLWtleS1ldmVudC1kcmFmdC01Iiwia2V5aWQiOiIxOGMzZWVhZDA4NjQ2NjE0In0sInByZWRpY2F0ZVR5cGUiOiJodHRwczovL3RyYWNld2VhdmUub3JnL3ByZWRpY2F0ZS9rZXktZXZlbnQvZHJhZnQtNSIsInN1YmplY3QiOlt7ImRpZ2VzdCI6eyJzaGEyNTYiOiIxOGMzZWVhZDA4NjQ2NjE0YmM4NjBiZjc0MzY5YWMxZjEzZmIxOGY5MTRiNDQzNDAxYzU1NDJkZWJkMDA2MzE4In0sIm5hbWUiOiJrZXkifV19",
       "signatures": [
         {
           "keyid": "18c3eead08646614",
-          "sig": "wIXJpQEFDSD+TC58iy+Iqp4IzrC08+WhKGAj9u3dPJQHQ0vbxl+PjiiWNRcAXjjIMgaAQ5iK38lWJlRIVccADA=="
+          "sig": "5deXvG/uTQ+2XPQ2jCiuT6Kjg6+ULTo2V2wZo1T+cbYDI+dutq1AgWQVrl/xPNFVMlO+9TjSJzR1+Bznnw0rDg=="
         }
       ]
     },
@@ -27,20 +27,20 @@
     },
     "timeEvidence": [
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-4",
+        "evidenceVersion": "traceweave-time-evidence-draft-5",
         "type": "rfc3161",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "4e40edc3a86306e734f0db8459cd6d48e177f6b68cd34cff5038156b3c1168bc"
+          "sha256": "213f1ecc5f40d28c488404ca43f6804bc4838f5470b3a566130141d161beb514"
         },
         "root": {
           "kind": "tsa-certificate-chain",
           "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
         },
-        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-4e40edc3a863-tsa-a-2026-11-28T00:00:00Z-u1",
+        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-213f1ecc5f40-tsa-a-2026-11-28T00:00:00Z-u1",
         "rfc3161": {
           "genTime": "2026-11-28T00:00:00Z",
           "policyOid": "2.999.1",
@@ -55,20 +55,20 @@
         }
       },
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-4",
+        "evidenceVersion": "traceweave-time-evidence-draft-5",
         "type": "opentimestamps",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "4e40edc3a86306e734f0db8459cd6d48e177f6b68cd34cff5038156b3c1168bc"
+          "sha256": "213f1ecc5f40d28c488404ca43f6804bc4838f5470b3a566130141d161beb514"
         },
         "root": {
           "kind": "bitcoin-proof-of-work",
           "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6"
         },
-        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-4e40edc3a863-btc-2026-11-28T01:00:00Z",
+        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-213f1ecc5f40-btc-2026-11-28T01:00:00Z",
         "opentimestamps": {
           "status": "complete",
           "blockTime": "2026-11-28T01:00:00Z"

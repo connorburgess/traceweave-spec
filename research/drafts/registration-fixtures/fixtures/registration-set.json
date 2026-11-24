@@ -5,7 +5,7 @@
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing."
   },
   "object": {
-    "setVersion": "traceweave-registration-set-draft-4",
+    "setVersion": "traceweave-registration-set-draft-5",
     "registrations": [
       "fixtures/bundle-three-roots.json",
       "fixtures/bundle-second-work.json"

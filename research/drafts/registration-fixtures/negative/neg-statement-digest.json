@@ -8,7 +8,7 @@
     }
   },
   "object": {
-    "linkVersion": "traceweave-registration-link-draft-4",
+    "linkVersion": "traceweave-registration-link-draft-5",
     "report": {
       "path": "test-vectors/matching/example-report.json",
       "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"

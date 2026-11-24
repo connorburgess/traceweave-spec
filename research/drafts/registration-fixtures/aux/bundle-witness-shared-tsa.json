@@ -5,14 +5,14 @@
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing."
   },
   "object": {
-    "bundleVersion": "traceweave-registration-bundle-draft-4",
+    "bundleVersion": "traceweave-registration-bundle-draft-5",
     "envelope": {
       "payloadType": "application/vnd.in-toto+json",
-      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2F0YWxvZ3VlIjp7InByb2ZpbGUiOnsiY29uZmlnU2hhMjU2IjoiZGZiYzVmZTM1MTdlOWRhNjUxODljZjJlZjMyYzQ2NTViNWVjNjYyNDQxZjJlNzFmNTA4NTQzYTBhNWM4ZjdiMiIsImlkIjoiZ28tdG9rZW5zIiwidmVyc2lvbiI6ImRyYWZ0LTEifSwic2NoZW1lIjoic2hhMjU2LXNhbHRlZC1jYXRhbG9ndWUtdjEiLCJzaGEyNTYiOiJjMTRmY2Y2NGFmMDAwZjg4N2YzNzIzNGJiMGQzOTQzN2NjZjgwYmE5YmQ2ZDA3MjE2YmE1ZmVhODJiNjMzYjE1In0sImNsYWltcyI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTIwVDA5OjAwOjAwWiJ9LCJjb250ZW50S2luZCI6InNvdXJjZS1jb2RlIiwiaW1wbGVtZW50YXRpb24iOnsiY29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIm5hbWUiOiJidWlsZF9maXh0dXJlcy5weSIsInZlcnNpb24iOiJkcmFmdC00In0sIm5vbmNlIjoiYzU3NTE0Y2QwMDkxMGFmNGFmYjg0NDNkMzIzMWM5N2U4OTYzM2QwNTAzNTU0MWFhYTFlZjRhNDA0MzUwYTdhYyIsInBvc3Nlc3Npb24iOlt7InNjaGVtZSI6InNoYTI1Ni1zYWx0ZWQtcG9zc2Vzc2lvbi12MSIsInNoYTI1NiI6ImY0MWI4ZGZjOTEzZWU1YWI1NDM3MTUxMWQ3ZGEwZTE4MDcwZmEyODhiY2U1MWNjNTA5ZTYwY2I2NzlhNTRhOTkiLCJzdWJqZWN0SW5kZXgiOjB9XSwicmVnaXN0cmF0aW9uVmVyc2lvbiI6InRyYWNld2VhdmUtcmVnaXN0cmF0aW9uLWRyYWZ0LTQiLCJzcGVjQ29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUvcmVnaXN0cmF0aW9uL2RyYWZ0LTQiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiOTc0YzhkMGFkMTQ0YzNjMzllOWYxY2U0MTA3NDBmNDQ5ZjYyM2JmZmQyOWM3NTBlOGVkM2JkNjg2NDBiNjk3YyJ9LCJuYW1lIjoic3VtLmdvIn1dfQ==",
+      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2F0YWxvZ3VlIjp7InByb2ZpbGUiOnsiY29uZmlnU2hhMjU2IjoiZGZiYzVmZTM1MTdlOWRhNjUxODljZjJlZjMyYzQ2NTViNWVjNjYyNDQxZjJlNzFmNTA4NTQzYTBhNWM4ZjdiMiIsImlkIjoiZ28tdG9rZW5zIiwidmVyc2lvbiI6ImRyYWZ0LTEifSwic2NoZW1lIjoic2hhMjU2LXNhbHRlZC1jYXRhbG9ndWUtdjEiLCJzaGEyNTYiOiJjMTRmY2Y2NGFmMDAwZjg4N2YzNzIzNGJiMGQzOTQzN2NjZjgwYmE5YmQ2ZDA3MjE2YmE1ZmVhODJiNjMzYjE1In0sImNsYWltcyI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTIwVDA5OjAwOjAwWiJ9LCJjb250ZW50S2luZCI6InNvdXJjZS1jb2RlIiwiaW1wbGVtZW50YXRpb24iOnsiY29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIm5hbWUiOiJidWlsZF9maXh0dXJlcy5weSIsInZlcnNpb24iOiJkcmFmdC01In0sIm5vbmNlIjoiYzU3NTE0Y2QwMDkxMGFmNGFmYjg0NDNkMzIzMWM5N2U4OTYzM2QwNTAzNTU0MWFhYTFlZjRhNDA0MzUwYTdhYyIsInBvc3Nlc3Npb24iOlt7InNjaGVtZSI6InNoYTI1Ni1zYWx0ZWQtcG9zc2Vzc2lvbi12MSIsInNoYTI1NiI6ImY0MWI4ZGZjOTEzZWU1YWI1NDM3MTUxMWQ3ZGEwZTE4MDcwZmEyODhiY2U1MWNjNTA5ZTYwY2I2NzlhNTRhOTkiLCJzdWJqZWN0SW5kZXgiOjB9XSwicmVnaXN0cmF0aW9uVmVyc2lvbiI6InRyYWNld2VhdmUtcmVnaXN0cmF0aW9uLWRyYWZ0LTUiLCJzcGVjQ29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUvcmVnaXN0cmF0aW9uL2RyYWZ0LTUiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiOTc0YzhkMGFkMTQ0YzNjMzllOWYxY2U0MTA3NDBmNDQ5ZjYyM2JmZmQyOWM3NTBlOGVkM2JkNjg2NDBiNjk3YyJ9LCJuYW1lIjoic3VtLmdvIn1dfQ==",
       "signatures": [
         {
           "keyid": "18c3eead08646614",
-          "sig": "cA6GPVbCQfo/VODr+mIBoIBFuw7c44nZ4yFAEoiR5e6TAA8jTECdYv4N1zi4V60l4f1Z3kyp0+wer9Y1KNuyAA=="
+          "sig": "y/FWl7Fqr4fS4VYGOnNsb3u229HkJIk0IbMFI0zLwltyCLCG92TZujgHcgF0Z+N1Myk+8gONVi7Hn21MNZGNDw=="
         }
       ]
     },
@@ -27,20 +27,20 @@
     },
     "timeEvidence": [
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-4",
+        "evidenceVersion": "traceweave-time-evidence-draft-5",
         "type": "rfc3161",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "f08e441cf7d33da7c43667540a54a95fde96b353eb8600134543274855a76cd9"
+          "sha256": "817289222896a1b8ff43396a8e2d955f14a9cfc903d9379684fb20c64a3a14c4"
         },
         "root": {
           "kind": "tsa-certificate-chain",
           "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
         },
-        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-f08e441cf7d3-tsa-a-2026-11-23T10:00:00Z-u1",
+        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-817289222896-tsa-a-2026-11-23T10:00:00Z-u1",
         "rfc3161": {
           "genTime": "2026-11-23T10:00:00Z",
           "policyOid": "2.999.1",
@@ -55,30 +55,30 @@
         }
       },
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-4",
+        "evidenceVersion": "traceweave-time-evidence-draft-5",
         "type": "traceweave-witness",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "f08e441cf7d33da7c43667540a54a95fde96b353eb8600134543274855a76cd9"
+          "sha256": "817289222896a1b8ff43396a8e2d955f14a9cfc903d9379684fb20c64a3a14c4"
         },
         "root": {
           "kind": "witness-service-key",
           "anchorSha256": "e4fbf7d5d9e35ceb9fa59efd37544a3c41e1f0d0bb59057832a28b0cd2dab885"
         },
-        "token": "PLACEHOLDER-NOT-A-TRACEWEAVE-WITNESS-OBJECT-f08e441cf7d3-witness-a",
+        "token": "PLACEHOLDER-NOT-A-TRACEWEAVE-WITNESS-OBJECT-817289222896-witness-a",
         "witness": {
           "bundle": {
-            "bundleVersion": "traceweave-registration-bundle-draft-4",
+            "bundleVersion": "traceweave-registration-bundle-draft-5",
             "envelope": {
               "payloadType": "application/vnd.in-toto+json",
-              "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2FsbGVyIjp7Imlzc3VlciI6Imh0dHBzOi8vaXNzdWVyLmV4YW1wbGUuaW52YWxpZCIsInNjaGVtZSI6Im9wZW5JZENvbm5lY3QiLCJzdWJqZWN0IjoicGxhY2Vob2xkZXItc3ViamVjdC0wMDAxIn0sIm5vdFNob3duIjpbImF1dGhvcnNoaXAiLCJvcmlnaW5hbGl0eSIsImZpcnN0LWNyZWF0aW9uIiwib3duZXJzaGlwIiwicGVybWlzc2lvbiJdLCJwcmVzZW50ZWRLaW5kIjoiZHNzZS1zaWduYXR1cmUtc2hhMjU2IiwicmVjZWl2ZWRBdCI6IjIwMjYtMTEtMjNUMTA6MDA6MDJaIiwicmVxdWVzdE1lc3NhZ2VJZCI6IjBmNmMyYThlLWlsbHVzdHJhdGl2ZS0wMDAxIiwid2l0bmVzc1ZlcnNpb24iOiJ0cmFjZXdlYXZlLXdpdG5lc3MtZHJhZnQtNCJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUvd2l0bmVzcy9kcmFmdC00Iiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6ImYwOGU0NDFjZjdkMzNkYTdjNDM2Njc1NDBhNTRhOTVmZGU5NmIzNTNlYjg2MDAxMzQ1NDMyNzQ4NTVhNzZjZDkifSwibmFtZSI6InByZXNlbnRlZC1kaWdlc3QifV19",
+              "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2FsbGVyIjp7Imlzc3VlciI6Imh0dHBzOi8vaXNzdWVyLmV4YW1wbGUuaW52YWxpZCIsInNjaGVtZSI6Im9wZW5JZENvbm5lY3QiLCJzdWJqZWN0IjoicGxhY2Vob2xkZXItc3ViamVjdC0wMDAxIn0sIm5vdFNob3duIjpbImF1dGhvcnNoaXAiLCJvcmlnaW5hbGl0eSIsImZpcnN0LWNyZWF0aW9uIiwib3duZXJzaGlwIiwicGVybWlzc2lvbiJdLCJwcmVzZW50ZWRLaW5kIjoiZHNzZS1zaWduYXR1cmUtc2hhMjU2IiwicmVjZWl2ZWRBdCI6IjIwMjYtMTEtMjNUMTA6MDA6MDJaIiwicmVxdWVzdE1lc3NhZ2VJZCI6IjBmNmMyYThlLWlsbHVzdHJhdGl2ZS0wMDAxIiwid2l0bmVzc1ZlcnNpb24iOiJ0cmFjZXdlYXZlLXdpdG5lc3MtZHJhZnQtNSJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUvd2l0bmVzcy9kcmFmdC01Iiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6IjgxNzI4OTIyMjg5NmExYjhmZjQzMzk2YThlMmQ5NTVmMTRhOWNmYzkwM2Q5Mzc5Njg0ZmIyMGM2NGEzYTE0YzQifSwibmFtZSI6InByZXNlbnRlZC1kaWdlc3QifV19",
               "signatures": [
                 {
                   "keyid": "e4fbf7d5d9e35ceb",
-                  "sig": "IaszVPZwfPoE1oWqu4YkXvKk/b50MQe7pM4jqyrmaVY1h3/z9osN4a4UXkoMX++pHSGCZgCsoJYhMt4QMLiDCg=="
+                  "sig": "uo97DOVtaFRJZ0ostoPlToBzoNnLRLDOOwG2ooEe4dEvlfkak7NhvJhNhVh36p1dJOwrxUT2OhXemUuXsO9ZCg=="
                 }
               ]
             },
@@ -93,20 +93,20 @@
             },
             "timeEvidence": [
               {
-                "evidenceVersion": "traceweave-time-evidence-draft-4",
+                "evidenceVersion": "traceweave-time-evidence-draft-5",
                 "type": "rfc3161",
                 "placeholder": true,
                 "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
                 "target": {
                   "kind": "dsse-signature",
                   "signatureIndex": 0,
-                  "sha256": "5b9058c43a860b2bbc5b7301eb93d630c33b2cce6bca494bd394e37b4766ae73"
+                  "sha256": "81d4e2364fa7c6a10de9741d20fe3355d4af745c6a9e86ce0c65ac218d064158"
                 },
                 "root": {
                   "kind": "tsa-certificate-chain",
                   "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
                 },
-                "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-5b9058c43a86-tsa-a-2026-11-23T10:00:03Z-u1",
+                "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-81d4e2364fa7-tsa-a-2026-11-23T10:00:03Z-u1",
                 "rfc3161": {
                   "genTime": "2026-11-23T10:00:03Z",
                   "policyOid": "2.999.1",

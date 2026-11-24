@@ -1,6 +1,6 @@
-# Registration record fixtures, draft-4 (illustrative)
+# Registration record fixtures, draft-5 (illustrative)
 
-These fixtures belong to the [registration record draft](../registration-record.md), draft-4. They are research material, not test vectors, and nothing in `validate` runs them yet (REG.1 proposes that).
+These fixtures belong to the [registration record draft](../registration-record.md), draft-5. They are research material, not test vectors, and nothing in `validate` runs them yet (REG.1 proposes that).
 
 **What these are not.**
 - No external time-stamping authority, calendar, transparency log or witness produced any of them. **No external service was contacted.**
@@ -45,12 +45,17 @@ A fixture registers nothing and proves nothing.
 | `fixtures/rendering-cosigned.json` | rendering | Text for the co-signed bundle: a bound sentence only for the key that has one. |
 | `fixtures/rendering.json` | rendering | User-facing text built only from the allowed templates. |
 | `fixtures/report-link.json` | report-link | Links the committed example comparison report to the registration, without changing the report. |
+| `fixtures/result-equivalence-e1.json` | result-equivalence | E1: the same events with 0, 1 and 2 extra rejected events give byte-identical outcomes for the common events. |
 | `fixtures/statement.json` | statement | The registration statement (in-toto Statement v1) before signing. |
 | `fixtures/verification-result-chain-same-time.json` | verification-result | Enumeration finding: trust flows only through a rotation proved strictly after its signer became trusted. |
 | `fixtures/verification-result-claim-trusted-only.json` | verification-result | The claimed time is compared only with trusted signatures (S11): `claimed-only`. |
 | `fixtures/verification-result-compromise-early.json` | verification-result | An early-dated claim is clamped to the look-back window: `trusted`. |
 | `fixtures/verification-result-compromise-recent.json` | verification-result | Bound between the claimed start and the event's proved time: `disputed`. |
 | `fixtures/verification-result-cosigned.json` | verification-result | Per-signature bounds: the co-signer gets none. |
+| `fixtures/verification-result-e1-extra-1.json` | verification-result | E1 with one extra rejected event: same outcomes. |
+| `fixtures/verification-result-e1-extra-2.json` | verification-result | E1 with two extra rejected events: same outcomes. |
+| `fixtures/verification-result-e1-second-level.json` | verification-result | E1 one level down: the second successor's report about the first successor does not dispute its own appointment. |
+| `fixtures/verification-result-e1.json` | verification-result | E1: a successor's compromise report never disputes its own appointment; the successor stays trusted. |
 | `fixtures/verification-result-event-order-a.json` | verification-result | B2: retirement listed before the rotation it relies on; identical result to order b. |
 | `fixtures/verification-result-event-order-b.json` | verification-result | B2: the same two events in the other order; identical result to order a. |
 | `fixtures/verification-result-event-unauthorized.json` | verification-result | An event signed by another key is `ignored-unauthorized`. |
@@ -59,9 +64,12 @@ A fixture registers nothing and proves nothing.
 | `fixtures/verification-result-late-second-rotation.json` | verification-result | D2: a second rotation of an already-rotated key is `ignored-superseded`; the honest successor stays trusted. |
 | `fixtures/verification-result-no-accuracy.json` | verification-result | TSA B's token has no accuracy and the policy gives none: `unsupported`. |
 | `fixtures/verification-result-no-revocation-data.json` | verification-result | No revocation data for TSA A: its token cannot be judged offline (S3). |
+| `fixtures/verification-result-real-decoy-first.json` | verification-result | A valid token under an intermediate, with a decoy certificate of the same name inserted first; path building backtracks and the token is valid. |
+| `fixtures/verification-result-real-ecdsa.json` | verification-result | D7: a valid token from an ECDSA TSA; this checker reports it `unsupported`, never as a forgery. |
 | `fixtures/verification-result-real-expired-intermediate.json` | verification-result | D4: TSA certificate under an intermediate that expired in 2021. Outcome `path-invalid`. |
 | `fixtures/verification-result-real-issued-by-end-entity.json` | verification-result | D4: TSA certificate issued by an end-entity (CA:FALSE) certificate. Outcome `path-invalid`. |
 | `fixtures/verification-result-real.json` | verification-result | Not simulated: both real-format evidences verify; anchors computed from the pinned root certificate and header file. |
+| `fixtures/verification-result-recovery-key.json` | verification-result | RD18: after the thief's rotation is disputed, the owner's recovery key, listed in the policy from 2026-11-29, is trusted for later bounds. |
 | `fixtures/verification-result-renewed.json` | verification-result | Verified in 2032: TSA A's token survives its certificate's expiry through the 2030 renewal; TSA B's does not. |
 | `fixtures/verification-result-retired-and-rotated-same-time.json` | verification-result | D1: a retirement and a rotation of one key at the same proved time are both `disputed`; no trust flows. |
 | `fixtures/verification-result-retired-then-rotated.json` | verification-result | D1: after the retirement, the old key's later rotation is `ignored-superseded`; the thief's key stays untrusted. |
@@ -72,6 +80,8 @@ A fixture registers nothing and proves nothing.
 | `fixtures/verification-result-rotation-applied.json` | verification-result | The successor is trusted for signatures bounded after the rotation. |
 | `fixtures/verification-result-rotation-conflict.json` | verification-result | D2: a second, different rotation of an already-rotated key is `ignored-superseded`; the first successor stays trusted. |
 | `fixtures/verification-result-rotation-hijack.json` | verification-result | B1: the rotation falls inside the later compromise window, so it is `disputed` and the thief's key gains no trust. |
+| `fixtures/verification-result-same-statement-twice.json` | verification-result | The same signed statement supplied twice is one event, with its earliest proved time. |
+| `fixtures/verification-result-same-statement-two-signers.json` | verification-result | Enumeration finding: one statement signed by two keys is two events (identity = SHA-256 of payload and signature). |
 | `fixtures/verification-result-single-source-event.json` | verification-result | S1: a key event affects the key and the signature has no quorum bound: `disputed`, never `trusted`. |
 | `fixtures/verification-result-stripped.json` | verification-result | Removing an evidence can only make the bounds later (N3). |
 | `fixtures/verification-result-witness-independent.json` | verification-result | S4: witness on TSA B plus direct TSA A: two classes, `quorum-met`. |
@@ -84,9 +94,12 @@ A fixture registers nothing and proves nothing.
 | `aux/bundle-one-source.json` | bundle | Only one time source (TSA A) for the creator's signature. |
 | `aux/bundle-other-catalogue.json` | bundle | Registration committing to another catalogue. |
 | `aux/bundle-other-profile.json` | bundle | Registration under a different profile version. |
+| `aux/bundle-real-decoy-first.json` | bundle | A valid token under an intermediate, with a decoy certificate of the same name inserted first; path building backtracks and the token is valid. |
+| `aux/bundle-real-ecdsa.json` | bundle | D7: a valid token from an ECDSA TSA; this checker reports it `unsupported`, never as a forgery. |
 | `aux/bundle-real-expired-intermediate.json` | bundle | TSA certificate under an intermediate that expired in 2021. |
 | `aux/bundle-real-issued-by-end-entity.json` | bundle | TSA certificate issued by an end-entity (CA:FALSE) certificate. |
 | `aux/bundle-same-anchor.json` | bundle | Two TSA tokens under one trust anchor. |
+| `aux/bundle-second-successor-late.json` | bundle | A registration signed by the second successor, 2026-12-15. |
 | `aux/bundle-second-successor.json` | bundle | A registration signed by the second successor, 2026-12-10. |
 | `aux/bundle-stripped.json` | bundle | bundle-three-roots with TSA B's evidence removed in transit. |
 | `aux/bundle-successor-dec.json` | bundle | The successor's registration, 2026-12-10. |
@@ -99,42 +112,53 @@ A fixture registers nothing and proves nothing.
 | `aux/key-event-by-other-key.json` | key-event | A compromise event for the creator key, signed by an unrelated key. |
 | `aux/key-event-compromise-2028.json` | key-event | And claims the old key was compromised since 2026-01-01. |
 | `aux/key-event-compromise-after-theft.json` | key-event | The owner reports the theft afterwards, from 2026-11-25T12:00. |
+| `aux/key-event-compromise-by-second-successor.json` | key-event | The second successor reports the first successor compromised from before its rotation. |
+| `aux/key-event-compromise-by-successor.json` | key-event | The successor reports the old key compromised 10 days after the rotation, from 5 days before it. |
 | `aux/key-event-onward-rotation-same-time.json` | key-event | The successor rotates onward with the same proved time as its own rotation. |
+| `aux/key-event-onward-rotation.json` | key-event | The successor rotates onward, proved 2026-12-01T03:00. |
+| `aux/key-event-rejected-1.json` | key-event | An unauthorized event: the attacker's key signs a retirement of the old key. |
+| `aux/key-event-rejected-2.json` | key-event | An unauthorized event: the attacker's key signs a retirement of the old key. |
 | `aux/key-event-retired-by-successor.json` | key-event | The successor retires the old key after the rotation. |
+| `aux/key-event-retired-later-proof.json` | key-event | The same signed retirement as key-event-retired, with a later proof. |
 | `aux/key-event-retired.json` | key-event | The owner retires the key, proved 2026-11-26T03:00. |
 | `aux/key-event-rotation-after-retirement.json` | key-event | Whoever later holds the retired key rotates it to the thief. |
 | `aux/key-event-rotation-conflicting.json` | key-event | A second rotation of the same key to a different successor. |
 | `aux/key-event-rotation-honest.json` | key-event | The owner rotates the key to the successor, proved 2026-11-26T03:00. |
 | `aux/key-event-rotation-same-time.json` | key-event | A rotation to the thief with the same proved time as the retirement. |
+| `aux/key-event-rotation-to-thief-signed-by-thief.json` | key-event | The same rotation statement as key-event-rotation-to-thief, signed by the thief's key instead. |
 | `aux/key-event-rotation-to-thief.json` | key-event | A thief holding the key rotates it to the thief's own key. |
 | `aux/key-event-second-rotation-2028.json` | key-event | Eighteen months later, whoever obtained the old key rotates it again. |
+| `aux/verification-result-e1-flipped.json` | verification-result | Draft-4 behaviour with one extra rejected event (the flip), kept as input to the equivalence negative. |
 
-`negative/` holds 89 broken fixtures; each must produce exactly the codes listed below. `aux/` holds inputs that other fixtures refer to; they are not checked on their own.
+`negative/` holds 94 broken fixtures; each must produce exactly the codes listed below. `aux/` holds inputs that other fixtures refer to; they are not checked on their own.
 
 | Real-format file | SHA-256 (from `MANIFEST.json`) |
 | --- | --- |
-| `real-format/headers-forked.bin` | `dbe5f3748f217e34…` |
+| `real-format/headers-forked.bin` | `38585f3e8565531a…` |
 | `real-format/headers-other.bin` | `6c9ae8ff0cb017d2…` |
-| `real-format/headers.bin` | `be4b757891037717…` |
+| `real-format/headers.bin` | `7ffedf9065723d4f…` |
 | `real-format/opentimestamps-other-digest.ots` | `bc4ca13c114cfb82…` |
-| `real-format/opentimestamps-pending.ots` | `121c125fc7d331a0…` |
-| `real-format/opentimestamps-proof.ots` | `6eb231a334d93817…` |
-| `real-format/rfc3161-request-other-digest.der` | `ab7baee3cd27dd76…` |
-| `real-format/rfc3161-request.der` | `11aae143c3eb10e2…` |
-| `real-format/rfc3161-response-expired-intermediate.der` | `8494b06d97fac736…` |
-| `real-format/rfc3161-response-issued-by-end-entity.der` | `77c43241890665ee…` |
-| `real-format/rfc3161-response-noncritical-eku.der` | `b4b756c05f958880…` |
-| `real-format/rfc3161-response-other-digest.der` | `b779db9a1674641b…` |
-| `real-format/rfc3161-response-tampered.der` | `23b33250cb8e6374…` |
-| `real-format/rfc3161-response-wrong-ess.der` | `9c5968fea7e3187a…` |
-| `real-format/rfc3161-response.der` | `c256d95e2cad03a9…` |
-| `real-format/test-root-ca.der` | `95270fbfb15faae4…` |
+| `real-format/opentimestamps-pending.ots` | `1bd5597f59ad87ad…` |
+| `real-format/opentimestamps-proof.ots` | `6d4ad3c8729ca55c…` |
+| `real-format/rfc3161-request-other-digest.der` | `d8e3653cec3ee22d…` |
+| `real-format/rfc3161-request.der` | `52f0f4d2a680f6c1…` |
+| `real-format/rfc3161-response-decoy-first.der` | `2be6a66c1782ce44…` |
+| `real-format/rfc3161-response-ecdsa.der` | `1aeb3f1350944c0b…` |
+| `real-format/rfc3161-response-expired-intermediate.der` | `d455a077d35df16d…` |
+| `real-format/rfc3161-response-issued-by-end-entity.der` | `4b473b0b20ded5e4…` |
+| `real-format/rfc3161-response-noncritical-eku.der` | `28b7123ebd20bcb1…` |
+| `real-format/rfc3161-response-other-digest.der` | `d3efbbc4b2899242…` |
+| `real-format/rfc3161-response-tampered.der` | `338fbee6b301ab36…` |
+| `real-format/rfc3161-response-valid-intermediate.der` | `42b3b622266ba555…` |
+| `real-format/rfc3161-response-wrong-ess.der` | `4e9017fea8cd27bb…` |
+| `real-format/rfc3161-response.der` | `01dd5b7bfb11a4e9…` |
+| `real-format/test-root-ca.der` | `ba5c2850a36caee8…` |
 
 Scripts, all standard library only, Python 3.11 or later:
 - `build_fixtures.py` rebuilds `fixtures/`, `negative/` and `aux/` deterministically, reading `real-format/` as input.
 - `make_real_vectors.py` remakes `real-format/` and is run by hand. It needs the local `openssl`, contacts nothing, and its output is not reproducible byte for byte.
 - `check_registration.py` is the checker, and `realformat.py` is its DER, X.509 (with RFC 5280 path validation), CMS, RSA and OpenTimestamps code. The checker loads it by path.
-- `enumerate_key_events.py` is the key-event enumeration test: 1,727,604 sequences up to length 4, seven invariants, and a mutation check (design §8). It runs separately, in about 96 s.
+- `enumerate_key_events.py` is the key-event enumeration test (design §8). It checks every sequence of length 1–3 over 100 symbols (1,010,100) and 200,000 sampled sequences of length 4 against 13 invariants. It also rebuilds 300 sampled sequences as real signed bundles and loads them, and runs a mutation check against three weakened rule sets, the draft-4 fixed point among them. It runs separately, in about a minute.
 
 ## What the checker does
 
@@ -151,7 +175,8 @@ Scripts, all standard library only, Python 3.11 or later:
 - **Real-format vectors** (§6.5):
   - RFC 3161 imprint, request nonce, ESSCertIDv2, critical timeStamping EKU, single SignerInfo, TSTInfo version, no duplicate signed attributes, messageDigest and RSA signature, and RFC 5280 path validation to the pinned root at `genTime`; `MANIFEST.json` records `openssl ts -verify` for every token, and the checker agrees;
   - OpenTimestamps operations, proof of work, Merkle root, and linkage back from the pinned checkpoint header, with `blockTime` read from the header.
-- **Verification results** (§10). Recomputed and compared field by field: per-signature bounds over union-find independence classes; key events evaluated in proved-time order with supersession (B1–B3, D1, D2); certificate-level revocation (D5); trust from quorum bounds only (S1); the claim compared with trusted signatures only (S11).
+- **Verification results** (§10). Recomputed and compared field by field: per-signature bounds over union-find independence classes; key events evaluated in two passes (standing, then disputes; no fixed point), with supersession and the own-standing exemption (B1–B3, D1, D2, E1); event identity by payload and signature; recovery keys; certificate-level revocation (D5); trust from quorum bounds only (S1); the claim compared with trusted signatures only (S11).
+- **Result equivalence** (`result-equivalence` fixtures): results that differ only by rejected events must agree byte for byte (E1).
 - **Links, sets, renderings and agent fixtures** as in the design: the report link; nonce freshness; the §11 allow-list with three fixed sentences, the ordering rule, 128-bit key display and the simulated-result marker (D6); and §19.
 - **Wrong-implementation self-test.** 33 cases: plausible wrong verifiers, renderings and decoders built in memory, each of which must be caught.
 - **Drift.** Every failure code appears in the design document and has a negative fixture.
@@ -183,12 +208,15 @@ The A2A fixtures are **not validated against a published A2A schema** (none is c
 | `neg-content-on-wire` | `content-on-wire` | Sends the file itself as a raw part to the hosted witness. |
 | `neg-duplicate-key` | `duplicate-key` | Duplicate JSON key; the strict parser refuses the file, so the code is in the file name |
 | `neg-duplicate-signer` | `envelope-shape` | The same key signs the envelope twice. |
+| `neg-e1-report-disputes-own-appointment` | `key-event-ignored` | E1 (review case): the successor's report disputes the rotation that gives it standing; successor reported untrusted. |
 | `neg-envelope-shape` | `envelope-shape` | Wrong DSSE payload type. |
+| `neg-event-identity-collision` | `key-event-ignored` | Enumeration finding: two signers of one statement collapsed into one event. |
 | `neg-event-order-dependent` | `key-event-ignored` | B2: a list-order evaluator ignores the retirement that precedes its rotation in the list. |
 | `neg-evidence-shape` | `evidence-shape` | Malformed genTime. |
 | `neg-evidence-target-base64` | `evidence-wrong-target` | Token over the base64 text of the signature, not its raw bytes (A1). |
 | `neg-evidence-wrong-target` | `evidence-wrong-target` | Token over the statement bytes, not over the signature. |
 | `neg-expired-accepted` | `result-mismatch` | S6: tokens accepted after their TSA certificates expired, with no renewal. |
+| `neg-extra-event-changed-result` | `extra-event-changed-result` | E1 (review case): adding one rejected event flips the successor's trust. |
 | `neg-fingerprints-on-wire` | `forbidden-field` | Sends fingerprints to the hosted witness. |
 | `neg-fixture-shape` | `fixture-shape` | Fixture notice removed. |
 | `neg-forbidden-field` | `forbidden-field` | Fingerprints in the statement. |
@@ -207,6 +235,8 @@ The A2A fixtures are **not validated against a published A2A schema** (none is c
 | `neg-ordering-claim` | `ordering-claim` + `rendering-unlisted-line` | Two registrations' times presented as an order (S8). |
 | `neg-pending-counted` | `pending-counted` | A pending proof that states a block time. |
 | `neg-placeholder-unlabelled` | `placeholder-unlabelled` | Placeholder presented as a real token. |
+| `neg-policy-min-confirmations-zero` | `result-mismatch` | Draft-4 review: minConfirmations 0 would admit headers forged above the checkpoint; the policy is refused. |
+| `neg-policy-negative-lookback` | `result-mismatch` | Draft-4 review: a negative compromise look-back is refused. |
 | `neg-possession-mismatch` | `possession-mismatch` | Possession digest not computed from the content. |
 | `neg-predicate-type` | `predicate-type` | Draft-2 predicate type. |
 | `neg-profile-mismatch` | `profile-mismatch` | Registered profile differs from the report's. |
@@ -257,7 +287,7 @@ The A2A fixtures are **not validated against a published A2A schema** (none is c
 ```sh
 python3 -I research/drafts/registration-fixtures/build_fixtures.py
 python3 -I research/drafts/registration-fixtures/check_registration.py --verbose
-python3 -I research/drafts/registration-fixtures/enumerate_key_events.py      # about 96 s
+python3 -I research/drafts/registration-fixtures/enumerate_key_events.py      # about a minute; --quick for length <= 2
 git status --short research/drafts/registration-fixtures   # rebuilt files must be unchanged
 # only after a change to the registration statement (needs the local openssl; contacts nothing):
 python3 -I research/drafts/registration-fixtures/make_real_vectors.py

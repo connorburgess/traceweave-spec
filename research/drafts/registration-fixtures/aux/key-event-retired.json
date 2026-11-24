@@ -5,14 +5,14 @@
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing."
   },
   "object": {
-    "bundleVersion": "traceweave-registration-bundle-draft-4",
+    "bundleVersion": "traceweave-registration-bundle-draft-5",
     "envelope": {
       "payloadType": "application/vnd.in-toto+json",
-      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiZXZlbnQiOiJyZXRpcmVkIiwiZXZlbnRWZXJzaW9uIjoidHJhY2V3ZWF2ZS1rZXktZXZlbnQtZHJhZnQtNCIsImtleWlkIjoiMThjM2VlYWQwODY0NjYxNCJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUva2V5LWV2ZW50L2RyYWZ0LTQiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiMThjM2VlYWQwODY0NjYxNGJjODYwYmY3NDM2OWFjMWYxM2ZiMThmOTE0YjQ0MzQwMWM1NTQyZGViZDAwNjMxOCJ9LCJuYW1lIjoia2V5In1dfQ==",
+      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiZXZlbnQiOiJyZXRpcmVkIiwiZXZlbnRWZXJzaW9uIjoidHJhY2V3ZWF2ZS1rZXktZXZlbnQtZHJhZnQtNSIsImtleWlkIjoiMThjM2VlYWQwODY0NjYxNCJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUva2V5LWV2ZW50L2RyYWZ0LTUiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiMThjM2VlYWQwODY0NjYxNGJjODYwYmY3NDM2OWFjMWYxM2ZiMThmOTE0YjQ0MzQwMWM1NTQyZGViZDAwNjMxOCJ9LCJuYW1lIjoia2V5In1dfQ==",
       "signatures": [
         {
           "keyid": "18c3eead08646614",
-          "sig": "Q2s84LY1KsesXKIgbkg5NQg4ALHa8nrQfY3XkOhmv5MM40uA8Xh/e18JC+JlS72xjjm8Da5wyUbdXwRXLSOCAw=="
+          "sig": "q3m5HXIAEoc0XeovXsY+ertSWBMuXlsuY4928Ojya5CaYXoQFhJ/xTkxXdCaUJYlYniQ8BHHq/wOj9MsAl/ADw=="
         }
       ]
     },
@@ -27,20 +27,20 @@
     },
     "timeEvidence": [
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-4",
+        "evidenceVersion": "traceweave-time-evidence-draft-5",
         "type": "rfc3161",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "073d792a47fae8b362afa5553f3471d1813167da7bc848d4f15b85c97ea98ecf"
+          "sha256": "75781548e28c4c44c6bb0449261cbd52dee0cf953a0c22f9cddb72579ff94ccf"
         },
         "root": {
           "kind": "tsa-certificate-chain",
           "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
         },
-        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-073d792a47fa-tsa-a-2026-11-26T00:00:00Z-u1",
+        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-75781548e28c-tsa-a-2026-11-26T00:00:00Z-u1",
         "rfc3161": {
           "genTime": "2026-11-26T00:00:00Z",
           "policyOid": "2.999.1",
@@ -55,20 +55,20 @@
         }
       },
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-4",
+        "evidenceVersion": "traceweave-time-evidence-draft-5",
         "type": "opentimestamps",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "073d792a47fae8b362afa5553f3471d1813167da7bc848d4f15b85c97ea98ecf"
+          "sha256": "75781548e28c4c44c6bb0449261cbd52dee0cf953a0c22f9cddb72579ff94ccf"
         },
         "root": {
           "kind": "bitcoin-proof-of-work",
           "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6"
         },
-        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-073d792a47fa-btc-2026-11-26T01:00:00Z",
+        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-75781548e28c-btc-2026-11-26T01:00:00Z",
         "opentimestamps": {
           "status": "complete",
           "blockTime": "2026-11-26T01:00:00Z"

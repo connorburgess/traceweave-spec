@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rebuild the illustrative registration fixtures, draft-4 (fixtures/, negative/ and aux/).
+"""Rebuild the illustrative registration fixtures, draft-5 (fixtures/, negative/ and aux/).
 
 Standard library only. Deterministic: Ed25519 signatures are deterministic, and every nonce,
 key and placeholder trust anchor below is derived from a fixed public label. The keys are public
@@ -83,6 +83,7 @@ POLICY = {
         {"anchorSha256": ANCHOR["witness"], "kind": "witness-service-key", "independenceGroup": "witness-a"},
     ],
     "trustedKeys": [C.sha(PUB)],
+    "recoveryKeys": [],
     "revocationData": [revocation_data("tsa-a", "TSA operator A"), revocation_data("tsa-b", "TSA operator B")],
     "compromiseLookbackSeconds": 2592000,
     "verificationTime": VT,
@@ -107,7 +108,7 @@ def statement(nonce=NONCE, artifact=ARTIFACT, name="sum.go", catalogue=CATALOGUE
             "possession": [{"subjectIndex": 0, "scheme": C.POSSESSION_SCHEME, "sha256": C.possession_digest(nonce, artifact)}],
             "catalogue": {"scheme": C.CATALOGUE_SCHEME, "sha256": C.catalogue_commitment(CAT_NONCE, catalogue),
                           "profile": copy.deepcopy(REPORT_BODY["profile"])},
-            "implementation": {"name": "build_fixtures.py", "version": "draft-4", "commit": ZERO40},
+            "implementation": {"name": "build_fixtures.py", "version": "draft-5", "commit": ZERO40},
             "specCommit": ZERO40,
             "claims": {"createdAt": "2026-11-20T09:00:00Z"},
         },
@@ -277,6 +278,7 @@ def real_policy():
              "checkpoint": json.loads(real_bytes("MANIFEST.json"))["checkpoint"]},
         ],
         "trustedKeys": [C.sha(PUB)],
+        "recoveryKeys": [],
         "revocationData": [{"anchorSha256": root.sha256(), "source": "real-format test CA: no CRL issued", "asOf": "2026-11-24T12:00:00Z", "revocations": []}],
         "compromiseLookbackSeconds": 2592000,
         "verificationTime": "2026-11-24T12:00:00Z",
@@ -334,6 +336,16 @@ def build_real():
         claimed["inputs"]["bundleSha256"] = honest["inputs"]["bundleSha256"]
         neg(f"real-{name}-accepted", fixture("verification-result", f"D4 (review case): {desc} The token is reported valid anyway.", claimed,
                                              "quorum-miscount", bundle=rel, artifacts=ART))
+    for name, file, desc in [("ecdsa", "rfc3161-response-ecdsa.der", "D7: a valid token from an ECDSA TSA; this checker reports it `unsupported`, never as a forgery."),
+                             ("decoy-first", "rfc3161-response-decoy-first.der", "A valid token under an intermediate, with a decoy certificate of the same name inserted first; path building backtracks and the token is valid.")]:
+        b = bundle_of(env, [real_evidence("rfc3161", sig, real_bytes(file), real_bytes("rfc3161-request.der")), good[1]])
+        write("aux", f"bundle-real-{name}", fixture("bundle", desc, b))
+        rel = f"aux/bundle-real-{name}.json"
+        write("fixtures", f"verification-result-real-{name}", fixture("verification-result", desc, result_for(rel, rp, simulated=False), bundle=rel, artifacts=ART))
+    r0 = copy.deepcopy(result_for(BR, rp, simulated=False))
+    r0["policy"]["timeRoots"][1]["minConfirmations"] = 0
+    neg("policy-min-confirmations-zero", fixture("verification-result", "Draft-4 review: minConfirmations 0 would admit headers forged above the checkpoint; the policy is refused.",
+                                                 r0, "result-mismatch", bundle=BR, artifacts=ART))
     r = result_for(BR, rp, simulated=False)
     forked = copy.deepcopy(rp)
     forked["timeRoots"][1]["headerFile"] = "real-format/headers-forked.bin"
@@ -514,8 +526,45 @@ def build():
     d_events["-chain-same-time"] = (["aux/key-event-rotation-honest.json", "aux/key-event-onward-rotation-same-time.json"],
                                     {"bundle": "aux/bundle-second-successor.json", "artifacts": ART2},
                                     "Enumeration finding: trust flows only through a rotation proved strictly after its signer became trusted.")
+    # E1: the honest owner rotates because K leaked, then reports the compromise with the successor.
+    report_s, _ = key_event("compromised", signer=NEXT, gen="2026-12-06T00:00:00Z", block="2026-12-06T01:00:00Z", compromisedNotBefore="2026-11-21T03:00:00Z")
+    write("aux", "key-event-compromise-by-successor", fixture("key-event", "The successor reports the old key compromised 10 days after the rotation, from 5 days before it.", report_s))
+    for k in (1, 2):
+        junk, _ = key_event("retired", signer=THIEF, gen=f"2026-12-0{k}T00:00:00Z", block=f"2026-12-0{k}T01:00:00Z")
+        write("aux", f"key-event-rejected-{k}", fixture("key-event", "An unauthorized event: the attacker's key signs a retirement of the old key.", junk))
+    e1 = ["aux/key-event-rotation-honest.json", "aux/key-event-compromise-by-successor.json"]
+    d_events["-e1"] = (e1, succ_dec, "E1: a successor's compromise report never disputes its own appointment; the successor stays trusted.")
+    d_events["-e1-extra-1"] = (e1 + ["aux/key-event-rejected-1.json"], succ_dec, "E1 with one extra rejected event: same outcomes.")
+    d_events["-e1-extra-2"] = (e1 + ["aux/key-event-rejected-1.json", "aux/key-event-rejected-2.json"], succ_dec, "E1 with two extra rejected events: same outcomes.")
+    onward_later, _ = key_event("rotated", target=NEXT, signer=NEXT, gen="2026-12-01T00:00:00Z", block="2026-12-01T01:00:00Z", successorPublicKeyHex=PUB_CO.hex())
+    write("aux", "key-event-onward-rotation", fixture("key-event", "The successor rotates onward, proved 2026-12-01T03:00.", onward_later))
+    report_s2, _ = key_event("compromised", target=NEXT, signer=CO, gen="2026-12-11T00:00:00Z", block="2026-12-11T01:00:00Z", compromisedNotBefore="2026-11-28T00:00:00Z")
+    write("aux", "key-event-compromise-by-second-successor", fixture("key-event", "The second successor reports the first successor compromised from before its rotation.", report_s2))
+    env_c3, sigs_c3 = envelope(statement(NONCE_3, ARTIFACT_2, "host.go"), signers=(CO,))
+    write("aux", "bundle-second-successor-late", fixture("bundle", "A registration signed by the second successor, 2026-12-15.",
+                                                         bundle_of(env_c3, [tsa(sigs_c3[0], "a", "2026-12-15T00:00:00Z"), ots(sigs_c3[0], "2026-12-15T01:00:00Z")], keys=(CO,))))
+    d_events["-e1-second-level"] = (["aux/key-event-rotation-honest.json", "aux/key-event-onward-rotation.json", "aux/key-event-compromise-by-second-successor.json"],
+                                    {"bundle": "aux/bundle-second-successor-late.json", "artifacts": ART2},
+                                    "E1 one level down: the second successor's report about the first successor does not dispute its own appointment.")
+    same_stmt, _ = key_event("rotated", signer=THIEF, gen="2026-11-27T00:00:00Z", block="2026-11-27T01:00:00Z", successorPublicKeyHex=PUB_THIEF.hex())
+    write("aux", "key-event-rotation-to-thief-signed-by-thief", fixture("key-event", "The same rotation statement as key-event-rotation-to-thief, signed by the thief's key instead.", same_stmt))
+    d_events["-same-statement-two-signers"] = (["aux/key-event-rotation-to-thief.json", "aux/key-event-rotation-to-thief-signed-by-thief.json"], thief,
+                                               "Enumeration finding: one statement signed by two keys is two events (identity = SHA-256 of payload and signature).")
+    retired_again, _ = key_event("retired", gen="2026-12-20T00:00:00Z", block="2026-12-20T01:00:00Z")
+    write("aux", "key-event-retired-later-proof", fixture("key-event", "The same signed retirement as key-event-retired, with a later proof.", retired_again))
+    d_events["-same-statement-twice"] = (["aux/key-event-retired-later-proof.json", "aux/key-event-retired.json"], rmeta,
+                                         "The same signed statement supplied twice is one event, with its earliest proved time.")
     for name, (evs, meta, desc) in d_events.items():
         vr(name, desc, result_for(meta["bundle"], artifacts=meta["artifacts"], events=evs), keyEvents=evs, **meta)
+    write("fixtures", "result-equivalence-e1", fixture("result-equivalence", "E1: the same events with 0, 1 and 2 extra rejected events give byte-identical outcomes for the common events.",
+                                                       {"equivalenceVersion": C.EQUIVALENCE_VERSION, "results": [f"fixtures/verification-result{n}.json" for n in ("-e1", "-e1-extra-1", "-e1-extra-2")]}))
+    # RD18: a recovery key listed in advance in the verifier's policy, after a thief rotated first.
+    pr = copy.deepcopy(POLICY)
+    pr["recoveryKeys"] = [{"keySha256": C.sha(PUB_CO), "recovers": C.sha(PUB), "notBefore": "2026-11-29T00:00:00Z"}]
+    vr("-recovery-key", "RD18: after the thief's rotation is disputed, the owner's recovery key, listed in the policy from 2026-11-29, is trusted for later bounds.",
+       result_for("aux/bundle-second-successor-late.json", pr, artifacts=ART2, events=["aux/key-event-rotation-to-thief.json", "aux/key-event-compromise-after-theft.json"]),
+       keyEvents=["aux/key-event-rotation-to-thief.json", "aux/key-event-compromise-after-theft.json"], bundle="aux/bundle-second-successor-late.json", artifacts=ART2)
+
     # D5: two signing certificates under TSA A's root; the revocation names one.
     env_2c, sigs_2c = envelope(st)
     write("aux", "bundle-two-tsa-units", fixture("bundle", "Tokens from two signing certificates under TSA A's root, plus Bitcoin.",
@@ -646,6 +695,24 @@ def build_negatives(st, sig, three, result, rmeta, link, ren, res_co, recent, re
          "fixtures/verification-result-revoked-one-unit.json", one_revocation_kills_all, "result-mismatch")
     vneg("chain-same-time", "Enumeration finding: trust passed on through a rotation with the same proved time as the predecessor's own.",
          "fixtures/verification-result-chain-same-time.json", lambda r: r["outcomes"]["signerTrust"][0].update(outcome="trusted"), "key-event-ignored")
+    def flipped(r):
+        r["outcomes"]["signerTrust"][0]["outcome"] = "untrusted"
+        for e in r["outcomes"]["keyEvents"]:
+            if e["event"] == "rotated":
+                e["outcome"] = "disputed"
+    vneg("e1-report-disputes-own-appointment", "E1 (review case): the successor's report disputes the rotation that gives it standing; successor reported untrusted.",
+         "fixtures/verification-result-e1-extra-1.json", flipped, "key-event-ignored")
+    write("aux", "verification-result-e1-flipped", fixture("verification-result", "Draft-4 behaviour with one extra rejected event (the flip), kept as input to the equivalence negative.",
+                                                           json.loads((HERE / "negative/neg-e1-report-disputes-own-appointment.json").read_text())["object"],
+                                                           keyEvents=["aux/key-event-rotation-honest.json", "aux/key-event-compromise-by-successor.json", "aux/key-event-rejected-1.json"],
+                                                           bundle="aux/bundle-successor-dec.json", artifacts=ART2))
+    neg("extra-event-changed-result", fixture("result-equivalence", "E1 (review case): adding one rejected event flips the successor's trust.",
+                                              {"equivalenceVersion": C.EQUIVALENCE_VERSION, "results": ["fixtures/verification-result-e1.json", "aux/verification-result-e1-flipped.json"]},
+                                              "extra-event-changed-result"))
+    vneg("event-identity-collision", "Enumeration finding: two signers of one statement collapsed into one event.",
+         "fixtures/verification-result-same-statement-two-signers.json", lambda r: r["outcomes"].update(keyEvents=r["outcomes"]["keyEvents"][:1]), "key-event-ignored")
+    vneg("policy-negative-lookback", "Draft-4 review: a negative compromise look-back is refused.", "fixtures/verification-result-compromise-recent.json",
+         lambda r: r["policy"].update(compromiseLookbackSeconds=-1), "result-mismatch")
     rb = copy.deepcopy(ren)
     rb["lines"] = rb["lines"][1:]
     neg("simulated-unmarked", fixture("rendering", "D6 (review case): a rendering of a simulated result without the marker line.", rb, "simulated-unmarked"))
@@ -802,7 +869,7 @@ def hosted_card(**changes):
             "id": "witness-digest", "name": "Witness a registration digest",
             "description": "Records that the authenticated caller presented this signature digest, signs a witness statement and attaches the witness's own RFC 3161 token. It does not register content, check authorship or check originality. " + LIMIT,
             "tags": ["traceweave", "registration", "witness", "timestamp"],
-            "examples": ['{"requestVersion": "traceweave-witness-request-draft-4", "presented": {"kind": "dsse-signature-sha256", "sha256": "<64 hex>"}}'],
+            "examples": ['{"requestVersion": "traceweave-witness-request-draft-5", "presented": {"kind": "dsse-signature-sha256", "sha256": "<64 hex>"}}'],
             "inputModes": ["application/json"], "outputModes": ["application/json"]}],
     }
     card.update(changes)

@@ -12,10 +12,10 @@
     ]
   },
   "object": {
-    "resultVersion": "traceweave-registration-verification-draft-4",
+    "resultVersion": "traceweave-registration-verification-draft-5",
     "simulated": false,
     "inputs": {
-      "bundleSha256": "52bbd228e608249feef92934342898a5a11153a690f2e99c6a6723df526347a4",
+      "bundleSha256": "3b4ddfd5eafd84807bc5752d30a50b2cf182ab9c79c7d08b7784e4df99773833",
       "artifacts": [
         {
           "subjectIndex": 0,
@@ -28,7 +28,7 @@
       "quorum": 2,
       "timeRoots": [
         {
-          "anchorSha256": "95270fbfb15faae45bcbedd765d20b97cd8df0d81a38cf01fb0776488951b060",
+          "anchorSha256": "ba5c2850a36caee83cb5133747a48c310c9c5ff62ad20c5518d8ba817472820e",
           "kind": "tsa-certificate-chain",
           "independenceGroup": "test-tsa",
           "policyOids": [
@@ -44,16 +44,17 @@
           "minConfirmations": 6,
           "checkpoint": {
             "height": 12,
-            "headerSha256": "bb683658753413047d4bdc2a6065a3ebf03848dffd658dea34a9dfe0df158b31"
+            "headerSha256": "d48a0f32363caeb19526d359c8d53adf8ff437a2adcc539b8660059a56025947"
           }
         }
       ],
       "trustedKeys": [
         "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318"
       ],
+      "recoveryKeys": [],
       "revocationData": [
         {
-          "anchorSha256": "95270fbfb15faae45bcbedd765d20b97cd8df0d81a38cf01fb0776488951b060",
+          "anchorSha256": "ba5c2850a36caee83cb5133747a48c310c9c5ff62ad20c5518d8ba817472820e",
           "source": "real-format test CA: no CRL issued",
           "asOf": "2026-11-24T12:00:00Z",
           "revocations": []
@@ -100,7 +101,7 @@
             "signatureIndex": 0
           },
           "type": "rfc3161",
-          "anchorSha256": "95270fbfb15faae45bcbedd765d20b97cd8df0d81a38cf01fb0776488951b060",
+          "anchorSha256": "ba5c2850a36caee83cb5133747a48c310c9c5ff62ad20c5518d8ba817472820e",
           "outcome": "path-invalid",
           "notAfter": null,
           "revocationDataAsOf": "2026-11-24T12:00:00Z"

@@ -19,10 +19,10 @@
     }
   },
   "object": {
-    "resultVersion": "traceweave-registration-verification-draft-4",
+    "resultVersion": "traceweave-registration-verification-draft-5",
     "simulated": true,
     "inputs": {
-      "bundleSha256": "10612069fe5b65707e2a89b7391556a3c62b18dd8d142ef069ec69e7e20d405e",
+      "bundleSha256": "a2dd7fd39f6d7167f3b5ba1d6036654f4400e3332913a7dffbf538495a984663",
       "artifacts": [
         {
           "subjectIndex": 0,
@@ -30,8 +30,8 @@
         }
       ],
       "keyEvents": [
-        "48038bfc9c38e1392a50626ad113f30c843b90a656fd06aed8c9f7dbeaacd0fd",
-        "7e304a5ded5170f27f4e6de5ea2e764f6315d121745cee77332a76946a6f73f9"
+        "7ce473d690042b8e592376c31bfe0f0e13fbeda4845c4738f8a3dfb163470ba2",
+        "f05259113cbcee0b7819b9d4e8c1a7c82d080edb6ab42bbd778aaf7286b204b8"
       ]
     },
     "policy": {
@@ -73,6 +73,7 @@
       "trustedKeys": [
         "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318"
       ],
+      "recoveryKeys": [],
       "revocationData": [
         {
           "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde",
@@ -103,14 +104,14 @@
       ],
       "keyEvents": [
         {
-          "eventSha256": "ac3105b30095ba40bd3c3cf1c44b69b402867406bb28971af443c5e96567b186",
+          "eventSha256": "65a9c5e1cdbef4d6cd83fe0b1237340ef71b02afdb4ea938747f4a4411aa5219",
           "keySha256": "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318",
           "event": "rotated",
           "outcome": "applied",
           "provedAt": "2026-12-01T03:00:00Z"
         },
         {
-          "eventSha256": "6118d2c96d9ca496bff78e48602dab2e1786449d58f92c8e93b338eeffc78386",
+          "eventSha256": "dd2ca930dbec18bfa38e6d8a97ae0a652a3faeec46c77705af6bad73ea670317",
           "keySha256": "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318",
           "event": "retired",
           "outcome": "ignored-unauthorized",

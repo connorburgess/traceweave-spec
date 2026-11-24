@@ -8,7 +8,7 @@
     }
   },
   "object": {
-    "setVersion": "traceweave-registration-set-draft-4",
+    "setVersion": "traceweave-registration-set-draft-5",
     "registrations": [
       "fixtures/bundle-three-roots.json",
       "aux/bundle-nonce-reused.json"

@@ -11,7 +11,7 @@
     }
   },
   "object": {
-    "renderingVersion": "traceweave-registration-rendering-draft-4",
+    "renderingVersion": "traceweave-registration-rendering-draft-5",
     "result": "fixtures/verification-result.json",
     "lines": [
       "Simulated: time evidence is placeholder only.",
