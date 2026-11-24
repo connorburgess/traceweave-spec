@@ -122,3 +122,85 @@ Status: non-author confirmation review, 2026-11-24, of [registration-record.md](
 - **Canonical bytes:** the statement is verified over its exact payload bytes. Base64 acceptance (S7) and event ordering (B2) are the remaining ambiguities between implementations.
 - **One time source unavailable or disagreeing:** with three sources and q = 2, one loss leaves a quorum (`verification-result-revoked`). Disagreement is resolved by taking the q-th smallest bound. With two losses, the result is `below-quorum` and the rendering says "according to one time source only". Under S1, that single source must not decide trust.
 - **Algorithm agility:** SHA-256 and Ed25519 are fixed per version string, which is acceptable. Renewal is undefined (S6).
+
+## Draft-3 confirmation
+
+Draft-3 (`5250eae`), confirmation pass of 2026-11-24. **Method:** the author's builder, checker and `realformat.py` on a scratch copy (`$TMPDIR/reg3/attack3.py`), openssl 4.1.0, and local test certificates. No service was contacted and the draft was not edited. The author's checker passes: 54 positives, 81 negatives, 25 wrong-implementation cases, 48 codes.
+
+**Verdict: not confirmed.** The draft-2 items are fixed as written, but four new blocking defects remain (D1–D4): two in the key-event rules, and two in the real-format verification that REG.1 would certify.
+
+### Draft-2 items, tested
+
+- **B1: partly.** The direct hijack (`verification-result-rotation-hijack`) and two new variants hold. In a chain K→NEXT→CO with K compromised before the first rotation, CO is `untrusted`. With the successor NEXT compromised before NEXT→CO, CO is `untrusted`. Two further variants break it (D1, D2).
+- **B2: resolved.** Events are sorted by proved time, ties by payload digest, and evaluated to a fixed point, so the result is order-independent by construction. With equal proved times, a successor's event is not authorized by a rotation at the same E. That is deterministic, and acceptable.
+- **B3: resolved.** Every decision uses SHA-256 of the full key: `trustedKeys`, event target (subject digest, with `keyid` agreement), successor, signer, and the witness anchor. `keyid` remains only for lookup and display. Note: renderings show only the 16-hex keyid, so two keys with colliding hints render identically. Show at least 128 bits.
+- **S1, S7, S11: resolved.**
+- **S4: resolved.**
+- **S8, S12: resolved.**
+- **S13: resolved as a proposal.** Gate wording is assessed below.
+- **S2: partly.** All five token checks are real: imprint and hash algorithm, request nonce and imprint, ESSCertID/ESSCertIDv2, a single critical timeStamping EKU, and the CMS signature with `messageDigest`. openssl agrees on the positive and on all four negatives: digest failure, imprint mismatch, unsuitable purpose, and ESS cert id not found. The chain step is not real path validation (D4).
+- **S3: partly.** `revocationData` with `asOf` exists, but it is keyed by **root anchor**, and its entries name no certificate (`{revokedAt, reasonCode}`). One revoked TSA certificate therefore invalidates every TSA under the same CA, and an intermediate cannot be told from a leaf (D5).
+- **S9: resolved for the listed vectors.** D1–D4 have none.
+- **S10: partly.** The TSA anchor is computed from the pinned root, but the Bitcoin anchor pins only the first header (D3). Placeholders count only in `simulated: true` results (`_final`), but every rendering fixture is built from a simulated result with no marker (D6).
+- **S5, S6: accepted** (below).
+- **N1: resolved** (rounded up in `gtime` and accuracy).
+- **N2: partly**, because of D3.
+- **N3, N4: resolved.**
+
+### Blocking
+
+**D1: a retired or rotated-away key can still rotate, and its successor becomes trusted.** §8, "An event is authorized if it is signed by its target key".
+- Owner retires K, proved 2026-11-26. A thief who later obtains K rotates K→THIEF, proved 2027-03-01. Both events are `applied`, and the thief's 2027-03-05 registration is **`trusted`**.
+- The same happens with retirement and rotation at equal proved times.
+- Retired keys are exactly the ones least likely to be guarded.
+- **Change:** after an applied, undisputed `retired` or `rotated` event for K, later events signed by K other than `compromised` are `ignored-superseded`. Add the fixture.
+
+**D2: a later holder of an old key can erase the honest successor chain, with no time limit.** §8, "Two applied rotations of one key to different successors are both disputed".
+- Owner rotates K→NEXT, proved 2026-11-26. Eighteen months later, whoever obtained K rotates K→THIEF. Both rotations become `disputed`, and the owner's 2026-12-10 NEXT registration drops to `untrusted`.
+- The compromise look-back clamp (§8) does not apply to this rule. Under RD18, the owner cannot repair it through keys.
+- **Change:** apply D1's supersession rule, so a second rotation of an already-rotated key is ignored. Dispute conflicting rotations only when both fall within one compromise window, as the thief-first hijack does.
+
+**D3: the OpenTimestamps header source pins only the first header, and difficulty is not enforced.** §6.2 ("a header file or node whose first header's SHA-256 is the anchor"); `header_ok` compares each header's hash with the target from that header's **own** `nBits`.
+- I mined twelve headers at `nBits` 0x207fffff on top of the same pinned first header, with the shipped proof's commitment at height 4 and time 2001-01-01.
+- `header_ok` returns True and the Merkle root matches, so the bound becomes 2001-01-01 plus 2 h for the real `opentimestamps-proof.ots`.
+- Against a mainnet genesis anchor, the same attack needs only easy-difficulty headers.
+- **Change:**
+  - The policy pins a **checkpoint**, the hash of a header at a height ≥ the attested height plus `minConfirmations`. The checker links back from the checkpoint to the attested header, so a fork cannot contain the checkpoint without the real work.
+  - Header files come from the verifier's own node, never from a bundle.
+  - Add a `neg-real-ots-forked-headers` vector.
+
+**D4: the RFC 3161 chain check is not path validation.** §6.2 step 6 ("the chain verifies to the pinned root"); `chain_to_root` checks signatures only. I issued two TSA certificates under a local root:
+- **One signed by an end-entity certificate** (`CA:FALSE`): openssl says "invalid CA certificate", but `check_token` and `chain_to_root` accept it.
+- **One under an intermediate that expired in 2021:** openssl says "certificate has expired", but `realformat.py` accepts it.
+
+With a commercial CA root as anchor, anyone holding any end-entity certificate under it could mint a TSA certificate and backdate tokens.
+- **Change:** §6.2 step 6 requires RFC 5280 path validation at `genTime`: CA basic constraints and `keyCertSign` on every issuer, validity of every certificate, and critical extensions understood. `realformat.py` enforces it. Add both vectors.
+
+### Should-fix and notes
+
+- **D5 (S3):** revocation entries must name the certificate (issuer and serial, or SHA-256), and apply to the TSA certificate or the intermediate they name.
+- **D6 (S10):** a rendering made from a `simulated: true` result is presented as real. Either refuse to render simulated results, or require a template line such as "Simulated: time evidence is placeholder only".
+- **D7:** `realformat.py` rejects valid tokens: ECDSA (documented), RSA-PSS, SHA-384/512 signatures, and ESSCertIDv2 with a non-SHA-256 hash, which it compares with SHA-1. That is fine for REG.1, but REG.3 against real TSAs may meet these. State the supported algorithms in §6.2.
+- **D8:** TSTInfo `version` is parsed but not checked, and duplicate signed attributes are not rejected.
+- **D9 (S6):** the renewal hashes only the old token's bytes. RFC 3161 §4 item 3 renews trust "if authentic copies of old CRLs are available", and RFC 4998 covers the verification data too. Either include the chain and revocation data in the renewed bytes, or state that the renewal relies on the policy's `revocationData`.
+
+### The author's choices
+
+- **S5, removing `cosigned-checkpoint`: acceptable for REG.1.** **Cost:** no log-based time source, which is fine while logs are out of scope (RD3). Rekor v2 stays without a bound.
+- **S6, renewal as a token over the earlier token, with hash-tree renewal out of scope: acceptable for REG.1.** **Costs:**
+  - a SHA-256 weakness ends every bound; re-registering starts a new, later bound, so continuity is lost;
+  - renewal does not rescue `keyCompromise` revocations;
+  - D9 above.
+- **RD18, an honest owner's rotation after a compromise report is disputed: acceptable**, given the pre-listed recovery-key option. **Costs:**
+  - continuity rests on out-of-band links or per-verifier recovery keys;
+  - with D2 unfixed, any later leak of an old key erases continuity too. That is why D2 is blocking.
+
+### Proposed ROADMAP text (§15)
+
+- **M4 row, M4.3 (amended), M4.5 (replaced), M4.6 (amended) and REG.5:** verifiable as written.
+- **REG.1:** verifiable, but:
+  - it counts "four TSA and one proof negatives", while the fixtures have two OpenTimestamps negatives (`neg-real-ots-other-chain`, `neg-real-ots-wrong-target`);
+  - as written it passes with D3 and D4 present. Add the forked-header and bad-chain vectors.
+- **REG.2:** "byte-identical verification results" needs a canonical serialization for results (RFC 8785, as for reports). State it.
+- **REG.3:** "k/k" has no k; name the counts. A "revoked certificate" cannot be produced on demand at a real TSA, so test that direction with the local test TSA. "Pinned header source" must mean the checkpoint pin of D3.
+- **REG.4:** verifiable as a process gate (a named non-author); add "no rendering from a simulated result" (D6).
