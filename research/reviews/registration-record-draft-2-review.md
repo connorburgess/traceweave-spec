@@ -301,3 +301,112 @@ Reviewed commit dba683b, 2026-11-24. Verdict: **not confirmed**, with one blocki
 - **D8:** resolved. `version ≠ 1` and duplicate signed attributes are rejected.
 - **D9:** resolved as text. The renewal relies on retained revocation data, and the stronger form is left to RD11.
 - **REG.1–REG.4:** the draft-3 items are fixed: the counts, the D3 and D4 vectors, RFC 8785 bytes, k = 3, the local test TSA for revocation, the checkpoint pin, and the refusal of simulated results. But REG.1's "`enumerate_key_events.py` reports 0 violations up to length 4" passes with E1 present. Tie it to the widened parameters above.
+
+## Draft-5 confirmation
+
+Reviewed commit aab6717, 2026-11-24. Verdict: **confirmed, with changes.** Nothing blocks. Two should-fix items remain (F1, F2), plus notes. All tests ran on a scratch copy outside the repository; no external service was contacted.
+
+### E1 and its variants (question 1)
+
+- **The count and order of other events no longer change anything.**
+  - Setup: the E1 pair (K→S at T; S reports K compromised at T+10 d from T−5 d), plus every subset of six extra events, each subset in four shuffled orders: 256 runs.
+  - The six extra events:
+    - unauthorized (J retires K);
+    - superseded (K rotates to A later);
+    - no proved time;
+    - a bad signature;
+    - an unauthorized report reaching 50 days back;
+    - the same rotation statement signed by A instead of K.
+  - Result: the E1 events' outcomes, and every key's trust at 18 probe times (including no quorum), match the pair alone in all 256 runs.
+- **Through real bundles** (`load_event_bundles`):
+  - E1 as signed bundles: both events applied, S trusted.
+  - The rotation file supplied twice: one event.
+  - The rotation statement signed by a second key: two events. The second is `ignored-unauthorized`.
+- **Thief and owner scenarios.** Every outcome below is defensible: each is the most a verifier can conclude without knowing who held K.
+
+| Case | Outcome | Defensible? |
+| --- | --- | --- |
+| Thief K→S′ at T; owner reports with K at T+5 d from T−3 d | K→S′ disputed; S′ untrusted | Yes |
+| Same, and the thief also reports with S′ (from T−100 d) | K→S′ still disputed. The thief's report only marks K's own signatures from T−24 d as `disputed`, which the thief could already do with K | Yes |
+| Thief reports with S′ first (T+1 d), then the owner reports with K | K→S′ disputed. The thief's report cannot pre-empt the owner's, because reports are never superseded or disputed | Yes |
+| Thief K→S′; owner reports at T+40 d (outside the window), or with a claimed start after T | K→S′ applied; S′ trusted | Yes, it is the stated RD15 trade-off. The owner must recover with a recovery key or out of band |
+| Thief K→S′ at T; owner rotates K→S at T+2 d and reports | Owner's rotation ignored as superseded; K→S′ disputed; neither successor trusted | Yes (RD18) |
+| Owner K→S at T; thief reports with K at T+10 d | K→S disputed permanently | Yes, and now stated in the threat row |
+| Same at T+40 d | S trusted; the chain is final | Yes |
+| Owner K→S, owner reports with S at T+10 d, thief reports with K at T+12 d | K→S disputed | Yes. The exemption protects S only from its own report |
+| Owner K→S at T; thief rotates K→S′ at T+3 d and reports with S′ | Thief's rotation ignored as superseded; thief's report unauthorized; S trusted | Yes |
+| Owner and thief rotate at the same T; each reports with its own successor | Both rotations disputed; neither successor trusted | Yes |
+
+- **The exemption cannot be exploited.**
+  - A rotation of K that grants standing is always signed by K: a rotation of K signed by its successor arrives after K was superseded, so it is ignored.
+  - So whoever gains standing through a rotation held K when it was made. Every report that successor can file, the holder of K could file with K directly.
+  - The exemption covers only the report's own signer. A K-signed report, the owner's tool against a thief who rotated first, has no exemption and disputes the thief's rotation.
+
+### Two-pass soundness (question 2)
+
+- **None.** No state makes pass-1 standing need to depend on a dispute.
+  - Standing granted through a disputed rotation allows only compromise reports about the old key. Its other events are superseded, because the appointing rotation itself superseded the key.
+  - A compromise report only restricts. It disputes other applied supersessions of the key (in practice, only ones at the same E, which the equal-time rule already disputes), and it marks the key's own signatures in its window as `disputed`.
+  - As shown above, the holder of the old key had the same power without the rotation.
+- **One cosmetic edge case.** Two different rotation statements K→S, for example re-serialized or signed with a random nonce, can be proved at the same E.
+  - They are not a conflict, because both name the same successor.
+  - S's report then disputes the twin that is not its own appointment. S stays trusted through the other twin, but the result lists one rotation as `disputed`.
+  - Treat same-target, same-successor rotations as one appointment when applying the exemption.
+
+### Enumeration and mutation check (question 3)
+
+- **Rerun as shipped.** Mutation counts 345 / 430 / 40. Length 1–3: 1,010,100 sequences. Length 4: 200,000 sampled. 0 violations; loading sample 0 mismatches of 300; 57 s.
+- **Boundary variant on a scratch copy.** Steps of ±29, ±30, ±31 days and 0; claimed starts 29, 30 and 31 days back (140 symbols); length-4 seeds starting at 777000; loading seed 99.
+  - Length 1–3: 2,763,740 sequences, exhaustive. Length 4: 200,000 sampled.
+  - 0 violations, and 0 loading mismatches. Mutation counts 693 / 896 / 140. 128 s.
+- The invariants now cover every gap named in the draft-4 pass:
+  - windows and their boundaries (I8);
+  - no quorum (I9);
+  - added rejected events (I10);
+  - who may sign (I11);
+  - equal times (I12);
+  - late successor-signed reports (I6).
+
+### Earlier items and new ones (question 4)
+
+- **Fixed and retested:**
+  - `minConfirmations ≥ 1` and the checkpoint's shape are validated, and the attested height must be at most the checkpoint height minus `minConfirmations`.
+  - The look-back must be a non-negative integer.
+  - ECDSA gives `unsupported` (retested with the scratch ECDSA token).
+  - Path building backtracks.
+    - A valid chain with a same-subject decoy listed first passes `validate_path`. Every chain tested in the draft-4 pass still gets the same verdict.
+    - openssl 4.1.0 fails that decoy-first chain ("certificate signature failure") when the certificates carry no key identifiers, and passes it with the decoy last. The checker's answer is the RFC 5280 one. openssl is not an oracle for decoy chains without key identifiers; real TSA chains carry them.
+  - `recoveryKeys` exists, is validated, and is trusted only from `notBefore`.
+  - The threat row states that the successor chain is lost permanently.
+- **F1 (should-fix): a key event is read from its first signature only, which contradicts "one statement signed by two keys is two events".**
+  - `load_event_bundles` takes `keyDigests[0]` and `sigs[0]`. Envelope signatures are not signed, so anyone carrying a K-signed event file can put their own signature first.
+  - Reproduced: the file then loads as one event signed by A, `ignored-unauthorized`. K's valid signature is never considered, and the S report that depended on it becomes unauthorized too.
+  - That is only as bad as deleting the file. Supplied next to the original, the copy loads as a separate event and changes nothing. It is still a silent mask.
+  - Either require exactly one signature on a key event (`key-event-shape`), or load each valid signature as its own event.
+- **Event identity (payload plus signature):**
+  - Only a key holder can multiply events, because Ed25519 is checked as non-malleable (S < L, canonical encodings). The holder can make any number of distinct signatures, but duplicates add nothing: later ones are ignored as superseded, and equal-time ones with the same successor are not a conflict (see the cosmetic edge case).
+  - Masking is possible only through F1.
+  - Merging copies of one signed statement to its earliest proved time is sound, because each copy's E is a valid upper bound.
+- **F2 (should-fix, text): RD17 contradicts §8.** RD17 still says "the key and verified, **undisputed** successors", while §8 pass 1 now grants standing through a rotation "disputed or not". It also says "policy may add keys", but there is no policy field for that. Align RD17 with §8, and drop the policy option or name its field.
+- **Note on recovery keys.** A recovery key adds a trust root; it does not end K's chain. If a thief's K→A is never disputed, A and the recovery key are both trusted. That is acceptable, but say so in RD18.
+
+### Decisions the owner must take before implementation
+
+1. **External services:**
+   - whether any may be contacted at all, including a single REG.3 test submission (§17 lists what each one sees);
+   - which two unrelated RFC 3161 TSAs, after reading their terms, and whether any paid or qualified TSA is used (RD2);
+   - whether OpenTimestamps is used. Its commitment lands in Bitcoin permanently, and it needs the verifier's own Bitcoin node or header source (RD1, RD21). Without it, option (b) leaves one revocation able to drop the quorum;
+   - the signature algorithms to support, from what the chosen TSAs issue (RD22).
+2. **Policy defaults:**
+   - quorum (2 of 3 proposed, RD5);
+   - the compromise look-back (RD15; 30 days is a placeholder with no derivation);
+   - `minConfirmations` and how the checkpoint is refreshed (6 in the fixtures);
+   - the OpenTimestamps margin (7,200 s, RD6);
+   - the independence groups for the chosen TSAs.
+3. **Recovery keys (RD18):** whether the tool offers to generate and list one at registration; how verifiers learn of it; and its default `notBefore`.
+4. **Who may assert key events (RD17)**, after F2.
+5. **Already listed in §17 and still open:**
+   - public logs and any project-run log, witness or signer (RD3, SK.5);
+   - the default identity mode, I0 or I0′, and whether I2 is offered (RD4);
+   - publishing the predicate identifiers under `traceweave.org` (RD10);
+   - adopting the §15 ROADMAP text.
