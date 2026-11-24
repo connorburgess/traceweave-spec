@@ -790,6 +790,7 @@
   {
    "id": "rank-field",
    "reason": "ranks are not recorded",
+   "code": "malformed-record",
    "record": {
     "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
     "report": {
@@ -815,6 +816,7 @@
   {
    "id": "score-field",
    "reason": "scores are not recorded",
+   "code": "malformed-record",
    "record": {
     "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
     "report": {
@@ -837,6 +839,7 @@
   {
    "id": "unknown-method",
    "reason": "closed method list",
+   "code": "malformed-record",
    "record": {
     "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
     "report": {
@@ -856,6 +859,7 @@
   {
    "id": "selected-without-digest",
    "reason": "selected needs the id-set digest",
+   "code": "malformed-record",
    "record": {
     "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
     "report": {
@@ -874,6 +878,7 @@
   {
    "id": "selected-digest-mismatch",
    "reason": "the digest is not that of the candidate catalogue's ids",
+   "code": "selected-ids-mismatch",
    "record": {
     "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
     "report": {
@@ -893,6 +898,7 @@
   {
    "id": "catalogue-mismatch",
    "reason": "candidateCatalogueSha256 differs from the body's inputs",
+   "code": "candidate-catalogue-mismatch",
    "record": {
     "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
     "report": {
@@ -912,6 +918,7 @@
   {
    "id": "body-unknown",
    "reason": "no fixture body has this digest",
+   "code": "body-unknown",
    "record": {
     "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
     "report": {
@@ -925,6 +932,44 @@
       "version": "1"
      },
      "selectedIdsSha256": "3b787323579ff58fcfef4d607c922af9e3df579e673b020b9796db5d34339fb0"
+    }
+   }
+  },
+  {
+   "id": "selected-without-candidate-catalogue",
+   "reason": "A16 (CG-Q7 / E4): a valid selected record validated without its candidate catalogue: the id set cannot be checked",
+   "code": "candidate-catalogue-unavailable",
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "a60fb1ca2b5fa87d3e2debcabb532eaca7e085d0b5b0ccc516fcdbcd1f8ac7be"
+    },
+    "candidateCatalogueSha256": "71b3563bd18d2de7c09bd18a4e2380226a928786e025fa468882dc8e933c155d",
+    "generation": {
+     "method": "selected",
+     "index": {
+      "name": "toy-index",
+      "version": "1"
+     },
+     "selectedIdsSha256": "3b787323579ff58fcfef4d607c922af9e3df579e673b020b9796db5d34339fb0"
+    }
+   },
+   "candidateCatalogue": "withheld"
+  }
+ ],
+ "validWithoutCandidateCatalogue": [
+  {
+   "id": "exhaustive-without-candidate-catalogue",
+   "candidateCatalogue": "withheld",
+   "reason": "A16: an exhaustive record needs no candidate catalogue; exhaustive is the producer's claim",
+   "record": {
+    "candidateGenerationVersion": "traceweave-candidate-generation-draft-1",
+    "report": {
+     "bodySha256": "a60fb1ca2b5fa87d3e2debcabb532eaca7e085d0b5b0ccc516fcdbcd1f8ac7be"
+    },
+    "candidateCatalogueSha256": "71b3563bd18d2de7c09bd18a4e2380226a928786e025fa468882dc8e933c155d",
+    "generation": {
+     "method": "exhaustive"
     }
    }
   }

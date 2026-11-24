@@ -14,12 +14,13 @@ Revision status (before promotion): draft for review, 2026-11-22. These vectors 
 | `comparison-config.json` | Exact comparison configuration bytes (contract §4), SHA-256 `39345e9c…147333` |
 | `comparison-config-negative.json` | 22 configurations that MUST be rejected |
 | `extraction-go.json`, `extraction-rust.json` | 17 new synthetic inputs (15 Go, 2 Rust) in the [extraction vector](../extraction/README.md) format, with the shipped 1 MiB configurations. Token streams are hand-written literals (`HAND_TOKENS` in `build_vectors.py`), each vector `derivation: hand` |
-| `matching.json` | 90 matching vectors, with a `derivationRule` (ROADMAP.md definition and how it applies) |
+| `matching.json` | 93 matching vectors, with a `derivationRule` (ROADMAP.md definition and how it applies) |
 | `extraction-go-gates.json` | A13: three Go inputs (a vendored helper, a host with a reformatted fragment, a second non-ASCII prefix), hand-written token streams like `extraction-go.json`, checked by `../extraction/check_vectors.py` |
 | `extraction-py.json`, `config-py.json` | A13: verbatim copies of three frozen `py-tokens` draft-1 vectors and their configuration (`research/drafts/extraction-vectors-python/` at 58c25a9); `check_gates.py` checks they are identical |
 | `m22-fixture-manifest.json` | A13, M2.2: the frozen fixture manifest (SHA-256 `349bd14953082dcef95e00c40d22972a708654d270819ba7ae7366444dc7fb34`, re-frozen in A14) |
 | `review-packets.json`, `licence-texts/` | A13, M2.7: review-packet fixtures (`traceweave-review-packet-draft-2` since A14) and the archived synthetic licence texts they reference by digest |
-| `candidate-generation.json` | A13, M2.9: candidate-generation fixtures |
+| `candidate-generation.json` | A13, M2.9: candidate-generation fixtures; A16 adds a rejection `code` to each invalid record and the catalogue-withheld cases |
+| `m23-control-classes.json` | A16, M2.3: the control classes, their hand member vectors, candidate counts, denominators and rejected comparisons (contract §6.12) |
 | `build_gates.py`, `check_gates.py` | Builder and independent checker of the three gate files (`check_gates.py` is run by `tools/validate.py`) |
 | `behaviour-checklist.md` | A6–A12: 66 numbered behavioural conformance items (working-tree markers, override scope, exit statuses, location values, stdout, provenance, atomic writes and temporaries, symbolic links, per-platform default location, message hygiene), each an observable command outcome, for implementations to script |
 | `comparison-config-bounds.json` | A5: 4 configurations above the seed and region bounds (MUST be rejected) and 4 at or just below them (MUST be accepted) |
@@ -79,6 +80,7 @@ The checker rejects a corrupted copy that relabels a `computed-then-reviewed` mo
 | M2.2 additions (A13) | `go-formatted-fragment-in-host` (GO_SUM reformatted inside a large host; same tokens, localized match), `go-non-ascii-shift-2` (hand-derived: spans shift by 15 bytes for an 11-code-point prefix) |
 | `py-tokens` (A13, registered as specified, not implemented) | `py-empty-span-self` (the catalogue stores the empty-span fingerprint `[35, 35)`; normalized mode is `computed-then-reviewed`), `py-equal-starts` (consecutive fingerprints with equal span starts are valid), `rv-py-empty-span-region` (synthetic: a region whose spans are empty, `[30, 30)` and `[20, 20)`, carried unchanged) |
 | Span rules by profile (A14, OD-C64 revised; tag `zero-width-rule`) | `go-w1-reused-span-start`, `rust-w1-reused-span-start` (the second exact fingerprint reuses the first's span start), `go-w2-identical-spans`, `rust-w2-identical-spans` (two consecutive positions with identical spans), `go-empty-span-k5` (an empty span at k = 5): each a reference-side `malformed-catalogue`, because Go and Rust have no zero-width tokens. `py-equal-starts` and `py-empty-span-self` stay valid: `py-tokens` declares zero-width tokens |
+| Span ends (A16, OD-C69; tag `span-ends`) | `go-w3-decreasing-span-end`, `rust-w3-decreasing-span-end` (the second exact fingerprint's span ends one byte before the first one's), `rv-py-decreasing-span-end` (synthetic `py-tokens` [0, 10) then [2, 8)): each a reference-side `malformed-catalogue`. Ends never decrease for any profile, zero-width tokens included |
 | Vendor-suppression effects (A14, OD-C66; tag `vendor-effect`) | `vendor-copied-into-own-code` (the vendored helper copied into own files `util.go` and `helpers.go`: with the vendor catalogue both modes are `common-only`, one diagonal-0 region; companion without it: `vendor-unsuppressed`), `vendor-idiom-suppresses-pair` (the `go-identical` inputs, with a vendor catalogue that also holds a vendored file with the same code: both modes `common-only` although neither side is vendored; companion without it: `go-identical`) |
 | Caps | `go-output-caps`, `go-output-caps-2` (region truncation with uncapped counts; seed limit at and above the limit); `go-cap-straddles-ambiguous`, `-mirror` (a listed region stays ambiguous when its partner is truncated) |
 | Invariance | `go-invariance-three-references`, `go-invariance-plus-unrelated` (3 ok references sharing the copied loop; adding an unrelated reference changes no pair; checked as an invariance group) |
@@ -115,12 +117,15 @@ Body digests and outcomes per vector are in `matching.json`. `build_vectors.py` 
 PASS extraction-py.json: 3 vectors and config-py.json are verbatim copies of the frozen py-tokens draft-1 files
 PASS M2.2 m22-fixture-manifest.json (frozen 349bd14953082dce...): 4 rows, 11 cases, spans 56/56 equal to the recomputed bodies
 PASS M2.7 review-packets.json: 4 valid packets (3 origin kinds), 67 rejections as stated, 1 report-body rejection
-PASS M2.9 candidate-generation.json: 4 retrieval paths (3 give the base body byte for byte, 1 different set), 7 invalid records rejected, 4 report bodies with rank/score/index rejected
-PASS gate corruption self-test: rejected 19/19
+PASS M2.9 candidate-generation.json: 4 retrieval paths (3 give the base body byte for byte, 1 different set), 8 invalid records rejected, 4 report bodies with rank/score/index rejected
+PASS M2.3 m23-control-classes.json: 5 classes, 30 member vectors (hand only); candidate counts, denominators and rejected comparisons equal to the recomputed bodies: independent-same-task 0/1; boilerplate 0/2; vendor 1/10; unrelated 0/1; malformed-unsupported 1/10 + 20 rejected
+PASS gate corruption self-test: rejected 30/30
 ```
 
 - **M2.2.** The manifest is frozen: its SHA-256 is pinned in `check_gates.py`, so any change must change that digest in the same commit. For each of the four UC-1 example-matrix rows it lists hand-derived positive cases (and, for the last row, companion cases) with their input digests, catalogue and body digests, and the half-open UTF-8 byte spans of its regions per mode: reportable regions only for positive cases (`regionsListed: "reportable"`), every region for companion cases (`"all"`, A14). The checker recomputes every body and requires every span to match.
 - **M2.7.** See contract §6.9. Valid packets cover own origin, a vendored dependency (also on its `common-only` region) and a historical copy. Rejections cover one per required field of each kind, a region key or mode absent from the referenced body, a non-first seed, an unknown body, an unarchived licence text, and the forbidden fields (`rightsVerdict`, `permitted`, `owner`, `score`, `note`, `licenceCompatible`, `permitted` inside `package`, a licence `identifier`). Since A14 each origin names a `side` whose digest must equal the body pair's digest for that side, and a historical copy's source must be the other side's digest; the review's P1b (a vendored packet re-pointed at `go-identical`) and an unbound source digest are rejected. `upstreamArtifactSha256` is a claim the body cannot check (contract §6.9).
+- **M2.7 and M2.9 codes (A16).** Every invalid packet and invalid candidate-generation record carries the common rejection `code` of contract §6.9 / §6.10, and the checker requires its own code to equal it.
+- **M2.3 (A16).** See contract §6.12. Members are the `hand` vectors with a class tag; rejected comparisons are counted apart from the pair denominator.
 - **M2.9.** See contract §6.10. Three retrieval paths, in different orders, rebuild the candidate catalogue of `text-plain-three-modes` from records and give its body byte for byte. A subset changes the catalogue digest, the count and the pairs.
 
 ## Derivation (A13, A15)
@@ -129,7 +134,7 @@ Every file states the [ROADMAP.md definition](../../ROADMAP.md#definitions) of h
 
 **Hand-written token streams (A15).** The 22 synthetic inputs of `extraction-go.json` (15), `extraction-rust.json` (2), `extraction-go-classes.json` (2) and `extraction-go-gates.json` (3) used to take their token streams from the builder's mini-lexer `lex()`: a tool-made lexical layer, which the [core-gates review](../../research/reviews/core-gates-m1-m2-review.md) §11 found under 48 `hand` vectors and 7 of the 11 M2.2 cases. Their tokens are now written by hand from `spec/extraction.md` as literal lists (`HAND_TOKENS` in `build_vectors.py`), in the form `../extraction/harness/build_vectors.py` uses: class and text in source order, and each inserted Go semicolon. Spans are located by a source-order search for each text. One start is hand-written because the search would land in a comment: `total` in `mv-go-host-formatted` (byte 238, marked `spanStarts: hand`). `lex()` is kept only as a cross-check, and the builder stops if it disagrees. All 22 hand-written lists agreed with it, and every record, catalogue, body and digest is byte-identical to before. `check_matching.py` fails a vector labelled `hand` if any artifact it is built from does not come from an extraction vector or record labelled `hand`, or from a literal catalogue. Its derivation self-test relabels four source vectors as tool-lexed and drops the rule text from four files, and requires each to fail (8/8).
 
-Every vector has a `derivation` label, and every mode of every hand expectation has its own. **6 vectors are `mixed`** (`go-duplicate-regions`, `go-tie-equal-candidate-span`, `go-repeated-hash-self`, `go-boilerplate-unsuppressed`, `go-non-ascii-shift`, `py-empty-span-self`), with **8 modes** `computed-then-reviewed` among them (both modes of `go-boilerplate-unsuppressed` and of `go-non-ascii-shift`, the normalized mode of the other four); the other 84 vectors are `hand`. The mixed vectors are:
+Every vector has a `derivation` label, and every mode of every hand expectation has its own. **6 vectors are `mixed`** (`go-duplicate-regions`, `go-tie-equal-candidate-span`, `go-repeated-hash-self`, `go-boilerplate-unsuppressed`, `go-non-ascii-shift`, `py-empty-span-self`), with **8 modes** `computed-then-reviewed` among them (both modes of `go-boilerplate-unsuppressed` and of `go-non-ascii-shift`, the normalized mode of the other four); the other 87 vectors are `hand`. The mixed vectors are:
 - the five pre-A13 cases listed above;
 - `py-empty-span-self` normalized: the frozen input's layout-only k-grams repeat, which I had not derived.
 
@@ -151,14 +156,14 @@ python3 -I test-vectors/matching/build_vectors.py   # regenerates every file byt
 `check_matching.py` output on 2026-11-23 (Python 3.14.6), with per-item lines omitted:
 
 ```
-PASS matching.json: vectors=90 catalogues-rebuilt=136 synthetic-catalogues=32 fabricated-catalogues=20 pairs=86 regions=193 reportable=112 rejected-reports=32 comparison-config-negatives=22/22 + channel-list and bound negatives 9/9 rejected, bound positives accepted; example-report.json valid
+PASS matching.json: vectors=93 catalogues-rebuilt=138 synthetic-catalogues=34 fabricated-catalogues=22 pairs=86 regions=193 reportable=112 rejected-reports=35 comparison-config-negatives=22/22 + channel-list and bound negatives 9/9 rejected, bound positives accepted; example-report.json valid
   rule situations (vectors each, minimum 2): match-over-ambiguous=2, match-over-weaker=2, ambiguous-over-weaker=2, below-over-common=3, region-repeats-hash=5, mixed-common-region=2, merge-split-at-gap-plus-one=2, merge-join-at-gap=29, span-overlap-without-shared-position=3, truncated=4, seed-limit=2, ambiguity-before-cap=2
-PASS derivation (M2.6): 8 labelled files state the ROADMAP.md definition and its application; 84 hand vectors rest only on hand-written token streams, hand records or literal catalogues; 6 mixed
+PASS derivation (M2.6): 8 labelled files state the ROADMAP.md definition and its application; 87 hand vectors rest only on hand-written token streams, hand records or literal catalogues; 6 mixed
 PASS derivation self-test: rejected 8/8
 PASS corruption self-test: rejected 68/68
 PASS catalogue rule self-test (no extraction records used): 42/42 as stated
 PASS required-field self-test: 706/706 single-field deletions handled (required fields rejected, optional provenance field accepted)
-PASS wrong-implementation self-test: rejected 36/36
+PASS wrong-implementation self-test: rejected 37/37
 PASS records-text-plain.json (text lane, external): 60/60 records valid, 1023 k-gram hashes recomputed from recorded values
 PASS records.json: records=29 (null input fields: 4) catalogues-from-records=7 (2 equal to matching.json catalogues, 1 to a rebuild from extraction vectors, 1 from re-derived records, 1 from text-plain records) build-rejections=6
 PASS record corruption self-test: rejected 55/55

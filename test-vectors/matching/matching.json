@@ -46,6 +46,7 @@
   "rust",
   "seed-limit",
   "shadowing",
+  "span-ends",
   "suppression",
   "suppression-artifact-count",
   "suppression-catalogue-mismatch",
@@ -62760,6 +62761,686 @@
    }
   },
   {
+   "id": "go-w3-decreasing-span-end",
+   "tags": [
+    "span-ends",
+    "malformed-catalogue"
+   ],
+   "description": "A16: a go catalogue whose second exact fingerprint's span ends before the first one's. Span ends never decrease, for every profile: malformed-catalogue.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "file": "comparison-config.json"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "sum.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "f5bdefaf388071c855924d7402e8d9c607f095d625fd924c61ad8ac3ca8f6719",
+    "bytesBase64": "eyJhcnRpZmFjdHMiOlt7ImJ5dGVMZW5ndGgiOjEyNywiY2hhbm5lbHMiOnsiZXhhY3QiOnsiZmluZ2VycHJpbnRzIjpbeyJoYXNoIjoiMTNjNTM5NzVmZmQ2MGRjYyIsInBvc2l0aW9uIjoyLCJzcGFuIjpbMTYsMjldfSx7Imhhc2giOiIzMzAyMTBjZDBjMzQ2NmFiIiwicG9zaXRpb24iOjMsInNwYW4iOlsxNywyOF19LHsiaGFzaCI6IjNkNDk3NjUyYTIzZmNlYWIiLCJwb3NpdGlvbiI6NSwic3BhbiI6WzI1LDM2XX0seyJoYXNoIjoiM2M1Njg3ODY4NTU1NWUzMiIsInBvc2l0aW9uIjo4LCJzcGFuIjpbMzEsNDhdfSx7Imhhc2giOiIyZjhmNDBhNjFkY2ZhZTg1IiwicG9zaXRpb24iOjEyLCJzcGFuIjpbNDcsNTZdfSx7Imhhc2giOiI0MjNjNmM5ZDVkN2EyM2U3IiwicG9zaXRpb24iOjE2LCJzcGFuIjpbNTUsNzRdfSx7Imhhc2giOiIwMjkzNzA2MGZjNjI0NzBjIiwicG9zaXRpb24iOjE5LCJzcGFuIjpbNjIsODNdfSx7Imhhc2giOiIwOGJkYzFhNDE3MDA1MjMwIiwicG9zaXRpb24iOjIxLCJzcGFuIjpbNzUsODddfSx7Imhhc2giOiIyMzMxMTY5MDhjMWY3ZmRmIiwicG9zaXRpb24iOjIyLCJzcGFuIjpbNzksODldfSx7Imhhc2giOiI3OWE4ZjVlNDQ0OGJiYTA4IiwicG9zaXRpb24iOjI0LCJzcGFuIjpbODQsMTAxXX0seyJoYXNoIjoiYTAzNmM0ZGQ4ZmQ4ZGRkZiIsInBvc2l0aW9uIjoyNywic3BhbiI6WzkzLDEwN119LHsiaGFzaCI6IjcyNWFmMDBiZjJhYmU3YTMiLCJwb3NpdGlvbiI6MjksInNwYW4iOlsxMDIsMTEwXX0seyJoYXNoIjoiNWMzNDQ2MTcwNDVjZjY3ZCIsInBvc2l0aW9uIjozMCwic3BhbiI6WzEwMywxMTBdfSx7Imhhc2giOiI3NmE2ZWVjYzhjN2E4OTAxIiwicG9zaXRpb24iOjMzLCJzcGFuIjpbMTA5LDEyNF19XSwia2dyYW1Db3VudCI6MzYsInBhcnRpYWxXaW5kb3ciOmZhbHNlfSwibm9ybWFsaXplZCI6eyJmaW5nZXJwcmludHMiOlt7Imhhc2giOiIxOGRhNDJlY2EwNmNkNGExIiwicG9zaXRpb24iOjAsInNwYW4iOlswLDI1XX0seyJoYXNoIjoiMzFkOTM4NTY4YWIzNmIyMCIsInBvc2l0aW9uIjo0LCJzcGFuIjpbMjQsMzRdfSx7Imhhc2giOiIxYmViNzMzNDRjZDA2NDQ3IiwicG9zaXRpb24iOjYsInNwYW4iOlsyNiw0M119LHsiaGFzaCI6IjEzNTE1YTkzNjFjYjY5NDEiLCJwb3NpdGlvbiI6Nywic3BhbiI6WzI5LDQ2XX0seyJoYXNoIjoiMzhlY2IyYWE5M2QyZGM2MCIsInBvc2l0aW9uIjo4LCJzcGFuIjpbMzEsNDhdfSx7Imhhc2giOiI1YjQ2NGRmMmRmMGY4MWY5IiwicG9zaXRpb24iOjksInNwYW4iOlszNSw0OF19LHsiaGFzaCI6IjkxYzQ2MzJkZWFlMWUyMGYiLCJwb3NpdGlvbiI6MTAsInNwYW4iOlszOCw1M119LHsiaGFzaCI6IjQzZDMwOWNlYjIyMzc0YzgiLCJwb3NpdGlvbiI6MTQsInNwYW4iOls1MCw2MV19LHsiaGFzaCI6IjIzM2FiMTY0MzNjMmQ4ZmIiLCJwb3NpdGlvbiI6MTUsInNwYW4iOls1NCw2N119LHsiaGFzaCI6IjUzODA5M2IyOWE1NjEzMzIiLCJwb3NpdGlvbiI6MTgsInNwYW4iOls1OSw4MV19LHsiaGFzaCI6IjFlNzFkMDZjNGUyOWUzZWIiLCJwb3NpdGlvbiI6MjEsInNwYW4iOls3NSw4N119LHsiaGFzaCI6IjNmMjM0NzJkZTM2NzA1M2IiLCJwb3NpdGlvbiI6MjUsInNwYW4iOls4NiwxMDNdfSx7Imhhc2giOiIzNDVhYjg3NzMxN2I2MjcxIiwicG9zaXRpb24iOjI2LCJzcGFuIjpbODgsMTAzXX0seyJoYXNoIjoiMmVhN2NmYmVkZjZhMzgxMyIsInBvc2l0aW9uIjoyNywic3BhbiI6WzkzLDEwN119LHsiaGFzaCI6IjFhOTAwMTIzY2I1ODczYjQiLCJwb3NpdGlvbiI6MjgsInNwYW4iOls5OSwxMDddfSx7Imhhc2giOiIyZDJkZDk4ZDc1YTg0MGY5IiwicG9zaXRpb24iOjMyLCJzcGFuIjpbMTA3LDEyNF19LHsiaGFzaCI6IjIzZDY2ZWUwMTkyZjM1YTEiLCJwb3NpdGlvbiI6MzUsInNwYW4iOlsxMTIsMTI2XX1dLCJrZ3JhbUNvdW50IjozNiwicGFydGlhbFdpbmRvdyI6ZmFsc2V9fSwiaWQiOiJzdW0uZ28iLCJzaGEyNTYiOiI5NzRjOGQwYWQxNDRjM2MzOWU5ZjFjZTQxMDc0MGY0NDlmNjIzYmZmZDI5Yzc1MGU4ZWQzYmQ2ODY0MGI2OTdjIiwic3RhdHVzIjoib2siLCJ0b2tlbkNvdW50Ijo0MH1dLCJjYXRhbG9ndWVWZXJzaW9uIjoidHJhY2V3ZWF2ZS1jYXRhbG9ndWUtZHJhZnQtMiIsImV4dHJhY3Rpb25Db25maWciOnsiY2hhbm5lbHMiOlsiZXhhY3QiLCJub3JtYWxpemVkIl0sImNvbnRyYWN0IjoidHJhY2V3ZWF2ZS10b2tlbi13aW5ub3ctZHJhZnQtMSIsImhhc2giOiJzaGEyNTYtZmlyc3Q4LXU2NGJlIiwiayI6NSwibWF4SW5wdXRCeXRlcyI6MTA0ODU3NiwicHJvZmlsZSI6ImdvLXRva2VucyIsInByb2ZpbGVWZXJzaW9uIjoiZHJhZnQtMSIsIndpbmRvdyI6NH0sInByb2ZpbGUiOnsiY29uZmlnU2hhMjU2IjoiZGZiYzVmZTM1MTdlOWRhNjUxODljZjJlZjMyYzQ2NTViNWVjNjYyNDQxZjJlNzFmNTA4NTQzYTBhNWM4ZjdiMiIsImlkIjoiZ28tdG9rZW5zIiwidmVyc2lvbiI6ImRyYWZ0LTEifX0=",
+    "fabricated": "Catalogue built from the listed artifact, then its second exact fingerprint's span end set one byte before the first fingerprint's end (A16, span ends never decrease)."
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "copy.go",
+      "source": "extraction-go.json#mv-go-sum"
+     }
+    ],
+    "sha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 127,
+       "id": "copy.go",
+       "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+       "status": "ok",
+       "tokenCount": 40,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "13c53975ffd60dcc",
+           "position": 2,
+           "span": [
+            16,
+            29
+           ]
+          },
+          {
+           "hash": "330210cd0c3466ab",
+           "position": 3,
+           "span": [
+            17,
+            30
+           ]
+          },
+          {
+           "hash": "3d497652a23fceab",
+           "position": 5,
+           "span": [
+            25,
+            36
+           ]
+          },
+          {
+           "hash": "3c56878685555e32",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "2f8f40a61dcfae85",
+           "position": 12,
+           "span": [
+            47,
+            56
+           ]
+          },
+          {
+           "hash": "423c6c9d5d7a23e7",
+           "position": 16,
+           "span": [
+            55,
+            74
+           ]
+          },
+          {
+           "hash": "02937060fc62470c",
+           "position": 19,
+           "span": [
+            62,
+            83
+           ]
+          },
+          {
+           "hash": "08bdc1a417005230",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "233116908c1f7fdf",
+           "position": 22,
+           "span": [
+            79,
+            89
+           ]
+          },
+          {
+           "hash": "79a8f5e4448bba08",
+           "position": 24,
+           "span": [
+            84,
+            101
+           ]
+          },
+          {
+           "hash": "a036c4dd8fd8dddf",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "725af00bf2abe7a3",
+           "position": 29,
+           "span": [
+            102,
+            110
+           ]
+          },
+          {
+           "hash": "5c344617045cf67d",
+           "position": 30,
+           "span": [
+            103,
+            110
+           ]
+          },
+          {
+           "hash": "76a6eecc8c7a8901",
+           "position": 33,
+           "span": [
+            109,
+            124
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "18da42eca06cd4a1",
+           "position": 0,
+           "span": [
+            0,
+            25
+           ]
+          },
+          {
+           "hash": "31d938568ab36b20",
+           "position": 4,
+           "span": [
+            24,
+            34
+           ]
+          },
+          {
+           "hash": "1beb73344cd06447",
+           "position": 6,
+           "span": [
+            26,
+            43
+           ]
+          },
+          {
+           "hash": "13515a9361cb6941",
+           "position": 7,
+           "span": [
+            29,
+            46
+           ]
+          },
+          {
+           "hash": "38ecb2aa93d2dc60",
+           "position": 8,
+           "span": [
+            31,
+            48
+           ]
+          },
+          {
+           "hash": "5b464df2df0f81f9",
+           "position": 9,
+           "span": [
+            35,
+            48
+           ]
+          },
+          {
+           "hash": "91c4632deae1e20f",
+           "position": 10,
+           "span": [
+            38,
+            53
+           ]
+          },
+          {
+           "hash": "43d309ceb22374c8",
+           "position": 14,
+           "span": [
+            50,
+            61
+           ]
+          },
+          {
+           "hash": "233ab16433c2d8fb",
+           "position": 15,
+           "span": [
+            54,
+            67
+           ]
+          },
+          {
+           "hash": "538093b29a561332",
+           "position": 18,
+           "span": [
+            59,
+            81
+           ]
+          },
+          {
+           "hash": "1e71d06c4e29e3eb",
+           "position": 21,
+           "span": [
+            75,
+            87
+           ]
+          },
+          {
+           "hash": "3f23472de367053b",
+           "position": 25,
+           "span": [
+            86,
+            103
+           ]
+          },
+          {
+           "hash": "345ab877317b6271",
+           "position": 26,
+           "span": [
+            88,
+            103
+           ]
+          },
+          {
+           "hash": "2ea7cfbedf6a3813",
+           "position": 27,
+           "span": [
+            93,
+            107
+           ]
+          },
+          {
+           "hash": "1a900123cb5873b4",
+           "position": 28,
+           "span": [
+            99,
+            107
+           ]
+          },
+          {
+           "hash": "2d2dd98d75a840f9",
+           "position": 32,
+           "span": [
+            107,
+            124
+           ]
+          },
+          {
+           "hash": "23d66ee0192f35a1",
+           "position": 35,
+           "span": [
+            112,
+            126
+           ]
+          }
+         ],
+         "kgramCount": 36,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "go-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "id": "go-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "rejected",
+    "rejectionCode": "malformed-catalogue",
+    "rejectionSide": "reference"
+   },
+   "expectedReport": {
+    "bodySha256": "074cce1a0fb5d2fa25700210914dd11c44a51c5a72fe7a90866142143d3e93e1",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "ef6ef689e5931996546764849ede0088812c520a35333e00383c3c482570a76f",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceCatalogueSha256": "f5bdefaf388071c855924d7402e8d9c607f095d625fd924c61ad8ac3ca8f6719",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "rejection": {
+      "class": "unsupported-input",
+      "code": "malformed-catalogue",
+      "side": "reference"
+     },
+     "status": "rejected"
+    }
+   }
+  },
+  {
+   "id": "rust-w3-decreasing-span-end",
+   "tags": [
+    "span-ends",
+    "malformed-catalogue"
+   ],
+   "description": "A16: a rust catalogue whose second exact fingerprint's span ends before the first one's. Span ends never decrease, for every profile: malformed-catalogue.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "file": "comparison-config.json"
+   },
+   "reference": {
+    "artifacts": [
+     {
+      "id": "sum.rs",
+      "source": "extraction-rust.json#mv-rust-sum"
+     }
+    ],
+    "sha256": "cbee1999f888d181eef36bc47f98c8e0fa38cb4b25e9f3c7f17bd2f28a6a8735",
+    "bytesBase64": "eyJhcnRpZmFjdHMiOlt7ImJ5dGVMZW5ndGgiOjE1OSwiY2hhbm5lbHMiOnsiZXhhY3QiOnsiZmluZ2VycHJpbnRzIjpbeyJoYXNoIjoiMDQ1OGY4NTVmOGY4ZjM4ZSIsInBvc2l0aW9uIjoyLCJzcGFuIjpbMTUsMjZdfSx7Imhhc2giOiIzOTlkMTVlNWJjN2ZkN2RmIiwicG9zaXRpb24iOjUsInNwYW4iOlsyNCwyNV19LHsiaGFzaCI6IjgwNDgxODAxNWMxYTc3ZjEiLCJwb3NpdGlvbiI6Nywic3BhbiI6WzI2LDM0XX0seyJoYXNoIjoiMGE3MTNiNzM5ZDMyNDE2NiIsInBvc2l0aW9uIjoxMCwic3BhbiI6WzMyLDQ4XX0seyJoYXNoIjoiNGQ4MzI5MmVkZDk4OTI5NiIsInBvc2l0aW9uIjoxMiwic3BhbiI6WzM1LDU4XX0seyJoYXNoIjoiNjQzM2ZhNTNjY2MyMmI4YyIsInBvc2l0aW9uIjoxNiwic3BhbiI6WzUzLDcxXX0seyJoYXNoIjoiMGY3M2Q1YzI0ZjRlMTE1YyIsInBvc2l0aW9uIjoyMCwic3BhbiI6WzY4LDg1XX0seyJoYXNoIjoiNWM5NDEzZjc4NWM5MmIzNyIsInBvc2l0aW9uIjoyMiwic3BhbiI6Wzc0LDk4XX0seyJoYXNoIjoiNDk4MGZlNDRhMDU4YzQ2MCIsInBvc2l0aW9uIjoyNSwic3BhbiI6Wzk0LDEwM119LHsiaGFzaCI6IjA4NjM4MjJjNWMzOGI3ODIiLCJwb3NpdGlvbiI6MjYsInNwYW4iOls5NywxMDVdfSx7Imhhc2giOiI0ZGZlMTQzOGUwNzE3OTlmIiwicG9zaXRpb24iOjI5LCJzcGFuIjpbMTAyLDEyNl19LHsiaGFzaCI6IjIxM2M4ZDJlNzM2YzQ3YjUiLCJwb3NpdGlvbiI6MzIsInNwYW4iOlsxMjQsMTMwXX0seyJoYXNoIjoiNmY0Yjk0YmQ0MWUyYzMxZCIsInBvc2l0aW9uIjozNSwic3BhbiI6WzEyOCwxNTZdfV0sImtncmFtQ291bnQiOjM3LCJwYXJ0aWFsV2luZG93IjpmYWxzZX0sIm5vcm1hbGl6ZWQiOnsiZmluZ2VycHJpbnRzIjpbeyJoYXNoIjoiMTA4NThiOThkZThkNzMyYSIsInBvc2l0aW9uIjoxLCJzcGFuIjpbMywyNV19LHsiaGFzaCI6IjAwOGI5NTMzYWM4ZWEwYzciLCJwb3NpdGlvbiI6NCwic3BhbiI6WzIyLDMwXX0seyJoYXNoIjoiOGM1M2NjYjFhMTQyNjA1NSIsInBvc2l0aW9uIjo3LCJzcGFuIjpbMjYsMzRdfSx7Imhhc2giOiIzYjFjMDE5NjUwZjk2MDZmIiwicG9zaXRpb24iOjksInNwYW4iOlszMCw0MF19LHsiaGFzaCI6Ijg1ODBkZjNkNTFhMzQ5NWMiLCJwb3NpdGlvbiI6MTAsInNwYW4iOlszMiw0OF19LHsiaGFzaCI6IjkzZjE4Mzc0OGZmZGEwZDkiLCJwb3NpdGlvbiI6MTIsInNwYW4iOlszNSw1OF19LHsiaGFzaCI6IjU3YTNmZmE0ZTk5ZGNkNDMiLCJwb3NpdGlvbiI6MTUsInNwYW4iOls0OSw2M119LHsiaGFzaCI6IjM1YTg2NzI3Yjk4ODYxMTMiLCJwb3NpdGlvbiI6MTYsInNwYW4iOls1Myw3MV19LHsiaGFzaCI6IjRhNmYxM2ZlZGUxODFkYmEiLCJwb3NpdGlvbiI6MTksInNwYW4iOls2Miw4M119LHsiaGFzaCI6IjE3MDNhN2M1OTA5NDA0YjMiLCJwb3NpdGlvbiI6MjEsInNwYW4iOls3Miw5Nl19LHsiaGFzaCI6IjFiMzQ0Y2JjNzU3NjRjM2YiLCJwb3NpdGlvbiI6MjMsInNwYW4iOls3Nyw5OV19LHsiaGFzaCI6IjI5NGJmYzRhZGJmMDgyODEiLCJwb3NpdGlvbiI6MjUsInNwYW4iOls5NCwxMDNdfSx7Imhhc2giOiIyNjU0NjU0NWNjOTdhODlhIiwicG9zaXRpb24iOjI5LCJzcGFuIjpbMTAyLDEyNl19LHsiaGFzaCI6IjA3YmQ4ODcyNGRmNDEwZWQiLCJwb3NpdGlvbiI6MzAsInNwYW4iOlsxMDQsMTI4XX0seyJoYXNoIjoiM2FjYjMwYmJkNzRjZjc1MCIsInBvc2l0aW9uIjozMiwic3BhbiI6WzEyNCwxMzBdfSx7Imhhc2giOiI0ZTFkNjg3ZDdkZDExM2ZiIiwicG9zaXRpb24iOjM1LCJzcGFuIjpbMTI4LDE1Nl19XSwia2dyYW1Db3VudCI6MzcsInBhcnRpYWxXaW5kb3ciOmZhbHNlfX0sImlkIjoic3VtLnJzIiwic2hhMjU2IjoiNTRlN2MwZGQzNzU5MTNlYzczNjJhODAzYTRiYjNjMzFjOGMxMjgxNTEyMzdmNDA3MWMyNGQxOGY2NTU0N2Q1MiIsInN0YXR1cyI6Im9rIiwidG9rZW5Db3VudCI6NDF9XSwiY2F0YWxvZ3VlVmVyc2lvbiI6InRyYWNld2VhdmUtY2F0YWxvZ3VlLWRyYWZ0LTIiLCJleHRyYWN0aW9uQ29uZmlnIjp7ImNoYW5uZWxzIjpbImV4YWN0Iiwibm9ybWFsaXplZCJdLCJjb250cmFjdCI6InRyYWNld2VhdmUtdG9rZW4td2lubm93LWRyYWZ0LTEiLCJoYXNoIjoic2hhMjU2LWZpcnN0OC11NjRiZSIsImsiOjUsIm1heElucHV0Qnl0ZXMiOjEwNDg1NzYsInByb2ZpbGUiOiJydXN0MjAyNC10b2tlbnMiLCJwcm9maWxlVmVyc2lvbiI6ImRyYWZ0LTEiLCJ3aW5kb3ciOjR9LCJwcm9maWxlIjp7ImNvbmZpZ1NoYTI1NiI6IjY0YjM0MzM1ZTRhNjEzODNhZGExNDAzYTJkZjk3YzJlNDVkYmE5ODdiYmYwYzhlYzIxMzg1ZTA0MTA0ZDEyNzciLCJpZCI6InJ1c3QyMDI0LXRva2VucyIsInZlcnNpb24iOiJkcmFmdC0xIn19",
+    "fabricated": "Catalogue built from the listed artifact, then its second exact fingerprint's span end set one byte before the first fingerprint's end (A16, span ends never decrease)."
+   },
+   "candidate": {
+    "artifacts": [
+     {
+      "id": "copy.rs",
+      "source": "extraction-rust.json#mv-rust-sum"
+     }
+    ],
+    "sha256": "88d8615bf2f8d46c21bbb7724f34fd9a06048dcff6ca893d9a8086a9e0334843",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 159,
+       "id": "copy.rs",
+       "sha256": "54e7c0dd375913ec7362a803a4bb3c31c8c128151237f4071c24d18f65547d52",
+       "status": "ok",
+       "tokenCount": 41,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "0458f855f8f8f38e",
+           "position": 2,
+           "span": [
+            15,
+            26
+           ]
+          },
+          {
+           "hash": "399d15e5bc7fd7df",
+           "position": 5,
+           "span": [
+            24,
+            31
+           ]
+          },
+          {
+           "hash": "804818015c1a77f1",
+           "position": 7,
+           "span": [
+            26,
+            34
+           ]
+          },
+          {
+           "hash": "0a713b739d324166",
+           "position": 10,
+           "span": [
+            32,
+            48
+           ]
+          },
+          {
+           "hash": "4d83292edd989296",
+           "position": 12,
+           "span": [
+            35,
+            58
+           ]
+          },
+          {
+           "hash": "6433fa53ccc22b8c",
+           "position": 16,
+           "span": [
+            53,
+            71
+           ]
+          },
+          {
+           "hash": "0f73d5c24f4e115c",
+           "position": 20,
+           "span": [
+            68,
+            85
+           ]
+          },
+          {
+           "hash": "5c9413f785c92b37",
+           "position": 22,
+           "span": [
+            74,
+            98
+           ]
+          },
+          {
+           "hash": "4980fe44a058c460",
+           "position": 25,
+           "span": [
+            94,
+            103
+           ]
+          },
+          {
+           "hash": "0863822c5c38b782",
+           "position": 26,
+           "span": [
+            97,
+            105
+           ]
+          },
+          {
+           "hash": "4dfe1438e071799f",
+           "position": 29,
+           "span": [
+            102,
+            126
+           ]
+          },
+          {
+           "hash": "213c8d2e736c47b5",
+           "position": 32,
+           "span": [
+            124,
+            130
+           ]
+          },
+          {
+           "hash": "6f4b94bd41e2c31d",
+           "position": 35,
+           "span": [
+            128,
+            156
+           ]
+          }
+         ],
+         "kgramCount": 37,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "10858b98de8d732a",
+           "position": 1,
+           "span": [
+            3,
+            25
+           ]
+          },
+          {
+           "hash": "008b9533ac8ea0c7",
+           "position": 4,
+           "span": [
+            22,
+            30
+           ]
+          },
+          {
+           "hash": "8c53ccb1a1426055",
+           "position": 7,
+           "span": [
+            26,
+            34
+           ]
+          },
+          {
+           "hash": "3b1c019650f9606f",
+           "position": 9,
+           "span": [
+            30,
+            40
+           ]
+          },
+          {
+           "hash": "8580df3d51a3495c",
+           "position": 10,
+           "span": [
+            32,
+            48
+           ]
+          },
+          {
+           "hash": "93f183748ffda0d9",
+           "position": 12,
+           "span": [
+            35,
+            58
+           ]
+          },
+          {
+           "hash": "57a3ffa4e99dcd43",
+           "position": 15,
+           "span": [
+            49,
+            63
+           ]
+          },
+          {
+           "hash": "35a86727b9886113",
+           "position": 16,
+           "span": [
+            53,
+            71
+           ]
+          },
+          {
+           "hash": "4a6f13fede181dba",
+           "position": 19,
+           "span": [
+            62,
+            83
+           ]
+          },
+          {
+           "hash": "1703a7c5909404b3",
+           "position": 21,
+           "span": [
+            72,
+            96
+           ]
+          },
+          {
+           "hash": "1b344cbc75764c3f",
+           "position": 23,
+           "span": [
+            77,
+            99
+           ]
+          },
+          {
+           "hash": "294bfc4adbf08281",
+           "position": 25,
+           "span": [
+            94,
+            103
+           ]
+          },
+          {
+           "hash": "26546545cc97a89a",
+           "position": 29,
+           "span": [
+            102,
+            126
+           ]
+          },
+          {
+           "hash": "07bd88724df410ed",
+           "position": 30,
+           "span": [
+            104,
+            128
+           ]
+          },
+          {
+           "hash": "3acb30bbd74cf750",
+           "position": 32,
+           "span": [
+            124,
+            130
+           ]
+          },
+          {
+           "hash": "4e1d687d7dd113fb",
+           "position": 35,
+           "span": [
+            128,
+            156
+           ]
+          }
+         ],
+         "kgramCount": 37,
+         "partialWindow": false
+        }
+       }
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "rust2024-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "64b34335e4a61383ada1403a2df97c2e45dba987bbf0c8ec21385e04104d1277",
+      "id": "rust2024-tokens",
+      "version": "draft-1"
+     }
+    }
+   },
+   "handExpectations": {
+    "status": "rejected",
+    "rejectionCode": "malformed-catalogue",
+    "rejectionSide": "reference"
+   },
+   "expectedReport": {
+    "bodySha256": "e506491150424cb7ca31f733d96a6f47c3984224fc8588929f7a4efd5f76bcd0",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "88d8615bf2f8d46c21bbb7724f34fd9a06048dcff6ca893d9a8086a9e0334843",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceCatalogueSha256": "cbee1999f888d181eef36bc47f98c8e0fa38cb4b25e9f3c7f17bd2f28a6a8735",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "rejection": {
+      "class": "unsupported-input",
+      "code": "malformed-catalogue",
+      "side": "reference"
+     },
+     "status": "rejected"
+    }
+   }
+  },
+  {
    "id": "go-empty-span-k5",
    "tags": [
     "zero-width-rule",
@@ -65856,6 +66537,204 @@
      "suppression": {
       "status": "none"
      }
+    }
+   }
+  },
+  {
+   "id": "rv-py-decreasing-span-end",
+   "tags": [
+    "synthetic",
+    "py-tokens",
+    "span-ends",
+    "malformed-catalogue"
+   ],
+   "description": "A16: a synthetic py-tokens catalogue whose second fingerprint's span [2, 8) ends before the first one's [0, 10). Zero-width tokens relax starts and empty spans only; ends never decrease: malformed-catalogue.",
+   "derivation": "hand",
+   "comparisonConfig": {
+    "bytesBase64": "eyJjb21wYXJpc29uIjoidHJhY2V3ZWF2ZS1zZWVkLW1lcmdlLWRyYWZ0LTIiLCJtb2RlcyI6WyJleGFjdCIsIm5vcm1hbGl6ZWQiXSwibWluUmVnaW9uRGlzdGluY3RIYXNoZXMiOjEsIm1lcmdlR2FwIjo0LCJtYXhTZWVkc1Blck1vZGUiOjEwMDAwMCwibWF4UmVnaW9uc1Blck1vZGUiOjEwMDAsInN1cHByZXNzaW9uQ2F0YWxvZ3VlU2hhMjU2Ijoibm9uZSJ9Cg=="
+   },
+   "reference": {
+    "sha256": "cd5b9a4ae6993bdd404236a10a19c2cb1202cabe36915867069a551397113612",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 24,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "a000000000000001",
+           "position": 0,
+           "span": [
+            0,
+            10
+           ]
+          },
+          {
+           "hash": "b000000000000002",
+           "position": 4,
+           "span": [
+            2,
+            8
+           ]
+          }
+         ],
+         "kgramCount": 8,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "a000000000000001",
+           "position": 0,
+           "span": [
+            0,
+            10
+           ]
+          },
+          {
+           "hash": "b000000000000002",
+           "position": 4,
+           "span": [
+            2,
+            8
+           ]
+          }
+         ],
+         "kgramCount": 8,
+         "partialWindow": false
+        }
+       },
+       "id": "r.syn",
+       "sha256": "08d98bd2573255f0abef5c8f6203871e7364c529e694c459ee9ef9aaab30ed5a",
+       "status": "ok",
+       "tokenCount": 12
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "py-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c77b016",
+      "id": "py-tokens",
+      "version": "draft-1"
+     }
+    },
+    "synthetic": "Winnowing-shaped catalogue with no source bytes; the artifact digest is the SHA-256 of the ASCII string 'traceweave synthetic artifact r.syn'."
+   },
+   "candidate": {
+    "sha256": "fa29f8880dd5f02ffc0229b41ebb9a84fc8f122ec1295adfbfeebeb3077eca6a",
+    "canonical": {
+     "artifacts": [
+      {
+       "byteLength": 24,
+       "channels": {
+        "exact": {
+         "fingerprints": [
+          {
+           "hash": "b000000000000002",
+           "position": 0,
+           "span": [
+            0,
+            10
+           ]
+          },
+          {
+           "hash": "a0a0a0a0a0a0a0a0",
+           "position": 4,
+           "span": [
+            20,
+            20
+           ]
+          }
+         ],
+         "kgramCount": 8,
+         "partialWindow": false
+        },
+        "normalized": {
+         "fingerprints": [
+          {
+           "hash": "b000000000000002",
+           "position": 0,
+           "span": [
+            0,
+            10
+           ]
+          },
+          {
+           "hash": "a0a0a0a0a0a0a0a0",
+           "position": 4,
+           "span": [
+            20,
+            20
+           ]
+          }
+         ],
+         "kgramCount": 8,
+         "partialWindow": false
+        }
+       },
+       "id": "c.syn",
+       "sha256": "932cd2fb30cca2d600d5b1f54bb449a80d746a131654b49311d05f96155b6429",
+       "status": "ok",
+       "tokenCount": 12
+      }
+     ],
+     "catalogueVersion": "traceweave-catalogue-draft-2",
+     "extractionConfig": {
+      "contract": "traceweave-token-winnow-draft-1",
+      "profile": "py-tokens",
+      "profileVersion": "draft-1",
+      "channels": [
+       "exact",
+       "normalized"
+      ],
+      "k": 5,
+      "window": 4,
+      "hash": "sha256-first8-u64be",
+      "maxInputBytes": 1048576
+     },
+     "profile": {
+      "configSha256": "365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c77b016",
+      "id": "py-tokens",
+      "version": "draft-1"
+     }
+    },
+    "synthetic": "Winnowing-shaped catalogue with no source bytes; the artifact digest is the SHA-256 of the ASCII string 'traceweave synthetic artifact c.syn'."
+   },
+   "handExpectations": {
+    "status": "rejected",
+    "rejectionCode": "malformed-catalogue",
+    "rejectionSide": "reference"
+   },
+   "expectedReport": {
+    "bodySha256": "f8d77955069eb5ce56719e0a03ee1e066df78a41e757014e7e438fcadc1a6dd5",
+    "body": {
+     "inputs": {
+      "candidateCatalogueSha256": "fa29f8880dd5f02ffc0229b41ebb9a84fc8f122ec1295adfbfeebeb3077eca6a",
+      "comparisonConfigSha256": "0e8eb77a871853f12f353df33d4a64e02c0945b6538b83a96582328501eb6b4f",
+      "referenceCatalogueSha256": "cd5b9a4ae6993bdd404236a10a19c2cb1202cabe36915867069a551397113612",
+      "suppressionCatalogueSha256": "none"
+     },
+     "reportVersion": "traceweave-report-draft-2",
+     "resultKind": "token-fingerprint-comparison",
+     "rejection": {
+      "class": "unsupported-input",
+      "code": "malformed-catalogue",
+      "side": "reference"
+     },
+     "status": "rejected"
     }
    }
   }

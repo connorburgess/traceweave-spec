@@ -1,0 +1,244 @@
+{
+ "controlClassesVersion": "traceweave-m23-control-classes-draft-1",
+ "note": "M2.3 control classes (spec/catalogue-report.md section 6.12). A class's members are the derivation hand vectors of matching.json carrying one of its tags, in id byte order. candidateCount counts listed pairs whose outcome is match in at least one mode; denominator counts every listed pair, compared or not; a rejected comparison lists no pair and is counted in rejectedComparisons, never in the denominator. An implementation's M2.3 report MUST give these numbers.",
+ "derivationRule": "A vector is hand-derived when both of these hold: (a) Judgments are written by a person. Every judgment the contract leaves to a reader is written by a person from the contract text. That covers the token boundaries, classes and texts; inserted tokens; the outcome status; and the error code and the position of the defect. For matching vectors it also covers which regions match, and the outcome. (b) Arithmetic is computed and rechecked. Everything that is pure arithmetic over those judgments is computed by the specification's own checker or builder, which is not an implementation under test. That covers byte spans located from the hand-written token texts, SHA-256 hashes, window selection, fingerprints, digests and canonical bytes. At least one independent recomputation, by a clean-room reviewer or a second checker, confirms it. A vector whose lexical layer was first produced by a tool and then reviewed is not hand-derived, and must be labelled otherwise. Applied to this listing: the classes and the tags that select them are written by hand from ROADMAP.md M2.3 and spec/catalogue-report.md section 6.12; members are the derivation hand vectors carrying a class tag. Every count is computed by build_gates.py from matching.json bodies, and check_gates.py recounts them from its own recomputed bodies.",
+ "matchingVectorsFile": "matching.json",
+ "classes": [
+  {
+   "class": "independent-same-task",
+   "tags": [
+    "independent-same-task"
+   ],
+   "vectors": [
+    {
+     "vectorId": "go-independent-same-task",
+     "pairs": 1,
+     "candidates": 0,
+     "candidatesByMode": {
+      "exact": 0,
+      "normalized": 0
+     }
+    }
+   ],
+   "candidateCount": 0,
+   "denominator": 1,
+   "rejectedComparisons": 0,
+   "excludedNotHand": []
+  },
+  {
+   "class": "boilerplate",
+   "tags": [
+    "boilerplate"
+   ],
+   "vectors": [
+    {
+     "vectorId": "go-boilerplate-suppressed",
+     "pairs": 2,
+     "candidates": 0,
+     "candidatesByMode": {
+      "exact": 0,
+      "normalized": 0
+     }
+    }
+   ],
+   "candidateCount": 0,
+   "denominator": 2,
+   "rejectedComparisons": 0,
+   "excludedNotHand": [
+    "go-boilerplate-unsuppressed"
+   ]
+  },
+  {
+   "class": "vendor",
+   "tags": [
+    "vendor"
+   ],
+   "vectors": [
+    {
+     "vectorId": "vendor-copied-into-own-code",
+     "pairs": 1,
+     "candidates": 0,
+     "candidatesByMode": {
+      "exact": 0,
+      "normalized": 0
+     }
+    },
+    {
+     "vectorId": "vendor-idiom-suppresses-pair",
+     "pairs": 1,
+     "candidates": 0,
+     "candidatesByMode": {
+      "exact": 0,
+      "normalized": 0
+     }
+    },
+    {
+     "vectorId": "vendor-suppressed",
+     "pairs": 4,
+     "candidates": 0,
+     "candidatesByMode": {
+      "exact": 0,
+      "normalized": 0
+     }
+    },
+    {
+     "vectorId": "vendor-unsuppressed",
+     "pairs": 4,
+     "candidates": 1,
+     "candidatesByMode": {
+      "exact": 1,
+      "normalized": 1
+     }
+    }
+   ],
+   "candidateCount": 1,
+   "denominator": 10,
+   "rejectedComparisons": 0,
+   "excludedNotHand": []
+  },
+  {
+   "class": "unrelated",
+   "tags": [
+    "no-overlap"
+   ],
+   "vectors": [
+    {
+     "vectorId": "go-no-overlap",
+     "pairs": 1,
+     "candidates": 0,
+     "candidatesByMode": {
+      "exact": 0,
+      "normalized": 0
+     }
+    }
+   ],
+   "candidateCount": 0,
+   "denominator": 1,
+   "rejectedComparisons": 0,
+   "excludedNotHand": []
+  },
+  {
+   "class": "malformed-unsupported",
+   "tags": [
+    "malformed-catalogue",
+    "malformed-candidate",
+    "unsupported-catalogue",
+    "unsupported-profile",
+    "unsupported-comparison-config"
+   ],
+   "vectors": [
+    {
+     "vectorId": "bounds-regions-above",
+     "rejected": "unsupported-comparison-config"
+    },
+    {
+     "vectorId": "bounds-seeds-above",
+     "rejected": "unsupported-comparison-config"
+    },
+    {
+     "vectorId": "go-duplicate-key-catalogue",
+     "rejected": "malformed-catalogue"
+    },
+    {
+     "vectorId": "go-empty-span-k5",
+     "rejected": "malformed-catalogue"
+    },
+    {
+     "vectorId": "go-input-too-large",
+     "pairs": 3,
+     "candidates": 0,
+     "candidatesByMode": {
+      "exact": 0,
+      "normalized": 0
+     }
+    },
+    {
+     "vectorId": "go-malformed-candidate",
+     "pairs": 1,
+     "candidates": 0,
+     "candidatesByMode": {
+      "exact": 0,
+      "normalized": 0
+     }
+    },
+    {
+     "vectorId": "go-malformed-catalogue",
+     "rejected": "malformed-catalogue"
+    },
+    {
+     "vectorId": "go-reference-side-failures",
+     "pairs": 6,
+     "candidates": 1,
+     "candidatesByMode": {
+      "exact": 1,
+      "normalized": 1
+     }
+    },
+    {
+     "vectorId": "go-unsupported-catalogue",
+     "rejected": "unsupported-catalogue"
+    },
+    {
+     "vectorId": "go-unsupported-comparison-config",
+     "rejected": "unsupported-comparison-config"
+    },
+    {
+     "vectorId": "go-unsupported-profile",
+     "rejected": "unsupported-profile"
+    },
+    {
+     "vectorId": "go-w1-reused-span-start",
+     "rejected": "malformed-catalogue"
+    },
+    {
+     "vectorId": "go-w2-identical-spans",
+     "rejected": "malformed-catalogue"
+    },
+    {
+     "vectorId": "go-w3-decreasing-span-end",
+     "rejected": "malformed-catalogue"
+    },
+    {
+     "vectorId": "k1-extraction-bounds-k17",
+     "rejected": "malformed-catalogue"
+    },
+    {
+     "vectorId": "k1-extraction-bounds-max-input",
+     "rejected": "malformed-catalogue"
+    },
+    {
+     "vectorId": "k3-lone-surrogate",
+     "rejected": "malformed-catalogue"
+    },
+    {
+     "vectorId": "k3-non-integer-number",
+     "rejected": "malformed-catalogue"
+    },
+    {
+     "vectorId": "k4-depth-65",
+     "rejected": "malformed-catalogue"
+    },
+    {
+     "vectorId": "rust-w1-reused-span-start",
+     "rejected": "malformed-catalogue"
+    },
+    {
+     "vectorId": "rust-w2-identical-spans",
+     "rejected": "malformed-catalogue"
+    },
+    {
+     "vectorId": "rust-w3-decreasing-span-end",
+     "rejected": "malformed-catalogue"
+    },
+    {
+     "vectorId": "rv-py-decreasing-span-end",
+     "rejected": "malformed-catalogue"
+    }
+   ],
+   "candidateCount": 1,
+   "denominator": 10,
+   "rejectedComparisons": 20,
+   "excludedNotHand": []
+  }
+ ]
+}

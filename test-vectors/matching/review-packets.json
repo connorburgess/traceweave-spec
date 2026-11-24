@@ -156,7 +156,8 @@
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-report-own-origin",
@@ -179,7 +180,8 @@
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-report.bodySha256-own-origin",
@@ -203,7 +205,8 @@
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-region-own-origin",
@@ -220,7 +223,8 @@
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-region.referenceId-own-origin",
@@ -245,7 +249,8 @@
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-region.candidateId-own-origin",
@@ -270,7 +275,8 @@
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-region.mode-own-origin",
@@ -295,7 +301,8 @@
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-region.firstSeed-own-origin",
@@ -317,7 +324,8 @@
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin-own-origin",
@@ -337,7 +345,8 @@
       44
      ]
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.kind-own-origin",
@@ -362,7 +371,8 @@
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.side-own-origin",
@@ -387,7 +397,8 @@
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.artifactSha256-own-origin",
@@ -412,7 +423,8 @@
      "side": "reference",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.repositoryCommit-own-origin",
@@ -437,7 +449,8 @@
      "side": "reference",
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-reviewPacketVersion-vendored-dependency",
@@ -469,7 +482,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-report-vendored-dependency",
@@ -499,7 +513,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-report.bodySha256-vendored-dependency",
@@ -530,7 +545,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-region-vendored-dependency",
@@ -554,7 +570,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-region.referenceId-vendored-dependency",
@@ -586,7 +603,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-region.candidateId-vendored-dependency",
@@ -618,7 +636,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-region.mode-vendored-dependency",
@@ -650,7 +669,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-region.firstSeed-vendored-dependency",
@@ -679,7 +699,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin-vendored-dependency",
@@ -699,7 +720,8 @@
       0
      ]
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.kind-vendored-dependency",
@@ -731,7 +753,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.side-vendored-dependency",
@@ -763,7 +786,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.vendoredArtifactSha256-vendored-dependency",
@@ -795,7 +819,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.package-vendored-dependency",
@@ -824,7 +849,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.package.name-vendored-dependency",
@@ -856,7 +882,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.package.version-vendored-dependency",
@@ -888,7 +915,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.upstreamArtifactSha256-vendored-dependency",
@@ -920,7 +948,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.licence-vendored-dependency",
@@ -950,7 +979,8 @@
      },
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413"
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.licence.textSha256-vendored-dependency",
@@ -981,7 +1011,8 @@
      "upstreamArtifactSha256": "b8cc5efd3c09d50077b988e9090774d146840ee07b10f530b0f52cca58169413",
      "licence": {}
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-reviewPacketVersion-historical-copy",
@@ -1010,7 +1041,8 @@
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-report-historical-copy",
@@ -1037,7 +1069,8 @@
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-report.bodySha256-historical-copy",
@@ -1065,7 +1098,8 @@
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-region-historical-copy",
@@ -1086,7 +1120,8 @@
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-region.referenceId-historical-copy",
@@ -1115,7 +1150,8 @@
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-region.candidateId-historical-copy",
@@ -1144,7 +1180,8 @@
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-region.mode-historical-copy",
@@ -1173,7 +1210,8 @@
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-region.firstSeed-historical-copy",
@@ -1199,7 +1237,8 @@
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin-historical-copy",
@@ -1219,7 +1258,8 @@
       14
      ]
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.kind-historical-copy",
@@ -1248,7 +1288,8 @@
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.side-historical-copy",
@@ -1277,7 +1318,8 @@
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.copyArtifactSha256-historical-copy",
@@ -1306,7 +1348,8 @@
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.sourceArtifactSha256-historical-copy",
@@ -1335,7 +1378,8 @@
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.sourceCommit-historical-copy",
@@ -1364,7 +1408,8 @@
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.licence-historical-copy",
@@ -1391,7 +1436,8 @@
      "sourceArtifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "sourceCommit": "2222222222222222222222222222222222222222"
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "missing-origin.licence.textSha256-historical-copy",
@@ -1419,7 +1465,8 @@
      "sourceCommit": "2222222222222222222222222222222222222222",
      "licence": {}
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "region-key-absent",
@@ -1452,7 +1499,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "region-key-absent"
   },
   {
    "id": "region-mode-absent",
@@ -1485,7 +1533,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "region-mode-absent"
   },
   {
    "id": "body-unknown",
@@ -1518,7 +1567,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "body-unknown"
   },
   {
    "id": "own-origin-digest-mismatch",
@@ -1544,7 +1594,8 @@
      "artifactSha256": "3333333333333333333333333333333333333333333333333333333333333333",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
-   }
+   },
+   "code": "side-digest-mismatch"
   },
   {
    "id": "own-origin-wrong-side",
@@ -1570,7 +1621,8 @@
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
-   }
+   },
+   "code": "side-digest-mismatch"
   },
   {
    "id": "vendored-repointed-p1b",
@@ -1603,7 +1655,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "side-digest-mismatch"
   },
   {
    "id": "vendored-digest-mismatch",
@@ -1636,7 +1689,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "side-digest-mismatch"
   },
   {
    "id": "historical-source-unbound",
@@ -1666,7 +1720,8 @@
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
-   }
+   },
+   "code": "historical-source-unbound"
   },
   {
    "id": "historical-copy-digest-mismatch",
@@ -1696,7 +1751,8 @@
       "textSha256": "6b786d3d54203106d38bd3f6a8a1b80df67a6b252b630f93797980f594cfae6c"
      }
     }
-   }
+   },
+   "code": "side-digest-mismatch"
   },
   {
    "id": "licence-identifier-p3",
@@ -1730,7 +1786,8 @@
       "identifier": "GPL-3.0-only"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "permitted-inside-package-p4",
@@ -1764,7 +1821,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "uppercase-digest-p6",
@@ -1797,7 +1855,8 @@
       "textSha256": "5f91082ba3a3db2ee70d0120532c1e95c2d473cc360fd2c18e9c275c770ac15a"
      }
     }
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "non-first-seed-p2",
@@ -1823,7 +1882,8 @@
      "artifactSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
      "repositoryCommit": "1111111111111111111111111111111111111111"
     }
-   }
+   },
+   "code": "region-key-absent"
   },
   {
    "id": "licence-text-unarchived",
@@ -1856,7 +1916,8 @@
       "textSha256": "4444444444444444444444444444444444444444444444444444444444444444"
      }
     }
-   }
+   },
+   "code": "licence-text-unarchived"
   },
   {
    "id": "forbidden-field-rightsVerdict",
@@ -1890,7 +1951,8 @@
      }
     },
     "rightsVerdict": "permitted"
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "forbidden-field-permitted",
@@ -1924,7 +1986,8 @@
      }
     },
     "permitted": true
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "forbidden-field-owner",
@@ -1958,7 +2021,8 @@
      }
     },
     "owner": "x"
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "forbidden-field-score",
@@ -1992,7 +2056,8 @@
      }
     },
     "score": 1
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "forbidden-field-note",
@@ -2026,7 +2091,8 @@
      }
     },
     "note": "free text"
-   }
+   },
+   "code": "malformed-packet"
   },
   {
    "id": "forbidden-field-origin-licenceCompatible",
@@ -2060,7 +2126,8 @@
      },
      "licenceCompatible": true
     }
-   }
+   },
+   "code": "malformed-packet"
   }
  ],
  "reportRejections": [

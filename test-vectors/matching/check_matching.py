@@ -612,7 +612,7 @@ def catalogue_semantic_errors(cat, prof):
                     errs.append(f"{a['id']}/{ch}: empty span at k > 1 in a profile without zero-width tokens")
                 if prev and not (f["position"] > prev["position"]
                                  and (s >= prev["span"][0] if zw and CATALOGUE_VARIANT[0] != "strict-span-starts" else s > prev["span"][0])
-                                 and e >= prev["span"][1]):
+                                 and (e >= prev["span"][1] or CATALOGUE_VARIANT[0] == "span-ends-unchecked")):
                     errs.append(f"{a['id']}/{ch}: fingerprints not ordered by position with monotone spans")
                 if prev and f["position"] - prev["position"] > w:
                     errs.append(f"{a['id']}/{ch}: gap between fingerprints exceeds the window")
@@ -864,10 +864,12 @@ VARIANTS = [
     ("strict-span-starts", "P1: fingerprint span starts required to strictly increase (rejects py-tokens zero-width layout)"),
     ("empty-span-rejected", "P2: an empty fingerprint span rejected at k > 1"),
     ("relaxation-global", "P3: non-decreasing starts and empty spans allowed for every profile (review W1/W2)"),
+    ("span-ends-unchecked", "P4: span ends not checked (A16: ends never decrease, for every profile)"),
 ]
 CATALOGUE_LEVEL_VARIANTS = {"suppression-lenient-digest", "last-duplicate-key-wins", "extraction-bounds-ignored",
                             "lone-surrogate-accepted", "no-depth-limit", "depth-limit-strict", "config-bounds-ignored",
-                            "strict-span-starts", "empty-span-rejected", "relaxation-global"}
+                            "strict-span-starts", "empty-span-rejected", "relaxation-global",
+                            "span-ends-unchecked"}
 
 
 # ------------------------------------------------------------------ report rules beyond the schema (contract §6)
@@ -1085,7 +1087,11 @@ def vector_inputs(v, doc, ctx, stats=None):
                  f"{side}: a synthetic catalogue has a note and a canonical object and no artifact sources")
             schema_check(ctx.cat_schema, entry["canonical"], f"{side} synthetic catalogue")
             raw = canon_bytes(entry["canonical"])
-            need(catalogue_rejection(raw, ctx.cat_schema)[1] is None, f"{side}: synthetic catalogue fails the §3.6 rules")
+            rj = v["expectedReport"]["body"].get("rejection") or {}
+            # A synthetic catalogue must pass §3.6 unless the vector exists to reject it (A16: rv-py-decreasing-span-end).
+            need(catalogue_rejection(raw, ctx.cat_schema)[1] is None
+                 or (rj.get("side") == side and rj.get("code") == "malformed-catalogue"),
+                 f"{side}: synthetic catalogue fails the §3.6 rules")
             if stats is not None:
                 stats["synthetic"] += 1
         else:

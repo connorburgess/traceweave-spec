@@ -838,6 +838,8 @@ def catalogue_status(raw: bytes):
             for x, y in zip(fps, fps[1:]):
                 if (y["span"][0] < x["span"][0]) if zero_width else (y["span"][0] <= x["span"][0]):
                     return None, "malformed-catalogue"
+                if y["span"][1] < x["span"][1]:   # A16: span ends never decrease, for every profile
+                    return None, "malformed-catalogue"
     return obj, None
 
 
@@ -1688,6 +1690,13 @@ def main():
         vec(f"{vid0}-w2-identical-spans", ["zero-width-rule", "malformed-catalogue"],
             f"A14 (review W2): a {lang} catalogue with identical spans at two consecutive fingerprint positions: malformed-catalogue.",
             src, cand0, rej("malformed-catalogue", "reference"), overrides={"reference": "w2"})
+    # --- A16 (implementation rulings): span ends never decrease, for every profile (CG-Q3 / E7) ----
+    for lang, src, vid0 in (("go", SUM, "go"), ("rust", [("sum.rs", f"{RU}#mv-rust-sum")], "rust")):
+        cand0 = COPY if lang == "go" else [("copy.rs", f"{RU}#mv-rust-sum")]
+        vec(f"{vid0}-w3-decreasing-span-end", ["span-ends", "malformed-catalogue"],
+            f"A16: a {lang} catalogue whose second exact fingerprint's span ends before the first one's. Span ends never "
+            "decrease, for every profile: malformed-catalogue.",
+            src, cand0, rej("malformed-catalogue", "reference"), overrides={"reference": "w3"})
     vec("go-empty-span-k5", ["zero-width-rule", "malformed-catalogue"],
         "A14: an empty fingerprint span at k = 5 in a go-tokens catalogue. Only profiles with zero-width tokens (py-tokens) may "
         "have empty spans at k > 1: malformed-catalogue.",
@@ -1719,6 +1728,13 @@ def main():
         {"status": "compared", "pairs": [pair("r.syn", "c.syn", both(ex(codeIn=["match"], reportable=1, seeds=[[[4, 4]]],
                                                                          regionSpans=[[[30, 30], [20, 20]]])))]},
         cc=comparison_config_bytes(min_hashes=1))
+
+    vec("rv-py-decreasing-span-end", ["synthetic", "py-tokens", "span-ends", "malformed-catalogue"],
+        "A16: a synthetic py-tokens catalogue whose second fingerprint's span [2, 8) ends before the first one's [0, 10). "
+        "Zero-width tokens relax starts and empty spans only; ends never decrease: malformed-catalogue.",
+        ("synthetic", "r.syn", 8, [(0, A, [0, 10]), (4, B, [2, 8])], "py"),
+        ("synthetic", "c.syn", 8, [(0, B, [0, 10]), (4, Z, [20, 20])], "py"),
+        rej("malformed-catalogue", "reference"), cc=comparison_config_bytes(min_hashes=1))
 
     cc_cache = {}
     out = []
@@ -1796,12 +1812,15 @@ def main():
                         cats[side] = entry
                         bytes_[side] = b
                         continue
-                elif ov in ("w1", "w2", "emptyk"):
+                elif ov in ("w1", "w2", "emptyk", "w3"):
                     fp = cat["artifacts"][0]["channels"]["exact"]["fingerprints"]
                     if ov == "w1":
                         fp[1]["span"][0] = fp[0]["span"][0]            # W1: the previous fingerprint's start reused
                     elif ov == "w2":
                         fp[1]["span"] = list(fp[0]["span"])            # W2: identical spans at consecutive positions
+                    elif ov == "w3":
+                        fp[1]["span"][1] = fp[0]["span"][1] - 1        # W3: the second span ends before the first one
+                        assert fp[1]["span"][0] < fp[1]["span"][1], "w3 needs overlapping fingerprints"
                     else:
                         fp[0]["span"][1] = fp[0]["span"][0]            # an empty span at k = 5
                     b = canonical(cat)
@@ -1809,6 +1828,8 @@ def main():
                                   "the first fingerprint's start (review W1).",
                             "w2": "Catalogue built from the listed artifact, then its second exact fingerprint's span set equal to "
                                   "the first's (review W2).",
+                            "w3": "Catalogue built from the listed artifact, then its second exact fingerprint's span end set "
+                                  "one byte before the first fingerprint's end (A16, span ends never decrease).",
                             "emptyk": "Catalogue built from the listed artifact, then its first exact fingerprint's span made empty "
                                       "([start, start)) at k = 5."}[ov]
                 elif ov in ("surrogate", "float", "depth64", "depth65"):
@@ -1876,7 +1897,7 @@ def main():
                                    "suppression-artifact-count", "suppression-order", "input-too-large",
                                    "three-channel", "mode-mismatch", "text-plain", "k1", "k3", "k4", "config-bounds",
                                    "vendor", "formatted-fragment-in-host", "py-tokens", "empty-span", "equal-starts",
-                                   "zero-width-rule", "vendor-effect"}),
+                                   "zero-width-rule", "vendor-effect", "span-ends"}),
            "vectors": out}
     (HERE / "matching.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
     build_records(sources, out)

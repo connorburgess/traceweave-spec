@@ -273,6 +273,15 @@ def build_packets(vecs):
                                                                                "conclusion", "expect": "schema", "packet": d})
     d = copy.deepcopy(vecs["go-function-in-host"]["expectedReport"]["body"])
     d["pairs"][0]["modes"]["exact"]["regions"][0]["origin"] = "own"
+    # A16 (CG-Q5 / E3): common rejection codes, written by hand per fixture; every schema rejection is malformed-packet.
+    semantic_codes = {
+        "region-key-absent": "region-key-absent", "region-mode-absent": "region-mode-absent", "body-unknown": "body-unknown",
+        "own-origin-digest-mismatch": "side-digest-mismatch", "own-origin-wrong-side": "side-digest-mismatch",
+        "vendored-repointed-p1b": "side-digest-mismatch", "vendored-digest-mismatch": "side-digest-mismatch",
+        "historical-source-unbound": "historical-source-unbound", "historical-copy-digest-mismatch": "side-digest-mismatch",
+        "non-first-seed-p2": "region-key-absent", "licence-text-unarchived": "licence-text-unarchived"}
+    for x in invalid:
+        x["code"] = "malformed-packet" if x["expect"] == "schema" else semantic_codes[x["id"]]
     report_reject = {"id": "origin-inside-report", "reason": "origin links are never report fields; the report schema rejects them",
                      "body": d}
     return {"packetVersion": PACKET_VERSION,
@@ -333,19 +342,32 @@ def build_candgen(vecs):
     assert out[3]["expectedBodySha256"] != v["expectedReport"]["bodySha256"]
     good = out[1]["record"]
     bad_records = []
-    for rid, fn, reason in (
-            ("rank-field", lambda r: r["generation"].__setitem__("rank", [1, 2, 3, 4]), "ranks are not recorded"),
-            ("score-field", lambda r: r.__setitem__("scores", [90]), "scores are not recorded"),
-            ("unknown-method", lambda r: r["generation"].__setitem__("method", "top-k"), "closed method list"),
-            ("selected-without-digest", lambda r: r["generation"].pop("selectedIdsSha256"), "selected needs the id-set digest"),
+    for rid, fn, reason, code in (
+            ("rank-field", lambda r: r["generation"].__setitem__("rank", [1, 2, 3, 4]), "ranks are not recorded",
+             "malformed-record"),
+            ("score-field", lambda r: r.__setitem__("scores", [90]), "scores are not recorded", "malformed-record"),
+            ("unknown-method", lambda r: r["generation"].__setitem__("method", "top-k"), "closed method list", "malformed-record"),
+            ("selected-without-digest", lambda r: r["generation"].pop("selectedIdsSha256"), "selected needs the id-set digest",
+             "malformed-record"),
             ("selected-digest-mismatch", lambda r: r["generation"].__setitem__("selectedIdsSha256", "5" * 64),
-             "the digest is not that of the candidate catalogue's ids"),
+             "the digest is not that of the candidate catalogue's ids", "selected-ids-mismatch"),
             ("catalogue-mismatch", lambda r: r.__setitem__("candidateCatalogueSha256", "6" * 64),
-             "candidateCatalogueSha256 differs from the body's inputs"),
-            ("body-unknown", lambda r: r["report"].__setitem__("bodySha256", "7" * 64), "no fixture body has this digest")):
+             "candidateCatalogueSha256 differs from the body's inputs", "candidate-catalogue-mismatch"),
+            ("body-unknown", lambda r: r["report"].__setitem__("bodySha256", "7" * 64), "no fixture body has this digest",
+             "body-unknown"),
+            ("selected-without-candidate-catalogue", lambda r: None,
+             "A16 (CG-Q7 / E4): a valid selected record validated without its candidate catalogue: the id set cannot be "
+             "checked", "candidate-catalogue-unavailable")):
         d = copy.deepcopy(good)
         fn(d)
-        bad_records.append({"id": rid, "reason": reason, "record": d})
+        entry = {"id": rid, "reason": reason, "code": code, "record": d}
+        if code == "candidate-catalogue-unavailable":
+            entry["candidateCatalogue"] = "withheld"
+        bad_records.append(entry)
+    exhaustive = next(o["record"] for o in out if o["record"]["generation"]["method"] == "exhaustive")
+    without_catalogue = [{"id": "exhaustive-without-candidate-catalogue", "candidateCatalogue": "withheld",
+                          "reason": "A16: an exhaustive record needs no candidate catalogue; exhaustive is the producer's claim",
+                          "record": copy.deepcopy(exhaustive)}]
     rejections = []
     body = v["expectedReport"]["body"]
     for rid, fn in (("report-rank-in-pair", lambda b: b["pairs"][0].__setitem__("rank", 1)),
@@ -363,7 +385,57 @@ def build_candgen(vecs):
                     "selected candidate ids sorted by bytes.",
             "derivationRule": CANDGEN_RULE,
             "baseVector": "matching.json#text-plain-three-modes", "retrievals": out,
-            "invalidRecords": bad_records, "reportRejections": rejections}
+            "invalidRecords": bad_records, "validWithoutCandidateCatalogue": without_catalogue,
+            "reportRejections": rejections}
+
+
+# ------------------------------------------------------------------ M2.3 control classes (A16)
+
+M23_VERSION = "traceweave-m23-control-classes-draft-1"
+M23_CLASSES = [  # written by hand: ROADMAP M2.3 control classes and the matching.json tags that select them
+    ("independent-same-task", ["independent-same-task"]),
+    ("boilerplate", ["boilerplate"]),
+    ("vendor", ["vendor"]),
+    ("unrelated", ["no-overlap"]),
+    ("malformed-unsupported", ["malformed-catalogue", "malformed-candidate", "unsupported-catalogue", "unsupported-profile",
+                               "unsupported-comparison-config"]),
+]
+M23_RULE = RULE + (
+    " Applied to this listing: the classes and the tags that select them are written by hand from ROADMAP.md M2.3 and "
+    "spec/catalogue-report.md section 6.12; members are the derivation hand vectors carrying a class tag. Every count is "
+    "computed by build_gates.py from matching.json bodies, and check_gates.py recounts them from its own recomputed bodies.")
+
+
+def m23_vector(v):
+    body = v["expectedReport"]["body"]
+    if body["status"] == "rejected":
+        return {"vectorId": v["id"], "rejected": body["rejection"]["code"]}
+    modes = body["comparison"]["modes"]
+    pairs = body["pairs"]
+    match = lambda p, m: p["status"] == "compared" and p["modes"][m]["outcome"]["code"] == "match"
+    return {"vectorId": v["id"], "pairs": len(pairs), "candidates": sum(any(match(p, m) for m in modes) for p in pairs),
+            "candidatesByMode": {m: sum(match(p, m) for p in pairs) for m in modes}}
+
+
+def build_m23(doc):
+    classes = []
+    for name, tags in M23_CLASSES:
+        members = sorted((v for v in doc["vectors"] if v["derivation"] == "hand" and set(tags) & set(v["tags"])),
+                         key=lambda v: v["id"].encode())
+        rows = [m23_vector(v) for v in members]
+        classes.append({"class": name, "tags": tags, "vectors": rows,
+                        "candidateCount": sum(r.get("candidates", 0) for r in rows),
+                        "denominator": sum(r.get("pairs", 0) for r in rows),
+                        "rejectedComparisons": sum("rejected" in r for r in rows),
+                        "excludedNotHand": sorted((v["id"] for v in doc["vectors"] if v["derivation"] != "hand"
+                                                   and set(tags) & set(v["tags"])), key=str.encode)})
+    return {"controlClassesVersion": M23_VERSION,
+            "note": "M2.3 control classes (spec/catalogue-report.md section 6.12). A class's members are the derivation hand "
+                    "vectors of matching.json carrying one of its tags, in id byte order. candidateCount counts listed pairs "
+                    "whose outcome is match in at least one mode; denominator counts every listed pair, compared or not; a "
+                    "rejected comparison lists no pair and is counted in rejectedComparisons, never in the denominator. An "
+                    "implementation's M2.3 report MUST give these numbers.",
+            "derivationRule": M23_RULE, "matchingVectorsFile": "matching.json", "classes": classes}
 
 
 def main():
@@ -371,7 +443,8 @@ def main():
     dump("m22-fixture-manifest.json", build_manifest(vecs))
     dump("review-packets.json", build_packets(vecs))
     dump("candidate-generation.json", build_candgen(vecs))
-    for f in ("m22-fixture-manifest.json", "review-packets.json", "candidate-generation.json"):
+    dump("m23-control-classes.json", build_m23(doc))
+    for f in ("m22-fixture-manifest.json", "review-packets.json", "candidate-generation.json", "m23-control-classes.json"):
         print(f, sha((HERE / f).read_bytes()))
 
 

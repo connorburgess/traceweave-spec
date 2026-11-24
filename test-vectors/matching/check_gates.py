@@ -106,6 +106,7 @@ def check_manifest(m, ctx, frozen=True):
                     cm.need(p["status"] == "not-compared" and p["outcome"]["code"] == e["pairOutcome"], f"{c['vectorId']}: pair outcome")
                     seen.add((e["reference"], e["candidate"], None))
                     continue
+                cm.need(type(e.get("regions")) is list, f"{c['vectorId']} {e['mode']}: every mode entry needs a regions list (A16)")
                 m_ = p["modes"][e["mode"]]
                 cm.need(m_["outcome"]["code"] == e["outcome"], f"{c['vectorId']}: {e['mode']} outcome")
                 cm.need(c["regionsListed"] == ("all" if c["role"] == "companion" else "reportable"),
@@ -113,7 +114,10 @@ def check_manifest(m, ctx, frozen=True):
                 regs = m_["regions"] if c["regionsListed"] == "all" else [r for r in m_["regions"] if r["status"] == "reportable"]
                 got = [{"firstSeed": r["seeds"][0], "referenceSpan": r["referenceSpan"], "candidateSpan": r["candidateSpan"],
                         "status": r["status"]} for r in regs]
-                cm.need(got == e["regions"], f"{c['vectorId']} {e['reference']}/{e['candidate']} {e['mode']}: spans differ")
+                # A16 (Q-B): positional; the manifest lists regions in the body's canonical order (§6.5), so a reordered
+                # or incomplete list is rejected even when every listed region exists.
+                cm.need(got == e["regions"], f"{c['vectorId']} {e['reference']}/{e['candidate']} {e['mode']}: listed regions "
+                                             f"differ from the body's (in canonical order)")
                 spans += 2 * len(got)
                 seen.add((e["reference"], e["candidate"], e["mode"]))
                 if c["role"] == "positive" and e["outcome"] == "match" and got:
@@ -127,27 +131,42 @@ def check_manifest(m, ctx, frozen=True):
 
 # ------------------------------------------------------------------ M2.7
 
-def packet_semantic(pk, ctx, licences):
+PACKET_CODES = ("malformed-packet", "body-unknown", "region-key-absent", "region-mode-absent", "side-digest-mismatch",
+                "historical-source-unbound", "licence-text-unarchived")
+
+
+def packet_code(pk, ctx, licences):
+    """§6.9 (A16): the first failing check, in this order, names the rejection; None for a valid packet.
+    The caller has already applied the strict-JSON and schema checks (malformed-packet)."""
     body_vid = ctx.known_bodies().get(pk["report"]["bodySha256"])
-    cm.need(body_vid is not None, "no known report body has this bodySha256")
+    if body_vid is None:
+        return "body-unknown"
     body = ctx.recomputed_body(body_vid)
     key = pk["region"]
     p = next((p for p in body["pairs"] if [p["reference"]["id"], p["candidate"]["id"]] == [key["referenceId"], key["candidateId"]]), None)
-    cm.need(p is not None and p["status"] == "compared", "the region key's pair is not a compared pair of the body")
-    cm.need(key["mode"] in p["modes"], "the region key's mode is not a mode of the body")
-    cm.need(any(r["seeds"][0] == key["firstSeed"] for r in p["modes"][key["mode"]]["regions"]),
-            "the region key's first seed is not a listed region of the body")
+    if p is None or p["status"] != "compared":
+        return "region-key-absent"
+    if key["mode"] not in p["modes"]:
+        return "region-mode-absent"
+    if not any(r["seeds"][0] == key["firstSeed"] for r in p["modes"][key["mode"]]["regions"]):
+        return "region-key-absent"
     o = pk["origin"]
     side, other = o["side"], "candidate" if o["side"] == "reference" else "reference"
     bound = {"own-origin": "artifactSha256", "vendored-dependency": "vendoredArtifactSha256",
              "historical-copy": "copyArtifactSha256"}[o["kind"]]
-    cm.need(o[bound] == p[side]["sha256"], f"{o['kind']} {bound} is not the digest of the region's {side} artifact")
-    if o["kind"] == "historical-copy":
-        cm.need(o["sourceArtifactSha256"] == p[other]["sha256"],
-                "historical-copy sourceArtifactSha256 is not the digest of the region's other artifact")
+    if o[bound] != p[side]["sha256"]:
+        return "side-digest-mismatch"
+    if o["kind"] == "historical-copy" and o["sourceArtifactSha256"] != p[other]["sha256"]:
+        return "historical-source-unbound"
     # vendored-dependency upstreamArtifactSha256 is a claim: checkable only against the upstream archive, not from body + packet.
-    if "licence" in o:
-        cm.need(o["licence"]["textSha256"] in licences, "the licence text digest is not an archived licence text")
+    if "licence" in o and o["licence"]["textSha256"] not in licences:
+        return "licence-text-unarchived"
+    return None
+
+
+def packet_semantic(pk, ctx, licences):
+    code = packet_code(pk, ctx, licences)
+    cm.need(code is None, f"packet rejected: {code}")
 
 
 def check_packets(d, ctx):
@@ -165,17 +184,16 @@ def check_packets(d, ctx):
     required_paths = set()
     for v in d["invalid"]:
         errs = cm.schema_errors(ctx.packet_schema, v["packet"], ctx.packet_schema)
+        cm.need(v.get("code") in PACKET_CODES, f"{v['id']}: code must be one of the §6.9 rejection codes")
         if v["expect"] == "schema":
             cm.need(errs, f"{v['id']}: expected a schema rejection")
+            cm.need(v["code"] == "malformed-packet", f"{v['id']}: a schema rejection has code malformed-packet")
             if v["id"].startswith("missing-"):
                 required_paths.add(v["id"])
         else:
             cm.need(not errs, f"{v['id']}: expected to pass the schema")
-            try:
-                packet_semantic(v["packet"], ctx, licences)
-            except cm.CheckError:
-                continue
-            raise cm.CheckError(f"{v['id']}: semantic rejection expected")
+            got = packet_code(v["packet"], ctx, licences)
+            cm.need(got == v["code"], f"{v['id']}: rejection code {got} differs from the fixture's {v['code']}")
     # one rejection per required field of each valid origin kind
     for v in d["valid"]:
         if v["id"] == "packet-vendored-common-only":
@@ -234,29 +252,83 @@ def check_candgen(d, ctx):
     cm.need(same >= 2, "at least two retrieval paths must give the base vector's body")
     for b in d["invalidRecords"]:
         errs = cm.schema_errors(ctx.candgen_schema, b["record"], ctx.candgen_schema)
-        if errs:
-            continue
-        try:
-            candgen_semantic(b["record"], bodies)
-        except cm.CheckError:
-            continue
-        raise cm.CheckError(f"{b['id']}: invalid record accepted")
+        cm.need(b.get("code") in CANDGEN_CODES, f"{b['id']}: code must be one of the §6.10 rejection codes")
+        got = "malformed-record" if errs else candgen_code(b["record"], bodies, b.get("candidateCatalogue") != "withheld")
+        cm.need(got == b["code"], f"{b['id']}: rejection code {got} differs from the fixture's {b['code']}")
+    for b in d["validWithoutCandidateCatalogue"]:
+        cm.need(b["record"]["generation"]["method"] == "exhaustive" and b["candidateCatalogue"] == "withheld"
+                and not cm.schema_errors(ctx.candgen_schema, b["record"], ctx.candgen_schema)
+                and candgen_code(b["record"], bodies, False) is None, f"{b['id']}: an exhaustive record needs no catalogue")
     for b in d["reportRejections"]:
         cm.need(cm.schema_errors({"$ref": "#/$defs/body"}, b["body"], ctx.cm.rep_schema), f"{b['id']}: report schema accepted it")
     return len(d["retrievals"]), same, len(d["invalidRecords"]), len(d["reportRejections"])
 
 
-def candgen_semantic(rec, bodies):
-    cm.need(rec["report"]["bodySha256"] in bodies, "no fixture body has this bodySha256")
+CANDGEN_CODES = ("malformed-record", "body-unknown", "candidate-catalogue-mismatch", "candidate-catalogue-unavailable",
+                 "selected-ids-mismatch")
+
+
+def candgen_code(rec, bodies, catalogue_supplied=True):
+    """§6.10 (A16): the first failing check names the rejection; None for a valid record. The caller has applied the
+    strict-JSON and schema checks (malformed-record). bodies maps bodySha256 to (body, candidate catalogue bytes)."""
+    if rec["report"]["bodySha256"] not in bodies:
+        return "body-unknown"
     body, cb = bodies[rec["report"]["bodySha256"]]
-    cm.need(rec["candidateCatalogueSha256"] == sha(cb) == body["inputs"]["candidateCatalogueSha256"],
-            "candidateCatalogueSha256 differs from the body's inputs")
+    if rec["candidateCatalogueSha256"] != body["inputs"]["candidateCatalogueSha256"]:
+        return "candidate-catalogue-mismatch"
     if rec["generation"]["method"] == "selected":
+        if not catalogue_supplied:
+            return "candidate-catalogue-unavailable"
+        if sha(cb) != rec["candidateCatalogueSha256"]:
+            return "candidate-catalogue-mismatch"
         ids = [a["id"] for a in cm.strict_loads(cb)["artifacts"]]
-        cm.need(rec["generation"]["selectedIdsSha256"] == ids_digest(ids), "selectedIdsSha256 is not the candidate catalogue's id set")
+        if rec["generation"]["selectedIdsSha256"] != ids_digest(ids):
+            return "selected-ids-mismatch"
+    return None
+
+
+def candgen_semantic(rec, bodies):
+    code = candgen_code(rec, bodies)
+    cm.need(code is None, f"record rejected: {code}")
 
 
 # ------------------------------------------------------------------ self-test and main
+
+def check_m23(d, ctx):
+    """M2.3 (§6.12, A16): class members, candidate counts and denominators, recounted from recomputed bodies."""
+    cm.need(d["controlClassesVersion"] == "traceweave-m23-control-classes-draft-1", "controlClassesVersion")
+    cm.need(d["derivationRule"].startswith(cm.roadmap_definition()), "m23-control-classes.json: derivationRule")
+    names = [c["class"] for c in d["classes"]]
+    cm.need(names == ["independent-same-task", "boilerplate", "vendor", "unrelated", "malformed-unsupported"],
+            "the five M2.3 control classes, in order")
+    vecs = [v for v in ctx.doc["vectors"]]
+    total = 0
+    for c in d["classes"]:
+        tagged = [v for v in vecs if set(c["tags"]) & set(v["tags"])]
+        want = sorted((v["id"] for v in tagged if v["derivation"] == "hand"), key=str.encode)
+        cm.need([r["vectorId"] for r in c["vectors"]] == want, f"{c['class']}: members are the hand vectors with a class tag, in id byte order")
+        cm.need(c["excludedNotHand"] == sorted((v["id"] for v in tagged if v["derivation"] != "hand"), key=str.encode),
+                f"{c['class']}: excludedNotHand")
+        cand = den = rej = 0
+        for r in c["vectors"]:
+            body = ctx.recomputed_body(r["vectorId"])
+            if body["status"] == "rejected":
+                cm.need(r == {"vectorId": r["vectorId"], "rejected": body["rejection"]["code"]}, f"{r['vectorId']}: rejected comparison")
+                rej += 1
+                continue
+            modes = body["comparison"]["modes"]
+            match = lambda p, m: p["status"] == "compared" and p["modes"][m]["outcome"]["code"] == "match"
+            want_r = {"vectorId": r["vectorId"], "pairs": len(body["pairs"]),
+                      "candidates": sum(any(match(p, m) for m in modes) for p in body["pairs"]),
+                      "candidatesByMode": {m: sum(match(p, m) for p in body["pairs"]) for m in modes}}
+            cm.need(r == want_r, f"{r['vectorId']}: counts differ from the recomputed body")
+            cand += want_r["candidates"]
+            den += want_r["pairs"]
+        cm.need([c["candidateCount"], c["denominator"], c["rejectedComparisons"]] == [cand, den, rej],
+                f"{c['class']}: totals (rejected comparisons are not in the denominator)")
+        total += len(c["vectors"])
+    return len(d["classes"]), total
+
 
 def check_rules(m, pk, cg):
     """M2.6: each gate fixture file states the ROADMAP.md definition of hand-derived, then how it applies."""
@@ -267,9 +339,12 @@ def check_rules(m, pk, cg):
                 f"{name}: derivationRule must be the ROADMAP.md definition followed by its application")
 
 
-def run_all(m, pk, cg, ctx, frozen=True):
+def run_all(m, pk, cg, ctx, frozen=True, m23=None):
     check_rules(m, pk, cg)
-    return check_manifest(m, ctx, frozen), check_packets(pk, ctx), check_candgen(cg, ctx)
+    out = check_manifest(m, ctx, frozen), check_packets(pk, ctx), check_candgen(cg, ctx)
+    if m23 is not None:
+        check_m23(m23, ctx)
+    return out
 
 
 def corruptions(m, pk, cg):
@@ -299,6 +374,18 @@ def corruptions(m, pk, cg):
     yield "packet-vendored-digest-moved", pp(lambda d: d["valid"][1]["packet"]["origin"].__setitem__("vendoredArtifactSha256", "6" * 64))
     yield "packet-historical-source-moved", pp(lambda d: d["valid"][3]["packet"]["origin"].__setitem__("sourceArtifactSha256", "5" * 64))
     yield "packet-licence-identifier-added", pp(lambda d: d["valid"][1]["packet"]["origin"]["licence"].__setitem__("identifier", "MIT"))
+    def periodic(d):
+        return next(e for r in d["rows"] for c in r["cases"] if c["vectorId"] == "go-periodic-distinct"
+                    for e in c["expectedSpans"] if e.get("mode") == "exact")
+    yield "manifest-regions-reordered-q-b", mm(lambda d: periodic(d)["regions"].reverse())
+    yield "manifest-regions-key-dropped", mm(lambda d: d["rows"][0]["cases"][0]["expectedSpans"][0].pop("regions"))
+    yield "packet-code-changed", pp(lambda d: next(x for x in d["invalid"] if x["id"] == "non-first-seed-p2").__setitem__(
+        "code", "region-mode-absent"))
+    yield "packet-schema-code-changed", pp(lambda d: d["invalid"][0].__setitem__("code", "body-unknown"))
+    yield "candgen-code-changed", cc(lambda d: next(x for x in d["invalidRecords"] if x["id"] == "catalogue-mismatch").__setitem__(
+        "code", "selected-ids-mismatch"))
+    yield "candgen-withheld-catalogue-ignored", cc(lambda d: next(
+        x for x in d["invalidRecords"] if x["id"] == "selected-without-candidate-catalogue").pop("candidateCatalogue"))
     yield "candgen-derivation-rule-dropped", cc(lambda d: d.pop("derivationRule"))
     yield "packet-missing-fixture-dropped", pp(lambda d: d["invalid"].pop(0))
     yield "packet-licence-file-digest", pp(lambda d: d["licenceTexts"][0].__setitem__("sha256", "8" * 64))
@@ -307,6 +394,21 @@ def corruptions(m, pk, cg):
     yield "candgen-subset-claimed-same", cc(lambda d: d["retrievals"][3].__setitem__("sameBodyAs", d["baseVector"]))
     yield "candgen-rank-accepted", cc(lambda d: d["reportRejections"].__setitem__(0, {"id": "x", "body": copy.deepcopy(
         next(r for r in d["retrievals"] if "expectedBody" in r)["expectedBody"])}))
+
+
+def m23_corruptions(d):
+    def mk(fn):
+        x = copy.deepcopy(d)
+        fn(x)
+        return x
+    cls = lambda x, n: next(c for c in x["classes"] if c["class"] == n)
+    yield "m23-mixed-vector-counted-q-a", mk(lambda x: cls(x, "boilerplate")["vectors"].append(
+        {"vectorId": "go-boilerplate-unsuppressed", "pairs": 2, "candidates": 1, "candidatesByMode": {"exact": 0, "normalized": 1}}))
+    yield "m23-rejected-in-denominator", mk(lambda x: cls(x, "malformed-unsupported").__setitem__(
+        "denominator", cls(x, "malformed-unsupported")["denominator"] + cls(x, "malformed-unsupported")["rejectedComparisons"]))
+    yield "m23-candidate-count", mk(lambda x: cls(x, "vendor").__setitem__("candidateCount", 2))
+    yield "m23-member-dropped", mk(lambda x: cls(x, "vendor")["vectors"].pop())
+    yield "m23-class-dropped", mk(lambda x: x["classes"].pop())
 
 
 def check_python_copies():
@@ -331,6 +433,7 @@ def main():
     m = cm.strict_loads((HERE / "m22-fixture-manifest.json").read_bytes())
     pk = cm.strict_loads((HERE / "review-packets.json").read_bytes())
     cg = cm.strict_loads((HERE / "candidate-generation.json").read_bytes())
+    m23 = cm.strict_loads((HERE / "m23-control-classes.json").read_bytes())
     try:
         (cases, spans), (pv, pi, pr), (rn, same, ci, cr) = run_all(m, pk, cg, ctx)
     except cm.CheckError as exc:
@@ -342,7 +445,22 @@ def main():
           f"{pr} report-body rejection")
     print(f"PASS M2.9 candidate-generation.json: {rn} retrieval paths ({same} give the base body byte for byte, 1 different set), "
           f"{ci} invalid records rejected, {cr} report bodies with rank/score/index rejected")
+    try:
+        ncls, nmem = check_m23(m23, ctx)
+    except cm.CheckError as exc:
+        print(f"FAIL M2.3: {exc}")
+        return 1
+    print(f"PASS M2.3 m23-control-classes.json: {ncls} classes, {nmem} member vectors (hand only); candidate counts, "
+          f"denominators and rejected comparisons equal to the recomputed bodies: " + "; ".join(
+              f"{c['class']} {c['candidateCount']}/{c['denominator']}" + (f" + {c['rejectedComparisons']} rejected" if c["rejectedComparisons"] else "")
+              for c in m23["classes"]))
     results = []
+    for name, d in m23_corruptions(m23):
+        try:
+            check_m23(d, ctx)
+            results.append((name, None))
+        except (cm.CheckError, KeyError, IndexError, TypeError) as exc:
+            results.append((name, str(exc) or type(exc).__name__))
     for name, (dm, dp, dc) in corruptions(m, pk, cg):
         try:
             run_all(dm, dp, dc, ctx, frozen=False)
