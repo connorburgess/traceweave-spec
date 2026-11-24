@@ -1,21 +1,36 @@
 {
   "note": "Real-format TEST vectors made locally by make_real_vectors.py; no external service. Never trust these anchors.",
   "openssl": "OpenSSL 4.1.0 23 Oct 2026 (Library: OpenSSL 4.1.0 23 Oct 2026)",
-  "targetSha256": "395ed58a28ff4b8270ee3bbb498f97ea3071151629811bb90d7843fb8839716d",
+  "targetSha256": "f08e441cf7d33da7c43667540a54a95fde96b353eb8600134543274855a76cd9",
   "files": {
+    "headers-forked.bin": "dbe5f3748f217e340ba4d6cf09d0b1ea967a00f9ce89d1b569ada533a12cfcea",
     "headers-other.bin": "6c9ae8ff0cb017d2b1b95d53f03774400fc54729323831d74b0f487ac3d80ed4",
-    "headers.bin": "5077c8e4f7d50162cacb18fae926854cd16832503528a57ee6c45ef95554f6ca",
+    "headers.bin": "be4b757891037717e8de65aaa644b5f397cd30d6c2709965b7b9f2b613c74076",
     "opentimestamps-other-digest.ots": "bc4ca13c114cfb82c7d5653655d42115062e4f2c84fbe545cb7d31b2349409f3",
-    "opentimestamps-pending.ots": "5dc1589f30a5b6a126d5a5d890d61eb777574bf1d4b2a6d29700cf72e5b4437f",
-    "opentimestamps-proof.ots": "6f00b891c863e7661cdb4514974057492a32bb4791a8735c82681bd453874f71",
-    "rfc3161-request-other-digest.der": "a867026b217133b6e86aa7a7c413537e0d6de0ec22e0cb4485a9d07c1e1a8813",
-    "rfc3161-request.der": "92354ac4f7f91141d563eedac8d781d0a5ff34dfbe14e71c3066533fac7e76a3",
-    "rfc3161-response-noncritical-eku.der": "f586b87bbb5b7c02b10690e4bf37d8c25b3f0c0d3e3e0f2d985a571214b045b7",
-    "rfc3161-response-other-digest.der": "d0944bfea5c2ab484896db0097ecd0e57df4341fa04081020bc0bc136b0eba27",
-    "rfc3161-response-tampered.der": "2c6f9616a8b4b625a3526f7893287c35f79d0c54993d7f9082520bfabe2d5826",
-    "rfc3161-response-wrong-ess.der": "8aa489e9b28f0a9bd567dc1b0f03dde6afe3a10dabfda05c4c55a88c659b0f2e",
-    "rfc3161-response.der": "83d67c1a6de0241e2c6e43050180821b0c14b2dc28f836b1036f41e8c5d28ad8",
-    "test-root-ca.der": "e6d4a9450352d2c1f4b6685e735cf4467723542b656dd9c2c4f9e3c2e8b9c555"
+    "opentimestamps-pending.ots": "121c125fc7d331a03474ea7ac5c04e9ce1e1fc416d235d45cf25360a340004d8",
+    "opentimestamps-proof.ots": "6eb231a334d93817f02e7d99c9ea12311d48ba3548390f20b98cc61eb4f4cd94",
+    "rfc3161-request-other-digest.der": "ab7baee3cd27dd76359cfe0c04c69f96edf30d6c2e9cf472bd02689feacfbb77",
+    "rfc3161-request.der": "11aae143c3eb10e2dc269d08c822c15a50c145ab3f28aacb2f397c9c6a65e15f",
+    "rfc3161-response-expired-intermediate.der": "8494b06d97fac736e8ae42c9f607f55d47a72c5839aaffbeba3f1783192aa0ad",
+    "rfc3161-response-issued-by-end-entity.der": "77c43241890665eee701526448c01b361c30d59ea3a15b19dbf778caf6addd42",
+    "rfc3161-response-noncritical-eku.der": "b4b756c05f958880391074afc8d13454bd396ff7e60433947f6aa774647a888f",
+    "rfc3161-response-other-digest.der": "b779db9a1674641b984af09f23a1d7ff6b66c9d26f719d43eb6af99754a81c51",
+    "rfc3161-response-tampered.der": "23b33250cb8e6374b3228c8c6adb33f7ea16148b74e87cc001ac37dc4bb7d49c",
+    "rfc3161-response-wrong-ess.der": "9c5968fea7e3187a7839c317723379d7ad2ab37148ab3a7d18b452eb2a631d1e",
+    "rfc3161-response.der": "c256d95e2cad03a9f48d3e02037f583fd861318a73e96b810419ecbc0c378b81",
+    "test-root-ca.der": "95270fbfb15faae45bcbedd765d20b97cd8df0d81a38cf01fb0776488951b060"
   },
-  "opensslVerify": "Verification: OK"
+  "opensslVerify": {
+    "rfc3161-response-expired-intermediate.der": "Verification: FAILED | certificate verify error:crypto/ts/ts_rsp_verify.c:190:Verify error:certificate has expired",
+    "rfc3161-response-issued-by-end-entity.der": "Verification: FAILED | certificate verify error:crypto/ts/ts_rsp_verify.c:190:Verify error:invalid CA certificate",
+    "rfc3161-response-noncritical-eku.der": "Verification: FAILED | certificate verify error:crypto/ts/ts_rsp_verify.c:190:Verify error:unsuitable certificate purpose",
+    "rfc3161-response-other-digest.der": "Verification: OK",
+    "rfc3161-response-tampered.der": "Verification: FAILED | digest failure:crypto/pkcs7/pk7_doit.c:1118: | signature failure:crypto/ts/ts_rsp_verify.c:146:",
+    "rfc3161-response-wrong-ess.der": "Verification: FAILED | ess cert id not found:crypto/ess/ess_lib.c:322:",
+    "rfc3161-response.der": "Verification: OK"
+  },
+  "checkpoint": {
+    "height": 12,
+    "headerSha256": "bb683658753413047d4bdc2a6065a3ebf03848dffd658dea34a9dfe0df158b31"
+  }
 }

@@ -9,20 +9,20 @@
     }
   },
   "object": {
-    "evidenceVersion": "traceweave-time-evidence-draft-3",
+    "evidenceVersion": "traceweave-time-evidence-draft-4",
     "type": "opentimestamps",
     "placeholder": true,
     "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
     "target": {
       "kind": "dsse-signature",
       "signatureIndex": 0,
-      "sha256": "395ed58a28ff4b8270ee3bbb498f97ea3071151629811bb90d7843fb8839716d"
+      "sha256": "f08e441cf7d33da7c43667540a54a95fde96b353eb8600134543274855a76cd9"
     },
     "root": {
       "kind": "bitcoin-proof-of-work",
       "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6"
     },
-    "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-395ed58a28ff-btc",
+    "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-f08e441cf7d3-btc",
     "opentimestamps": {
       "status": "pending",
       "blockTime": "2026-11-23T11:12:00Z"

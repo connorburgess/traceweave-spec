@@ -28,6 +28,10 @@ OID_SIGNING_CERT_V2 = "1.2.840.113549.1.9.16.2.47"
 OID_EKU = "2.5.29.37"
 OID_KP_TIMESTAMPING = "1.3.6.1.5.5.7.3.8"
 OID_BASIC_CONSTRAINTS = "2.5.29.19"
+OID_KEY_USAGE = "2.5.29.15"
+# Extensions this validator understands; an unknown critical extension fails path validation (RFC 5280 4.2).
+UNDERSTOOD_EXTENSIONS = {OID_BASIC_CONSTRAINTS, OID_KEY_USAGE, OID_EKU, "2.5.29.14", "2.5.29.35"}
+HASHES = {SHA256_OID: hashlib.sha256, "2.16.840.1.101.3.4.2.2": hashlib.sha384, "2.16.840.1.101.3.4.2.3": hashlib.sha512, SHA1_OID: hashlib.sha1}
 DIGESTINFO_SHA256 = bytes.fromhex("3031300d060960864801650304020105000420")
 
 
@@ -177,6 +181,34 @@ class Cert:
     def sha256(self):
         return hashlib.sha256(self.der).hexdigest()
 
+    def basic_constraints(self):
+        """(cA, pathLenConstraint or None); (False, None) when the extension is absent."""
+        if OID_BASIC_CONSTRAINTS not in self.extensions:
+            return False, None
+        seq = parse(self.extensions[OID_BASIC_CONSTRAINTS][1])
+        ca, path_len = False, None
+        for c in seq.children:
+            if c.tag == 0x01:
+                ca = c.value != b"\x00"
+            elif c.tag == 0x02:
+                path_len = integer(c)
+        return ca, path_len
+
+    def key_usage(self):
+        """Set of bit numbers asserted, or None when the extension is absent (RFC 5280 4.2.1.3)."""
+        if OID_KEY_USAGE not in self.extensions:
+            return None
+        bits = parse(self.extensions[OID_KEY_USAGE][1]).value
+        out = set()
+        for i, byte in enumerate(bits[1:]):
+            for j in range(8):
+                if byte & (0x80 >> j):
+                    out.add(8 * i + j)
+        return out
+
+    def unknown_critical(self):
+        return [o for o, (crit, _) in self.extensions.items() if crit and o not in UNDERSTOOD_EXTENSIONS]
+
 
 def rsa_verify(n, e, message, signature):
     k = (n.bit_length() + 7) // 8
@@ -238,6 +270,8 @@ def parse_response(der):
     if signer_infos is None or len(signer_infos) != 1:
         raise Bad("tsa-signature-invalid", "exactly one SignerInfo is required (S2)")
     si = signer_infos[0]
+    if integer(tst[0]) != 1:
+        raise Bad("evidence-shape", "TSTInfo version must be 1")
     fields = {"version": integer(tst[0]), "policyOid": oid(tst[1]), "hashAlg": oid(tst[2][0][0]),
               "hash": tst[2][1].value.hex(), "serial": integer(tst[3]), "genTime": gtime(tst[4]),
               "accuracy": None, "nonce": None, "tstDer": tst_der, "certs": certs}
@@ -261,6 +295,9 @@ def parse_response(der):
     attrs_node = si[3]
     if attrs_node.tag != 0xA0:
         raise Bad("tsa-signature-invalid", "signed attributes are required")
+    oids = [oid(a[0]) for a in attrs_node.children]
+    if len(oids) != len(set(oids)):
+        raise Bad("tsa-signature-invalid", "duplicate signed attribute")
     attrs = {oid(a[0]): a[1] for a in attrs_node.children}
     fields["signedAttrsDer"] = encode(Node(0x31, children=attrs_node.children))
     fields["sigAlg"] = oid(si[4][0])
@@ -294,7 +331,9 @@ def check_token(fields, target_sha256, request):
     if not fields["essCertIds"]:
         raise Bad("tsa-signing-cert-mismatch", "no SigningCertificate attribute (RFC 5816 section 2)")
     alg, h = fields["essCertIds"][0]
-    expected = hashlib.sha256(signer.der).hexdigest() if alg == SHA256_OID else hashlib.sha1(signer.der).hexdigest()
+    if alg not in HASHES:
+        raise Bad("tsa-signing-cert-mismatch", "unsupported ESSCertIDv2 hash algorithm")
+    expected = HASHES[alg](signer.der).hexdigest()
     if h != expected:
         raise Bad("tsa-signing-cert-mismatch", "ESSCertID does not identify the signer certificate")
     if not eku_is_timestamping_only_and_critical(signer):
@@ -308,8 +347,42 @@ def check_token(fields, target_sha256, request):
     return signer
 
 
-def chain_to_root(signer, certs, root):
-    """Signer -> (intermediates in the token) -> pinned root. Returns True if every link verifies."""
+def validate_path(signer, certs, root, at):
+    """RFC 5280 path validation at time `at` (design 6.2 step 6), restricted to what these vectors need.
+    Returns the list of certificates from the signer to the pinned root, or raises Bad("path-invalid", ...).
+    Checked: every signature; every certificate valid at `at`; every issuer has basicConstraints cA=TRUE and,
+    if keyUsage is present, keyCertSign; pathLenConstraint; no unknown critical extension anywhere; the
+    leaf's keyUsage, if present, asserts digitalSignature or nonRepudiation."""
+    path, current = [signer], signer
+    while not (current.issuer_der == root.subject_der and cert_signed_by(current, root)):
+        nxt = next((c for c in certs if c.subject_der == current.issuer_der and c is not current and c not in path), None)
+        if nxt is None or not cert_signed_by(current, nxt) or len(path) > 5:
+            raise Bad("path-invalid", "no signature path to the pinned root")
+        path.append(nxt)
+        current = nxt
+    path.append(root)
+    for k, cert in enumerate(path):
+        if not cert.not_before <= at <= cert.not_after:
+            raise Bad("path-invalid", "a certificate in the path is not valid at genTime")
+        if cert.unknown_critical():
+            raise Bad("path-invalid", "unknown critical extension")
+        if k == 0:
+            ku = cert.key_usage()
+            if ku is not None and not ku & {0, 1}:
+                raise Bad("path-invalid", "leaf keyUsage lacks digitalSignature and nonRepudiation")
+            continue
+        ca, path_len = cert.basic_constraints()
+        ku = cert.key_usage()
+        if not ca or (ku is not None and 5 not in ku):
+            raise Bad("path-invalid", "issuer is not a CA certificate")
+        intermediates_below = k - 1
+        if path_len is not None and intermediates_below > path_len:
+            raise Bad("path-invalid", "pathLenConstraint exceeded")
+    return path
+
+
+def chain_to_root(signer, certs, root, at=None):
+    """Kept for the wrong-implementation self-test: signatures only, which is NOT path validation (D4)."""
     current, seen = signer, 0
     while seen < 4:
         if cert_signed_by(current, root):
@@ -410,6 +483,22 @@ def header_ok(chain, height):
         if int.from_bytes(hashlib.sha256(hashlib.sha256(hdr).digest()).digest(), "little") > target:
             return False
         if h and hdr[4:36] != hashlib.sha256(hashlib.sha256(chain[h - 1]).digest()).digest():
+            return False
+    return True
+
+
+def header_hash(hdr):
+    return hashlib.sha256(hashlib.sha256(hdr).digest()).digest()
+
+
+def linked_to_checkpoint(chain, height, checkpoint_height, checkpoint_sha256):
+    """D3: the attested header must be an ancestor of a pinned checkpoint header. The checkpoint is the
+    SHA-256 of the raw 80-byte header at `checkpoint_height`, taken from the verifier's own node. A fork cannot
+    contain the checkpoint without reproducing every header back to the attested one."""
+    if checkpoint_height >= len(chain) or hashlib.sha256(chain[checkpoint_height]).hexdigest() != checkpoint_sha256:
+        return False
+    for h in range(checkpoint_height, height, -1):
+        if chain[h][4:36] != header_hash(chain[h - 1]):
             return False
     return True
 

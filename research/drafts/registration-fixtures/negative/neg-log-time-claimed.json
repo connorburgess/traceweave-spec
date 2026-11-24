@@ -9,20 +9,20 @@
     }
   },
   "object": {
-    "evidenceVersion": "traceweave-time-evidence-draft-3",
+    "evidenceVersion": "traceweave-time-evidence-draft-4",
     "type": "rekor-v2",
     "placeholder": true,
     "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
     "target": {
       "kind": "dsse-signature",
       "signatureIndex": 0,
-      "sha256": "395ed58a28ff4b8270ee3bbb498f97ea3071151629811bb90d7843fb8839716d"
+      "sha256": "f08e441cf7d33da7c43667540a54a95fde96b353eb8600134543274855a76cd9"
     },
     "root": {
       "kind": "log-key",
       "anchorSha256": "a119903304b41261ee88a9892057782ac7f9011894981a60348d75ef35b622c4"
     },
-    "token": "PLACEHOLDER-NOT-A-REKOR-V2-OBJECT-395ed58a28ff-log",
+    "token": "PLACEHOLDER-NOT-A-REKOR-V2-OBJECT-f08e441cf7d3-log",
     "rekorV2": {
       "logIndex": 0
     },

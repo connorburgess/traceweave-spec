@@ -56,6 +56,16 @@ keyUsage = critical,digitalSignature,nonRepudiation
 extendedKeyUsage = critical,timeStamping
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid
+[v3_ee]
+basicConstraints = critical,CA:false
+keyUsage = critical,digitalSignature
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid
+[v3_int]
+basicConstraints = critical,CA:true
+keyUsage = critical,keyCertSign,cRLSign
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid
 [v3_tsa_noncrit]
 basicConstraints = critical,CA:false
 keyUsage = critical,digitalSignature,nonRepudiation
@@ -134,13 +144,18 @@ def mine(prev, merkle, t):
     raise RuntimeError("no nonce")
 
 
-def chain(attested_merkle, label, height=4, length=13):
-    """Header 0 at 2026-11-23T10:32:00Z, one header every 600 s, so height 4 is at 11:12:00Z."""
+def chain(attested_merkle, label, height=4, length=13, genesis=None, attested_time=None):
+    """Header 0 at 2026-11-23T10:32:00Z, one header every 600 s, so height 4 is at 11:12:00Z.
+    With `genesis`, the chain is re-mined on top of that header (a fork); `attested_time` overrides
+    the attested header's time (the forged-time attack of review item D3)."""
     t0 = 1795429920  # 2026-11-23T10:32:00Z
     headers, prev = [], b"\x00" * 32
-    for h in range(length):
+    if genesis is not None:
+        headers, prev = [genesis], hashlib.sha256(hashlib.sha256(genesis).digest()).digest()
+    for h in range(len(headers), length):
         merkle = attested_merkle if h == height else hashlib.sha256(f"{label} {h}; test only".encode()).digest()
-        hdr, prev = mine(prev, merkle, t0 + 600 * h)
+        t = attested_time if (h == height and attested_time is not None) else t0 + 600 * h
+        hdr, prev = mine(prev, merkle, t)
         headers.append(hdr)
     return b"".join(headers)
 
@@ -164,6 +179,18 @@ def main():
                 "-subj", f"/CN=Traceweave TEST-ONLY {name} (never trust)", cwd=tmp)
             run("x509", "-req", "-in", f"{name}.csr", "-CA", "ca.pem", "-CAkey", "ca.key", "-out", f"{name}.pem", "-days", "1825",
                 "-extfile", "ca.cnf", "-extensions", f"v3_{name}", "-set_serial", serial, cwd=tmp)
+        # D4: a TSA certificate issued by an end-entity certificate, and one under an intermediate expired in 2021.
+        run("req", "-newkey", "rsa:2048", "-nodes", "-keyout", "ee.key", "-out", "ee.csr", "-subj", "/CN=Traceweave TEST-ONLY end entity (never trust)", cwd=tmp)
+        run("x509", "-req", "-in", "ee.csr", "-CA", "ca.pem", "-CAkey", "ca.key", "-out", "ee.pem", "-days", "1825",
+            "-extfile", "ca.cnf", "-extensions", "v3_ee", "-set_serial", "4", cwd=tmp)
+        run("req", "-newkey", "rsa:2048", "-nodes", "-keyout", "int.key", "-out", "int.csr", "-subj", "/CN=Traceweave TEST-ONLY expired intermediate (never trust)", cwd=tmp)
+        run("x509", "-req", "-in", "int.csr", "-CA", "ca.pem", "-CAkey", "ca.key", "-out", "int.pem", "-not_before", "20200101000000Z",
+            "-not_after", "20210101000000Z", "-extfile", "ca.cnf", "-extensions", "v3_int", "-set_serial", "5", cwd=tmp)
+        for name, ca, serial in (("tsa_by_ee", "ee", "6"), ("tsa_by_int", "int", "7")):
+            run("req", "-newkey", "rsa:2048", "-nodes", "-keyout", f"{name}.key", "-out", f"{name}.csr",
+                "-subj", f"/CN=Traceweave TEST-ONLY {name} (never trust)", cwd=tmp)
+            run("x509", "-req", "-in", f"{name}.csr", "-CA", f"{ca}.pem", "-CAkey", f"{ca}.key", "-out", f"{name}.pem", "-days", "1825",
+                "-extfile", "ca.cnf", "-extensions", "v3_tsa", "-set_serial", serial, cwd=tmp)
         files = {"test-root-ca.der": der("ca.pem", tmp)}
         for label, dg in (("", digest), ("-other-digest", other)):
             run("ts", "-query", "-digest", dg, "-sha256", "-cert", "-out", f"q{label}.tsq", cwd=tmp)
@@ -171,9 +198,10 @@ def main():
                 "-out", f"r{label}.tsr", cwd=tmp)
             files[f"rfc3161-request{label}.der"] = (tmp / f"q{label}.tsq").read_bytes()
             files[f"rfc3161-response{label}.der"] = (tmp / f"r{label}.tsr").read_bytes()
-        manifest["opensslVerify"] = subprocess.run(
-            [OPENSSL, "ts", "-verify", "-queryfile", "q.tsq", "-in", "r.tsr", "-CAfile", "ca.pem"], cwd=tmp,
-            capture_output=True, text=True).stdout.strip()
+        for label, signer, chain_pem in (("-issued-by-end-entity", "tsa_by_ee", "ee.pem"), ("-expired-intermediate", "tsa_by_int", "int.pem")):
+            run("ts", "-reply", "-config", "ts.cnf", "-queryfile", "q.tsq", "-signer", f"{signer}.pem", "-inkey", f"{signer}.key",
+                "-chain", chain_pem, "-out", f"r{label}.tsr", cwd=tmp)
+            files[f"rfc3161-response{label}.der"] = (tmp / f"r{label}.tsr").read_bytes()
         good = files["rfc3161-response.der"]
         fields = RF.parse_response(good)
         gt = fields["genTime"].strftime("%Y%m%d%H%M%S").encode()
@@ -185,7 +213,18 @@ def main():
         files["rfc3161-response-noncritical-eku.der"] = resign(good, tmp, "tsa_noncrit.key", cert_der=noncrit, serial=3,
                                                                ess_hash=hashlib.sha256(noncrit).digest())
         files["rfc3161-response-wrong-ess.der"] = resign(good, tmp, "tsa.key", ess_hash=hashlib.sha256(noncrit).digest())
-        for name in ("ca.key", "tsa.key", "tsa_noncrit.key"):
+        # Cross-check every token against openssl (review item D4): record its verdict.
+        manifest["opensslVerify"] = {}
+        for name, data in sorted(files.items()):
+            if not name.startswith("rfc3161-response"):
+                continue
+            (tmp / "check.tsr").write_bytes(data)
+            query = "q-other-digest.tsq" if "other-digest" in name else "q.tsq"
+            res = subprocess.run([OPENSSL, "ts", "-verify", "-queryfile", query, "-in", "check.tsr", "-CAfile", "ca.pem",
+                                  "-untrusted", "ee.pem", "-untrusted", "int.pem"], cwd=tmp, capture_output=True, text=True)
+            lines = [l for l in (res.stdout + res.stderr).splitlines() if "Verification" in l or "error" in l.lower()]
+            manifest["opensslVerify"][name] = " | ".join(l.split(":", 5)[-1].strip() if "error" in l.lower() else l.strip() for l in lines[:3])
+        for name in ("ca.key", "tsa.key", "tsa_noncrit.key", "ee.key", "int.key", "tsa_by_ee.key", "tsa_by_int.key"):
             os.remove(tmp / name)
     nonce = hashlib.sha256(b"traceweave OpenTimestamps fixture nonce; test only").digest()[:16]
     leaf = hashlib.sha256(b"traceweave OpenTimestamps fixture other leaf; test only").digest()
@@ -198,12 +237,18 @@ def main():
     files["opentimestamps-other-digest.ots"] = RF.OTS_MAGIC + b"\x01\x08" + other_proof_digest + b"\x00" + RF.OTS_BITCOIN + varbytes(varuint(4))
     headers = chain(merkle, "traceweave synthetic chain")
     files["headers.bin"] = headers
+    # D3: the same pinned first header, re-mined at the same easy difficulty with the proof's commitment at
+    # height 4 and a forged time of 2001-01-01T00:00:00Z.
+    files["headers-forked.bin"] = chain(merkle, "forged branch", genesis=headers[:80], attested_time=978307200)
+    manifest["checkpoint"] = {"height": 12, "headerSha256": hashlib.sha256(headers[12 * 80:13 * 80]).hexdigest()}
     files["headers-other.bin"] = headers[:80] + chain(hashlib.sha256(b"different").digest(), "other branch")[80:]
     for name, data in sorted(files.items()):
         (OUT / name).write_bytes(data)
         manifest["files"][name] = hashlib.sha256(data).hexdigest()
     (OUT / "MANIFEST.json").write_text(json.dumps(manifest, indent=2) + "\n")
-    print("wrote", len(files), "files to", OUT.name, "; openssl ts -verify:", manifest["opensslVerify"])
+    print("wrote", len(files), "files to", OUT.name)
+    for name, verdict in manifest["opensslVerify"].items():
+        print(f"  openssl ts -verify {name}: {verdict}")
 
 
 if __name__ == "__main__":

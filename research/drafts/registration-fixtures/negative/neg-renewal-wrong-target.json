@@ -9,7 +9,7 @@
     }
   },
   "object": {
-    "evidenceVersion": "traceweave-time-evidence-draft-3",
+    "evidenceVersion": "traceweave-time-evidence-draft-4",
     "type": "rfc3161",
     "placeholder": true,
     "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
@@ -22,7 +22,7 @@
       "kind": "tsa-certificate-chain",
       "anchorSha256": "b17252a48ba9c0e7d0f9ae5315caa20e2f28fd7ed6a83582b75353de217547f5"
     },
-    "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-395ed58a28ff-tsa-b-2030-06-01T00:00:00Z-renewal",
+    "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-f08e441cf7d3-tsa-b-2030-06-01T00:00:00Z-u1-renewal",
     "rfc3161": {
       "genTime": "2030-06-01T00:00:00Z",
       "policyOid": "2.999.2",
@@ -30,7 +30,8 @@
       "requestNonce": "5a17c0de00000002",
       "signerCertificate": {
         "notBefore": "2029-01-01T00:00:00Z",
-        "notAfter": "2036-01-01T00:00:00Z"
+        "notAfter": "2036-01-01T00:00:00Z",
+        "sha256": "4e7e1bf5a554b29d2f2f16bcb3567a7211c6774dd928d4e9abc42a5d5dfe9c8e"
       }
     }
   }

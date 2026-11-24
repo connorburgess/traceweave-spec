@@ -12,10 +12,10 @@
     ]
   },
   "object": {
-    "resultVersion": "traceweave-registration-verification-draft-3",
+    "resultVersion": "traceweave-registration-verification-draft-4",
     "simulated": true,
     "inputs": {
-      "bundleSha256": "0202b7626c5edf1d67658657334121582a7532a27cee2d4b55dcd4f175180d92",
+      "bundleSha256": "3e1fed9c7e15c161af91c1902f6e68a65e58451cd9da41a457926252506a9662",
       "artifacts": [
         {
           "subjectIndex": 0,

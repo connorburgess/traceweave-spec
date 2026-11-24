@@ -15,10 +15,10 @@
     ]
   },
   "object": {
-    "resultVersion": "traceweave-registration-verification-draft-3",
+    "resultVersion": "traceweave-registration-verification-draft-4",
     "simulated": true,
     "inputs": {
-      "bundleSha256": "1fedd43451c0ac60ca11beea3d72c7716bb16fdbe9f5ef3e729fceda90c8b935",
+      "bundleSha256": "10612069fe5b65707e2a89b7391556a3c62b18dd8d142ef069ec69e7e20d405e",
       "artifacts": [
         {
           "subjectIndex": 0,
@@ -26,7 +26,7 @@
         }
       ],
       "keyEvents": [
-        "1ae92c6acedd880e18a0eaf5dba8480e4a72a980e39a2aeb8fb28d02f83ca8e0"
+        "e08148cb154160dcf84f0db278cc23bb57ecdc64c19f32875f823099c98882e5"
       ]
     },
     "policy": {
@@ -98,7 +98,7 @@
       ],
       "keyEvents": [
         {
-          "eventSha256": "b66af2ad047f749607a5e81f107f563645b3e2744601c46c703656362910f367",
+          "eventSha256": "d85b3a205e9f2a56250225ece91f2a22c087085f7e7e07fbe2afe79804237499",
           "keySha256": "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318",
           "event": "compromised",
           "outcome": "applied",

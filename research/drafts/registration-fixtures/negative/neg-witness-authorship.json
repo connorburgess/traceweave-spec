@@ -21,14 +21,14 @@
         "parts": [
           {
             "data": {
-              "bundleVersion": "traceweave-registration-bundle-draft-3",
+              "bundleVersion": "traceweave-registration-bundle-draft-4",
               "envelope": {
                 "payloadType": "application/vnd.in-toto+json",
-                "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYXV0aG9yIjoicGxhY2Vob2xkZXItc3ViamVjdC0wMDAxIiwiY2FsbGVyIjp7Imlzc3VlciI6Imh0dHBzOi8vaXNzdWVyLmV4YW1wbGUuaW52YWxpZCIsInNjaGVtZSI6Im9wZW5JZENvbm5lY3QiLCJzdWJqZWN0IjoicGxhY2Vob2xkZXItc3ViamVjdC0wMDAxIn0sIm5vdFNob3duIjpbImF1dGhvcnNoaXAiLCJvcmlnaW5hbGl0eSIsImZpcnN0LWNyZWF0aW9uIiwib3duZXJzaGlwIiwicGVybWlzc2lvbiJdLCJwcmVzZW50ZWRLaW5kIjoiZHNzZS1zaWduYXR1cmUtc2hhMjU2IiwicmVjZWl2ZWRBdCI6IjIwMjYtMTEtMjNUMTA6MDA6MDJaIiwicmVxdWVzdE1lc3NhZ2VJZCI6IjBmNmMyYThlLWlsbHVzdHJhdGl2ZS0wMDAxIiwid2l0bmVzc1ZlcnNpb24iOiJ0cmFjZXdlYXZlLXdpdG5lc3MtZHJhZnQtMyJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUvd2l0bmVzcy9kcmFmdC0zIiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6IjM5NWVkNThhMjhmZjRiODI3MGVlM2JiYjQ5OGY5N2VhMzA3MTE1MTYyOTgxMWJiOTBkNzg0M2ZiODgzOTcxNmQifSwibmFtZSI6InByZXNlbnRlZC1kaWdlc3QifV19",
+                "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYXV0aG9yIjoicGxhY2Vob2xkZXItc3ViamVjdC0wMDAxIiwiY2FsbGVyIjp7Imlzc3VlciI6Imh0dHBzOi8vaXNzdWVyLmV4YW1wbGUuaW52YWxpZCIsInNjaGVtZSI6Im9wZW5JZENvbm5lY3QiLCJzdWJqZWN0IjoicGxhY2Vob2xkZXItc3ViamVjdC0wMDAxIn0sIm5vdFNob3duIjpbImF1dGhvcnNoaXAiLCJvcmlnaW5hbGl0eSIsImZpcnN0LWNyZWF0aW9uIiwib3duZXJzaGlwIiwicGVybWlzc2lvbiJdLCJwcmVzZW50ZWRLaW5kIjoiZHNzZS1zaWduYXR1cmUtc2hhMjU2IiwicmVjZWl2ZWRBdCI6IjIwMjYtMTEtMjNUMTA6MDA6MDJaIiwicmVxdWVzdE1lc3NhZ2VJZCI6IjBmNmMyYThlLWlsbHVzdHJhdGl2ZS0wMDAxIiwid2l0bmVzc1ZlcnNpb24iOiJ0cmFjZXdlYXZlLXdpdG5lc3MtZHJhZnQtNCJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUvd2l0bmVzcy9kcmFmdC00Iiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6ImYwOGU0NDFjZjdkMzNkYTdjNDM2Njc1NDBhNTRhOTVmZGU5NmIzNTNlYjg2MDAxMzQ1NDMyNzQ4NTVhNzZjZDkifSwibmFtZSI6InByZXNlbnRlZC1kaWdlc3QifV19",
                 "signatures": [
                   {
                     "keyid": "e4fbf7d5d9e35ceb",
-                    "sig": "zYTSUHkePk4VF2lzLikg4sDKi7aznz4qAH4R5/r0xK7OxUYKfiuSsuzBWqIBZ055oH2QoTzzqLD/N1BpidlbBw=="
+                    "sig": "+nLEeYHFJKLh2yhCouezBnhYFFVjHKtfFYxH3aqkHqLbNV4EoaTkId3YvLvBTeD8uPGzx8ttX/oII9W4A4esCA=="
                   }
                 ]
               },
@@ -43,20 +43,20 @@
               },
               "timeEvidence": [
                 {
-                  "evidenceVersion": "traceweave-time-evidence-draft-3",
+                  "evidenceVersion": "traceweave-time-evidence-draft-4",
                   "type": "rfc3161",
                   "placeholder": true,
                   "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
                   "target": {
                     "kind": "dsse-signature",
                     "signatureIndex": 0,
-                    "sha256": "1b19de763bd2710920863dbe93ca08f5dbe143401beea1bbd22f52cf3553e179"
+                    "sha256": "d37acfcdf64dca8f73d2c5db0ecb013f1d1d23ed1f064486996800be017b555a"
                   },
                   "root": {
                     "kind": "tsa-certificate-chain",
                     "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
                   },
-                  "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-1b19de763bd2-tsa-a-2026-11-23T10:00:03Z",
+                  "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-d37acfcdf64d-tsa-a-2026-11-23T10:00:03Z-u1",
                   "rfc3161": {
                     "genTime": "2026-11-23T10:00:03Z",
                     "policyOid": "2.999.1",
@@ -64,7 +64,8 @@
                     "requestNonce": "5a17c0de00000001",
                     "signerCertificate": {
                       "notBefore": "2026-01-01T00:00:00Z",
-                      "notAfter": "2031-01-01T00:00:00Z"
+                      "notAfter": "2031-01-01T00:00:00Z",
+                      "sha256": "8dd8f57938800e7d3a7c0c5618d393eb2623096e1137cc91e60d53ee0ad0c429"
                     },
                     "accuracySeconds": 1
                   }

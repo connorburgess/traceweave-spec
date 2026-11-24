@@ -21,14 +21,14 @@
         "parts": [
           {
             "data": {
-              "bundleVersion": "traceweave-registration-bundle-draft-3",
+              "bundleVersion": "traceweave-registration-bundle-draft-4",
               "envelope": {
                 "payloadType": "application/vnd.in-toto+json",
-                "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2FsbGVyIjp7InNjaGVtZSI6Im5vbmUifSwibm90U2hvd24iOlsiYXV0aG9yc2hpcCIsIm9yaWdpbmFsaXR5IiwiZmlyc3QtY3JlYXRpb24iLCJvd25lcnNoaXAiLCJwZXJtaXNzaW9uIl0sInByZXNlbnRlZEtpbmQiOiJkc3NlLXNpZ25hdHVyZS1zaGEyNTYiLCJyZWNlaXZlZEF0IjoiMjAyNi0xMS0yM1QxMDowMDowMloiLCJyZXF1ZXN0TWVzc2FnZUlkIjoiMGY2YzJhOGUtaWxsdXN0cmF0aXZlLTAwMDEiLCJ3aXRuZXNzVmVyc2lvbiI6InRyYWNld2VhdmUtd2l0bmVzcy1kcmFmdC0zIn0sInByZWRpY2F0ZVR5cGUiOiJodHRwczovL3RyYWNld2VhdmUub3JnL3ByZWRpY2F0ZS93aXRuZXNzL2RyYWZ0LTMiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiMzk1ZWQ1OGEyOGZmNGI4MjcwZWUzYmJiNDk4Zjk3ZWEzMDcxMTUxNjI5ODExYmI5MGQ3ODQzZmI4ODM5NzE2ZCJ9LCJuYW1lIjoicHJlc2VudGVkLWRpZ2VzdCJ9XX0=",
+                "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2FsbGVyIjp7InNjaGVtZSI6Im5vbmUifSwibm90U2hvd24iOlsiYXV0aG9yc2hpcCIsIm9yaWdpbmFsaXR5IiwiZmlyc3QtY3JlYXRpb24iLCJvd25lcnNoaXAiLCJwZXJtaXNzaW9uIl0sInByZXNlbnRlZEtpbmQiOiJkc3NlLXNpZ25hdHVyZS1zaGEyNTYiLCJyZWNlaXZlZEF0IjoiMjAyNi0xMS0yM1QxMDowMDowMloiLCJyZXF1ZXN0TWVzc2FnZUlkIjoiMGY2YzJhOGUtaWxsdXN0cmF0aXZlLTAwMDEiLCJ3aXRuZXNzVmVyc2lvbiI6InRyYWNld2VhdmUtd2l0bmVzcy1kcmFmdC00In0sInByZWRpY2F0ZVR5cGUiOiJodHRwczovL3RyYWNld2VhdmUub3JnL3ByZWRpY2F0ZS93aXRuZXNzL2RyYWZ0LTQiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiZjA4ZTQ0MWNmN2QzM2RhN2M0MzY2NzU0MGE1NGE5NWZkZTk2YjM1M2ViODYwMDEzNDU0MzI3NDg1NWE3NmNkOSJ9LCJuYW1lIjoicHJlc2VudGVkLWRpZ2VzdCJ9XX0=",
                 "signatures": [
                   {
                     "keyid": "e4fbf7d5d9e35ceb",
-                    "sig": "Msf+hrittbOFbLIpGYPymBG+BLED749vF/ygCteOmhncF2uzJWynOuG8C5tDPufOFaD5UTXBJ1US5m5etlHHBw=="
+                    "sig": "iTIOFG56SLhLEfcJvqXoj/XUk1vgx5Dvjl804Aslf1ao+iyQGjjfIOzs9V89x0P4Kwip5JBeuRcWRpEvzS19CA=="
                   }
                 ]
               },
@@ -43,20 +43,20 @@
               },
               "timeEvidence": [
                 {
-                  "evidenceVersion": "traceweave-time-evidence-draft-3",
+                  "evidenceVersion": "traceweave-time-evidence-draft-4",
                   "type": "rfc3161",
                   "placeholder": true,
                   "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
                   "target": {
                     "kind": "dsse-signature",
                     "signatureIndex": 0,
-                    "sha256": "775d53299a16343274a647a265f1f8e0cc0da68649c75535e3f9432ba0984728"
+                    "sha256": "8669a009371bc1866ec6531c8c083026c7f4ef1fd574f7fea1aee1f68ccfae75"
                   },
                   "root": {
                     "kind": "tsa-certificate-chain",
                     "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
                   },
-                  "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-775d53299a16-tsa-a-2026-11-23T10:00:03Z",
+                  "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-8669a009371b-tsa-a-2026-11-23T10:00:03Z-u1",
                   "rfc3161": {
                     "genTime": "2026-11-23T10:00:03Z",
                     "policyOid": "2.999.1",
@@ -64,7 +64,8 @@
                     "requestNonce": "5a17c0de00000001",
                     "signerCertificate": {
                       "notBefore": "2026-01-01T00:00:00Z",
-                      "notAfter": "2031-01-01T00:00:00Z"
+                      "notAfter": "2031-01-01T00:00:00Z",
+                      "sha256": "8dd8f57938800e7d3a7c0c5618d393eb2623096e1137cc91e60d53ee0ad0c429"
                     },
                     "accuracySeconds": 1
                   }

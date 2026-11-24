@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the illustrative registration-record fixtures (draft-3) against ../registration-record.md.
+"""Check the illustrative registration-record fixtures (draft-4) against ../registration-record.md.
 
 Standard library only; Python 3.11 or later. This is not a registration verifier.
 It verifies the fixtures' Ed25519 signatures (public, test-only keys) under the
@@ -42,19 +42,19 @@ _spec.loader.exec_module(RF)
 
 STATEMENT_TYPE = "https://in-toto.io/Statement/v1"
 PAYLOAD_TYPE = "application/vnd.in-toto+json"
-PREDICATE_TYPE = "https://traceweave.org/predicate/registration/draft-3"
-KEY_EVENT_TYPE = "https://traceweave.org/predicate/key-event/draft-3"
-REGISTRATION_VERSION = "traceweave-registration-draft-3"
-BUNDLE_VERSION = "traceweave-registration-bundle-draft-3"
-EVIDENCE_VERSION = "traceweave-time-evidence-draft-3"
-RESULT_VERSION = "traceweave-registration-verification-draft-3"
-LINK_VERSION = "traceweave-registration-link-draft-3"
-RENDERING_VERSION = "traceweave-registration-rendering-draft-3"
-KEY_EVENT_VERSION = "traceweave-key-event-draft-3"
-SET_VERSION = "traceweave-registration-set-draft-3"
-WITNESS_TYPE = "https://traceweave.org/predicate/witness/draft-3"
-WITNESS_VERSION = "traceweave-witness-draft-3"
-WITNESS_REQUEST_VERSION = "traceweave-witness-request-draft-3"
+PREDICATE_TYPE = "https://traceweave.org/predicate/registration/draft-4"
+KEY_EVENT_TYPE = "https://traceweave.org/predicate/key-event/draft-4"
+REGISTRATION_VERSION = "traceweave-registration-draft-4"
+BUNDLE_VERSION = "traceweave-registration-bundle-draft-4"
+EVIDENCE_VERSION = "traceweave-time-evidence-draft-4"
+RESULT_VERSION = "traceweave-registration-verification-draft-4"
+LINK_VERSION = "traceweave-registration-link-draft-4"
+RENDERING_VERSION = "traceweave-registration-rendering-draft-4"
+KEY_EVENT_VERSION = "traceweave-key-event-draft-4"
+SET_VERSION = "traceweave-registration-set-draft-4"
+WITNESS_TYPE = "https://traceweave.org/predicate/witness/draft-4"
+WITNESS_VERSION = "traceweave-witness-draft-4"
+WITNESS_REQUEST_VERSION = "traceweave-witness-request-draft-4"
 A2A_EXTENSION = "https://traceweave.org/a2a/ext/registration/draft-1"
 POSSESSION_SCHEME = "sha256-salted-possession-v1"
 POSSESSION_DOMAIN = b"Traceweave-Possession-v1\x00"
@@ -84,7 +84,7 @@ OTS_MARGIN = timedelta(seconds=7200)
 RETAIN_REASONS = {"unspecified", "affiliationChanged", "superseded", "cessationOfOperation"}  # RFC 3161 section 4 item 1
 ALL_REASONS = RETAIN_REASONS | {"keyCompromise", None}
 EVIDENCE_OUTCOMES = {"valid", "invalid", "wrong-target", "pending", "untrusted-root", "unsupported", "wrong-policy",
-                     "revoked", "no-revocation-data", "expired-unrenewed", "insufficient-confirmations",
+                     "revoked", "no-revocation-data", "expired-unrenewed", "insufficient-confirmations", "path-invalid",
                      "placeholder", "placeholder-assumed-valid"}
 COUNTED = ("valid", "placeholder-assumed-valid")
 
@@ -104,7 +104,7 @@ DENY_TEXT = re.compile(
     r"own(s|ed|er|ership)?|original\w*|copyright|prove[sdn]?|proof|establish\w*|authentic\w*|verified|genuine|legitimate)\b")
 ORDER_TEXT = re.compile(r"(?i)\b(before|after|earlier|later|first|sooner|preceded?|predates?|older|newer)\b")
 T = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)"
-K = r"([0-9a-f]{16})"
+K = r"([0-9a-f]{32})"  # 128 bits of SHA-256(public key), never the 64-bit hint (B3 note)
 TEMPLATES = {
     "title": re.compile(r"^Registration of ([a-z0-9][a-z0-9._-]{0,63}) \(SHA-256 [0-9a-f]{8}…[0-9a-f]{4}\)\.$"),
     "digest": re.compile(r"^Content digest: (matches the file you supplied|does not match the file you supplied|not checked, because no file was supplied)\.$"),
@@ -113,6 +113,7 @@ TEMPLATES = {
     "sources": re.compile(r"^Time sources for key " + K + r": (\d+) independent, (\d+) required; the earliest single source says " + T + r"\.$"),
     "no-bound": re.compile(r"^No proved time for key " + K + r"\.$"),
     "claimed": re.compile(r"^Creation time claimed by the registrant, not proved: " + T + r"\.$"),
+    "simulated": re.compile(r"^Simulated: time evidence is placeholder only\.$"),
     "witness": re.compile(r"^Witnessed: the caller ([A-Za-z0-9._-]+) presented the signature digest no later than " + T + r", according to the witness's time-stamp authority\.$"),
 }
 
@@ -125,7 +126,7 @@ CODES = [
     "provenance-shape", "quorum-miscount", "rendering-unlisted-line", "report-digest", "result-mismatch",
     "root-not-anchored", "signature-invalid", "single-verdict", "statement-digest", "statement-shape",
     "subject-mismatch", "subject-name", "time-in-statement", "tsa-eku-invalid", "tsa-imprint-mismatch",
-    "tsa-nonce-mismatch", "tsa-signature-invalid", "tsa-signing-cert-mismatch", "trust-without-quorum",
+    "tsa-nonce-mismatch", "tsa-signature-invalid", "tsa-signing-cert-mismatch", "trust-without-quorum", "simulated-unmarked",
     "content-on-wire", "a2a-shape", "mcp-tool-shape", "witness-shape",
 ]
 
@@ -585,14 +586,16 @@ def check_evidence(ev, sig_bytes, out, tokens=None):
     if not req <= set(body) or set(body) - req - {"accuracySeconds"} or not TIME.match(str(body["genTime"])) \
             or not OID.match(str(body["policyOid"])) or not HEX16.match(str(body["nonce"])) or not HEX16.match(str(body["requestNonce"])) \
             or not isinstance(body.get("accuracySeconds", 0), int) or not isinstance(body["signerCertificate"], dict) \
-            or set(body["signerCertificate"]) != {"notBefore", "notAfter"} \
-            or not all(TIME.match(str(v)) for v in body["signerCertificate"].values()):
+            or set(body["signerCertificate"]) != {"notBefore", "notAfter", "sha256"} \
+            or not all(TIME.match(str(body["signerCertificate"][k])) for k in ("notBefore", "notAfter")) \
+            or not HEX64.match(str(body["signerCertificate"]["sha256"])):
         out.add("evidence-shape")
         return None
     if body["nonce"] != body["requestNonce"]:
         out.add("tsa-nonce-mismatch")
     s.update(time=parse_time(body["genTime"]), accuracy=body.get("accuracySeconds"), policyOid=body["policyOid"],
-             cert=(parse_time(body["signerCertificate"]["notBefore"]), parse_time(body["signerCertificate"]["notAfter"])))
+             cert=(parse_time(body["signerCertificate"]["notBefore"]), parse_time(body["signerCertificate"]["notAfter"])),
+             pathCerts=[body["signerCertificate"]["sha256"]])
     return s
 
 
@@ -711,11 +714,15 @@ def _outcome(i, e, summaries, policy, simulated, memo):
             return "untrusted-root", None
         if not chain or sha(chain[0]) != root["anchorSha256"]:
             return "untrusted-root", None
+        cp = root.get("checkpoint")
+        if not cp:
+            return "unsupported", None  # D3: a header source is trusted only up to a pinned checkpoint
         best = None
         for height, commitment in e["ots"]:
-            if height >= len(chain) or not RF.header_ok(chain, height) or chain[height][36:68] != commitment:
+            if height >= len(chain) or chain[height][36:68] != commitment or not RF.header_ok(chain, height) \
+                    or not RF.linked_to_checkpoint(chain, height, cp["height"], cp["headerSha256"]):
                 continue
-            if len(chain) - 1 - height < root.get("minConfirmations", 6):
+            if cp["height"] - height < root.get("minConfirmations", 6):
                 return "insufficient-confirmations", None
             t = RF.header_time(chain[height]) + OTS_MARGIN
             best = t if best is None else min(best, t)
@@ -732,8 +739,11 @@ def _outcome(i, e, summaries, policy, simulated, memo):
             return "untrusted-root", None
         if root_cert.sha256() != root["anchorSha256"]:
             return "untrusted-root", None
-        if not RF.chain_to_root(e["signer"], e["certs"], root_cert):
-            return "invalid", None
+        try:
+            path = RF.validate_path(e["signer"], e["certs"], root_cert, e["time"])
+        except RF.Bad:
+            return "path-invalid", None
+        e = dict(e, pathCerts=[c.sha256() for c in path])
     if e["policyOid"] not in root.get("policyOids", []):
         return "wrong-policy", None
     if not e["cert"][0] <= e["time"] <= e["cert"][1]:
@@ -742,6 +752,9 @@ def _outcome(i, e, summaries, policy, simulated, memo):
     if data is None:
         return "no-revocation-data", None
     for rev in data["revocations"]:
+        # D5: an entry names one certificate (leaf or intermediate) by SHA-256 and applies only to paths through it.
+        if rev["certificateSha256"] not in e["pathCerts"]:
+            continue
         # RFC 3161 section 4 items 1-2: no reasonCode, or keyCompromise, invalidates every token of that key.
         if rev["reasonCode"] not in RETAIN_REASONS or e["time"] >= parse_time(rev["revokedAt"]):
             return "revoked", None
@@ -829,39 +842,60 @@ def load_events(event_paths, policy, simulated, out):
 
 def evaluate_events(evs, policy):
     """Order-independent (B2): events are taken in order of proved time E, ties by payload digest, and an
-    event may rely only on events with a smaller E. Iterated until nothing changes, because a later
-    compromise can dispute an earlier rotation (B1)."""
+    event may rely only on events with a smaller E. Iterated to a fixed point, because a later compromise
+    can dispute an earlier rotation (B1).
+
+    Supersession (D1, D2): the first applied `rotated` or `retired` event for key K supersedes K, disputed
+    or not. After it, events signed by K other than `compromised` are `ignored-superseded`, and so is any
+    later rotation or retirement of K by anyone. Two different supersessions of K at the same E are both
+    `disputed` (an equal-time tie must not be won by grinding the payload digest). Otherwise rotations are
+    disputed only by a compromise window: an applied `compromised` event for K disputes rotations and
+    retirements of K with E >= max(Tc, E_c - lookback)."""
     lookback = timedelta(seconds=policy["compromiseLookbackSeconds"])
     order = sorted(evs, key=lambda e: (e["E"] or FAR, e["hash"]))
-    disputed, state, applied = set(), None, []
+    disputed, state, applied, status = set(), None, [], {}
     for _ in range(len(order) + 2):
-        applied = []
+        applied, status, superseded = [], {}, {}
         for e in order:
             if not e["sigok"] or e["E"] is None:
                 continue
-            if e["signer"] == e["target"] or any(
+            if not (e["signer"] == e["target"] or any(
                     r["event"] == "rotated" and r["target"] == e["target"] and r["successor"] == e["signer"]
-                    and r["E"] < e["E"] and r["hash"] not in disputed for r in applied):
-                applied.append(e)
+                    and r["E"] < e["E"] and r["hash"] not in disputed for r in applied)):
+                status[e["hash"]] = "ignored-unauthorized"
+                continue
+            sup = e["event"] in ("rotated", "retired")
+            by_signer = superseded.get(e["signer"])
+            if by_signer is not None and e["event"] != "compromised" \
+                    and not (sup and e["target"] == e["signer"] and e["E"] == by_signer):
+                status[e["hash"]] = "ignored-superseded"
+                continue
+            by_target = superseded.get(e["target"])
+            if sup and by_target is not None and e["E"] > by_target:
+                status[e["hash"]] = "ignored-superseded"
+                continue
+            applied.append(e)
+            status[e["hash"]] = "applied"
+            if sup and e["target"] not in superseded:
+                superseded[e["target"]] = e["E"]
         new = set()
+        ties = {}
+        for e in applied:
+            if e["event"] in ("rotated", "retired"):
+                ties.setdefault((e["target"], e["E"]), set()).add((e["event"], e["successor"], e["hash"]))
+        for group in ties.values():
+            if len({(ev, succ) for ev, succ, _ in group}) > 1:
+                new |= {h for _, _, h in group}
         for c in applied:
             if c["event"] == "compromised":
                 start = max(c["claimed"], c["E"] - lookback)
                 for r in applied:
                     if r is not c and r["target"] == c["target"] and r["event"] in ("rotated", "retired") and r["E"] >= start:
                         new.add(r["hash"])
-        successors = {}
-        for r in applied:
-            if r["event"] == "rotated":
-                successors.setdefault(r["target"], set()).add(r["successor"])
-        for r in applied:
-            if r["event"] == "rotated" and len(successors[r["target"]]) > 1:
-                new.add(r["hash"])  # conflicting rotations of one key
         key = (tuple(e["hash"] for e in applied), frozenset(new))
         if key == state:
             break
         state, disputed = key, new
-    applied_hashes = {e["hash"] for e in applied}
     results = []
     for e in order:
         if not e["sigok"]:
@@ -870,10 +904,8 @@ def evaluate_events(evs, policy):
             o = "ignored-no-proved-time"
         elif e["hash"] in disputed:
             o = "disputed"
-        elif e["hash"] in applied_hashes:
-            o = "applied"
         else:
-            o = "ignored-unauthorized"
+            o = status.get(e["hash"], "ignored-unauthorized")
         results.append({"eventSha256": e["hash"], "keySha256": e["target"], "event": e["event"], "outcome": o,
                         "provedAt": fmt_time(e["E"])})
     ok = [e for e in applied if e["hash"] not in disputed]
@@ -886,7 +918,9 @@ def signer_trust(digest, sig_outcome, bound, policy, ok_events, all_applied):
     b = bound["quorum"]  # S1: event decisions use the quorum bound only
     trusted_from = {k: None for k in policy["trustedKeys"]}
     for r in sorted((e for e in ok_events if e["event"] == "rotated"), key=lambda e: (e["E"], e["hash"])):
-        if r["target"] in trusted_from and r["successor"] not in trusted_from:
+        since = trusted_from.get(r["target"], FAR)
+        # trust flows only through a rotation proved strictly after its signer became trusted
+        if r["target"] in trusted_from and (since is None or r["E"] > since) and r["successor"] not in trusted_from:
             trusted_from[r["successor"]] = r["E"]
     if digest not in trusted_from:
         return "untrusted"
@@ -898,7 +932,7 @@ def signer_trust(digest, sig_outcome, bound, policy, ok_events, all_applied):
         return "untrusted"
     status = "trusted"
     lookback = timedelta(seconds=policy["compromiseLookbackSeconds"])
-    for e in ok_events:
+    for e in all_applied:  # disputed events never grant trust, but they still restrict it
         if e["target"] != digest:
             continue
         if e["event"] == "compromised":
@@ -973,7 +1007,7 @@ def expected_result(ctx, artifacts, policy, simulated, bundle_sha, event_paths, 
 
 
 POLICY_KEYS = {"quorum", "timeRoots", "trustedKeys", "revocationData", "compromiseLookbackSeconds", "verificationTime"}
-ROOT_KEYS = {"anchorSha256", "kind", "independenceGroup", "accuracySeconds", "policyOids", "rootCertificate", "headerFile", "minConfirmations"}
+ROOT_KEYS = {"anchorSha256", "kind", "independenceGroup", "accuracySeconds", "policyOids", "rootCertificate", "headerFile", "minConfirmations", "checkpoint"}
 
 
 def check_policy(policy, out):
@@ -996,7 +1030,8 @@ def check_policy(policy, out):
             return False
     for rd in policy["revocationData"]:
         if set(rd) != {"anchorSha256", "source", "asOf", "revocations"} or not TIME.match(str(rd["asOf"])) \
-                or any(set(rev) != {"revokedAt", "reasonCode"} or rev["reasonCode"] not in ALL_REASONS for rev in rd["revocations"]):
+                or any(set(rev) != {"certificateSha256", "revokedAt", "reasonCode"} or rev["reasonCode"] not in ALL_REASONS
+                       or not HEX64.match(str(rev["certificateSha256"])) for rev in rd["revocations"]):
             out.add("result-mismatch")
             return False
     return True
@@ -1121,7 +1156,12 @@ def check_rendering(ren, meta, out):
         if sentence not in lines:
             out.add("notice-missing")
     result = load_fixture(ren["result"])
-    times = {t["keyid"]: t for t in result["outcomes"]["time"]}
+    times = {t["keySha256"][:32]: t for t in result["outcomes"]["time"] if t["keySha256"]}
+    marked = TEMPLATES["simulated"].match(lines[0]) if lines else None
+    if result.get("simulated") and not marked:
+        out.add("simulated-unmarked")  # D6: a simulated result must say so, on the first line
+    if marked and not result.get("simulated"):
+        out.add("result-mismatch")
     claimed = result["outcomes"]["claimedCreatedAt"]["value"]
     bound_keys = set()
     for line in lines:
@@ -1463,7 +1503,11 @@ def wrong_implementation_self_test(verbose):
         ("RFC 3161 revocation ignored", "fixtures/verification-result-revoked.json", ignore_revocation),
         ("target over text instead of signature bytes", "fixtures/evidence-rfc3161.json", base64_target),
         ("successor of a rotation made with a stolen key trusted (B1)", "fixtures/verification-result-rotation-hijack.json", set_trust("trusted")),
-        ("successor of conflicting rotations trusted (B1)", "fixtures/verification-result-rotation-conflict.json", set_trust("trusted")),
+        ("successor erased by a later second rotation of the old key (D2)", "fixtures/verification-result-rotation-conflict.json", set_trust("untrusted")),
+        ("retired key's later rotation trusted (D1)", "fixtures/verification-result-retired-then-rotated.json", set_trust("trusted")),
+        ("equal-time retirement and rotation: rotation trusted (D1)", "fixtures/verification-result-retired-and-rotated-same-time.json", set_trust("trusted")),
+        ("successor erased by a rotation eighteen months later (D2)", "fixtures/verification-result-late-second-rotation.json", set_trust("untrusted")),
+        ("late compromise claim disputes the honest rotation (D2)", "fixtures/verification-result-late-compromise-claim.json", set_trust("untrusted")),
         ("events evaluated in list order (B2)", "fixtures/verification-result-event-order-a.json", order_dependent),
         ("trust matched on the 64-bit keyid (B3)", "fixtures/verification-result.json", trust_by_hint),
         ("trust decided on one source after a key event (S1)", "fixtures/verification-result-single-source-event.json", set_trust("trusted")),
@@ -1497,6 +1541,26 @@ def wrong_implementation_self_test(verbose):
     except RF.Bad as bad:
         strict = bad.code == "tsa-imprint-mismatch"
     cases.append(("real RFC 3161 token accepted without the messageImprint check (S2)", lenient, strict))
+    # D3: a header file re-mined on the pinned first header passes per-header proof of work, but not the checkpoint.
+    rp = load_fixture("fixtures/verification-result-real.json")["policy"]
+    root = rp["timeRoots"][1]
+    forked = RF.headers_from_file((HERE / "real-format/headers-forked.bin").read_bytes())
+    cases.append(("forked header file accepted without a checkpoint (D3)", RF.header_ok(forked, 4),
+                  not RF.linked_to_checkpoint(forked, 4, root["checkpoint"]["height"], root["checkpoint"]["headerSha256"])))
+    # D4: signature-only chain checks accept TSA certificates that RFC 5280 path validation (and openssl) reject.
+    root_cert = RF.Cert((HERE / "real-format/test-root-ca.der").read_bytes())
+    for vec in ("issued-by-end-entity", "expired-intermediate"):
+        f = RF.parse_response((HERE / f"real-format/rfc3161-response-{vec}.der").read_bytes())
+        signer = next(c for c in f["certs"] if (c.issuer_der, c.serial) == f["sid"])
+        try:
+            RF.validate_path(signer, f["certs"], root_cert, f["genTime"])
+            rejects = False
+        except RF.Bad:
+            rejects = True
+        cases.append((f"signature-only chain check accepts a TSA {vec.replace('-', ' ')} (D4)", RF.chain_to_root(signer, f["certs"], root_cert), rejects))
+    # D6: rendering a simulated result without the marker.
+    got = mutated("fixtures/rendering.json", lambda r: r["lines"].pop(0))
+    cases.append(("simulated result rendered without the marker (D6)", True, "simulated-unmarked" in got))
     failures = 0
     for name, wrong_misbehaves, caught in cases:
         ok = wrong_misbehaves and caught

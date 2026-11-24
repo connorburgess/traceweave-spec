@@ -5,14 +5,14 @@
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing."
   },
   "object": {
-    "bundleVersion": "traceweave-registration-bundle-draft-3",
+    "bundleVersion": "traceweave-registration-bundle-draft-4",
     "envelope": {
       "payloadType": "application/vnd.in-toto+json",
-      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY29tcHJvbWlzZWROb3RCZWZvcmUiOiIyMDI2LTAxLTAxVDAwOjAwOjAwWiIsImV2ZW50IjoiY29tcHJvbWlzZWQiLCJldmVudFZlcnNpb24iOiJ0cmFjZXdlYXZlLWtleS1ldmVudC1kcmFmdC0zIiwia2V5aWQiOiIxOGMzZWVhZDA4NjQ2NjE0In0sInByZWRpY2F0ZVR5cGUiOiJodHRwczovL3RyYWNld2VhdmUub3JnL3ByZWRpY2F0ZS9rZXktZXZlbnQvZHJhZnQtMyIsInN1YmplY3QiOlt7ImRpZ2VzdCI6eyJzaGEyNTYiOiIxOGMzZWVhZDA4NjQ2NjE0YmM4NjBiZjc0MzY5YWMxZjEzZmIxOGY5MTRiNDQzNDAxYzU1NDJkZWJkMDA2MzE4In0sIm5hbWUiOiJrZXkifV19",
+      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY29tcHJvbWlzZWROb3RCZWZvcmUiOiIyMDI2LTAxLTAxVDAwOjAwOjAwWiIsImV2ZW50IjoiY29tcHJvbWlzZWQiLCJldmVudFZlcnNpb24iOiJ0cmFjZXdlYXZlLWtleS1ldmVudC1kcmFmdC00Iiwia2V5aWQiOiIxOGMzZWVhZDA4NjQ2NjE0In0sInByZWRpY2F0ZVR5cGUiOiJodHRwczovL3RyYWNld2VhdmUub3JnL3ByZWRpY2F0ZS9rZXktZXZlbnQvZHJhZnQtNCIsInN1YmplY3QiOlt7ImRpZ2VzdCI6eyJzaGEyNTYiOiIxOGMzZWVhZDA4NjQ2NjE0YmM4NjBiZjc0MzY5YWMxZjEzZmIxOGY5MTRiNDQzNDAxYzU1NDJkZWJkMDA2MzE4In0sIm5hbWUiOiJrZXkifV19",
       "signatures": [
         {
           "keyid": "bdd28d703dac2451",
-          "sig": "X2c2CBNS9OF4HWm9ZzizRynwcBNTJZgsG6uKh2RMc+yNt/09HMlJs6D7bq310upaYW7+RXLFHjwvpI6GeHsUBg=="
+          "sig": "F/fFNc/63HT74vx13RjsI/jj5Wr3TA/4nD3Pqnx7KOY3k+wztLkt7lX2Bv770OLWPGaP8e9nQma3qd2EoVs0Bg=="
         }
       ]
     },
@@ -27,20 +27,20 @@
     },
     "timeEvidence": [
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-3",
+        "evidenceVersion": "traceweave-time-evidence-draft-4",
         "type": "rfc3161",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "af26399ccaa5093c2edf2646a0340b2ce557268bebe38715cf33230549462df5"
+          "sha256": "bfd225fbbd92825ea9b305b877a570e903bda5b57c82ef9b6bb3d62f1653e61e"
         },
         "root": {
           "kind": "tsa-certificate-chain",
           "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
         },
-        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-af26399ccaa5-tsa-a-2026-11-25T00:00:00Z",
+        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-bfd225fbbd92-tsa-a-2026-11-25T00:00:00Z-u1",
         "rfc3161": {
           "genTime": "2026-11-25T00:00:00Z",
           "policyOid": "2.999.1",
@@ -48,26 +48,27 @@
           "requestNonce": "5a17c0de00000001",
           "signerCertificate": {
             "notBefore": "2026-01-01T00:00:00Z",
-            "notAfter": "2031-01-01T00:00:00Z"
+            "notAfter": "2031-01-01T00:00:00Z",
+            "sha256": "8dd8f57938800e7d3a7c0c5618d393eb2623096e1137cc91e60d53ee0ad0c429"
           },
           "accuracySeconds": 1
         }
       },
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-3",
+        "evidenceVersion": "traceweave-time-evidence-draft-4",
         "type": "opentimestamps",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "af26399ccaa5093c2edf2646a0340b2ce557268bebe38715cf33230549462df5"
+          "sha256": "bfd225fbbd92825ea9b305b877a570e903bda5b57c82ef9b6bb3d62f1653e61e"
         },
         "root": {
           "kind": "bitcoin-proof-of-work",
           "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6"
         },
-        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-af26399ccaa5-btc-2026-11-25T01:00:00Z",
+        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-bfd225fbbd92-btc-2026-11-25T01:00:00Z",
         "opentimestamps": {
           "status": "complete",
           "blockTime": "2026-11-25T01:00:00Z"

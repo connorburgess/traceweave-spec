@@ -15,10 +15,10 @@
     ]
   },
   "object": {
-    "resultVersion": "traceweave-registration-verification-draft-3",
+    "resultVersion": "traceweave-registration-verification-draft-4",
     "simulated": true,
     "inputs": {
-      "bundleSha256": "09b33473c79729fa3bb83e2e5d5e98f64de6fb9dac643b3ec09000b4a2f3e327",
+      "bundleSha256": "62ad933b839f1cc1fb1ccb5d24f3d54ad0ee1619b0c09d42ee885b582e7a5469",
       "artifacts": [
         {
           "subjectIndex": 0,
@@ -26,7 +26,7 @@
         }
       ],
       "keyEvents": [
-        "03b9a10648226ffe34cb8ae19c59fd6e68d1fa0b7c8a96c7e964275593d1dade"
+        "7e304a5ded5170f27f4e6de5ea2e764f6315d121745cee77332a76946a6f73f9"
       ]
     },
     "policy": {
@@ -98,7 +98,7 @@
       ],
       "keyEvents": [
         {
-          "eventSha256": "3cf015a34884a37c494a8cb6745b4dfdf9e3988ffc972b42ded372bff267c04c",
+          "eventSha256": "ac3105b30095ba40bd3c3cf1c44b69b402867406bb28971af443c5e96567b186",
           "keySha256": "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318",
           "event": "rotated",
           "outcome": "applied",

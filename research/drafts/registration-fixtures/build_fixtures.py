@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rebuild the illustrative registration fixtures, draft-3 (fixtures/, negative/ and aux/).
+"""Rebuild the illustrative registration fixtures, draft-4 (fixtures/, negative/ and aux/).
 
 Standard library only. Deterministic: Ed25519 signatures are deterministic, and every nonce,
 key and placeholder trust anchor below is derived from a fixed public label. The keys are public
@@ -107,7 +107,7 @@ def statement(nonce=NONCE, artifact=ARTIFACT, name="sum.go", catalogue=CATALOGUE
             "possession": [{"subjectIndex": 0, "scheme": C.POSSESSION_SCHEME, "sha256": C.possession_digest(nonce, artifact)}],
             "catalogue": {"scheme": C.CATALOGUE_SCHEME, "sha256": C.catalogue_commitment(CAT_NONCE, catalogue),
                           "profile": copy.deepcopy(REPORT_BODY["profile"])},
-            "implementation": {"name": "build_fixtures.py", "version": "draft-3", "commit": ZERO40},
+            "implementation": {"name": "build_fixtures.py", "version": "draft-4", "commit": ZERO40},
             "specCommit": ZERO40,
             "claims": {"createdAt": "2026-11-20T09:00:00Z"},
         },
@@ -147,14 +147,18 @@ def evidence(kind, sig, anchor, body, index=0, extra_label=""):
     return ev
 
 
-def tsa(sig, which="a", gen="2026-11-23T10:00:00Z", index=0, cert=("2026-01-01T00:00:00Z", "2031-01-01T00:00:00Z"), **extra):
+def cert_id(which, unit=1):
+    return C.sha(f"PLACEHOLDER signing certificate {unit} of TSA operator {which}; not a real certificate".encode())
+
+
+def tsa(sig, which="a", gen="2026-11-23T10:00:00Z", index=0, cert=("2026-01-01T00:00:00Z", "2031-01-01T00:00:00Z"), unit=1, **extra):
     n = {"a": "5a17c0de00000001", "b": "5a17c0de00000002"}[which]
     body = {"genTime": gen, "policyOid": "2.999.1" if which == "a" else "2.999.2", "nonce": n, "requestNonce": n,
-            "signerCertificate": {"notBefore": cert[0], "notAfter": cert[1]}}
+            "signerCertificate": {"notBefore": cert[0], "notAfter": cert[1], "sha256": cert_id(which, unit)}}
     if which == "a":
         body["accuracySeconds"] = 1
     body.update(extra)
-    return evidence("rfc3161", sig, f"tsa-{which}", body, index, extra_label=f"-{gen}")
+    return evidence("rfc3161", sig, f"tsa-{which}", body, index, extra_label=f"-{gen}-u{unit}")
 
 
 def ots(sig, block="2026-11-23T11:12:00Z", index=0):
@@ -226,12 +230,15 @@ def witness_evidence(sig, which="a"):
 def render(result, name="sum.go", artifact=ARTIFACT, context=None, witness=None):
     o = result["outcomes"]
     h = C.sha(artifact)
-    lines = [f"Registration of {name} (SHA-256 {h[:8]}…{h[-4:]}).",
+    lines = ["Simulated: time evidence is placeholder only."] if result["simulated"] else []
+    lines += [f"Registration of {name} (SHA-256 {h[:8]}…{h[-4:]}).",
              {"match": "Content digest: matches the file you supplied.",
               "mismatch": "Content digest: does not match the file you supplied.",
               "not-supplied": "Content digest: not checked, because no file was supplied."}[o["subjects"][0]["outcome"]]]
     trust_words = {"trusted": "trusted", "untrusted": "not trusted", "disputed": "disputed by a key event", "not-evaluated": "not evaluated"}
     for sig, trust, t in zip(o["signatures"], o["signerTrust"], o["time"]):
+        t = dict(t, keyid=t["keySha256"][:32])
+        sig = dict(sig, keyid=sig["keySha256"][:32])
         lines.append(f"Signature by key {sig['keyid']}: {sig['outcome'].replace('unknown-key', 'unknown key')}; signer {trust_words[trust['outcome']]} under your policy.")
         if t["notAfterQuorum"]:
             lines.append(f"This record shows that the content existed, and that key {t['keyid']} signed a statement naming it, no later than {t['notAfterQuorum']}.")
@@ -266,7 +273,8 @@ def real_policy():
             {"anchorSha256": root.sha256(), "kind": "tsa-certificate-chain", "independenceGroup": "test-tsa",
              "policyOids": ["2.999.1"], "rootCertificate": "real-format/test-root-ca.der"},
             {"anchorSha256": C.sha(genesis), "kind": "bitcoin-proof-of-work", "independenceGroup": "synthetic-chain",
-             "headerFile": "real-format/headers.bin", "minConfirmations": 6},
+             "headerFile": "real-format/headers.bin", "minConfirmations": 6,
+             "checkpoint": json.loads(real_bytes("MANIFEST.json"))["checkpoint"]},
         ],
         "trustedKeys": [C.sha(PUB)],
         "revocationData": [{"anchorSha256": root.sha256(), "source": "real-format test CA: no CRL issued", "asOf": "2026-11-24T12:00:00Z", "revocations": []}],
@@ -314,7 +322,29 @@ def build_real():
         neg(name, fixture("evidence", desc, real_evidence("rfc3161", sig, real_bytes(file), real_bytes(req)), code, bundle=BR))
     neg("real-ots-wrong-target", fixture("evidence", "A real-format proof for another digest.",
                                          real_evidence("opentimestamps", sig, real_bytes("opentimestamps-other-digest.ots")), "evidence-wrong-target", bundle=BR))
+    # D4: TSA certificates whose paths fail RFC 5280 validation (openssl rejects both; see MANIFEST.json).
+    for name, file, desc in [("issued-by-end-entity", "rfc3161-response-issued-by-end-entity.der", "TSA certificate issued by an end-entity (CA:FALSE) certificate."),
+                             ("expired-intermediate", "rfc3161-response-expired-intermediate.der", "TSA certificate under an intermediate that expired in 2021.")]:
+        b = bundle_of(env, [real_evidence("rfc3161", sig, real_bytes(file), real_bytes("rfc3161-request.der")), good[1]])
+        write("aux", f"bundle-real-{name}", fixture("bundle", desc, b))
+        rel = f"aux/bundle-real-{name}.json"
+        honest = result_for(rel, rp, simulated=False)
+        write("fixtures", f"verification-result-real-{name}", fixture("verification-result", f"D4: {desc} Outcome `path-invalid`.", honest, bundle=rel, artifacts=ART))
+        claimed = copy.deepcopy(result_for(BR, rp, simulated=False))
+        claimed["inputs"]["bundleSha256"] = honest["inputs"]["bundleSha256"]
+        neg(f"real-{name}-accepted", fixture("verification-result", f"D4 (review case): {desc} The token is reported valid anyway.", claimed,
+                                             "quorum-miscount", bundle=rel, artifacts=ART))
     r = result_for(BR, rp, simulated=False)
+    forked = copy.deepcopy(rp)
+    forked["timeRoots"][1]["headerFile"] = "real-format/headers-forked.bin"
+    r4 = copy.deepcopy(r)
+    r4["policy"] = forked
+    for e in r4["outcomes"]["timeEvidence"]:
+        if e["type"] == "opentimestamps":
+            e["notAfter"] = "2001-01-01T02:00:00Z"
+    r4["outcomes"]["time"][0]["notAfterAnyRoot"] = "2001-01-01T02:00:00Z"
+    neg("real-ots-forked-headers", fixture("verification-result", "D3 (review case): headers re-mined on the pinned first header at easy difficulty, attested time 2001-01-01; reported valid anyway.",
+                                           r4, "quorum-miscount", bundle=BR, artifacts=ART))
     bad_policy = copy.deepcopy(rp)
     bad_policy["timeRoots"][1]["headerFile"] = "real-format/headers-other.bin"
     r2 = copy.deepcopy(r)
@@ -359,7 +389,7 @@ def build():
         ("-revoked-retaining", "superseded", "2027-03-01T00:00:00Z", "TSA A revoked as superseded after genTime: its earlier token stays valid."),
     ]:
         p = copy.deepcopy(POLICY)
-        p["revocationData"][0]["revocations"] = [{"revokedAt": when, "reasonCode": reason}]
+        p["revocationData"][0]["revocations"] = [{"certificateSha256": cert_id("a"), "revokedAt": when, "reasonCode": reason}]
         vr(name, desc, result_for(B3, p))
     p = copy.deepcopy(POLICY)
     p["timeRoots"][0]["policyOids"] = ["2.999.9"]
@@ -433,7 +463,7 @@ def build():
         "-rotation-hijack": (["aux/key-event-rotation-to-thief.json", "aux/key-event-compromise-after-theft.json"], thief,
                              "B1: the rotation falls inside the later compromise window, so it is `disputed` and the thief's key gains no trust."),
         "-rotation-conflict": (["fixtures/key-event-rotation.json", "aux/key-event-rotation-conflicting.json"], succ,
-                               "B1: two rotations of one key to different successors are both `disputed`."),
+                               "D2: a second, different rotation of an already-rotated key is `ignored-superseded`; the first successor stays trusted."),
         "-event-order-a": (["aux/key-event-retired-by-successor.json", "fixtures/key-event-rotation.json"], rmeta,
                            "B2: retirement listed before the rotation it relies on; identical result to order b."),
         "-event-order-b": (["fixtures/key-event-rotation.json", "aux/key-event-retired-by-successor.json"], rmeta,
@@ -443,6 +473,57 @@ def build():
     }
     for name, (evs, meta, desc) in events.items():
         vr(name, desc, result_for(meta["bundle"], artifacts=meta["artifacts"], events=evs), keyEvents=evs, **meta)
+
+    # D1: a retired key cannot rotate later, nor at the same proved time.
+    retired, _ = key_event("retired", gen="2026-11-26T00:00:00Z", block="2026-11-26T01:00:00Z")
+    write("aux", "key-event-retired", fixture("key-event", "The owner retires the key, proved 2026-11-26T03:00.", retired))
+    late_rot, _ = key_event("rotated", gen="2027-03-01T00:00:00Z", block="2027-03-01T01:00:00Z", successorPublicKeyHex=PUB_THIEF.hex())
+    write("aux", "key-event-rotation-after-retirement", fixture("key-event", "Whoever later holds the retired key rotates it to the thief.", late_rot))
+    tie_rot, _ = key_event("rotated", gen="2026-11-26T00:00:00Z", block="2026-11-26T01:00:00Z", successorPublicKeyHex=PUB_THIEF.hex())
+    write("aux", "key-event-rotation-same-time", fixture("key-event", "A rotation to the thief with the same proved time as the retirement.", tie_rot))
+    env_t7, sigs_t7 = envelope(statement(NONCE_3, ARTIFACT_2, "host.go"), signers=(THIEF,))
+    write("aux", "bundle-thief-2027", fixture("bundle", "A registration signed by the thief's key in 2027.",
+                                              bundle_of(env_t7, [tsa(sigs_t7[0], "a", "2027-03-05T00:00:00Z"), ots(sigs_t7[0], "2027-03-05T01:00:00Z")], keys=(THIEF,))))
+    thief7 = {"bundle": "aux/bundle-thief-2027.json", "artifacts": ART2}
+    # D2: an honest rotation, then, much later, a second rotation by whoever obtained the old key.
+    honest_rot, _ = key_event("rotated", gen="2026-11-26T00:00:00Z", block="2026-11-26T01:00:00Z", successorPublicKeyHex=PUB_NEXT.hex())
+    write("aux", "key-event-rotation-honest", fixture("key-event", "The owner rotates the key to the successor, proved 2026-11-26T03:00.", honest_rot))
+    second_rot, _ = key_event("rotated", gen="2028-05-26T00:00:00Z", block="2028-05-26T01:00:00Z", successorPublicKeyHex=PUB_THIEF.hex())
+    write("aux", "key-event-second-rotation-2028", fixture("key-event", "Eighteen months later, whoever obtained the old key rotates it again.", second_rot))
+    late_claim, _ = key_event("compromised", gen="2028-05-27T00:00:00Z", block="2028-05-27T01:00:00Z", compromisedNotBefore="2026-01-01T00:00:00Z")
+    write("aux", "key-event-compromise-2028", fixture("key-event", "And claims the old key was compromised since 2026-01-01.", late_claim))
+    env_n, sigs_n = envelope(statement(NONCE_3, ARTIFACT_2, "host.go"), signers=(NEXT,))
+    write("aux", "bundle-successor-dec", fixture("bundle", "The successor's registration, 2026-12-10.",
+                                                 bundle_of(env_n, [tsa(sigs_n[0], "a", "2026-12-10T00:00:00Z"), ots(sigs_n[0], "2026-12-10T01:00:00Z")], keys=(NEXT,))))
+    succ_dec = {"bundle": "aux/bundle-successor-dec.json", "artifacts": ART2}
+    d_events = {
+        "-retired-then-rotated": (["aux/key-event-retired.json", "aux/key-event-rotation-after-retirement.json"], thief7,
+                                  "D1: after the retirement, the old key's later rotation is `ignored-superseded`; the thief's key stays untrusted."),
+        "-retired-and-rotated-same-time": (["aux/key-event-retired.json", "aux/key-event-rotation-same-time.json"], thief7,
+                                           "D1: a retirement and a rotation of one key at the same proved time are both `disputed`; no trust flows."),
+        "-late-second-rotation": (["aux/key-event-rotation-honest.json", "aux/key-event-second-rotation-2028.json"], succ_dec,
+                                  "D2: a second rotation of an already-rotated key is `ignored-superseded`; the honest successor stays trusted."),
+        "-late-compromise-claim": (["aux/key-event-rotation-honest.json", "aux/key-event-second-rotation-2028.json", "aux/key-event-compromise-2028.json"], succ_dec,
+                                   "D2: a compromise claim filed after the look-back window cannot dispute the honest rotation."),
+    }
+    onward, _ = key_event("rotated", target=NEXT, signer=NEXT, gen="2026-11-26T00:00:00Z", block="2026-11-26T01:00:00Z", successorPublicKeyHex=PUB_CO.hex())
+    write("aux", "key-event-onward-rotation-same-time", fixture("key-event", "The successor rotates onward with the same proved time as its own rotation.", onward))
+    env_c2, sigs_c2 = envelope(statement(NONCE_3, ARTIFACT_2, "host.go"), signers=(CO,))
+    write("aux", "bundle-second-successor", fixture("bundle", "A registration signed by the second successor, 2026-12-10.",
+                                                    bundle_of(env_c2, [tsa(sigs_c2[0], "a", "2026-12-10T00:00:00Z"), ots(sigs_c2[0], "2026-12-10T01:00:00Z")], keys=(CO,))))
+    d_events["-chain-same-time"] = (["aux/key-event-rotation-honest.json", "aux/key-event-onward-rotation-same-time.json"],
+                                    {"bundle": "aux/bundle-second-successor.json", "artifacts": ART2},
+                                    "Enumeration finding: trust flows only through a rotation proved strictly after its signer became trusted.")
+    for name, (evs, meta, desc) in d_events.items():
+        vr(name, desc, result_for(meta["bundle"], artifacts=meta["artifacts"], events=evs), keyEvents=evs, **meta)
+    # D5: two signing certificates under TSA A's root; the revocation names one.
+    env_2c, sigs_2c = envelope(st)
+    write("aux", "bundle-two-tsa-units", fixture("bundle", "Tokens from two signing certificates under TSA A's root, plus Bitcoin.",
+                                                 bundle_of(env_2c, [tsa(sigs_2c[0], "a"), tsa(sigs_2c[0], "a", "2026-11-23T10:00:30Z", unit=2), ots(sigs_2c[0])])))
+    p5 = copy.deepcopy(POLICY)
+    p5["revocationData"][0]["revocations"] = [{"certificateSha256": cert_id("a", 1), "revokedAt": "2027-03-01T00:00:00Z", "reasonCode": None}]
+    vr("-revoked-one-unit", "D5: the revocation names signing certificate 1; certificate 2's token under the same root stays valid.",
+       result_for("aux/bundle-two-tsa-units.json", p5), bundle="aux/bundle-two-tsa-units.json", artifacts=ART)
 
     env_w, sigs_w = envelope(st)
     write("aux", "bundle-witness-shared-tsa", fixture("bundle", "Direct TSA A token plus a witness whose own token also comes from TSA A.",
@@ -527,7 +608,8 @@ def build_negatives(st, sig, three, result, rmeta, link, ren, res_co, recent, re
     rb["lines"] = rb["lines"][:-3]
     neg("notice-missing", fixture("rendering", "Rendering without the three fixed sentences.", rb, "notice-missing"))
     rb = {"renderingVersion": C.RENDERING_VERSION, "result": "fixtures/verification-result-cosigned.json", "lines": render(res_co)}
-    rb["lines"] = [l.replace(f"No proved time for key {KEYID_CO}.", f"This record shows that the content existed, and that key {KEYID_CO} signed a statement naming it, no later than 2026-11-23T10:00:01Z (according to one time source only).") for l in rb["lines"]]
+    co32 = C.sha(PUB_CO)[:32]
+    rb["lines"] = [l.replace(f"No proved time for key {co32}.", f"This record shows that the content existed, and that key {co32} signed a statement naming it, no later than 2026-11-23T10:00:01Z (according to one time source only).") for l in rb["lines"]]
     neg("key-bound-misattributed-rendering", fixture("rendering", "The co-signer is given the first signature's bound (W8).", rb, "key-bound-misattributed"))
     vneg("key-bound-misattributed", "A later co-signature inherits the earlier signature's bound (W8).", "fixtures/verification-result-cosigned.json",
          lambda r: r["outcomes"]["time"][1].update({k: res_co["outcomes"]["time"][0][k] for k in ("notAfterAnyRoot", "notAfterQuorum", "outcome")}),
@@ -536,8 +618,6 @@ def build_negatives(st, sig, three, result, rmeta, link, ren, res_co, recent, re
          "fixtures/verification-result-compromise-recent.json", lambda r: r["outcomes"]["signerTrust"][0].update(outcome="trusted"), "key-event-ignored")
     vneg("rotation-hijack", "B1: the thief's successor key reported `trusted`.", "fixtures/verification-result-rotation-hijack.json",
          lambda r: r["outcomes"]["signerTrust"][0].update(outcome="trusted"), "key-event-ignored")
-    vneg("rotation-conflict", "B1: a successor of conflicting rotations reported `trusted`.", "fixtures/verification-result-rotation-conflict.json",
-         lambda r: r["outcomes"]["signerTrust"][0].update(outcome="trusted"), "key-event-ignored")
 
     def order_dependent(r):
         for e in r["outcomes"]["keyEvents"]:
@@ -545,6 +625,30 @@ def build_negatives(st, sig, three, result, rmeta, link, ren, res_co, recent, re
                 e["outcome"] = "ignored-unauthorized"
     vneg("event-order-dependent", "B2: a list-order evaluator ignores the retirement that precedes its rotation in the list.",
          "fixtures/verification-result-event-order-a.json", order_dependent, "key-event-ignored")
+    vneg("retired-key-rotates", "D1 (review case): the thief's key reported trusted after a retired key's rotation.",
+         "fixtures/verification-result-retired-then-rotated.json", lambda r: r["outcomes"]["signerTrust"][0].update(outcome="trusted"), "key-event-ignored")
+    vneg("retired-key-rotates-same-time", "D1 (review case): equal proved times; the thief's key reported trusted.",
+         "fixtures/verification-result-retired-and-rotated-same-time.json", lambda r: r["outcomes"]["signerTrust"][0].update(outcome="trusted"), "key-event-ignored")
+
+    def both_disputed(r):
+        for e in r["outcomes"]["keyEvents"]:
+            if e["event"] == "rotated":
+                e["outcome"] = "disputed"
+        r["outcomes"]["signerTrust"][0]["outcome"] = "untrusted"
+    vneg("late-rotation-erases-chain", "D2 (review case): a much later second rotation disputes the honest chain; the successor reported untrusted.",
+         "fixtures/verification-result-late-second-rotation.json", both_disputed, "key-event-ignored")
+
+    def one_revocation_kills_all(r):
+        for e in r["outcomes"]["timeEvidence"]:
+            if e["type"] == "rfc3161":
+                e.update(outcome="revoked", notAfter=None)
+    vneg("revocation-by-root", "D5 (review case): one revoked TSA certificate invalidates every TSA under the same root.",
+         "fixtures/verification-result-revoked-one-unit.json", one_revocation_kills_all, "result-mismatch")
+    vneg("chain-same-time", "Enumeration finding: trust passed on through a rotation with the same proved time as the predecessor's own.",
+         "fixtures/verification-result-chain-same-time.json", lambda r: r["outcomes"]["signerTrust"][0].update(outcome="trusted"), "key-event-ignored")
+    rb = copy.deepcopy(ren)
+    rb["lines"] = rb["lines"][1:]
+    neg("simulated-unmarked", fixture("rendering", "D6 (review case): a rendering of a simulated result without the marker line.", rb, "simulated-unmarked"))
     vneg("trust-without-quorum", "S1: trust after a key event decided on one source.", "fixtures/verification-result-single-source-event.json",
          lambda r: r["outcomes"]["signerTrust"][0].update(outcome="trusted"), "trust-without-quorum")
     vneg("trust-by-hint", "B3: the policy lists trusted keys by their 64-bit keyid.", "fixtures/verification-result.json",
@@ -698,7 +802,7 @@ def hosted_card(**changes):
             "id": "witness-digest", "name": "Witness a registration digest",
             "description": "Records that the authenticated caller presented this signature digest, signs a witness statement and attaches the witness's own RFC 3161 token. It does not register content, check authorship or check originality. " + LIMIT,
             "tags": ["traceweave", "registration", "witness", "timestamp"],
-            "examples": ['{"requestVersion": "traceweave-witness-request-draft-3", "presented": {"kind": "dsse-signature-sha256", "sha256": "<64 hex>"}}'],
+            "examples": ['{"requestVersion": "traceweave-witness-request-draft-4", "presented": {"kind": "dsse-signature-sha256", "sha256": "<64 hex>"}}'],
             "inputModes": ["application/json"], "outputModes": ["application/json"]}],
     }
     card.update(changes)

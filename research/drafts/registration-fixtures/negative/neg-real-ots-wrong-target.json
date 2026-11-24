@@ -9,14 +9,14 @@
     }
   },
   "object": {
-    "evidenceVersion": "traceweave-time-evidence-draft-3",
+    "evidenceVersion": "traceweave-time-evidence-draft-4",
     "type": "opentimestamps",
     "placeholder": false,
     "notice": "TEST VECTOR. Real format, issued by a local test-only TSA or built against a locally mined header file. No external service issued it, and its trust anchor must never be trusted.",
     "target": {
       "kind": "dsse-signature",
       "signatureIndex": 0,
-      "sha256": "395ed58a28ff4b8270ee3bbb498f97ea3071151629811bb90d7843fb8839716d"
+      "sha256": "f08e441cf7d33da7c43667540a54a95fde96b353eb8600134543274855a76cd9"
     },
     "root": {
       "kind": "bitcoin-proof-of-work",

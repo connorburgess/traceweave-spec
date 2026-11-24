@@ -5,14 +5,14 @@
     "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing."
   },
   "object": {
-    "bundleVersion": "traceweave-registration-bundle-draft-3",
+    "bundleVersion": "traceweave-registration-bundle-draft-4",
     "envelope": {
       "payloadType": "application/vnd.in-toto+json",
-      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2F0YWxvZ3VlIjp7InByb2ZpbGUiOnsiY29uZmlnU2hhMjU2IjoiZGZiYzVmZTM1MTdlOWRhNjUxODljZjJlZjMyYzQ2NTViNWVjNjYyNDQxZjJlNzFmNTA4NTQzYTBhNWM4ZjdiMiIsImlkIjoiZ28tdG9rZW5zIiwidmVyc2lvbiI6ImRyYWZ0LTEifSwic2NoZW1lIjoic2hhMjU2LXNhbHRlZC1jYXRhbG9ndWUtdjEiLCJzaGEyNTYiOiJjMTRmY2Y2NGFmMDAwZjg4N2YzNzIzNGJiMGQzOTQzN2NjZjgwYmE5YmQ2ZDA3MjE2YmE1ZmVhODJiNjMzYjE1In0sImNsYWltcyI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTIwVDA5OjAwOjAwWiJ9LCJjb250ZW50S2luZCI6InNvdXJjZS1jb2RlIiwiaW1wbGVtZW50YXRpb24iOnsiY29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIm5hbWUiOiJidWlsZF9maXh0dXJlcy5weSIsInZlcnNpb24iOiJkcmFmdC0zIn0sIm5vbmNlIjoiNDVhNWY4Y2U2Y2ZlYjM3OTAyODk5YTVjNTc1ZjdlNjJiNGNiZDdlOTE2MDY1MDc0YThkYTkzNzRlNDJjNmY3NiIsInBvc3Nlc3Npb24iOlt7InNjaGVtZSI6InNoYTI1Ni1zYWx0ZWQtcG9zc2Vzc2lvbi12MSIsInNoYTI1NiI6IjJhMGJhNzJkMDM1NTVlY2I5NmE1MmUyZWM4OWY4M2EzMDgzYWQ3ZWUyYTZhZGE2ZjllOWQ4YjdmNjhjODZkNmMiLCJzdWJqZWN0SW5kZXgiOjB9XSwicmVnaXN0cmF0aW9uVmVyc2lvbiI6InRyYWNld2VhdmUtcmVnaXN0cmF0aW9uLWRyYWZ0LTMiLCJzcGVjQ29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUvcmVnaXN0cmF0aW9uL2RyYWZ0LTMiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiNTBmNGZkOTZhMWY3NDgxZTQ2ODZiNjZlMjlmMjI1OWQzZTBmZjgzNjUwNTYzYjRhMTcxOTYzMWVjYzAzYTg5ZCJ9LCJuYW1lIjoiaG9zdC5nbyJ9XX0=",
+      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2F0YWxvZ3VlIjp7InByb2ZpbGUiOnsiY29uZmlnU2hhMjU2IjoiZGZiYzVmZTM1MTdlOWRhNjUxODljZjJlZjMyYzQ2NTViNWVjNjYyNDQxZjJlNzFmNTA4NTQzYTBhNWM4ZjdiMiIsImlkIjoiZ28tdG9rZW5zIiwidmVyc2lvbiI6ImRyYWZ0LTEifSwic2NoZW1lIjoic2hhMjU2LXNhbHRlZC1jYXRhbG9ndWUtdjEiLCJzaGEyNTYiOiJjMTRmY2Y2NGFmMDAwZjg4N2YzNzIzNGJiMGQzOTQzN2NjZjgwYmE5YmQ2ZDA3MjE2YmE1ZmVhODJiNjMzYjE1In0sImNsYWltcyI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTIwVDA5OjAwOjAwWiJ9LCJjb250ZW50S2luZCI6InNvdXJjZS1jb2RlIiwiaW1wbGVtZW50YXRpb24iOnsiY29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIm5hbWUiOiJidWlsZF9maXh0dXJlcy5weSIsInZlcnNpb24iOiJkcmFmdC00In0sIm5vbmNlIjoiNDVhNWY4Y2U2Y2ZlYjM3OTAyODk5YTVjNTc1ZjdlNjJiNGNiZDdlOTE2MDY1MDc0YThkYTkzNzRlNDJjNmY3NiIsInBvc3Nlc3Npb24iOlt7InNjaGVtZSI6InNoYTI1Ni1zYWx0ZWQtcG9zc2Vzc2lvbi12MSIsInNoYTI1NiI6IjJhMGJhNzJkMDM1NTVlY2I5NmE1MmUyZWM4OWY4M2EzMDgzYWQ3ZWUyYTZhZGE2ZjllOWQ4YjdmNjhjODZkNmMiLCJzdWJqZWN0SW5kZXgiOjB9XSwicmVnaXN0cmF0aW9uVmVyc2lvbiI6InRyYWNld2VhdmUtcmVnaXN0cmF0aW9uLWRyYWZ0LTQiLCJzcGVjQ29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUvcmVnaXN0cmF0aW9uL2RyYWZ0LTQiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiNTBmNGZkOTZhMWY3NDgxZTQ2ODZiNjZlMjlmMjI1OWQzZTBmZjgzNjUwNTYzYjRhMTcxOTYzMWVjYzAzYTg5ZCJ9LCJuYW1lIjoiaG9zdC5nbyJ9XX0=",
       "signatures": [
         {
           "keyid": "baebb6682a4a7262",
-          "sig": "M9YHO5IbdzIf7w2pv8hTj0se2SmWamAXQHB07WXLmRibs7YjB3k95I0prhxAiz8DdsUZct1IG2pGkx0tuY5jBw=="
+          "sig": "rShK4H2cLkn211HPeTVfyp11fbn0Fn2zpkJfJm8ifpz0ISOTmwVGAxX5BWM6y3huzoZb+JM8zXUqPrZ4VhgMBg=="
         }
       ]
     },
@@ -27,20 +27,20 @@
     },
     "timeEvidence": [
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-3",
+        "evidenceVersion": "traceweave-time-evidence-draft-4",
         "type": "rfc3161",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "190bb9bae9b7480316cbd35cb718cc4b340a2c4fe60207cc97cd6afea6685208"
+          "sha256": "cfbd1e9579dd2e984b744c34f80591b12734beced4cba9ddc6e9d69365a653ea"
         },
         "root": {
           "kind": "tsa-certificate-chain",
           "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
         },
-        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-190bb9bae9b7-tsa-a-2026-11-27T00:00:00Z",
+        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-cfbd1e9579dd-tsa-a-2026-11-27T00:00:00Z-u1",
         "rfc3161": {
           "genTime": "2026-11-27T00:00:00Z",
           "policyOid": "2.999.1",
@@ -48,26 +48,27 @@
           "requestNonce": "5a17c0de00000001",
           "signerCertificate": {
             "notBefore": "2026-01-01T00:00:00Z",
-            "notAfter": "2031-01-01T00:00:00Z"
+            "notAfter": "2031-01-01T00:00:00Z",
+            "sha256": "8dd8f57938800e7d3a7c0c5618d393eb2623096e1137cc91e60d53ee0ad0c429"
           },
           "accuracySeconds": 1
         }
       },
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-3",
+        "evidenceVersion": "traceweave-time-evidence-draft-4",
         "type": "opentimestamps",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "190bb9bae9b7480316cbd35cb718cc4b340a2c4fe60207cc97cd6afea6685208"
+          "sha256": "cfbd1e9579dd2e984b744c34f80591b12734beced4cba9ddc6e9d69365a653ea"
         },
         "root": {
           "kind": "bitcoin-proof-of-work",
           "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6"
         },
-        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-190bb9bae9b7-btc-2026-11-27T01:00:00Z",
+        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-cfbd1e9579dd-btc-2026-11-27T01:00:00Z",
         "opentimestamps": {
           "status": "complete",
           "blockTime": "2026-11-27T01:00:00Z"

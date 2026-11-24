@@ -15,10 +15,10 @@
     }
   },
   "object": {
-    "resultVersion": "traceweave-registration-verification-draft-3",
+    "resultVersion": "traceweave-registration-verification-draft-4",
     "simulated": false,
     "inputs": {
-      "bundleSha256": "1ec64f96f94b79b493215568ca86d91c57deb6d7254db96ddf9a647bebf2dd31",
+      "bundleSha256": "641f868148bf0b021db89bad9ba1f5781f34597ddcf946fddd10bebcd5300bd3",
       "artifacts": [
         {
           "subjectIndex": 0,
@@ -31,7 +31,7 @@
       "quorum": 2,
       "timeRoots": [
         {
-          "anchorSha256": "e6d4a9450352d2c1f4b6685e735cf4467723542b656dd9c2c4f9e3c2e8b9c555",
+          "anchorSha256": "95270fbfb15faae45bcbedd765d20b97cd8df0d81a38cf01fb0776488951b060",
           "kind": "tsa-certificate-chain",
           "independenceGroup": "test-tsa",
           "policyOids": [
@@ -44,7 +44,11 @@
           "kind": "bitcoin-proof-of-work",
           "independenceGroup": "synthetic-chain",
           "headerFile": "real-format/headers-other.bin",
-          "minConfirmations": 6
+          "minConfirmations": 6,
+          "checkpoint": {
+            "height": 12,
+            "headerSha256": "bb683658753413047d4bdc2a6065a3ebf03848dffd658dea34a9dfe0df158b31"
+          }
         }
       ],
       "trustedKeys": [
@@ -52,7 +56,7 @@
       ],
       "revocationData": [
         {
-          "anchorSha256": "e6d4a9450352d2c1f4b6685e735cf4467723542b656dd9c2c4f9e3c2e8b9c555",
+          "anchorSha256": "95270fbfb15faae45bcbedd765d20b97cd8df0d81a38cf01fb0776488951b060",
           "source": "real-format test CA: no CRL issued",
           "asOf": "2026-11-24T12:00:00Z",
           "revocations": []
@@ -99,9 +103,9 @@
             "signatureIndex": 0
           },
           "type": "rfc3161",
-          "anchorSha256": "e6d4a9450352d2c1f4b6685e735cf4467723542b656dd9c2c4f9e3c2e8b9c555",
+          "anchorSha256": "95270fbfb15faae45bcbedd765d20b97cd8df0d81a38cf01fb0776488951b060",
           "outcome": "valid",
-          "notAfter": "2026-11-24T02:37:20Z",
+          "notAfter": "2026-11-24T02:57:03Z",
           "revocationDataAsOf": "2026-11-24T12:00:00Z"
         },
         {
@@ -125,7 +129,7 @@
           "quorum": 2,
           "distinctRoots": 2,
           "notAfterAnyRoot": "2026-11-23T13:12:00Z",
-          "notAfterQuorum": "2026-11-24T02:37:20Z"
+          "notAfterQuorum": "2026-11-24T02:57:03Z"
         }
       ],
       "claimedCreatedAt": {

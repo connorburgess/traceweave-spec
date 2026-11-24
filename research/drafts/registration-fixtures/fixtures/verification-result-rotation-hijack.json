@@ -16,10 +16,10 @@
     ]
   },
   "object": {
-    "resultVersion": "traceweave-registration-verification-draft-3",
+    "resultVersion": "traceweave-registration-verification-draft-4",
     "simulated": true,
     "inputs": {
-      "bundleSha256": "076dd4c339250b3bfdd7efe6c5d7685b701561444b0edb7102e05edf0503b406",
+      "bundleSha256": "7070f3c948a82db04b0349dc9fdf38d568a1aa13a3355e9af6a92f3467823ab4",
       "artifacts": [
         {
           "subjectIndex": 0,
@@ -27,8 +27,8 @@
         }
       ],
       "keyEvents": [
-        "0e1aebda357c3fdf933f0e6d56af34f3942fd34487a2cb95578b0eaa6bdaa699",
-        "4570dd5b121283bb1d9e53410a03d1c768ab2efbb2f0ca0e3191354422c6e16c"
+        "29af0e9f24ce2c83128dd98c1abac037b5edc0ebadb68cc15caa6d48dc280c72",
+        "708bbc29429aad002478f0417af981d3e4296ab87017f841d1bb95d03aefb940"
       ]
     },
     "policy": {
@@ -100,14 +100,14 @@
       ],
       "keyEvents": [
         {
-          "eventSha256": "de70082926d5115f4bab70cd9ceefaebabffd1fae689c5b2c38f58354976f6d0",
+          "eventSha256": "eb9c2cf5e7103649044a9b11b2a4e322116c77d8eb0c42e13821a0802ac15523",
           "keySha256": "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318",
           "event": "rotated",
           "outcome": "disputed",
           "provedAt": "2026-11-26T03:00:00Z"
         },
         {
-          "eventSha256": "97485a1abd86548b39a4e6e45b2733893db4e845a47bd10a0c6ddd2c14306ab1",
+          "eventSha256": "c498642d2fb3b39593413fcb3a56a1335f2fe834a37e9b8f8ec841476886b899",
           "keySha256": "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318",
           "event": "compromised",
           "outcome": "applied",

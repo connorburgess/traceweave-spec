@@ -1,0 +1,186 @@
+{
+  "fixture": {
+    "kind": "verification-result",
+    "description": "D1: a retirement and a rotation of one key at the same proved time are both `disputed`; no trust flows.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "keyEvents": [
+      "aux/key-event-retired.json",
+      "aux/key-event-rotation-same-time.json"
+    ],
+    "bundle": "aux/bundle-thief-2027.json",
+    "artifacts": [
+      {
+        "subjectIndex": 0,
+        "source": "test-vectors/matching/extraction-go.json#mv-go-host"
+      }
+    ]
+  },
+  "object": {
+    "resultVersion": "traceweave-registration-verification-draft-4",
+    "simulated": true,
+    "inputs": {
+      "bundleSha256": "b177af7f559129bf7a0d5d5fdc996e30d9de5f02fb5950f59e4be993b451b8e5",
+      "artifacts": [
+        {
+          "subjectIndex": 0,
+          "sha256": "50f4fd96a1f7481e4686b66e29f2259d3e0ff83650563b4a1719631ecc03a89d"
+        }
+      ],
+      "keyEvents": [
+        "109b982ed3491813f147aa2e52d2bcb513bba49dffc5ea256ae0e0d76c15754f",
+        "a9325e6d3a8ed06a63c6750f9d968b2b08b1b711619dcb52f3a59712539ab122"
+      ]
+    },
+    "policy": {
+      "quorum": 2,
+      "timeRoots": [
+        {
+          "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde",
+          "kind": "tsa-certificate-chain",
+          "independenceGroup": "tsa-operator-a",
+          "policyOids": [
+            "2.999.1"
+          ]
+        },
+        {
+          "anchorSha256": "b17252a48ba9c0e7d0f9ae5315caa20e2f28fd7ed6a83582b75353de217547f5",
+          "kind": "tsa-certificate-chain",
+          "independenceGroup": "tsa-operator-b",
+          "policyOids": [
+            "2.999.2"
+          ],
+          "accuracySeconds": 1
+        },
+        {
+          "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6",
+          "kind": "bitcoin-proof-of-work",
+          "independenceGroup": "bitcoin"
+        },
+        {
+          "anchorSha256": "a119903304b41261ee88a9892057782ac7f9011894981a60348d75ef35b622c4",
+          "kind": "log-key",
+          "independenceGroup": "log-a"
+        },
+        {
+          "anchorSha256": "e4fbf7d5d9e35ceb9fa59efd37544a3c41e1f0d0bb59057832a28b0cd2dab885",
+          "kind": "witness-service-key",
+          "independenceGroup": "witness-a"
+        }
+      ],
+      "trustedKeys": [
+        "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318"
+      ],
+      "revocationData": [
+        {
+          "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde",
+          "source": "PLACEHOLDER CRL of TSA operator A; not fetched",
+          "asOf": "2026-11-24T00:00:00Z",
+          "revocations": []
+        },
+        {
+          "anchorSha256": "b17252a48ba9c0e7d0f9ae5315caa20e2f28fd7ed6a83582b75353de217547f5",
+          "source": "PLACEHOLDER CRL of TSA operator B; not fetched",
+          "asOf": "2026-11-24T00:00:00Z",
+          "revocations": []
+        }
+      ],
+      "compromiseLookbackSeconds": 2592000,
+      "verificationTime": "2026-11-24T00:00:00Z"
+    },
+    "outcomes": {
+      "envelope": "ok",
+      "statement": "ok",
+      "signatures": [
+        {
+          "index": 0,
+          "keyid": "baebb6682a4a7262",
+          "keySha256": "baebb6682a4a7262aeb9d65dabf9c6c2098821fb8560ed4f00cff5c16fd77fe5",
+          "outcome": "valid"
+        }
+      ],
+      "keyEvents": [
+        {
+          "eventSha256": "6118d2c96d9ca496bff78e48602dab2e1786449d58f92c8e93b338eeffc78386",
+          "keySha256": "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318",
+          "event": "retired",
+          "outcome": "disputed",
+          "provedAt": "2026-11-26T03:00:00Z"
+        },
+        {
+          "eventSha256": "eb9c2cf5e7103649044a9b11b2a4e322116c77d8eb0c42e13821a0802ac15523",
+          "keySha256": "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318",
+          "event": "rotated",
+          "outcome": "disputed",
+          "provedAt": "2026-11-26T03:00:00Z"
+        }
+      ],
+      "signerTrust": [
+        {
+          "index": 0,
+          "outcome": "untrusted"
+        }
+      ],
+      "subjects": [
+        {
+          "index": 0,
+          "outcome": "match"
+        }
+      ],
+      "possession": [
+        {
+          "index": 0,
+          "outcome": "match"
+        }
+      ],
+      "catalogue": "not-supplied",
+      "timeEvidence": [
+        {
+          "index": 0,
+          "target": {
+            "signatureIndex": 0
+          },
+          "type": "rfc3161",
+          "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde",
+          "outcome": "placeholder-assumed-valid",
+          "notAfter": "2027-03-05T00:00:01Z",
+          "revocationDataAsOf": "2026-11-24T00:00:00Z"
+        },
+        {
+          "index": 1,
+          "target": {
+            "signatureIndex": 0
+          },
+          "type": "opentimestamps",
+          "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6",
+          "outcome": "placeholder-assumed-valid",
+          "notAfter": "2027-03-05T03:00:00Z",
+          "revocationDataAsOf": null
+        }
+      ],
+      "time": [
+        {
+          "signatureIndex": 0,
+          "keyid": "baebb6682a4a7262",
+          "keySha256": "baebb6682a4a7262aeb9d65dabf9c6c2098821fb8560ed4f00cff5c16fd77fe5",
+          "outcome": "quorum-met",
+          "quorum": 2,
+          "distinctRoots": 2,
+          "notAfterAnyRoot": "2027-03-05T00:00:01Z",
+          "notAfterQuorum": "2027-03-05T03:00:00Z"
+        }
+      ],
+      "claimedCreatedAt": {
+        "value": "2026-11-20T09:00:00Z",
+        "status": "not-compared",
+        "comparedWith": null
+      }
+    },
+    "notShown": [
+      "authorship",
+      "originality",
+      "first-creation",
+      "ownership",
+      "permission"
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "fixture": {
+    "kind": "bundle",
+    "description": "TSA certificate under an intermediate that expired in 2021.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing."
+  },
+  "object": {
+    "bundleVersion": "traceweave-registration-bundle-draft-4",
+    "envelope": {
+      "payloadType": "application/vnd.in-toto+json",
+      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2F0YWxvZ3VlIjp7InByb2ZpbGUiOnsiY29uZmlnU2hhMjU2IjoiZGZiYzVmZTM1MTdlOWRhNjUxODljZjJlZjMyYzQ2NTViNWVjNjYyNDQxZjJlNzFmNTA4NTQzYTBhNWM4ZjdiMiIsImlkIjoiZ28tdG9rZW5zIiwidmVyc2lvbiI6ImRyYWZ0LTEifSwic2NoZW1lIjoic2hhMjU2LXNhbHRlZC1jYXRhbG9ndWUtdjEiLCJzaGEyNTYiOiJjMTRmY2Y2NGFmMDAwZjg4N2YzNzIzNGJiMGQzOTQzN2NjZjgwYmE5YmQ2ZDA3MjE2YmE1ZmVhODJiNjMzYjE1In0sImNsYWltcyI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTIwVDA5OjAwOjAwWiJ9LCJjb250ZW50S2luZCI6InNvdXJjZS1jb2RlIiwiaW1wbGVtZW50YXRpb24iOnsiY29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIm5hbWUiOiJidWlsZF9maXh0dXJlcy5weSIsInZlcnNpb24iOiJkcmFmdC00In0sIm5vbmNlIjoiYzU3NTE0Y2QwMDkxMGFmNGFmYjg0NDNkMzIzMWM5N2U4OTYzM2QwNTAzNTU0MWFhYTFlZjRhNDA0MzUwYTdhYyIsInBvc3Nlc3Npb24iOlt7InNjaGVtZSI6InNoYTI1Ni1zYWx0ZWQtcG9zc2Vzc2lvbi12MSIsInNoYTI1NiI6ImY0MWI4ZGZjOTEzZWU1YWI1NDM3MTUxMWQ3ZGEwZTE4MDcwZmEyODhiY2U1MWNjNTA5ZTYwY2I2NzlhNTRhOTkiLCJzdWJqZWN0SW5kZXgiOjB9XSwicmVnaXN0cmF0aW9uVmVyc2lvbiI6InRyYWNld2VhdmUtcmVnaXN0cmF0aW9uLWRyYWZ0LTQiLCJzcGVjQ29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUvcmVnaXN0cmF0aW9uL2RyYWZ0LTQiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiOTc0YzhkMGFkMTQ0YzNjMzllOWYxY2U0MTA3NDBmNDQ5ZjYyM2JmZmQyOWM3NTBlOGVkM2JkNjg2NDBiNjk3YyJ9LCJuYW1lIjoic3VtLmdvIn1dfQ==",
+      "signatures": [
+        {
+          "keyid": "18c3eead08646614",
+          "sig": "cA6GPVbCQfo/VODr+mIBoIBFuw7c44nZ4yFAEoiR5e6TAA8jTECdYv4N1zi4V60l4f1Z3kyp0+wer9Y1KNuyAA=="
+        }
+      ]
+    },
+    "verificationMaterial": {
+      "publicKeys": [
+        {
+          "keyid": "18c3eead08646614",
+          "alg": "ed25519",
+          "publicKeyHex": "d0fb7f8f8f5c8fa2cf9ce29ca36d85058df67eef34d57df07791870339056704"
+        }
+      ]
+    },
+    "timeEvidence": [
+      {
+        "evidenceVersion": "traceweave-time-evidence-draft-4",
+        "type": "rfc3161",
+        "placeholder": false,
+        "notice": "TEST VECTOR. Real format, issued by a local test-only TSA or built against a locally mined header file. No external service issued it, and its trust anchor must never be trusted.",
+        "target": {
+          "kind": "dsse-signature",
+          "signatureIndex": 0,
+          "sha256": "f08e441cf7d33da7c43667540a54a95fde96b353eb8600134543274855a76cd9"
+        },
+        "root": {
+          "kind": "tsa-certificate-chain",
+          "anchorSha256": "95270fbfb15faae45bcbedd765d20b97cd8df0d81a38cf01fb0776488951b060"
+        },
+        "token": "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",
+        "request": "MEMCAQEwMTANBglghkgBZQMEAgEFAAQg8I5EHPfTPafENmdUClSpX96Ws1PrhgATRUMnSFWnbNkCCFdTXouz7f8PAQH/"
+      },
+      {
+        "evidenceVersion": "traceweave-time-evidence-draft-4",
+        "type": "opentimestamps",
+        "placeholder": false,
+        "notice": "TEST VECTOR. Real format, issued by a local test-only TSA or built against a locally mined header file. No external service issued it, and its trust anchor must never be trusted.",
+        "target": {
+          "kind": "dsse-signature",
+          "signatureIndex": 0,
+          "sha256": "f08e441cf7d33da7c43667540a54a95fde96b353eb8600134543274855a76cd9"
+        },
+        "root": {
+          "kind": "bitcoin-proof-of-work",
+          "anchorSha256": "2c051ef338e3925c5bbd4cbaa5a21f245d0a4bfa9c46df373d13bdf51c8734ee"
+        },
+        "token": "AE9wZW5UaW1lc3RhbXBzAABQcm9vZgC/ieLohOiSlAEI8I5EHPfTPafENmdUClSpX96Ws1PrhgATRUMnSFWnbNnwEONlq/cPXAveb6aJaHxS7E8I8SCXYB6uRffam0JeawuJq3GltujASjCDhbUvm+iQGoDkBAgABYiWDXPXGQEBBA=="
+      }
+    ]
+  }
+}

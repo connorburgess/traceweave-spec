@@ -14,14 +14,14 @@
     }
   },
   "object": {
-    "bundleVersion": "traceweave-registration-bundle-draft-3",
+    "bundleVersion": "traceweave-registration-bundle-draft-4",
     "envelope": {
       "payloadType": "application/vnd.in-toto+json",
-      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2F0YWxvZ3VlIjp7InByb2ZpbGUiOnsiY29uZmlnU2hhMjU2IjoiZGZiYzVmZTM1MTdlOWRhNjUxODljZjJlZjMyYzQ2NTViNWVjNjYyNDQxZjJlNzFmNTA4NTQzYTBhNWM4ZjdiMiIsImlkIjoiZ28tdG9rZW5zIiwidmVyc2lvbiI6ImRyYWZ0LTEifSwic2NoZW1lIjoic2hhMjU2LXNhbHRlZC1jYXRhbG9ndWUtdjEiLCJzaGEyNTYiOiJjMTRmY2Y2NGFmMDAwZjg4N2YzNzIzNGJiMGQzOTQzN2NjZjgwYmE5YmQ2ZDA3MjE2YmE1ZmVhODJiNjMzYjE1In0sImNsYWltcyI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTIwVDA5OjAwOjAwWiJ9LCJjb250ZW50S2luZCI6InNvdXJjZS1jb2RlIiwiaW1wbGVtZW50YXRpb24iOnsiY29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIm5hbWUiOiJidWlsZF9maXh0dXJlcy5weSIsInZlcnNpb24iOiJkcmFmdC0zIn0sIm5vbmNlIjoiYzU3NTE0Y2QwMDkxMGFmNGFmYjg0NDNkMzIzMWM5N2U4OTYzM2QwNTAzNTU0MWFhYTFlZjRhNDA0MzUwYTdhYyIsInBvc3Nlc3Npb24iOlt7InNjaGVtZSI6InNoYTI1Ni1zYWx0ZWQtcG9zc2Vzc2lvbi12MSIsInNoYTI1NiI6ImY0MWI4ZGZjOTEzZWU1YWI1NDM3MTUxMWQ3ZGEwZTE4MDcwZmEyODhiY2U1MWNjNTA5ZTYwY2I2NzlhNTRhOTkiLCJzdWJqZWN0SW5kZXgiOjB9XSwicHJvdmVkQXQiOiIyMDI2LTExLTAxVDAwOjAwOjAwWiIsInJlZ2lzdHJhdGlvblZlcnNpb24iOiJ0cmFjZXdlYXZlLXJlZ2lzdHJhdGlvbi1kcmFmdC0zIiwic3BlY0NvbW1pdCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAifSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vdHJhY2V3ZWF2ZS5vcmcvcHJlZGljYXRlL3JlZ2lzdHJhdGlvbi9kcmFmdC0zIiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6Ijk3NGM4ZDBhZDE0NGMzYzM5ZTlmMWNlNDEwNzQwZjQ0OWY2MjNiZmZkMjljNzUwZThlZDNiZDY4NjQwYjY5N2MifSwibmFtZSI6InN1bS5nbyJ9XX0=",
+      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2F0YWxvZ3VlIjp7InByb2ZpbGUiOnsiY29uZmlnU2hhMjU2IjoiZGZiYzVmZTM1MTdlOWRhNjUxODljZjJlZjMyYzQ2NTViNWVjNjYyNDQxZjJlNzFmNTA4NTQzYTBhNWM4ZjdiMiIsImlkIjoiZ28tdG9rZW5zIiwidmVyc2lvbiI6ImRyYWZ0LTEifSwic2NoZW1lIjoic2hhMjU2LXNhbHRlZC1jYXRhbG9ndWUtdjEiLCJzaGEyNTYiOiJjMTRmY2Y2NGFmMDAwZjg4N2YzNzIzNGJiMGQzOTQzN2NjZjgwYmE5YmQ2ZDA3MjE2YmE1ZmVhODJiNjMzYjE1In0sImNsYWltcyI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTIwVDA5OjAwOjAwWiJ9LCJjb250ZW50S2luZCI6InNvdXJjZS1jb2RlIiwiaW1wbGVtZW50YXRpb24iOnsiY29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIm5hbWUiOiJidWlsZF9maXh0dXJlcy5weSIsInZlcnNpb24iOiJkcmFmdC00In0sIm5vbmNlIjoiYzU3NTE0Y2QwMDkxMGFmNGFmYjg0NDNkMzIzMWM5N2U4OTYzM2QwNTAzNTU0MWFhYTFlZjRhNDA0MzUwYTdhYyIsInBvc3Nlc3Npb24iOlt7InNjaGVtZSI6InNoYTI1Ni1zYWx0ZWQtcG9zc2Vzc2lvbi12MSIsInNoYTI1NiI6ImY0MWI4ZGZjOTEzZWU1YWI1NDM3MTUxMWQ3ZGEwZTE4MDcwZmEyODhiY2U1MWNjNTA5ZTYwY2I2NzlhNTRhOTkiLCJzdWJqZWN0SW5kZXgiOjB9XSwicHJvdmVkQXQiOiIyMDI2LTExLTAxVDAwOjAwOjAwWiIsInJlZ2lzdHJhdGlvblZlcnNpb24iOiJ0cmFjZXdlYXZlLXJlZ2lzdHJhdGlvbi1kcmFmdC00Iiwic3BlY0NvbW1pdCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAifSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vdHJhY2V3ZWF2ZS5vcmcvcHJlZGljYXRlL3JlZ2lzdHJhdGlvbi9kcmFmdC00Iiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6Ijk3NGM4ZDBhZDE0NGMzYzM5ZTlmMWNlNDEwNzQwZjQ0OWY2MjNiZmZkMjljNzUwZThlZDNiZDY4NjQwYjY5N2MifSwibmFtZSI6InN1bS5nbyJ9XX0=",
       "signatures": [
         {
           "keyid": "18c3eead08646614",
-          "sig": "DjeGg8D6pX6Q+6AfRBYeMJAqYDKliL8QRdbTwndt0VwFwiPf+5YyHb8LuKKQgVeM8WQAdQboIGLp8VataCCDDw=="
+          "sig": "P/u1lEtI7lcwre1WMFLUw3vVfIMcOjDBI/0ZuzfKK9ZeDwd3mofnQrQoxAT6N3lekJXJm7FbU7+WUYJraQ88Ag=="
         }
       ]
     },
@@ -36,20 +36,20 @@
     },
     "timeEvidence": [
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-3",
+        "evidenceVersion": "traceweave-time-evidence-draft-4",
         "type": "rfc3161",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "bc2c1a0dad815831692830c57c6a3ed1971ceac90a75460b23eb01d223843ed7"
+          "sha256": "8975306e09530b271dee993593269ab96ec35732a3107e852430926d72b946b2"
         },
         "root": {
           "kind": "tsa-certificate-chain",
           "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
         },
-        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-bc2c1a0dad81-tsa-a-2026-11-23T10:00:00Z",
+        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-8975306e0953-tsa-a-2026-11-23T10:00:00Z-u1",
         "rfc3161": {
           "genTime": "2026-11-23T10:00:00Z",
           "policyOid": "2.999.1",
@@ -57,26 +57,27 @@
           "requestNonce": "5a17c0de00000001",
           "signerCertificate": {
             "notBefore": "2026-01-01T00:00:00Z",
-            "notAfter": "2031-01-01T00:00:00Z"
+            "notAfter": "2031-01-01T00:00:00Z",
+            "sha256": "8dd8f57938800e7d3a7c0c5618d393eb2623096e1137cc91e60d53ee0ad0c429"
           },
           "accuracySeconds": 1
         }
       },
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-3",
+        "evidenceVersion": "traceweave-time-evidence-draft-4",
         "type": "rfc3161",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "bc2c1a0dad815831692830c57c6a3ed1971ceac90a75460b23eb01d223843ed7"
+          "sha256": "8975306e09530b271dee993593269ab96ec35732a3107e852430926d72b946b2"
         },
         "root": {
           "kind": "tsa-certificate-chain",
           "anchorSha256": "b17252a48ba9c0e7d0f9ae5315caa20e2f28fd7ed6a83582b75353de217547f5"
         },
-        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-bc2c1a0dad81-tsa-b-2026-11-23T10:00:05Z",
+        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-8975306e0953-tsa-b-2026-11-23T10:00:05Z-u1",
         "rfc3161": {
           "genTime": "2026-11-23T10:00:05Z",
           "policyOid": "2.999.2",
@@ -84,45 +85,46 @@
           "requestNonce": "5a17c0de00000002",
           "signerCertificate": {
             "notBefore": "2026-01-01T00:00:00Z",
-            "notAfter": "2031-01-01T00:00:00Z"
+            "notAfter": "2031-01-01T00:00:00Z",
+            "sha256": "4e7e1bf5a554b29d2f2f16bcb3567a7211c6774dd928d4e9abc42a5d5dfe9c8e"
           }
         }
       },
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-3",
+        "evidenceVersion": "traceweave-time-evidence-draft-4",
         "type": "opentimestamps",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "bc2c1a0dad815831692830c57c6a3ed1971ceac90a75460b23eb01d223843ed7"
+          "sha256": "8975306e09530b271dee993593269ab96ec35732a3107e852430926d72b946b2"
         },
         "root": {
           "kind": "bitcoin-proof-of-work",
           "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6"
         },
-        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-bc2c1a0dad81-btc-2026-11-23T11:12:00Z",
+        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-8975306e0953-btc-2026-11-23T11:12:00Z",
         "opentimestamps": {
           "status": "complete",
           "blockTime": "2026-11-23T11:12:00Z"
         }
       },
       {
-        "evidenceVersion": "traceweave-time-evidence-draft-3",
+        "evidenceVersion": "traceweave-time-evidence-draft-4",
         "type": "rekor-v2",
         "placeholder": true,
         "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
         "target": {
           "kind": "dsse-signature",
           "signatureIndex": 0,
-          "sha256": "bc2c1a0dad815831692830c57c6a3ed1971ceac90a75460b23eb01d223843ed7"
+          "sha256": "8975306e09530b271dee993593269ab96ec35732a3107e852430926d72b946b2"
         },
         "root": {
           "kind": "log-key",
           "anchorSha256": "a119903304b41261ee88a9892057782ac7f9011894981a60348d75ef35b622c4"
         },
-        "token": "PLACEHOLDER-NOT-A-REKOR-V2-OBJECT-bc2c1a0dad81-log",
+        "token": "PLACEHOLDER-NOT-A-REKOR-V2-OBJECT-8975306e0953-log",
         "rekorV2": {
           "logIndex": 0
         }
