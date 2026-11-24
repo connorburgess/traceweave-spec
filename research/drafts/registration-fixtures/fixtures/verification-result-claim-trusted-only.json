@@ -172,6 +172,9 @@
         "value": "2026-11-23T10:00:03Z",
         "status": "claimed-only",
         "comparedWith": "2026-11-23T10:00:06Z"
+      },
+      "declaredAiUse": {
+        "status": "not-declared"
       }
     },
     "notShown": [

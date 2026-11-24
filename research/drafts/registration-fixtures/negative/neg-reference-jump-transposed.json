@@ -1,0 +1,14 @@
+{
+  "fixture": {
+    "kind": "text-reference",
+    "description": "Two characters two apart swapped: Luhn mod 32 gives them the same weight, so the check character misses it and only the bundle comparison catches it.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "expect": {
+      "code": "reference-mismatch"
+    }
+  },
+  "object": {
+    "reference": "tw1-RW78Y61HYTR7RJE0NN5W52C8TAN",
+    "bundle": "fixtures/bundle-three-roots.json"
+  }
+}

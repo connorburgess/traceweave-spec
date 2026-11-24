@@ -169,27 +169,42 @@ The name is not `generator`. "Generator" reads as "who generated it", which is t
 | `modified` | The content was modified with an AI system | "AI + MODIFIED" (Annex 1, Figure 2: "AI-manipulated/partially modified") | `compositeWithTrainedAlgorithmicMedia` ("Edited using Generative AI") |
 | `no-generative-ai` | No generative AI system was used | none; the Code labels AI content only | none (see below) |
 
-**Absent means nothing was declared.** A statement without `aiUse` is never read, rendered or exported as "no AI" or "human-made".
+**Absent means nothing was declared.** A statement without `aiUse` is never read, rendered or exported as "no AI" or "human-made". The verification result always carries `declaredAiUse`; when the claim is absent it is `{"status": "not-declared"}`, so a JSON consumer cannot read a gap as "none".
+
+**Fixed at registration.** `aiUse` is inside the signed statement. Changing it changes the signature, every time evidence over that signature, `statementSha256` and the `tw1-` reference (§9.1). A declaration cannot be added or changed after registration without making a new registration, which gets its own, later time bounds.
 
 **Sources, pinned.**
-- **EU Code.** The [Code of Practice on Transparency of AI-Generated Content](https://ec.europa.eu/newsroom/dae/redirection/document/129555), 2026-06-10, the final text (38 pages, SHA-256 `7bd22c5a…bc28` of the PDF fetched 2026-11-24). Its labelling vocabulary is two icon texts in Annex 1, "AI + GENERATED" and "AI + MODIFIED", plus a basic "AI" icon, with Section 2 Measure 1.1 (b) encouraging "text indicating 'modified' or 'generated'". The Code has no finer taxonomy, so this list has exactly those two AI values.
+- **EU Code.** The [Code of Practice on Transparency of AI-Generated Content](https://ec.europa.eu/newsroom/dae/redirection/document/129555), 2026-06-10, the final text (38 pages, SHA-256 `7bd22c5a3c56eaefda27a5bf7a6118198ef2a9c9255241bd97abf7cdedf9bc28`).
+  - **How it was obtained, so a third party can repeat it:** on 2026-11-24, one HTTPS GET of that URL with Python 3.14.6 `urllib.request` (header `User-Agent: Mozilla/5.0`; the redirect URL served the PDF directly, 1,213,943 bytes). `curl` from the same machine failed with "unable to get local issuer certificate", as it did for the reviewer, while Python's own CA store accepted the chain.
+  - **What was read:** the text, extracted with `pdftotext -layout` (poppler 26.07.0), including Section 2 Measure 1.1 and the Annex 1 text on pages 37–38. The icon texts "AI + GENERATED" and "AI + MODIFIED" are quoted from that **text**. The Figure 1–3 **images** were not viewed, so the mapping to the icon artwork itself is unverified. Its labelling vocabulary is two icon texts in Annex 1, "AI + GENERATED" and "AI + MODIFIED", plus a basic "AI" icon, with Section 2 Measure 1.1 (b) encouraging "text indicating 'modified' or 'generated'". The Code has no finer taxonomy, so this list has exactly those two AI values.
 - **IPTC.** The [IPTC Digital Source Type scheme](https://cv.iptc.org/newscodes/digitalsourcetype/) (`http://cv.iptc.org/newscodes/digitalsourcetype/`), `dateReleased` 2024-10-23, CC BY 4.0, SHA-256 `e9178aa2…99a6` of the JSON fetched 2026-11-24.
+- **Why `modified` maps to `compositeWithTrainedAlgorithmicMedia`.** The Code's "AI + MODIFIED" is for content that is "AI-manipulated/partially modified". That is a change made to existing content, which matches IPTC's "Edited using Generative AI" ("Augmentation, correction or enhancement using a Generative AI model").
+  - IPTC `compositeSynthetic` ("Mix or composite of several elements, at least one of which is Generative AI") describes assembling elements. That fits text into which AI-written passages were pasted, which the Code would also label MODIFIED.
+  - One term per value keeps the mapping single-valued. A later version may add `compositeSynthetic` as a value of its own, if the owner wants that distinction; that is a value change and would need a version step.
 - **No IPTC term for `no-generative-ai`.** IPTC's nearest non-AI terms (`digitalCreation`, "Media created by a human using non-generative tools", and `humanEdits`) assert human creation. Mapping to them would turn a declaration into an authorship statement, so `no-generative-ai` maps to no IPTC term and is never exported as one.
 - Both sources are recorded in the [source register](../../docs/sources.md).
 
 **Tool identifier (optional).**
 - **Where allowed:** only with `generated` or `modified`.
-- **Pattern:** `^[A-Za-z0-9][A-Za-z0-9._+-]{0,63}$`, one token. It cannot hold a space, `/`, `:`, `@` or `\`, so URLs, paths, e-mail addresses and names written with a space are `ai-use-shape`.
-- **Limit:** a single-token personal name cannot be excluded mechanically. The rendering therefore calls it the "AI tool named by the registrant" and never makes it the subject of a sentence about a person.
+- **Pattern:** `[A-Za-z0-9][A-Za-z0-9._+-]{0,63}`, matched against the **whole** value (a trailing newline does not match), one token. It cannot hold a space, `/`, `:`, `@` or `\`, so URLs, paths, e-mail addresses and names written with a space are `ai-use-shape`.
+- **No origin statements inside the token (A1).** The token is split at `.`, `_`, `+` and `-` and at case changes (`Penned-by-Bob` → penned, by, bob; `NoAIUsed` → no, ai, used). It is `ai-origin-claim` if any part is on one of these lists, or if the parts read as the §11 never-shown wording:
+  - **human origin and attribution:** `human`, `humans`, `humanly`, `person`, `people`, `handwritten`, `handmade`, `hand`, `manual`, `manually`, `penned`, `pen`, `written`, `wrote`, `typed`, `authored`, `author`, `by`, `me`, `myself`, `self`, `mine`, `organic`, `natural`, `real`, `genuine`, `original`;
+  - **negation:** `no`, `not`, `non`, `none`, `never`, `without`, `zero`, `free`, `nil`, `null`, `only`.
+
+  The review's examples are all rejected, with mixed-case and separator variants: `human-made`, `Human-Only`, `Handwritten`, `not-AI`, `no-ai-used`, `by-Alice`, `Penned-by-Bob`, `HUMAN_MADE`, `humanMade`, `Not.AI`, `NoAIUsed`, `penned+by+bob`, `AI-free`, `100pct-Human` (`neg-ai-use-tool-*`). The rule is deliberately broad: a real product name containing such a word (for example "…Free…") is refused, and the registrant leaves the tool out.
+- **Rendering frame.** The tool is shown only as a quoted identifier in a fixed frame: `Tool identifier given by the registrant: "<token>". Traceweave did not check this.` It cannot read as a sentence about the content.
+- **Residual risk.** A single-word personal name ("Alice") cannot be excluded mechanically. The frame names it only as an identifier the registrant gave, never as the subject of a sentence about a person.
 
 **How the authorship rule stays intact.**
 - **Key rule.** A key in `authorship`, `author`, `owner`, `ownership`, `creator`, `original` or `originality` (case-insensitive), **anywhere inside `aiUse`**, is `authorship-claim`.
 - **Value rule.** A tool token that, with `-`, `_` and `.` read as spaces, matches the §11 authorship deny-list (`author…`, `wrote`, `written`, `belongs`, `creator`, `created`, `own…`, `original…` and the rest) is `authorship-claim`.
+- **Origin rule.** The token rule above (`ai-origin-claim`). The never-shown check also runs on **every** rendered line, template or not, so a template-matching line cannot carry origin wording through its token.
 - **Why this keeps the rejection whole.** The claim's own names (`aiUse`, `declared`, `tool`, `generated`, `modified`, `no-generative-ai`) are on neither list, so the existing rejection is unchanged.
 
-**What it never affects.** A declaration changes **no** trust, time, key-event, digest or possession outcome. The verification result echoes it as `declaredAiUse: {declared, tool, euCodeIcon, iptcDigitalSourceType, status: "declared-not-checked"}`, present only when the statement carries the claim. A result whose other outcomes differ because of the claim is `ai-use-affected-outcome`.
+**What it never affects.** A declaration changes **no** trust, time, key-event, digest or possession outcome. The verification result always carries `declaredAiUse`: `{declared, tool, euCodeIcon, iptcDigitalSourceType, status: "declared-not-checked"}` when the statement carries the claim, and `{status: "not-declared"}` when it does not. A result whose other outcomes differ because of the claim is `ai-use-affected-outcome`.
 
 **Format and fixtures.**
+- **Change log.** Draft-5, amended 2026-11-24: optional `claims.aiUse` added (owner decision). Addendum fixes, the same day: the A1 token rule, the quoted tool frame, full-value matching, and `declaredAiUse` always present.
 - **Format impact.** The predicate version stays `traceweave-registration-draft-5`. The field is optional, every existing draft-5 statement remains valid and byte-identical, and draft-5 is unreleased. A verifier built before this section rejects a statement carrying `aiUse` as `statement-shape`, which is the correct behaviour for an unknown field. **No existing fixture changed.**
 - **Positives:** `bundle-ai-use-*`, `verification-result-ai-use-*` and `rendering-ai-use-*` for each value, plus `rendering-ai-use-absent`.
 - **Negatives:** `neg-ai-use-*` for:
@@ -473,6 +488,8 @@ Pasted text cannot carry metadata, so a registrant can paste a short reference n
 **Error detection** (measured by the checker's self-test, exhaustively over 64 references):
 - all 53,568 single-character substitutions are detected;
 - of 1,595 adjacent transpositions, all but 3 are detected. All three swap an adjacent `0` and `Z`, the values 0 and 31: the known Luhn mod N blind spot.
+- **jump transpositions (positions two apart) are never detected:** 1,545 of 1,545 were missed, because positions two apart carry the same Luhn weight. The check character catches typing slips, not deliberate edits.
+- The pattern is matched against the whole string, so a trailing newline is `reference-shape`, not `reference-check`.
 - A wrong check character is `reference-check`.
 
 **Margins at 130 bits.** Collision resistance here is a property of the reference, not of the record.
@@ -482,11 +499,12 @@ Pasted text cannot carry metadata, so a registrant can paste a short reference n
 **What the reference carries.** **No content and no identity.**
 - **Content:** the statement contains a fresh 256-bit nonce (§4.2), so the reference cannot be computed from the content, and the content cannot be recovered from it.
 - **Identity:** no key, name or account is in it. Two references from one registrant are not linkable through the references themselves.
-- **Same statement, same reference:** a statement co-signed later by another key keeps its reference (`text-reference-cosigned` equals `text-reference-three-roots`). The reference names the statement, not a bundle or a signer.
+- **Same statement, same reference:** a statement co-signed later by another key keeps its reference (`text-reference-cosigned` equals `text-reference-three-roots`). The reference names the statement, not a bundle or a signer. Changing any statement field — including adding, changing or removing `claims.aiUse` (§4.7) — makes a different statement, signature, time evidence, `statementSha256` and `tw1-` reference.
 
 **Lookup, with no project-run service.**
 - **Where:** the verifier gets the bundle from a local file, or from a URL the registrant chose and printed next to the reference.
-- **Check:** the verifier recomputes the reference from the bundle's statement payload and requires equality; otherwise `reference-mismatch`. It then runs §10 against the pasted bytes.
+- **Check:** the verifier recomputes the reference from the bundle's statement payload and requires equality of the **whole** reference; otherwise `reference-mismatch`. It then runs §10 against the pasted bytes. A verifier that must bind to exactly one record keeps the full `statementSha256`, not only the reference (the 2⁶⁵ equivocation margin above).
+- **Look-alikes.** People tend to compare the first and last few characters. A reference matching another in its first four and last four characters (40 bits) costs only about 2⁴⁰ work to make. Tools must compare the whole reference, and renderings must not abbreviate it.
 - **Exposure:**
   - Fetching tells the host the verifier's IP address.
   - Publishing a bundle discloses what §5 says.
@@ -499,8 +517,8 @@ Pasted text cannot carry metadata, so a registrant can paste a short reference n
 - **Positives:** `text-reference-three-roots`, `-cosigned` and `-second-work`.
 - **Negatives:**
   - `neg-reference-wrong-check`, `-transposed` (`reference-check`);
-  - `-too-short`, `-too-long`, `-wrong-prefix`, `-no-prefix`, `-lower-case`, `-look-alike-I`, `-look-alike-L`, `-look-alike-O`, `-letter-U` (`reference-shape`);
-  - `-other-statement`, `neg-rendering-reference-mismatch` (`reference-mismatch`).
+  - `-too-short`, `-too-long`, `-wrong-prefix`, `-no-prefix`, `-lower-case`, `-trailing-newline`, `-look-alike-I`, `-look-alike-L`, `-look-alike-O`, `-letter-U` (`reference-shape`);
+  - `-jump-transposed`, `-other-statement`, `neg-rendering-reference-mismatch` (`reference-mismatch`).
 
 ## 10. Verification procedure
 
@@ -564,7 +582,7 @@ A registration does not show **authorship**, **originality**, **ownership** or *
 | `Registration of <name> (SHA-256 <first 8 hex>…<last 4 hex>).` | subject |
 | `Reference: <tw1-reference>.` | §9.1; must equal the reference of the result's bundle |
 | `The registrant declared that this content was generated with an AI system ("AI + GENERATED" in the EU Code of Practice).` / `… was modified with an AI system ("AI + MODIFIED" in the EU Code of Practice).` / `The registrant declared that no generative AI system was used.` | §4.7 `declaredAiUse.declared`; must match it |
-| `AI tool named by the registrant: <tool>.` | §4.7 `declaredAiUse.tool`, if any |
+| `Tool identifier given by the registrant: "<tool>". Traceweave did not check this.` | §4.7 `declaredAiUse.tool`, if any; the token must also pass the A1 rule |
 | `Traceweave did not check this declaration.` | **Required** with every declaration line (`notice-missing`) |
 | `The registrant made no declaration about AI use.` | Optional, only when nothing was declared; any declaration line without a declaration is `result-mismatch` |
 | `Content digest: matches the file you supplied.` / `does not match the file you supplied.` / `not checked, because no file was supplied.` | step 6 |
@@ -869,8 +887,8 @@ Run on 2026-11-24 on `roadmap-v2` (parent `2186523`), over this draft, lane 13 a
   Only the local `openssl` was used; no external service was contacted.
 - **`check_registration.py`** (draft-5):
   - the Ed25519 and PAE self-tests pass;
-  - 86 positive fixtures give no code, and each of the 124 negative fixtures gives exactly its expected codes (after the draft-5 follow-up, §9.1 and §4.7);
-  - all 39 wrong-implementation cases behave as required;
+  - 86 positive fixtures give no code, and each of the 140 negative fixtures gives exactly its expected codes (after the draft-5 follow-up, §9.1, §4.7 and the addendum fixes);
+  - all 43 wrong-implementation cases behave as required;
   - all 57 codes appear in this document and have a negative fixture;
   - the §9.1 check character detects every one of 53,568 single-character substitutions (the self-test asserts it).
 - **`enumerate_key_events.py`** (60 s, after the follow-up):

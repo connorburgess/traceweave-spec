@@ -146,7 +146,7 @@ A fixture registers nothing and proves nothing.
 | `aux/key-event-second-rotation-2028.json` | key-event | Eighteen months later, whoever obtained the old key rotates it again. |
 | `aux/verification-result-e1-flipped.json` | verification-result | Draft-4 behaviour with one extra rejected event (the flip), kept as input to the equivalence negative. |
 
-`negative/` holds 124 broken fixtures; each must produce exactly the codes listed below. `aux/` holds inputs that other fixtures refer to; they are not checked on their own.
+`negative/` holds 139 broken fixtures; each must produce exactly the codes listed below. `aux/` holds inputs that other fixtures refer to; they are not checked on their own.
 
 | Real-format file | SHA-256 (from `MANIFEST.json`) |
 | --- | --- |
@@ -209,15 +209,29 @@ The A2A fixtures are **not validated against a published A2A schema** (none is c
 | `neg-agent-notice-missing` | `notice-missing` | Agent-made registration without the agent sentence. |
 | `neg-ai-use-absent-as-none` | `result-mismatch` | Nothing declared, but rendered as a no-AI declaration. |
 | `neg-ai-use-as-property` | `ai-origin-claim` + `rendering-unlisted-line` | The declaration rendered as a property of the content. |
-| `neg-ai-use-authorship-in-tool` | `authorship-claim` | An authorship word smuggled into the tool identifier. |
+| `neg-ai-use-authorship-in-tool` | `authorship-claim` + `ai-origin-claim` | An authorship word smuggled into the tool identifier. |
 | `neg-ai-use-authorship-key` | `authorship-claim` | An authorship key smuggled into the claim. |
 | `neg-ai-use-changes-trust` | `ai-use-affected-outcome` | The declaration lowered the signer's trust. |
 | `neg-ai-use-extra-key` | `ai-use-shape` | An extra key in the claim. |
 | `neg-ai-use-human-written` | `ai-origin-claim` + `authorship-claim` + `rendering-unlisted-line` | No-AI declaration rendered as human authorship. |
 | `neg-ai-use-missing-value` | `ai-use-shape` | A tool without a declaration. |
+| `neg-ai-use-old-tool-line` | `ai-origin-claim` + `rendering-unlisted-line` + `result-mismatch` | A1: the draft tool line, which read as a statement about the content. |
+| `neg-ai-use-rendered-tool-origin` | `ai-origin-claim` + `result-mismatch` | A1: a template-matching tool line whose token states human origin. |
+| `neg-ai-use-tool-100pct-human` | `ai-origin-claim` | A1: tool token '100pct-Human' states human origin or attribution. |
+| `neg-ai-use-tool-ai-free` | `ai-origin-claim` | A1: tool token 'AI-free' states human origin or attribution. |
+| `neg-ai-use-tool-by-alice` | `ai-origin-claim` | A1: tool token 'by-Alice' states human origin or attribution. |
 | `neg-ai-use-tool-email` | `ai-use-shape` | An e-mail address as tool identifier. |
+| `neg-ai-use-tool-handwritten` | `ai-origin-claim` | A1: tool token 'Handwritten' states human origin or attribution. |
+| `neg-ai-use-tool-human-made` | `ai-origin-claim` | A1: tool token 'HUMAN_MADE' states human origin or attribution. |
+| `neg-ai-use-tool-human-only` | `ai-origin-claim` | A1: tool token 'Human-Only' states human origin or attribution. |
+| `neg-ai-use-tool-humanmade` | `ai-origin-claim` | A1: tool token 'humanMade' states human origin or attribution. |
 | `neg-ai-use-tool-name-with-space` | `ai-use-shape` | A name with a space as tool identifier. |
+| `neg-ai-use-tool-no-ai-used` | `ai-origin-claim` | A1: tool token 'no-ai-used' states human origin or attribution. |
+| `neg-ai-use-tool-noaiused` | `ai-origin-claim` | A1: tool token 'NoAIUsed' states human origin or attribution. |
+| `neg-ai-use-tool-not-ai` | `ai-origin-claim` | A1: tool token 'Not.AI' states human origin or attribution. |
 | `neg-ai-use-tool-path` | `ai-use-shape` | A path as tool identifier. |
+| `neg-ai-use-tool-penned-by-bob` | `ai-origin-claim` | A1: tool token 'penned+by+bob' states human origin or attribution. |
+| `neg-ai-use-tool-trailing-newline` | `ai-use-shape` | A tool identifier with a trailing newline. |
 | `neg-ai-use-tool-url` | `ai-use-shape` | A URL as tool identifier. |
 | `neg-ai-use-tool-with-none` | `ai-use-shape` | A tool named while declaring no generative AI. |
 | `neg-ai-use-unchecked-dropped` | `notice-missing` | The not-checked sentence dropped. |
@@ -290,6 +304,7 @@ The A2A fixtures are **not validated against a published A2A schema** (none is c
 | `neg-reference-other-statement` | `reference-mismatch` | A valid reference, but of another statement. |
 | `neg-reference-too-long` | `reference-shape` | One character too many. |
 | `neg-reference-too-short` | `reference-shape` | One character missing. |
+| `neg-reference-trailing-newline` | `reference-shape` | A trailing newline: the pattern is matched in full. |
 | `neg-reference-transposed` | `reference-check` | Two adjacent characters swapped. |
 | `neg-reference-wrong-check` | `reference-check` | The check character is off by one. |
 | `neg-reference-wrong-prefix` | `reference-shape` | Unknown version prefix tw2-. |

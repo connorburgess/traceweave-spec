@@ -258,12 +258,12 @@ def render(result, name="sum.go", artifact=ARTIFACT, context=None, witness=None,
         lines.append(witness)
     lines.append(f"Reference: {reference_of(bundle_rel)}.")
     ai = o.get("declaredAiUse")
-    if ai:
+    if ai and ai["status"] == "declared-not-checked":
         lines.append({"generated": 'The registrant declared that this content was generated with an AI system ("AI + GENERATED" in the EU Code of Practice).',
                       "modified": 'The registrant declared that this content was modified with an AI system ("AI + MODIFIED" in the EU Code of Practice).',
                       "no-generative-ai": "The registrant declared that no generative AI system was used."}[ai["declared"]])
         if ai["tool"]:
-            lines.append(f"AI tool named by the registrant: {ai['tool']}.")
+            lines.append(f'Tool identifier given by the registrant: "{ai["tool"]}". Traceweave did not check this.')
         lines.append("Traceweave did not check this declaration.")
     if o["claimedCreatedAt"]["value"]:
         lines.append(f"Creation time claimed by the registrant, not proved: {o['claimedCreatedAt']['value']}.")
@@ -637,11 +637,13 @@ def build():
     for name, ref, code, desc in [
         ("wrong-check", good_ref[:-1] + wrong_check, "reference-check", "The check character is off by one."),
         ("transposed", "tw1-" + body[1] + body[0] + body[2:] + good_ref[-1] if body[0] != body[1] else good_ref[:-1] + wrong_check, "reference-check", "Two adjacent characters swapped."),
+        ("jump-transposed", "tw1-" + body[2] + body[1] + body[0] + body[3:] + good_ref[-1], "reference-mismatch", "Two characters two apart swapped: Luhn mod 32 gives them the same weight, so the check character misses it and only the bundle comparison catches it."),
         ("too-short", good_ref[:-2], "reference-shape", "One character missing."),
         ("too-long", good_ref + "0", "reference-shape", "One character too many."),
         ("wrong-prefix", "tw2-" + good_ref[4:], "reference-shape", "Unknown version prefix tw2-."),
         ("no-prefix", good_ref[4:], "reference-shape", "Prefix missing."),
         ("lower-case", good_ref.lower(), "reference-shape", "Lower case: only the canonical upper-case form is accepted."),
+        ("trailing-newline", good_ref + "\n", "reference-shape", "A trailing newline: the pattern is matched in full."),
         ("look-alike-I", good_ref[:5] + "I" + good_ref[6:], "reference-shape", "Look-alike I is not in the alphabet."),
         ("look-alike-L", good_ref[:5] + "L" + good_ref[6:], "reference-shape", "Look-alike L is not in the alphabet."),
         ("look-alike-O", good_ref[:5] + "O" + good_ref[6:], "reference-shape", "Look-alike O is not in the alphabet."),
@@ -944,14 +946,26 @@ def build_ai_use(ren_doc):
         ("tool-name-with-space", {"declared": "modified", "tool": "Jane Doe"}, "ai-use-shape", "A name with a space as tool identifier."),
         ("tool-with-none", {"declared": "no-generative-ai", "tool": "ExampleModel-4.2"}, "ai-use-shape", "A tool named while declaring no generative AI."),
         ("authorship-in-tool", {"declared": "generated", "tool": "author-assist"}, "authorship-claim", "An authorship word smuggled into the tool identifier."),
+        ("tool-trailing-newline", {"declared": "generated", "tool": "GPT\n"}, "ai-use-shape", "A tool identifier with a trailing newline."),
         ("authorship-key", {"declared": "modified", "author": "placeholder"}, "authorship-claim", "An authorship key smuggled into the claim."),
     ]:
         b, _ = three_roots(statement(**{"predicate.claims.aiUse": ai}))
-        neg(f"ai-use-{name}", fixture("bundle", desc, b, code, artifacts=ART))
+        neg(f"ai-use-{name}", fixture("bundle", desc, b, code, ["ai-origin-claim"] if name == "authorship-in-tool" else None, artifacts=ART))
+    # A1 (review cases and variants): tool tokens that state human origin, negation or attribution.
+    for tok in ["human-made", "Human-Only", "Handwritten", "not-AI", "no-ai-used", "by-Alice", "Penned-by-Bob",
+                "HUMAN_MADE", "humanMade", "Not.AI", "NoAIUsed", "penned+by+bob", "AI-free", "100pct-Human"]:
+        b, _ = three_roots(statement(**{"predicate.claims.aiUse": {"declared": "modified", "tool": tok}}))
+        neg(f"ai-use-tool-{tok.lower().replace('+', '-').replace('.', '-').replace('_', '-')}", fixture("bundle", f"A1: tool token {tok!r} states human origin or attribution.", b, "ai-origin-claim", artifacts=ART))
     base = json.loads((HERE / "fixtures/rendering-ai-use-generated.json").read_text())["object"]
     r = copy.deepcopy(base)
     r["lines"].remove("Traceweave did not check this declaration.")
     neg("ai-use-unchecked-dropped", fixture("rendering", "The not-checked sentence dropped.", r, "notice-missing"))
+    r = copy.deepcopy(base)
+    r["lines"] = [l.replace('"ExampleModel-4.2"', '"human-made"') for l in r["lines"]]
+    neg("ai-use-rendered-tool-origin", fixture("rendering", "A1: a template-matching tool line whose token states human origin.", r, "ai-origin-claim", ["result-mismatch"]))
+    r = copy.deepcopy(base)
+    r["lines"] = [("AI tool named by the registrant: human-made." if l.startswith("Tool identifier") else l) for l in r["lines"]]
+    neg("ai-use-old-tool-line", fixture("rendering", "A1: the draft tool line, which read as a statement about the content.", r, "ai-origin-claim", ["rendering-unlisted-line", "result-mismatch"]))
     r = copy.deepcopy(base)
     r["lines"].insert(1, "This content is AI-generated.")
     neg("ai-use-as-property", fixture("rendering", "The declaration rendered as a property of the content.", r, "ai-origin-claim", ["rendering-unlisted-line"]))

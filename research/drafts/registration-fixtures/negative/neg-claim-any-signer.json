@@ -175,6 +175,9 @@
         "value": "2026-11-23T10:00:03Z",
         "status": "after-proved-bound",
         "comparedWith": "2026-11-23T10:00:01Z"
+      },
+      "declaredAiUse": {
+        "status": "not-declared"
       }
     },
     "notShown": [

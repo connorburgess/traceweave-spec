@@ -119,7 +119,7 @@ TEMPLATES = {
     "ai-generated": re.compile(r'^The registrant declared that this content was generated with an AI system \("AI \+ GENERATED" in the EU Code of Practice\)\.$'),
     "ai-modified": re.compile(r'^The registrant declared that this content was modified with an AI system \("AI \+ MODIFIED" in the EU Code of Practice\)\.$'),
     "ai-none": re.compile(r"^The registrant declared that no generative AI system was used\.$"),
-    "ai-tool": re.compile(r"^AI tool named by the registrant: ([A-Za-z0-9][A-Za-z0-9._+-]{0,63})\.$"),
+    "ai-tool": re.compile(r'^Tool identifier given by the registrant: "([A-Za-z0-9][A-Za-z0-9._+-]{0,63})"\. Traceweave did not check this\.\Z'),
     "ai-unchecked": re.compile(r"^Traceweave did not check this declaration\.$"),
     "ai-absent": re.compile(r"^The registrant made no declaration about AI use\.$"),
     "witness": re.compile(r"^Witnessed: the caller ([A-Za-z0-9._-]+) presented the signature digest no later than " + T + r", according to the witness's time-stamp authority\.$"),
@@ -173,6 +173,27 @@ AI_USE = {
     "no-generative-ai": (None, None),  # no Code icon; IPTC has no term that does not assert human creation
 }
 AI_TOOL = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._+-]{0,63}$")  # one token: no space, '/', ':', '@' or '\\'
+# A1: words that turn a tool identifier into a statement of human origin, negation or attribution.
+HUMAN_ORIGIN_PARTS = {"human", "humans", "humanly", "person", "people", "handwritten", "handmade", "hand", "manual", "manually",
+                      "penned", "pen", "written", "wrote", "typed", "authored", "author", "by", "me", "myself", "self", "mine",
+                      "organic", "natural", "real", "genuine", "original"}
+NEGATION_PARTS = {"no", "not", "non", "none", "never", "without", "zero", "free", "nil", "null", "only"}
+
+
+def token_parts(token):
+    """Split at separators and case changes: 'Penned-by-Bob' -> penned, by, bob; 'NoAIUsed' -> no, ai, used."""
+    out = []
+    for chunk in re.split(r"[._+\-]+", token):
+        out += [w.lower() for w in re.findall(r"[A-Z]+(?![a-z])|[A-Z]?[a-z]+|\d+", chunk)]
+    return out
+
+
+def tool_states_origin(token):
+    parts = token_parts(token)
+    joined = " ".join(parts)
+    return bool(set(parts) & (HUMAN_ORIGIN_PARTS | NEGATION_PARTS)) or bool(AI_ORIGIN_TEXT.search(joined))
+
+
 AI_ORIGIN_TEXT = re.compile(r"(?i)\b(ai[- ]generated|ai[- ]written|ai[- ]made|made by ai|human[- ](written|made|authored|created|generated)|"
                             r"written by (a )?(human|person)|not ai)\b")
 
@@ -191,16 +212,19 @@ def check_ai_use(ai, out):
         return
     if "tool" in ai:
         tool = ai["tool"]
-        if ai["declared"] == "no-generative-ai" or not isinstance(tool, str) or not AI_TOOL.match(tool):
-            out.add("ai-use-shape")  # a URL, path, e-mail address or name with spaces cannot match
-        elif DENY_TEXT.search(tool.replace("-", " ").replace("_", " ").replace(".", " ")):
-            out.add("authorship-claim")
+        if ai["declared"] == "no-generative-ai" or not isinstance(tool, str) or not AI_TOOL.fullmatch(tool):
+            out.add("ai-use-shape")  # a URL, path, e-mail address, name with spaces or trailing newline cannot match
+        else:
+            if DENY_TEXT.search(" ".join(token_parts(tool))):
+                out.add("authorship-claim")
+            if tool_states_origin(tool):
+                out.add("ai-origin-claim")  # A1: human origin, negation or attribution inside the tool token
 
 
 def declared_ai_use(pred):
     ai = pred.get("claims", {}).get("aiUse")
     if ai is None:
-        return None
+        return {"status": "not-declared"}  # explicit, so a gap is never read as "none"
     icon, iptc = AI_USE[ai["declared"]]
     return {"declared": ai["declared"], "tool": ai.get("tool"), "euCodeIcon": icon, "iptcDigitalSourceType": iptc,
             "status": "declared-not-checked"}
@@ -232,7 +256,7 @@ def text_reference(statement_sha256_hex):
 
 def check_reference_string(ref, out):
     """Returns True if `ref` is a well-formed reference with a correct check character."""
-    if not isinstance(ref, str) or not REF_PATTERN.match(ref):
+    if not isinstance(ref, str) or not REF_PATTERN.fullmatch(ref):
         out.add("reference-shape")  # wrong prefix or version, length, case, or a character outside the alphabet
         return False
     body = ref[len(REF_PREFIX):-1]
@@ -1099,7 +1123,7 @@ def expected_result(ctx, artifacts, policy, simulated, bundle_sha, event_paths, 
     # S11: compare only with signatures whose signer is trusted.
     compared = min((b["anyRoot"] for b, tr in zip(bounds, trust) if b["anyRoot"] and tr == "trusted"), default=None)
     created = pred.get("claims", {}).get("createdAt")
-    declared = declared_ai_use(pred) if not ai_use_invalid(pred) else None
+    declared = declared_ai_use(pred) if not ai_use_invalid(pred) else {"status": "not-declared"}
     if created is None:
         status = "absent"
     elif compared is None:
@@ -1131,7 +1155,7 @@ def expected_result(ctx, artifacts, policy, simulated, bundle_sha, event_paths, 
             "timeEvidence": ev_out,
             "time": time,
             "claimedCreatedAt": {"value": created, "status": status, "comparedWith": fmt_time(compared)},
-            **({"declaredAiUse": declared} if declared else {}),
+            "declaredAiUse": declared,
         },
         "notShown": NOT_SHOWN,
     }
@@ -1225,7 +1249,7 @@ def check_result(res, meta, out):
             out.add("key-event-ignored")
     if got_o.get("keyEvents") != exp_o["keyEvents"] and not out:
         out.add("key-event-ignored")
-    if "declaredAiUse" in exp_o and (got_o.get("signerTrust") != exp_o["signerTrust"] or got_o.get("time") != exp_o["time"]):
+    if exp_o["declaredAiUse"]["status"] == "declared-not-checked" and (got_o.get("signerTrust") != exp_o["signerTrust"] or got_o.get("time") != exp_o["time"]):
         out.add("ai-use-affected-outcome")  # design 4.7: a declaration never changes a trust or time outcome
     if res != exp and not out:
         out.add("result-mismatch")
@@ -1344,6 +1368,8 @@ def check_rendering(ren, meta, out):
     claimed = result["outcomes"]["claimedCreatedAt"]["value"]
     bound_keys = set()
     declared = result["outcomes"].get("declaredAiUse")
+    if not declared or declared.get("status") != "declared-not-checked":
+        declared = None
     shown = {k for line in lines for k, rx in TEMPLATES.items() if k.startswith("ai-") and rx.match(line)}
     want = {"generated": "ai-generated", "modified": "ai-modified", "no-generative-ai": "ai-none"}.get((declared or {}).get("declared"))
     if declared:
@@ -1351,13 +1377,17 @@ def check_rendering(ren, meta, out):
             out.add("result-mismatch")
         if "ai-unchecked" not in shown:
             out.add("notice-missing")  # every declaration line comes with "Traceweave did not check this declaration."
-        if declared["tool"] and f"AI tool named by the registrant: {declared['tool']}." not in lines:
+        if declared["tool"] and f'Tool identifier given by the registrant: "{declared["tool"]}". Traceweave did not check this.' not in lines:
             out.add("result-mismatch")
     elif shown - {"ai-absent"}:
         out.add("result-mismatch")  # nothing was declared, so nothing may be shown as declared (absent is never "no AI")
     for line in lines:
         if line in fixed:
             continue
+        # A1: the never-shown check runs on every rendered line, template or not.
+        tm = TEMPLATES["ai-tool"].match(line)
+        if AI_ORIGIN_TEXT.search(line) or (tm and tool_states_origin(tm.group(1))):
+            out.add("ai-origin-claim")
         kind, m = next(((k, rx.match(line)) for k, rx in TEMPLATES.items() if rx.match(line)), (None, None))
         if kind is None:
             out.add("rendering-unlisted-line")
@@ -1365,8 +1395,6 @@ def check_rendering(ren, meta, out):
                 out.add("authorship-claim")
             if ORDER_TEXT.search(line):
                 out.add("ordering-claim")
-            if AI_ORIGIN_TEXT.search(line):
-                out.add("ai-origin-claim")
             if re.search(r"(?i)\b(authentic\w*|verified|genuine)\b", line):
                 out.add("single-verdict")
             if claimed and claimed in line:
@@ -1805,6 +1833,18 @@ def wrong_implementation_self_test(verbose):
     cases.append(("not-checked sentence dropped (4.7)", True, "notice-missing" in got))
     got = mutated("fixtures/verification-result-ai-use-modified.json", lambda r: r["outcomes"]["signerTrust"][0].update(outcome="disputed"))
     cases.append(("declaration changes a trust outcome (4.7)", True, "ai-use-affected-outcome" in got))
+    # A1: a pattern-only tool check accepts tokens that state human origin; the part check rejects them all.
+    review = ["human-made", "Human-Only", "Handwritten", "not-AI", "no-ai-used", "by-Alice", "Penned-by-Bob"]
+    cases.append(("pattern-only tool check accepts human-origin tokens (A1)", all(AI_TOOL.fullmatch(t) for t in review),
+                  all(tool_states_origin(t) for t in review)))
+    got = mutated("fixtures/rendering-ai-use-generated.json", lambda r: r.update(lines=[l.replace('"ExampleModel-4.2"', '"Human-Only"') for l in r["lines"]]))
+    cases.append(("never-shown check skipped on template-matching lines (A1)", True, "ai-origin-claim" in got))
+    cases.append(("tool pattern anchored with $ accepts a trailing newline", bool(re.match(r"^[A-Za-z0-9][A-Za-z0-9._+-]{0,63}$", "GPT\n")),
+                  AI_TOOL.fullmatch("GPT\n") is None))
+    probe = set()
+    check_reference_string(text_reference("ab" * 32) + "\n", probe)
+    cases.append(("reference with a trailing newline read as a check error, not a shape error (9.1)",
+                  bool(re.match(r"^tw1-[0-9A-HJKMNP-TV-Z]{27}$", text_reference("ab" * 32) + "\n")), probe == {"reference-shape"}))
     failures = 0
     for name, wrong_misbehaves, caught in cases:
         ok = wrong_misbehaves and caught

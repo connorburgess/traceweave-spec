@@ -10,7 +10,10 @@
       }
     ],
     "expect": {
-      "code": "authorship-claim"
+      "code": "authorship-claim",
+      "alsoReported": [
+        "ai-origin-claim"
+      ]
     }
   },
   "object": {
