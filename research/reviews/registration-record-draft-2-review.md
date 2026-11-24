@@ -476,3 +476,21 @@ Reviewed commit e6444c9 (§4.7) and §9.1 as frozen at a726ab2, 2026-11-24. At e
   - **Should-fix:** also put it in the Lookup "Check" step. A registrant-chosen URL is exactly where an equivocating registrant serves different bundles to different people.
 - **Phishing and look-alikes (should-fix, text).** §9.1 has no text about look-alike references. Grinding a reference whose first and last four body characters match someone else's costs about 2⁴⁰ SHA-256 evaluations, which is cheap. Add: "compare the whole reference, or let the tool compare it; a matching start and end means nothing". The existing exposure bullets (anyone can register copied text; a page that verifies proves nothing) are right.
 - **Fixtures:** the listed positives and negatives cover shape, check, look-alike letters and mismatch. Add a jump-transposition negative that documents the miss, and a trailing-newline negative.
+
+### Confirmation pass (`d0bf632`)
+
+Independent non-author confirmation pass of commit `d0bf632` (responding to `5852c3d`), 2026-11-25. **Verdict: confirmed.** Every blocking and non-blocking item from `5852c3d` is resolved. No code or spec files were edited in this pass.
+
+- **Blocking A1 (§4.7 `claims.aiUse.tool` and rendering):** resolved.
+  - All 14 review examples and separator/case/digit variants (`human-made`, `Human-Only`, `Handwritten`, `not-AI`, `no-ai-used`, `by-Alice`, `Penned-by-Bob`, `HUMAN_MADE`, `humanMade`, `Not.AI`, `NoAIUsed`, `penned+by+bob`, `AI-free`, `100pct-Human`, `human1`, `1human`, `not2ai`, `ai-generated`, `made+by+ai`) are rejected as `ai-origin-claim`.
+  - Unicode look-alikes (`hum\u0430n`), zero-width spaces (`human\u200bmade`), and trailing whitespace/newlines (`GPT\n`, `GPT\r\n`, `GPT `) are rejected as `ai-use-shape` via `AI_TOOL.fullmatch`.
+  - `check_rendering` runs `AI_ORIGIN_TEXT` and `tool_states_origin` on template-matching lines (tested on `ai-tool` and `title`), catching `Human-Only` and `made+by+ai` as `ai-origin-claim`.
+  - The quoted rendering frame (`Tool identifier given by the registrant: "<tool>". Traceweave did not check this.`) prevents reading the token as a claim about the content.
+  - **Residual note (non-blocking):** unseparated lowercase concatenations (`humanmade`, `noaiused`, `notai`, `humanonly`) and alternating-case splits (`hUmAn`, `NOai`) still pass `tool_states_origin`, though the quoted frame prevents them from reading as claims about the content.
+- **Trailing newlines:** `GPT\n` in `tool` is `ai-use-shape`, and `tw1-…\n` in §9.1 is `reference-shape` (not `reference-check`) via `REF_PATTERN.fullmatch`.
+- **Explicit `"not-declared"`:** verification results without `claims.aiUse` now carry `declaredAiUse: {"status": "not-declared"}` (`verification-result.json`), and `rendering-ai-use-absent.json` validates cleanly.
+- **Spec text notes:** §4.7 immutability / signed-statement note and draft-5 change-log entry, IPTC `compositeWithTrainedAlgorithmicMedia` rationale (vs `compositeSynthetic`), EU Code Annex 1 provenance (URL, date, tool, full SHA-256, and unviewed-artwork note), and §9.1 jump-transposition note (`1,545 of 1,545` missed), Lookup `statementSha256` reminder, and look-alike guidance are all present.
+- **Checks run on `d0bf632`:**
+  - `check_registration.py validate`: 86 positive, 140 negative, 43 wrong-implementation cases, 57 codes (all exercised).
+  - `build_fixtures.py` rebuild: byte-identical (`git status -s` clean).
+  - `tools/validate.py`, `tools/validate.py --links-all`, `tools/check_hygiene.py`, `python -m unittest discover -s tests` (9 tests): all pass.
