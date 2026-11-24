@@ -204,3 +204,100 @@ With a commercial CA root as anchor, anyone holding any end-entity certificate u
 - **REG.2:** "byte-identical verification results" needs a canonical serialization for results (RFC 8785, as for reports). State it.
 - **REG.3:** "k/k" has no k; name the counts. A "revoked certificate" cannot be produced on demand at a real TSA, so test that direction with the local test TSA. "Pinned header source" must mean the checkpoint pin of D3.
 - **REG.4:** verifiable as a process gate (a named non-author); add "no rendering from a simulated result" (D6).
+
+## Draft-4 confirmation
+
+Reviewed commit dba683b, 2026-11-24. Verdict: **not confirmed**, with one blocking item (E1). D1–D9 and the REG.1–REG.4 text are resolved. E1 is narrow, and the enumeration already detects it once its time steps are shorter than the look-back. All tests ran on a scratch copy outside the repository; no external service was contacted.
+
+### D1–D4, retested
+
+- **D1, D2: hold.** Hand-built variants, all as the draft predicts:
+  - S retires K, then K rotates to A: ignored-superseded.
+  - An honest rotation and a thief's rotation at the same E: both disputed, so neither successor is trusted.
+  - Retirement, then a thief's compromise report within the window, then a thief's rotation: the rotation is ignored, and the retirement is disputed but still supersedes K.
+  - S→S2, then the stolen S rotates S→A 18 months later: ignored, and S2 stays trusted.
+  - A thief's report exactly 30 days after K→S disputes the rotation; at 31 days it does not.
+- **D3: holds, including forks that start below the checkpoint.** Headers were re-mined with the fixture's `nBits`:
+  - forked at height 3 and re-mined through the checkpoint height: rejected, because the checkpoint hash does not match;
+  - forked at 3 with the real checkpoint header kept: rejected, because linkage breaks;
+  - attested header 4 real, fork starting at 6: rejected.
+  - **A header file kept real up to the checkpoint and forged above it** passes `header_ok` and `linked_to_checkpoint` for an attested height above the checkpoint. Only `cp.height − height < minConfirmations` stops it, and `minConfirmations` is never validated, so 0 or a negative value admits the forgery. Should-fix: require `height ≤ checkpoint.height − minConfirmations` with `minConfirmations ≥ 1`, and validate it and the checkpoint shape in the policy check.
+- **D4: holds.** `validate_path` agrees with `openssl ts -verify` (OpenSSL 4.1.0) on every token from a local scratch CA:
+  - the two draft-3 cases (non-CA intermediate; expired intermediate);
+  - an intermediate with `CA:TRUE` but no `keyCertSign` (openssl: "invalid CA cert");
+  - an unknown critical extension on the intermediate (openssl: "unhandled critical extension");
+  - two intermediates under `pathlen:0` (openssl: "path length constraint exceeded").
+  - The control case, a TSA certificate issued directly by the root, passes both.
+  - openssl refused to issue a token from a TSA certificate whose `keyUsage` lacks `digitalSignature`, so the leaf keyUsage check has no openssl cross-check.
+  - Note: the path builder takes the first certificate with a matching subject and does not backtrack. The SignedData `certificates` field is unsigned, so anyone carrying the bundle can put a decoy certificate first and turn a valid token into `path-invalid`. That is denial of service only, no worse than deleting the token, but RFC 5280 path building should try every candidate.
+
+### Blocking
+
+**E1. A compromise report signed by a successor can dispute the rotation that authorizes it, and the evaluation never converges. The result then depends on how many unrelated events are in the input.**
+- **The cycle.** K→S is applied at T. S signs `compromised` for K at T+10 d with claimed start T−5 d.
+  - Pass 1: the report is authorized, because K→S is not yet disputed. Its window, starting at T−5 d, disputes K→S.
+  - Pass 2: K→S is disputed, so the report is unauthorized and nothing is disputed.
+  - Pass 3 repeats pass 1, and so on.
+  - The loop stops after `len(events) + 2` passes, so the outcome is set by the parity of the event count.
+- **Measured.**
+  - The two events alone: K→S applied, report ignored, S trusted.
+  - Add one unauthorized event (A signs `retired` for K): K→S disputed, report applied, S `untrusted`, and K disputed before T.
+  - Add two such events: S trusted again.
+  - Reversing the input keeps the same result, so I1 does not catch this. But anyone can add an unauthorized event file, so the "attacker events change nothing" claim (I2) and the B2 determinism claim both fail.
+  - The same happens one level down: S2 signs a compromise of S within 30 days after S→S2. It also happens when the thief's A reports K compromised after the thief's own K→A.
+- **Why the enumeration misses it.**
+  - Every "later" step is 40 days, longer than the 30-day look-back. A step of 0 is never strictly later, so a successor report never lands inside (0, 30 d] after its own authorizing rotation.
+  - With steps of ±20 days, and a claimed start 30 days before E, the author's own invariants report **558 violating sequences at length 3**: 540 under I2 and 18 under I6.
+  - Every one of them contains a successor-signed or attacker-signed compromise report.
+- **This is also the natural honest flow.** The owner rotates because K leaked, then reports the compromise with S (RD17).
+- **Change.**
+  1. Define the rule so that it is monotone. For example: a compromise report's window never disputes the rotation chain that authorizes its own signer. Or: decide authorization for compromise reports before computing windows, without fixed-point feedback.
+  2. Make a loop that has not converged after its bound an error, not a result.
+  3. Add the cycle as a fixture.
+  4. Widen the enumeration so that steps are shorter than the look-back and claimed starts reach before the earlier event (see the enumeration section).
+
+### The enumeration (question 2)
+
+- **Same code path, no drift in the core.** It imports `check_registration` and calls its `evaluate_events` and `signer_trust`.
+- **What it bypasses.** It skips `load_events`: no signature, subject or `keyid` checks, and no `E = None` path. It also skips signature bounds: every probe has `quorum == anyRoot`, and none has `None`.
+- **Mutation check.** Run here: 8,289 and 5,184, as stated. Length 3: 0 violations. Length 4: 1,727,604 sequences, 0 violations, 99 s.
+- **What length 4 with this alphabet cannot reach, tested by hand:**
+  - A successor-signed report inside the window: E1.
+  - Overlapping compromises of K (starts −10 d and +5 d; E +20 d and +35 d): trusted below −10 d, disputed from −10 d, untrusted from +20 d. Correct.
+  - A three-key chain with a mid-chain compromise of S reported by a copy of S: S→S2 disputed, S2 untrusted; S trusted below the start, disputed from it. Correct. Reported by S2: E1.
+  - A thief rotates first, the owner reports, and a recovery key R is in `trustedKeys`: A and S untrusted, R trusted. Correct, but R is trusted for every bound, including before it was listed (see the look-back section).
+  - Events and signatures with no quorum: an event with no proved time is ignored; a signature with no quorum bound by a key an event touches is `disputed`. Both as the draft says.
+- **Trust claims with no invariant:**
+  - effect rule 3: `disputed` for start ≤ B < E, and trust unchanged below the start. Probes sit only at max E + 1 d and T0 − 400 d, so no window or boundary is probed;
+  - effect rule 2, no quorum gives `disputed`;
+  - "the result is identical whatever other events are supplied", beyond attacker-signed ones: no invariant adds unauthorized events, which is exactly E1;
+  - authorization: a successor acts only through an undisputed rotation with a smaller E;
+  - equal-time supersessions are both disputed;
+  - "after the window the honest chain is final" against successor-signed reports: I6 removes only events by the `old` role.
+- **Add** a step shorter than the look-back, several claimed starts, probes at start − 1 s, start, E − 1 s and E, a no-quorum probe, and an invariant that adding an unauthorized event changes nothing. The run time stays practical at length 3 with these parameters (2 s).
+
+### Look-back and RD18 (question 3)
+
+- **Coherent apart from E1.**
+  - The look-back bounds two things symmetrically: how long a thief holding K can dispute the owner's rotation, and how long an owner has to dispute a thief's rotation.
+  - After the window, the first supersession is final in-band.
+- **What an attacker holding K can do inside the window (30 days after the owner's rotation):**
+  - Dispute the honest rotation **permanently**. S never regains trust, and K cannot be rotated again, so the owner must recover out of band. The window is short, but the harm is permanent.
+  - Make K's own signatures bounded in [E − 30 d, E) `disputed`.
+  - Gain no trust for any key.
+  - The draft states the first point (§8, owner rotates first), but the §13 threat row lists only "registrations inside the window can be disputed". Add that the successor chain is lost.
+- **30 days.** It is a named policy parameter, `compromiseLookbackSeconds` (RD15), with 30 days stated as the fixture default.
+  - The justification is a trade-off only. Nothing ties 30 days to an expected discovery time, so it is a placeholder for the owner to set.
+  - The value is not validated: zero, negative or non-integer values are accepted. A negative value makes every compromise window start after its own report. Validate it as a non-negative integer.
+- **Recovery keys (RD18).** No policy field holds them. `POLICY_KEYS` is fixed, and RD17's "policy may add keys" has no field either.
+  - The only working form is an extra `trustedKeys` entry. That key is trusted for every bound, including signatures made before it was listed, and is not tied to K.
+  - State that this is the mechanism, or add a field that names the key and the key it may recover.
+
+### D5–D9 and gate text (question 4)
+
+- **D5:** resolved. Revocations name a certificate by SHA-256 and apply only to paths through it; placeholder evidence uses its signer's hash.
+- **D6:** resolved (marker line; REG.4 refusal).
+- **D7:** stated, but the code does not match the text. §6.2 says ECDSA and others are "rejected as unsupported". The ECDSA token here instead raises `tsa-signature-invalid`, which reads as a forged signature. Should-fix: report `unsupported`.
+- **D8:** resolved. `version ≠ 1` and duplicate signed attributes are rejected.
+- **D9:** resolved as text. The renewal relies on retained revocation data, and the stronger form is left to RD11.
+- **REG.1–REG.4:** the draft-3 items are fixed: the counts, the D3 and D4 vectors, RFC 8785 bytes, k = 3, the local test TSA for revocation, the checkpoint pin, and the refusal of simulated results. But REG.1's "`enumerate_key_events.py` reports 0 violations up to length 4" passes with E1 present. Tie it to the widened parameters above.
