@@ -47,6 +47,9 @@ A fixture registers nothing and proves nothing.
 | `fixtures/report-link.json` | report-link | Links the committed example comparison report to the registration, without changing the report. |
 | `fixtures/result-equivalence-e1.json` | result-equivalence | E1: the same events with 0, 1 and 2 extra rejected events give byte-identical outcomes for the common events. |
 | `fixtures/statement.json` | statement | The registration statement (in-toto Statement v1) before signing. |
+| `fixtures/text-reference-cosigned.json` | text-reference | The reference of fixtures/bundle-cosigned.json: tw1- + 130 bits of statementSha256 + a Luhn mod 32 check character. |
+| `fixtures/text-reference-second-work.json` | text-reference | The reference of fixtures/bundle-second-work.json: tw1- + 130 bits of statementSha256 + a Luhn mod 32 check character. |
+| `fixtures/text-reference-three-roots.json` | text-reference | The reference of fixtures/bundle-three-roots.json: tw1- + 130 bits of statementSha256 + a Luhn mod 32 check character. |
 | `fixtures/verification-result-chain-same-time.json` | verification-result | Enumeration finding: trust flows only through a rotation proved strictly after its signer became trusted. |
 | `fixtures/verification-result-claim-trusted-only.json` | verification-result | The claimed time is compared only with trusted signatures (S11): `claimed-only`. |
 | `fixtures/verification-result-compromise-early.json` | verification-result | An early-dated claim is clamped to the look-back window: `trusted`. |
@@ -133,7 +136,7 @@ A fixture registers nothing and proves nothing.
 | `aux/key-event-second-rotation-2028.json` | key-event | Eighteen months later, whoever obtained the old key rotates it again. |
 | `aux/verification-result-e1-flipped.json` | verification-result | Draft-4 behaviour with one extra rejected event (the flip), kept as input to the equivalence negative. |
 
-`negative/` holds 96 broken fixtures; each must produce exactly the codes listed below. `aux/` holds inputs that other fixtures refer to; they are not checked on their own.
+`negative/` holds 109 broken fixtures; each must produce exactly the codes listed below. `aux/` holds inputs that other fixtures refer to; they are not checked on their own.
 
 | Real-format file | SHA-256 (from `MANIFEST.json`) |
 | --- | --- |
@@ -253,6 +256,19 @@ The A2A fixtures are **not validated against a published A2A schema** (none is c
 | `neg-real-ots-other-chain` | `quorum-miscount` | Header file that does not contain the attested block; the proof is reported valid anyway. |
 | `neg-real-ots-wrong-target` | `evidence-wrong-target` | A real-format proof for another digest. |
 | `neg-real-root-not-pinned` | `quorum-miscount` | Pinned root file does not hash to the anchor; the token is reported valid anyway. |
+| `neg-reference-letter-U` | `reference-shape` | U is not in the alphabet. |
+| `neg-reference-look-alike-I` | `reference-shape` | Look-alike I is not in the alphabet. |
+| `neg-reference-look-alike-L` | `reference-shape` | Look-alike L is not in the alphabet. |
+| `neg-reference-look-alike-O` | `reference-shape` | Look-alike O is not in the alphabet. |
+| `neg-reference-lower-case` | `reference-shape` | Lower case: only the canonical upper-case form is accepted. |
+| `neg-reference-no-prefix` | `reference-shape` | Prefix missing. |
+| `neg-reference-other-statement` | `reference-mismatch` | A valid reference, but of another statement. |
+| `neg-reference-too-long` | `reference-shape` | One character too many. |
+| `neg-reference-too-short` | `reference-shape` | One character missing. |
+| `neg-reference-transposed` | `reference-check` | Two adjacent characters swapped. |
+| `neg-reference-wrong-check` | `reference-check` | The check character is off by one. |
+| `neg-reference-wrong-prefix` | `reference-shape` | Unknown version prefix tw2-. |
+| `neg-rendering-reference-mismatch` | `reference-mismatch` | A rendering shows the reference of another statement. |
 | `neg-rendering-unlisted-line` | `rendering-unlisted-line` | A harmless line outside the template list is still refused. |
 | `neg-renewal-wrong-target` | `evidence-wrong-target` | Renewal whose target digest is not the renewed token's bytes. |
 | `neg-report-digest` | `report-digest` | The link names a different report body. |

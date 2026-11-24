@@ -228,7 +228,12 @@ def witness_evidence(sig, which="a"):
     return ev
 
 
-def render(result, name="sum.go", artifact=ARTIFACT, context=None, witness=None):
+def reference_of(bundle_rel):
+    obj = json.loads((HERE / bundle_rel).read_text())["object"]
+    return C.text_reference(C.sha(base64.b64decode(obj["envelope"]["payload"])))
+
+
+def render(result, name="sum.go", artifact=ARTIFACT, context=None, witness=None, bundle_rel=B3):
     o = result["outcomes"]
     h = C.sha(artifact)
     lines = ["Simulated: time evidence is placeholder only."] if result["simulated"] else []
@@ -251,6 +256,7 @@ def render(result, name="sum.go", artifact=ARTIFACT, context=None, witness=None)
             lines.append(f"Time sources for key {t['keyid']}: {t['distinctRoots']} independent, {t['quorum']} required; the earliest single source says {t['notAfterAnyRoot']}.")
     if witness:
         lines.append(witness)
+    lines.append(f"Reference: {reference_of(bundle_rel)}.")
     if o["claimedCreatedAt"]["value"]:
         lines.append(f"Creation time claimed by the registrant, not proved: {o['claimedCreatedAt']['value']}.")
     return lines + C.REQUIRED_SENTENCES + ([C.AGENT_SENTENCE] if context == "agent" else [])
@@ -432,7 +438,7 @@ def build():
     res_co = result_for("fixtures/bundle-cosigned.json")
     vr("-cosigned", "Per-signature bounds: the co-signer gets none.", res_co, bundle="fixtures/bundle-cosigned.json", artifacts=ART)
     write("fixtures", "rendering-cosigned", fixture("rendering", "Text for the co-signed bundle: a bound sentence only for the key that has one.",
-                                                    {"renderingVersion": C.RENDERING_VERSION, "result": "fixtures/verification-result-cosigned.json", "lines": render(res_co)}))
+                                                    {"renderingVersion": C.RENDERING_VERSION, "result": "fixtures/verification-result-cosigned.json", "lines": render(res_co, bundle_rel="fixtures/bundle-cosigned.json")}))
     st_claim = statement(**{"predicate.claims.createdAt": "2026-11-23T10:00:03Z"})
     env_cl, sigs_cl = envelope(st_claim, signers=(CREATOR, CO))
     write("aux", "bundle-claim", fixture("bundle", "Claimed 10:00:03; the trusted signature's earliest bound is 10:00:06, the untrusted co-signer's 10:00:01.",
@@ -613,6 +619,32 @@ def build():
     write("fixtures", "registration-set", fixture("registration-set", "Two registrations by one producer: nonces differ.",
                                                   {"setVersion": C.SET_VERSION, "registrations": [B3, "fixtures/bundle-second-work.json"]}))
 
+    # Design 9.1: text references (frozen format).
+    for name, rel in [("three-roots", B3), ("cosigned", "fixtures/bundle-cosigned.json"), ("second-work", "fixtures/bundle-second-work.json")]:
+        write("fixtures", f"text-reference-{name}", fixture("text-reference", f"The reference of {rel}: tw1- + 130 bits of statementSha256 + a Luhn mod 32 check character.",
+                                                            {"reference": reference_of(rel), "bundle": rel}))
+    good_ref = reference_of(B3)
+    body = good_ref[4:-1]
+    wrong_check = C.REF_ALPHABET[(C.REF_ALPHABET.index(good_ref[-1]) + 1) % 32]
+    for name, ref, code, desc in [
+        ("wrong-check", good_ref[:-1] + wrong_check, "reference-check", "The check character is off by one."),
+        ("transposed", "tw1-" + body[1] + body[0] + body[2:] + good_ref[-1] if body[0] != body[1] else good_ref[:-1] + wrong_check, "reference-check", "Two adjacent characters swapped."),
+        ("too-short", good_ref[:-2], "reference-shape", "One character missing."),
+        ("too-long", good_ref + "0", "reference-shape", "One character too many."),
+        ("wrong-prefix", "tw2-" + good_ref[4:], "reference-shape", "Unknown version prefix tw2-."),
+        ("no-prefix", good_ref[4:], "reference-shape", "Prefix missing."),
+        ("lower-case", good_ref.lower(), "reference-shape", "Lower case: only the canonical upper-case form is accepted."),
+        ("look-alike-I", good_ref[:5] + "I" + good_ref[6:], "reference-shape", "Look-alike I is not in the alphabet."),
+        ("look-alike-L", good_ref[:5] + "L" + good_ref[6:], "reference-shape", "Look-alike L is not in the alphabet."),
+        ("look-alike-O", good_ref[:5] + "O" + good_ref[6:], "reference-shape", "Look-alike O is not in the alphabet."),
+        ("letter-U", good_ref[:5] + "U" + good_ref[6:], "reference-shape", "U is not in the alphabet."),
+        ("other-statement", reference_of("fixtures/bundle-second-work.json"), "reference-mismatch", "A valid reference, but of another statement."),
+    ]:
+        write("negative", f"neg-reference-{name}", fixture("text-reference", desc, {"reference": ref, "bundle": B3}, code))
+    rb_ref = copy.deepcopy(ren_doc)
+    rb_ref["lines"] = [f"Reference: {reference_of('fixtures/bundle-second-work.json')}." if l.startswith("Reference: ") else l for l in rb_ref["lines"]]
+    write("negative", "neg-rendering-reference-mismatch", fixture("rendering", "A rendering shows the reference of another statement.", rb_ref, "reference-mismatch"))
+
     build_negatives(st, sig, three, result, rmeta, link, ren_doc, res_co, recent, res_claim)
     build_real()
     build_agent(sig, result)
@@ -666,7 +698,7 @@ def build_negatives(st, sig, three, result, rmeta, link, ren, res_co, recent, re
     rb = copy.deepcopy(ren)
     rb["lines"] = rb["lines"][:-3]
     neg("notice-missing", fixture("rendering", "Rendering without the three fixed sentences.", rb, "notice-missing"))
-    rb = {"renderingVersion": C.RENDERING_VERSION, "result": "fixtures/verification-result-cosigned.json", "lines": render(res_co)}
+    rb = {"renderingVersion": C.RENDERING_VERSION, "result": "fixtures/verification-result-cosigned.json", "lines": render(res_co, bundle_rel="fixtures/bundle-cosigned.json")}
     co32 = C.sha(PUB_CO)[:32]
     rb["lines"] = [l.replace(f"No proved time for key {co32}.", f"This record shows that the content existed, and that key {co32} signed a statement naming it, no later than 2026-11-23T10:00:01Z (according to one time source only).") for l in rb["lines"]]
     neg("key-bound-misattributed-rendering", fixture("rendering", "The co-signer is given the first signature's bound (W8).", rb, "key-bound-misattributed"))

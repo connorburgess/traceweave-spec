@@ -1,0 +1,11 @@
+{
+  "fixture": {
+    "kind": "text-reference",
+    "description": "The reference of fixtures/bundle-three-roots.json: tw1- + 130 bits of statementSha256 + a Luhn mod 32 check character.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing."
+  },
+  "object": {
+    "reference": "tw1-7WR8Y61HYTR7RJE0NN5W52C8TAN",
+    "bundle": "fixtures/bundle-three-roots.json"
+  }
+}

@@ -13,6 +13,8 @@ Gate IDs `NEXT.*` are proposals, like the REG gates in the design's §15.
 
 ## 1. A reference that travels with text
 
+**Status: frozen as normative in [design §9.1](registration-record.md#91-text-reference-normative-frozen-2026-11-24) on 2026-11-24.** The check character there is Luhn mod 32 over the same alphabet, not Crockford's mod 37, which would bring in `*~$=U`. §9.1 governs where this sketch differs.
+
 **The problem.** Pasted text cannot carry metadata ("free-form text cannot transport metadata", L14 §1.1, quoting the EU Code of Practice). A copy loses any link to its registration. Invisible Unicode carriers are no answer: one published fold erases them ([lane 09](../lanes/09-evidence-review.md)).
 
 **What it adds.** A short reference a person can paste next to the text, derived from what the record already has.

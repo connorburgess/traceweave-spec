@@ -1,0 +1,14 @@
+{
+  "fixture": {
+    "kind": "text-reference",
+    "description": "Two adjacent characters swapped.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "expect": {
+      "code": "reference-check"
+    }
+  },
+  "object": {
+    "reference": "tw1-W7R8Y61HYTR7RJE0NN5W52C8TAN",
+    "bundle": "fixtures/bundle-three-roots.json"
+  }
+}

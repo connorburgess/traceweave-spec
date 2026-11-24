@@ -1,0 +1,11 @@
+{
+  "fixture": {
+    "kind": "text-reference",
+    "description": "The reference of fixtures/bundle-second-work.json: tw1- + 130 bits of statementSha256 + a Luhn mod 32 check character.",
+    "notice": "Illustrative fixture for research/drafts/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing."
+  },
+  "object": {
+    "reference": "tw1-68NV41DECCTCMWDAMB5QJS4D5QP",
+    "bundle": "fixtures/bundle-second-work.json"
+  }
+}

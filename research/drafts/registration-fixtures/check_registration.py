@@ -115,6 +115,7 @@ TEMPLATES = {
     "no-bound": re.compile(r"^No proved time for key " + K + r"\.$"),
     "claimed": re.compile(r"^Creation time claimed by the registrant, not proved: " + T + r"\.$"),
     "simulated": re.compile(r"^Simulated: time evidence is placeholder only\.$"),
+    "reference": re.compile(r"^Reference: (tw1-[0-9A-HJKMNP-TV-Z]{27})\.$"),
     "witness": re.compile(r"^Witnessed: the caller ([A-Za-z0-9._-]+) presented the signature digest no later than " + T + r", according to the witness's time-stamp authority\.$"),
 }
 
@@ -128,6 +129,7 @@ CODES = [
     "root-not-anchored", "signature-invalid", "single-verdict", "statement-digest", "statement-shape",
     "subject-mismatch", "subject-name", "time-in-statement", "tsa-eku-invalid", "tsa-imprint-mismatch",
     "tsa-nonce-mismatch", "tsa-signature-invalid", "tsa-signing-cert-mismatch", "trust-without-quorum", "simulated-unmarked", "extra-event-changed-result", "key-event-signatures",
+    "reference-shape", "reference-check", "reference-mismatch",
     "content-on-wire", "a2a-shape", "mcp-tool-shape", "witness-shape",
 ]
 
@@ -153,6 +155,42 @@ MCP_NAME = re.compile(r"^[A-Za-z0-9_.-]{1,128}$")
 
 class Dup(ValueError):
     pass
+
+
+# ------------------------------------------------------------------ text reference (design 9.1, frozen)
+# tw1- + 26 Crockford base32 characters (the first 130 bits of statementSha256) + 1 Luhn mod 32 check character.
+REF_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"  # Crockford base32: no I, L, O or U
+REF_PREFIX = "tw1-"
+REF_BITS = 130
+REF_PATTERN = re.compile(r"^tw1-[0-9A-HJKMNP-TV-Z]{27}$")
+
+
+def luhn32_check(body):
+    """Luhn mod N (N = 32) check character over the reference alphabet."""
+    factor, total = 2, 0
+    for ch in reversed(body):
+        addend = factor * REF_ALPHABET.index(ch)
+        factor = 1 if factor == 2 else 2
+        total += addend // 32 + addend % 32
+    return REF_ALPHABET[(32 - total % 32) % 32]
+
+
+def text_reference(statement_sha256_hex):
+    v = int(statement_sha256_hex, 16) >> (256 - REF_BITS)
+    body = "".join(REF_ALPHABET[(v >> (5 * (25 - i))) & 31] for i in range(26))
+    return REF_PREFIX + body + luhn32_check(body)
+
+
+def check_reference_string(ref, out):
+    """Returns True if `ref` is a well-formed reference with a correct check character."""
+    if not isinstance(ref, str) or not REF_PATTERN.match(ref):
+        out.add("reference-shape")  # wrong prefix or version, length, case, or a character outside the alphabet
+        return False
+    body = ref[len(REF_PREFIX):-1]
+    if luhn32_check(body) != ref[-1]:
+        out.add("reference-check")
+        return False
+    return True
 
 
 # ------------------------------------------------------------------ Ed25519, strict profile (design section 10.1)
@@ -1192,6 +1230,18 @@ def check_equivalence(obj, meta, out):
         out.add("extra-event-changed-result")
 
 
+def check_text_reference(obj, meta, out):
+    """Design 9.1: the reference names the statement of the referenced bundle (first 130 bits of statementSha256)."""
+    if not isinstance(obj, dict) or set(obj) != {"reference", "bundle"}:
+        out.add("fixture-shape")
+        return
+    if not check_reference_string(obj["reference"], out):
+        return
+    payload = b64d(load_fixture(obj["bundle"])["envelope"]["payload"])
+    if obj["reference"] != text_reference(sha(payload)):
+        out.add("reference-mismatch")
+
+
 def check_set(obj, meta, out):
     """Registrations by one producer: nonces must be fresh (design section 4.2). Only checkable across records."""
     if not isinstance(obj, dict) or set(obj) != {"setVersion", "registrations"} or obj["setVersion"] != SET_VERSION:
@@ -1258,6 +1308,12 @@ def check_rendering(ren, meta, out):
             t = times.get(m.group(1))
             if t is None or (int(m.group(2)), int(m.group(3)), m.group(4)) != (t["distinctRoots"], t["quorum"], t["notAfterAnyRoot"]):
                 out.add("key-bound-misattributed")
+        elif kind == "reference":
+            meta_bundle = strict_loads((HERE / ren["result"]).read_text(encoding="utf-8"))["fixture"]["bundle"]
+            if check_reference_string(m.group(1), out):
+                payload = b64d(load_fixture(meta_bundle)["envelope"]["payload"])
+                if m.group(1) != text_reference(sha(payload)):
+                    out.add("reference-mismatch")
         elif kind == "claimed" and m.group(1) != claimed:
             out.add("result-mismatch")
     for kid, t in times.items():
@@ -1458,7 +1514,7 @@ def check_object(kind, obj, meta):
 
 
 CHECKS.update({"verification-result": check_result, "report-link": check_link, "rendering": check_rendering,
-               "key-event": check_key_event, "registration-set": check_set, "result-equivalence": check_equivalence, "a2a-agent-card": check_card,
+               "key-event": check_key_event, "registration-set": check_set, "result-equivalence": check_equivalence, "text-reference": check_text_reference, "a2a-agent-card": check_card,
                "a2a-request": check_request, "a2a-task": check_task, "mcp-tool": check_mcp_tool})
 
 
@@ -1488,6 +1544,31 @@ def self_test():
     assert ed25519_verify(pub2, b"\x72", sig2)
     assert not ed25519_verify(pub2, b"\x73", sig2)
     assert pae("http://example.com/HelloWorld", b"hello world") == b"DSSEv1 29 http://example.com/HelloWorld 11 hello world"
+    # Design 9.1: the check character detects every single-character substitution, and every adjacent
+    # transposition except 0<->Z (values 0 and 31), the known Luhn mod N blind spot.
+    subs, subs_missed, trans, trans_missed = reference_error_detection()
+    assert subs_missed == 0, subs_missed
+    assert text_reference("ab" * 32) == "tw1-NENTQAXBNENTQAXBNENTQAXBNE4"
+
+
+def reference_error_detection():
+    """Exhaustive over 64 references: every single-character substitution and every adjacent transposition."""
+    subs = subs_missed = trans = trans_missed = 0
+    for n in range(64):
+        ref = text_reference(sha(f"reference detection sample {n}".encode()))
+        chars = list(ref[len(REF_PREFIX):])
+        for i in range(len(chars)):
+            for c in REF_ALPHABET:
+                if c != chars[i]:
+                    mutated = chars[:i] + [c] + chars[i + 1:]
+                    subs += 1
+                    subs_missed += luhn32_check("".join(mutated[:-1])) == mutated[-1]
+        for i in range(len(chars) - 1):
+            if chars[i] != chars[i + 1]:
+                mutated = chars[:i] + [chars[i + 1], chars[i]] + chars[i + 2:]
+                trans += 1
+                trans_missed += luhn32_check("".join(mutated[:-1])) == mutated[-1]
+    return subs, subs_missed, trans, trans_missed
 
 
 def wrong_implementation_self_test(verbose):

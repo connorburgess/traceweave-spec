@@ -1,6 +1,6 @@
 # Registration record: design draft-5
 
-Status: research draft, draft-5 of 2026-11-24. It resolves the "Draft-4 confirmation" section of the [draft-2 review](../reviews/registration-record-draft-2-review.md#draft-4-confirmation) (`2186523`), whose single blocking item is E1; §24 maps every item. Draft-4 (`dba683b`) resolved D1–D9 (§23), draft-3 (`5250eae`) B1–B3 and S1–S13 (§22), and draft-2 the first [review](../reviews/registration-record-review.md) (§21). Not normative. No schema, profile, vector or roadmap file is changed by this draft. **No external time-stamping service, calendar, log or witness was contacted.**
+Status: research draft, draft-5 of 2026-11-24, with the follow-up `d74d0eb` and **§9.1, the text reference, frozen as normative on 2026-11-24** (no statement-format change). It resolves the "Draft-4 confirmation" section of the [draft-2 review](../reviews/registration-record-draft-2-review.md#draft-4-confirmation) (`2186523`), whose single blocking item is E1; §24 maps every item. Draft-4 (`dba683b`) resolved D1–D9 (§23), draft-3 (`5250eae`) B1–B3 and S1–S13 (§22), and draft-2 the first [review](../reviews/registration-record-review.md) (§21). Not normative. No schema, profile, vector or roadmap file is changed by this draft. **No external time-stamping service, calendar, log or witness was contacted.**
 
 **What changed from draft-4:**
 - **E1** (§8). Key events are now evaluated in two passes with no fixed point: standing first, then disputes, which never feed back. A compromise report never disputes the rotation that gives its own signer standing. The evaluation cannot oscillate, and a non-settling implementation is an error, never a verdict.
@@ -408,6 +408,53 @@ The report body is closed (contract §6.2, §7). A report never embeds a registr
 
 This shows that the reference artifact compared in the report is byte-identical to content registered under the named key no later than that signature's bound. It shows nothing about the candidate's origin, about direction of copying, or about anything contract §8 forbids.
 
+### 9.1 Text reference (normative; frozen 2026-11-24)
+
+Pasted text cannot carry metadata, so a registrant can paste a short reference next to it. The format is frozen before any registration is shared, because a reference already printed next to someone's text cannot be re-derived later. This section changes **no** statement field: the reference is computed from `statementSha256`, the SHA-256 of the exact statement payload bytes (§9).
+
+**Format.** `tw1-` followed by 27 characters:
+1. **Prefix.** `tw1-`, in lower case. `tw` names the scheme and `1` its version. Any other prefix, version or separator is `reference-shape`.
+2. **Body.** 26 characters encoding the **first 130 bits** of `statementSha256`, most significant bit first, 5 bits per character.
+3. **Check.** One **Luhn mod 32** check character over the body, computed with the same alphabet (factor 2 on the rightmost body character, alternating).
+4. **Example.** For a `statementSha256` of `abab…ab` (32 bytes of `0xab`), the reference is `tw1-NENTQAXBNENTQAXBNENTQAXBNE4`.
+
+**Alphabet: Crockford base32, upper case only:** `0123456789ABCDEFGHJKMNPQRSTVWXYZ`.
+- **Why this alphabet.** It leaves out `I`, `L` and `O`, which are easily confused with `1` and `0`, and `U`, which avoids accidental words. It has no punctuation that Markdown, URLs or auto-linkers might change.
+- **Why not Crockford's own check.** Crockford's mod-37 check symbols (`*~$=U`) would bring such punctuation back, so the check character uses Luhn mod 32 over the same 32 symbols.
+- **Strict parsing.** A verifier accepts **only** the canonical upper-case form. Lower case, look-alike letters, missing or extra characters are `reference-shape`. An input tool may offer to upper-case and to map `I`/`L` to `1` and `O` to `0`, but only as a suggestion the person confirms, never silently before verification.
+
+**Error detection** (measured by the checker's self-test, exhaustively over 64 references):
+- all 53,568 single-character substitutions are detected;
+- of 1,595 adjacent transpositions, all but 3 are detected. All three swap an adjacent `0` and `Z`, the values 0 and 31: the known Luhn mod N blind spot.
+- A wrong check character is `reference-check`.
+
+**Margins at 130 bits.** Collision resistance here is a property of the reference, not of the record.
+- **Second preimage: about 2¹³⁰ work.** Finding another statement whose reference equals a given reference is out of reach. A verifier who fetches a bundle and finds its statement's first 130 bits equal to the reference has the statement the reference names.
+- **Collision: about 2⁶⁵ work, by birthday search.** That is not protection against a registrant who deliberately makes **two** statements with the same reference, in order to show different records to different people. Such equivocation costs about 2⁶⁵ SHA-256 evaluations. That is expensive for an individual but within reach of a large adversary. A verifier who must bind to exactly one record keeps the full `statementSha256`, as the report link does (§9), not only the reference.
+
+**What the reference carries.** **No content and no identity.**
+- **Content:** the statement contains a fresh 256-bit nonce (§4.2), so the reference cannot be computed from the content, and the content cannot be recovered from it.
+- **Identity:** no key, name or account is in it. Two references from one registrant are not linkable through the references themselves.
+- **Same statement, same reference:** a statement co-signed later by another key keeps its reference (`text-reference-cosigned` equals `text-reference-three-roots`). The reference names the statement, not a bundle or a signer.
+
+**Lookup, with no project-run service.**
+- **Where:** the verifier gets the bundle from a local file, or from a URL the registrant chose and printed next to the reference.
+- **Check:** the verifier recomputes the reference from the bundle's statement payload and requires equality; otherwise `reference-mismatch`. It then runs §10 against the pasted bytes.
+- **Exposure:**
+  - Fetching tells the host the verifier's IP address.
+  - Publishing a bundle discloses what §5 says.
+  - Anyone who copies the text can register it and paste their own reference (§11).
+  - A page that "verifies" a reference proves nothing; only the local check counts.
+
+**Rendering.** A `Reference: tw1-….` line is in the §11 allow-list. It must equal the reference of the bundle the result was computed from (`reference-mismatch`).
+
+**Fixtures:**
+- **Positives:** `text-reference-three-roots`, `-cosigned` and `-second-work`.
+- **Negatives:**
+  - `neg-reference-wrong-check`, `-transposed` (`reference-check`);
+  - `-too-short`, `-too-long`, `-wrong-prefix`, `-no-prefix`, `-lower-case`, `-look-alike-I`, `-look-alike-L`, `-look-alike-O`, `-letter-U` (`reference-shape`);
+  - `-other-statement`, `neg-rendering-reference-mismatch` (`reference-mismatch`).
+
 ## 10. Verification procedure
 
 **Inputs:**
@@ -467,6 +514,7 @@ A registration does not show **authorship**, **originality**, **ownership** or *
 | --- | --- |
 | `Simulated: time evidence is placeholder only.` | **Required as the first line** when the result says `simulated: true`, and forbidden otherwise (D6; `simulated-unmarked`) |
 | `Registration of <name> (SHA-256 <first 8 hex>…<last 4 hex>).` | subject |
+| `Reference: <tw1-reference>.` | §9.1; must equal the reference of the result's bundle |
 | `Content digest: matches the file you supplied.` / `does not match the file you supplied.` / `not checked, because no file was supplied.` | step 6 |
 | `Signature by key <key>: <valid/invalid/unknown key>; signer <trusted/not trusted/disputed by a key event/not evaluated> under your policy.` | steps 2, 4 |
 | `This record shows that the content existed, and that key <key> signed a statement naming it, no later than <T>.`, where T is that signature's `notAfterQuorum`; if quorum was not met, T is its `notAfterAnyRoot` and the line ends `… no later than <T> (according to one time source only).` | step 10, **one line per signature with a bound** |
@@ -613,7 +661,7 @@ See the [fixtures README](registration-fixtures/README.md). `check_registration.
 
 Placeholder time evidence is never verified (§6.5, S10).
 
-Failure codes: `authorship-claim`, `catalogue-does-not-open`, `catalogue-not-report-input`, `catalogue-unsalted`, `claimed-as-proved`, `duplicate-key`, `envelope-shape`, `evidence-shape`, `evidence-wrong-target`, `fixture-shape`, `forbidden-field`, `key-bound-misattributed`, `key-event-ignored`, `key-event-shape`, `key-identity-by-hint`, `log-time-claimed`, `nonce-invalid`, `nonce-reused`, `notice-missing`, `ordering-claim`, `pending-counted`, `placeholder-unlabelled`, `possession-mismatch`, `predicate-type`, `profile-mismatch`, `provenance-shape`, `quorum-miscount`, `rendering-unlisted-line`, `report-digest`, `result-mismatch`, `root-not-anchored`, `signature-invalid`, `single-verdict`, `statement-digest`, `statement-shape`, `subject-mismatch`, `subject-name`, `time-in-statement`, `trust-without-quorum`, `tsa-eku-invalid`, `tsa-imprint-mismatch`, `tsa-nonce-mismatch`, `tsa-signature-invalid`, `tsa-signing-cert-mismatch`, `simulated-unmarked`, `extra-event-changed-result`, `key-event-signatures`; for §19: `content-on-wire`, `a2a-shape`, `mcp-tool-shape`, `witness-shape`.
+Failure codes: `authorship-claim`, `catalogue-does-not-open`, `catalogue-not-report-input`, `catalogue-unsalted`, `claimed-as-proved`, `duplicate-key`, `envelope-shape`, `evidence-shape`, `evidence-wrong-target`, `fixture-shape`, `forbidden-field`, `key-bound-misattributed`, `key-event-ignored`, `key-event-shape`, `key-identity-by-hint`, `log-time-claimed`, `nonce-invalid`, `nonce-reused`, `notice-missing`, `ordering-claim`, `pending-counted`, `placeholder-unlabelled`, `possession-mismatch`, `predicate-type`, `profile-mismatch`, `provenance-shape`, `quorum-miscount`, `rendering-unlisted-line`, `report-digest`, `result-mismatch`, `root-not-anchored`, `signature-invalid`, `single-verdict`, `statement-digest`, `statement-shape`, `subject-mismatch`, `subject-name`, `time-in-statement`, `trust-without-quorum`, `tsa-eku-invalid`, `tsa-imprint-mismatch`, `tsa-nonce-mismatch`, `tsa-signature-invalid`, `tsa-signing-cert-mismatch`, `simulated-unmarked`, `extra-event-changed-result`, `key-event-signatures`, `reference-shape`, `reference-check`, `reference-mismatch`; for §19: `content-on-wire`, `a2a-shape`, `mcp-tool-shape`, `witness-shape`.
 
 ## 19. Registration at creation time and agent interoperability
 
@@ -768,9 +816,10 @@ Run on 2026-11-24 on `roadmap-v2` (parent `2186523`), over this draft, lane 13 a
   Only the local `openssl` was used; no external service was contacted.
 - **`check_registration.py`** (draft-5):
   - the Ed25519 and PAE self-tests pass;
-  - 73 positive fixtures give no code, and each of the 96 negative fixtures gives exactly its expected codes (after the draft-5 confirmation follow-up);
+  - 76 positive fixtures give no code, and each of the 109 negative fixtures gives exactly its expected codes (after the draft-5 follow-up and §9.1);
   - all 33 wrong-implementation cases behave as required;
-  - all 51 codes appear in this document and have a negative fixture.
+  - all 54 codes appear in this document and have a negative fixture;
+  - the §9.1 check character detects every one of 53,568 single-character substitutions (the self-test asserts it).
 - **`enumerate_key_events.py`** (60 s, after the follow-up):
   - 1,010,100 sequences of length 1–3 exhaustively, and 200,000 sampled sequences of length 4, over 100 symbols: **0 violations** of the 13 invariants;
   - the loading sample, 300 sequences as signed bundles, now also with prepended foreign signatures: 0 mismatches;
