@@ -1,0 +1,35 @@
+{
+  "fixtureVersion": "traceweave-intoto-adapter-fixture-v1",
+  "id": "reject-authorship-smuggling-content-kind",
+  "kind": "registration",
+  "description": "predicate.contentKind smuggles authorship wording ('authored by Bob').",
+  "notice": "Illustrative fixture for Traceweave M4.5 in-toto Statement v1 / DSSE adapter. Public test-only keys and synthetic nonces; registers nothing.",
+  "envelope": {
+    "payloadType": "application/vnd.in-toto+json",
+    "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2F0YWxvZ3VlIjp7InByb2ZpbGUiOnsiY29uZmlnU2hhMjU2IjoiZGZiYzVmZTM1MTdlOWRhNjUxODljZjJlZjMyYzQ2NTViNWVjNjYyNDQxZjJlNzFmNTA4NTQzYTBhNWM4ZjdiMiIsImlkIjoiZ28tdG9rZW5zIiwidmVyc2lvbiI6ImRyYWZ0LTEifSwic2NoZW1lIjoic2hhMjU2LXNhbHRlZC1jYXRhbG9ndWUtdjEiLCJzaGEyNTYiOiJjMTRmY2Y2NGFmMDAwZjg4N2YzNzIzNGJiMGQzOTQzN2NjZjgwYmE5YmQ2ZDA3MjE2YmE1ZmVhODJiNjMzYjE1In0sImNsYWltcyI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTIwVDA5OjAwOjAwWiJ9LCJjb250ZW50S2luZCI6ImF1dGhvcmVkIGJ5IEJvYiIsImltcGxlbWVudGF0aW9uIjp7ImNvbW1pdCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJuYW1lIjoiYnVpbGRfZml4dHVyZXMucHkiLCJ2ZXJzaW9uIjoiZHJhZnQtNSJ9LCJub25jZSI6ImJlMGFjODM0Y2NiOWFiZTdjYmI0YTQ5YWFmM2M1YWM5MzA5ZTRjM2FmMzE0MDM4ZDE2MmVkN2EyODYxYzMyMzAiLCJwb3NzZXNzaW9uIjpbeyJzY2hlbWUiOiJzaGEyNTYtc2FsdGVkLXBvc3Nlc3Npb24tdjEiLCJzaGEyNTYiOiIwMDg2OWUxZGIxNzZhNDY2NDk4YWRjOWM0YTEwMDE5YjYwNjdhMjU0YzU4NjljYzQwOGI3MTQxMzJhNzJhODBmIiwic3ViamVjdEluZGV4IjowfV0sInJlZ2lzdHJhdGlvblZlcnNpb24iOiJ0cmFjZXdlYXZlLXJlZ2lzdHJhdGlvbi1kcmFmdC01Iiwic3BlY0NvbW1pdCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAifSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vdHJhY2V3ZWF2ZS5vcmcvcHJlZGljYXRlL3JlZ2lzdHJhdGlvbi9kcmFmdC01Iiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6Ijk3NGM4ZDBhZDE0NGMzYzM5ZTlmMWNlNDEwNzQwZjQ0OWY2MjNiZmZkMjljNzUwZThlZDNiZDY4NjQwYjY5N2MifSwibmFtZSI6InN1bS5nbyJ9XX0=",
+    "signatures": [
+      {
+        "keyid": "4c35482fb77b4090",
+        "sig": "ocvhCaz5BMpPoQX0vwF4ZtOwEuhB2Df2T4/IkzJsY53T2iMIQrqzppHBV2wGAOkDy9i4Z7udbdneqNinq+azCw=="
+      }
+    ]
+  },
+  "verificationMaterial": {
+    "publicKeys": [
+      {
+        "keyid": "4c35482fb77b4090",
+        "alg": "ed25519",
+        "publicKeyHex": "fe4c248c7b86540caa357783c3d9e42ae5963f0e0d77886aaf8b3445ffbe036c"
+      }
+    ]
+  },
+  "trustedKeys": [
+    "4c35482fb77b4090e713bf7a409382236d83d9a743f4ec46e92b4e61ae3d7cbd"
+  ],
+  "expect": {
+    "code": "authorship-claim",
+    "alsoReported": [
+      "statement-shape"
+    ]
+  }
+}

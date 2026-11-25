@@ -1,0 +1,32 @@
+{
+  "fixtureVersion": "traceweave-intoto-adapter-fixture-v1",
+  "id": "reject-unknown-content-kind",
+  "kind": "registration",
+  "description": "Registration predicate.contentKind uses a value outside the closed registration allow-list.",
+  "notice": "Illustrative fixture for Traceweave M4.5 in-toto Statement v1 / DSSE adapter. Public test-only keys and synthetic nonces; registers nothing.",
+  "envelope": {
+    "payloadType": "application/vnd.in-toto+json",
+    "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2F0YWxvZ3VlIjp7InByb2ZpbGUiOnsiY29uZmlnU2hhMjU2IjoiZGZiYzVmZTM1MTdlOWRhNjUxODljZjJlZjMyYzQ2NTViNWVjNjYyNDQxZjJlNzFmNTA4NTQzYTBhNWM4ZjdiMiIsImlkIjoiZ28tdG9rZW5zIiwidmVyc2lvbiI6ImRyYWZ0LTEifSwic2NoZW1lIjoic2hhMjU2LXNhbHRlZC1jYXRhbG9ndWUtdjEiLCJzaGEyNTYiOiJjMTRmY2Y2NGFmMDAwZjg4N2YzNzIzNGJiMGQzOTQzN2NjZjgwYmE5YmQ2ZDA3MjE2YmE1ZmVhODJiNjMzYjE1In0sImNsYWltcyI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTIwVDA5OjAwOjAwWiJ9LCJjb250ZW50S2luZCI6ImV4ZWN1dGFibGUiLCJpbXBsZW1lbnRhdGlvbiI6eyJjb21taXQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIiwibmFtZSI6ImJ1aWxkX2ZpeHR1cmVzLnB5IiwidmVyc2lvbiI6ImRyYWZ0LTUifSwibm9uY2UiOiJiZTBhYzgzNGNjYjlhYmU3Y2JiNGE0OWFhZjNjNWFjOTMwOWU0YzNhZjMxNDAzOGQxNjJlZDdhMjg2MWMzMjMwIiwicG9zc2Vzc2lvbiI6W3sic2NoZW1lIjoic2hhMjU2LXNhbHRlZC1wb3NzZXNzaW9uLXYxIiwic2hhMjU2IjoiMDA4NjllMWRiMTc2YTQ2NjQ5OGFkYzljNGExMDAxOWI2MDY3YTI1NGM1ODY5Y2M0MDhiNzE0MTMyYTcyYTgwZiIsInN1YmplY3RJbmRleCI6MH1dLCJyZWdpc3RyYXRpb25WZXJzaW9uIjoidHJhY2V3ZWF2ZS1yZWdpc3RyYXRpb24tZHJhZnQtNSIsInNwZWNDb21taXQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIn0sInByZWRpY2F0ZVR5cGUiOiJodHRwczovL3RyYWNld2VhdmUub3JnL3ByZWRpY2F0ZS9yZWdpc3RyYXRpb24vZHJhZnQtNSIsInN1YmplY3QiOlt7ImRpZ2VzdCI6eyJzaGEyNTYiOiI5NzRjOGQwYWQxNDRjM2MzOWU5ZjFjZTQxMDc0MGY0NDlmNjIzYmZmZDI5Yzc1MGU4ZWQzYmQ2ODY0MGI2OTdjIn0sIm5hbWUiOiJzdW0uZ28ifV19",
+    "signatures": [
+      {
+        "keyid": "4c35482fb77b4090",
+        "sig": "t0VK7dOP1cupdoAwQL6BvR6hQUKrquLKm6jLUTrXpZSIl/bIZ33BB91VTO9Z8avRcKwo6UaAPL4c1FjFxT6yCg=="
+      }
+    ]
+  },
+  "verificationMaterial": {
+    "publicKeys": [
+      {
+        "keyid": "4c35482fb77b4090",
+        "alg": "ed25519",
+        "publicKeyHex": "fe4c248c7b86540caa357783c3d9e42ae5963f0e0d77886aaf8b3445ffbe036c"
+      }
+    ]
+  },
+  "trustedKeys": [
+    "4c35482fb77b4090e713bf7a409382236d83d9a743f4ec46e92b4e61ae3d7cbd"
+  ],
+  "expect": {
+    "code": "statement-shape"
+  }
+}

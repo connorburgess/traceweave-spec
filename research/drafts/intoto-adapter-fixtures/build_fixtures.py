@@ -356,13 +356,63 @@ def main() -> int:
         s, "authorship-claim",
     ))
 
-    # 11. Authorship/origin claim smuggling by value (claims.aiUse.tool)
+    # 11. Authorship/origin claim smuggling by value (claims.aiUse.tool caught by tool_has_origin_claim)
     s = copy.deepcopy(reg_ai_stmt)
-    s["predicate"]["claims"]["aiUse"]["tool"] = "human-written-by-alice"
+    s["predicate"]["claims"]["aiUse"]["tool"] = "Penned-by-Bob"
     reject_list.append(reject_signed_stmt(
         "reject-authorship-smuggling-value", "registration",
-        "claims.aiUse.tool smuggles human-authorship wording.",
+        "claims.aiUse.tool smuggles human-origin wording ('Penned-by-Bob').",
         s, "authorship-claim",
+    ))
+
+    # 11b. Authorship smuggling in core subject[0].name
+    s = copy.deepcopy(core_stmt)
+    s["subject"][0]["name"] = "written by Alice"
+    reject_list.append(reject_signed_stmt(
+        "reject-authorship-smuggling-subject-name", "catalogue",
+        "Core subject[0].name smuggles human-authorship wording ('written by Alice').",
+        s, "authorship-claim",
+    ))
+
+    # 11c. Authorship smuggling in registration predicate.implementation.name
+    s = copy.deepcopy(reg_stmt)
+    s["predicate"]["implementation"]["name"] = "proves authorship"
+    reject_list.append(reject_signed_stmt(
+        "reject-authorship-smuggling-impl-name", "registration",
+        "predicate.implementation.name smuggles authorship wording ('proves authorship').",
+        s, "authorship-claim",
+    ))
+
+    # 11d. Authorship smuggling in registration predicate.contentKind
+    s = copy.deepcopy(reg_stmt)
+    s["predicate"]["contentKind"] = "authored by Bob"
+    reject_list.append(reject_signed_stmt(
+        "reject-authorship-smuggling-content-kind", "registration",
+        "predicate.contentKind smuggles authorship wording ('authored by Bob').",
+        s, "authorship-claim",
+        also=["statement-shape"],
+    ))
+
+    # 11e. Unrecognized contentKind in registration mode (closed allow-list)
+    s = copy.deepcopy(reg_stmt)
+    s["predicate"]["contentKind"] = "executable"
+    reject_list.append(reject_signed_stmt(
+        "reject-unknown-content-kind", "registration",
+        "Registration predicate.contentKind uses a value outside the closed registration allow-list.",
+        s, "statement-shape",
+    ))
+
+    # 11f. Permuted predicate.possession subjectIndex ordering
+    s = copy.deepcopy(reg_ai_stmt)
+    s["predicate"]["possession"] = list(reversed(s["predicate"]["possession"]))
+    reject_list.append(reject_signed_stmt(
+        "reject-permuted-possession-index", "registration",
+        "Multi-subject registration predicate.possession entries appear out of canonical subjectIndex order.",
+        s, "statement-shape",
+        artifacts=[
+            {"subjectIndex": 0, "source": sum_go_src},
+            {"subjectIndex": 1, "source": host_go_src},
+        ],
     ))
 
     # 12. Time claim smuggling (provedAt inside predicate)

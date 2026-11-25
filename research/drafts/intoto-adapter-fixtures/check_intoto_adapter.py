@@ -42,6 +42,7 @@ CATALOGUE_DOMAIN = b"Traceweave-Catalogue-v0.1\x00"
 POSSESSION_DOMAIN = b"Traceweave-Possession-v1\x00"
 
 CORE_CONTENT_KINDS = {"code", "text", "image", "audio", "binary", "other"}
+REG_CONTENT_KINDS = {"text", "source-code", "image", "other"}
 AI_USE_DECLARED = {"generated", "modified", "no-generative-ai"}
 
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
@@ -441,7 +442,14 @@ def adapter_encode(record: dict) -> dict:
 
 # ------------------------------------------------------------------ validation
 
-def _scan_smuggling(node, in_predicate: bool, reg_mode: bool, codes: set[str]) -> None:
+def _scan_smuggling(
+    node,
+    in_predicate: bool,
+    reg_mode: bool,
+    codes: set[str],
+    in_subject: bool = False,
+    in_subject_name: bool = False,
+) -> None:
     if isinstance(node, dict):
         for key, value in node.items():
             if key.lower() in AUTHORSHIP_KEYS:
@@ -451,12 +459,15 @@ def _scan_smuggling(node, in_predicate: bool, reg_mode: bool, codes: set[str]) -
                     codes.add("time-in-statement")
                 if key in FORBIDDEN_KEYS:
                     codes.add("forbidden-field")
-            _scan_smuggling(value, in_predicate or key == "predicate", reg_mode, codes)
+            next_pred = in_predicate or key == "predicate"
+            next_subj = in_subject or (not in_predicate and key == "subject")
+            next_subj_name = in_subject and not in_predicate and key == "name"
+            _scan_smuggling(value, next_pred, reg_mode, codes, next_subj, next_subj_name)
     elif isinstance(node, list):
         for item in node:
-            _scan_smuggling(item, in_predicate, reg_mode, codes)
-    elif isinstance(node, str) and in_predicate:
-        if SMUGGLED_VALUE_PHRASES.search(node):
+            _scan_smuggling(item, in_predicate, reg_mode, codes, in_subject, in_subject_name)
+    elif isinstance(node, str) and (in_predicate or in_subject_name):
+        if SMUGGLED_VALUE_PHRASES.search(node) or AUTHORSHIP_DENY.search(node):
             codes.add("authorship-claim")
 
 
@@ -589,7 +600,7 @@ def validate_statement(st, artifacts: list[dict], cat_opening: dict | None, code
         if (
             pred["registrationVersion"] != REG_VERSION
             or not isinstance(pred["contentKind"], str)
-            or not pred["contentKind"]
+            or pred["contentKind"] not in REG_CONTENT_KINDS
             or not isinstance(pred["nonce"], str)
             or not HEX64.fullmatch(pred["nonce"])
             or pred["nonce"] == "0" * 64
@@ -601,22 +612,18 @@ def validate_statement(st, artifacts: list[dict], cat_opening: dict | None, code
         if not isinstance(poss, list) or len(poss) != len(subjects):
             codes.add("statement-shape")
         else:
-            seen_idx = set()
-            for entry in poss:
+            for i, entry in enumerate(poss):
                 if _check_keys(entry, {"subjectIndex", "scheme", "sha256"}, set(), codes, ignored):
                     idx = entry["subjectIndex"]
                     if (
                         not isinstance(idx, int)
                         or isinstance(idx, bool)
-                        or not (0 <= idx < len(subjects))
-                        or idx in seen_idx
+                        or idx != i
                         or entry["scheme"] != POSSESSION_SCHEME
                         or not isinstance(entry["sha256"], str)
                         or not HEX64.fullmatch(entry["sha256"])
                     ):
                         codes.add("statement-shape")
-                    else:
-                        seen_idx.add(idx)
         impl = pred["implementation"]
         if _check_keys(impl, {"name", "version", "commit"}, set(), codes, ignored):
             if (
@@ -667,6 +674,15 @@ def validate_statement(st, artifacts: list[dict], cat_opening: dict | None, code
                 cat_sha = cat.get("sha256")
 
     # Artifact & possession bindings
+    poss_by_idx = {}
+    if reg_mode and isinstance(pred.get("possession"), list):
+        for entry in pred["possession"]:
+            if (
+                isinstance(entry, dict)
+                and isinstance(entry.get("subjectIndex"), int)
+                and not isinstance(entry.get("subjectIndex"), bool)
+            ):
+                poss_by_idx.setdefault(entry["subjectIndex"], entry)
     for art in artifacts:
         idx = art.get("subjectIndex")
         if not isinstance(idx, int) or not (0 <= idx < len(subjects)):
@@ -675,10 +691,10 @@ def validate_statement(st, artifacts: list[dict], cat_opening: dict | None, code
         raw_bytes = load_source(art["source"])
         if sha256_hex(raw_bytes) != subjects[idx]["digest"]["sha256"]:
             codes.add("subject-digest-mismatch")
-        if reg_mode and isinstance(pred.get("possession"), list) and idx < len(pred["possession"]):
+        if reg_mode and idx in poss_by_idx:
             if HEX64.fullmatch(str(pred.get("nonce", ""))):
                 expected_poss = possession_digest(pred["nonce"], raw_bytes)
-                if pred["possession"][idx].get("sha256") != expected_poss:
+                if poss_by_idx[idx].get("sha256") != expected_poss:
                     codes.add("possession-mismatch")
 
     # Catalogue commitment opening check if provided
@@ -867,6 +883,48 @@ def run_self_test(accept_fixtures: list[dict]) -> list[str]:
         got_codes, _ = check_fixture(mut_fx)
         if "signature-invalid" not in got_codes:
             errors.append(f"{fx['id']}: signature over base64 text instead of decoded bytes was accepted")
+
+    # 4. Ed25519 strictness self-tests (S >= Q, non-canonical R, small-order A) and hint-only trust rejection.
+    seed = hashlib.sha256(b"traceweave intoto adapter ed25519 self-test").digest()
+    pub = ed25519_public(seed)
+    kid = sha256_hex(pub)[:16]
+    base_fx = copy.deepcopy(accept_fixtures[0])
+    raw_msg = dsse_pae(DSSE_PAYLOAD_TYPE.encode("utf-8"), b64d(base_fx["envelope"]["payload"]))
+    good_sig = ed25519_sign(seed, raw_msg)
+
+    # (a) Malleated S = s + Q (>= Q)
+    s_val = int.from_bytes(good_sig[32:], "little") + Q
+    mal_sig = good_sig[:32] + s_val.to_bytes(32, "little")
+    fx_s = copy.deepcopy(base_fx)
+    fx_s["envelope"]["signatures"] = [{"keyid": kid, "sig": base64.b64encode(mal_sig).decode("ascii")}]
+    fx_s["verificationMaterial"]["publicKeys"] = [{"keyid": kid, "alg": "ed25519", "publicKeyHex": pub.hex()}]
+    fx_s["trustedKeys"] = [sha256_hex(pub)]
+    if "signature-invalid" not in check_fixture(fx_s)[0]:
+        errors.append("Ed25519 S >= Q malleated signature was accepted")
+
+    # (b) Non-canonical R (x = 0, y = 1, sign bit set)
+    noncan_r = (1 | (1 << 255)).to_bytes(32, "little") + bytes(32)
+    fx_r = copy.deepcopy(fx_s)
+    fx_r["envelope"]["signatures"] = [{"keyid": kid, "sig": base64.b64encode(noncan_r).decode("ascii")}]
+    if "signature-invalid" not in check_fixture(fx_r)[0]:
+        errors.append("Ed25519 non-canonical R was accepted")
+
+    # (c) Small-order public key A (identity point, R = A, S = 0)
+    small_pub = (1).to_bytes(32, "little")
+    small_kid = sha256_hex(small_pub)[:16]
+    small_sig = small_pub + bytes(32)
+    fx_a = copy.deepcopy(base_fx)
+    fx_a["envelope"]["signatures"] = [{"keyid": small_kid, "sig": base64.b64encode(small_sig).decode("ascii")}]
+    fx_a["verificationMaterial"]["publicKeys"] = [{"keyid": small_kid, "alg": "ed25519", "publicKeyHex": small_pub.hex()}]
+    fx_a["trustedKeys"] = [sha256_hex(small_pub)]
+    if "signature-invalid" not in check_fixture(fx_a)[0]:
+        errors.append("Ed25519 small-order public key A was accepted")
+
+    # (d) 16-hex hint in trustedKeys must be rejected
+    fx_hint = copy.deepcopy(base_fx)
+    fx_hint["trustedKeys"] = [base_fx["verificationMaterial"]["publicKeys"][0]["keyid"]]
+    if "fixture-shape" not in check_fixture(fx_hint)[0]:
+        errors.append("16-hex keyid hint in trustedKeys was not rejected")
 
     return errors
 

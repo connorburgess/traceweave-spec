@@ -11,11 +11,11 @@ Illustrative accept and reject fixtures for core gate **M4.5**, exercising the r
   - `accept-catalogue-core-urlsafe.json`: core catalogue-commitment statement with optional claimed `recordedAt`, pretty-printed non-canonical payload bytes (verifying PAE signs exact decoded bytes, not reserialized JSON), and URL-safe base64 DSSE encoding.
   - `accept-registration-draft5.json`: registration statement (`registration/draft-5`) over `sum.go` (`test-vectors/matching/extraction-go.json#mv-go-sum`) with possession digest and salted catalogue commitment.
   - `accept-registration-ai-use.json`: multi-subject registration statement (`sum.go`, `host.go`) with optional self-declared `claims.aiUse` and omitted `catalogue`.
-- [reject/](reject/) — 21 distinct negative fixtures covering:
-  - Statement/adapter structure: `reject-wrong-type`, `reject-wrong-predicate-type`, `reject-missing-statement-field`, `reject-missing-predicate-field`, `reject-extra-field-statement`, `reject-extra-field-predicate`, `reject-core-multiple-subjects`, `reject-malformed-subject-digest`.
+- [reject/](reject/) — 26 distinct negative fixtures covering:
+  - Statement/adapter structure: `reject-wrong-type`, `reject-wrong-predicate-type`, `reject-missing-statement-field`, `reject-missing-predicate-field`, `reject-extra-field-statement`, `reject-extra-field-predicate`, `reject-core-multiple-subjects`, `reject-malformed-subject-digest`, `reject-unknown-content-kind`, `reject-permuted-possession-index`.
   - DSSE & JSON strictness: `reject-invalid-base64`, `reject-wrong-dsse-payload-type`, `reject-duplicate-json-key`, `reject-signature-over-base64`, `reject-tampered-payload`, `reject-missing-key-hint`, `reject-empty-signatures`.
   - Trust & binding separation: `reject-subject-digest-mismatch` (valid signature, mismatched artifact digest), `reject-untrusted-key` (valid signature, key absent from `trustedKeys`).
-  - Smuggling protections: `reject-authorship-smuggling-key`, `reject-authorship-smuggling-value`, `reject-time-claim-smuggling`, `reject-forbidden-secret-field`.
+  - Smuggling protections: `reject-authorship-smuggling-key`, `reject-authorship-smuggling-value`, `reject-authorship-smuggling-subject-name`, `reject-authorship-smuggling-impl-name`, `reject-authorship-smuggling-content-kind`, `reject-time-claim-smuggling`, `reject-forbidden-secret-field`.
 - [check_intoto_adapter.py](check_intoto_adapter.py) — standard-library-only checker (Python 3.11+) wired into [tools/validate.py](../../../tools/validate.py). Runs strict JSON parsing, DSSE PAE + strict RFC 8032 Ed25519 verification, full-key trust verification, schema/smuggling checks, subject/possession/catalogue bindings, canonical RFC 8785 / exact-byte round-tripping, required/extra-field self-tests, and reject-code coverage checks.
 - [build_fixtures.py](build_fixtures.py) — deterministic fixture generator.
 
