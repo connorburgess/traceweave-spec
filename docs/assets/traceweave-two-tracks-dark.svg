@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="492" viewBox="0 0 960 492" role="img" aria-labelledby="tw-tracks-title tw-tracks-desc">
+  <title id="tw-tracks-title">Traceweave separates candidate similarity from cryptographic provenance</title>
+  <desc id="tw-tracks-desc">Two side-by-side tracks. Track A is Candidate Similarity (non-authoritative): deterministic profile extraction, local catalogue comparison, byte-span localization, and proposed embedded-mark research. Track B is Offline-First Cryptographic Registration (draft-5): DSSE/in-toto statements, tw1- references, salted private catalogue commitments, verifier-local trust policy, and optional time evidence. A bottom boundary bar clarifies that neither track proves ownership, infringement, or model training.</desc>
+
+  <!-- Sheet background -->
+  <rect x="0.5" y="0.5" width="959" height="491" rx="4" fill="#0D1014" stroke="#2E3540" stroke-width="1"/>
+
+  <!-- Header -->
+  <text x="28" y="30" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="500" letter-spacing="1.1" fill="#9DA5B2">FIG 02 // SEPARATING THE THREE QUESTIONS INTO TWO TRACKS</text>
+  <text x="932" y="30" text-anchor="end" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="500" letter-spacing="0.8" fill="#9DA5B2">EPISTEMIC BOUNDARY</text>
+  <line x1="28" y1="42" x2="932" y2="42" stroke="#2E3540" stroke-width="1"/>
+
+  <!-- LEFT PANEL: TRACK A -->
+  <rect x="28" y="58" width="440" height="314" rx="2" fill="#1C212A" stroke="#434C5C" stroke-width="1"/>
+  <rect x="28" y="58" width="440" height="42" rx="2" fill="#151920"/>
+  <line x1="28" y1="100" x2="468" y2="100" stroke="#2E3540" stroke-width="1"/>
+  <text x="46" y="84" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="600" letter-spacing="0.8" fill="#F2F4F7">TRACK A · CANDIDATE SIMILARITY</text>
+  <rect x="330" y="69" width="122" height="20" rx="2" fill="#2E2311" stroke="#E8B04B" stroke-width="0.9"/>
+  <text x="391" y="83" text-anchor="middle" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#E8B04B">NON-AUTHORITATIVE</text>
+
+  <text x="46" y="128" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#F2F4F7">Question: Does another artifact contain similar material?</text>
+  <line x1="46" y1="142" x2="450" y2="142" stroke="#2E3540" stroke-width="1"/>
+
+  <!-- Track A rows -->
+  <rect x="46" y="156" width="6" height="6" fill="#9DA5B2"/>
+  <text x="64" y="163" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#F2F4F7">Deterministic profile extraction</text>
+  <text x="64" y="180" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#9DA5B2">go-tokens · rs-tokens · ts-tokens · py-tokens · text-plain</text>
+
+  <rect x="46" y="198" width="6" height="6" fill="#9DA5B2"/>
+  <text x="64" y="205" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#F2F4F7">Local catalogue &amp; boilerplate suppression</text>
+  <text x="64" y="222" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9DA5B2">Separate fragment containment &amp; whole-file similarity fields</text>
+
+  <rect x="46" y="240" width="6" height="6" fill="#9DA5B2"/>
+  <text x="64" y="247" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#F2F4F7">Localized byte spans &amp; review packets</text>
+  <text x="64" y="264" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9DA5B2">Origin/dependency links live outside the comparison report</text>
+
+  <rect x="46" y="282" width="6" height="6" fill="#9DA5B2"/>
+  <text x="64" y="289" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#F2F4F7">Embedded marks (research track)</text>
+  <text x="64" y="306" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9DA5B2">Finding aid only; not standardized and never proves origin</text>
+
+  <!-- Track A footer verdict -->
+  <rect x="46" y="326" width="404" height="30" rx="2" fill="#2E2311" stroke="#E8B04B" stroke-width="0.9"/>
+  <text x="248" y="345" text-anchor="middle" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="500" fill="#E8B04B">OUTPUT: Candidate overlap &amp; spans for human review</text>
+
+  <!-- RIGHT PANEL: TRACK B -->
+  <rect x="492" y="58" width="440" height="314" rx="2" fill="#1C212A" stroke="#34E5BC" stroke-width="1.2"/>
+  <rect x="492" y="58" width="440" height="42" rx="2" fill="#151920"/>
+  <line x1="492" y1="100" x2="932" y2="100" stroke="#2E3540" stroke-width="1"/>
+  <text x="510" y="84" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="600" letter-spacing="0.8" fill="#F2F4F7">TRACK B · CRYPTOGRAPHIC REGISTRATION</text>
+  <rect x="812" y="69" width="104" height="20" rx="2" fill="#0F2B28" stroke="#34E5BC" stroke-width="0.9"/>
+  <text x="864" y="83" text-anchor="middle" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#34E5BC">DRAFT-5 (M4)</text>
+
+  <text x="510" y="128" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#F2F4F7">Question: Which exact artifact does a record describe?</text>
+  <line x1="510" y1="142" x2="914" y2="142" stroke="#2E3540" stroke-width="1"/>
+
+  <!-- Track B rows -->
+  <rect x="510" y="156" width="6" height="6" fill="#34E5BC"/>
+  <text x="528" y="163" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#F2F4F7">Offline-first DSSE / in-toto statements</text>
+  <text x="528" y="180" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#9DA5B2">traceweave-registration-draft-5 · compact tw1- references</text>
+
+  <rect x="510" y="198" width="6" height="6" fill="#34E5BC"/>
+  <text x="528" y="205" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#F2F4F7">Salted private catalogue commitments</text>
+  <text x="528" y="222" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9DA5B2">Commit to a catalogue without publishing its contents</text>
+
+  <rect x="510" y="240" width="6" height="6" fill="#34E5BC"/>
+  <text x="528" y="247" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#F2F4F7">Verifier-local trust policy &amp; key events</text>
+  <text x="528" y="264" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9DA5B2">No global authority; each verifier controls trusted keys</text>
+
+  <rect x="510" y="282" width="6" height="6" fill="#34E5BC"/>
+  <text x="528" y="289" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#F2F4F7">Optional independent time evidence</text>
+  <text x="528" y="306" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9DA5B2">RFC 3161 / OpenTimestamps adapters kept strictly optional</text>
+
+  <!-- Track B footer verdict -->
+  <rect x="510" y="326" width="404" height="30" rx="2" fill="#0F2B28" stroke="#34E5BC" stroke-width="0.9"/>
+  <text x="712" y="345" text-anchor="middle" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="500" fill="#34E5BC">OUTPUT: Authenticated record under local trust policy</text>
+
+  <!-- BOTTOM EPISTEMIC BOUNDARY BAR -->
+  <rect x="28" y="388" width="904" height="80" rx="2" fill="#331719" stroke="#F27478" stroke-width="1"/>
+  <rect x="28" y="388" width="6" height="80" fill="#F27478"/>
+  <text x="48" y="413" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="600" letter-spacing="0.8" fill="#F27478">WHAT NEITHER TRACK CLAIMS</text>
+  <text x="48" y="436" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#F2F4F7">Cryptographic verification authenticates a record; it does not make a similarity claim true or establish</text>
+  <text x="48" y="456" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#F2F4F7">legal ownership, copyright infringement, or model training.</text>
+</svg>

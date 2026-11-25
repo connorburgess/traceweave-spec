@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="tw-banner-title tw-banner-desc">
+  <title id="tw-banner-title">Traceweave — Open Specification for Local-First Content Fingerprinting and Cryptographic Provenance</title>
+  <desc id="tw-banner-desc">Editorial Evidence Ledger banner showing the Traceweave mark, title, tagline, and an archival verification hash grid with a single signal-green matched thread.</desc>
+
+  <!-- Outer ledger sheet -->
+  <rect x="0.5" y="0.5" width="1199" height="359" rx="4" fill="#F9F9F7" stroke="#D2D4D8" stroke-width="1"/>
+
+  <!-- Subtle background vertical ledger rules -->
+  <g stroke="#ECECE8" stroke-width="1">
+    <line x1="60" y1="52" x2="60" y2="308"/>
+    <line x1="816" y1="52" x2="816" y2="308"/>
+    <line x1="1140" y1="52" x2="1140" y2="308"/>
+  </g>
+
+  <!-- Top & bottom hairline rules -->
+  <line x1="24" y1="52" x2="1176" y2="52" stroke="#D2D4D8" stroke-width="1"/>
+  <line x1="24" y1="308" x2="1176" y2="308" stroke="#D2D4D8" stroke-width="1"/>
+
+  <!-- Print registration corner crops -->
+  <g stroke="#50555E" stroke-width="1.2" fill="none">
+    <path d="M16 28 V16 H28"/>
+    <path d="M1172 16 H1184 V28"/>
+    <path d="M16 332 V344 H28"/>
+    <path d="M1172 344 H1184 V332"/>
+  </g>
+
+  <!-- Top ledger header metadata -->
+  <text x="60" y="34" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="500" letter-spacing="1.2" fill="#50555E">TRACEWEAVE SPECIFICATION // 0.1.0-DRAFT.1</text>
+  <rect x="976" y="20" width="164" height="22" rx="2" fill="#DCF2EC" stroke="#096B56" stroke-width="1"/>
+  <text x="1058" y="35" text-anchor="middle" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="500" letter-spacing="0.8" fill="#096B56">OPEN · LOCAL-FIRST</text>
+
+  <!-- Left column: Official mark + wordmark + tagline -->
+  <g transform="translate(60 102) scale(2.25)">
+    <path d="M2 2H8V4H4V8H2V2ZM24 2H30V8H28V4H24V2ZM2 24H4V28H8V30H2V24ZM28 24H30V30H24V28H28V24Z" fill="#111317"/>
+    <rect x="8" y="8" width="6" height="6" fill="#111317"/>
+    <rect x="18" y="18" width="6" height="6" fill="#111317"/>
+    <path fill-rule="evenodd" d="M8 18H14V24H8V18ZM10 20V22H12V20H10Z" fill="#111317"/>
+    <rect x="14" y="10" width="4" height="2" fill="#096B56"/>
+    <rect x="18" y="8" width="6" height="6" fill="#096B56"/>
+  </g>
+
+  <text x="152" y="156" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="52" font-weight="700" letter-spacing="-1.2" fill="#111317">Traceweave</text>
+  <text x="60" y="212" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#111317">Open specification for local-first content fingerprinting</text>
+  <text x="60" y="240" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#111317">and verifiable cryptographic provenance.</text>
+  <text x="60" y="278" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" font-weight="400" fill="#50555E">Your content never leaves your machine — only fingerprints are compared.</text>
+
+  <!-- Right column: Archival verification hash matrix + signal green thread -->
+  <g>
+    <rect x="840" y="86" width="36" height="36" rx="2" fill="#FFFFFF" stroke="#B4B8C0" stroke-width="1"/>
+    <rect x="854" y="100" width="8" height="8" fill="none" stroke="#50555E" stroke-width="1"/>
+    <rect x="884" y="86" width="36" height="36" rx="2" fill="#F0F0EC" stroke="#D2D4D8" stroke-width="1"/>
+    <rect x="928" y="86" width="36" height="36" rx="2" fill="#FFFFFF" stroke="#B4B8C0" stroke-width="1"/>
+    <rect x="942" y="100" width="8" height="8" fill="none" stroke="#50555E" stroke-width="1"/>
+    <rect x="972" y="86" width="36" height="36" rx="2" fill="#F0F0EC" stroke="#D2D4D8" stroke-width="1"/>
+    <rect x="1016" y="86" width="36" height="36" rx="2" fill="#F0F0EC" stroke="#D2D4D8" stroke-width="1"/>
+    <rect x="1060" y="86" width="36" height="36" rx="2" fill="#FFFFFF" stroke="#B4B8C0" stroke-width="1"/>
+    <rect x="1074" y="100" width="8" height="8" fill="none" stroke="#50555E" stroke-width="1"/>
+    <rect x="1104" y="86" width="36" height="36" rx="2" fill="#F0F0EC" stroke="#D2D4D8" stroke-width="1"/>
+    <rect x="840" y="130" width="36" height="36" rx="2" fill="#F0F0EC" stroke="#D2D4D8" stroke-width="1"/>
+    <rect x="884" y="130" width="36" height="36" rx="2" fill="#DCF2EC" stroke="#096B56" stroke-width="1.2"/>
+    <rect x="896" y="142" width="12" height="12" fill="#096B56"/>
+    <rect x="928" y="130" width="36" height="36" rx="2" fill="#DCF2EC" stroke="#096B56" stroke-width="1.2"/>
+    <rect x="940" y="142" width="12" height="12" fill="#096B56"/>
+    <rect x="972" y="130" width="36" height="36" rx="2" fill="#DCF2EC" stroke="#096B56" stroke-width="1.2"/>
+    <rect x="984" y="142" width="12" height="12" fill="#096B56"/>
+    <rect x="1016" y="130" width="36" height="36" rx="2" fill="#F0F0EC" stroke="#D2D4D8" stroke-width="1"/>
+    <rect x="1060" y="130" width="36" height="36" rx="2" fill="#F0F0EC" stroke="#D2D4D8" stroke-width="1"/>
+    <rect x="1104" y="130" width="36" height="36" rx="2" fill="#FFFFFF" stroke="#B4B8C0" stroke-width="1"/>
+    <rect x="1118" y="144" width="8" height="8" fill="none" stroke="#50555E" stroke-width="1"/>
+    <rect x="840" y="174" width="36" height="36" rx="2" fill="#FFFFFF" stroke="#B4B8C0" stroke-width="1"/>
+    <rect x="854" y="188" width="8" height="8" fill="none" stroke="#50555E" stroke-width="1"/>
+    <rect x="884" y="174" width="36" height="36" rx="2" fill="#F0F0EC" stroke="#D2D4D8" stroke-width="1"/>
+    <rect x="928" y="174" width="36" height="36" rx="2" fill="#F0F0EC" stroke="#D2D4D8" stroke-width="1"/>
+    <rect x="972" y="174" width="36" height="36" rx="2" fill="#F0F0EC" stroke="#D2D4D8" stroke-width="1"/>
+    <rect x="1016" y="174" width="36" height="36" rx="2" fill="#DCF2EC" stroke="#096B56" stroke-width="1.2"/>
+    <rect x="1028" y="186" width="12" height="12" fill="#096B56"/>
+    <rect x="1060" y="174" width="36" height="36" rx="2" fill="#DCF2EC" stroke="#096B56" stroke-width="1.2"/>
+    <rect x="1072" y="186" width="12" height="12" fill="#096B56"/>
+    <rect x="1104" y="174" width="36" height="36" rx="2" fill="#F0F0EC" stroke="#D2D4D8" stroke-width="1"/>
+    <rect x="840" y="218" width="36" height="36" rx="2" fill="#F0F0EC" stroke="#D2D4D8" stroke-width="1"/>
+    <rect x="884" y="218" width="36" height="36" rx="2" fill="#F0F0EC" stroke="#D2D4D8" stroke-width="1"/>
+    <rect x="928" y="218" width="36" height="36" rx="2" fill="#F0F0EC" stroke="#D2D4D8" stroke-width="1"/>
+    <rect x="972" y="218" width="36" height="36" rx="2" fill="#FFFFFF" stroke="#B4B8C0" stroke-width="1"/>
+    <rect x="986" y="232" width="8" height="8" fill="none" stroke="#50555E" stroke-width="1"/>
+    <rect x="1016" y="218" width="36" height="36" rx="2" fill="#F0F0EC" stroke="#D2D4D8" stroke-width="1"/>
+    <rect x="1060" y="218" width="36" height="36" rx="2" fill="#F0F0EC" stroke="#D2D4D8" stroke-width="1"/>
+    <rect x="1104" y="218" width="36" height="36" rx="2" fill="#FFFFFF" stroke="#B4B8C0" stroke-width="1"/>
+    <rect x="1118" y="232" width="8" height="8" fill="none" stroke="#50555E" stroke-width="1"/>
+    <!-- Connecting signal-green thread -->
+    <polyline points="902,148 990,148 1034,192 1078,192" fill="none" stroke="#096B56" stroke-width="2" stroke-linejoin="miter"/>
+    <text x="840" y="280" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="500" letter-spacing="0.5" fill="#096B56">MATCHED SPAN</text>
+    <text x="1140" y="280" text-anchor="end" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="400" letter-spacing="0.3" fill="#50555E">SHA-256 · DETERMINISTIC</text>
+  </g>
+
+  <!-- Bottom ledger footer strip -->
+  <text x="60" y="335" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="500" letter-spacing="0.6" fill="#50555E">PROFILES: GO · RUST · TS · PYTHON · TEXT-PLAIN</text>
+  <text x="600" y="335" text-anchor="middle" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="500" letter-spacing="0.6" fill="#50555E">REGISTRATION: DRAFT-5 (DSSE / IN-TOTO)</text>
+  <text x="1140" y="335" text-anchor="end" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="500" letter-spacing="0.6" fill="#096B56">TRACEWEAVE.ORG</text>
+</svg>

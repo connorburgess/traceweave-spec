@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="430" viewBox="0 0 960 430" role="img" aria-labelledby="tw-pipe-title tw-pipe-desc">
+  <title id="tw-pipe-title">Traceweave local-only extraction and comparison workflow</title>
+  <desc id="tw-pipe-desc">Four steps run strictly inside a local boundary on your machine: Source Work, Extract, Catalogue, and Compare. Raw content never leaves your machine. Optionally, a Reproducible Evidence Report containing byte spans and SHA-256 digests can be shared and re-verified offline.</desc>
+
+  <defs>
+    <marker id="arr-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#F2F4F7"/>
+    </marker>
+    <marker id="arr-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#34E5BC"/>
+    </marker>
+  </defs>
+
+  <!-- Sheet background -->
+  <rect x="0.5" y="0.5" width="959" height="429" rx="4" fill="#0D1014" stroke="#2E3540" stroke-width="1"/>
+
+  <!-- Header bar -->
+  <text x="28" y="30" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="500" letter-spacing="1.1" fill="#9DA5B2">FIG 01 // LOCAL-ONLY EXTRACTION &amp; COMPARISON PIPELINE</text>
+  <text x="932" y="30" text-anchor="end" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="500" letter-spacing="0.8" fill="#34E5BC">ZERO NETWORK · ZERO UPLOADS</text>
+  <line x1="28" y1="42" x2="932" y2="42" stroke="#2E3540" stroke-width="1"/>
+
+  <!-- Local machine boundary container -->
+  <rect x="28" y="58" width="904" height="196" rx="2" fill="#151920" stroke="#34E5BC" stroke-width="1.2" stroke-dasharray="6 4"/>
+  <rect x="44" y="50" width="352" height="18" rx="2" fill="#0D1014"/>
+  <text x="54" y="63" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="500" letter-spacing="0.9" fill="#34E5BC">LOCAL BOUNDARY — RAW CONTENT STAYS ON DISK</text>
+
+  <!-- Step 1: Source Work -->
+  <rect x="48" y="84" width="186" height="148" rx="2" fill="#1C212A" stroke="#434C5C" stroke-width="1"/>
+  <rect x="48" y="84" width="186" height="26" rx="2" fill="#151920"/>
+  <line x1="48" y1="110" x2="234" y2="110" stroke="#2E3540" stroke-width="1"/>
+  <text x="60" y="101" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="500" letter-spacing="0.8" fill="#9DA5B2">01 / INPUT</text>
+  <text x="60" y="138" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#F2F4F7">Your Content</text>
+  <text x="60" y="160" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" fill="#9DA5B2">Source code, prose,</text>
+  <text x="60" y="177" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" fill="#9DA5B2">or candidate files.</text>
+  <text x="60" y="214" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#34E5BC">Never leaves machine</text>
+
+  <!-- Arrow 1 -> 2 -->
+  <line x1="234" y1="158" x2="268" y2="158" stroke="#F2F4F7" stroke-width="1.4" marker-end="url(#arr-ink)"/>
+
+  <!-- Step 2: Extract -->
+  <rect x="274" y="84" width="186" height="148" rx="2" fill="#1C212A" stroke="#434C5C" stroke-width="1"/>
+  <rect x="274" y="84" width="186" height="26" rx="2" fill="#151920"/>
+  <line x1="274" y1="110" x2="460" y2="110" stroke="#2E3540" stroke-width="1"/>
+  <text x="286" y="101" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="500" letter-spacing="0.8" fill="#9DA5B2">02 / EXTRACT</text>
+  <text x="286" y="138" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#F2F4F7">Fingerprints</text>
+  <text x="286" y="160" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" fill="#9DA5B2">Profile tokens, k-grams,</text>
+  <text x="286" y="177" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" fill="#9DA5B2">and UTF-8 byte spans.</text>
+  <text x="286" y="214" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#9DA5B2">configSha256 pinned</text>
+
+  <!-- Arrow 2 -> 3 -->
+  <line x1="460" y1="158" x2="494" y2="158" stroke="#F2F4F7" stroke-width="1.4" marker-end="url(#arr-ink)"/>
+
+  <!-- Step 3: Catalogue -->
+  <rect x="500" y="84" width="186" height="148" rx="2" fill="#1C212A" stroke="#434C5C" stroke-width="1"/>
+  <rect x="500" y="84" width="186" height="26" rx="2" fill="#151920"/>
+  <line x1="500" y1="110" x2="686" y2="110" stroke="#2E3540" stroke-width="1"/>
+  <text x="512" y="101" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="500" letter-spacing="0.8" fill="#9DA5B2">03 / CATALOGUE</text>
+  <text x="512" y="138" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#F2F4F7">Private Index</text>
+  <text x="512" y="160" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" fill="#9DA5B2">Stored outside checkout;</text>
+  <text x="512" y="177" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" fill="#9DA5B2">optional salted commit.</text>
+  <text x="512" y="214" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#9DA5B2">Only hashes indexed</text>
+
+  <!-- Arrow 3 -> 4 -->
+  <line x1="686" y1="158" x2="720" y2="158" stroke="#F2F4F7" stroke-width="1.4" marker-end="url(#arr-ink)"/>
+
+  <!-- Step 4: Compare -->
+  <rect x="726" y="84" width="186" height="148" rx="2" fill="#1C212A" stroke="#434C5C" stroke-width="1"/>
+  <rect x="726" y="84" width="186" height="26" rx="2" fill="#151920"/>
+  <line x1="726" y1="110" x2="912" y2="110" stroke="#2E3540" stroke-width="1"/>
+  <text x="738" y="101" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="500" letter-spacing="0.8" fill="#9DA5B2">04 / COMPARE</text>
+  <text x="738" y="138" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#F2F4F7">Local Match</text>
+  <text x="738" y="160" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" fill="#9DA5B2">Containment, similarity,</text>
+  <text x="738" y="177" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" fill="#9DA5B2">boilerplate suppression.</text>
+  <text x="738" y="214" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#9DA5B2">Distinct-hash floor</text>
+
+  <!-- Connector down from Compare to Output Report -->
+  <line x1="819" y1="232" x2="819" y2="286" stroke="#34E5BC" stroke-width="1.5" marker-end="url(#arr-acc)"/>
+  <text x="805" y="274" text-anchor="end" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="500" fill="#34E5BC">emits canonical body</text>
+
+  <!-- Step 5: Reproducible Evidence Report -->
+  <rect x="28" y="294" width="904" height="86" rx="2" fill="#1C212A" stroke="#34E5BC" stroke-width="1.4"/>
+  <rect x="28" y="294" width="8" height="86" fill="#34E5BC"/>
+
+  <text x="54" y="320" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="500" letter-spacing="0.9" fill="#34E5BC">05 / OUTPUT — REPRODUCIBLE EVIDENCE REPORT</text>
+  <text x="54" y="346" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15.5" font-weight="600" fill="#F2F4F7">Byte-identical canonical body (bodySha256) with exact UTF-8 spans &amp; pinned profile config</text>
+  <text x="54" y="366" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" fill="#9DA5B2">Shareable for independent offline re-verification. Separate review packets carry origin notes; neither establishes ownership or infringement.</text>
+
+  <!-- Footer rule -->
+  <text x="480" y="408" text-anchor="middle" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#9DA5B2">Two independent implementations (Go &amp; Rust) + zero-import WASM reproduce every published vector byte-for-byte.</text>
+</svg>
