@@ -74,3 +74,17 @@ Executed on commit `19cc1ca` (and re-run after writing this review file):
 | `.venv/bin/python tools/validate.py --links-all` | **PASS** (exit 0) | Local Markdown links valid in every Markdown file |
 | `.venv/bin/python -m unittest discover -s tests` | **PASS** (exit 0) | `Ran 11 tests in 13.449s` (`OK`) |
 | `.venv/bin/python tools/check_hygiene.py` | **PASS** (exit 0) | No home-directory paths, thread identifiers, or AI-attribution trailers |
+
+---
+
+## 4. Confirmation pass (`9f50798`)
+
+Re-checked 2026-11-25 against commit `9f50798` on local `roadmap-v2`.
+
+**Verdict: `ready`** for **RES.1** (`RES.2` synthetic measurement and `RES.3` post-measurement review remain open).
+
+- **B1 resolved ([§2](../drafts/resolver-threat-model.md#L47), [§3.5](../drafts/resolver-threat-model.md#L173-L197), [§4](../drafts/resolver-threat-model.md#L230)):** `traceweave-seed-merge-draft-2` pairwise `seedCount` / `maxRegionsPerMode` scope is explicitly distinguished from pre-comparison top-$K$ crowding and T2 global caps; `M-AB-1` splits cleanly into `M-AB-1a` (within-artifact padding) and `M-AB-1b` (top-$K$ candidate crowding & T2 global query cap), each with explicit numerators and denominators.
+- **B2 resolved ([§2](../drafts/resolver-threat-model.md#L46), [§3.4](../drafts/resolver-threat-model.md#L142-L159), [§4](../drafts/resolver-threat-model.md#L213-L228)):** T2 oracle mitigations mandate collapsing `below-minimum-evidence`, `common-only`, and `no-shared-fingerprints` into an indistinguishable `no-match` and withholding `regionCounts`, `containment`, `similarity.jaccard`, `span`, `position`, and `seedCount`; known-prefix padding within `mergeGap` (or under global distinct-hash floors) is documented in attack vectors, residual risk, and `M-MD-1`.
+- **B3 resolved ([§3.2](../drafts/resolver-threat-model.md#L103), [§4](../drafts/resolver-threat-model.md#L224)):** Standardized both sections on $\text{TPR} = \text{TP} / N$ and $\text{FPR} = \text{FP} / M$ distractors, restricting supplemental FDR to $\text{TP} + \text{FP} > 0$.
+- **A1–A5 resolved:** `T1` cross-references [catalogue contract §3.7](../../spec/catalogue-report.md#37-commitment-and-privacy-class) (`§1.2`); `M-QL-1` freezes $q \in \{1, 2, 4, 8, \text{all}\}$ and `M-CI-2` defines precision, recall, and per-file MAE denominators (`§3.1`, `§3.3`, `§4`); `M-AB-2` clarifies `max-bound inputs (k=16, w=128, maxInputBytes=8 MiB)` (`§3.5`, `§4`); `§4` scopes `RES.2` to `go-tokens`, `rust2024-tokens`, `ts-tokens`, and `text-plain` (`folded`/`skeleton`) while excluding PDQ/ISCC Hamming-ball resolver queries pending a separate addendum; and `§1.3` clarifies `tw1-` is computed externally from `statementSha256`.
+- **Re-run checks on `9f50798` + `ROADMAP.md` (`RES.1` met):** `tools/validate.py`, `tools/validate.py --links-all`, `unittest discover -s tests`, and `tools/check_hygiene.py` all passed (exit 0).
