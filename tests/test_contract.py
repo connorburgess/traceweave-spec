@@ -109,6 +109,16 @@ class ContractTests(unittest.TestCase):
         with self.assertRaises(ValidationError):
             validator.validate(bad_secret)
 
+    def test_intoto_core_accept_fixtures_match_statement_schema(self):
+        import base64
+        import json
+        for name in ("accept-catalogue-core.json", "accept-catalogue-core-urlsafe.json"):
+            with self.subTest(fixture=name):
+                fx = read_json(ROOT / "research/drafts/intoto-adapter-fixtures/accept" / name)
+                payload_b64 = fx["envelope"]["payload"]
+                raw = base64.b64decode(payload_b64, altchars=b"-_" if ("-" in payload_b64 or "_" in payload_b64) else None)
+                self.validator.validate(json.loads(raw.decode("utf-8")))
+
 
 if __name__ == "__main__":
     unittest.main()

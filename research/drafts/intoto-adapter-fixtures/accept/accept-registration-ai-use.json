@@ -1,0 +1,85 @@
+{
+  "fixtureVersion": "traceweave-intoto-adapter-fixture-v1",
+  "id": "accept-registration-ai-use",
+  "kind": "registration",
+  "description": "Multi-subject registration draft-5 statement with optional self-declared claims.aiUse and omitted catalogue.",
+  "notice": "Illustrative fixture for Traceweave M4.5 in-toto Statement v1 / DSSE adapter. Public test-only keys and synthetic nonces; registers nothing.",
+  "envelope": {
+    "payloadType": "application/vnd.in-toto+json",
+    "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2xhaW1zIjp7ImFpVXNlIjp7ImRlY2xhcmVkIjoibW9kaWZpZWQiLCJ0b29sIjoiRXhhbXBsZUZvcm1hdHRlci0xLjAifSwiY3JlYXRlZEF0IjoiMjAyNi0xMS0yNFQxMjowMDowMFoifSwiY29udGVudEtpbmQiOiJzb3VyY2UtY29kZSIsImltcGxlbWVudGF0aW9uIjp7ImNvbW1pdCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJuYW1lIjoiYnVpbGRfZml4dHVyZXMucHkiLCJ2ZXJzaW9uIjoiZHJhZnQtNSJ9LCJub25jZSI6IjcxMzI3NGFhODEwY2NkMjIxMjllMjBhNTc2ZjRhZjIxZGJkMGNmODAzYTk4MGU4NzBiNGUxYWI0NTdkYjAyMmUiLCJwb3NzZXNzaW9uIjpbeyJzY2hlbWUiOiJzaGEyNTYtc2FsdGVkLXBvc3Nlc3Npb24tdjEiLCJzaGEyNTYiOiI3OGUzYjE3YTVhNDg1YTE2NGNlNTNlM2FkNzk0Y2E3YmQxNTA2NmRiNzA1YjA5YmJlZDBmZDUwNjg5NDljOGY5Iiwic3ViamVjdEluZGV4IjowfSx7InNjaGVtZSI6InNoYTI1Ni1zYWx0ZWQtcG9zc2Vzc2lvbi12MSIsInNoYTI1NiI6ImJjYmY4NDY3YTNhZjBiMTc5NTM3ZWQyZTkwM2Q3Nzk5N2E5MzUxZjBlYjc2YTA0ZDc2ZjgxNzFiMzM4M2YzYjIiLCJzdWJqZWN0SW5kZXgiOjF9XSwicmVnaXN0cmF0aW9uVmVyc2lvbiI6InRyYWNld2VhdmUtcmVnaXN0cmF0aW9uLWRyYWZ0LTUiLCJzcGVjQ29tbWl0IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly90cmFjZXdlYXZlLm9yZy9wcmVkaWNhdGUvcmVnaXN0cmF0aW9uL2RyYWZ0LTUiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiOTc0YzhkMGFkMTQ0YzNjMzllOWYxY2U0MTA3NDBmNDQ5ZjYyM2JmZmQyOWM3NTBlOGVkM2JkNjg2NDBiNjk3YyJ9LCJuYW1lIjoic3VtLmdvIn0seyJkaWdlc3QiOnsic2hhMjU2IjoiNTBmNGZkOTZhMWY3NDgxZTQ2ODZiNjZlMjlmMjI1OWQzZTBmZjgzNjUwNTYzYjRhMTcxOTYzMWVjYzAzYTg5ZCJ9LCJuYW1lIjoiaG9zdC5nbyJ9XX0=",
+    "signatures": [
+      {
+        "keyid": "4c35482fb77b4090",
+        "sig": "I3IMeaMi24OnbD+UYC/JKNp7Y9d9ME08PryUigTfeMeW8LTmy9i0OgyedjpmMSxZwWMnapWT1h5gz/gRmMWUAw=="
+      }
+    ]
+  },
+  "verificationMaterial": {
+    "publicKeys": [
+      {
+        "keyid": "4c35482fb77b4090",
+        "alg": "ed25519",
+        "publicKeyHex": "fe4c248c7b86540caa357783c3d9e42ae5963f0e0d77886aaf8b3445ffbe036c"
+      }
+    ]
+  },
+  "trustedKeys": [
+    "4c35482fb77b4090e713bf7a409382236d83d9a743f4ec46e92b4e61ae3d7cbd"
+  ],
+  "artifacts": [
+    {
+      "subjectIndex": 0,
+      "source": "test-vectors/matching/extraction-go.json#mv-go-sum"
+    },
+    {
+      "subjectIndex": 1,
+      "source": "test-vectors/matching/extraction-go.json#mv-go-host"
+    }
+  ],
+  "expectedRoundTrip": {
+    "statementSha256": "bc9e014081f9c951c9e9b910d6d5112064c46b0304dea759594e36b41495220b",
+    "canonicalStatementSha256": "bc9e014081f9c951c9e9b910d6d5112064c46b0304dea759594e36b41495220b",
+    "record": {
+      "adapterKind": "registration",
+      "predicateType": "https://traceweave.org/predicate/registration/draft-5",
+      "subjects": [
+        {
+          "name": "sum.go",
+          "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"
+        },
+        {
+          "name": "host.go",
+          "sha256": "50f4fd96a1f7481e4686b66e29f2259d3e0ff83650563b4a1719631ecc03a89d"
+        }
+      ],
+      "registrationVersion": "traceweave-registration-draft-5",
+      "contentKind": "source-code",
+      "nonce": "713274aa810ccd22129e20a576f4af21dbd0cf803a980e870b4e1ab457db022e",
+      "possession": [
+        {
+          "subjectIndex": 0,
+          "scheme": "sha256-salted-possession-v1",
+          "sha256": "78e3b17a5a485a164ce53e3ad794ca7bd15066db705b09bbed0fd5068949c8f9"
+        },
+        {
+          "subjectIndex": 1,
+          "scheme": "sha256-salted-possession-v1",
+          "sha256": "bcbf8467a3af0b179537ed2e903d77997a9351f0eb76a04d76f8171b3383f3b2"
+        }
+      ],
+      "implementation": {
+        "name": "build_fixtures.py",
+        "version": "draft-5",
+        "commit": "0000000000000000000000000000000000000000"
+      },
+      "specCommit": "0000000000000000000000000000000000000000",
+      "claims": {
+        "createdAt": "2026-11-24T12:00:00Z",
+        "aiUse": {
+          "declared": "modified",
+          "tool": "ExampleFormatter-1.0"
+        }
+      }
+    }
+  }
+}

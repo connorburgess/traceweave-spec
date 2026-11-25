@@ -1,0 +1,32 @@
+{
+  "fixtureVersion": "traceweave-intoto-adapter-fixture-v1",
+  "id": "reject-invalid-base64",
+  "kind": "catalogue",
+  "description": "DSSE envelope payload contains invalid base64 characters.",
+  "notice": "Illustrative fixture for Traceweave M4.5 in-toto Statement v1 / DSSE adapter. Public test-only keys and synthetic nonces; registers nothing.",
+  "envelope": {
+    "payloadType": "application/vnd.in-toto+json",
+    "payload": "not!valid!base64===",
+    "signatures": [
+      {
+        "keyid": "4c35482fb77b4090",
+        "sig": "uIdb7ZL+stD6qIzJMn+M6ypC2tPU7wIrK2bwrMiZjnwQWSwTQj93HduWMyPGYCQWOxy+NuDmKV31hzd7vbsQBA=="
+      }
+    ]
+  },
+  "verificationMaterial": {
+    "publicKeys": [
+      {
+        "keyid": "4c35482fb77b4090",
+        "alg": "ed25519",
+        "publicKeyHex": "fe4c248c7b86540caa357783c3d9e42ae5963f0e0d77886aaf8b3445ffbe036c"
+      }
+    ]
+  },
+  "trustedKeys": [
+    "4c35482fb77b4090e713bf7a409382236d83d9a743f4ec46e92b4e61ae3d7cbd"
+  ],
+  "expect": {
+    "code": "invalid-base64"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "fixtureVersion": "traceweave-intoto-adapter-fixture-v1",
+  "id": "reject-duplicate-json-key",
+  "kind": "catalogue",
+  "description": "Valid DSSE signature over payload bytes containing a duplicate '_type' JSON key.",
+  "notice": "Illustrative fixture for Traceweave M4.5 in-toto Statement v1 / DSSE adapter. Public test-only keys and synthetic nonces; registers nothing.",
+  "envelope": {
+    "payloadType": "application/vnd.in-toto+json",
+    "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2F0YWxvZ3VlQ29tbWl0bWVudCI6eyJzY2hlbWUiOiJzaGEyNTYtc2FsdGVkLWNhdGFsb2d1ZS12MSIsInNoYTI1NiI6ImY0ZGYwNGFiMDA0NTRiM2E0YjFiYzI1ZDgwMDA5YThhM2U4MmY5ZDVkNGY0ZWVlZDA4YzZjYmJkOTg5MWM0YTkifSwiY29udGVudEtpbmQiOiJ0ZXh0IiwicHJvZmlsZSI6eyJjb25maWdTaGEyNTYiOiIyZDI4MGU2YWIyNGNlMDc1Njg5MmRmNzM3OTI5YzkxYWU1MWQ2ZGFkZGIzYzY3YWYxNWU5ZmFmN2VkZTNhMmE2IiwiaWQiOiJleGFjdC1ieXRlcy1maXh0dXJlIiwidmVyc2lvbiI6IjAuMS4wIn0sInNwZWNWZXJzaW9uIjoiMC4xLjAtZHJhZnQuMSJ9LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly9naXRodWIuY29tL2Nvbm5vcmJ1cmdlc3MvdHJhY2V3ZWF2ZS1zcGVjL2Jsb2IvbWFpbi9zcGVjL2NvcmUubWQjZXZpZGVuY2UtMC4xLjAtZHJhZnQuMSIsInN1YmplY3QiOlt7ImRpZ2VzdCI6eyJzaGEyNTYiOiJiYTc4MTZiZjhmMDFjZmVhNDE0MTQwZGU1ZGFlMjIyM2IwMDM2MWEzOTYxNzdhOWNiNDEwZmY2MWYyMDAxNWFkIn0sIm5hbWUiOiJhcnRpZmFjdC50eHQifV19",
+    "signatures": [
+      {
+        "keyid": "4c35482fb77b4090",
+        "sig": "XNVyHOFE+xU7c3NCNcZZ21V766heqLNVgEu2M/AgdCXfv8D9n/Qs1nJrWxvXEMX0+gv5qC6ziluMotfm12F0CA=="
+      }
+    ]
+  },
+  "verificationMaterial": {
+    "publicKeys": [
+      {
+        "keyid": "4c35482fb77b4090",
+        "alg": "ed25519",
+        "publicKeyHex": "fe4c248c7b86540caa357783c3d9e42ae5963f0e0d77886aaf8b3445ffbe036c"
+      }
+    ]
+  },
+  "trustedKeys": [
+    "4c35482fb77b4090e713bf7a409382236d83d9a743f4ec46e92b4e61ae3d7cbd"
+  ],
+  "expect": {
+    "code": "duplicate-key"
+  }
+}
