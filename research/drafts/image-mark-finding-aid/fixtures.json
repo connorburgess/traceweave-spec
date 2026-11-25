@@ -273,7 +273,7 @@
     },
     {
       "id": "valid-pixelseal-clean-no-registration",
-      "description": "PixelSeal clean query from e-img-m-2 (256 payload bits at positions 1..256 of 257 raw outputs) with no registration link attached.",
+      "description": "PixelSeal clean query from e-img-m-2 (257 raw bits: unkeyed detection bit preds[0, 0] prepended to the 256 tested payload bits from queries.jsonl) with no registration link attached.",
       "record": {
         "recordVersion": "traceweave-image-mark-finding-aid-draft-1",
         "recordKind": "image-mark-finding-aid",
@@ -581,7 +581,7 @@
         },
         "embeddingQuality": {
           "status": "unavailable",
-          "reason": "abstain-before-embed",
+          "reason": "no-cover-reference",
           "floorDb": 38.0
         },
         "outcome": {
@@ -703,7 +703,50 @@
       "id": "neg-match-below-threshold",
       "expect": "threshold-violation",
       "why": "Accepted entry matchedBits (48) is below threshold k (49).",
-      "mutation": ["statistic", "acceptedEntries", [{"entryId": "m2000000", "matchedBits": 48, "n": 61}]]
+      "mutations": [
+        ["statistic", "matchedBits", 48],
+        ["statistic", "acceptedEntries", [{"entryId": "m2000000", "matchedBits": 48, "n": 61}]]
+      ]
+    },
+    {
+      "id": "neg-freetext-origin-note",
+      "expect": "origin-claim-wording",
+      "why": "Free-text registrationLink.note must not assert origin or authorship.",
+      "mutation": ["registrationLink", "note", "Proves origin and authorship of creator."]
+    },
+    {
+      "id": "neg-freetext-origin-threshold-basis",
+      "expect": "origin-claim-wording",
+      "why": "Free-text threshold.basis must not assert origin.",
+      "mutation": ["threshold", "basis", "Proves origin with 99.9% certainty"]
+    },
+    {
+      "id": "neg-freetext-origin-excluded-note",
+      "expect": "origin-claim-wording",
+      "why": "Free-text testedBits.excludedNote must not assert authorship.",
+      "mutation": ["testedBits", "excludedNote", "Proves authorship"]
+    },
+    {
+      "id": "neg-abstain-with-accepted-entries",
+      "baseId": "valid-decode-abstain-too-small",
+      "expect": "outcome-mismatch",
+      "why": "Decode abstention (too-small) must have empty acceptedEntries and matchedBits null.",
+      "mutation": ["statistic", "acceptedEntries", [{"entryId": "m2000000", "matchedBits": 61, "n": 61}]]
+    },
+    {
+      "id": "neg-match-statistic-matched-mismatch",
+      "expect": "statistic-matched-mismatch",
+      "why": "statistic.matchedBits (0) disagrees with acceptedEntries[0].matchedBits (61) on match.",
+      "mutation": ["statistic", "matchedBits", 0]
+    },
+    {
+      "id": "neg-whole-image-partial-region",
+      "expect": "region-whole-image-mismatch",
+      "why": "region.scope whole-image cannot carry partial coordinates.",
+      "mutations": [
+        ["region", "x", 10],
+        ["region", "width", 100]
+      ]
     }
   ]
 }

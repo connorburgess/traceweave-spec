@@ -4,7 +4,7 @@
   "c2paVersion": "2.5",
   "c2paSpecification": "https://spec.c2pa.org/specifications/specifications/2.5/specs/C2PA_Specification.html",
   "notice": "Illustrative only: CBOR/JUMBF structures in JSON diagnostic form. Not a signed C2PA manifest, not produced or validated by any C2PA implementation, and no compatibility claim is made.",
-  "claimWordsPattern": "(?i)\\b(compatible|interoperable|compliant|conformant|certified|c2pa-ready)\\b",
+  "claimWordsPattern": "(?i)(\\b(compatible|interoperable|compliant|conformant|certified|c2pa-ready)\\b|supports\\s+c2pa|works\\s+with\\s+content\\s+credentials)",
   "forbiddenKeys": [
     "similarityScore",
     "score",

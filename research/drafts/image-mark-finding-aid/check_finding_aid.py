@@ -24,6 +24,10 @@ REF_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
 REF_PREFIX = "tw1-"
 REF_BITS = 130
 REF_PATTERN = re.compile(r"^tw1-[0-9A-HJKMNP-TV-Z]{27}$")
+ORIGIN_CLAIM_TEXT = re.compile(
+    r"(?i)\b(author(?:ship)?|creator|own(?:s|ed|er|ership)|origin(?:al|ality)?|first[- ]to[- ]create|"
+    r"first[- ]creation|copyright|infring\w*|prove[sdn]?|proof|belongs?\s+to)\b"
+)
 
 
 def strict_load(path: Path):
@@ -89,6 +93,13 @@ def semantic_errors(rec: dict) -> list[str]:
                 errs.append("region-size-mismatch")
             if region["x"] + region["width"] > region["imageWidth"] or region["y"] + region["height"] > region["imageHeight"]:
                 errs.append("region-bounds")
+            if region["scope"] == "whole-image" and (
+                region["x"] != 0
+                or region["y"] != 0
+                or region["width"] != region["imageWidth"]
+                or region["height"] != region["imageHeight"]
+            ):
+                errs.append("region-whole-image-mismatch")
     else:
         if raw["status"] != "abstain" or raw["code"] != decode["code"]:
             errs.append("decode-raw-mismatch")
@@ -110,6 +121,8 @@ def semantic_errors(rec: dict) -> list[str]:
     if outcome["class"] == "match":
         if outcome["code"] != "expected-payload" or len(accepted) != 1:
             errs.append("outcome-mismatch")
+        elif stat["matchedBits"] != accepted[0]["matchedBits"]:
+            errs.append("statistic-matched-mismatch")
     elif outcome["class"] == "no-match":
         if outcome["code"] != "no-match" or len(accepted) != 0:
             errs.append("outcome-mismatch")
@@ -117,8 +130,14 @@ def semantic_errors(rec: dict) -> list[str]:
         if outcome["code"] == "ambiguous":
             if len(accepted) < 2:
                 errs.append("outcome-mismatch")
-        elif decode["status"] != "abstain" or outcome["code"] != decode["code"]:
-            errs.append("outcome-mismatch")
+        else:
+            if (
+                decode["status"] != "abstain"
+                or outcome["code"] != decode["code"]
+                or accepted
+                or stat["matchedBits"] is not None
+            ):
+                errs.append("outcome-mismatch")
 
     link = rec["registrationLink"]
     if link is not None:
@@ -129,6 +148,13 @@ def semantic_errors(rec: dict) -> list[str]:
             errs.append("reference-check")
         elif text_reference(link["statementSha256"]) != ref:
             errs.append("reference-mismatch")
+
+    free_texts = [tb["excludedNote"], thresh["basis"], thresh["calibrationId"]]
+    if link is not None:
+        free_texts.append(link["note"])
+    for text in free_texts:
+        if ORIGIN_CLAIM_TEXT.search(text):
+            errs.append("origin-claim-wording")
 
     return sorted(set(errs))
 
@@ -185,9 +211,11 @@ def main() -> int:
             print(f"FAIL valid/{item['id']}: semantic errors {serrs}")
             problems += 1
 
+    valid_by_id = {item["id"]: item["record"] for item in valid_cases}
     base_record = valid_cases[0]["record"]
     for item in invalid_cases:
-        rec = apply_case(base_record, item)
+        source_record = valid_by_id[item["baseId"]] if "baseId" in item else base_record
+        rec = apply_case(source_record, item)
         expect = item["expect"]
         schema_failed = False
         try:
