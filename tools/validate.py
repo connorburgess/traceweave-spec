@@ -122,6 +122,7 @@ VECTOR_CHECKERS = (
     ("text", ("test-vectors/extraction-text/check_text_vectors.py",)),
     ("image-mark finding aid (IMG.5)", ("research/drafts/image-mark-finding-aid/check_finding_aid.py",)),
     ("c2pa mapping fixtures (C2PA.1/C2PA.3)", ("research/drafts/c2pa-fixtures/check_fixtures.py",)),
+    ("in-toto adapter fixtures (M4.5)", ("research/drafts/intoto-adapter-fixtures/check_intoto_adapter.py",)),
     ("requirement map (M1.5) and registration item map (M1.1)", ("tools/check_requirement_map.py",)),
 )
 PROMOTED_SCHEMAS = ("catalogue", "report", "record", "review-packet", "candidate-generation")

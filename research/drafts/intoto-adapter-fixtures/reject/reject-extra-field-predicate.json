@@ -1,0 +1,32 @@
+{
+  "fixtureVersion": "traceweave-intoto-adapter-fixture-v1",
+  "id": "reject-extra-field-predicate",
+  "kind": "catalogue",
+  "description": "Predicate carries an unallowed 'unexpectedFlag' field.",
+  "notice": "Illustrative fixture for Traceweave M4.5 in-toto Statement v1 / DSSE adapter. Public test-only keys and synthetic nonces; registers nothing.",
+  "envelope": {
+    "payloadType": "application/vnd.in-toto+json",
+    "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2F0YWxvZ3VlQ29tbWl0bWVudCI6eyJzY2hlbWUiOiJzaGEyNTYtc2FsdGVkLWNhdGFsb2d1ZS12MSIsInNoYTI1NiI6ImY0ZGYwNGFiMDA0NTRiM2E0YjFiYzI1ZDgwMDA5YThhM2U4MmY5ZDVkNGY0ZWVlZDA4YzZjYmJkOTg5MWM0YTkifSwiY29udGVudEtpbmQiOiJ0ZXh0IiwicHJvZmlsZSI6eyJjb25maWdTaGEyNTYiOiIyZDI4MGU2YWIyNGNlMDc1Njg5MmRmNzM3OTI5YzkxYWU1MWQ2ZGFkZGIzYzY3YWYxNWU5ZmFmN2VkZTNhMmE2IiwiaWQiOiJleGFjdC1ieXRlcy1maXh0dXJlIiwidmVyc2lvbiI6IjAuMS4wIn0sInNwZWNWZXJzaW9uIjoiMC4xLjAtZHJhZnQuMSIsInVuZXhwZWN0ZWRGbGFnIjp0cnVlfSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vZ2l0aHViLmNvbS9jb25ub3JidXJnZXNzL3RyYWNld2VhdmUtc3BlYy9ibG9iL21haW4vc3BlYy9jb3JlLm1kI2V2aWRlbmNlLTAuMS4wLWRyYWZ0LjEiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiYmE3ODE2YmY4ZjAxY2ZlYTQxNDE0MGRlNWRhZTIyMjNiMDAzNjFhMzk2MTc3YTljYjQxMGZmNjFmMjAwMTVhZCJ9LCJuYW1lIjoiYXJ0aWZhY3QudHh0In1dfQ==",
+    "signatures": [
+      {
+        "keyid": "4c35482fb77b4090",
+        "sig": "OjCcKNT8UGFa+UH7SuPwNnrOxCIHu8gWer2PgOhkjgGhJST4mWC+E6adcl7grN/ACW5gRgdlnvOykmMgx4ztCA=="
+      }
+    ]
+  },
+  "verificationMaterial": {
+    "publicKeys": [
+      {
+        "keyid": "4c35482fb77b4090",
+        "alg": "ed25519",
+        "publicKeyHex": "fe4c248c7b86540caa357783c3d9e42ae5963f0e0d77886aaf8b3445ffbe036c"
+      }
+    ]
+  },
+  "trustedKeys": [
+    "4c35482fb77b4090e713bf7a409382236d83d9a743f4ec46e92b4e61ae3d7cbd"
+  ],
+  "expect": {
+    "code": "extra-field"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "fixtureVersion": "traceweave-intoto-adapter-fixture-v1",
+  "id": "reject-extra-field-statement",
+  "kind": "catalogue",
+  "description": "Statement carries an unallowed top-level 'extra' field.",
+  "notice": "Illustrative fixture for Traceweave M4.5 in-toto Statement v1 / DSSE adapter. Public test-only keys and synthetic nonces; registers nothing.",
+  "envelope": {
+    "payloadType": "application/vnd.in-toto+json",
+    "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJleHRyYSI6dHJ1ZSwicHJlZGljYXRlIjp7ImNhdGFsb2d1ZUNvbW1pdG1lbnQiOnsic2NoZW1lIjoic2hhMjU2LXNhbHRlZC1jYXRhbG9ndWUtdjEiLCJzaGEyNTYiOiJmNGRmMDRhYjAwNDU0YjNhNGIxYmMyNWQ4MDAwOWE4YTNlODJmOWQ1ZDRmNGVlZWQwOGM2Y2JiZDk4OTFjNGE5In0sImNvbnRlbnRLaW5kIjoidGV4dCIsInByb2ZpbGUiOnsiY29uZmlnU2hhMjU2IjoiMmQyODBlNmFiMjRjZTA3NTY4OTJkZjczNzkyOWM5MWFlNTFkNmRhZGRiM2M2N2FmMTVlOWZhZjdlZGUzYTJhNiIsImlkIjoiZXhhY3QtYnl0ZXMtZml4dHVyZSIsInZlcnNpb24iOiIwLjEuMCJ9LCJzcGVjVmVyc2lvbiI6IjAuMS4wLWRyYWZ0LjEifSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vZ2l0aHViLmNvbS9jb25ub3JidXJnZXNzL3RyYWNld2VhdmUtc3BlYy9ibG9iL21haW4vc3BlYy9jb3JlLm1kI2V2aWRlbmNlLTAuMS4wLWRyYWZ0LjEiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiYmE3ODE2YmY4ZjAxY2ZlYTQxNDE0MGRlNWRhZTIyMjNiMDAzNjFhMzk2MTc3YTljYjQxMGZmNjFmMjAwMTVhZCJ9LCJuYW1lIjoiYXJ0aWZhY3QudHh0In1dfQ==",
+    "signatures": [
+      {
+        "keyid": "4c35482fb77b4090",
+        "sig": "6WaKZirPBh9+A2q8iWr401/JvbdfqIG+QmZQPVRG+VQIkpcmljT0zGi8ksN9Qnyp8LJSLdJPOa1c2NGMOFKiBw=="
+      }
+    ]
+  },
+  "verificationMaterial": {
+    "publicKeys": [
+      {
+        "keyid": "4c35482fb77b4090",
+        "alg": "ed25519",
+        "publicKeyHex": "fe4c248c7b86540caa357783c3d9e42ae5963f0e0d77886aaf8b3445ffbe036c"
+      }
+    ]
+  },
+  "trustedKeys": [
+    "4c35482fb77b4090e713bf7a409382236d83d9a743f4ec46e92b4e61ae3d7cbd"
+  ],
+  "expect": {
+    "code": "extra-field"
+  }
+}
