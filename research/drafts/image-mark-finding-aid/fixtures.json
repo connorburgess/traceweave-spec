@@ -1,0 +1,752 @@
+{
+  "fixturesVersion": "traceweave-image-mark-finding-aid-fixtures-draft-1",
+  "notice": "Illustrative draft fixtures for IMG.5 using committed e-img-m-2 synthetic hashes and a synthetic tw1- registration pointer. Marks are finding aids only and prove neither origin nor authorship.",
+  "valid": [
+    {
+      "id": "valid-tm-jpeg90-with-tw1-link",
+      "description": "TrustMark-Q query (jpeg90 from e-img-m-2 m2000000) matching expected payload on 61 tested bits, with tw1- registration link showing candidate bytes differ from registered marked bytes.",
+      "record": {
+        "recordVersion": "traceweave-image-mark-finding-aid-draft-1",
+        "recordKind": "image-mark-finding-aid",
+        "findingAidBoundary": {
+          "role": "finding-aid-only",
+          "provesOrigin": false,
+          "provesAuthorship": false,
+          "keylessCopyPossible": true,
+          "originEvidenceSource": "separate-registration-record"
+        },
+        "artifact": {
+          "sha256": "c389ac8a41a0d8f8294c3a0f1db270e054c19f9a4adabe979f2abb356e67700e",
+          "byteLength": 363290,
+          "role": "query",
+          "decode": {
+            "status": "ok",
+            "width": 1920,
+            "height": 1080,
+            "orientationBasis": "after-exif-orientation"
+          }
+        },
+        "profile": {
+          "id": "traceweave-image-mark-trustmark-q",
+          "version": "draft-1",
+          "protocolVersion": "e-img-m-2",
+          "protocolSha256": "cba3667307941766f19b2ff9141e89c154b1f9b53a01e11391135ffe8ab64110"
+        },
+        "carrier": {
+          "algorithm": "trustmark",
+          "variant": "Q",
+          "codeCommit": "4c60b9fdb4125fca3001f0803e6890a6b55371ac",
+          "models": [
+            {
+              "id": "trustmark-Q-config",
+              "role": "config",
+              "sha256": "43f37103f92efa8bd6b1c5902bb537cc12a981dc699fca19d9bb7de8c62d03d9"
+            },
+            {
+              "id": "trustmark-Q-encoder",
+              "role": "encoder",
+              "sha256": "dc382c3f6b4fd568b27d6fbb763d6ffc2d2587126d84afe9d5ee95b4c5d99826"
+            },
+            {
+              "id": "trustmark-Q-decoder",
+              "role": "decoder",
+              "sha256": "e3d9cea5406a26590735719f8f15cb10802b11852ae69047eaf4cf17214df781"
+            }
+          ]
+        },
+        "region": {
+          "unit": "pixel",
+          "basis": "after-exif-orientation",
+          "scope": "whole-image",
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080,
+          "imageWidth": 1920,
+          "imageHeight": 1080
+        },
+        "raw": {
+          "status": "decoded",
+          "bitCount": 100,
+          "bitsHex": "decc5a65859a0f72c35557b81"
+        },
+        "decodedPayload": {
+          "status": "valid",
+          "decisive": false,
+          "ecc": "BCH_5",
+          "version": 1,
+          "payloadHex": "decc5a65859a0f72"
+        },
+        "testedBits": {
+          "basis": "direct-keyed-output",
+          "start": 0,
+          "end": 61,
+          "count": 61,
+          "rawBitCount": 100,
+          "excludedNote": "Excludes 35 BCH ECC bits (61..95) and 4 fixed version bits (96..99) per e-img-m-2 review B1."
+        },
+        "keyReference": {
+          "keyId": "e-img-m-2-key-A-test-only",
+          "derivationId": "e-img-m-1-hmac-sha256-msbf"
+        },
+        "statistic": {
+          "name": "expected-payload-agreement",
+          "n": 61,
+          "matchedBits": 61,
+          "acceptedEntries": [
+            {
+              "entryId": "m2000000",
+              "matchedBits": 61,
+              "n": 61
+            }
+          ],
+          "maxOtherBits": 42,
+          "maxOtherEntryId": "m2000015"
+        },
+        "threshold": {
+          "k": 49,
+          "basis": "analytic, P(Bin(61, 1/2) >= 49) = 9.85e-7 <= 1e-6 per comparison",
+          "perComparisonFalseAcceptBound": 9.85e-07,
+          "calibrationId": "e-img-m-2:cba3667307941766f19b2ff9141e89c154b1f9b53a01e11391135ffe8ab64110",
+          "searchScope": {
+            "catalogueEntries": 100,
+            "keysSearched": 1,
+            "perQueryUpperBound": 9.85e-05
+          }
+        },
+        "embeddingQuality": {
+          "status": "unavailable",
+          "reason": "no-cover-reference",
+          "floorDb": 38.0
+        },
+        "outcome": {
+          "class": "match",
+          "code": "expected-payload"
+        },
+        "registrationLink": {
+          "registrationVersion": "traceweave-registration-draft-5",
+          "textReference": "tw1-TDE8C1777CWW71Q8G8E3GGSJZQP",
+          "statementSha256": "d35c8604e73b39c386e8821c384332fdc8bc1697a6602e5bd867e3edb0f88c32",
+          "subjectDigestMatchesCandidate": false,
+          "verificationStatus": "unverified-reference-only",
+          "note": "Finding aid points to candidate registration of marked PNG; JPEG-90 candidate bytes differ from registered bytes."
+        },
+        "confidence": null
+      }
+    },
+    {
+      "id": "valid-tm-marked-entry-measured-quality",
+      "description": "TrustMark-Q marked-entry record with measured embedding quality from e-img-m-2 and verified exact-byte registration link.",
+      "record": {
+        "recordVersion": "traceweave-image-mark-finding-aid-draft-1",
+        "recordKind": "image-mark-finding-aid",
+        "findingAidBoundary": {
+          "role": "finding-aid-only",
+          "provesOrigin": false,
+          "provesAuthorship": false,
+          "keylessCopyPossible": true,
+          "originEvidenceSource": "separate-registration-record"
+        },
+        "artifact": {
+          "sha256": "b42ffeb20956007a9f77408ca072e32c27ece8bc422c02f837e8d497efb7439f",
+          "byteLength": 3859992,
+          "role": "marked-entry",
+          "decode": {
+            "status": "ok",
+            "width": 1920,
+            "height": 1080,
+            "orientationBasis": "after-exif-orientation"
+          }
+        },
+        "profile": {
+          "id": "traceweave-image-mark-trustmark-q",
+          "version": "draft-1",
+          "protocolVersion": "e-img-m-2",
+          "protocolSha256": "cba3667307941766f19b2ff9141e89c154b1f9b53a01e11391135ffe8ab64110"
+        },
+        "carrier": {
+          "algorithm": "trustmark",
+          "variant": "Q",
+          "codeCommit": "4c60b9fdb4125fca3001f0803e6890a6b55371ac",
+          "models": [
+            {
+              "id": "trustmark-Q-config",
+              "role": "config",
+              "sha256": "43f37103f92efa8bd6b1c5902bb537cc12a981dc699fca19d9bb7de8c62d03d9"
+            },
+            {
+              "id": "trustmark-Q-encoder",
+              "role": "encoder",
+              "sha256": "dc382c3f6b4fd568b27d6fbb763d6ffc2d2587126d84afe9d5ee95b4c5d99826"
+            },
+            {
+              "id": "trustmark-Q-decoder",
+              "role": "decoder",
+              "sha256": "e3d9cea5406a26590735719f8f15cb10802b11852ae69047eaf4cf17214df781"
+            }
+          ]
+        },
+        "region": {
+          "unit": "pixel",
+          "basis": "after-exif-orientation",
+          "scope": "whole-image",
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080,
+          "imageWidth": 1920,
+          "imageHeight": 1080
+        },
+        "raw": {
+          "status": "decoded",
+          "bitCount": 100,
+          "bitsHex": "decc5a65859a0f72c35557b81"
+        },
+        "decodedPayload": {
+          "status": "valid",
+          "decisive": false,
+          "ecc": "BCH_5",
+          "version": 1,
+          "payloadHex": "decc5a65859a0f72"
+        },
+        "testedBits": {
+          "basis": "direct-keyed-output",
+          "start": 0,
+          "end": 61,
+          "count": 61,
+          "rawBitCount": 100,
+          "excludedNote": "Excludes 35 BCH ECC bits (61..95) and 4 fixed version bits (96..99) per e-img-m-2 review B1."
+        },
+        "keyReference": {
+          "keyId": "e-img-m-2-key-A-test-only",
+          "derivationId": "e-img-m-1-hmac-sha256-msbf"
+        },
+        "statistic": {
+          "name": "expected-payload-agreement",
+          "n": 61,
+          "matchedBits": 61,
+          "acceptedEntries": [
+            {
+              "entryId": "m2000000",
+              "matchedBits": 61,
+              "n": 61
+            }
+          ]
+        },
+        "threshold": {
+          "k": 49,
+          "basis": "analytic, P(Bin(61, 1/2) >= 49) = 9.85e-7 <= 1e-6 per comparison",
+          "perComparisonFalseAcceptBound": 9.85e-07,
+          "calibrationId": "e-img-m-2:cba3667307941766f19b2ff9141e89c154b1f9b53a01e11391135ffe8ab64110",
+          "searchScope": {
+            "catalogueEntries": 100,
+            "keysSearched": 1,
+            "perQueryUpperBound": 9.85e-05
+          }
+        },
+        "embeddingQuality": {
+          "status": "measured",
+          "psnrDb": 46.2554,
+          "floorDb": 38.0,
+          "belowFloor": false,
+          "maxAbsDiff": 11,
+          "meanAbsDiff": 0.852539,
+          "changedSampleFraction": 0.628527,
+          "coverPixelSha256": "4b8d45e9da11928348a6f0ddfed8e10840010ff5cafe40fc9a9de537e9ec2d6a",
+          "markedPixelSha256": "784dbd14e67ad0648f518d89af02faa630c5b7d518951d353d7719b5f9b31fc3",
+          "markedSha256": "b42ffeb20956007a9f77408ca072e32c27ece8bc422c02f837e8d497efb7439f"
+        },
+        "outcome": {
+          "class": "match",
+          "code": "expected-payload"
+        },
+        "registrationLink": {
+          "registrationVersion": "traceweave-registration-draft-5",
+          "textReference": "tw1-TDE8C1777CWW71Q8G8E3GGSJZQP",
+          "statementSha256": "d35c8604e73b39c386e8821c384332fdc8bc1697a6602e5bd867e3edb0f88c32",
+          "subjectDigestMatchesCandidate": true,
+          "verificationStatus": "verified-separately",
+          "note": "Exact marked PNG bytes match the separately verified registration statement subject."
+        },
+        "confidence": null
+      }
+    },
+    {
+      "id": "valid-pixelseal-clean-no-registration",
+      "description": "PixelSeal clean query from e-img-m-2 (257 raw bits: unkeyed detection bit preds[0, 0] prepended to the 256 tested payload bits from queries.jsonl) with no registration link attached.",
+      "record": {
+        "recordVersion": "traceweave-image-mark-finding-aid-draft-1",
+        "recordKind": "image-mark-finding-aid",
+        "findingAidBoundary": {
+          "role": "finding-aid-only",
+          "provesOrigin": false,
+          "provesAuthorship": false,
+          "keylessCopyPossible": true,
+          "originEvidenceSource": "separate-registration-record"
+        },
+        "artifact": {
+          "sha256": "a98b3e0fdbf569d3e926d173de7e2fa1119650740bb72d4bf04c003243f6a951",
+          "byteLength": 3860963,
+          "role": "query",
+          "decode": {
+            "status": "ok",
+            "width": 1920,
+            "height": 1080,
+            "orientationBasis": "after-exif-orientation"
+          }
+        },
+        "profile": {
+          "id": "traceweave-image-mark-pixelseal",
+          "version": "draft-1",
+          "protocolVersion": "e-img-m-2",
+          "protocolSha256": "cba3667307941766f19b2ff9141e89c154b1f9b53a01e11391135ffe8ab64110"
+        },
+        "carrier": {
+          "algorithm": "pixelseal",
+          "variant": "default",
+          "codeCommit": "f12875a9b5e711e0c6e2dc3a22aca18231ce4a1a",
+          "models": [
+            {
+              "id": "pixelseal",
+              "role": "checkpoint",
+              "sha256": "0c5665cff20eb6ce1b5aaa7d91c19dafb418bfee32d02dd3344e4ed60d9d75bd"
+            }
+          ]
+        },
+        "region": {
+          "unit": "pixel",
+          "basis": "after-exif-orientation",
+          "scope": "whole-image",
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080,
+          "imageWidth": 1920,
+          "imageHeight": 1080
+        },
+        "raw": {
+          "status": "decoded",
+          "bitCount": 257,
+          "bitsHex": "1b6c944f1995afcce4a601fcab330b69c4f99e782ad2372bbfea155f328f45050"
+        },
+        "decodedPayload": {
+          "status": "none",
+          "decisive": false
+        },
+        "testedBits": {
+          "basis": "direct-keyed-output",
+          "start": 1,
+          "end": 257,
+          "count": 256,
+          "rawBitCount": 257,
+          "excludedNote": "Excludes raw index 0 (unkeyed detection bit preds[0, 0]); tests payload bits 1..256."
+        },
+        "keyReference": {
+          "keyId": "e-img-m-2-key-A-test-only",
+          "derivationId": "e-img-m-1-hmac-sha256-msbf"
+        },
+        "statistic": {
+          "name": "expected-payload-agreement",
+          "n": 256,
+          "matchedBits": 256,
+          "acceptedEntries": [
+            {
+              "entryId": "m2000000",
+              "matchedBits": 256,
+              "n": 256
+            }
+          ],
+          "maxOtherBits": 146,
+          "maxOtherEntryId": "m2000075"
+        },
+        "threshold": {
+          "k": 167,
+          "basis": "analytic, P(Bin(256, 1/2) >= 167) = 6.22e-7 <= 1e-6 per comparison",
+          "perComparisonFalseAcceptBound": 6.22e-07,
+          "calibrationId": "e-img-m-2:cba3667307941766f19b2ff9141e89c154b1f9b53a01e11391135ffe8ab64110",
+          "searchScope": {
+            "catalogueEntries": 100,
+            "keysSearched": 1,
+            "perQueryUpperBound": 6.22e-05
+          }
+        },
+        "embeddingQuality": {
+          "status": "unavailable",
+          "reason": "no-cover-reference",
+          "floorDb": 38.0
+        },
+        "outcome": {
+          "class": "match",
+          "code": "expected-payload"
+        },
+        "registrationLink": null,
+        "confidence": null
+      }
+    },
+    {
+      "id": "valid-tm-unmarked-cover-no-match",
+      "description": "Unmarked cover image from e-img-m-2 returning no-match with maxOtherBits 43 < k=49.",
+      "record": {
+        "recordVersion": "traceweave-image-mark-finding-aid-draft-1",
+        "recordKind": "image-mark-finding-aid",
+        "findingAidBoundary": {
+          "role": "finding-aid-only",
+          "provesOrigin": false,
+          "provesAuthorship": false,
+          "keylessCopyPossible": true,
+          "originEvidenceSource": "separate-registration-record"
+        },
+        "artifact": {
+          "sha256": "8c18d43f5865eeda6a0dfc5bb4936831da5c524a724a64b3432f57b084a3ea11",
+          "byteLength": 3859514,
+          "role": "query",
+          "decode": {
+            "status": "ok",
+            "width": 1920,
+            "height": 1080,
+            "orientationBasis": "after-exif-orientation"
+          }
+        },
+        "profile": {
+          "id": "traceweave-image-mark-trustmark-q",
+          "version": "draft-1",
+          "protocolVersion": "e-img-m-2",
+          "protocolSha256": "cba3667307941766f19b2ff9141e89c154b1f9b53a01e11391135ffe8ab64110"
+        },
+        "carrier": {
+          "algorithm": "trustmark",
+          "variant": "Q",
+          "codeCommit": "4c60b9fdb4125fca3001f0803e6890a6b55371ac",
+          "models": [
+            {
+              "id": "trustmark-Q-config",
+              "role": "config",
+              "sha256": "43f37103f92efa8bd6b1c5902bb537cc12a981dc699fca19d9bb7de8c62d03d9"
+            },
+            {
+              "id": "trustmark-Q-decoder",
+              "role": "decoder",
+              "sha256": "e3d9cea5406a26590735719f8f15cb10802b11852ae69047eaf4cf17214df781"
+            }
+          ]
+        },
+        "region": {
+          "unit": "pixel",
+          "basis": "after-exif-orientation",
+          "scope": "whole-image",
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080,
+          "imageWidth": 1920,
+          "imageHeight": 1080
+        },
+        "raw": {
+          "status": "decoded",
+          "bitCount": 100,
+          "bitsHex": "517a0a30ace48a083f12092ab"
+        },
+        "decodedPayload": {
+          "status": "invalid",
+          "decisive": false,
+          "ecc": "BCH_5",
+          "version": 3
+        },
+        "testedBits": {
+          "basis": "direct-keyed-output",
+          "start": 0,
+          "end": 61,
+          "count": 61,
+          "rawBitCount": 100,
+          "excludedNote": "Excludes 35 BCH ECC bits (61..95) and 4 fixed version bits (96..99) per e-img-m-2 review B1."
+        },
+        "keyReference": {
+          "keyId": "e-img-m-2-key-A-test-only",
+          "derivationId": "e-img-m-1-hmac-sha256-msbf"
+        },
+        "statistic": {
+          "name": "expected-payload-agreement",
+          "n": 61,
+          "matchedBits": null,
+          "acceptedEntries": [],
+          "maxOtherBits": 43,
+          "maxOtherEntryId": "m2000071"
+        },
+        "threshold": {
+          "k": 49,
+          "basis": "analytic, P(Bin(61, 1/2) >= 49) = 9.85e-7 <= 1e-6 per comparison",
+          "perComparisonFalseAcceptBound": 9.85e-07,
+          "calibrationId": "e-img-m-2:cba3667307941766f19b2ff9141e89c154b1f9b53a01e11391135ffe8ab64110",
+          "searchScope": {
+            "catalogueEntries": 100,
+            "keysSearched": 1,
+            "perQueryUpperBound": 9.85e-05
+          }
+        },
+        "embeddingQuality": {
+          "status": "unavailable",
+          "reason": "no-cover-reference",
+          "floorDb": 38.0
+        },
+        "outcome": {
+          "class": "no-match",
+          "code": "no-match"
+        },
+        "registrationLink": null,
+        "confidence": null
+      }
+    },
+    {
+      "id": "valid-decode-abstain-too-small",
+      "description": "Image below minimum supported dimensions abstains cleanly before mark decoding.",
+      "record": {
+        "recordVersion": "traceweave-image-mark-finding-aid-draft-1",
+        "recordKind": "image-mark-finding-aid",
+        "findingAidBoundary": {
+          "role": "finding-aid-only",
+          "provesOrigin": false,
+          "provesAuthorship": false,
+          "keylessCopyPossible": true,
+          "originEvidenceSource": "separate-registration-record"
+        },
+        "artifact": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "byteLength": 128,
+          "role": "query",
+          "decode": {
+            "status": "abstain",
+            "code": "too-small"
+          }
+        },
+        "profile": {
+          "id": "traceweave-image-mark-trustmark-q",
+          "version": "draft-1",
+          "protocolVersion": "e-img-m-2",
+          "protocolSha256": "cba3667307941766f19b2ff9141e89c154b1f9b53a01e11391135ffe8ab64110"
+        },
+        "carrier": {
+          "algorithm": "trustmark",
+          "variant": "Q",
+          "codeCommit": "4c60b9fdb4125fca3001f0803e6890a6b55371ac",
+          "models": [
+            {
+              "id": "trustmark-Q-config",
+              "role": "config",
+              "sha256": "43f37103f92efa8bd6b1c5902bb537cc12a981dc699fca19d9bb7de8c62d03d9"
+            },
+            {
+              "id": "trustmark-Q-decoder",
+              "role": "decoder",
+              "sha256": "e3d9cea5406a26590735719f8f15cb10802b11852ae69047eaf4cf17214df781"
+            }
+          ]
+        },
+        "region": null,
+        "raw": {
+          "status": "abstain",
+          "code": "too-small"
+        },
+        "decodedPayload": {
+          "status": "none",
+          "decisive": false
+        },
+        "testedBits": {
+          "basis": "direct-keyed-output",
+          "start": 0,
+          "end": 61,
+          "count": 61,
+          "rawBitCount": 100,
+          "excludedNote": "Excludes 35 BCH ECC bits (61..95) and 4 fixed version bits (96..99) per e-img-m-2 review B1."
+        },
+        "keyReference": {
+          "keyId": "e-img-m-2-key-A-test-only",
+          "derivationId": "e-img-m-1-hmac-sha256-msbf"
+        },
+        "statistic": {
+          "name": "expected-payload-agreement",
+          "n": 61,
+          "matchedBits": null,
+          "acceptedEntries": []
+        },
+        "threshold": {
+          "k": 49,
+          "basis": "analytic, P(Bin(61, 1/2) >= 49) = 9.85e-7 <= 1e-6 per comparison",
+          "perComparisonFalseAcceptBound": 9.85e-07,
+          "calibrationId": "e-img-m-2:cba3667307941766f19b2ff9141e89c154b1f9b53a01e11391135ffe8ab64110",
+          "searchScope": {
+            "catalogueEntries": 100,
+            "keysSearched": 1,
+            "perQueryUpperBound": 9.85e-05
+          }
+        },
+        "embeddingQuality": {
+          "status": "unavailable",
+          "reason": "no-cover-reference",
+          "floorDb": 38.0
+        },
+        "outcome": {
+          "class": "abstain",
+          "code": "too-small"
+        },
+        "registrationLink": null,
+        "confidence": null
+      }
+    }
+  ],
+  "invalid": [
+    {
+      "id": "neg-proves-origin-true",
+      "expect": "schema",
+      "why": "Finding aid must never claim provesOrigin: true.",
+      "mutation": ["findingAidBoundary", "provesOrigin", true]
+    },
+    {
+      "id": "neg-proves-authorship-true",
+      "expect": "schema",
+      "why": "Finding aid must never claim provesAuthorship: true.",
+      "mutation": ["findingAidBoundary", "provesAuthorship", true]
+    },
+    {
+      "id": "neg-keyless-copy-false",
+      "expect": "schema",
+      "why": "Public decoder/encoder schemes cannot claim keylessCopyPossible: false.",
+      "mutation": ["findingAidBoundary", "keylessCopyPossible", false]
+    },
+    {
+      "id": "neg-decoded-payload-decisive-true",
+      "expect": "schema",
+      "why": "Blind BCH/payload decode is never decisive.",
+      "mutation": ["decodedPayload", "decisive", true]
+    },
+    {
+      "id": "neg-secret-key-bytes-injected",
+      "expect": "schema",
+      "why": "Raw key bytes must never appear in keyReference.",
+      "mutation": ["keyReference", "keyHex", "00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff"]
+    },
+    {
+      "id": "neg-confidence-non-null",
+      "expect": "schema",
+      "why": "Uncalibrated confidence must remain null.",
+      "mutation": ["confidence", 0.99]
+    },
+    {
+      "id": "neg-missing-model-digests",
+      "expect": "schema",
+      "why": "IMG.5 field 1 (carrier.models) cannot be deleted.",
+      "delete": ["carrier", "models"]
+    },
+    {
+      "id": "neg-missing-statistic-n",
+      "expect": "schema",
+      "why": "IMG.5 field 2 (statistic.n) cannot be deleted.",
+      "delete": ["statistic", "n"]
+    },
+    {
+      "id": "neg-missing-threshold-basis",
+      "expect": "schema",
+      "why": "IMG.5 field 3 (threshold.basis) cannot be deleted.",
+      "delete": ["threshold", "basis"]
+    },
+    {
+      "id": "neg-missing-key-derivation-id",
+      "expect": "schema",
+      "why": "IMG.5 field 4 (keyReference.derivationId) cannot be deleted.",
+      "delete": ["keyReference", "derivationId"]
+    },
+    {
+      "id": "neg-missing-embedding-quality",
+      "expect": "schema",
+      "why": "IMG.5 field 5 (embeddingQuality) cannot be deleted.",
+      "delete": ["embeddingQuality"]
+    },
+    {
+      "id": "neg-missing-tested-bits",
+      "expect": "schema",
+      "why": "IMG.5 field 6 (testedBits) cannot be deleted.",
+      "delete": ["testedBits"]
+    },
+    {
+      "id": "neg-tw1-bad-check-char",
+      "expect": "reference-check",
+      "why": "Corrupted Luhn mod 32 check character in tw1- registration pointer.",
+      "mutation": ["registrationLink", "textReference", "tw1-TDE8C1777CWW71Q8G8E3GGSJZQQ"]
+    },
+    {
+      "id": "neg-tw1-statement-mismatch",
+      "expect": "reference-mismatch",
+      "why": "Valid tw1- check character, but belongs to a different statementSha256.",
+      "mutation": ["registrationLink", "textReference", "tw1-QTDYH1TK78G2ERN86DXVXZ7VY7D"]
+    },
+    {
+      "id": "neg-tested-bits-n-mismatch",
+      "expect": "tested-bits-mismatch",
+      "why": "testedBits.count (60) disagrees with statistic.n (61).",
+      "mutation": ["testedBits", "count", 60]
+    },
+    {
+      "id": "neg-tested-bits-out-of-range",
+      "expect": "tested-bits-range",
+      "why": "testedBits.end exceeds rawBitCount (101 > 100) while count remains 61.",
+      "mutations": [
+        ["testedBits", "start", 40],
+        ["testedBits", "end", 101]
+      ]
+    },
+    {
+      "id": "neg-learned-scheme-empty-models",
+      "expect": "models-missing",
+      "why": "Learned mark carrier (trustmark) requires at least one pinned model digest.",
+      "mutation": ["carrier", "models", []]
+    },
+    {
+      "id": "neg-match-below-threshold",
+      "expect": "threshold-violation",
+      "why": "Accepted entry matchedBits (48) is below threshold k (49).",
+      "mutations": [
+        ["statistic", "matchedBits", 48],
+        ["statistic", "acceptedEntries", [{"entryId": "m2000000", "matchedBits": 48, "n": 61}]]
+      ]
+    },
+    {
+      "id": "neg-freetext-origin-note",
+      "expect": "origin-claim-wording",
+      "why": "Free-text registrationLink.note must not assert origin or authorship.",
+      "mutation": ["registrationLink", "note", "Proves origin and authorship of creator."]
+    },
+    {
+      "id": "neg-freetext-origin-threshold-basis",
+      "expect": "origin-claim-wording",
+      "why": "Free-text threshold.basis must not assert origin.",
+      "mutation": ["threshold", "basis", "Proves origin with 99.9% certainty"]
+    },
+    {
+      "id": "neg-freetext-origin-excluded-note",
+      "expect": "origin-claim-wording",
+      "why": "Free-text testedBits.excludedNote must not assert authorship.",
+      "mutation": ["testedBits", "excludedNote", "Proves authorship"]
+    },
+    {
+      "id": "neg-abstain-with-accepted-entries",
+      "baseId": "valid-decode-abstain-too-small",
+      "expect": "outcome-mismatch",
+      "why": "Decode abstention (too-small) must have empty acceptedEntries and matchedBits null.",
+      "mutation": ["statistic", "acceptedEntries", [{"entryId": "m2000000", "matchedBits": 61, "n": 61}]]
+    },
+    {
+      "id": "neg-match-statistic-matched-mismatch",
+      "expect": "statistic-matched-mismatch",
+      "why": "statistic.matchedBits (0) disagrees with acceptedEntries[0].matchedBits (61) on match.",
+      "mutation": ["statistic", "matchedBits", 0]
+    },
+    {
+      "id": "neg-whole-image-partial-region",
+      "expect": "region-whole-image-mismatch",
+      "why": "region.scope whole-image cannot carry partial coordinates.",
+      "mutations": [
+        ["region", "x", 10],
+        ["region", "width", 100]
+      ]
+    }
+  ]
+}

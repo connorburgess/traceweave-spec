@@ -92,6 +92,23 @@ class ContractTests(unittest.TestCase):
                     with self.assertRaises(ValueError):
                         read_json(path)
 
+    def test_image_mark_finding_aid_schema_and_boundary(self):
+        from jsonschema import Draft202012Validator, FormatChecker
+        schema = read_json(ROOT / "schemas/image-mark-finding-aid.schema.json")
+        Draft202012Validator.check_schema(schema)
+        validator = Draft202012Validator(schema, format_checker=FormatChecker())
+        doc = read_json(ROOT / "research/drafts/image-mark-finding-aid/fixtures.json")
+        base = doc["valid"][0]["record"]
+        validator.validate(base)
+        bad_origin = copy.deepcopy(base)
+        bad_origin["findingAidBoundary"]["provesOrigin"] = True
+        with self.assertRaises(ValidationError):
+            validator.validate(bad_origin)
+        bad_secret = copy.deepcopy(base)
+        bad_secret["keyReference"]["keyHex"] = "00" * 32
+        with self.assertRaises(ValidationError):
+            validator.validate(bad_secret)
+
 
 if __name__ == "__main__":
     unittest.main()

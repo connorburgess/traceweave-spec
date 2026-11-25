@@ -4,7 +4,7 @@
   "c2paVersion": "2.5",
   "c2paSpecification": "https://spec.c2pa.org/specifications/specifications/2.5/specs/C2PA_Specification.html",
   "notice": "Illustrative only: CBOR/JUMBF structures in JSON diagnostic form. Not a signed C2PA manifest, not produced or validated by any C2PA implementation, and no compatibility claim is made.",
-  "claimWordsPattern": "(?i)\\b(compatible|interoperable|compliant|conformant|certified|c2pa-ready)\\b",
+  "claimWordsPattern": "(?i)(\\b(compatible|interoperable|compliant|conformant|certified|c2pa-ready)\\b|supports\\s+c2pa|works\\s+with\\s+content\\s+credentials)",
   "forbiddenKeys": [
     "similarityScore",
     "score",
@@ -403,6 +403,79 @@
       "source": "the soft-binding-image source, exported and imported back",
       "side": "c2pa",
       "rulesFrom": "soft-binding-image"
+    },
+    "registration-link": {
+      "source": "a Traceweave M4 registration statement and tw1- reference linked from a sidecar C2PA manifest via org.traceweave.registration-link",
+      "side": "c2pa",
+      "assertionLabel": "org.traceweave.registration-link",
+      "placement": "gathered_assertions",
+      "mapped": [
+        {
+          "tw": "/statementSha256",
+          "to": "/assertions/org.traceweave.registration-link/statementSha256",
+          "type": "bstr",
+          "conv": "hex-to-bstr"
+        },
+        {
+          "tw": "/textReference",
+          "to": "/assertions/org.traceweave.registration-link/textReference",
+          "type": "tstr",
+          "conv": "text"
+        },
+        {
+          "tw": "/statement/predicate/registrationVersion",
+          "to": "/assertions/org.traceweave.registration-link/registrationVersion",
+          "type": "tstr",
+          "conv": "text"
+        },
+        {
+          "tw": "/statement/predicateType",
+          "to": "/assertions/org.traceweave.registration-link/predicateType",
+          "type": "tstr",
+          "conv": "text"
+        },
+        {
+          "tw": "/statement/subject/0/digest/sha256",
+          "to": "/assertions/org.traceweave.registration-link/subjectSha256",
+          "type": "bstr",
+          "conv": "hex-to-bstr"
+        },
+        {
+          "tw": "/statement/subject/0/digest/sha256",
+          "to": "/assertions/c2pa.hash.data/hash",
+          "type": "bstr",
+          "conv": "hex-to-bstr-whole-file"
+        },
+        {
+          "tw": "/relation",
+          "to": "/assertions/org.traceweave.registration-link/relation",
+          "type": "tstr",
+          "conv": "text"
+        }
+      ],
+      "lossy": [
+        "/statement/predicate/claims/createdAt"
+      ],
+      "unmapped": [
+        "/statement/_type",
+        "/statement/subject/0/name",
+        "/statement/predicate/contentKind",
+        "/statement/predicate/nonce",
+        "/statement/predicate/possession",
+        "/statement/predicate/catalogue",
+        "/statement/predicate/implementation",
+        "/statement/predicate/specCommit"
+      ],
+      "opaque": [
+        "/notShown"
+      ],
+      "conflicting": [
+        "/timeEvidenceSummary"
+      ],
+      "forbidden": [
+        "/assertions/c2pa.soft-binding",
+        "/assertions/c2pa.hash.data/exclusions"
+      ]
     }
   }
 }

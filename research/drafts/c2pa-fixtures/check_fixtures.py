@@ -32,7 +32,25 @@ TDATE = re.compile(r'^0\("(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)"\)$')
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 MANIFEST_ID = re.compile(r"^urn:c2pa:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 RELATIONS = ("same-bytes", "bytes-minus-exclusions", "found-by-soft-binding")
+REG_RELATIONS = ("same-bytes", "bytes-minus-exclusions", "derived-copy")
+REF_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
+REF_PATTERN = re.compile(r"^tw1-[0-9A-HJKMNP-TV-Z]{27}$")
 MISSING = object()
+
+
+def luhn32_check(body):
+    factor, total = 2, 0
+    for ch in reversed(body):
+        addend = factor * REF_ALPHABET.index(ch)
+        factor = 1 if factor == 2 else 2
+        total += addend // 32 + addend % 32
+    return REF_ALPHABET[(32 - total % 32) % 32]
+
+
+def text_reference(statement_sha256_hex):
+    v = int(statement_sha256_hex, 16) >> (256 - 130)
+    body = "".join(REF_ALPHABET[(v >> (5 * (25 - i))) & 31] for i in range(26))
+    return "tw1-" + body + luhn32_check(body)
 
 
 # ---------------------------------------------------------------- JSON helpers
@@ -246,12 +264,36 @@ class Checker:
         label = rules.get("assertionLabel")
         if label and label in assertions:
             gathered = {u.get("url") for u in claim.get("gathered_assertions", [])}
-            if f"self#jumbf=c2pa.assertions/{label}" not in gathered and self.fx["mapping"].get("signerRanComparison") is not True:
-                self.fail("attribution", "the report would be attributed to the manifest signer (10.2.2)")
-            carried = bstr_bytes(assertions[label].get("body"))
-            digest = bstr_bytes(assertions[label].get("bodySha256"))
-            if carried is not None and digest is not None and hashlib.sha256(carried).digest() != digest:
-                self.fail("body-digest-mismatch", "carried body bytes do not hash to bodySha256")
+            signer_owns = (
+                self.fx["mapping"].get("signerRanComparison") is True
+                or self.fx["mapping"].get("signerIsRegistrant") is True
+            )
+            if f"self#jumbf=c2pa.assertions/{label}" not in gathered and not signer_owns:
+                self.fail("attribution", "the assertion would be attributed to the manifest signer (10.2.2)")
+            if label == "org.traceweave.comparison-report":
+                carried = bstr_bytes(assertions[label].get("body"))
+                digest = bstr_bytes(assertions[label].get("bodySha256"))
+                if carried is not None and digest is not None and hashlib.sha256(carried).digest() != digest:
+                    self.fail("body-digest-mismatch", "carried body bytes do not hash to bodySha256")
+            elif label == "org.traceweave.registration-link":
+                body = assertions[label]
+                ref = body.get("textReference")
+                st_bytes = bstr_bytes(body.get("statementSha256"))
+                subj_bytes = bstr_bytes(body.get("subjectSha256"))
+                rel = body.get("relation")
+                if not isinstance(ref, str) or not REF_PATTERN.fullmatch(ref):
+                    self.fail("reference-shape", "malformed tw1- textReference")
+                elif luhn32_check(ref[4:-1]) != ref[-1]:
+                    self.fail("reference-check", "tw1- Luhn mod 32 check character mismatch")
+                elif st_bytes is not None and text_reference(st_bytes.hex()) != ref:
+                    self.fail("reference-mismatch", "tw1- textReference does not match statementSha256")
+                if rel not in REG_RELATIONS:
+                    self.fail("fixture-shape", f"unknown registration-link relation {rel!r}")
+                elif rel == "same-bytes":
+                    hd = assertions.get("c2pa.hash.data", {})
+                    hd_bytes = bstr_bytes(hd.get("hash"))
+                    if hd.get("exclusions") or (subj_bytes is not None and hd_bytes != subj_bytes):
+                        self.fail("identity-conflation", "same-bytes requires whole-file c2pa.hash.data without exclusions")
 
     # ---- in-toto side
 
@@ -310,7 +352,9 @@ class Checker:
                 if field not in rules[cat]:
                     self.fail("declaration-unknown", f"{cat} {field} is not a {cat} rule")
                 if "carriedAt" in entry and concrete(tw, field):
-                    if get(side, entry["carriedAt"]) != get(tw, field):
+                    got_val = get(side, entry["carriedAt"])
+                    src_val = get(tw, field)
+                    if got_val != src_val and not (isinstance(src_val, str) and got_val == f'0("{src_val}")'):
                         self.fail("value-mismatch", f"{field} carried at {entry['carriedAt']}")
         for path in leaves(tw):
             if not any(covers(p, path) for p in patterns):

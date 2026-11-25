@@ -110,7 +110,7 @@ A report with several candidate artifacts needs one statement per candidate, or 
 
 ### 1.6 Mark-detection record → C2PA (fixture f4)
 
-No Traceweave schema exists for mark detection. The source uses the lane 08 shared-container shape, and every value in it is invented. No mark was embedded or detected, and the IMG gates stay owner-gated. **A detection is a verifier result.** The C2PA structures it can map to are the ones the *embedder's* manifest would hold.
+A draft profile-specific schema now exists for image-mark finding aids: [schemas/image-mark-finding-aid.schema.json](../../schemas/image-mark-finding-aid.schema.json) (see [image-mark-finding-aid.md](image-mark-finding-aid.md), IMG.5). Fixture `f4` uses the earlier Lane 08 shared-container shape with invented values (no mark was embedded or detected in this fixture). **A detection is a verifier result.** The C2PA structures it can map to are the ones the *embedder's* manifest would hold; all six IMG.5 fields (model digests, statistic with `n`, threshold basis, key/derivation id, embedding quality, tested bit positions) and any `tw1-` registration pointer remain unmapped in C2PA `c2pa.soft-binding`.
 
 | Traceweave pointer | C2PA location | Conversion | Status |
 | --- | --- | --- | --- |
@@ -148,6 +148,29 @@ No Traceweave schema exists for mark detection. The source uses the lane 08 shar
 | Regions of interest: spatial, temporal, frame, textual, identified (16.9.2) | Pixel regions after orientation, or byte spans | conflicting (§4.2, §4.3) |
 | `c2pa.external-reference`, hashed `location` (16.4.2) | A pointer to a DSSE envelope (§3, option C) | mapped only as a pointer |
 | Resolution API `similarityScore` 0–100 (C2 OpenAPI) | **None, by design**: the report has no score field (contract §8) | unmapped; an importer must not store it as evidence |
+
+### 1.8 M4 registration record → C2PA sidecar custom assertion (`org.traceweave.registration-link`, fixture f7)
+
+Source: [statement.json](registration-fixtures/fixtures/statement.json) (`traceweave-registration-draft-5`, [design](registration-record.md)), whose canonical JCS bytes hash to `statementSha256` (`3f308f18…c93e`) and yield the frozen §9.1 text reference `tw1-7WR8Y61HYTR7RJE0NN5W52C8TAN` ([text-reference-three-roots.json](registration-fixtures/fixtures/text-reference-three-roots.json)).
+
+A C2PA **sidecar** manifest (`c2pa.hash.data` with no `exclusions`) or custom assertion links cleanly to a Traceweave M4 registration record via `org.traceweave.registration-link` under the `org.traceweave` namespace (`traceweave.org`). It carries **both** the `tw1-` reference (for human-readable lookup) and the full `statementSha256` (avoiding the 2^65 birthday equivocation margin of 130-bit references alone, [registration design §9.1](registration-record.md#91-text-reference-normative-frozen-2026-11-24)). It stays in `gathered_assertions` unless the manifest signer is the registrant (`signerIsRegistrant: true`).
+
+| Traceweave pointer | C2PA location | Conversion | Status | Notes |
+| --- | --- | --- | --- | --- |
+| `/statementSha256` | `/assertions/org.traceweave.registration-link/statementSha256` | hex → 32-byte `bstr` | mapped | Must match the 130-bit prefix of `textReference` |
+| `/textReference` | `/assertions/org.traceweave.registration-link/textReference` | `tstr` | mapped | Frozen `tw1-` Crockford base32 + Luhn mod 32 check character |
+| `/statement/predicate/registrationVersion` | `/assertions/org.traceweave.registration-link/registrationVersion` | `tstr` | mapped | `traceweave-registration-draft-5` |
+| `/statement/predicateType` | `/assertions/org.traceweave.registration-link/predicateType` | `tstr` | mapped | `https://traceweave.org/predicate/registration/draft-5` |
+| `/statement/subject/0/digest/sha256` | `/assertions/org.traceweave.registration-link/subjectSha256` and `/assertions/c2pa.hash.data/hash` | hex → 32-byte `bstr` | mapped | `c2pa.hash.data` equality holds only when `relation` is `same-bytes` (sidecar, no exclusions) |
+| `/relation` | `/assertions/org.traceweave.registration-link/relation` | `tstr` | mapped | Closed list: `same-bytes`, `bytes-minus-exclusions`, `derived-copy` |
+| `/statement/predicate/claims/createdAt` | `/assertions/org.traceweave.registration-link/claimedCreatedAt` | text → `tdate` | lossy | Claimed creation time only; not a trusted C2PA `sigTst2` (C1 8.9) |
+| `/notShown` | `/assertions/org.traceweave.registration-link/notShown` | array of `tstr` | **opaque** | Disclaims authorship, originality, first-creation, ownership, permission; ignored by C2PA validators |
+| `/statement/_type`, `/statement/subject/0/name`, `/statement/predicate/contentKind` | — | — | unmapped | Envelope/coarse labels; `subject/0/name` is not `instanceID` |
+| `/statement/predicate/nonce`, `/statement/predicate/possession`, `/statement/predicate/catalogue` | — | — | unmapped | Kept private in the registration statement/bundle; never disclosed in a public C2PA manifest |
+| `/statement/predicate/implementation`, `/statement/predicate/specCommit` | — | — | unmapped | Statement producer metadata; not `claim_generator_info` |
+| `/timeEvidenceSummary` | none (`sigTst2` is separate) | — | **conflicting** | Registration RFC 3161 / OpenTimestamps roots stamp the DSSE signature and cannot be reused as C2PA `sigTst2` over the claim signature ([registration design §15 S12](registration-record.md#15-roadmap-mapping-and-proposed-roadmapmd-text-s13-roadmapmd-is-not-changed-here)) |
+
+Note on `claims.aiUse` ([registration design §4.7](registration-record.md#47-self-declared-ai-use-normative-owner-decision-2026-11-24)): if a registration carries `aiUse.declared`, `generated` and `modified` correspond to the IPTC URIs `trainedAlgorithmicMedia` and `compositeWithTrainedAlgorithmicMedia`, while `no-generative-ai` has **no** IPTC/C2PA term (unmapped/conflicting; never emit a negative claim as an IPTC URI, and never render either as Traceweave-verified). Forbidden in `org.traceweave.registration-link`: deriving `/assertions/c2pa.soft-binding` from a registration link, or adding `/assertions/c2pa.hash.data/exclusions` when `relation` is `same-bytes`.
 
 ## 2. Fingerprints as soft bindings
 
@@ -335,7 +358,7 @@ Not allowed: "compatible", "interoperable", "compliant", "conformant", "certifie
 
 ## 8. Fixtures and checker
 
-[c2pa-fixtures/](c2pa-fixtures/README.md) holds six fixtures. Each C2PA side is written by hand in JSON diagnostic form, labelled illustrative, and unsigned.
+[c2pa-fixtures/](c2pa-fixtures/README.md) holds seven positive fixtures (`f1`–`f7`). Each C2PA side is written by hand in JSON diagnostic form, labelled illustrative, and unsigned.
 
 | Fixture | Case | Checker result |
 | --- | --- | --- |
@@ -345,8 +368,9 @@ Not allowed: "compatible", "interoperable", "compliant", "conformant", "certifie
 | f4 | Invented mark-detection record against the embedder's soft binding and `c2pa.watermarked.bound` | no failure |
 | f5 | Round trip of f1: 2 of 20 leaf fields survive, 18 are listed as lost | no failure |
 | f6 | Go token-catalogue entry as two soft-binding assertions | no failure |
+| f7 | Sidecar manifest linking to an M4 registration statement via `tw1-` reference and `statementSha256` | no failure; `tw1-` check and prefix re-derived |
 
-Eighteen negative fixtures each change one thing in a positive fixture and must be rejected with exactly their expected code. All 18 were rejected as expected, on 2026-11-23 with Python 3.14.6. They include the two that the brief requires: a lossy field silently dropped (`neg-lossy-dropped`, `lossy-undeclared`) and a claim of compatibility (`neg-compatibility-claim`, `claim-wording`). The checker also fails if any rule pointer is missing from this document. Commands and the full code list are in the [fixtures README](c2pa-fixtures/README.md).
+Twenty-two negative fixtures each change one thing in a positive fixture and must be rejected with exactly their expected code. They include a lossy field silently dropped (`neg-lossy-dropped`, `lossy-undeclared`), a claim of compatibility (`neg-compatibility-claim`, `claim-wording`), and four registration-link negatives (`neg-reg-tw1-bad-check`, `neg-reg-tw1-statement-mismatch`, `neg-reg-same-bytes-exclusions`, `neg-reg-created-attribution`). The checker also fails if any rule pointer is missing from this document. Commands and the full code list are in the [fixtures README](c2pa-fixtures/README.md).
 
 **C2PA tool availability.** No `c2patool` is on the path, no `c2pa` Python module can be imported, and the local Cargo and Go module caches hold no C2PA crate or module. Nothing was installed (no global installs; any download needs the owner). **No fixture was validated by a C2PA implementation.** The fixtures check this mapping's own rules, not C2PA conformance.
 
@@ -354,8 +378,8 @@ Eighteen negative fixtures each change one thing in a positive fixture and must 
 
 | Gate | Status after this draft |
 | --- | --- |
-| C2PA.1 | **Draft, open.** Pinned to C2PA 2.5. Every field of the report, the provenance block, the image and token catalogue entries and the mark-detection record is classified as mapped, lossy, opaque, unmapped or conflicting, both directions (§1). Open: a non-author review, and D1 |
+| C2PA.1 | **Audited & complete for non-author review (2026-11-25).** Pinned to C2PA 2.5, uses the owned `traceweave.org` (`org.traceweave.*`) namespace, classifies every field (mapped / lossy / opaque / unmapped / conflicting) across catalogues, reports, mark detection, and M4 `tw1-` registration linkage (§1.2–§1.8), with `check_fixtures.py` wired into `tools/validate.py`. Needs non-author review and D1 |
 | C2PA.2 | **Open.** No C2PA tool was available or run; no adapter exists; the fixtures are hand-written. D7 (tool download) and D10 (wording) need the owner |
-| C2PA.3 | **Met for now, by inspection on 2026-11-23:** the repository README has no C2PA claim, and `spec/attestations.md` says "No C2PA compatibility is claimed yet". Re-check whenever README text changes |
+| C2PA.3 | **Met by inspection (2026-11-25):** `README.md` makes no C2PA claim, `spec/attestations.md` states "No C2PA compatibility is claimed yet", and `docs/sources.md` cites C2PA 2.5 without claiming compatibility. Inside `tools/validate.py`, `check_fixtures.py` additionally enforces `claimWordsPattern` across the C2PA JSON fixtures. Re-check whenever README text changes |
 
 **Needs the owner:** D3 (fixing the `org.traceweave.*` names, any public contact for a list entry, and anything published under `traceweave.org`), D4 and D6 (whether fingerprints may leave the private catalogue at all), D7 (downloading and building a C2PA tool), D10 (the C2PA.2 wording), and any registration pull request.

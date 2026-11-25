@@ -9,9 +9,9 @@ These fixtures belong to the [C2PA mapping draft](../c2pa-mapping.md) (roadmap g
 | Path | Content |
 | --- | --- |
 | `mapping-rules.json` | The mapping table of the draft in machine-readable form: for each fixture kind, the mapped fields (source pointer, target pointer, type, conversion) and the lossy, unmapped, opaque, conflicting and forbidden fields. It also holds the pinned soft-binding algorithm ids (79, from the list at `b445c12f`), the standard labels, the hash algorithms and the deprecated constructs of C2PA 2.5 |
-| `fixtures/` | Six positive fixtures, f1–f6 (table in the draft, §8) |
-| `negative/` | 18 broken fixtures. Each changes one thing in a positive fixture, and `expect.code` names the one failure it must produce |
-| `build_fixtures.py` | Rebuilds both directories from committed Traceweave sources: entry `s0000000` of the `e-img-f-2` image catalogue, the `sum.go` reference catalogue of `go-function-in-host`, and `example-report.json`. It records each source file's SHA-256 |
+| `fixtures/` | Seven positive fixtures, f1–f7 (table in the draft, §8) |
+| `negative/` | 22 broken fixtures. Each changes one thing in a positive fixture, and `expect.code` names the one failure it must produce |
+| `build_fixtures.py` | Rebuilds both directories from committed Traceweave sources: entry `s0000000` of the `e-img-f-2` image catalogue, the `sum.go` reference catalogue of `go-function-in-host`, `example-report.json`, and the registration statement fixture `statement.json` with its `tw1-` reference. It records each source file's SHA-256 |
 | `check_fixtures.py` | The checker. Standard library only, Python 3.11 or later |
 
 ## Notation on the C2PA side
@@ -39,7 +39,7 @@ For every fixture:
 - **Round trip:** the declared survivors and losses equal what the imported record actually contains. Nothing is invented, and every survivor comes from a mapped rule.
 - **Drift:** every rule pointer appears in backticks in the mapping document, and each source file still has the SHA-256 recorded at build time.
 
-Failure codes: `alg-unregistered-undeclared`, `assertion-missing`, `assertion-undeclared`, `attribution`, `body-digest-mismatch`, `claim-wording`, `conflict-undeclared`, `declaration-unknown`, `deprecated-construct`, `field-unruled`, `fixture-shape`, `forbidden-field`, `hard-binding-count`, `identity-conflation`, `intoto-shape`, `kind-unknown`, `label-namespace`, `lossy-undeclared`, `mapped-missing`, `notice-missing`, `opaque-undeclared`, `round-trip-invented`, `round-trip-misdeclared`, `round-trip-unsupported`, `signature-claimed`, `soft-as-hard`, `soft-binding-missing`, `source-drift`, `type-mismatch`, `unmapped-undeclared`, `value-mismatch`, `version-pin`, plus `doc-drift` for the whole run.
+Failure codes: `alg-unregistered-undeclared`, `assertion-missing`, `assertion-undeclared`, `attribution`, `body-digest-mismatch`, `claim-wording`, `conflict-undeclared`, `declaration-unknown`, `deprecated-construct`, `field-unruled`, `fixture-shape`, `forbidden-field`, `hard-binding-count`, `identity-conflation`, `intoto-shape`, `kind-unknown`, `label-namespace`, `lossy-undeclared`, `mapped-missing`, `notice-missing`, `opaque-undeclared`, `reference-check`, `reference-mismatch`, `reference-shape`, `round-trip-invented`, `round-trip-misdeclared`, `round-trip-unsupported`, `signature-claimed`, `soft-as-hard`, `soft-binding-missing`, `source-drift`, `type-mismatch`, `unmapped-undeclared`, `value-mismatch`, `version-pin`, plus `doc-drift` for the whole run.
 
 ## Negative fixtures
 
@@ -63,6 +63,10 @@ Failure codes: `alg-unregistered-undeclared`, `assertion-missing`, `assertion-un
 | `neg-alg-unregistered` | `alg-unregistered-undeclared` |
 | `neg-signature-claimed` | `signature-claimed` |
 | `neg-region-integer` | `type-mismatch`: integer region coordinate |
+| `neg-reg-tw1-bad-check` | `reference-check`: corrupted `tw1-` Luhn mod 32 check character |
+| `neg-reg-tw1-statement-mismatch` | `reference-mismatch`: `tw1-` derived from another `statementSha256` |
+| `neg-reg-same-bytes-exclusions` | `identity-conflation` (and `forbidden-field`): `same-bytes` with hard-binding exclusions |
+| `neg-reg-created-attribution` | `attribution`: registration link in `created_assertions` when signer is not registrant |
 
 ## Commands
 
@@ -73,7 +77,7 @@ python3 -I research/drafts/c2pa-fixtures/build_fixtures.py   # rewrites fixtures
 python3 -I research/drafts/c2pa-fixtures/check_fixtures.py   # exit 0 when every fixture behaves as expected
 ```
 
-The checker exits 1 if any positive fixture fails, if any negative fixture is not rejected with exactly its expected codes, if a rule pointer is missing from the mapping document, or if fewer than 6 fixtures or 8 negatives are present. These scripts are not wired into `tools/validate.py` or CI.
+The checker exits 1 if any positive fixture fails, if any negative fixture is not rejected with exactly its expected codes, if a rule pointer is missing from the mapping document, or if fewer than 6 fixtures or 8 negatives are present. `check_fixtures.py` is wired into `tools/validate.py` (`VECTOR_CHECKERS`).
 
 ## Limits
 
