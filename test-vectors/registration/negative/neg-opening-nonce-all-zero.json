@@ -1,0 +1,40 @@
+{
+  "fixture": {
+    "kind": "report-link",
+    "description": "All-zero catalogue opening nonce (CD-B2).",
+    "notice": "Illustrative fixture for spec/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "expect": {
+      "code": "nonce-invalid"
+    }
+  },
+  "object": {
+    "linkVersion": "traceweave-registration-link-draft-5",
+    "report": {
+      "path": "test-vectors/matching/example-report.json",
+      "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
+    },
+    "registration": {
+      "bundle": "fixtures/bundle-three-roots.json",
+      "statementSha256": "3f308f1831f6b07c49c0ad4bc28988d2b976b27daf13c8b94fb02e1dd352c93e"
+    },
+    "links": [
+      {
+        "pair": 0,
+        "role": "reference",
+        "subjectIndex": 0,
+        "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"
+      }
+    ],
+    "catalogueOpening": {
+      "catalogue": "test-vectors/matching/matching.json#/vectors/1/reference/canonical",
+      "nonceHex": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "notShown": [
+      "authorship",
+      "originality",
+      "first-creation",
+      "ownership",
+      "permission"
+    ]
+  }
+}

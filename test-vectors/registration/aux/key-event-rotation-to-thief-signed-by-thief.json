@@ -1,0 +1,79 @@
+{
+  "fixture": {
+    "kind": "key-event",
+    "description": "The same rotation statement as key-event-rotation-to-thief, signed by the thief's key instead.",
+    "notice": "Illustrative fixture for spec/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing."
+  },
+  "object": {
+    "bundleVersion": "traceweave-registration-bundle-draft-5",
+    "envelope": {
+      "payloadType": "application/vnd.in-toto+json",
+      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiZXZlbnQiOiJyb3RhdGVkIiwiZXZlbnRWZXJzaW9uIjoidHJhY2V3ZWF2ZS1rZXktZXZlbnQtZHJhZnQtNSIsImtleWlkIjoiMThjM2VlYWQwODY0NjYxNCIsInN1Y2Nlc3NvclB1YmxpY0tleUhleCI6Ijk3MDExYzYzN2RjNmE4NWI2ZTE5ZjdmZjY2NWVmMDljMTExMGYwZDg4MTBlNmUzNzdmOTJkNWJjZDhlMjY3YWUifSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vdHJhY2V3ZWF2ZS5vcmcvcHJlZGljYXRlL2tleS1ldmVudC9kcmFmdC01Iiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6IjE4YzNlZWFkMDg2NDY2MTRiYzg2MGJmNzQzNjlhYzFmMTNmYjE4ZjkxNGI0NDM0MDFjNTU0MmRlYmQwMDYzMTgifSwibmFtZSI6ImtleSJ9XX0=",
+      "signatures": [
+        {
+          "keyid": "baebb6682a4a7262",
+          "sig": "fNxxsDeyNz3wmmQXEMYqg3EuPvY8rzzpHITLGONpT/JUVkuStvv0zntF3nyvJTAFtjsb+MJgqdCkl1luJy/PDg=="
+        }
+      ]
+    },
+    "verificationMaterial": {
+      "publicKeys": [
+        {
+          "keyid": "baebb6682a4a7262",
+          "alg": "ed25519",
+          "publicKeyHex": "97011c637dc6a85b6e19f7ff665ef09c1110f0d8810e6e377f92d5bcd8e267ae"
+        }
+      ]
+    },
+    "timeEvidence": [
+      {
+        "evidenceVersion": "traceweave-time-evidence-draft-5",
+        "type": "rfc3161",
+        "placeholder": true,
+        "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+        "target": {
+          "kind": "dsse-signature",
+          "signatureIndex": 0,
+          "sha256": "8820095f13553a6aed677a7feff950003dc9d429ae0a1d1c0b8c3761e396ea40"
+        },
+        "root": {
+          "kind": "tsa-certificate-chain",
+          "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
+        },
+        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-8820095f1355-tsa-a-2026-11-27T00:00:00Z-u1",
+        "rfc3161": {
+          "genTime": "2026-11-27T00:00:00Z",
+          "policyOid": "2.999.1",
+          "nonce": "5a17c0de00000001",
+          "requestNonce": "5a17c0de00000001",
+          "signerCertificate": {
+            "notBefore": "2026-01-01T00:00:00Z",
+            "notAfter": "2031-01-01T00:00:00Z",
+            "sha256": "8dd8f57938800e7d3a7c0c5618d393eb2623096e1137cc91e60d53ee0ad0c429"
+          },
+          "accuracySeconds": 1
+        }
+      },
+      {
+        "evidenceVersion": "traceweave-time-evidence-draft-5",
+        "type": "opentimestamps",
+        "placeholder": true,
+        "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+        "target": {
+          "kind": "dsse-signature",
+          "signatureIndex": 0,
+          "sha256": "8820095f13553a6aed677a7feff950003dc9d429ae0a1d1c0b8c3761e396ea40"
+        },
+        "root": {
+          "kind": "bitcoin-proof-of-work",
+          "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6"
+        },
+        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-8820095f1355-btc-2026-11-27T01:00:00Z",
+        "opentimestamps": {
+          "status": "complete",
+          "blockTime": "2026-11-27T01:00:00Z"
+        }
+      }
+    ]
+  }
+}

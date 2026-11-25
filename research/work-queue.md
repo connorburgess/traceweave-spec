@@ -47,7 +47,7 @@ Closed with evidence: M0.1–M0.4, M1.1, M1.2, M1.3, M1.5, M2.1, M2.4–M2.8, M2
   - **Websites:** both live as of 2026-11-23 at <https://traceweave.org> and <https://docs.traceweave.org>. The WEB browser tool is still planned.
   - **Visual identity:** the owner chose "Evidence Ledger" with a green signal colour (2026-11-23), applied to both websites. The brand kit is outside this repository; generated imagery is in preparation.
   - **Name clearance:** open; owner to verify.
-- **Registration record (M4), planned direction of 2026-11-23.** For people who want to protect their work, a timestamped, signed registration record serves that need, rather than marks. A design lane is drafting `research/drafts/registration-record.md` and `research/lanes/13-timestamp-evidence-review.md`.
+- **Registration record (M4), planned direction of 2026-11-23.** For people who want to protect their work, a timestamped, signed registration record serves that need, rather than marks. Promoted on 2026-11-25 to `spec/registration-record.md` (with `research/lanes/13-timestamp-evidence-review.md`).
 - **SK.3–SK.5 (A2A).** The owner wants content registered at creation time, including by AI agents. Planned; design in progress; no implementation lane. Any hosted signing or witness service is an owner decision (SK.5).
 - **WEB.0–WEB.6 (browser tool and testing page).** Requested by the owner on 2026-11-23 as a roadmap item, not for building yet. Planned; not started; no lane assigned. It follows M3.4 unless the owner overrides, and the owner decides when it starts and where it is hosted (WEB.0). See the [roadmap](../ROADMAP.md#later-profiles-and-sequence).
 
@@ -64,7 +64,7 @@ These are the SYN research records and M0/M4 evidence in the roadmap, not comple
 
 ## Promoted contracts
 
-On 2026-11-23 the owner approved promoting the reviewed contracts: [extraction contract](../spec/extraction.md), [catalogue and report contract](../spec/catalogue-report.md), [TypeScript profile](../profiles/typescript.md) and [text profile](../profiles/text.md), with their vectors under `test-vectors/` and the three schemas under `schemas/`. See the [promotion map](promotion-map.md). The image profile, image protocol and evaluation protocol remain drafts in `research/drafts/`.
+On 2026-11-23 and 2026-11-25 the owner approved promoting the reviewed specifications and frozen profiles: [extraction contract](../spec/extraction.md), [catalogue and report contract](../spec/catalogue-report.md), [registration record](../spec/registration-record.md), [trust policy](../spec/trust-policy.md), [timestamp adapter decision](../docs/decisions/timestamp-adapter-decision.md), [TypeScript profile](../profiles/typescript.md), [Python profile](../profiles/python.md) and [text profile](../profiles/text.md), with their vectors under `test-vectors/` and the schemas under `schemas/`. See the [promotion map](promotion-map.md). The image profile, image protocol and evaluation protocol remain drafts in `research/drafts/`.
 
 ## Operating rules
 

@@ -1,6 +1,8 @@
 # Clean-room review: Python token profile `py-tokens` draft-1
 
-Reviewed 2026-11-23 at commit `1c5c06a` on `roadmap-v2`: [extraction-profile-python.md](../drafts/extraction-profile-python.md) and [extraction-vectors-python/](../drafts/extraction-vectors-python/README.md). The model is the [TypeScript profile review](extraction-profile-typescript-review.md). I did not write any of it.
+> Path note: the profile and vectors reviewed here were promoted on 2026-11-25 to [profiles/python.md](../../profiles/python.md) and [test-vectors/extraction-python/](../../test-vectors/extraction-python/README.md); link targets below point to the promoted locations. See the [promotion map](../promotion-map.md).
+
+Reviewed 2026-11-23 at commit `1c5c06a` on `roadmap-v2`: [extraction-profile-python.md](../../profiles/python.md) and [extraction-vectors-python/](../../test-vectors/extraction-python/README.md). The model is the [TypeScript profile review](extraction-profile-typescript-review.md). I did not write any of it.
 
 **Order kept.** I read the profile text, `spec/extraction.md` §2–§3 and §6–§8, and the field layout of `py.json`, then wrote my lexer and ran it on the vectors. Only after that did I open `check_vectors.py`; I never opened `pylex.py` or the harness sources. My scripts are in `$TMPDIR/pyrev/`. No downloads were made. The interpreter is CPython **3.14.6** with `unicodedata.unidata_version` 16.0.0, as the profile pins.
 

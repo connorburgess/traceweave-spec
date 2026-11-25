@@ -1,0 +1,28 @@
+{
+  "fixture": {
+    "kind": "evidence",
+    "description": "Upgraded OpenTimestamps proof placeholder.",
+    "notice": "Illustrative fixture for spec/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "bundle": "fixtures/bundle-three-roots.json"
+  },
+  "object": {
+    "evidenceVersion": "traceweave-time-evidence-draft-5",
+    "type": "opentimestamps",
+    "placeholder": true,
+    "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+    "target": {
+      "kind": "dsse-signature",
+      "signatureIndex": 0,
+      "sha256": "817289222896a1b8ff43396a8e2d955f14a9cfc903d9379684fb20c64a3a14c4"
+    },
+    "root": {
+      "kind": "bitcoin-proof-of-work",
+      "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6"
+    },
+    "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-817289222896-btc-2026-11-23T11:12:00Z",
+    "opentimestamps": {
+      "status": "complete",
+      "blockTime": "2026-11-23T11:12:00Z"
+    }
+  }
+}

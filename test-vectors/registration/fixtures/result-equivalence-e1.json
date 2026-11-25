@@ -1,0 +1,15 @@
+{
+  "fixture": {
+    "kind": "result-equivalence",
+    "description": "E1: the same events with 0, 1 and 2 extra rejected events give byte-identical outcomes for the common events.",
+    "notice": "Illustrative fixture for spec/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing."
+  },
+  "object": {
+    "equivalenceVersion": "traceweave-result-equivalence-draft-5",
+    "results": [
+      "fixtures/verification-result-e1.json",
+      "fixtures/verification-result-e1-extra-1.json",
+      "fixtures/verification-result-e1-extra-2.json"
+    ]
+  }
+}

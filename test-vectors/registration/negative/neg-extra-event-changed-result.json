@@ -1,0 +1,17 @@
+{
+  "fixture": {
+    "kind": "result-equivalence",
+    "description": "E1 (review case): adding one rejected event flips the successor's trust.",
+    "notice": "Illustrative fixture for spec/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "expect": {
+      "code": "extra-event-changed-result"
+    }
+  },
+  "object": {
+    "equivalenceVersion": "traceweave-result-equivalence-draft-5",
+    "results": [
+      "fixtures/verification-result-e1.json",
+      "aux/verification-result-e1-flipped.json"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "fixture": {
+    "kind": "report-link",
+    "description": "Links the candidate's digest instead of the registered reference.",
+    "notice": "Illustrative fixture for spec/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "expect": {
+      "code": "subject-mismatch"
+    }
+  },
+  "object": {
+    "linkVersion": "traceweave-registration-link-draft-5",
+    "report": {
+      "path": "test-vectors/matching/example-report.json",
+      "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
+    },
+    "registration": {
+      "bundle": "fixtures/bundle-three-roots.json",
+      "statementSha256": "3f308f1831f6b07c49c0ad4bc28988d2b976b27daf13c8b94fb02e1dd352c93e"
+    },
+    "links": [
+      {
+        "pair": 0,
+        "role": "reference",
+        "subjectIndex": 0,
+        "sha256": "50f4fd96a1f7481e4686b66e29f2259d3e0ff83650563b4a1719631ecc03a89d"
+      }
+    ],
+    "catalogueOpening": {
+      "catalogue": "test-vectors/matching/matching.json#/vectors/1/reference/canonical",
+      "nonceHex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f"
+    },
+    "notShown": [
+      "authorship",
+      "originality",
+      "first-creation",
+      "ownership",
+      "permission"
+    ]
+  }
+}

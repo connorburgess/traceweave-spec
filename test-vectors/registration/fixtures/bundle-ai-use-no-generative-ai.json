@@ -1,0 +1,131 @@
+{
+  "fixture": {
+    "kind": "bundle",
+    "description": "A registration carrying the registrant's own AI-use declaration: {'declared': 'no-generative-ai'}.",
+    "notice": "Illustrative fixture for spec/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "artifacts": [
+      {
+        "subjectIndex": 0,
+        "source": "test-vectors/matching/extraction-go.json#mv-go-sum"
+      }
+    ]
+  },
+  "object": {
+    "bundleVersion": "traceweave-registration-bundle-draft-5",
+    "envelope": {
+      "payloadType": "application/vnd.in-toto+json",
+      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiY2F0YWxvZ3VlIjp7InByb2ZpbGUiOnsiY29uZmlnU2hhMjU2IjoiZGZiYzVmZTM1MTdlOWRhNjUxODljZjJlZjMyYzQ2NTViNWVjNjYyNDQxZjJlNzFmNTA4NTQzYTBhNWM4ZjdiMiIsImlkIjoiZ28tdG9rZW5zIiwidmVyc2lvbiI6ImRyYWZ0LTEifSwic2NoZW1lIjoic2hhMjU2LXNhbHRlZC1jYXRhbG9ndWUtdjEiLCJzaGEyNTYiOiJjMTRmY2Y2NGFmMDAwZjg4N2YzNzIzNGJiMGQzOTQzN2NjZjgwYmE5YmQ2ZDA3MjE2YmE1ZmVhODJiNjMzYjE1In0sImNsYWltcyI6eyJhaVVzZSI6eyJkZWNsYXJlZCI6Im5vLWdlbmVyYXRpdmUtYWkifSwiY3JlYXRlZEF0IjoiMjAyNi0xMS0yMFQwOTowMDowMFoifSwiY29udGVudEtpbmQiOiJzb3VyY2UtY29kZSIsImltcGxlbWVudGF0aW9uIjp7ImNvbW1pdCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJuYW1lIjoiYnVpbGRfZml4dHVyZXMucHkiLCJ2ZXJzaW9uIjoiZHJhZnQtNSJ9LCJub25jZSI6ImM1NzUxNGNkMDA5MTBhZjRhZmI4NDQzZDMyMzFjOTdlODk2MzNkMDUwMzU1NDFhYWExZWY0YTQwNDM1MGE3YWMiLCJwb3NzZXNzaW9uIjpbeyJzY2hlbWUiOiJzaGEyNTYtc2FsdGVkLXBvc3Nlc3Npb24tdjEiLCJzaGEyNTYiOiJmNDFiOGRmYzkxM2VlNWFiNTQzNzE1MTFkN2RhMGUxODA3MGZhMjg4YmNlNTFjYzUwOWU2MGNiNjc5YTU0YTk5Iiwic3ViamVjdEluZGV4IjowfV0sInJlZ2lzdHJhdGlvblZlcnNpb24iOiJ0cmFjZXdlYXZlLXJlZ2lzdHJhdGlvbi1kcmFmdC01Iiwic3BlY0NvbW1pdCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAifSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vdHJhY2V3ZWF2ZS5vcmcvcHJlZGljYXRlL3JlZ2lzdHJhdGlvbi9kcmFmdC01Iiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6Ijk3NGM4ZDBhZDE0NGMzYzM5ZTlmMWNlNDEwNzQwZjQ0OWY2MjNiZmZkMjljNzUwZThlZDNiZDY4NjQwYjY5N2MifSwibmFtZSI6InN1bS5nbyJ9XX0=",
+      "signatures": [
+        {
+          "keyid": "18c3eead08646614",
+          "sig": "GGTfXGQFJfQXK95h+y8XgvAEGDjsIkQGR5K++RcUN2rdESbwJpvJ8nk0DNu7EVdeF23Z2wHKZ+Lj1FreW1V2AA=="
+        }
+      ]
+    },
+    "verificationMaterial": {
+      "publicKeys": [
+        {
+          "keyid": "18c3eead08646614",
+          "alg": "ed25519",
+          "publicKeyHex": "d0fb7f8f8f5c8fa2cf9ce29ca36d85058df67eef34d57df07791870339056704"
+        }
+      ]
+    },
+    "timeEvidence": [
+      {
+        "evidenceVersion": "traceweave-time-evidence-draft-5",
+        "type": "rfc3161",
+        "placeholder": true,
+        "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+        "target": {
+          "kind": "dsse-signature",
+          "signatureIndex": 0,
+          "sha256": "e25c6ac492718ae66d794d6bad7cf071987952f2fda94391035c157938d7b849"
+        },
+        "root": {
+          "kind": "tsa-certificate-chain",
+          "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
+        },
+        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-e25c6ac49271-tsa-a-2026-11-23T10:00:00Z-u1",
+        "rfc3161": {
+          "genTime": "2026-11-23T10:00:00Z",
+          "policyOid": "2.999.1",
+          "nonce": "5a17c0de00000001",
+          "requestNonce": "5a17c0de00000001",
+          "signerCertificate": {
+            "notBefore": "2026-01-01T00:00:00Z",
+            "notAfter": "2031-01-01T00:00:00Z",
+            "sha256": "8dd8f57938800e7d3a7c0c5618d393eb2623096e1137cc91e60d53ee0ad0c429"
+          },
+          "accuracySeconds": 1
+        }
+      },
+      {
+        "evidenceVersion": "traceweave-time-evidence-draft-5",
+        "type": "rfc3161",
+        "placeholder": true,
+        "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+        "target": {
+          "kind": "dsse-signature",
+          "signatureIndex": 0,
+          "sha256": "e25c6ac492718ae66d794d6bad7cf071987952f2fda94391035c157938d7b849"
+        },
+        "root": {
+          "kind": "tsa-certificate-chain",
+          "anchorSha256": "b17252a48ba9c0e7d0f9ae5315caa20e2f28fd7ed6a83582b75353de217547f5"
+        },
+        "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-e25c6ac49271-tsa-b-2026-11-23T10:00:05Z-u1",
+        "rfc3161": {
+          "genTime": "2026-11-23T10:00:05Z",
+          "policyOid": "2.999.2",
+          "nonce": "5a17c0de00000002",
+          "requestNonce": "5a17c0de00000002",
+          "signerCertificate": {
+            "notBefore": "2026-01-01T00:00:00Z",
+            "notAfter": "2031-01-01T00:00:00Z",
+            "sha256": "4e7e1bf5a554b29d2f2f16bcb3567a7211c6774dd928d4e9abc42a5d5dfe9c8e"
+          }
+        }
+      },
+      {
+        "evidenceVersion": "traceweave-time-evidence-draft-5",
+        "type": "opentimestamps",
+        "placeholder": true,
+        "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+        "target": {
+          "kind": "dsse-signature",
+          "signatureIndex": 0,
+          "sha256": "e25c6ac492718ae66d794d6bad7cf071987952f2fda94391035c157938d7b849"
+        },
+        "root": {
+          "kind": "bitcoin-proof-of-work",
+          "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6"
+        },
+        "token": "PLACEHOLDER-NOT-A-OPENTIMESTAMPS-OBJECT-e25c6ac49271-btc-2026-11-23T11:12:00Z",
+        "opentimestamps": {
+          "status": "complete",
+          "blockTime": "2026-11-23T11:12:00Z"
+        }
+      },
+      {
+        "evidenceVersion": "traceweave-time-evidence-draft-5",
+        "type": "rekor-v2",
+        "placeholder": true,
+        "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+        "target": {
+          "kind": "dsse-signature",
+          "signatureIndex": 0,
+          "sha256": "e25c6ac492718ae66d794d6bad7cf071987952f2fda94391035c157938d7b849"
+        },
+        "root": {
+          "kind": "log-key",
+          "anchorSha256": "a119903304b41261ee88a9892057782ac7f9011894981a60348d75ef35b622c4"
+        },
+        "token": "PLACEHOLDER-NOT-A-REKOR-V2-OBJECT-e25c6ac49271-log",
+        "rekorV2": {
+          "logIndex": 0
+        }
+      }
+    ]
+  }
+}

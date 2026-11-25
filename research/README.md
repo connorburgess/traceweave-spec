@@ -44,7 +44,7 @@ Follow the [research work queue](work-queue.md): it lists open gate IDs from the
 
 [Lane 06–08 reconciliation checkpoint](research-06-08-checkpoint.md): practical code carriers, fragment recovery and cross-media architecture reviewed; no code carrier cleared the bar, and the image study is deferred until after M3 and needs the owner.
 
-[Independent reviews](reviews/) of the roadmap, repository plan, contracts and checkpoints are kept there. The extraction contract, catalogue and report contract, TypeScript and text profiles and their vectors were promoted on 2026-11-23 to `spec/`, `schemas/`, `profiles/` and `test-vectors/`; see the [promotion map](promotion-map.md). The image profile, image protocol and evaluation protocol stay in `research/drafts/`.
+[Independent reviews](reviews/) of the roadmap, repository plan, contracts and checkpoints are kept there. The extraction contract, catalogue and report contract, TypeScript and text profiles and their vectors were promoted on 2026-11-23, and the M4 registration specification, trust policy, timestamp adapter decision, Python profile, and their vectors were promoted on 2026-11-25 to `spec/`, `docs/decisions/`, `schemas/`, `profiles/` and `test-vectors/`; see the [promotion map](promotion-map.md). The image profile, image protocol and evaluation protocol stay in `research/drafts/`.
 
 ## Follow-up deep research — 2026-11-22
 

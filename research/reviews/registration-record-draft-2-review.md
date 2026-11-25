@@ -1,6 +1,8 @@
 # Review: registration record, draft-2 (confirmation)
 
-Status: non-author confirmation review, 2026-11-24, of [registration-record.md](../drafts/registration-record.md) draft-2 (`c4848c1`, with §19 from `1dd9c1f`) at `roadmap-v2` `a6851dd`, its [fixtures](../drafts/registration-fixtures/README.md), and the [C2PA mapping draft](../drafts/c2pa-mapping.md) where they meet.
+> Path note: the specification and fixtures reviewed here were promoted on 2026-11-25 to [spec/registration-record.md](../../spec/registration-record.md) and [test-vectors/registration/](../../test-vectors/registration/README.md); link targets below point to the promoted locations. See the [promotion map](../promotion-map.md).
+
+Status: non-author confirmation review, 2026-11-24, of [registration-record.md](../../spec/registration-record.md) draft-2 (`c4848c1`, with §19 from `1dd9c1f`) at `roadmap-v2` `a6851dd`, its [fixtures](../../test-vectors/registration/README.md), and the [C2PA mapping draft](../drafts/c2pa-mapping.md) where they meet.
 - **Read first:** the draft-1 review, [registration-record-review.md](registration-record-review.md) (`5c3d9c5`).
 - **Method:** scratch code in `$TMPDIR/reg2` (`attack.py`), run against the author's builder and checker on a scratch copy. No service was contacted.
 - **Primary sources** (fetched read-only for the draft-1 review and re-read): RFC 3161, RFC 5816, RFC 8032, RFC 4998, the DSSE `protocol.md`, the in-toto Statement v1 spec, and the OpenTimestamps client README at `f3a9e92e`.

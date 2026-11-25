@@ -16,7 +16,7 @@ Revision status (before promotion): draft for review, 2026-11-22. These vectors 
 | `extraction-go.json`, `extraction-rust.json` | 17 new synthetic inputs (15 Go, 2 Rust) in the [extraction vector](../extraction/README.md) format, with the shipped 1 MiB configurations. Token streams are hand-written literals (`HAND_TOKENS` in `build_vectors.py`), each vector `derivation: hand` |
 | `matching.json` | 93 matching vectors, with a `derivationRule` (ROADMAP.md definition and how it applies) |
 | `extraction-go-gates.json` | A13: three Go inputs (a vendored helper, a host with a reformatted fragment, a second non-ASCII prefix), hand-written token streams like `extraction-go.json`, checked by `../extraction/check_vectors.py` |
-| `extraction-py.json`, `config-py.json` | A13: verbatim copies of three frozen `py-tokens` draft-1 vectors and their configuration (`research/drafts/extraction-vectors-python/` at 58c25a9); `check_gates.py` checks they are identical |
+| `extraction-py.json`, `config-py.json` | A13: verbatim copies of three frozen `py-tokens` draft-1 vectors and their configuration ([extraction-python](../extraction-python/README.md), frozen at `58c25a9`); `check_gates.py` checks they are identical |
 | `m22-fixture-manifest.json` | A13, M2.2: the frozen fixture manifest (SHA-256 `349bd14953082dcef95e00c40d22972a708654d270819ba7ae7366444dc7fb34`, re-frozen in A14) |
 | `review-packets.json`, `licence-texts/` | A13, M2.7: review-packet fixtures (`traceweave-review-packet-draft-2` since A14) and the archived synthetic licence texts they reference by digest |
 | `candidate-generation.json` | A13, M2.9: candidate-generation fixtures; A16 adds a rejection `code` to each invalid record and the catalogue-withheld cases |

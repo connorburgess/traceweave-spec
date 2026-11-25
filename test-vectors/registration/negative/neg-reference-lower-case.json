@@ -1,0 +1,14 @@
+{
+  "fixture": {
+    "kind": "text-reference",
+    "description": "Lower case: only the canonical upper-case form is accepted.",
+    "notice": "Illustrative fixture for spec/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "expect": {
+      "code": "reference-shape"
+    }
+  },
+  "object": {
+    "reference": "tw1-7wr8y61hytr7rje0nn5w52c8tan",
+    "bundle": "fixtures/bundle-three-roots.json"
+  }
+}

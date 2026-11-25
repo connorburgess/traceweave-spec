@@ -456,7 +456,7 @@ def m23_corruptions(d):
 
 def check_python_copies():
     """extraction-py.json holds verbatim copies of frozen py-tokens draft-1 vectors (profile frozen at 58c25a9)."""
-    frozen = cm.HERE.parent.parent / "research" / "drafts" / "extraction-vectors-python" / "py.json"
+    frozen = cm.HERE.parent / "extraction-python" / "py.json"
     mine = cm.strict_loads((HERE / "extraction-py.json").read_bytes())
     src = {v["id"]: v for v in cm.strict_loads(frozen.read_bytes())["vectors"]}
     cm.need(all(v == src[v["id"]] for v in mine["vectors"]), "extraction-py.json vectors differ from the frozen py-tokens vectors")

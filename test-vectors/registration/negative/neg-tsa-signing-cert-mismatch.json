@@ -1,0 +1,28 @@
+{
+  "fixture": {
+    "kind": "evidence",
+    "description": "ESSCertIDv2 names another certificate (RFC 5816).",
+    "notice": "Illustrative fixture for spec/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "bundle": "fixtures/bundle-real.json",
+    "expect": {
+      "code": "tsa-signing-cert-mismatch"
+    }
+  },
+  "object": {
+    "evidenceVersion": "traceweave-time-evidence-draft-5",
+    "type": "rfc3161",
+    "placeholder": false,
+    "notice": "TEST VECTOR. Real format, issued by a local test-only TSA or built against a locally mined header file. No external service issued it, and its trust anchor must never be trusted.",
+    "target": {
+      "kind": "dsse-signature",
+      "signatureIndex": 0,
+      "sha256": "817289222896a1b8ff43396a8e2d955f14a9cfc903d9379684fb20c64a3a14c4"
+    },
+    "root": {
+      "kind": "tsa-certificate-chain",
+      "anchorSha256": "ba5c2850a36caee83cb5133747a48c310c9c5ff62ad20c5518d8ba817472820e"
+    },
+    "token": "MIIGFTADAgEAMIIGDAYJKoZIhvcNAQcCoIIF/TCCBfkCAQMxDzANBglghkgBZQMEAgEFADByBgsqhkiG9w0BCRABBKBjBGEwXwIBAQYDiDcBMDEwDQYJYIZIAWUDBAIBBQAEIIFyiSIolqG4/0M5ao4tlV8Uqc/JA9k3loT7IMZKOhTEAgECGA8yMDI2MTEyNDAzMjAwN1owAwIBAQIJAI/iftqRJgTcoIIDXTCCA1kwggJBoAMCAQICAQIwDQYJKoZIhvcNAQELBQAwNTEzMDEGA1UEAwwqVHJhY2V3ZWF2ZSBURVNULU9OTFkgcm9vdCBDQSAobmV2ZXIgdHJ1c3QpMB4XDTI2MTEyNDAzMjAwN1oXDTMxMTEyMzAzMjAwN1owMTEvMC0GA1UEAwwmVHJhY2V3ZWF2ZSBURVNULU9OTFkgdHNhIChuZXZlciB0cnVzdCkwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDQZjeqngj7J3PoedVxWsDr+uUCm1nMPFwK6d3GdqS3cIbhsd6w2W8N5BCKkYL4R/Ec91qs/o+k97d3IfRTy7+OksRpmBJD6T6LCjK7xyJskBjA2d+DTKnG5xRKIoVgQJ5RckqDIU9wkc/1AVAJVpIAqxtee0OktqFDlS7QvxujsOhWslOSRrqhmb1KeMV52FVz4k95AymTrZqxgqC0kRJSAspcyYbrSG19jemWBAOgkQu1D77pXv4hUDAoB+XJ0AEta7YV3xBZIk+NjIXl4Pvj7Kbbv1HH8KhyOgAePp3vrbgwkEr4YKwH5rTK+Y0nGrcZURlmqwTyBLb8tf5z3JgFAgMBAAGjeDB2MAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgbAMBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMIMB0GA1UdDgQWBBSte24EoNxZFRxxWB3vdtlpdxlksDAfBgNVHSMEGDAWgBRJmxrO0GWbMveZ1SheOPDG60hBkDANBgkqhkiG9w0BAQsFAAOCAQEAGRonuldy7bFgA8lttWhcuVcGSsvUFWac2br83xkkalp0tFxBedWbKL1IgHqM3TCdHEk50D48BSJrg/sgPZDIKpUg5jdRSOpFqdnI/KR22VV45+GHc6LbMrJqBcun63Shtk3J/5yYxDbCtpN0xlBqpyp4rWfVs0dZzzfaiy/oJiJuYzUXMn6F1zABQ1pBMzj2+sQO8wDAt+RyXKZOyGOz4HH89GZnBJrp4XEWoz+zLeOWKptrI/Mf4HnUOOdTvDOpiI4qo6pOjjUk3/CIq3aLmyJfzB2Omphza2UroAKJfNLwEEqhloR93MsbRDNukxCgfXOVUCeZ5duwzeYDg/S7VTGCAgwwggIIAgEBMDowNTEzMDEGA1UEAwwqVHJhY2V3ZWF2ZSBURVNULU9OTFkgcm9vdCBDQSAobmV2ZXIgdHJ1c3QpAgECMA0GCWCGSAFlAwQCAQUAoIGkMBoGCSqGSIb3DQEJAzENBgsqhkiG9w0BCRABBDAcBgkqhkiG9w0BCQUxDxcNMjYxMTI0MDMyMDA3WjAvBgkqhkiG9w0BCQQxIgQgpTgyZpbWwN10j1CazkVHUk+NVcxPPbb9k88E5U12IWcwNwYLKoZIhvcNAQkQAi8xKDAmMCQwIgQgjiK3RqgAqdl/j6yQYN6ADSro4uRh7c/8+4c8taol2n8wDQYJKoZIhvcNAQEBBQAEggEAbH2d2lkFozVi3tsTcTJc8kNUJvJb/B53Kaux9PoZGG32bpjIfcIl9SUyqmPZehWMTHF9MMSQoNs4j3U0MX2pyiPX60mBlxvbWf5+O24ddIFB5WKrLTwQMwhWT44F91QRov9DDZ82ktHbjik+yBbTLPvYBNoxuISTbIVd/M8Q1o9xQNVkzan4MvX0nzQxkW7A2sATbx7q5suNwFwqUQzWp/DCrL7O/eIaBBdSDHHEQ2wxliNpqhytu/scRz+8HQMOajnuAyA1Juj9dVLE2YsyzJEmbE7yhOEiwoPOHNg+pVOnHyDVuKwl1iHUr03hC3kOnFLGoBOGsF599HZbm2P5TQ==",
+    "request": "MEQCAQEwMTANBglghkgBZQMEAgEFAAQggXKJIiiWobj/Qzlqji2VXxSpz8kD2TeWhPsgxko6FMQCCQCP4n7akSYE3AEB/w=="
+  }
+}

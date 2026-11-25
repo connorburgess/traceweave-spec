@@ -1,0 +1,14 @@
+{
+  "fixture": {
+    "kind": "text-reference",
+    "description": "A valid reference, but of another statement.",
+    "notice": "Illustrative fixture for spec/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "expect": {
+      "code": "reference-mismatch"
+    }
+  },
+  "object": {
+    "reference": "tw1-68NV41DECCTCMWDAMB5QJS4D5QP",
+    "bundle": "fixtures/bundle-three-roots.json"
+  }
+}

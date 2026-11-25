@@ -1,0 +1,62 @@
+{
+  "fixture": {
+    "kind": "mcp-tool",
+    "description": "Illustrative MCP 2026-07-28 Tool for the local route.",
+    "notice": "Illustrative fixture for spec/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing."
+  },
+  "object": {
+    "name": "traceweave_register",
+    "title": "Register files with Traceweave (illustrative)",
+    "description": "Registers local files: hashes them, signs a registration statement with the registrant key held by this local server, and requests time evidence. Only a signature digest leaves the machine. First to register is not first to create.",
+    "inputSchema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "paths"
+      ],
+      "properties": {
+        "paths": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {
+            "type": "string"
+          }
+        },
+        "claimedCreatedAt": {
+          "type": "string",
+          "description": "Optional claimed creation time; never shown as proved."
+        }
+      }
+    },
+    "outputSchema": {
+      "type": "object",
+      "required": [
+        "bundleId",
+        "statementSha256",
+        "timeEvidence"
+      ],
+      "properties": {
+        "bundleId": {
+          "type": "string",
+          "description": "Opaque id of the bundle in the private store; never a path (SK.2)."
+        },
+        "statementSha256": {
+          "type": "string"
+        },
+        "timeEvidence": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  }
+}

@@ -114,10 +114,47 @@ class ContractTests(unittest.TestCase):
         import json
         for name in ("accept-catalogue-core.json", "accept-catalogue-core-urlsafe.json"):
             with self.subTest(fixture=name):
-                fx = read_json(ROOT / "research/drafts/intoto-adapter-fixtures/accept" / name)
+                fx = read_json(ROOT / "test-vectors/intoto-adapter/accept" / name)
                 payload_b64 = fx["envelope"]["payload"]
                 raw = base64.b64decode(payload_b64, altchars=b"-_" if ("-" in payload_b64 or "_" in payload_b64) else None)
                 self.validator.validate(json.loads(raw.decode("utf-8")))
+
+    def test_record_schema_accepts_python_token_classes_and_error_codes(self):
+        from jsonschema import Draft202012Validator, FormatChecker
+        schema = read_json(ROOT / "schemas/record.schema.json")
+        validator = Draft202012Validator(schema, format_checker=FormatChecker())
+        base_examined = {
+            "recordVersion": "traceweave-extraction-record-draft-1",
+            "profile": "py-tokens",
+            "profileVersion": "draft-1",
+            "configSha256": "0" * 64,
+            "inputSha256": "1" * 64,
+            "inputLength": 10,
+        }
+        valid_tokens = copy.deepcopy(base_examined)
+        valid_tokens["result"] = {
+            "status": "insufficient-tokens",
+            "tokenCount": 2,
+            "tokens": [
+                {"class": "fstring-start", "text": 'f"', "span": [0, 2]},
+                {"class": "tstring-middle", "text": "x", "span": [2, 3]},
+            ],
+            "channels": {
+                "exact": {"kgrams": [], "partialWindow": False, "windowSelections": [], "fingerprints": []},
+                "normalized": {"kgrams": [], "partialWindow": False, "windowSelections": [], "fingerprints": [], "values": ["", "x"]},
+            },
+        }
+        validator.validate(valid_tokens)
+        for bad_class in ("fstring--start", "-start", "start-", "FString"):
+            bad = copy.deepcopy(valid_tokens)
+            bad["result"]["tokens"][0]["class"] = bad_class
+            with self.subTest(bad_class=bad_class), self.assertRaises(ValidationError):
+                validator.validate(bad)
+        for err_code in ("inconsistent-indentation", "unmatched-dedent"):
+            err_rec = copy.deepcopy(base_examined)
+            err_rec["result"] = {"status": "error", "error": {"code": err_code, "offset": 4}}
+            with self.subTest(err_code=err_code):
+                validator.validate(err_rec)
 
 
 if __name__ == "__main__":

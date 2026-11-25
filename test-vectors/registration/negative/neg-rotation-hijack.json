@@ -1,0 +1,193 @@
+{
+  "fixture": {
+    "kind": "verification-result",
+    "description": "B1: the thief's successor key reported `trusted`.",
+    "notice": "Illustrative fixture for spec/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "keyEvents": [
+      "aux/key-event-rotation-to-thief.json",
+      "aux/key-event-compromise-after-theft.json"
+    ],
+    "bundle": "aux/bundle-thief.json",
+    "artifacts": [
+      {
+        "subjectIndex": 0,
+        "source": "test-vectors/matching/extraction-go.json#mv-go-host"
+      }
+    ],
+    "expect": {
+      "code": "key-event-ignored"
+    }
+  },
+  "object": {
+    "resultVersion": "traceweave-registration-verification-draft-5",
+    "simulated": true,
+    "inputs": {
+      "bundleSha256": "ef9bc06f844f8f1469c99e2064ad7915112b4253e54766c148dbe3a7146622ca",
+      "artifacts": [
+        {
+          "subjectIndex": 0,
+          "sha256": "50f4fd96a1f7481e4686b66e29f2259d3e0ff83650563b4a1719631ecc03a89d"
+        }
+      ],
+      "keyEvents": [
+        "65c982dc972413b0dd021c0b55a5a53b6a522a035a9ef3a79bc3da21e798982e",
+        "f68c4aaa899e725473cee73e624d9f38bf0056624d6473144f223ee55d632f99"
+      ]
+    },
+    "policy": {
+      "quorum": 2,
+      "timeRoots": [
+        {
+          "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde",
+          "kind": "tsa-certificate-chain",
+          "independenceGroup": "tsa-operator-a",
+          "policyOids": [
+            "2.999.1"
+          ]
+        },
+        {
+          "anchorSha256": "b17252a48ba9c0e7d0f9ae5315caa20e2f28fd7ed6a83582b75353de217547f5",
+          "kind": "tsa-certificate-chain",
+          "independenceGroup": "tsa-operator-b",
+          "policyOids": [
+            "2.999.2"
+          ],
+          "accuracySeconds": 1
+        },
+        {
+          "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6",
+          "kind": "bitcoin-proof-of-work",
+          "independenceGroup": "bitcoin"
+        },
+        {
+          "anchorSha256": "a119903304b41261ee88a9892057782ac7f9011894981a60348d75ef35b622c4",
+          "kind": "log-key",
+          "independenceGroup": "log-a"
+        },
+        {
+          "anchorSha256": "e4fbf7d5d9e35ceb9fa59efd37544a3c41e1f0d0bb59057832a28b0cd2dab885",
+          "kind": "witness-service-key",
+          "independenceGroup": "witness-a"
+        }
+      ],
+      "trustedKeys": [
+        "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318"
+      ],
+      "recoveryKeys": [],
+      "revocationData": [
+        {
+          "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde",
+          "source": "PLACEHOLDER CRL of TSA operator A; not fetched",
+          "asOf": "2026-11-24T00:00:00Z",
+          "revocations": []
+        },
+        {
+          "anchorSha256": "b17252a48ba9c0e7d0f9ae5315caa20e2f28fd7ed6a83582b75353de217547f5",
+          "source": "PLACEHOLDER CRL of TSA operator B; not fetched",
+          "asOf": "2026-11-24T00:00:00Z",
+          "revocations": []
+        }
+      ],
+      "compromiseLookbackSeconds": 2592000,
+      "verificationTime": "2026-11-24T00:00:00Z"
+    },
+    "outcomes": {
+      "envelope": "ok",
+      "statement": "ok",
+      "signatures": [
+        {
+          "index": 0,
+          "keyid": "baebb6682a4a7262",
+          "keySha256": "baebb6682a4a7262aeb9d65dabf9c6c2098821fb8560ed4f00cff5c16fd77fe5",
+          "outcome": "valid"
+        }
+      ],
+      "keyEvents": [
+        {
+          "eventSha256": "ce44afddfc1dd34a9325b491571f55dac59353d36bb87e0d063b79103a90985c",
+          "keySha256": "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318",
+          "event": "rotated",
+          "outcome": "disputed",
+          "provedAt": "2026-11-26T03:00:00Z"
+        },
+        {
+          "eventSha256": "2184097c191eb69eab32488f672d3e3b8064a1b7f4a3bfb54a489d3d8f2ac0ac",
+          "keySha256": "18c3eead08646614bc860bf74369ac1f13fb18f914b443401c5542debd006318",
+          "event": "compromised",
+          "outcome": "applied",
+          "provedAt": "2026-11-28T03:00:00Z"
+        }
+      ],
+      "signerTrust": [
+        {
+          "index": 0,
+          "outcome": "trusted"
+        }
+      ],
+      "subjects": [
+        {
+          "index": 0,
+          "outcome": "match"
+        }
+      ],
+      "possession": [
+        {
+          "index": 0,
+          "outcome": "match"
+        }
+      ],
+      "catalogue": "not-supplied",
+      "timeEvidence": [
+        {
+          "index": 0,
+          "target": {
+            "signatureIndex": 0
+          },
+          "type": "rfc3161",
+          "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde",
+          "outcome": "placeholder-assumed-valid",
+          "notAfter": "2026-11-27T00:00:01Z",
+          "revocationDataAsOf": "2026-11-24T00:00:00Z"
+        },
+        {
+          "index": 1,
+          "target": {
+            "signatureIndex": 0
+          },
+          "type": "opentimestamps",
+          "anchorSha256": "732b968caad12f1299febcc258f2c5d5a61a82fb2d6b27f67e3f8a3c57847ac6",
+          "outcome": "placeholder-assumed-valid",
+          "notAfter": "2026-11-27T03:00:00Z",
+          "revocationDataAsOf": null
+        }
+      ],
+      "time": [
+        {
+          "signatureIndex": 0,
+          "keyid": "baebb6682a4a7262",
+          "keySha256": "baebb6682a4a7262aeb9d65dabf9c6c2098821fb8560ed4f00cff5c16fd77fe5",
+          "outcome": "quorum-met",
+          "quorum": 2,
+          "distinctRoots": 2,
+          "notAfterAnyRoot": "2026-11-27T00:00:01Z",
+          "notAfterQuorum": "2026-11-27T03:00:00Z"
+        }
+      ],
+      "claimedCreatedAt": {
+        "value": "2026-11-20T09:00:00Z",
+        "status": "not-compared",
+        "comparedWith": null
+      },
+      "declaredAiUse": {
+        "status": "not-declared"
+      }
+    },
+    "notShown": [
+      "authorship",
+      "originality",
+      "first-creation",
+      "ownership",
+      "permission"
+    ]
+  }
+}

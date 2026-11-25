@@ -6,6 +6,7 @@ The shared core handles exact subjects, private commitments, extraction configur
 | --- | --- | --- |
 | [Code](code.md) | First planned experiment | Scope normalization, partial fragments, generated code, AI refactoring |
 | [TypeScript/JavaScript](typescript.md) | `ts-tokens` frozen; `tsx-tokens` deferred draft | Open decisions are listed in the profile |
+| [Python](python.md) | `py-tokens` frozen (`draft-1`) | Stage-1 frozen; own M3 split (`PY.4`) remains open |
 | [Text](text.md) | `text-plain` frozen; `text-markdown` draft | Open decisions are listed in the profile; translations and paraphrases remain research only |
 | Image | Research only | Decoding, orientation, crops, resizing, composites, near-identical independent images |
 | Audio | Research only ([scoping note](../research/lanes/15-audio-video-scoping.md)) | Decoding, sample rate, channel mixing, alignment, short excerpts, pitch/speed changes |

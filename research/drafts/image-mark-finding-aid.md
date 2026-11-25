@@ -29,7 +29,7 @@ On the `e-img-m-2` evidence ([results recheck](../reviews/image-mark-protocol-re
   - `originEvidenceSource: "separate-registration-record"`
 - **`decodedPayload.decisive`** is fixed to `false` (a blind BCH decode is never presence evidence).
 - **`confidence`** is fixed to `null` (no natural-image calibration exists).
-- **`registrationLink`** is explicitly separated from the mark test. When present, it points to an M4 registration record ([`registration-record.md`](registration-record.md#91-text-reference-normative-frozen-2026-11-24)) using **both**:
+- **`registrationLink`** is explicitly separated from the mark test. When present, it points to an M4 registration record ([`registration-record.md`](../../spec/registration-record.md#91-text-reference-normative-frozen-2026-11-24)) using **both**:
   - `textReference`: the frozen `tw1-` reference (26 Crockford base32 characters over the first 130 bits of `statementSha256` plus 1 Luhn mod 32 check character), and
   - `statementSha256`: the full 256-bit statement digest (avoiding the 2^65 birthday-equivocation margin of 130-bit references alone),
   together with `subjectDigestMatchesCandidate` (false whenever a candidate has been edited or recompressed after registration) and `verificationStatus` (`"unverified-reference-only"` or `"verified-separately"`, never inferred from the mark).

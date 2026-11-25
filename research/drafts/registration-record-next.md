@@ -1,6 +1,6 @@
 # Registration record: next-increment proposal
 
-Status: proposal, 2026-11-24. **Non-blocking.** The build proceeds from the confirmed [registration record](registration-record.md) draft-5 (`aab6717`, with the follow-up `d74d0eb`). This file changes none of its text, fixtures or checker. Read first: [lane 14](../lanes/14-ai-origin-signals.md) (`db3263f`), cited below as L14. No service was contacted and nothing was built.
+Status: proposal, 2026-11-24. **Non-blocking.** The build proceeds from the confirmed [registration record](../../spec/registration-record.md) draft-5 (`aab6717`, with the follow-up `d74d0eb`). This file changes none of its text, fixtures or checker. Read first: [lane 14](../lanes/14-ai-origin-signals.md) (`db3263f`), cited below as L14. No service was contacted and nothing was built.
 
 Every item below is assessed on the same five points:
 - what it adds;
@@ -13,7 +13,7 @@ Gate IDs `NEXT.*` are proposals, like the REG gates in the design's §15.
 
 ## 1. A reference that travels with text
 
-**Status: frozen as normative in [design §9.1](registration-record.md#91-text-reference-normative-frozen-2026-11-24) on 2026-11-24.** The check character there is Luhn mod 32 over the same alphabet, not Crockford's mod 37, which would bring in `*~$=U`. §9.1 governs where this sketch differs.
+**Status: frozen as normative in [design §9.1](../../spec/registration-record.md#91-text-reference-normative-frozen-2026-11-24) on 2026-11-24.** The check character there is Luhn mod 32 over the same alphabet, not Crockford's mod 37, which would bring in `*~$=U`. §9.1 governs where this sketch differs.
 
 **The problem.** Pasted text cannot carry metadata ("free-form text cannot transport metadata", L14 §1.1, quoting the EU Code of Practice). A copy loses any link to its registration. Invisible Unicode carriers are no answer: one published fold erases them ([lane 09](../lanes/09-evidence-review.md)).
 
@@ -47,7 +47,7 @@ Gate IDs `NEXT.*` are proposals, like the REG gates in the design's §15.
 
 ## 2. Self-declared AI use (`claims.generator`)
 
-**Status: adopted on the owner's decision of 2026-11-24, as `claims.aiUse` in [design §4.7](registration-record.md#47-self-declared-ai-use-normative-owner-decision-2026-11-24).** The values come from the pinned EU Code icons and the IPTC scheme. The predicate version is unchanged, because the field is optional and draft-5 is unreleased. §4.7 governs where this sketch differs.
+**Status: adopted on the owner's decision of 2026-11-24, as `claims.aiUse` in [design §4.7](../../spec/registration-record.md#47-self-declared-ai-use-normative-owner-decision-2026-11-24).** The values come from the pinned EU Code icons and the IPTC scheme. The predicate version is unchanged, because the field is optional and draft-5 is unreleased. §4.7 governs where this sketch differs.
 
 **What it adds.** An optional statement by the registrant about whether, and which, AI tools were used, signed with the rest of the statement (L14 §4.2 floats this). It answers a question people ask, the way C2PA's `digitalSourceType` does, without Traceweave inferring anything.
 

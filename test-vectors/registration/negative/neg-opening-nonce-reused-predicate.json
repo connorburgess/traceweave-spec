@@ -1,0 +1,40 @@
+{
+  "fixture": {
+    "kind": "report-link",
+    "description": "Catalogue opening reuses predicate.nonce as R (CD-B2).",
+    "notice": "Illustrative fixture for spec/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "expect": {
+      "code": "nonce-reused"
+    }
+  },
+  "object": {
+    "linkVersion": "traceweave-registration-link-draft-5",
+    "report": {
+      "path": "test-vectors/matching/example-report.json",
+      "bodySha256": "081d860084af229d77137e32dedd9f40f7d0bbeca6b18424b6d51cc1d89ed3be"
+    },
+    "registration": {
+      "bundle": "aux/bundle-opening-nonce-reused.json",
+      "statementSha256": "7fbc65e81425d7fac64bdcd18dbc4d55b957ba84045d9b0171a9ebd066799523"
+    },
+    "links": [
+      {
+        "pair": 0,
+        "role": "reference",
+        "subjectIndex": 0,
+        "sha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"
+      }
+    ],
+    "catalogueOpening": {
+      "catalogue": "test-vectors/matching/matching.json#/vectors/1/reference/canonical",
+      "nonceHex": "c57514cd00910af4afb8443d3231c97e89633d05035541aaa1ef4a404350a7ac"
+    },
+    "notShown": [
+      "authorship",
+      "originality",
+      "first-creation",
+      "ownership",
+      "permission"
+    ]
+  }
+}

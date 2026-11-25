@@ -1,6 +1,8 @@
 # Review: registration record draft, fixtures and lane 13
 
-Status: non-author review, 2026-11-23, of [registration-record.md](../drafts/registration-record.md), [registration-fixtures/](../drafts/registration-fixtures/README.md) and [lane 13](../lanes/13-timestamp-evidence-review.md) at `roadmap-v2` `3d31974` and `7271715` (the A2A section was not available and is not reviewed). Scratch code is in `$TMPDIR/reg` (`clean.py`, `variants.py`); primary sources were fetched read-only; nothing was submitted to any TSA, calendar or log.
+> Path note: the specification and fixtures reviewed here were promoted on 2026-11-25 to [spec/registration-record.md](../../spec/registration-record.md) and [test-vectors/registration/](../../test-vectors/registration/README.md); link targets below point to the promoted locations. See the [promotion map](../promotion-map.md).
+
+Status: non-author review, 2026-11-23, of [registration-record.md](../../spec/registration-record.md), [registration-fixtures/](../../test-vectors/registration/README.md) and [lane 13](../lanes/13-timestamp-evidence-review.md) at `roadmap-v2` `3d31974` and `7271715` (the A2A section was not available and is not reviewed). Scratch code is in `$TMPDIR/reg` (`clean.py`, `variants.py`); primary sources were fetched read-only; nothing was submitted to any TSA, calendar or log.
 
 **Verdict: ready after listed fixes.** The core idea is sound: countersign one DSSE signature, salt the possession and catalogue digests, report each outcome separately, and keep the §11 limits. Four design gaps need fixing before REG.1/REG.2 (F1–F4). The fixture checker accepts nine wrong-but-plausible outputs (§2).
 

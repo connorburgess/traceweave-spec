@@ -18,20 +18,42 @@ Extraction is specified in the [extraction contract](extraction.md) and catalogu
 
 ## Private catalogue commitment
 
-This draft proposes a salted exact-byte commitment. It has not had an independent protocol review. Let:
+Normative exact-byte commitments and opening verification rules are specified here and in [registration-record.md](registration-record.md) (§4.2–§4.4, §9), with vectors in [test-vectors/commitment.json](../test-vectors/commitment.json), [test-vectors/registration/](../test-vectors/registration/README.md), and [test-vectors/intoto-adapter/](../test-vectors/intoto-adapter/README.md). Let:
 
 - `D` be UTF-8 bytes of `Traceweave-Catalogue-v0.1` followed by one zero byte.
-- `R` be a 32-byte nonce generated with an operating-system cryptographic random source, kept private with the opening.
+- `R` be a 32-byte nonce generated with an operating-system cryptographic random source (no non-cryptographic fallback), never all-zero, and kept private with the opening. When paired with a registration statement's `predicate.nonce`, `R` MUST be drawn independently and MUST NOT equal `predicate.nonce` (`nonce-reused`).
 - `C` be the exact private catalogue byte sequence.
 - `L` be the length of `C` encoded as an unsigned 64-bit big-endian integer.
 
 `commitment = SHA256(D || R || L || C)`, encoded as 64 lowercase hexadecimal characters.
 
-The public record contains the scheme identifier `sha256-salted-catalogue-v1` and the digest only. It MUST NOT include `R` or `C`. Use fresh nonces per commitment; never reuse the synthetic vectors' nonce in production. Opening a commitment discloses the entire catalogue and nonce. Selective disclosure is not specified in this draft.
+The public record contains the scheme identifier `sha256-salted-catalogue-v1` and the digest only. It MUST NOT include `R` or `C`. Use fresh nonces per commitment; never reuse the synthetic vectors' nonce in production. Opening a commitment discloses the entire catalogue `C` and nonce `R`. Selective disclosure is not specified in `v1`; registrants requiring per-file selective disclosure SHOULD register one work/catalogue per statement rather than batching unrelated works.
 
-The catalogue MUST bind the extraction profile, configuration digest, exact reference artifact digests, feature representations, and source coordinates or media ranges. Merely committing a list of hashes without their interpretation is insufficient for reproduction. The catalogue's internal schema awaits a concrete fingerprint profile; synthetic fixtures demonstrate the commitment operation only.
+The catalogue MUST bind the extraction profile, configuration digest, exact reference artifact digests, feature representations, and source coordinates or media ranges. Merely committing a list of hashes without their interpretation is insufficient for reproduction.
 
-Re-serializing a catalogue creates different bytes and normally a different commitment. Keep the exact opening. A commitment supports later consistency checks; timestamping it can support prior existence. Neither establishes who created or owns the content.
+Re-serializing a catalogue creates different bytes and normally a different commitment. Producers MUST retain `C` as exact raw bytes (never re-serialized before opening). Verifiers MUST enforce a bounded size cap when checking `C` (`1 MiB` / `1,048,576` bytes in the M4 policy/harness) and stream/bound artifact hashing for `A`. A commitment supports later consistency checks; timestamping it can support prior existence. Neither establishes who created or owns the content.
+
+### Salted possession digest
+
+`sha256-salted-possession-v1` binds a registration statement to possession of exact artifact bytes `A` using the statement's fresh 32-byte `predicate.nonce` ([registration-record.md](registration-record.md) §4.2–§4.3):
+
+- `D` be UTF-8 bytes of `Traceweave-Possession-v1` followed by one zero byte (`0x00`).
+- `nonce` be the 32-byte random value in `predicate.nonce`, drawn from an operating-system cryptographic random source (no non-cryptographic fallback), never all-zero and never reused across registrations.
+- `A` be the exact original artifact bytes.
+- `L` be the length of `A` encoded as an unsigned 64-bit big-endian integer.
+
+`possession[i].sha256 = SHA256(D || nonce || L || A)`, encoded as 64 lowercase hexadecimal characters.
+
+`possession[i]` binds to a signer key **only** through the enclosing verified DSSE signature over the statement ([registration-record.md](registration-record.md) §4.3, §6.1). Once a registration statement is disclosed, `predicate.nonce` is public, so `possession[i]` does not protect low-entropy artifacts from offline confirmation guessing.
+
+### Catalogue opening verification
+
+When verifying a `catalogueOpening` (`{catalogue, nonceHex}`, [registration-record.md](registration-record.md) §9), a verifier MUST enforce all of the following:
+
+1. `nonceHex` MUST be exact 64 lowercase hexadecimal characters (`HEX64`, 32 bytes) and MUST NOT be all zeros (`nonce-invalid`).
+2. `nonceHex` MUST NOT equal the statement's `predicate.nonce` (`nonce-reused`).
+3. `SHA256("Traceweave-Catalogue-v0.1\x00" || bytes.fromhex(nonceHex) || uint64be(len(C)) || C)` MUST equal `predicate.catalogue.sha256` (`catalogue-does-not-open`).
+4. When linking to a comparison report (`report-link`), `C` MUST be retained as exact raw bytes (bounded to the verifier's maximum catalogue size), `SHA256(C)` MUST equal the report's `referenceCatalogueSha256` (or `candidateCatalogueSha256` when every linked entry has `role: "candidate"`, `catalogue-not-report-input`), and `predicate.catalogue.profile` MUST equal the report's `profile` (`profile-mismatch`).
 
 ## Privacy defaults
 

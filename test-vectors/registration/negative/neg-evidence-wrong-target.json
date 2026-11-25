@@ -1,0 +1,39 @@
+{
+  "fixture": {
+    "kind": "evidence",
+    "description": "Token over the statement bytes, not over the signature.",
+    "notice": "Illustrative fixture for spec/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "bundle": "fixtures/bundle-three-roots.json",
+    "expect": {
+      "code": "evidence-wrong-target"
+    }
+  },
+  "object": {
+    "evidenceVersion": "traceweave-time-evidence-draft-5",
+    "type": "rfc3161",
+    "placeholder": true,
+    "notice": "PLACEHOLDER. Not a real time-stamp token, proof, log entry or cosignature. No service issued it and it cannot be verified. Times in it are invented for illustration.",
+    "target": {
+      "kind": "dsse-signature",
+      "signatureIndex": 0,
+      "sha256": "3f308f1831f6b07c49c0ad4bc28988d2b976b27daf13c8b94fb02e1dd352c93e"
+    },
+    "root": {
+      "kind": "tsa-certificate-chain",
+      "anchorSha256": "263ac66fe1570680b0d5323d03cb328cee40565a6b20600463895ccffb6fccde"
+    },
+    "token": "PLACEHOLDER-NOT-A-RFC3161-OBJECT-817289222896-tsa-a-2026-11-23T10:00:00Z-u1",
+    "rfc3161": {
+      "genTime": "2026-11-23T10:00:00Z",
+      "policyOid": "2.999.1",
+      "nonce": "5a17c0de00000001",
+      "requestNonce": "5a17c0de00000001",
+      "signerCertificate": {
+        "notBefore": "2026-01-01T00:00:00Z",
+        "notAfter": "2031-01-01T00:00:00Z",
+        "sha256": "8dd8f57938800e7d3a7c0c5618d393eb2623096e1137cc91e60d53ee0ad0c429"
+      },
+      "accuracySeconds": 1
+    }
+  }
+}
