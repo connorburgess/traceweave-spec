@@ -120,7 +120,7 @@ Owner column: **S** = spec repository; **I** = implementation repository (`trace
 
 | ID | Type | Verifiable criterion | Status | Owner |
 | --- | --- | --- | --- | --- |
-| M2E.0 | O | A decision record either selects candidate C (when C meets M2E.1) or omits embedding from the next release. M5.4 cannot state omission without it | open | S |
+| M2E.0 | O | A decision record either selects candidate C (when C meets M2E.1) or omits embedding from the next release. M5.4 cannot state omission without it | **met** ([code-embedding-decision.md](docs/decisions/code-embedding-decision.md): owner confirmed omitting source-code embedding from the next release; `M2E.1`–`M2E.7` deferred) | S |
 | M2E.1 | R | Frozen and committed before measurement: (a) eligible subset; (b) declared transformations, including full cheap normalization; (c) minimum net authenticated bits per unit, derived from the UC-6 payload and **approved by the owner**; (d) behavior checks; (e) the survival rate required for each declared transformation. Measured on a sample from a new owner-approved census protocol, never tuning data. **Met only if the owner-approved minimum (c) holds on that sample; otherwise negative-result** | open ([lane 06](research/lanes/06-evidence-review.md): no ready candidate) | S |
 | M2E.2 | E | Reproducible insertion: seeds are recorded and a rerun reproduces every marked-output digest. Only deliberate insertions are counted | open | I |
 | M2E.3 | E | Functionality/quality checks on **marked outputs only**, k/k. Attack outputs are reported separately | open | I |
@@ -222,7 +222,7 @@ Counted on 2026-11-25 from the status columns above. In the later-profile table,
 
 | Gates | Total | Met | Negative-result | Open |
 | --- | --- | --- | --- | --- |
-| Core M0–M5 | 47 | 28 (M0.1, M0.2, M0.3, M0.4, M1.1, M1.2, M1.3, M1.4, M1.5, M1.6, M2.1, M2.2, M2.3, M2.4, M2.5, M2.6, M2.7, M2.8, M2.9, M2.10, M2.11, M3.0, M4.1, M4.2, M4.3, M4.4, M4.5, M4.6) | 0 | 19 (M2E.0–M2E.7, M3.1–M3.6, M5.1–M5.5) |
+| Core M0–M5 | 47 | 29 (M0.1, M0.2, M0.3, M0.4, M1.1, M1.2, M1.3, M1.4, M1.5, M1.6, M2.1, M2.2, M2.3, M2.4, M2.5, M2.6, M2.7, M2.8, M2.9, M2.10, M2.11, M2E.0, M3.0, M4.1, M4.2, M4.3, M4.4, M4.5, M4.6) | 0 | 18 (M2E.1–M2E.7, M3.1–M3.6, M5.1–M5.5) |
 | Later profiles, EXT and RC | 55 | 21 (TS.3, PY.1, PY.2, PY.3, IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4, TXT.3, TXT.7, RES.1, C2PA.3, SK.1, SK.2, WEB.0, WEB.1, WEB.2) | 2 (TXT.4, TXT.8) | 32 (WEB.3–WEB.6 and SK.3–SK.5 planned; PY.4 open) |
 
 M0.1 is met on the second non-author recount (`3a640b3`). M2.5 and M2.8 are met on the [I2 review](research/reviews/implementation-merge-i2-review.md) (`de9a5b7`) of implementation `82b02ab`. M1.4 (with A16 caveat on TEST-ONLY exclusion positives), M1.6, M2.2, M2.3, M2.7 (CLI + spec both met) and M2.9 are met on the round-three spot-check (`docs/reviews/core-gates-review.md` @ `12cf016` on `connorburgess/traceweave`, pinned to public spec `6437c26`).
