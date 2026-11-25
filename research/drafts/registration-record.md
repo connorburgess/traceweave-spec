@@ -144,6 +144,8 @@ An all-zero or malformed nonce is rejected (`nonce-invalid`).
 
 `catalogue` commits to the private catalogue with the existing salted scheme `sha256-salted-catalogue-v1` ([core](../../spec/core.md#private-catalogue-commitment)), plus the profile triple. It lets a later comparison report be tied to the registered catalogue (§9) without revealing fingerprints now. A plain catalogue digest is rejected (`catalogue-unsalted`; §5 explains why). The catalogue bytes committed to and later opened are the exact stored catalogue bytes, which for the fixtures are the RFC 8785 bytes of the catalogue object (contract §3.3).
 
+**Opening nonce `R` (`catalogueOpening.nonceHex`, §9).** The commitment nonce `R` must be 32 fresh random bytes from an operating-system random source (`HEX64`: exact 64 lowercase hexadecimal characters, non-zero), drawn independently of `predicate.nonce`. Reusing `predicate.nonce` as `R` is forbidden: `predicate.nonce` is disclosed in plaintext whenever the registration statement is shared, so reusing it would prematurely reveal `R` before any `catalogueOpening` and collapse the salted commitment into an unsalted public-salt digest (`nonce-reused`).
+
 ### 4.5 Implementation provenance (B10)
 
 `implementation` and `specCommit` have the report provenance form (contract §6.6), and the same rule applies: the commit is fixed at build time, and only by a verified, clean build (§6.8 B10). An unstamped build refuses to write a registration, as it refuses a report document (`provenance-shape` covers the form only). The fixtures carry placeholder all-zero commits, as `example-report.json` does. Provenance stays cooperative-build evidence: a registration signature attests who registered, not which code ran.
@@ -460,7 +462,9 @@ The report body is closed (contract §6.2, §7). A report never embeds a registr
 - `report`: the report path and `bodySha256`, recomputed from the canonical body (`report-digest`).
 - `registration`: the bundle, and the SHA-256 of the statement payload bytes (`statement-digest`).
 - `links`: for each pair, the role, the subject index and the digest. The report pair's digest, the link digest and the registered subject digest must be equal (`subject-mismatch`).
-- `catalogueOpening` (optional): the catalogue bytes (the exact stored bytes; RFC 8785 bytes of the catalogue object in the fixtures) and the nonce.
+- `catalogueOpening` (optional): the catalogue bytes (the exact stored bytes; RFC 8785 bytes of the catalogue object in the fixtures) and `nonceHex`.
+  - `nonceHex` must be exact 32-byte lowercase hex (`HEX64`) and non-zero (`nonce-invalid`).
+  - `nonceHex` must be distinct from the registration statement's `predicate.nonce` (`nonce-reused`).
   - They must open the registered commitment (`catalogue-does-not-open`).
   - They must hash to the report's `referenceCatalogueSha256` (`catalogue-not-report-input`).
   - The registered profile must equal the report's (`profile-mismatch`).
@@ -887,8 +891,8 @@ Run on 2026-11-24 on `roadmap-v2` (parent `2186523`), over this draft, lane 13 a
   Only the local `openssl` was used; no external service was contacted.
 - **`check_registration.py`** (draft-5):
   - the Ed25519 and PAE self-tests pass;
-  - 86 positive fixtures give no code, and each of the 140 negative fixtures gives exactly its expected codes (after the draft-5 follow-up, §9.1, §4.7 and the addendum fixes);
-  - all 43 wrong-implementation cases behave as required;
+  - 86 positive fixtures give no code, and each of the 147 negative fixtures gives exactly its expected codes (after the draft-5 follow-up, §9.1, §4.7, addendum fixes and CD-B2);
+  - all 46 wrong-implementation cases behave as required;
   - all 57 codes appear in this document and have a negative fixture;
   - the §9.1 check character detects every one of 53,568 single-character substitutions (the self-test asserts it).
 - **`enumerate_key_events.py`** (60 s, after the follow-up):

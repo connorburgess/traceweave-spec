@@ -105,6 +105,7 @@ A fixture registers nothing and proves nothing.
 | `aux/bundle-cert-expired.json` | bundle | TSA A's signing certificate expired before genTime. |
 | `aux/bundle-claim.json` | bundle | Claimed 10:00:03; the trusted signature's earliest bound is 10:00:06, the untrusted co-signer's 10:00:01. |
 | `aux/bundle-nonce-reused.json` | bundle | Another work registered with the same nonce. |
+| `aux/bundle-opening-nonce-reused.json` | bundle | Registration whose catalogue commitment reuses `predicate.nonce` (CD-B2). |
 | `aux/bundle-one-source.json` | bundle | Only one time source (TSA A) for the creator's signature. |
 | `aux/bundle-other-catalogue.json` | bundle | Registration committing to another catalogue. |
 | `aux/bundle-other-profile.json` | bundle | Registration under a different profile version. |
@@ -146,7 +147,7 @@ A fixture registers nothing and proves nothing.
 | `aux/key-event-second-rotation-2028.json` | key-event | Eighteen months later, whoever obtained the old key rotates it again. |
 | `aux/verification-result-e1-flipped.json` | verification-result | Draft-4 behaviour with one extra rejected event (the flip), kept as input to the equivalence negative. |
 
-`negative/` holds 139 broken fixtures; each must produce exactly the codes listed below. `aux/` holds inputs that other fixtures refer to; they are not checked on their own.
+`negative/` holds 147 broken fixtures; each must produce exactly the codes listed below. `aux/` holds inputs that other fixtures refer to; they are not checked on their own.
 
 | Real-format file | SHA-256 (from `MANIFEST.json`) |
 | --- | --- |
@@ -194,7 +195,7 @@ Scripts, all standard library only, Python 3.11 or later:
 - **Verification results** (§10). Recomputed and compared field by field: per-signature bounds over union-find independence classes; key events evaluated in two passes (standing, then disputes; no fixed point), with supersession and the own-standing exemption (B1–B3, D1, D2, E1); event identity by payload and signature; recovery keys; certificate-level revocation (D5); trust from quorum bounds only (S1); the claim compared with trusted signatures only (S11).
 - **Result equivalence** (`result-equivalence` fixtures): results that differ only by rejected events must agree byte for byte (E1).
 - **Links, sets, renderings and agent fixtures** as in the design: the report link; nonce freshness; the §11 allow-list with three fixed sentences, the ordering rule, 128-bit key display and the simulated-result marker (D6); and §19.
-- **Wrong-implementation self-test.** 33 cases: plausible wrong verifiers, renderings and decoders built in memory, each of which must be caught.
+- **Wrong-implementation self-test.** 46 cases: plausible wrong verifiers, renderings and decoders built in memory, each of which must be caught.
 - **Drift.** Every failure code appears in the design document and has a negative fixture.
 
 The A2A fixtures are **not validated against a published A2A schema** (none is committed upstream). The MCP tool fixture was validated against MCP `schema.json` `$defs/Tool` (design §19.4).
@@ -278,6 +279,13 @@ The A2A fixtures are **not validated against a published A2A schema** (none is c
 | `neg-nonce-invalid` | `nonce-invalid` | All-zero nonce. |
 | `neg-nonce-reused` | `nonce-reused` | Nonce reused across two registrations (W4). |
 | `neg-notice-missing` | `notice-missing` | Rendering without the three fixed sentences. |
+| `neg-opening-nonce-all-zero` | `nonce-invalid` | All-zero catalogue opening nonce (CD-B2). |
+| `neg-opening-nonce-bad-hex` | `nonce-invalid` | Non-hex characters in catalogue opening nonce (CD-B2). |
+| `neg-opening-nonce-long` | `nonce-invalid` | 33-byte catalogue opening nonce (CD-B2). |
+| `neg-opening-nonce-reused-predicate` | `nonce-reused` | Catalogue opening reuses `predicate.nonce` as `R` (CD-B2). |
+| `neg-opening-nonce-short` | `nonce-invalid` | 31-byte catalogue opening nonce (CD-B2). |
+| `neg-opening-nonce-trailing-newline` | `nonce-invalid` | Trailing newline in catalogue opening nonce (CD-B2). |
+| `neg-opening-nonce-uppercase` | `nonce-invalid` | Uppercase hex in catalogue opening nonce (CD-B2). |
 | `neg-ordering-claim` | `ordering-claim` + `rendering-unlisted-line` | Two registrations' times presented as an order (S8). |
 | `neg-pending-counted` | `pending-counted` | A pending proof that states a block time. |
 | `neg-placeholder-unlabelled` | `placeholder-unlabelled` | Placeholder presented as a real token. |

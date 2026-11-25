@@ -871,6 +871,24 @@ def build_negatives(st, sig, three, result, rmeta, link, ren, res_co, recent, re
     bad = copy.deepcopy(link)
     bad["catalogueOpening"]["nonceHex"] = "ff" * 32
     neg("catalogue-does-not-open", fixture("report-link", "Wrong opening nonce.", bad, "catalogue-does-not-open"))
+    for name, bad_nonce, desc in [
+        ("opening-nonce-all-zero", "0" * 64, "All-zero catalogue opening nonce (CD-B2)."),
+        ("opening-nonce-short", "00" * 31, "31-byte catalogue opening nonce (CD-B2)."),
+        ("opening-nonce-long", "00" * 33, "33-byte catalogue opening nonce (CD-B2)."),
+        ("opening-nonce-uppercase", "00" * 31 + "FF", "Uppercase hex in catalogue opening nonce (CD-B2)."),
+        ("opening-nonce-bad-hex", "zz" * 32, "Non-hex characters in catalogue opening nonce (CD-B2)."),
+        ("opening-nonce-trailing-newline", CAT_NONCE.hex() + "\n", "Trailing newline in catalogue opening nonce (CD-B2)."),
+    ]:
+        bad = copy.deepcopy(link)
+        bad["catalogueOpening"]["nonceHex"] = bad_nonce
+        neg(name, fixture("report-link", desc, bad, "nonce-invalid"))
+    st_r = statement(**{"predicate.catalogue.sha256": C.catalogue_commitment(bytes.fromhex(NONCE), CATALOGUE)})
+    br, _ = three_roots(st_r)
+    write("aux", "bundle-opening-nonce-reused", fixture("bundle", "Registration whose catalogue commitment reuses predicate.nonce (CD-B2).", br))
+    bad = copy.deepcopy(link)
+    bad["registration"] = {"bundle": "aux/bundle-opening-nonce-reused.json", "statementSha256": C.sha(C.jcs(st_r))}
+    bad["catalogueOpening"]["nonceHex"] = NONCE
+    neg("opening-nonce-reused-predicate", fixture("report-link", "Catalogue opening reuses predicate.nonce as R (CD-B2).", bad, "nonce-reused"))
     bad = copy.deepcopy(link)
     bad["registration"]["statementSha256"] = C.sha(b"another statement")
     neg("statement-digest", fixture("report-link", "The link names a different statement.", bad, "statement-digest"))

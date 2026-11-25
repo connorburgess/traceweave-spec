@@ -429,10 +429,17 @@ def keyid(pub):
 
 
 def possession_digest(nonce_hex, artifact):
-    return sha(POSSESSION_DOMAIN + bytes.fromhex(nonce_hex) + len(artifact).to_bytes(8, "big") + artifact)
+    nonce = bytes.fromhex(nonce_hex)
+    if len(nonce) != 32:
+        raise ValueError("Nonce must be exactly 32 bytes")
+    return sha(POSSESSION_DOMAIN + nonce + len(artifact).to_bytes(8, "big") + artifact)
 
 
 def catalogue_commitment(nonce, catalogue):
+    if not isinstance(nonce, bytes) or len(nonce) != 32:
+        raise ValueError("Nonce must be exactly 32 bytes")
+    if not isinstance(catalogue, bytes):
+        raise TypeError("Catalogue must be bytes")
     return sha(CATALOGUE_DOMAIN + nonce + len(catalogue).to_bytes(8, "big") + catalogue)
 
 
@@ -520,7 +527,7 @@ def check_statement(st, artifacts, out):
     if pred["registrationVersion"] != REGISTRATION_VERSION or pred["contentKind"] not in ("text", "source-code", "image", "other"):
         out.add("statement-shape")
     nonce = pred["nonce"]
-    if not isinstance(nonce, str) or not HEX64.match(nonce) or nonce == "0" * 64:
+    if not isinstance(nonce, str) or not HEX64.fullmatch(nonce) or nonce == "0" * 64:
         out.add("nonce-invalid")
         nonce = None
     impl = pred["implementation"]
@@ -1287,9 +1294,18 @@ def check_link(link, meta, out):
         out.add("profile-mismatch")
     opening = link["catalogueOpening"]
     if opening is not None:
+        if not isinstance(opening, dict) or set(opening) != {"catalogue", "nonceHex"} or not isinstance(opening.get("catalogue"), str):
+            out.add("fixture-shape")
+            return
         catalogue = load_source(opening["catalogue"])
-        if cat is None or catalogue_commitment(bytes.fromhex(opening["nonceHex"]), catalogue) != cat["sha256"]:
-            out.add("catalogue-does-not-open")
+        nonce_hex = opening["nonceHex"]
+        if not isinstance(nonce_hex, str) or not HEX64.fullmatch(nonce_hex) or nonce_hex == "0" * 64:
+            out.add("nonce-invalid")
+        else:
+            if nonce_hex == st["predicate"]["nonce"]:
+                out.add("nonce-reused")
+            if cat is None or catalogue_commitment(bytes.fromhex(nonce_hex), catalogue) != cat["sha256"]:
+                out.add("catalogue-does-not-open")
         if sha(catalogue) != body["inputs"]["referenceCatalogueSha256"]:
             out.add("catalogue-not-report-input")
 
@@ -1845,6 +1861,29 @@ def wrong_implementation_self_test(verbose):
     check_reference_string(text_reference("ab" * 32) + "\n", probe)
     cases.append(("reference with a trailing newline read as a check error, not a shape error (9.1)",
                   bool(re.match(r"^tw1-[0-9A-HJKMNP-TV-Z]{27}$", text_reference("ab" * 32) + "\n")), probe == {"reference-shape"}))
+    # CD-B2: catalogue commitment nonce length, HEX64/non-zero enforcement, and separation from predicate.nonce.
+    try:
+        catalogue_commitment(b"x" * 33, b"{}")
+        rejects_33 = False
+    except ValueError:
+        rejects_33 = True
+    naive_33 = sha(CATALOGUE_DOMAIN + (b"x" * 33) + (2).to_bytes(8, "big") + b"{}")
+    cases.append(("catalogue_commitment without 32-byte length check accepts 33-byte nonce (CD-B2)", len(naive_33) == 64, rejects_33))
+    bad_openings = ["0" * 64, "00" * 31, "00" * 31 + "FF"]
+    bare_fromhex_ok = all(isinstance(bytes.fromhex(h), bytes) for h in bad_openings)
+    checker_rejects_openings = all(
+        mutated("fixtures/report-link.json", lambda r, h=h: r["catalogueOpening"].update(nonceHex=h)) == {"nonce-invalid"}
+        for h in bad_openings
+    )
+    cases.append(("bare bytes.fromhex accepts malformed/all-zero catalogueOpening.nonceHex (CD-B2)", bare_fromhex_ok, checker_rejects_openings))
+    reused_doc = strict_loads((HERE / "negative/neg-opening-nonce-reused-predicate.json").read_text(encoding="utf-8"))
+    reused_obj = reused_doc["object"]
+    reused_bundle = load_fixture(reused_obj["registration"]["bundle"])
+    reused_st = json.loads(base64.b64decode(reused_bundle["envelope"]["payload"]))
+    reused_cat = load_source(reused_obj["catalogueOpening"]["catalogue"])
+    naive_open_accepts = catalogue_commitment(bytes.fromhex(reused_obj["catalogueOpening"]["nonceHex"]), reused_cat) == reused_st["predicate"]["catalogue"]["sha256"]
+    cases.append(("catalogueOpening reusing predicate.nonce passes commitment check alone (CD-B2)", naive_open_accepts,
+                  check_file(HERE / "negative/neg-opening-nonce-reused-predicate.json")[0] == {"nonce-reused"}))
     failures = 0
     for name, wrong_misbehaves, caught in cases:
         ok = wrong_misbehaves and caught

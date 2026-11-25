@@ -89,5 +89,21 @@ Found **2 blocking findings** (`CD-B1`, `CD-B2`) and **5 advisory findings** (`C
 
 - **Blocking findings:** `2` (`CD-B1`, `CD-B2`)
 - **Advisory findings:** `5` (`CD-A1`–`CD-A5`)
-- **Dispositions recorded:** `0 / 7` (suggested dispositions provided above; awaiting author/coordinator resolution)
-- **`M4.6` status in `ROADMAP.md`:** Remains **`open`** until every finding above has a recorded disposition and the blocking issues are resolved.
+- **Dispositions recorded:** `7 / 7` (`CD-B2` fixed pending reviewer confirmation; `CD-B1` and `CD-A1`–`CD-A5` deferred to owner-gated M4 normative promotion)
+- **`M4.6` status in `ROADMAP.md`:** Remains **`open`** until `CD-B1` normative promotion is completed and the reviewer confirms `CD-B2`.
+
+---
+
+## 4. Dispositions
+
+Recorded on `roadmap-v2` following the `CD-B2` fix:
+
+| ID | Severity | Disposition | Target / Evidence |
+| --- | --- | --- | --- |
+| `CD-B1` | `blocking` | **Deferred to M4 normative promotion.** Promoting `sha256-salted-possession-v1`, `catalogueOpening` verification, and Go/Rust `Traceweave-Possession-v1\x00` interop vectors into `spec/` and `test-vectors/` requires the owner-gated M4 promotion alongside `M4.3`/`M4.5`. | `spec/core.md`, `spec/attestations.md`, `test-vectors/`, `research/experiments/signing-interop/` |
+| `CD-B2` | `blocking` | **Fixed (awaiting reviewer confirmation).** Enforced 32-byte nonce length in `catalogue_commitment`, strict `HEX64` and non-zero validation (`nonce-invalid`), and `catalogueOpening.nonceHex != predicate.nonce` (`nonce-reused`) in `registration-record.md` (§4.4, §9) and `check_registration.py`, backed by 7 negative fixtures (`neg-opening-nonce-*`) and 3 wrong-implementation self-test cases. | `research/drafts/registration-record.md`, `research/drafts/registration-fixtures/` |
+| `CD-A1` | `advisory` | **Deferred to M4 normative promotion.** Reconciling `schemas/statement.schema.json`, `schemas/evidence.schema.json`, and `spec/attestations.md` with `registration-draft-5` and `contentKind` values will happen alongside `M4.3`/`M4.5` promotion. | `schemas/`, `spec/attestations.md` |
+| `CD-A2` | `advisory` | **Acknowledged / deferred to M4 normative promotion.** Per-file selective disclosure guidance (one work/catalogue per statement) and supporting `candidateCatalogueSha256` in `report-link` §9 will be addressed during normative promotion; per-entry Merkle commitments remain out of scope for `v1`. | `research/drafts/registration-record.md` (§4.1, §5, §9) |
+| `CD-A3` | `advisory` | **Acknowledged / deferred to M4 normative promotion.** Explicitly stating that `possession[i]` binds to a key only through the enclosing DSSE signature (`§4.3`) and specifying OS CSPRNG APIs with no non-cryptographic fallback (`§4.2`) will be carried into the promoted normative spec. | `spec/attestations.md`, `research/drafts/registration-record.md` (§4.2, §4.3) |
+| `CD-A4` | `advisory` | **Acknowledged / deferred to M4 normative promotion.** Verbatim byte retention for `C` (`§4.4`, `§14`) and explicit maximum `C`/`A` byte-length bounds (`1 MiB` as enforced in `run_policy.py`) will be codified in `spec/core.md` during normative promotion. | `spec/core.md`, `research/drafts/registration-record.md` (§4.4, §14) |
+| `CD-A5` | `advisory` | **Acknowledged / deferred to M4 normative promotion.** Documenting the timing-sensitivity boundary (public commitment verification vs constant-time private signing and CSPRNG nonce generation) and maintaining independent Go/Rust commitment testing when `Traceweave-Possession-v1\x00` vectors are promoted will be completed in M4 promotion. | `spec/attestations.md`, `research/experiments/signing-interop/` |
