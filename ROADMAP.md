@@ -14,7 +14,7 @@ Initial experimentation uses synthetic Go and Rust source code, with planned exp
 
 Embedded marking and detection are a first-class research track alongside extracted fingerprint matching. Provenance verification supports both. A baseline matcher is useful for comparison, but does not satisfy the embedding use case. No marking method is standardized yet.
 
-**Finding (2026-11-23, image marks).** On the `e-img-m-2` evidence (synthetic images, [results recheck](research/reviews/image-mark-protocol-review.md#results-recheck-e-img-m-2)), an image mark can serve as a finding aid, but not as evidence of origin. The marks transfer between images without the key, and every copy was accepted. Evidence of origin must come from a signed, timestamped registration record (M4, and the C2PA mapping). The embedded-code results (the SYN records) remain negative. So does the embedded-text evidence (lane 09); TXT.8 stays formally open until a non-author confirms that reading.
+**Finding (2026-11-23, image marks).** On the `e-img-m-2` evidence (synthetic images, [results recheck](research/reviews/image-mark-protocol-review.md#results-recheck-e-img-m-2)), an image mark can serve as a finding aid, but not as evidence of origin. The marks transfer between images without the key, and every copy was accepted. Evidence of origin must come from a signed, timestamped registration record (M4, and the C2PA mapping). The embedded-code results (the SYN records) remain negative. So does the embedded-text evidence (lane 09), confirmed for Unicode carriers by non-author review in [txt8-unicode-mark-review.md](research/reviews/txt8-unicode-mark-review.md) (TXT.8 `negative-result` for Unicode carriers; any new text-mark experiment stays owner-blocked).
 
 **Planned direction (2026-11-23).**
 - **Registration over marks.** The owner noted that many people want to protect their work. The coordinator's finding is that a timestamped, signed registration record (M4) serves that need, rather than marks. The design is in [registration-record.md](research/drafts/registration-record.md); `research/lanes/13-timestamp-evidence-review.md` is cited here once it exists.
@@ -212,12 +212,12 @@ On 2026-11-23 the owner approved two openings. Both are recorded here in paraphr
 
 ## Progress count
 
-Counted on 2026-11-25 from the status columns above. In the later-profile table, a row is open unless its criterion carries a **Status: met** or **Status: negative-result** note; TS.3, PY.3, IMGF.2–IMGF.4, IMG.0–IMG.4, TXT.3 and C2PA.3 are met, and TXT.4 is negative-result.
+Counted on 2026-11-25 from the status columns above. In the later-profile table, a row is open unless its criterion carries a **Status: met** or **Status: negative-result** note; TS.3, PY.3, IMGF.2–IMGF.4, IMG.0–IMG.4, TXT.3 and C2PA.3 are met, and TXT.4 and TXT.8 are negative-result.
 
 | Gates | Total | Met | Negative-result | Open |
 | --- | --- | --- | --- | --- |
 | Core M0–M5 | 47 | 24 (M0.1, M0.2, M0.3, M0.4, M1.1, M1.2, M1.3, M1.4, M1.5, M1.6, M2.1, M2.2, M2.3, M2.4, M2.5, M2.6, M2.7, M2.8, M2.9, M2.10, M2.11, M3.0, M4.1, M4.2) | 0 | 23 |
-| Later profiles, EXT and RC | 55 | 12 (TS.3, PY.3, IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4, TXT.3, C2PA.3) | 1 (TXT.4) | 42 (WEB.0–WEB.6 and SK.3–SK.5 planned; PY.1–PY.2 specified pending promotion, PY.4 open) |
+| Later profiles, EXT and RC | 55 | 12 (TS.3, PY.3, IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4, TXT.3, C2PA.3) | 2 (TXT.4, TXT.8) | 41 (WEB.0–WEB.6 and SK.3–SK.5 planned; PY.1–PY.2 specified pending promotion, PY.4 open) |
 
 M0.1 is met on the second non-author recount (`3a640b3`). M2.5 and M2.8 are met on the [I2 review](research/reviews/implementation-merge-i2-review.md) (`de9a5b7`) of implementation `82b02ab`. M1.4 (with A16 caveat on TEST-ONLY exclusion positives), M1.6, M2.2, M2.3, M2.7 (CLI + spec both met) and M2.9 are met on the round-three spot-check (`docs/reviews/core-gates-review.md` @ `12cf016` on `connorburgess/traceweave`, pinned to public spec `6437c26`).
 
@@ -302,7 +302,7 @@ The owner may narrow this reading. Core M1–M3 gates keep priority under the su
 | TXT.5 | O | Owner approves the PAN-PC-10 download (Zenodo record 3250123, 1,773,941,212 bytes, CC BY 4.0 on the record), licence acceptance and storage location | S |
 | TXT.6 | E | Stage 2, only after TXT.4 met and TXT.5 recorded. Frozen before running: a seeded sample of 200 cases for each of 5 obfuscation classes (1,000 positives) and 200 suspicious documents without plagiarism; k, w and the boilerplate catalogue. Report per class: detection under the PAN measures, abstentions, and negatives with any match (out of 200), each with its denominator. No rate is claimed beyond n (0/200 bounds only below about 1.5%) | I |
 | TXT.7 | E | The profile and release notes list the limits: paraphrase; translation; fragments shorter than `k+w-1` tokens; scripts without spaces, if unmeasured. Each limit cites a TXT.4 or TXT.6 count or a lane 09 source. A non-author counts 0 uncited limits | S |
-| TXT.8 | R | Research question: does any embedded mark in existing text survive the cheapest declared fold? [Lane 09](research/lanes/09-evidence-review.md#embedded-marks-in-existing-text) finds homoglyph and zero-width carriers erased by one published fold (NFKC + UTS #39 skeleton + delete Default_Ignorable), and rejects the AWT lexical rewriter. Status open: recorded as negative-result for Unicode carriers only after a non-author confirms that reading against the cited sources. Any new text-mark experiment needs the owner | S |
+| TXT.8 | R | Research question: does any embedded mark in existing text survive the cheapest declared fold? [Lane 09](research/lanes/09-evidence-review.md#embedded-marks-in-existing-text) finds homoglyph and zero-width carriers erased by one published fold (NFKC + UTS #39 skeleton + delete Default_Ignorable), and rejects the AWT lexical rewriter. **Status: negative-result** (for Unicode carriers; non-author source verification in [txt8-unicode-mark-review.md](research/reviews/txt8-unicode-mark-review.md)). Any new text-mark experiment still needs the owner | S |
 | **BIN — binary/compiled artifacts** | | | |
 | BIN.1 | R | Primary-source review of source-to-binary mark survival and binary similarity, in the lanes 06–08 format | S |
 | BIN.2 | O | Decision record citing BIN.1: a binary profile with its own gates, or out of scope | S |
