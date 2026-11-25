@@ -71,3 +71,38 @@ Run via `.venv/bin/python` (matching `ROADMAP.md` `validate` command; bare `pyth
 - `.venv/bin/python tools/validate.py --links-all` — **PASS** (exit `0`)
 - `.venv/bin/python -m unittest discover -s tests` — **PASS** (exit `0`, `9` tests)
 - `.venv/bin/python tools/check_hygiene.py` — **PASS** (exit `0`)
+
+---
+
+## Results recheck (`e-txt-1`)
+
+Rechecked 2026-11-25 against commit `76afd60` (`76afd600678662e7598840f36324dc8ab2cbe2b3`) on `roadmap-v2` and the committed artifacts in [results/e-txt-1/](../experiments/text-stage1/results/e-txt-1/RESULTS.md).
+
+**Verdict: `negative-result` confirmed (honest harness result under frozen `e-txt-1`).**
+
+1. **Frozen identity & ancestry:**
+   - `git merge-base --is-ancestor c708b20 76afd60` and `git merge-base --is-ancestor acebacb 76afd60` both exit `0`.
+   - `git diff --exit-code c708b20 76afd60 -- research/experiments/text-stage1/PROTOCOL.md research/experiments/text-stage1/harness.py profiles/text.md test-vectors/extraction-text/` exits `0` (`PROTOCOL.md` and `harness.py` are byte-identical to `c708b20`).
+   - `summary.json` records `gitIdentity` with `head = acebacb59c19fbbf27e9bf7b4c2894ba5a473c56`, `frozenCommit = c708b203165f3b1ea21e7205e3e1d91c16f946a4`, `cleanTree = true`, `frozenPathsUnchanged = true`, `pinnedDigestsCount = 27`, and `protocolSha256 = 642bb221f18b0a4efb1097ecbafa5da4f3f089dca018525b452db7e1cc5de2ce`.
+
+2. **Two-run determinism, confinement, and CLI identity:**
+   - `shasum -a 256` on [summary.json](../experiments/text-stage1/results/e-txt-1/summary.json) equals `eeef3f21e4f657e91f86d9d9b82baa1d0896cf843e8e556adcb01d897cad3`, matching `run-1` and `run-2` in [compare.txt](../experiments/text-stage1/results/e-txt-1/compare.txt) (`COMPARE EXIT=0`; both full runs exited `3`).
+   - `networkDenied: true` (`bind:errno=1; loopback:errno=1(EPERM); public:errno=1(EPERM)`).
+   - Both Rust (`traceweave` `0.0.1`) and Go (`traceweave-go` `0.2.0-dev`) report `stamp = "stamped"`, `implementation.commit = a6066d39b3fd0a66466f7a89d4553fc249479c28`, and `specCommit = 6437c26528ff87e91f86d9dcea37b45d20cd5064`.
+
+3. **Recounted criteria (i)–(iii) and the 35 `ambiguous` misses:**
+   - **TXT.2 vectors:** `154 / 154` (`55 + 3 + 21 + 60 + 15`).
+   - **Criterion (i):** `0` errors. **Criterion (ii):** `0` errors.
+   - **Criterion (iii):** independently recounted `35` misses from `stage1.transformations.*.details` (`32` `folded` misses = `8` transforms × `4` files: `docs/sources.md`, `docs/use-cases.md`, `profiles/README.md`, `profiles/code.md`; plus `3` `skeleton` misses = `confusable` × `docs/sources.md`, `docs/use-cases.md`, `profiles/code.md`), matching `failureCriteria.criterionIII_localityMissCount = 35` (`criterionIII_errors` holds the first `25` entries due to the `[:25]` summary slice).
+   - **Verified on all `35 / 35` misses:** every single miss shared `49..1169` fingerprints (`>= 49`) in the target channel yet returned `outcome = "ambiguous"` under `minRegionDistinctHashes = 1, mergeGap = 8`. Independent inspection confirms each of those 4 files has `max_diag_gap = 8` (`<= mergeGap`) and `>= 1` duplicated `folded` fingerprint hash (`2`, `2`, `1`, and `21` duplicate hashes respectively), so under `minRegionDistinctHashes = 1` an off-diagonal 1-seed repeat overlaps the single merged full-file diagonal region and triggers `ambiguous` per [catalogue-report.md](../../spec/catalogue-report.md#57-ambiguity-and-the-output-cap) §5.7–§5.8. Because `PROTOCOL.md` §9 and `harness.py:1126,1131` require `outcome == "match"`, the frozen `e-txt-1` verdict is **`negative-result`** (`exit 3`).
+
+4. **Recounted negative pairs and boilerplate controls:**
+   - **Ordered negatives (`/ 110`):** unsuppressed `min = 1` matches `2 / 4 / 4` (`exact / folded / skeleton`, `sharedFingerprintPairs` `2 / 4 / 4`, `selfPairMatches` `8 / 7 / 8`); unsuppressed `min = 2` matches `2 / 0 / 0` (`sharedFingerprintPairs` `2 / 4 / 4`, `selfPairMatches` `9 / 10 / 10`); boilerplate-suppressed `min = 1` matches `2 / 4 / 4` (`selfPairMatches` `8 / 7 / 8`).
+   - **Boilerplate cross-pairs (`/ 66`):** `0 / 0 / 0` (`exact / folded / skeleton`); boilerplate catalogue SHA-256 `9ea5e0521657fa2579a829fcc3cf438ca2411a5ad6f585324e46adf1e384c3fa`.
+   - **Suppression control:** unsuppressed `match / match / match` → suppressed `common-only / common-only / common-only`.
+
+5. **Repository checks (after recheck commit):**
+   - `.venv/bin/python tools/validate.py` — **PASS** (exit `0`)
+   - `.venv/bin/python tools/validate.py --links-all` — **PASS** (exit `0`)
+   - `.venv/bin/python -m unittest discover -s tests` — **PASS** (exit `0`, `9` tests)
+   - `.venv/bin/python tools/check_hygiene.py --messages HEAD~1..HEAD` — **PASS** (exit `0`)
