@@ -1,0 +1,2797 @@
+{
+  "protocolVersion": "e-txt-1",
+  "protocolSha256": "642bb221f18b0a4efb1097ecbafa5da4f3f089dca018525b452db7e1cc5de2ce",
+  "mode": "full",
+  "verdict": "negative-result",
+  "networkDenied": true,
+  "networkProbe": "bind:errno=1; loopback:errno=1(EPERM); public:errno=1(EPERM)",
+  "gitIdentity": {
+    "head": "acebacb59c19fbbf27e9bf7b4c2894ba5a473c56",
+    "frozenCommit": "c708b203165f3b1ea21e7205e3e1d91c16f946a4",
+    "cleanTree": true,
+    "frozenPathsUnchanged": true
+  },
+  "cliVersions": {
+    "rust": {
+      "implementation": {
+        "commit": "a6066d39b3fd0a66466f7a89d4553fc249479c28",
+        "name": "traceweave",
+        "version": "0.0.1"
+      },
+      "specCommit": "6437c26528ff87e91f86d9dcea37b45d20cd5064",
+      "stamp": "stamped"
+    },
+    "go": {
+      "implementation": {
+        "commit": "a6066d39b3fd0a66466f7a89d4553fc249479c28",
+        "name": "traceweave-go",
+        "version": "0.2.0-dev"
+      },
+      "specCommit": "6437c26528ff87e91f86d9dcea37b45d20cd5064",
+      "stamp": "stamped"
+    }
+  },
+  "pinnedDigestsCount": 27,
+  "txt2VectorCounts": {
+    "text-plain.json": 55,
+    "limits-text.json": 3,
+    "text-markdown.json": 21,
+    "records-text-plain.json": 60,
+    "config-negative-text.json": 15,
+    "total": 154
+  },
+  "failureCriteria": {
+    "criterionI_cliDiffCount": 0,
+    "criterionII_spanErrorCount": 0,
+    "criterionIII_localityMissCount": 35,
+    "criterionI_errors": [],
+    "criterionII_errors": [],
+    "criterionIII_errors": [
+      "docs__sources.md--reflow: unchanged folded run >= 15 but shared_folded_fp=323, outcome=ambiguous",
+      "docs__use-cases.md--reflow: unchanged folded run >= 15 but shared_folded_fp=1169, outcome=ambiguous",
+      "profiles__readme.md--reflow: unchanged folded run >= 15 but shared_folded_fp=49, outcome=ambiguous",
+      "profiles__code.md--reflow: unchanged folded run >= 15 but shared_folded_fp=423, outcome=ambiguous",
+      "docs__sources.md--crlf: unchanged folded run >= 15 but shared_folded_fp=323, outcome=ambiguous",
+      "docs__use-cases.md--crlf: unchanged folded run >= 15 but shared_folded_fp=1169, outcome=ambiguous",
+      "profiles__readme.md--crlf: unchanged folded run >= 15 but shared_folded_fp=49, outcome=ambiguous",
+      "profiles__code.md--crlf: unchanged folded run >= 15 but shared_folded_fp=423, outcome=ambiguous",
+      "docs__sources.md--nfc: unchanged folded run >= 15 but shared_folded_fp=323, outcome=ambiguous",
+      "docs__use-cases.md--nfc: unchanged folded run >= 15 but shared_folded_fp=1169, outcome=ambiguous",
+      "profiles__readme.md--nfc: unchanged folded run >= 15 but shared_folded_fp=49, outcome=ambiguous",
+      "profiles__code.md--nfc: unchanged folded run >= 15 but shared_folded_fp=423, outcome=ambiguous",
+      "docs__sources.md--nfkc: unchanged folded run >= 15 but shared_folded_fp=323, outcome=ambiguous",
+      "docs__use-cases.md--nfkc: unchanged folded run >= 15 but shared_folded_fp=1167, outcome=ambiguous",
+      "profiles__readme.md--nfkc: unchanged folded run >= 15 but shared_folded_fp=49, outcome=ambiguous",
+      "profiles__code.md--nfkc: unchanged folded run >= 15 but shared_folded_fp=423, outcome=ambiguous",
+      "docs__sources.md--case-change: unchanged folded run >= 15 but shared_folded_fp=323, outcome=ambiguous",
+      "docs__use-cases.md--case-change: unchanged folded run >= 15 but shared_folded_fp=1169, outcome=ambiguous",
+      "profiles__readme.md--case-change: unchanged folded run >= 15 but shared_folded_fp=49, outcome=ambiguous",
+      "profiles__code.md--case-change: unchanged folded run >= 15 but shared_folded_fp=423, outcome=ambiguous",
+      "docs__sources.md--zero-width-10: unchanged folded run >= 15 but shared_folded_fp=323, outcome=ambiguous",
+      "docs__use-cases.md--zero-width-10: unchanged folded run >= 15 but shared_folded_fp=1169, outcome=ambiguous",
+      "profiles__readme.md--zero-width-10: unchanged folded run >= 15 but shared_folded_fp=49, outcome=ambiguous",
+      "profiles__code.md--zero-width-10: unchanged folded run >= 15 but shared_folded_fp=423, outcome=ambiguous",
+      "docs__sources.md--confusable: confusable skeleton run >= 15 but shared_skel_fp=339, outcome=ambiguous"
+    ]
+  },
+  "stage1": {
+    "boilerplateCatalogueSha256": "9ea5e0521657fa2579a829fcc3cf438ca2411a5ad6f585324e46adf1e384c3fa",
+    "transformations": {
+      "reflow": {
+        "files": 11,
+        "isRecordedLimit": false,
+        "unchangedFoldedRunCount": 11,
+        "matchedCount": {
+          "exact": 8,
+          "folded": 7,
+          "skeleton": 8
+        },
+        "sharedFingerprintFileCount": {
+          "exact": 11,
+          "folded": 11,
+          "skeleton": 11
+        },
+        "details": [
+          {
+            "id": "docs/evaluation.md",
+            "artifactId": "docs__evaluation.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 61,
+              "folded": 64,
+              "skeleton": 65
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-patterns.md",
+            "artifactId": "docs__implementation-patterns.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 384,
+              "folded": 381,
+              "skeleton": 372
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-repo-plan.md",
+            "artifactId": "docs__implementation-repo-plan.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 502,
+              "folded": 503,
+              "skeleton": 515
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/sources.md",
+            "artifactId": "docs__sources.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 321,
+              "folded": 323,
+              "skeleton": 339
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "docs/use-cases.md",
+            "artifactId": "docs__use-cases.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1147,
+              "folded": 1169,
+              "skeleton": 1138
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "profiles/README.md",
+            "artifactId": "profiles__readme.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 46,
+              "folded": 49,
+              "skeleton": 52
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "ambiguous",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "profiles/code.md",
+            "artifactId": "profiles__code.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 398,
+              "folded": 423,
+              "skeleton": 407
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "spec/attestations.md",
+            "artifactId": "spec__attestations.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 98,
+              "folded": 100,
+              "skeleton": 92
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/conformance.md",
+            "artifactId": "spec__conformance.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 79,
+              "folded": 77,
+              "skeleton": 84
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/core.md",
+            "artifactId": "spec__core.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 148,
+              "folded": 154,
+              "skeleton": 147
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/threat-model.md",
+            "artifactId": "spec__threat-model.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 57,
+              "folded": 60,
+              "skeleton": 66
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          }
+        ]
+      },
+      "crlf": {
+        "files": 11,
+        "isRecordedLimit": false,
+        "unchangedFoldedRunCount": 11,
+        "matchedCount": {
+          "exact": 8,
+          "folded": 7,
+          "skeleton": 8
+        },
+        "sharedFingerprintFileCount": {
+          "exact": 11,
+          "folded": 11,
+          "skeleton": 11
+        },
+        "details": [
+          {
+            "id": "docs/evaluation.md",
+            "artifactId": "docs__evaluation.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 61,
+              "folded": 64,
+              "skeleton": 65
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-patterns.md",
+            "artifactId": "docs__implementation-patterns.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 384,
+              "folded": 381,
+              "skeleton": 372
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-repo-plan.md",
+            "artifactId": "docs__implementation-repo-plan.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 502,
+              "folded": 503,
+              "skeleton": 515
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/sources.md",
+            "artifactId": "docs__sources.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 321,
+              "folded": 323,
+              "skeleton": 339
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "docs/use-cases.md",
+            "artifactId": "docs__use-cases.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1147,
+              "folded": 1169,
+              "skeleton": 1138
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "profiles/README.md",
+            "artifactId": "profiles__readme.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 46,
+              "folded": 49,
+              "skeleton": 52
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "ambiguous",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "profiles/code.md",
+            "artifactId": "profiles__code.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 398,
+              "folded": 423,
+              "skeleton": 407
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "spec/attestations.md",
+            "artifactId": "spec__attestations.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 98,
+              "folded": 100,
+              "skeleton": 92
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/conformance.md",
+            "artifactId": "spec__conformance.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 79,
+              "folded": 77,
+              "skeleton": 84
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/core.md",
+            "artifactId": "spec__core.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 148,
+              "folded": 154,
+              "skeleton": 147
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/threat-model.md",
+            "artifactId": "spec__threat-model.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 57,
+              "folded": 60,
+              "skeleton": 66
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          }
+        ]
+      },
+      "nfc": {
+        "files": 11,
+        "isRecordedLimit": false,
+        "unchangedFoldedRunCount": 11,
+        "matchedCount": {
+          "exact": 8,
+          "folded": 7,
+          "skeleton": 8
+        },
+        "sharedFingerprintFileCount": {
+          "exact": 11,
+          "folded": 11,
+          "skeleton": 11
+        },
+        "details": [
+          {
+            "id": "docs/evaluation.md",
+            "artifactId": "docs__evaluation.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 61,
+              "folded": 64,
+              "skeleton": 65
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-patterns.md",
+            "artifactId": "docs__implementation-patterns.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 384,
+              "folded": 381,
+              "skeleton": 372
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-repo-plan.md",
+            "artifactId": "docs__implementation-repo-plan.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 502,
+              "folded": 503,
+              "skeleton": 515
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/sources.md",
+            "artifactId": "docs__sources.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 321,
+              "folded": 323,
+              "skeleton": 339
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "docs/use-cases.md",
+            "artifactId": "docs__use-cases.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1147,
+              "folded": 1169,
+              "skeleton": 1138
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "profiles/README.md",
+            "artifactId": "profiles__readme.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 46,
+              "folded": 49,
+              "skeleton": 52
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "ambiguous",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "profiles/code.md",
+            "artifactId": "profiles__code.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 398,
+              "folded": 423,
+              "skeleton": 407
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "spec/attestations.md",
+            "artifactId": "spec__attestations.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 98,
+              "folded": 100,
+              "skeleton": 92
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/conformance.md",
+            "artifactId": "spec__conformance.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 79,
+              "folded": 77,
+              "skeleton": 84
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/core.md",
+            "artifactId": "spec__core.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 148,
+              "folded": 154,
+              "skeleton": 147
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/threat-model.md",
+            "artifactId": "spec__threat-model.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 57,
+              "folded": 60,
+              "skeleton": 66
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          }
+        ]
+      },
+      "nfkc": {
+        "files": 11,
+        "isRecordedLimit": false,
+        "unchangedFoldedRunCount": 11,
+        "matchedCount": {
+          "exact": 9,
+          "folded": 7,
+          "skeleton": 8
+        },
+        "sharedFingerprintFileCount": {
+          "exact": 11,
+          "folded": 11,
+          "skeleton": 11
+        },
+        "details": [
+          {
+            "id": "docs/evaluation.md",
+            "artifactId": "docs__evaluation.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 61,
+              "folded": 64,
+              "skeleton": 65
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-patterns.md",
+            "artifactId": "docs__implementation-patterns.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 384,
+              "folded": 381,
+              "skeleton": 372
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-repo-plan.md",
+            "artifactId": "docs__implementation-repo-plan.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 502,
+              "folded": 503,
+              "skeleton": 515
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/sources.md",
+            "artifactId": "docs__sources.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 321,
+              "folded": 323,
+              "skeleton": 339
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "docs/use-cases.md",
+            "artifactId": "docs__use-cases.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1135,
+              "folded": 1167,
+              "skeleton": 1136
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "profiles/README.md",
+            "artifactId": "profiles__readme.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 46,
+              "folded": 49,
+              "skeleton": 52
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "ambiguous",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "profiles/code.md",
+            "artifactId": "profiles__code.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 398,
+              "folded": 423,
+              "skeleton": 407
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "spec/attestations.md",
+            "artifactId": "spec__attestations.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 98,
+              "folded": 100,
+              "skeleton": 92
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/conformance.md",
+            "artifactId": "spec__conformance.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 79,
+              "folded": 77,
+              "skeleton": 84
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/core.md",
+            "artifactId": "spec__core.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 148,
+              "folded": 154,
+              "skeleton": 147
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/threat-model.md",
+            "artifactId": "spec__threat-model.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 57,
+              "folded": 60,
+              "skeleton": 66
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          }
+        ]
+      },
+      "case-change": {
+        "files": 11,
+        "isRecordedLimit": false,
+        "unchangedFoldedRunCount": 11,
+        "matchedCount": {
+          "exact": 2,
+          "folded": 7,
+          "skeleton": 8
+        },
+        "sharedFingerprintFileCount": {
+          "exact": 2,
+          "folded": 11,
+          "skeleton": 11
+        },
+        "details": [
+          {
+            "id": "docs/evaluation.md",
+            "artifactId": "docs__evaluation.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 64,
+              "skeleton": 65
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-patterns.md",
+            "artifactId": "docs__implementation-patterns.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 381,
+              "skeleton": 372
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-repo-plan.md",
+            "artifactId": "docs__implementation-repo-plan.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 503,
+              "skeleton": 515
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/sources.md",
+            "artifactId": "docs__sources.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1,
+              "folded": 323,
+              "skeleton": 339
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "docs/use-cases.md",
+            "artifactId": "docs__use-cases.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 6,
+              "folded": 1169,
+              "skeleton": 1138
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "profiles/README.md",
+            "artifactId": "profiles__readme.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 49,
+              "skeleton": 52
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "ambiguous",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "profiles/code.md",
+            "artifactId": "profiles__code.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 423,
+              "skeleton": 407
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "spec/attestations.md",
+            "artifactId": "spec__attestations.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 100,
+              "skeleton": 92
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/conformance.md",
+            "artifactId": "spec__conformance.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 77,
+              "skeleton": 84
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/core.md",
+            "artifactId": "spec__core.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 154,
+              "skeleton": 147
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/threat-model.md",
+            "artifactId": "spec__threat-model.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 60,
+              "skeleton": 66
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          }
+        ]
+      },
+      "zero-width-10": {
+        "files": 11,
+        "isRecordedLimit": false,
+        "unchangedFoldedRunCount": 11,
+        "matchedCount": {
+          "exact": 1,
+          "folded": 7,
+          "skeleton": 8
+        },
+        "sharedFingerprintFileCount": {
+          "exact": 1,
+          "folded": 11,
+          "skeleton": 11
+        },
+        "details": [
+          {
+            "id": "docs/evaluation.md",
+            "artifactId": "docs__evaluation.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 64,
+              "skeleton": 65
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-patterns.md",
+            "artifactId": "docs__implementation-patterns.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 381,
+              "skeleton": 372
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-repo-plan.md",
+            "artifactId": "docs__implementation-repo-plan.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 503,
+              "skeleton": 515
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/sources.md",
+            "artifactId": "docs__sources.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 323,
+              "skeleton": 339
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "docs/use-cases.md",
+            "artifactId": "docs__use-cases.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 7,
+              "folded": 1169,
+              "skeleton": 1138
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "profiles/README.md",
+            "artifactId": "profiles__readme.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 49,
+              "skeleton": 52
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "ambiguous",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "profiles/code.md",
+            "artifactId": "profiles__code.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 423,
+              "skeleton": 407
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "spec/attestations.md",
+            "artifactId": "spec__attestations.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 100,
+              "skeleton": 92
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/conformance.md",
+            "artifactId": "spec__conformance.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 77,
+              "skeleton": 84
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/core.md",
+            "artifactId": "spec__core.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 154,
+              "skeleton": 147
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/threat-model.md",
+            "artifactId": "spec__threat-model.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 60,
+              "skeleton": 66
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          }
+        ]
+      },
+      "confusable": {
+        "files": 11,
+        "isRecordedLimit": false,
+        "unchangedFoldedRunCount": 0,
+        "matchedCount": {
+          "exact": 2,
+          "folded": 2,
+          "skeleton": 8
+        },
+        "sharedFingerprintFileCount": {
+          "exact": 2,
+          "folded": 2,
+          "skeleton": 11
+        },
+        "details": [
+          {
+            "id": "docs/evaluation.md",
+            "artifactId": "docs__evaluation.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 65
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-patterns.md",
+            "artifactId": "docs__implementation-patterns.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 372
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-repo-plan.md",
+            "artifactId": "docs__implementation-repo-plan.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 515
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/sources.md",
+            "artifactId": "docs__sources.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1,
+              "folded": 1,
+              "skeleton": 339
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "docs/use-cases.md",
+            "artifactId": "docs__use-cases.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 9,
+              "folded": 8,
+              "skeleton": 1138
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "profiles/README.md",
+            "artifactId": "profiles__readme.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 52
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "profiles/code.md",
+            "artifactId": "profiles__code.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 407
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "spec/attestations.md",
+            "artifactId": "spec__attestations.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 92
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/conformance.md",
+            "artifactId": "spec__conformance.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 84
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/core.md",
+            "artifactId": "spec__core.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 147
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/threat-model.md",
+            "artifactId": "spec__threat-model.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 66
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "match"
+            }
+          }
+        ]
+      },
+      "markdown-strip": {
+        "files": 11,
+        "isRecordedLimit": false,
+        "unchangedFoldedRunCount": 11,
+        "matchedCount": {
+          "exact": 11,
+          "folded": 11,
+          "skeleton": 11
+        },
+        "sharedFingerprintFileCount": {
+          "exact": 11,
+          "folded": 11,
+          "skeleton": 11
+        },
+        "details": [
+          {
+            "id": "docs/evaluation.md",
+            "artifactId": "docs__evaluation.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 61,
+              "folded": 64,
+              "skeleton": 65
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-patterns.md",
+            "artifactId": "docs__implementation-patterns.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 373,
+              "folded": 368,
+              "skeleton": 361
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-repo-plan.md",
+            "artifactId": "docs__implementation-repo-plan.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 454,
+              "folded": 455,
+              "skeleton": 463
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/sources.md",
+            "artifactId": "docs__sources.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 217,
+              "folded": 219,
+              "skeleton": 230
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/use-cases.md",
+            "artifactId": "docs__use-cases.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1052,
+              "folded": 1068,
+              "skeleton": 1042
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "profiles/README.md",
+            "artifactId": "profiles__readme.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 32,
+              "folded": 39,
+              "skeleton": 40
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "profiles/code.md",
+            "artifactId": "profiles__code.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 180,
+              "folded": 176,
+              "skeleton": 176
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/attestations.md",
+            "artifactId": "spec__attestations.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 80,
+              "folded": 83,
+              "skeleton": 78
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/conformance.md",
+            "artifactId": "spec__conformance.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 48,
+              "folded": 50,
+              "skeleton": 54
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/core.md",
+            "artifactId": "spec__core.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 137,
+              "folded": 144,
+              "skeleton": 140
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/threat-model.md",
+            "artifactId": "spec__threat-model.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 57,
+              "folded": 60,
+              "skeleton": 66
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          }
+        ]
+      },
+      "smart-quotes": {
+        "files": 11,
+        "isRecordedLimit": false,
+        "unchangedFoldedRunCount": 11,
+        "matchedCount": {
+          "exact": 8,
+          "folded": 7,
+          "skeleton": 8
+        },
+        "sharedFingerprintFileCount": {
+          "exact": 11,
+          "folded": 11,
+          "skeleton": 11
+        },
+        "details": [
+          {
+            "id": "docs/evaluation.md",
+            "artifactId": "docs__evaluation.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 61,
+              "folded": 64,
+              "skeleton": 65
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-patterns.md",
+            "artifactId": "docs__implementation-patterns.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 384,
+              "folded": 381,
+              "skeleton": 372
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-repo-plan.md",
+            "artifactId": "docs__implementation-repo-plan.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 502,
+              "folded": 503,
+              "skeleton": 515
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/sources.md",
+            "artifactId": "docs__sources.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 321,
+              "folded": 323,
+              "skeleton": 339
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "docs/use-cases.md",
+            "artifactId": "docs__use-cases.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1147,
+              "folded": 1169,
+              "skeleton": 1138
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "profiles/README.md",
+            "artifactId": "profiles__readme.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 46,
+              "folded": 49,
+              "skeleton": 52
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "ambiguous",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "profiles/code.md",
+            "artifactId": "profiles__code.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 398,
+              "folded": 423,
+              "skeleton": 407
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "spec/attestations.md",
+            "artifactId": "spec__attestations.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 98,
+              "folded": 100,
+              "skeleton": 92
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/conformance.md",
+            "artifactId": "spec__conformance.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 79,
+              "folded": 77,
+              "skeleton": 84
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/core.md",
+            "artifactId": "spec__core.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 148,
+              "folded": 154,
+              "skeleton": 147
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/threat-model.md",
+            "artifactId": "spec__threat-model.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 57,
+              "folded": 60,
+              "skeleton": 66
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          }
+        ]
+      },
+      "host-20x": {
+        "files": 11,
+        "isRecordedLimit": false,
+        "unchangedFoldedRunCount": 11,
+        "matchedCount": {
+          "exact": 8,
+          "folded": 7,
+          "skeleton": 8
+        },
+        "sharedFingerprintFileCount": {
+          "exact": 11,
+          "folded": 11,
+          "skeleton": 11
+        },
+        "details": [
+          {
+            "id": "docs/evaluation.md",
+            "artifactId": "docs__evaluation.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 61,
+              "folded": 64,
+              "skeleton": 65
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-patterns.md",
+            "artifactId": "docs__implementation-patterns.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 384,
+              "folded": 381,
+              "skeleton": 372
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-repo-plan.md",
+            "artifactId": "docs__implementation-repo-plan.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 502,
+              "folded": 503,
+              "skeleton": 515
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/sources.md",
+            "artifactId": "docs__sources.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 321,
+              "folded": 323,
+              "skeleton": 339
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "docs/use-cases.md",
+            "artifactId": "docs__use-cases.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1147,
+              "folded": 1169,
+              "skeleton": 1138
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "profiles/README.md",
+            "artifactId": "profiles__readme.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 46,
+              "folded": 49,
+              "skeleton": 52
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "ambiguous",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "profiles/code.md",
+            "artifactId": "profiles__code.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 398,
+              "folded": 423,
+              "skeleton": 407
+            },
+            "outcomes": {
+              "exact": "ambiguous",
+              "folded": "ambiguous",
+              "skeleton": "ambiguous"
+            }
+          },
+          {
+            "id": "spec/attestations.md",
+            "artifactId": "spec__attestations.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 98,
+              "folded": 100,
+              "skeleton": 92
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/conformance.md",
+            "artifactId": "spec__conformance.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 79,
+              "folded": 77,
+              "skeleton": 84
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/core.md",
+            "artifactId": "spec__core.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 148,
+              "folded": 154,
+              "skeleton": 147
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/threat-model.md",
+            "artifactId": "spec__threat-model.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 57,
+              "folded": 60,
+              "skeleton": 66
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          }
+        ]
+      },
+      "excerpt-kw1": {
+        "files": 11,
+        "isRecordedLimit": false,
+        "unchangedFoldedRunCount": 11,
+        "matchedCount": {
+          "exact": 11,
+          "folded": 11,
+          "skeleton": 11
+        },
+        "sharedFingerprintFileCount": {
+          "exact": 11,
+          "folded": 11,
+          "skeleton": 11
+        },
+        "details": [
+          {
+            "id": "docs/evaluation.md",
+            "artifactId": "docs__evaluation.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1,
+              "folded": 1,
+              "skeleton": 1
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-patterns.md",
+            "artifactId": "docs__implementation-patterns.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1,
+              "folded": 1,
+              "skeleton": 1
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-repo-plan.md",
+            "artifactId": "docs__implementation-repo-plan.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1,
+              "folded": 1,
+              "skeleton": 1
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/sources.md",
+            "artifactId": "docs__sources.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1,
+              "folded": 1,
+              "skeleton": 1
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/use-cases.md",
+            "artifactId": "docs__use-cases.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1,
+              "folded": 1,
+              "skeleton": 1
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "profiles/README.md",
+            "artifactId": "profiles__readme.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1,
+              "folded": 1,
+              "skeleton": 1
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "profiles/code.md",
+            "artifactId": "profiles__code.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1,
+              "folded": 1,
+              "skeleton": 1
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/attestations.md",
+            "artifactId": "spec__attestations.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1,
+              "folded": 1,
+              "skeleton": 1
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/conformance.md",
+            "artifactId": "spec__conformance.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1,
+              "folded": 1,
+              "skeleton": 1
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/core.md",
+            "artifactId": "spec__core.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1,
+              "folded": 1,
+              "skeleton": 1
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/threat-model.md",
+            "artifactId": "spec__threat-model.md",
+            "unchangedFoldedRunKw1": true,
+            "unchangedSkeletonRunKw1": true,
+            "sharedFingerprints": {
+              "exact": 1,
+              "folded": 1,
+              "skeleton": 1
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          }
+        ]
+      },
+      "distractor-kw2": {
+        "files": 11,
+        "isRecordedLimit": true,
+        "unchangedFoldedRunCount": 0,
+        "matchedCount": {
+          "exact": 11,
+          "folded": 11,
+          "skeleton": 11
+        },
+        "sharedFingerprintFileCount": {
+          "exact": 11,
+          "folded": 11,
+          "skeleton": 11
+        },
+        "details": [
+          {
+            "id": "docs/evaluation.md",
+            "artifactId": "docs__evaluation.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 25,
+              "folded": 32,
+              "skeleton": 24
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-patterns.md",
+            "artifactId": "docs__implementation-patterns.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 167,
+              "folded": 145,
+              "skeleton": 145
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/implementation-repo-plan.md",
+            "artifactId": "docs__implementation-repo-plan.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 203,
+              "folded": 195,
+              "skeleton": 193
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/sources.md",
+            "artifactId": "docs__sources.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 131,
+              "folded": 126,
+              "skeleton": 128
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "docs/use-cases.md",
+            "artifactId": "docs__use-cases.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 460,
+              "folded": 457,
+              "skeleton": 452
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "profiles/README.md",
+            "artifactId": "profiles__readme.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 18,
+              "folded": 18,
+              "skeleton": 18
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "profiles/code.md",
+            "artifactId": "profiles__code.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 161,
+              "folded": 182,
+              "skeleton": 170
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/attestations.md",
+            "artifactId": "spec__attestations.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 38,
+              "folded": 35,
+              "skeleton": 38
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/conformance.md",
+            "artifactId": "spec__conformance.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 30,
+              "folded": 32,
+              "skeleton": 31
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/core.md",
+            "artifactId": "spec__core.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 61,
+              "folded": 65,
+              "skeleton": 57
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          },
+          {
+            "id": "spec/threat-model.md",
+            "artifactId": "spec__threat-model.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 23,
+              "folded": 26,
+              "skeleton": 27
+            },
+            "outcomes": {
+              "exact": "match",
+              "folded": "match",
+              "skeleton": "match"
+            }
+          }
+        ]
+      },
+      "distractor-k1": {
+        "files": 11,
+        "isRecordedLimit": true,
+        "unchangedFoldedRunCount": 0,
+        "matchedCount": {
+          "exact": 0,
+          "folded": 0,
+          "skeleton": 0
+        },
+        "sharedFingerprintFileCount": {
+          "exact": 0,
+          "folded": 0,
+          "skeleton": 0
+        },
+        "details": [
+          {
+            "id": "docs/evaluation.md",
+            "artifactId": "docs__evaluation.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 0
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "no-shared-fingerprints"
+            }
+          },
+          {
+            "id": "docs/implementation-patterns.md",
+            "artifactId": "docs__implementation-patterns.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 0
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "no-shared-fingerprints"
+            }
+          },
+          {
+            "id": "docs/implementation-repo-plan.md",
+            "artifactId": "docs__implementation-repo-plan.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 0
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "no-shared-fingerprints"
+            }
+          },
+          {
+            "id": "docs/sources.md",
+            "artifactId": "docs__sources.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 0
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "no-shared-fingerprints"
+            }
+          },
+          {
+            "id": "docs/use-cases.md",
+            "artifactId": "docs__use-cases.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 0
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "no-shared-fingerprints"
+            }
+          },
+          {
+            "id": "profiles/README.md",
+            "artifactId": "profiles__readme.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 0
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "no-shared-fingerprints"
+            }
+          },
+          {
+            "id": "profiles/code.md",
+            "artifactId": "profiles__code.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 0
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "no-shared-fingerprints"
+            }
+          },
+          {
+            "id": "spec/attestations.md",
+            "artifactId": "spec__attestations.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 0
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "no-shared-fingerprints"
+            }
+          },
+          {
+            "id": "spec/conformance.md",
+            "artifactId": "spec__conformance.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 0
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "no-shared-fingerprints"
+            }
+          },
+          {
+            "id": "spec/core.md",
+            "artifactId": "spec__core.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 0
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "no-shared-fingerprints"
+            }
+          },
+          {
+            "id": "spec/threat-model.md",
+            "artifactId": "spec__threat-model.md",
+            "unchangedFoldedRunKw1": false,
+            "unchangedSkeletonRunKw1": false,
+            "sharedFingerprints": {
+              "exact": 0,
+              "folded": 0,
+              "skeleton": 0
+            },
+            "outcomes": {
+              "exact": "no-shared-fingerprints",
+              "folded": "no-shared-fingerprints",
+              "skeleton": "no-shared-fingerprints"
+            }
+          }
+        ]
+      }
+    },
+    "negativesUnsuppressedMin1": {
+      "denominator": 110,
+      "selfPairMatches": {
+        "exact": 8,
+        "folded": 7,
+        "skeleton": 8
+      },
+      "matches": {
+        "exact": 2,
+        "folded": 4,
+        "skeleton": 4
+      },
+      "sharedFingerprintPairs": {
+        "exact": 2,
+        "folded": 4,
+        "skeleton": 4
+      },
+      "matchedPairs": [
+        {
+          "reference": "docs__sources.md",
+          "candidate": "profiles__code.md",
+          "outcomes": {
+            "exact": "no-shared-fingerprints",
+            "folded": "match",
+            "skeleton": "no-shared-fingerprints"
+          }
+        },
+        {
+          "reference": "docs__sources.md",
+          "candidate": "spec__attestations.md",
+          "outcomes": {
+            "exact": "match",
+            "folded": "match",
+            "skeleton": "match"
+          }
+        },
+        {
+          "reference": "docs__use-cases.md",
+          "candidate": "profiles__code.md",
+          "outcomes": {
+            "exact": "no-shared-fingerprints",
+            "folded": "no-shared-fingerprints",
+            "skeleton": "match"
+          }
+        },
+        {
+          "reference": "profiles__code.md",
+          "candidate": "docs__sources.md",
+          "outcomes": {
+            "exact": "no-shared-fingerprints",
+            "folded": "match",
+            "skeleton": "no-shared-fingerprints"
+          }
+        },
+        {
+          "reference": "profiles__code.md",
+          "candidate": "docs__use-cases.md",
+          "outcomes": {
+            "exact": "no-shared-fingerprints",
+            "folded": "no-shared-fingerprints",
+            "skeleton": "match"
+          }
+        },
+        {
+          "reference": "spec__attestations.md",
+          "candidate": "docs__sources.md",
+          "outcomes": {
+            "exact": "match",
+            "folded": "match",
+            "skeleton": "match"
+          }
+        }
+      ]
+    },
+    "negativesUnsuppressedMin2": {
+      "denominator": 110,
+      "selfPairMatches": {
+        "exact": 9,
+        "folded": 10,
+        "skeleton": 10
+      },
+      "matches": {
+        "exact": 2,
+        "folded": 0,
+        "skeleton": 0
+      },
+      "sharedFingerprintPairs": {
+        "exact": 2,
+        "folded": 4,
+        "skeleton": 4
+      },
+      "matchedPairs": [
+        {
+          "reference": "docs__sources.md",
+          "candidate": "spec__attestations.md",
+          "outcomes": {
+            "exact": "match",
+            "folded": "below-minimum-evidence",
+            "skeleton": "below-minimum-evidence"
+          }
+        },
+        {
+          "reference": "spec__attestations.md",
+          "candidate": "docs__sources.md",
+          "outcomes": {
+            "exact": "match",
+            "folded": "below-minimum-evidence",
+            "skeleton": "below-minimum-evidence"
+          }
+        }
+      ]
+    },
+    "negativesSuppressedMin1": {
+      "denominator": 110,
+      "selfPairMatches": {
+        "exact": 8,
+        "folded": 7,
+        "skeleton": 8
+      },
+      "matches": {
+        "exact": 2,
+        "folded": 4,
+        "skeleton": 4
+      },
+      "sharedFingerprintPairs": {
+        "exact": 2,
+        "folded": 4,
+        "skeleton": 4
+      },
+      "matchedPairs": [
+        {
+          "reference": "docs__sources.md",
+          "candidate": "profiles__code.md",
+          "outcomes": {
+            "exact": "no-shared-fingerprints",
+            "folded": "match",
+            "skeleton": "no-shared-fingerprints"
+          }
+        },
+        {
+          "reference": "docs__sources.md",
+          "candidate": "spec__attestations.md",
+          "outcomes": {
+            "exact": "match",
+            "folded": "match",
+            "skeleton": "match"
+          }
+        },
+        {
+          "reference": "docs__use-cases.md",
+          "candidate": "profiles__code.md",
+          "outcomes": {
+            "exact": "no-shared-fingerprints",
+            "folded": "no-shared-fingerprints",
+            "skeleton": "match"
+          }
+        },
+        {
+          "reference": "profiles__code.md",
+          "candidate": "docs__sources.md",
+          "outcomes": {
+            "exact": "no-shared-fingerprints",
+            "folded": "match",
+            "skeleton": "no-shared-fingerprints"
+          }
+        },
+        {
+          "reference": "profiles__code.md",
+          "candidate": "docs__use-cases.md",
+          "outcomes": {
+            "exact": "no-shared-fingerprints",
+            "folded": "no-shared-fingerprints",
+            "skeleton": "match"
+          }
+        },
+        {
+          "reference": "spec__attestations.md",
+          "candidate": "docs__sources.md",
+          "outcomes": {
+            "exact": "match",
+            "folded": "match",
+            "skeleton": "match"
+          }
+        }
+      ]
+    },
+    "boilerplateCrossPairs": {
+      "denominator": 66,
+      "matches": {
+        "exact": 0,
+        "folded": 0,
+        "skeleton": 0
+      }
+    },
+    "boilerplateSuppressionControl": {
+      "unsuppressedOutcome": {
+        "exact": "match",
+        "folded": "match",
+        "skeleton": "match"
+      },
+      "suppressedOutcome": {
+        "exact": "common-only",
+        "folded": "common-only",
+        "skeleton": "common-only"
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+# E-TXT-1 Run Comparison & Offline Execution Record
+
+Recorded from clean-tree execution on branch `txt4-run` at commit `acebacb59c19fbbf27e9bf7b4c2894ba5a473c56` (descending from frozen protocol commit `c708b203165f3b1ea21e7205e3e1d91c16f946a4`). Absolute local paths are replaced with `<impl-repo>`, `<bin-dir>`, and `<out-dir>`.
+
+## Stamped CLI Identity (`--version-json`)
+
+Built from a clean export of `<impl-repo>` `main` at commit `a6066d39b3fd0a66466f7a89d4553fc249479c28`:
+
+```json
+{"implementation":{"commit":"a6066d39b3fd0a66466f7a89d4553fc249479c28","name":"traceweave","version":"0.0.1"},"specCommit":"6437c26528ff87e91f86d9dcea37b45d20cd5064","stamp":"stamped"}
+{"implementation":{"commit":"a6066d39b3fd0a66466f7a89d4553fc249479c28","name":"traceweave-go","version":"0.2.0-dev"},"specCommit":"6437c26528ff87e91f86d9dcea37b45d20cd5064","stamp":"stamped"}
+```
+
+## Run 1, Run 2, and Determinism Comparison
+
+```text
+=== RUN 1 ===
+scripts/offline: confinement: sandbox
+scripts/offline: probe outside: loopback connected
+scripts/offline: probe inside:  loopback refused:Operation_not_permitted, public refused:Operation_not_permitted
+scripts/offline: network denial proven; running: python3 -I research/experiments/text-stage1/harness.py full --rust-cli <bin-dir>/traceweave --go-cli <bin-dir>/traceweave-go --frozen-commit c708b203165f3b1ea21e7205e3e1d91c16f946a4 --require-network-denied --out <out-dir>/run-1
+[FULL RUN] protocol=e-txt-1 (642bb221f18b) verdict=negative-result elapsed=33.83s
+  networkDenied=True (bind:errno=1; loopback:errno=1(EPERM); public:errno=1(EPERM))
+  txt2=154 cases; criterion(i)=0 criterion(ii)=0 criterion(iii)=35
+  negatives(min=1, unsuppressed)={'exact': 2, 'folded': 4, 'skeleton': 4}/110
+RUN 1 EXIT=3
+
+=== RUN 2 ===
+scripts/offline: confinement: sandbox
+scripts/offline: probe outside: loopback connected
+scripts/offline: probe inside:  loopback refused:Operation_not_permitted, public refused:Operation_not_permitted
+scripts/offline: network denial proven; running: python3 -I research/experiments/text-stage1/harness.py full --rust-cli <bin-dir>/traceweave --go-cli <bin-dir>/traceweave-go --frozen-commit c708b203165f3b1ea21e7205e3e1d91c16f946a4 --require-network-denied --out <out-dir>/run-2
+[FULL RUN] protocol=e-txt-1 (642bb221f18b) verdict=negative-result elapsed=33.75s
+  networkDenied=True (bind:errno=1; loopback:errno=1(EPERM); public:errno=1(EPERM))
+  txt2=154 cases; criterion(i)=0 criterion(ii)=0 criterion(iii)=35
+  negatives(min=1, unsuppressed)={'exact': 2, 'folded': 4, 'skeleton': 4}/110
+RUN 2 EXIT=3
+
+=== COMPARE ===
+scripts/offline: confinement: sandbox
+scripts/offline: probe outside: loopback connected
+scripts/offline: probe inside:  loopback refused:Operation_not_permitted, public refused:Operation_not_permitted
+scripts/offline: network denial proven; running: python3 -I research/experiments/text-stage1/harness.py compare <out-dir>/run-1 <out-dir>/run-2
+PASS: byte-identical summary.json sha256=eeef3f21e4f657e91f86d9d9b82baa1d0896cf843e8e556adcb01d897cad3
+COMPARE EXIT=0
+eeef3f21e4f657e91f86d9d9b82baa1d0896cf843e8e556adcb01d897cad3  <out-dir>/run-1/summary.json
+eeef3f21e4f657e91f86d9d9b82baa1d0896cf843e8e556adcb01d897cad3  <out-dir>/run-2/summary.json
+```
