@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="450" viewBox="0 0 960 450" role="img" aria-labelledby="tw-em-title tw-em-desc">
+  <title id="tw-em-title">Proposed embedded-mark workflow (research track)</title>
+  <desc id="tw-em-desc">Two-stage proposed embedded-mark workflow. Stage A prepares for distribution: Original content and Mark plus embedding configuration feed Embed mark, producing Marked content with quality validation before sharing. Stage B examines possible reuse: Candidate content and Profile-required verification material feed Detect mark, producing Evidence for review, which may return insufficient evidence. Marks serve at most as a finding aid and never establish ownership.</desc>
+
+  <defs>
+    <marker id="arr-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#F2F4F7"/>
+    </marker>
+    <marker id="arr-mut" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#9DA5B2"/>
+    </marker>
+    <marker id="arr-amb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#F0B940"/>
+    </marker>
+  </defs>
+
+  <!-- Sheet background -->
+  <rect x="0.5" y="0.5" width="959" height="449" rx="4" fill="#0D1014" stroke="#2E3540" stroke-width="1"/>
+
+  <!-- Header bar -->
+  <text x="28" y="30" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="500" letter-spacing="1.1" fill="#9DA5B2">FIG 03 // PROPOSED EMBEDDED-MARK WORKFLOW</text>
+  <text x="932" y="30" text-anchor="end" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="500" letter-spacing="0.8" fill="#F0B940">RESEARCH TRACK · FINDING AID ONLY</text>
+  <line x1="28" y1="42" x2="932" y2="42" stroke="#2E3540" stroke-width="1"/>
+
+  <!-- STAGE A: PREPARE FOR DISTRIBUTION -->
+  <rect x="28" y="56" width="904" height="168" rx="2" fill="#151920" stroke="#2E3540" stroke-width="1"/>
+  <text x="48" y="78" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="600" letter-spacing="0.9" fill="#9DA5B2">A · PREPARE FOR DISTRIBUTION</text>
+
+  <!-- Top input arrow into Embed mark -->
+  <text x="480" y="78" text-anchor="middle" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#9DA5B2">Mark + embedding configuration</text>
+  <line x1="480" y1="86" x2="480" y2="112" stroke="#9DA5B2" stroke-width="1.3" marker-end="url(#arr-mut)"/>
+
+  <!-- Stage A Card 1: Original content -->
+  <rect x="48" y="118" width="244" height="70" rx="2" fill="#1C212A" stroke="#434C5C" stroke-width="1"/>
+  <text x="170" y="158" text-anchor="middle" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15.5" font-weight="600" fill="#F2F4F7">Original content</text>
+
+  <!-- Arrow A1 -> A2 -->
+  <line x1="292" y1="153" x2="350" y2="153" stroke="#F2F4F7" stroke-width="1.4" marker-end="url(#arr-ink)"/>
+
+  <!-- Stage A Card 2: Embed mark -->
+  <rect x="358" y="118" width="244" height="70" rx="2" fill="#1C212A" stroke="#434C5C" stroke-width="1"/>
+  <text x="480" y="158" text-anchor="middle" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15.5" font-weight="600" fill="#F2F4F7">Embed mark</text>
+
+  <!-- Arrow A2 -> A3 -->
+  <line x1="602" y1="153" x2="660" y2="153" stroke="#F2F4F7" stroke-width="1.4" marker-end="url(#arr-ink)"/>
+
+  <!-- Stage A Card 3: Marked content -->
+  <rect x="668" y="118" width="244" height="70" rx="2" fill="#1C212A" stroke="#434C5C" stroke-width="1"/>
+  <text x="790" y="158" text-anchor="middle" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15.5" font-weight="600" fill="#F2F4F7">Marked content</text>
+  <text x="790" y="208" text-anchor="middle" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#9DA5B2">Validate quality before sharing</text>
+
+  <!-- STAGE B: EXAMINE POSSIBLE REUSE -->
+  <rect x="28" y="238" width="904" height="168" rx="2" fill="#151920" stroke="#2E3540" stroke-width="1"/>
+  <text x="48" y="260" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="600" letter-spacing="0.9" fill="#9DA5B2">B · EXAMINE POSSIBLE REUSE</text>
+
+  <!-- Top input arrow into Detect mark -->
+  <text x="480" y="260" text-anchor="middle" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#9DA5B2">Profile-required verification material</text>
+  <line x1="480" y1="268" x2="480" y2="294" stroke="#9DA5B2" stroke-width="1.3" marker-end="url(#arr-mut)"/>
+
+  <!-- Stage B Card 1: Candidate content -->
+  <rect x="48" y="300" width="244" height="70" rx="2" fill="#1C212A" stroke="#434C5C" stroke-width="1"/>
+  <text x="170" y="340" text-anchor="middle" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15.5" font-weight="600" fill="#F2F4F7">Candidate content</text>
+
+  <!-- Arrow B1 -> B2 -->
+  <line x1="292" y1="335" x2="350" y2="335" stroke="#F2F4F7" stroke-width="1.4" marker-end="url(#arr-ink)"/>
+
+  <!-- Stage B Card 2: Detect mark -->
+  <rect x="358" y="300" width="244" height="70" rx="2" fill="#1C212A" stroke="#434C5C" stroke-width="1"/>
+  <text x="480" y="340" text-anchor="middle" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15.5" font-weight="600" fill="#F2F4F7">Detect mark</text>
+
+  <!-- Arrow B2 -> B3 -->
+  <line x1="602" y1="335" x2="660" y2="335" stroke="#F0B940" stroke-width="1.4" marker-end="url(#arr-amb)"/>
+
+  <!-- Stage B Card 3: Evidence for review -->
+  <rect x="668" y="300" width="244" height="70" rx="2" fill="#1C212A" stroke="#F0B940" stroke-width="1.3"/>
+  <rect x="668" y="300" width="6" height="70" fill="#F0B940"/>
+  <text x="793" y="340" text-anchor="middle" font-family="'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15.5" font-weight="600" fill="#F2F4F7">Evidence for review</text>
+  <text x="790" y="390" text-anchor="middle" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#F0B940">May return insufficient evidence</text>
+
+  <!-- Footer caption -->
+  <text x="480" y="432" text-anchor="middle" font-family="'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#9DA5B2">Finding aid only — detecting a mark does not establish origin, ownership, or infringement.</text>
+</svg>

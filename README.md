@@ -64,7 +64,11 @@ Traceweave separates three distinct questions: **which exact artifact** a record
 
 Alongside extracted fingerprint matching and signed registration records, a research track explores embedding a mark into content before distribution and checking later content for that mark. No marking method is standardized yet, and synthetic image-mark results show marks can serve at most as a **finding aid**—never as proof of origin.
 
-![Two-stage embedded-mark workflow: prepare marked content for distribution, then examine candidate content for evidence of the mark.](docs/figures/embedded-mark-workflow.svg)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/traceweave-embedded-mark-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="docs/assets/traceweave-embedded-mark-light.svg">
+  <img alt="Two-stage proposed embedded-mark workflow: Stage A prepares for distribution (Original content plus mark and embedding configuration feed Embed mark to produce Marked content with quality validation); Stage B examines possible reuse (Candidate content plus profile-required verification material feed Detect mark to produce Evidence for review, which may return insufficient evidence)." src="docs/assets/traceweave-embedded-mark-light.svg" width="960">
+</picture>
 
 *Figure 3. Proposed embedded-mark workflow. Detection may return insufficient evidence. Extracted fingerprint matching and provenance verification are separate supporting processes; detecting a mark does not establish ownership.*
 
