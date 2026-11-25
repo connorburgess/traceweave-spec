@@ -307,7 +307,7 @@ The owner may narrow this reading. Core M1–M3 gates keep priority under the su
 | BIN.1 | R | Primary-source review of source-to-binary mark survival and binary similarity, in the lanes 06–08 format | S |
 | BIN.2 | O | Decision record citing BIN.1: a binary profile with its own gates, or out of scope | S |
 | **RES — resolver threat model** | | | |
-| RES.1 | E | Threat model: query leakage, enumeration, catalogue inference, membership disclosure, abuse. Public registration stays optional | S |
+| RES.1 | E | Threat model: query leakage, enumeration, catalogue inference, membership disclosure, abuse. Public registration stays optional **Status: draft in progress** ([resolver-threat-model.md](research/drafts/resolver-threat-model.md)); awaits non-author review under RES.3 | S |
 | RES.2 | R | The adversary query model and the leakage metric are named and committed before running; then measured on synthetic catalogues with denominators | S/I |
 | RES.3 | E | Independent review filed, with every finding dispositioned | S |
 | **C2PA — mapping with interop fixtures** (`traceweave.org`, registered 2026-11-23, provides the owned namespace `org.traceweave.*`; see [c2pa-mapping.md](research/drafts/c2pa-mapping.md) and [c2pa-fixtures](research/drafts/c2pa-fixtures/README.md)) | | | |
