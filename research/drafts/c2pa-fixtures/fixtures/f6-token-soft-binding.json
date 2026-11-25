@@ -7,7 +7,7 @@
   "description": "A Go token-catalogue entry written as two soft-binding assertions, one per channel; spans are not carried.",
   "sourceRef": {
     "path": "test-vectors/matching/matching.json",
-    "sha256": "2f3406323014d065267cceab327bc33e5975fdf5325411a4c6d71b21f905dbdc",
+    "sha256": "79ce61ab7625dabb1cbd22beb5af5f2956610b6a20e7af0b3dd5ebfd74690fa0",
     "entry": "go-function-in-host reference sum.go"
   },
   "traceweave": {

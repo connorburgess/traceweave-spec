@@ -33,6 +33,8 @@ NS = RULES["proposedNamespace"]
 IMAGE_CATALOGUE = "research/experiments/image-fingerprint/results/e-img-f-2/full-1/catalogue.json"
 MATCHING = "test-vectors/matching/matching.json"
 REPORT = "test-vectors/matching/example-report.json"
+REG_STATEMENT = "research/drafts/registration-fixtures/fixtures/statement.json"
+REG_REF = "research/drafts/registration-fixtures/fixtures/text-reference-three-roots.json"
 
 
 def sha256_file(rel):
@@ -351,13 +353,98 @@ def mark_mapping():
     }
 
 
+# ---------------------------------------------------------------- registration link
+
+REG_LABEL = f"{NS}.registration-link"
+
+
+def registration_source():
+    st = json.loads((ROOT / REG_STATEMENT).read_text(encoding="utf-8"))["object"]
+    ref = json.loads((ROOT / REG_REF).read_text(encoding="utf-8"))["object"]["reference"]
+    st_sha = hashlib.sha256(jcs(st).encode("utf-8")).hexdigest()
+    return {
+        "statementSha256": st_sha,
+        "textReference": ref,
+        "relation": "same-bytes",
+        "statement": st,
+        "timeEvidenceSummary": {
+            "rootCount": 3,
+            "quorum": 2,
+            "earliestProvedTime": "2026-11-23T10:00:00Z",
+            "latestProvedTime": "2026-11-23T10:30:00Z",
+        },
+        "notShown": ["authorship", "originality", "first-creation", "ownership", "permission"],
+    }
+
+
+def registration_c2pa(tw):
+    st = tw["statement"]
+    subj_sha = st["subject"][0]["digest"]["sha256"]
+    assertions = {
+        "c2pa.hash.data": {
+            "alg": "sha256",
+            "hash": bstr(subj_sha),
+            "pad": "h''",
+            "name": "whole file; sidecar manifest, no exclusions",
+        },
+        REG_LABEL: {
+            "registrationVersion": st["predicate"]["registrationVersion"],
+            "predicateType": st["predicateType"],
+            "textReference": tw["textReference"],
+            "statementSha256": bstr(tw["statementSha256"]),
+            "subjectSha256": bstr(subj_sha),
+            "relation": tw["relation"],
+            "claimedCreatedAt": '0("' + st["predicate"]["claims"]["createdAt"] + '")',
+            "notShown": list(tw["notShown"]),
+        },
+    }
+    return manifest(["c2pa.hash.data"], [REG_LABEL], assertions, "00000000-0000-4000-8000-000000000007")
+
+
+def registration_mapping():
+    return {
+        "signerIsRegistrant": False,
+        "lossy": [
+            decl(
+                "/statement/predicate/claims/createdAt",
+                "claimed creation time only, not a trusted C2PA sigTst2 (C1 8.9)",
+                f"/assertions/{REG_LABEL}/claimedCreatedAt",
+            ),
+        ],
+        "unmapped": [
+            decl("/statement/_type", "in-toto envelope type replaced by C2PA assertion label"),
+            decl("/statement/subject/0/name", "caller-chosen name; not C2PA instanceID"),
+            decl("/statement/predicate/contentKind", "coarse Traceweave category"),
+            decl("/statement/predicate/nonce", "kept private in registration statement; never placed in C2PA manifest"),
+            decl("/statement/predicate/possession", "salted possession digest over private nonce"),
+            decl("/statement/predicate/catalogue", "private catalogue commitment and profile; never opened into C2PA"),
+            decl("/statement/predicate/implementation", "statement producer build provenance; not claim_generator_info"),
+            decl("/statement/predicate/specCommit", "spec commit of the statement"),
+        ],
+        "opaque": [
+            decl(
+                "/notShown",
+                "carried verbatim; C2PA defines no notShown disclaimer vocabulary",
+                f"/assertions/{REG_LABEL}/notShown",
+            ),
+        ],
+        "conflicting": [
+            decl(
+                "/timeEvidenceSummary",
+                "registration RFC 3161 / OpenTimestamps roots stamp the DSSE signature and cannot be reused as C2PA sigTst2",
+            ),
+        ],
+    }
+
+
 # ---------------------------------------------------------------- build
 
 def positives():
-    img, tok, rep, mark = image_source(), token_source(), report_source(), mark_source()
+    img, tok, rep, mark, reg = image_source(), token_source(), report_source(), mark_source(), registration_source()
     image_ref = {"path": IMAGE_CATALOGUE, "sha256": sha256_file(IMAGE_CATALOGUE), "entry": "s0000000"}
     token_ref = {"path": MATCHING, "sha256": sha256_file(MATCHING), "entry": "go-function-in-host reference sum.go"}
     report_ref = {"path": REPORT, "sha256": sha256_file(REPORT)}
+    reg_ref = {"path": REG_STATEMENT, "sha256": sha256_file(REG_STATEMENT)}
 
     f1 = base("f1-image-pdq-soft-binding", "soft-binding-image", "An image-catalogue PDQ fingerprint written as a c2pa.soft-binding assertion beside a whole-file hard binding.", image_ref, img, image_mapping())
     f1["c2pa"] = image_c2pa(img)
@@ -380,7 +467,10 @@ def positives():
 
     f6 = base("f6-token-soft-binding", "soft-binding-tokens", "A Go token-catalogue entry written as two soft-binding assertions, one per channel; spans are not carried.", token_ref, tok, token_mapping())
     f6["c2pa"] = token_c2pa(tok)
-    return [f1, f2, f3, f4, f5, f6]
+
+    f7 = base("f7-sidecar-registration-link", "registration-link", "A sidecar C2PA manifest linking cleanly to an M4 registration statement via tw1- textReference and statementSha256.", reg_ref, reg, registration_mapping())
+    f7["c2pa"] = registration_c2pa(reg)
+    return [f1, f2, f3, f4, f5, f6, f7]
 
 
 def leaf_pointers(value, prefix=""):
@@ -408,9 +498,10 @@ def negative(source, neg_id, code, why, mutate, also=()):
 
 
 def negatives(pos):
-    f1, f2, f3, f4, f5, f6 = pos
+    f1, f2, f3, f4, f5, f6, f7 = pos
     sb = lambda f: f["c2pa"]["assertions"]["c2pa.soft-binding"]
     rep = lambda f: f["c2pa"]["assertions"][REPORT_LABEL]
+    reg = lambda f: f["c2pa"]["assertions"][REG_LABEL]
 
     def drop_quality(f):
         del sb(f)["bindingMetadata"][META_QUALITY]
@@ -483,6 +574,22 @@ def negatives(pos):
         shape = sb(f)["blocks"][0]["scope"]["region"]["region"][0]["shape"]
         shape["width"] = 512
 
+    def reg_bad_check(f):
+        bad = f["traceweave"]["textReference"][:-1] + "P"
+        f["traceweave"]["textReference"] = bad
+        reg(f)["textReference"] = bad
+
+    def reg_tw1_mismatch(f):
+        other = "tw1-QTDYH1TK78G2ERN86DXVXZ7VY7D"
+        f["traceweave"]["textReference"] = other
+        reg(f)["textReference"] = other
+
+    def reg_same_bytes_exclusions(f):
+        f["c2pa"]["assertions"]["c2pa.hash.data"]["exclusions"] = [{"start": 0, "length": 16}]
+
+    def reg_created_attribution(f):
+        f["c2pa"]["claim"]["created_assertions"].append(f["c2pa"]["claim"].pop("gathered_assertions")[0])
+
     return [
         negative(f1, "neg-lossy-dropped", "lossy-undeclared", "PDQ quality is dropped from the export and not declared lossy", drop_quality),
         negative(f1, "neg-compatibility-claim", "claim-wording", "the fixture text claims compatibility", claim_words),
@@ -502,6 +609,10 @@ def negatives(pos):
         negative(f1, "neg-alg-unregistered", "alg-unregistered-undeclared", "a proposed, unregistered algorithm id is not declared as unregistered", unregistered),
         negative(f1, "neg-signature-claimed", "signature-claimed", "the fixture claims a signature", signed),
         negative(f4, "neg-region-integer", "type-mismatch", "a region width is an integer; region-map coordinates are floats", integer_rect),
+        negative(f7, "neg-reg-tw1-bad-check", "reference-check", "the tw1- Luhn mod 32 check character is corrupted", reg_bad_check),
+        negative(f7, "neg-reg-tw1-statement-mismatch", "reference-mismatch", "valid tw1- check character, but derived from a different statementSha256", reg_tw1_mismatch),
+        negative(f7, "neg-reg-same-bytes-exclusions", "identity-conflation", "same-bytes registration link paired with a hard binding that has exclusions", reg_same_bytes_exclusions, also=("forbidden-field",)),
+        negative(f7, "neg-reg-created-attribution", "attribution", "registration link placed in created_assertions when signerIsRegistrant is false", reg_created_attribution),
     ]
 
 

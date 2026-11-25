@@ -1,0 +1,711 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://traceweave.org/schemas/image-mark-finding-aid/draft-1.schema.json",
+  "title": "Traceweave image-mark finding-aid record (traceweave-image-mark-finding-aid-draft-1)",
+  "description": "Experimental draft profile-specific record resolving ROADMAP gate IMG.5. Hosts the six image-mark detection fields outside the generic lane-08 container (model digests, statistic with n, threshold basis, key and payload-derivation id, embedding quality, and tested bit positions), enforces non-origin boundaries, and optionally links to a separate M4 tw1- registration record. Proposed identifier under traceweave.org; not published or normative.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact",
+    "carrier",
+    "confidence",
+    "decodedPayload",
+    "embeddingQuality",
+    "findingAidBoundary",
+    "keyReference",
+    "outcome",
+    "profile",
+    "raw",
+    "recordKind",
+    "recordVersion",
+    "region",
+    "registrationLink",
+    "statistic",
+    "testedBits",
+    "threshold"
+  ],
+  "properties": {
+    "recordVersion": {
+      "const": "traceweave-image-mark-finding-aid-draft-1"
+    },
+    "recordKind": {
+      "const": "image-mark-finding-aid"
+    },
+    "findingAidBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "keylessCopyPossible",
+        "originEvidenceSource",
+        "provesAuthorship",
+        "provesOrigin",
+        "role"
+      ],
+      "properties": {
+        "role": {
+          "const": "finding-aid-only"
+        },
+        "provesOrigin": {
+          "const": false
+        },
+        "provesAuthorship": {
+          "const": false
+        },
+        "keylessCopyPossible": {
+          "const": true
+        },
+        "originEvidenceSource": {
+          "const": "separate-registration-record"
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "byteLength",
+        "decode",
+        "role",
+        "sha256"
+      ],
+      "properties": {
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "byteLength": {
+          "$ref": "#/$defs/count"
+        },
+        "role": {
+          "enum": [
+            "query",
+            "marked-entry"
+          ]
+        },
+        "decode": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "height",
+                "orientationBasis",
+                "status",
+                "width"
+              ],
+              "properties": {
+                "status": {
+                  "const": "ok"
+                },
+                "width": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                },
+                "height": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                },
+                "orientationBasis": {
+                  "const": "after-exif-orientation"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "code",
+                "status"
+              ],
+              "properties": {
+                "status": {
+                  "const": "abstain"
+                },
+                "code": {
+                  "enum": [
+                    "undecodable",
+                    "unsupported-mode",
+                    "too-small"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "protocolSha256",
+        "protocolVersion",
+        "version"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/label"
+        },
+        "version": {
+          "$ref": "#/$defs/label"
+        },
+        "protocolVersion": {
+          "$ref": "#/$defs/label"
+        },
+        "protocolSha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "carrier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "codeCommit",
+        "models",
+        "variant"
+      ],
+      "properties": {
+        "algorithm": {
+          "enum": [
+            "trustmark",
+            "pixelseal",
+            "dwtdct"
+          ]
+        },
+        "variant": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._-]{1,32}$"
+        },
+        "codeCommit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "models": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "role",
+              "sha256"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/label"
+              },
+              "role": {
+                "enum": [
+                  "config",
+                  "encoder",
+                  "decoder",
+                  "checkpoint"
+                ]
+              },
+              "sha256": {
+                "$ref": "#/$defs/sha256"
+              }
+            }
+          }
+        }
+      }
+    },
+    "region": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "basis",
+            "height",
+            "imageHeight",
+            "imageWidth",
+            "scope",
+            "unit",
+            "width",
+            "x",
+            "y"
+          ],
+          "properties": {
+            "unit": {
+              "const": "pixel"
+            },
+            "basis": {
+              "const": "after-exif-orientation"
+            },
+            "scope": {
+              "enum": [
+                "whole-image",
+                "spatial-box"
+              ]
+            },
+            "x": {
+              "$ref": "#/$defs/count"
+            },
+            "y": {
+              "$ref": "#/$defs/count"
+            },
+            "width": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "imageWidth": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "imageHeight": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            }
+          }
+        }
+      ]
+    },
+    "raw": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "bitCount",
+            "bitsHex",
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "const": "decoded"
+            },
+            "bitCount": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4096
+            },
+            "bitsHex": {
+              "type": "string",
+              "pattern": "^[0-9a-f]+$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "code",
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "const": "abstain"
+            },
+            "code": {
+              "enum": [
+                "undecodable",
+                "unsupported-mode",
+                "too-small"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "decodedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decisive",
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "valid",
+            "invalid",
+            "none"
+          ]
+        },
+        "decisive": {
+          "const": false
+        },
+        "ecc": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._-]{1,32}$"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255
+        },
+        "payloadHex": {
+          "type": "string",
+          "pattern": "^[0-9a-f]+$"
+        }
+      }
+    },
+    "testedBits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "basis",
+        "count",
+        "end",
+        "excludedNote",
+        "rawBitCount",
+        "start"
+      ],
+      "properties": {
+        "basis": {
+          "const": "direct-keyed-output"
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4095
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        },
+        "rawBitCount": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        },
+        "excludedNote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      }
+    },
+    "keyReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "derivationId",
+        "keyId"
+      ],
+      "properties": {
+        "keyId": {
+          "$ref": "#/$defs/label"
+        },
+        "derivationId": {
+          "$ref": "#/$defs/label"
+        }
+      }
+    },
+    "statistic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "acceptedEntries",
+        "matchedBits",
+        "n",
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "const": "expected-payload-agreement"
+        },
+        "n": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        },
+        "matchedBits": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4096
+            }
+          ]
+        },
+        "acceptedEntries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "entryId",
+              "matchedBits",
+              "n"
+            ],
+            "properties": {
+              "entryId": {
+                "$ref": "#/$defs/label"
+              },
+              "matchedBits": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 4096
+              },
+              "n": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 4096
+              }
+            }
+          }
+        },
+        "maxOtherBits": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4096
+        },
+        "maxOtherEntryId": {
+          "$ref": "#/$defs/label"
+        }
+      }
+    },
+    "threshold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "basis",
+        "calibrationId",
+        "k",
+        "perComparisonFalseAcceptBound",
+        "searchScope"
+      ],
+      "properties": {
+        "k": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        },
+        "basis": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "perComparisonFalseAcceptBound": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "calibrationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "searchScope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "catalogueEntries",
+            "keysSearched",
+            "perQueryUpperBound"
+          ],
+          "properties": {
+            "catalogueEntries": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "keysSearched": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "perQueryUpperBound": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1
+            }
+          }
+        }
+      }
+    },
+    "embeddingQuality": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "belowFloor",
+            "floorDb",
+            "psnrDb",
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "const": "measured"
+            },
+            "psnrDb": {
+              "type": "number",
+              "minimum": 0
+            },
+            "floorDb": {
+              "type": "number",
+              "minimum": 0
+            },
+            "belowFloor": {
+              "type": "boolean"
+            },
+            "maxAbsDiff": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 255
+            },
+            "meanAbsDiff": {
+              "type": "number",
+              "minimum": 0
+            },
+            "changedSampleFraction": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "coverPixelSha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "markedPixelSha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "markedSha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "floorDb",
+            "reason",
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "no-cover-reference",
+                "abstain-before-embed"
+              ]
+            },
+            "floorDb": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        }
+      ]
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "class",
+        "code"
+      ],
+      "properties": {
+        "class": {
+          "enum": [
+            "match",
+            "no-match",
+            "abstain"
+          ]
+        },
+        "code": {
+          "enum": [
+            "expected-payload",
+            "no-match",
+            "ambiguous",
+            "undecodable",
+            "unsupported-mode",
+            "too-small"
+          ]
+        }
+      }
+    },
+    "registrationLink": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "note",
+            "registrationVersion",
+            "statementSha256",
+            "subjectDigestMatchesCandidate",
+            "textReference",
+            "verificationStatus"
+          ],
+          "properties": {
+            "registrationVersion": {
+              "const": "traceweave-registration-draft-5"
+            },
+            "textReference": {
+              "type": "string",
+              "pattern": "^tw1-[0-9A-HJKMNP-TV-Z]{27}$"
+            },
+            "statementSha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "subjectDigestMatchesCandidate": {
+              "type": "boolean"
+            },
+            "verificationStatus": {
+              "enum": [
+                "unverified-reference-only",
+                "verified-separately"
+              ]
+            },
+            "note": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          }
+        }
+      ]
+    },
+    "confidence": {
+      "const": null
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "label": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:/-]{1,64}$"
+    }
+  }
+}
