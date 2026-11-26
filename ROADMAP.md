@@ -356,6 +356,10 @@ The owner may narrow this reading. Core M1–M3 gates keep priority under the su
 
 These are local backlog IDs, not published GitHub issues. The gate tables above carry the acceptance criteria; the gate IDs after each item are the ones the item feeds. M0 and initial discovery work are done except where a gate below is still open.
 
+## Deferred ideas (not counted as gates)
+
+- **CI/CD signing integration — deferred by the owner, 2026-11-26.** Revisit automatic signing of source content and release artifacts, with an optional commit trailer referencing a signed registration record, when the research and evidence supporting the existing roadmap are further along. This is a backlog idea only: no implementation, hosted service, trailer format, default behavior or new gate is approved. Prioritize substantiating existing proposals and resolving review findings before expanding scope.
+
 ## Needs the owner
 
 These stay with the owner. No agent or supervision loop decides them or does them unasked:
