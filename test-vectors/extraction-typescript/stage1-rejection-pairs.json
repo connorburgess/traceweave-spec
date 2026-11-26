@@ -1,0 +1,56 @@
+{
+  "profile": "ts-tokens",
+  "profileVersion": "draft-2",
+  "configSha256": "aeeed14177cd3be8fea69e453c825e74f2fd301d03babbf49329bde0cc4754de",
+  "scope": "Supplemental stage-1 rejection partners; frozen originals and their historical cross-profile pair fields remain byte-identical.",
+  "pairingOverrides": {
+    "ts-html-comment": "ts-html-comment-stage1-rejection",
+    "ts-type-assertion": "ts-type-assertion-stage1-rejection"
+  },
+  "rejections": [
+    {
+      "id": "ts-html-comment-stage1-rejection",
+      "derivation": "hand",
+      "tags": [
+        "error",
+        "stage1-pair"
+      ],
+      "description": "Original accepted input with a deliberately malformed appended block comment.",
+      "inputText": "x<!--y\n-->z\n/*",
+      "inputBase64": "eDwhLS15Ci0tPnoKLyo=",
+      "result": {
+        "status": "error",
+        "error": {
+          "code": "unterminated-comment",
+          "offset": 12
+        }
+      }
+    },
+    {
+      "id": "ts-type-assertion-stage1-rejection",
+      "derivation": "hand",
+      "tags": [
+        "error",
+        "stage1-pair"
+      ],
+      "description": "Original accepted input with a deliberately malformed appended closing delimiter.",
+      "inputText": "let a = <T>b; let c = <any>/re/;\n)",
+      "inputBase64": "bGV0IGEgPSA8VD5iOyBsZXQgYyA9IDxhbnk+L3JlLzsKKQ==",
+      "result": {
+        "status": "error",
+        "error": {
+          "code": "unbalanced-delimiter",
+          "offset": 33
+        }
+      }
+    }
+  ],
+  "sourceRevision": "1c8f09a62faabfa2304b14315ee80d1b324304d7",
+  "sourceSha256": {
+    "profiles/typescript.md": "e675e3e139412728e49dffc7db867baab83b4fdf86911593fa819bc1c298f0e5",
+    "test-vectors/extraction-typescript/ts.json": "be290174a694e3124c510518203220ab6675ac5d44081f89980c08b594f4dc81",
+    "test-vectors/extraction-typescript/limits-ts.json": "b9db6d79758873db321cee28b7b5161465337666b4c3db18e1efd390f018eb9f",
+    "test-vectors/extraction-typescript/config-ts.json": "aeeed14177cd3be8fea69e453c825e74f2fd301d03babbf49329bde0cc4754de",
+    "test-vectors/extraction-typescript/config-ts-limit16.json": "94403dd3e71a8105a9dcec894fc0d05d09cb771efaada28802dcf43ecd08f8d6"
+  }
+}

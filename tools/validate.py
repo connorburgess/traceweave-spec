@@ -119,6 +119,7 @@ VECTOR_CHECKERS = (
     ("matching gates M2.2 manifest, M2.7 review packets, M2.9 candidate generation (with self-tests)",
      ("test-vectors/matching/check_gates.py",)),
     ("typescript", ("test-vectors/extraction-typescript/check_vectors.py",)),
+    ("typescript-selection", ("test-vectors/extraction-typescript/check_selection.py",)),
     ("python", ("test-vectors/extraction-python/check_vectors.py",)),
     ("text", ("test-vectors/extraction-text/check_text_vectors.py",)),
     ("image-mark finding aid (IMG.5)", ("research/drafts/image-mark-finding-aid/check_finding_aid.py",)),

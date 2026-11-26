@@ -47,6 +47,50 @@ class ContractTests(unittest.TestCase):
             code, _ = run_checker([str(copy / "check_vectors.py")], cwd=copy)
             self.assertNotEqual(code, 0)
 
+    def test_ts2_checker_rejects_corrupted_selection_and_pair_evidence(self):
+        import json
+        folder = ROOT / "test-vectors/extraction-typescript"
+        selection = read_json(folder / "selection-decisions.json")
+        pairs = read_json(folder / "stage1-rejection-pairs.json")
+        cases = []
+        # Wrong exclusion decisions and opposite boundary/deferred decisions.
+        for vid in ("declaration.d.ts", "generated-end2048", "generated-end2049",
+                    "minified.min.js", "line4096", "utf8-line4097", "self-closing-jsx"):
+            changed = copy.deepcopy(selection)
+            vector = next(v for v in changed["vectors"] if v["id"] == vid)
+            vector["expected"] = "extract" if vector["expected"] != "extract" else "exclude"
+            cases.append((vid, changed, pairs))
+        changed = copy.deepcopy(selection)
+        changed["sourceSha256"]["profiles/typescript.md"] = "0" * 64
+        cases.append(("wrong source identity", changed, pairs))
+        changed = copy.deepcopy(selection)
+        changed["vectors"] = [v for v in changed["vectors"] if v["id"] != "line4097"]
+        cases.append(("missing boundary", changed, pairs))
+        changed = copy.deepcopy(selection)
+        changed["vectors"].append(copy.deepcopy(changed["vectors"][0]))
+        cases.append(("duplicate selection", changed, pairs))
+        for field, value in (("offset", 0), ("code", "nul")):
+            changed = copy.deepcopy(pairs)
+            changed["rejections"][0]["result"]["error"][field] = value
+            cases.append(("wrong rejection " + field, selection, changed))
+        changed = copy.deepcopy(pairs)
+        changed["pairingOverrides"].pop("ts-html-comment")
+        cases.append(("missing override", selection, changed))
+        changed = copy.deepcopy(pairs)
+        changed["pairingOverrides"]["ts-html-comment"] = "tsx-err-html-comment"
+        cases.append(("deferred partner", selection, changed))
+        with tempfile.TemporaryDirectory() as directory:
+            selected, paired = Path(directory) / "selection.json", Path(directory) / "pairs.json"
+            for label, selections, rejections in cases:
+                with self.subTest(corruption=label):
+                    selected.write_text(json.dumps(selections))
+                    paired.write_text(json.dumps(rejections))
+                    code, output = run_checker([
+                        str(folder / "check_selection.py"), "--selection", str(selected),
+                        "--pairs", str(paired)])
+                    self.assertEqual(code, 1, output)
+                    self.assertIn("FAIL TS.2:", output)
+
     def test_release_map_rejects_unmapped_musts_in_each_document_and_new_file(self):
         from tools.check_requirement_map import ALL_MAP, MapError, check_release_map, known_ids
         data = read_json(ALL_MAP)
