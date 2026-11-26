@@ -23,6 +23,7 @@ Checked 2026-11-27 for the [PROPOSED amendment](web6-budget-amendment-proposal.m
 | L15 | [MDN using service workers](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers) | Lifecycle and explicit cache strategy matter to offline reload. An already-loaded page working after network denial does not prove reload/persistence. No service worker installation/registration was performed |
 | L16 | [Chrome device mode](https://developer.chrome.com/docs/devtools/device-mode/) | Emulation is an approximation; desktop hardware cannot reproduce all mobile architecture/behavior. Requires real-device evidence for the candidate support cells |
 | L17 | [Chrome throttling](https://developer.chrome.com/docs/devtools/settings/throttling/) and [performance reference](https://developer.chrome.com/docs/devtools/performance/reference) | Supports explicit custom network rates and CPU settings/traces, and separates local/field metrics. Fixed 4×/1,600/750/150 numbers are proposed reproducibility inputs, not standard device equivalence |
+| L18 | [MDN supportedEntryTypes](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver/supportedEntryTypes_static) | Supported observer entry types vary by browser and context; feature detection is necessary. Availability alone is not collection completeness. Fallback trace equivalence, precision checks and unmeasured-cell handling are project protocol proposals, not a guarantee supplied by this API |
 
 ## Pinned local code and existing evidence
 
