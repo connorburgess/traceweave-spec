@@ -1,0 +1,584 @@
+{
+  "pins": {
+    "S": "303ef5a846d368fe293f32efe84477e23fe32d6b",
+    "W": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+    "P": "a589a1bbb3d00009438376d2df40ae923317cacb",
+    "I": "dcaa0d42e9de63d23aa113d9306134de9b28942c"
+  },
+  "files": [
+    {
+      "repository": "S",
+      "revision": "303ef5a846d368fe293f32efe84477e23fe32d6b",
+      "path": "src/app/layout.tsx",
+      "gitBlob": "fcffd4c0dd1d34c930492291daa9446374a54a43",
+      "sha256": "820ec2f6b0ba9651f4f8aa0f08bb83999449093ce9c744a2068829b1e7b7fa99"
+    },
+    {
+      "repository": "S",
+      "revision": "303ef5a846d368fe293f32efe84477e23fe32d6b",
+      "path": "src/components/CompareTab.tsx",
+      "gitBlob": "0de28ba475b82e15e9f14493e16eaa9ceaddccd1",
+      "sha256": "db225a09ce7a49ee6b4876fb3747a62c45b468c9a9dccfceaf68df98064e15e3"
+    },
+    {
+      "repository": "S",
+      "revision": "303ef5a846d368fe293f32efe84477e23fe32d6b",
+      "path": "src/components/ConcreteCard.tsx",
+      "gitBlob": "a8593d7234796d711b884d1cc212f167fd4f23a2",
+      "sha256": "67dec44d55eaf8481f8d1cf05fe8fcb44df9758b29f71522e22b59ec66b702cb"
+    },
+    {
+      "repository": "S",
+      "revision": "303ef5a846d368fe293f32efe84477e23fe32d6b",
+      "path": "src/components/KeysBackupDrawer.tsx",
+      "gitBlob": "80b9bc2efb840a91560381d824ceffadac421a24",
+      "sha256": "2fa5887d5eea691ccb6331d9735ff1db66ceddfe6352af50088507d8f8eee277"
+    },
+    {
+      "repository": "S",
+      "revision": "303ef5a846d368fe293f32efe84477e23fe32d6b",
+      "path": "src/components/LimitsBlock.tsx",
+      "gitBlob": "c47f18ebf905c11aa22dccf406dbf921dec26d9d",
+      "sha256": "a4992fff3487d7031402e84d04566189579d79153edfec76f1c5788b5717bfbd"
+    },
+    {
+      "repository": "S",
+      "revision": "303ef5a846d368fe293f32efe84477e23fe32d6b",
+      "path": "src/components/RegisterTab.tsx",
+      "gitBlob": "816be5a0c4b666a0ad7e6723667bf9669ab7bbd9",
+      "sha256": "0a5feeac45fbbc9afd9f1ec46e3bec7e1650b58d330aac7ea59e6e3d9eca8fbb"
+    },
+    {
+      "repository": "S",
+      "revision": "303ef5a846d368fe293f32efe84477e23fe32d6b",
+      "path": "src/components/ShelfApp.tsx",
+      "gitBlob": "3f9ddcc1b2220db8ac1653bbe48c3800fc15997e",
+      "sha256": "0b1d428a5598de7d739c41fff6288da96360b89c10cbc39c30695e13fdd5882f"
+    },
+    {
+      "repository": "S",
+      "revision": "303ef5a846d368fe293f32efe84477e23fe32d6b",
+      "path": "src/components/ShelfTab.tsx",
+      "gitBlob": "6afa453aeb8f04531f77da55d2d4280616e51cdf",
+      "sha256": "41b09f7864e863cc447a958dbc34463651e450e4402bb63bad935fa9a33b1b1a"
+    },
+    {
+      "repository": "S",
+      "revision": "303ef5a846d368fe293f32efe84477e23fe32d6b",
+      "path": "src/components/VerifyTab.tsx",
+      "gitBlob": "2e70f3d4c1108d50b0cc8367a8269dcd0ba42766",
+      "sha256": "2ac4b5626511d62cb12d8ec8b1289e1920002e30e2002ea9e33404103c692007"
+    },
+    {
+      "repository": "S",
+      "revision": "303ef5a846d368fe293f32efe84477e23fe32d6b",
+      "path": "src/lib/crypto.ts",
+      "gitBlob": "35cc691bfccfb9963401262b5c45602897533913",
+      "sha256": "3a4d003a33254f37f1733acec01c7215ae51e471c5e0cca3ecd4a2e687bef41c"
+    },
+    {
+      "repository": "S",
+      "revision": "303ef5a846d368fe293f32efe84477e23fe32d6b",
+      "path": "src/lib/embed.ts",
+      "gitBlob": "46aa611399b29d7db4c69f9a4072f95de110ac51",
+      "sha256": "4f475da206aa16320bec3aee359245cdb729000e230e59a59b2f46f1becc02b0"
+    },
+    {
+      "repository": "S",
+      "revision": "303ef5a846d368fe293f32efe84477e23fe32d6b",
+      "path": "src/lib/storage.ts",
+      "gitBlob": "61c45feb4bc85e47b0a5b794d3c915a9eb534a35",
+      "sha256": "1cca0eb3ca5815ef8d376a48b08326a1a6ddd4c6de6e2b3093f647d4d900b812"
+    },
+    {
+      "repository": "S",
+      "revision": "303ef5a846d368fe293f32efe84477e23fe32d6b",
+      "path": "src/lib/types.ts",
+      "gitBlob": "0a7a5c6f4a740942ff608de34a58e2d3ce453cc8",
+      "sha256": "ffd7071fadff39cd1afc85244bfa9b9e7afec7c1ea2d9665dcf0d55ff94800fe"
+    },
+    {
+      "repository": "S",
+      "revision": "303ef5a846d368fe293f32efe84477e23fe32d6b",
+      "path": "src/lib/wasm.ts",
+      "gitBlob": "958dd03fc1a44823671ddddf8f25dd45535171cd",
+      "sha256": "ebd2faeb9d9827c2971ecf6eeca9487ffb282785f9cf4197ce3ff0afad34a634"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "LICENSE.md",
+      "gitBlob": "75556acc9a1c89385bbe1bd12034359fdbf776dd",
+      "sha256": "bc8bc4d4c79381fb459227a065865b2c709980ae49224344ac7826643e8fcc1e"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "README.md",
+      "gitBlob": "dc5c0c4fb99feb5e1bbe3616ca58a89fac6a884d",
+      "sha256": "e6a16b85425a82e0a175a2319f016b239350a6c92eff8aa811b814429ad8be92"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "content/pages/about.md",
+      "gitBlob": "15dedc877d4404476e43ed7c037db305f5d2007e",
+      "sha256": "5919a0c4ca7c2e8f1612c2ac3949ceb99f790823e7940e0cf466eb64b0836c30"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "content/pages/coverage.md",
+      "gitBlob": "e0e044939ce6afd523ff2d71d9a5abb967503f3e",
+      "sha256": "9c8416ab8cb295f3881bf125c9529de41e5ec6154b7cc00fc5241b7e03155be6"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "content/pages/evidence.md",
+      "gitBlob": "630a2cee0ffc62b04080903dd1f1226e98246677",
+      "sha256": "90598e57b4dffdeedba0017c73b24d7825d46acaf81fc348dc2175844bd59247"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "content/pages/home.md",
+      "gitBlob": "f14acb3b3eb616bd805196a60ad73ce529ec8608",
+      "sha256": "bbc90347b96e578166d3e4b9bdbaade0f59a7fc24a4f0a35382c671597614622"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "content/pages/how-it-works.md",
+      "gitBlob": "00bda7ba721f98caae6e80dede970843029c8c3a",
+      "sha256": "bfbec2708956deacad0f73c4056cd9cc6c9d6a94194145a7dd5f4e3427cc7d9c"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "content/pages/roadmap.md",
+      "gitBlob": "eaaf8c3f417e18e19ee7b3e5d50e97ec67afa1b4",
+      "sha256": "ce5f5b066e50e741f67cdfa71a6e95ab416bb112a03539e8670422613b36e0d1"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "content/site/footer.md",
+      "gitBlob": "16a77aa30255d98d31f54296b795d7002fcfdbf6",
+      "sha256": "ac06ef31a734ef91001cd574db2001f4389893c09c5184ed1fc79775c4c33f07"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "content/site/header.md",
+      "gitBlob": "66d3fd822114e684e2c2f7b74992cda921864391",
+      "sha256": "49cd0b7271da20e0fb6ad4e628b296b4ec6cd06681bec99e921c42c703e7b489"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "next.config.ts",
+      "gitBlob": "fbc796df87be802f214700aaeec685add9bc18f3",
+      "sha256": "e1df6b783f788419dd6018e8e79d30384493492a27060ac724e4de203c40a4ba"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "src/app/layout.tsx",
+      "gitBlob": "582abf400dd50748ac0ac5d224c112b6c139453d",
+      "sha256": "ca933f637ea9d1f68b8011afcb25e6bcc3c99e5c0a18cd9a2a98b62def8d7d85"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "src/app/not-found.tsx",
+      "gitBlob": "f4e09a6f25ede16cfcf5b58a5182d9235be4f62a",
+      "sha256": "67f9eb5bb73d9c173195df2c44de633b810bb82f8f4471a8ff6735719d2ffe82"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "src/components/Button.tsx",
+      "gitBlob": "5de2bd3ad1eb081c310f0e40bae79d503fa87067",
+      "sha256": "2e8fec98997d0973a6d01771cb53174d208fa98d1acfa4e42d95509068dab523"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "src/components/PageSections.tsx",
+      "gitBlob": "a69fac2e033ebbf850ba42558647756f157842a7",
+      "sha256": "0af5a3abdbd2b8e047c1bd016c32daae6a17fd9c187b0a85a028ddb20201cd3a"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "src/components/RichText.tsx",
+      "gitBlob": "4d7850cf04005dc7be2429096f91936aabcb169d",
+      "sha256": "ffb35cdb0a8daae3a84757709315b689c219ad1550a762ca45551204188b011a"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "src/components/SiteHeader.tsx",
+      "gitBlob": "1d6a4b95a75ab0a87e6444f95a67137fc8383e26",
+      "sha256": "12a4ad350aa6ff35905ba5bfd832692e40636cd1b68b6a61c9aa396f566df185"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "src/components/SpecimenPicture.tsx",
+      "gitBlob": "d70f2d611d2b40ce039bd4f848a87b081fad959b",
+      "sha256": "9a5873349ce9e0554dadf5418824c1c5fccef9f4500478a63aaeac6b7f4785ba"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "src/components/WorkflowDiagram.tsx",
+      "gitBlob": "67665f8e3911ff5bd61953413a87ef9bc8d263e4",
+      "sha256": "76ddfbd03b7af4d517018f4755690088ed617f0fec205154b516308423fec717"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "src/data/facts.ts",
+      "gitBlob": "5b3bf63e8a4b31b908f272d714f44850ba8f2fe2",
+      "sha256": "95acfc93bf84b93ab8c39c41fa78e346c950aa031d0b406f964bba1dc5d99d2d"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "src/lib/content.ts",
+      "gitBlob": "ca95282b2f7bd0310e976272cdfd6e014ae8e043",
+      "sha256": "39a68039d39ed1166965ab3fb328990777fc00f188ac2a792e7420a2f5058475"
+    },
+    {
+      "repository": "W",
+      "revision": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+      "path": "src/lib/sources.ts",
+      "gitBlob": "b211fabc61a914e2b65c015e3b1b2103cd91a9e5",
+      "sha256": "59d73fe34e7e7c958da878a9afb6dd01e56b7f8532ee68e96c50f0e749a23c8d"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "CONTRIBUTING.md",
+      "gitBlob": "cf990a9d4387ab2559a25c44a86447b260317efe",
+      "sha256": "3d55f9a0c56bd2c91372cd0e988edb444474062874de3b8773289df9df09e1f5"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "LICENSE.md",
+      "gitBlob": "fbee628d56e753a2b8dd9617d9d4a4d7b884bc01",
+      "sha256": "a04847c3339a695fd97bb2de12fbac881a400a7c8d25bcafb36d728e23337ebd"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "README.md",
+      "gitBlob": "a1a0a34a158066ed57ff4d895169764c7fff4f1d",
+      "sha256": "f554cb7144c736a4503722a8dc45aef10ce16e7492e6fd822ccac48e25a94ad2"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "ROADMAP.md",
+      "gitBlob": "73c9dd7a41e049d9625c8f01fd4395a88e684f83",
+      "sha256": "b8925b5d9ba05bd061472fd889d08df72ef12d6bcaf2dc0232dfe4e90930c5da"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "SECURITY.md",
+      "gitBlob": "0de2e0d351ed71394ad0399946e924a110635a8d",
+      "sha256": "b2b255af6659a3a65e26c6ee17410e26fcebe932023fd9f690dff0b7818cdaec"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "docs/decisions/timestamp-adapter-decision.md",
+      "gitBlob": "32015f92e8c3e5f1550184337c73e1b278f5e734",
+      "sha256": "f76192a76d61f0eb95af968c4d95167ceeae7cb2c3cb794a16ed1e37860d5dd4"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "docs/release/conformance-matrix.md",
+      "gitBlob": "14b1b49c78e289c7a03d8b79974907d094a2b1c7",
+      "sha256": "873486eeb7a9593a6b956aca6c5d6417e21c34228c422af8423183fdd260d7e7"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "docs/release/readme-claim-map.json",
+      "gitBlob": "832f302a91a7ae3ef052c02b680016708f5b358c",
+      "sha256": "a6cc605ba9cce2052dd30389a4545b8184d522bb1e34bb51b7124f09d31540b6"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "docs/use-cases.md",
+      "gitBlob": "6458021f240b92700e9248615db19820b2de2a72",
+      "sha256": "0920225ec819bb3c58b81908e972792d16e6f7fad4abf28edd14dd2e7399f4ef"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "profiles/python.md",
+      "gitBlob": "3f5d6acce124b90a9e39cb38be965ab70665fb35",
+      "sha256": "8b4830ae481e5bb19714d72076a4942118ba8afb4a4d9598abf9f3274933533e"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/drafts/image-mark-protocol.md",
+      "gitBlob": "6963feb01aa0366be78d5c82e05fb21a7f6ab98e",
+      "sha256": "c9de1a7ab34e6773d2aa5585297e4e8ef3f25ee8877f1403d85a5b66230eb856"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/drafts/image-mark-use-case.md",
+      "gitBlob": "b6b8b957ef619a196da2aee6f93d62c984f49e5a",
+      "sha256": "5c395b7ee7e7d1199b039d2e608ab4822cb29efd2a98ed867614c5a7f6132e3f"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/experiment-checkpoint.md",
+      "gitBlob": "32118b7537f6ce0d31775cd38ec87c8889c54522",
+      "sha256": "00951b27b35e6c3625e39b2d4b3c8da1994f69d84f2b7eb2505d3c20908ae32a"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/experiments/image-fingerprint/results/e-img-f-2/RESULTS.md",
+      "gitBlob": "9d18fa80232bd7e9f680324a2863a98a05387290",
+      "sha256": "28e7f5e51f18b4fd5b1fcee951b740026a0c6d4e66da277adb23cd33e29f792b"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/experiments/image-mark/results/e-img-m-2/RESULTS.md",
+      "gitBlob": "a20bd462d670e79700f34a54c90a1bc6449b7b90",
+      "sha256": "690308da6d41368104d14472199689cb77712340a798aa611f1ec1d07b8d0aa3"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/fragment-policy-checkpoint.md",
+      "gitBlob": "565c8bf180424aa6484dc8e39711aed77ad593a5",
+      "sha256": "ab38bca012fc32dfaca1076195d764246ce088f7af1040a59a6e4e39aa67ed51"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/lanes/09-evidence-review.md",
+      "gitBlob": "ce454bc294e942a9718b4c4c4720a93567e82c2a",
+      "sha256": "c8e788fce79d1ebfe8715ce448f85bf405bd23fbf583c704b10702407f52b927"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/lanes/10-evidence-review.md",
+      "gitBlob": "e0172794676a9b703e80cd2881dc3c01ff38b370",
+      "sha256": "23ac67aae86f41220835c906b7c4250bef76610e8c5fbd9ed8108260d5d7fe97"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/lanes/11-report-audit.md",
+      "gitBlob": "e5355112728cc85c836b8d480abb75ca115385cf",
+      "sha256": "867be707d5d88b823929a7325d3d88691979fa319e0480d7146b7f31bdf55a0e"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/public-census-checkpoint.md",
+      "gitBlob": "204827752129ae167340cd746cd0def92a49205c",
+      "sha256": "829d9eb46ce960f6776a5386e8112a00b12a63f8f60919973f8948c2c7597d88"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/reviews/agent-registration-local-first-4fa00c7-review.md",
+      "gitBlob": "585bb9b36f8ce9e0d3bb628b13e3f3454fedd4ea",
+      "sha256": "e299d99a07e20d237f0516ffec52fa80f151027563f7b0b7c512d10fda17dad6"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/reviews/image-mark-protocol-review.md",
+      "gitBlob": "116aaf3c5a24508ad2b655d152ea610bf4678581",
+      "sha256": "d34366ae6e90f8ef9d701f3949b42343a374871801bab24f914fbb19180ef772"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/reviews/image-profile-protocol-review.md",
+      "gitBlob": "06636b83a4a66bc24f468fe187898e66e589d291",
+      "sha256": "f1515d2392abbad3fb22f55e53851a0b1d3076d3e4097d97de1abb647a6dc7a2"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/reviews/implementation-merge-i1-review.md",
+      "gitBlob": "8ce1a26ca6d1522cb0d439381cdd8d08e27a255d",
+      "sha256": "549600f6b9611164f60ab219083a494c1d6fb366047dbe394108d0f38e7c4168"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/reviews/implementation-merge-i2-review.md",
+      "gitBlob": "c3662213e2f58dfe633776352fdf37c6eb71dccf",
+      "sha256": "2e2e0712120e77a1b3ca9bcbcd2eae24ac93df8a1e63f2cec182e9b3fa492c2f"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/reviews/m5-readiness-7dccedd-review.md",
+      "gitBlob": "ae91dba97d52a71ccfd7a3f50880af9c80b4f55d",
+      "sha256": "64bc231371840555dadda0250f30da95b85eb3eee09b8b111026da10e78a850b"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "research/reviews/sk3-design-gate-closure-4fa00c7.md",
+      "gitBlob": "96bccd36d85e5b695b55e5f03cd215ba7a71058d",
+      "sha256": "71f2c19965bc242ab7e8a420e4a42bf6a3cb5970d47a3c7f0f8295382b9a0b1e"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "spec/attestations.md",
+      "gitBlob": "b01424c9f2baffc4d5596bd42d0c4fcba492f9b5",
+      "sha256": "d27f2023277c8d8bda741293877fafc34ac691f0888057b0a27d892d921420c5"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "spec/catalogue-report.md",
+      "gitBlob": "9f51ad609bba11bf977bbd8c3eba31a7c7c62f1c",
+      "sha256": "97b6a64c861560ed1360c5c1a8253e0fe8bca65642ce732422f41084fb1f4ca9"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "spec/conformance.md",
+      "gitBlob": "22780d8e0a4c4d76144bf3372fda514628919bc1",
+      "sha256": "dda9ce987843e04ff7769fe71561fb6753ced9e28eb3f949011033ffb374b22f"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "spec/core.md",
+      "gitBlob": "7577353912810b438cbf89a8fa2231766abb65f3",
+      "sha256": "50d369c71e767b95b3acce8d8c33f1270d136e672022df66fe0ed12cfc21cb9a"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "spec/extraction.md",
+      "gitBlob": "a156c7659d6a800311ab7721228b3dc59e087f75",
+      "sha256": "6998a24bbb4d5d5eb94b586da02244e0aa8012da5a83be5b8bc42c6330b9d0c2"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "spec/registration-record.md",
+      "gitBlob": "17effeb177f4fa30fe7ab1853498062da25bc3f7",
+      "sha256": "3b3bb4c23188d513a60ea715ea5a1882b7e21d7f6e9fa629e5b9cf27f67b839b"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "spec/threat-model.md",
+      "gitBlob": "2fc1676f287d58231b87b52a434eefd9c208a400",
+      "sha256": "136e81ebf9b719876c3bf4d85ee27936ec253dc3bffa265ced41517f7038322b"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "spec/trust-policy.md",
+      "gitBlob": "c47953763dd2f2e27a2ee93cfdb703376c2daaad",
+      "sha256": "67cb40b1aca7415ca7ab75a7af2228fa862f174b29f742b8e3710e49fd1dc812"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "test-vectors/intoto-adapter/README.md",
+      "gitBlob": "5cebc4f6ec16d3c413c62d00725ffe9887190b16",
+      "sha256": "4d7509c3add62cd1382cfd859880f6bda96ae1c921ab6b21896c7f792fb27a83"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "test-vectors/matching/example-report.json",
+      "gitBlob": "141c2360f098def0d29b7f2ee7114c47c26ebe99",
+      "sha256": "2b68547815259ecc80a49c7ad8d2b284aa2d534da2d971bd0c554bc53af878b5"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "test-vectors/matching/extraction-go.json",
+      "gitBlob": "c24e416c173c7e6e18da27d7c1ab684a701ebdf7",
+      "sha256": "405225d94e6d5535d528204999b9646e5c23ccdd429ec546a869282c257ee56c"
+    },
+    {
+      "repository": "P",
+      "revision": "a589a1bbb3d00009438376d2df40ae923317cacb",
+      "path": "test-vectors/matching/matching.json",
+      "gitBlob": "73e66771232d10743e63dee30ab2a41fc6dad283",
+      "sha256": "79ce61ab7625dabb1cbd22beb5af5f2956610b6a20e7af0b3dd5ebfd74690fa0"
+    },
+    {
+      "repository": "I",
+      "revision": "dcaa0d42e9de63d23aa113d9306134de9b28942c",
+      "path": "crates/tw-reg/src/render.rs",
+      "gitBlob": "c02176b9367a531ec3fbd1fabd3190672c9f06de",
+      "sha256": "cc46a2ef62f1fea9f02947631783721142ccf609f9ee077a8941819475ab089f"
+    },
+    {
+      "repository": "I",
+      "revision": "dcaa0d42e9de63d23aa113d9306134de9b28942c",
+      "path": "crates/tw-wasm/src/lib.rs",
+      "gitBlob": "4e8657ac5acbd288bfc03b212543832f275b2e12",
+      "sha256": "cdde709fe510e67d86e20ee17a8681aba2b65fa53f2d77ac6e05e538778a8864"
+    },
+    {
+      "repository": "I",
+      "revision": "dcaa0d42e9de63d23aa113d9306134de9b28942c",
+      "path": "docs/reviews/core-gates-review.md",
+      "gitBlob": "a4ca6bd5a56e10f08522d1972758f7806f2659b8",
+      "sha256": "6b80031a4034029480f46cb4af7c43be463c89e7ac4db11c3b8e00a19705f01d"
+    },
+    {
+      "repository": "I",
+      "revision": "dcaa0d42e9de63d23aa113d9306134de9b28942c",
+      "path": "docs/reviews/web-wasm-review.md",
+      "gitBlob": "a66d998610af86adbbb216dcfdcc74e3a30a50d2",
+      "sha256": "b1b86bdf2716883314d809720c3e6a7fc5e4ada7cd7b9db99bdc998893666be2"
+    },
+    {
+      "repository": "I",
+      "revision": "dcaa0d42e9de63d23aa113d9306134de9b28942c",
+      "path": "scripts/check",
+      "gitBlob": "d5913896dcd16bab333f302648ce17619b7fcfee",
+      "sha256": "be628467255fe564aba89869751ff3f6f0cdcc8d88a0bb97a65702857f77f04e"
+    },
+    {
+      "repository": "I",
+      "revision": "dcaa0d42e9de63d23aa113d9306134de9b28942c",
+      "path": "web/test_wasm.mjs",
+      "gitBlob": "b61551ba4dc9bb75c1222a832adcc004dc46ef70",
+      "sha256": "1c1eeff66690b3fe30f0df35b7bbb51525bcb3453881793a2a6803161e3f712d"
+    },
+    {
+      "repository": "I",
+      "revision": "dcaa0d42e9de63d23aa113d9306134de9b28942c",
+      "path": "web/tw-wasm.js",
+      "gitBlob": "155eb66d4dea2b48073b39df38e5c08632512bb6",
+      "sha256": "6785a5e2fff23ca4722d419722b7e2f84a52dd9613b3152f7963729d3bc01f7b"
+    }
+  ]
+}

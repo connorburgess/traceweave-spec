@@ -1,0 +1,483 @@
+{
+  "format": "web5-correction-dispositions-v1",
+  "verdict": "Both exact tips accepted independently for bounded copy correction; no blocking findings. WEB.5 uncertified.",
+  "shelf": {
+    "baseline": "303ef5a846d368fe293f32efe84477e23fe32d6b",
+    "acceptedTip": "86036c43394e94c1431ca335195a86e7754da6df",
+    "dispositions": [
+      {
+        "family": "F03 / Shelf parity qualification",
+        "ids": [
+          "S-0005"
+        ],
+        "independentDisposition": "accepted at bounded source-copy scope",
+        "scope": "No Shelf occurrence of the website “every promoted vector” assertion was found. Website F03 is out of scope and unmodified. Compare now states complete Shelf parity has not been independently verified and describes one selected profile.",
+        "sourceOccurrences": [
+          {
+            "id": "S-0005",
+            "file": "src/components/CompareTab.tsx",
+            "line": 71,
+            "key": "jsx"
+          }
+        ]
+      },
+      {
+        "family": "F07 / Compare notice",
+        "ids": [
+          "S-0298"
+        ],
+        "independentDisposition": "accepted at bounded source-copy scope",
+        "scope": "Added experimental status, fingerprint/match non-proof triad and catalogue-age/M4 distinction to the existing Compare lead, visible before any result. Wording derives from WEB.5 at pinned spec a589a1bbb3d00009438376d2df40ae923317cacb; existing result interpretation remains unchanged.",
+        "sourceOccurrences": [
+          {
+            "id": "S-0298",
+            "file": "src/components/CompareTab.tsx",
+            "line": 71,
+            "key": "manual-template"
+          }
+        ]
+      },
+      {
+        "family": "F05 / asset load boundary",
+        "ids": [
+          "S-0224",
+          "S-0225"
+        ],
+        "independentDisposition": "accepted at bounded source-copy scope",
+        "scope": "Replaced absolute zero-network statement with after-WASM-assets-load local supplied-input verification without a verification service. Does not claim complete Shelf network-denial testing.",
+        "sourceOccurrences": [
+          {
+            "id": "S-0224",
+            "file": "src/components/VerifyTab.tsx",
+            "line": 454,
+            "key": "jsx"
+          },
+          {
+            "id": "S-0225",
+            "file": "src/components/VerifyTab.tsx",
+            "line": 454,
+            "key": "jsx"
+          }
+        ]
+      },
+      {
+        "family": "F06 / stored card and embed claims",
+        "ids": [
+          "S-0030",
+          "S-0031",
+          "S-0032",
+          "S-0229",
+          "S-0230",
+          "S-0231",
+          "S-0232",
+          "S-0299"
+        ],
+        "independentDisposition": "accepted at bounded source-copy scope",
+        "scope": "Prefixed time/status and shared fixed card/HTML/plaintext assertions as card claims, not verified. Shared no-time fallback is likewise qualified. Existing Not a verification cues and First to register notice unchanged; no verifier added.",
+        "sourceOccurrences": [
+          {
+            "id": "S-0030",
+            "file": "src/components/ConcreteCard.tsx",
+            "line": 60,
+            "key": "literal"
+          },
+          {
+            "id": "S-0031",
+            "file": "src/components/ConcreteCard.tsx",
+            "line": 62,
+            "key": "literal"
+          },
+          {
+            "id": "S-0032",
+            "file": "src/components/ConcreteCard.tsx",
+            "line": 63,
+            "key": "literal"
+          },
+          {
+            "id": "S-0229",
+            "file": "src/lib/embed.ts",
+            "line": 14,
+            "key": ""
+          },
+          {
+            "id": "S-0230",
+            "file": "src/lib/embed.ts",
+            "line": 17,
+            "key": ""
+          },
+          {
+            "id": "S-0231",
+            "file": "src/lib/embed.ts",
+            "line": 19,
+            "key": ""
+          },
+          {
+            "id": "S-0232",
+            "file": "src/lib/embed.ts",
+            "line": 19,
+            "key": ""
+          },
+          {
+            "id": "S-0299",
+            "file": "src/components/ConcreteCard.tsx",
+            "line": 59,
+            "key": "manual-template"
+          }
+        ]
+      },
+      {
+        "family": "F06 / unsigned preview",
+        "ids": [
+          "S-0131"
+        ],
+        "independentDisposition": "accepted at bounded source-copy scope",
+        "scope": "Existing conditional preview heading now says unsigned and claims illustrative; same shared qualified card line, no new branch.",
+        "sourceOccurrences": [
+          {
+            "id": "S-0131",
+            "file": "src/components/RegisterTab.tsx",
+            "line": 577,
+            "key": "literal"
+          }
+        ]
+      },
+      {
+        "family": "F08 / storage and plaintext backups",
+        "ids": [
+          "S-0056",
+          "S-0057",
+          "S-0148"
+        ],
+        "independentDisposition": "accepted at bounded source-copy scope",
+        "scope": "Scoped browser storage/no application server copy, separate backups, unencrypted signing-private-key inclusion and retained pasted/sample artifact text. Backup behavior unchanged.",
+        "sourceOccurrences": [
+          {
+            "id": "S-0056",
+            "file": "src/components/KeysBackupDrawer.tsx",
+            "line": 123,
+            "key": "jsx"
+          },
+          {
+            "id": "S-0057",
+            "file": "src/components/KeysBackupDrawer.tsx",
+            "line": 123,
+            "key": "jsx"
+          },
+          {
+            "id": "S-0148",
+            "file": "src/components/ShelfApp.tsx",
+            "line": 262,
+            "key": "jsx"
+          }
+        ]
+      },
+      {
+        "family": "F15 / registration version",
+        "ids": [
+          "S-0149"
+        ],
+        "independentDisposition": "accepted at bounded source-copy scope",
+        "scope": "Named traceweave-registration-draft-5 instead of overall Spec draft-5.",
+        "sourceOccurrences": [
+          {
+            "id": "S-0149",
+            "file": "src/components/ShelfApp.tsx",
+            "line": 265,
+            "key": "jsx"
+          }
+        ]
+      },
+      {
+        "family": "F09 / digest and artifact storage",
+        "ids": [
+          "S-0157",
+          "S-0158"
+        ],
+        "independentDisposition": "accepted at bounded source-copy scope",
+        "scope": "Cards name exact bytes by digest, store bundle/reference and retain pasted/sample text; uploaded file bytes are not stored on cards by Register. Imported claims explicitly not verified by display. No guarantee about arbitrary manually imported fields.",
+        "sourceOccurrences": [
+          {
+            "id": "S-0157",
+            "file": "src/components/ShelfTab.tsx",
+            "line": 79,
+            "key": "jsx"
+          },
+          {
+            "id": "S-0158",
+            "file": "src/components/ShelfTab.tsx",
+            "line": 79,
+            "key": "jsx"
+          }
+        ]
+      },
+      {
+        "family": "Registration verification labels",
+        "ids": [
+          "S-0046",
+          "S-0135",
+          "S-0192",
+          "S-0208",
+          "S-0209",
+          "S-0223"
+        ],
+        "independentDisposition": "accepted at bounded source-copy scope",
+        "scope": "Named registration/bundle verification in card action, Register action, verifier heading/action/output and existing navigation tab label. Tab-label occurrence has no separate ID in original map; record source ShelfApp.tsx nav id verify explicitly. No comparison-report verification/replay added.",
+        "sourceOccurrences": [
+          {
+            "id": "S-0046",
+            "file": "src/components/ConcreteCard.tsx",
+            "line": 180,
+            "key": "jsx"
+          },
+          {
+            "id": "S-0135",
+            "file": "src/components/RegisterTab.tsx",
+            "line": 597,
+            "key": "jsx"
+          },
+          {
+            "id": "S-0192",
+            "file": "src/components/VerifyTab.tsx",
+            "line": 130,
+            "key": "jsx"
+          },
+          {
+            "id": "S-0208",
+            "file": "src/components/VerifyTab.tsx",
+            "line": 335,
+            "key": "literal"
+          },
+          {
+            "id": "S-0209",
+            "file": "src/components/VerifyTab.tsx",
+            "line": 335,
+            "key": "literal"
+          },
+          {
+            "id": "S-0223",
+            "file": "src/components/VerifyTab.tsx",
+            "line": 443,
+            "key": "jsx"
+          }
+        ]
+      }
+    ],
+    "additionalOccurrence": {
+      "file": "src/components/ShelfApp.tsx",
+      "key": "navigation label for existing id verify",
+      "originalClaimId": null,
+      "scope": "Label now explicitly identifies registration verification; handler/id unchanged."
+    }
+  },
+  "website": {
+    "baseline": "f622f0ce57343cb805004c5ac0053dc739e5c9dc",
+    "acceptedTip": "935ad2bf4028e628c5512489d091b274288e4d15",
+    "dispositions": [
+      {
+        "family": "F01",
+        "ids": [
+          "W-0341",
+          "W-0363",
+          "W-0443"
+        ],
+        "independentDisposition": "accepted at bounded source-copy scope",
+        "scope": "Narrowed privacy to the default local comparison workflow; removed the universal zero-upload heading. Same-catalogue/configuration reproducibility names the canonical body, not arbitrary report wrappers."
+      },
+      {
+        "family": "F02",
+        "ids": [
+          "W-0209",
+          "W-0391",
+          "W-0392"
+        ],
+        "independentDisposition": "accepted at bounded source-copy scope",
+        "scope": "Replaced the unshipped/coming-next contradiction with implemented draft native registration and review-packet spec/CLI status. External timestamp acquisition stays gated. Renamed the mixed-status eyebrow to Draft capabilities."
+      },
+      {
+        "family": "F03",
+        "ids": [
+          "W-0214",
+          "W-0324",
+          "W-0604"
+        ],
+        "independentDisposition": "accepted at bounded source-copy scope",
+        "scope": "Native parity is limited to the recorded registration fixture suite. Minimal-core in-toto fixtures are Python checker evidence; implementation parity is unverified. Added the pinned evidence target conformance matrix as a visible source on all three pages. Dormant compatibility copy is corrected too."
+      },
+      {
+        "family": "F04",
+        "ids": [
+          "W-0449",
+          "W-0450"
+        ],
+        "independentDisposition": "accepted at bounded source-copy scope",
+        "scope": "Scoped both the pipeline heading and lexing paragraph to Go/Rust token profiles. Kept the two-channel rule within that scope instead of asserting it for plain text, images or audio. W-0450 is changed by explicit context narrowing even though its own sentence is retained."
+      },
+      {
+        "family": "F13",
+        "ids": [
+          "W-0378",
+          "W-0387"
+        ],
+        "independentDisposition": "accepted at bounded source-copy scope",
+        "scope": "Changed the general copied-region wording to matching-region wording and removed original/copy relationship inference. The separately bounded synthetic worked example remains unchanged."
+      },
+      {
+        "family": "F14",
+        "ids": [
+          "W-0409"
+        ],
+        "independentDisposition": "accepted at bounded source-copy scope",
+        "scope": "Separated replay of the report computation using identical catalogues/configuration from checking span contents, which also requires original bytes."
+      }
+    ],
+    "supporting": [
+      {
+        "id": "W-0207",
+        "reason": "Mixed-status capabilities eyebrow corrected alongside F02."
+      },
+      {
+        "id": "W-0446",
+        "reason": "Entire token pipeline explicitly scoped alongside F04."
+      }
+    ],
+    "fields": [
+      {
+        "file": "content/pages/coverage.md",
+        "key": "sections.2.eyebrow",
+        "ids": [
+          "W-0207"
+        ],
+        "beforeSha256": "b38f8fbf19dc469bb53edc4b48e56fc9f47c09e85d42955190e02caeb00b3c7e",
+        "afterSha256": "cc7e6bdfbefc83e80d7870631d527518fc9bcc81dede55146dcbb4fd287ef805"
+      },
+      {
+        "file": "content/pages/coverage.md",
+        "key": "sections.2.intro",
+        "ids": [
+          "W-0209"
+        ],
+        "beforeSha256": "91f5aeb4d0ec8046ec9450f5009bb9d2aaaba16859317c4c5ba45454991a88ac",
+        "afterSha256": "59f1415c3cb4eb3142b9563baec2c3528ff38976633f13022db649680fe8397b"
+      },
+      {
+        "file": "content/pages/coverage.md",
+        "key": "sections.2.cards.0.summary",
+        "ids": [
+          "W-0214"
+        ],
+        "beforeSha256": "0a1059881b9d930f7a91cdad9edd0f9bd73a47046a3fcd0d995224cf5df87647",
+        "afterSha256": "d57bc2a4ae88e2daafbb82fb748c35002a84c61bdeb45e18bee4ce0fc932fea0"
+      },
+      {
+        "file": "content/pages/evidence.md",
+        "key": "sections.6.paragraphs.1",
+        "ids": [
+          "W-0324"
+        ],
+        "beforeSha256": "47f57c1ffd404f0e838578bb64f2d8f9443288ed454fabbd21d3ad4ad751afa2",
+        "afterSha256": "ff427aa7c69c100336f3f35471474bfc823ce30bc85ac07fdf26f26d32446055"
+      },
+      {
+        "file": "content/pages/home.md",
+        "key": "sections.0.leads.1",
+        "ids": [
+          "W-0341"
+        ],
+        "beforeSha256": "f48b8a341a8bbf14036a95dfac89f75a1bd344d4bb068e8009581f1f0aefd646",
+        "afterSha256": "33539856eb292690e14c52c42deaede3670e0e35cfddeb85871e8358815eb7a6"
+      },
+      {
+        "file": "content/pages/home.md",
+        "key": "sections.1.heading",
+        "ids": [
+          "W-0363"
+        ],
+        "beforeSha256": "2175f332fedb1b0972ac8ec3ee09d595db26def321bbc6c6491a7013738e7d3e",
+        "afterSha256": "2ce6ee4a38b84f5e359c8ececc80c1fb7892d58b66767acd17e0987653e02d68"
+      },
+      {
+        "file": "content/pages/home.md",
+        "key": "sections.2.cards.0.items.2",
+        "ids": [
+          "W-0378"
+        ],
+        "beforeSha256": "c4681f39219f7cbdf55a0d1b548f236853b56b72a96999b3b401c7f83bef46eb",
+        "afterSha256": "2ec2ab7e94a22943c4c62b69ba2c813cdadbd0b8ebbd8eb7675ef0b2d66dbaa4"
+      },
+      {
+        "file": "content/pages/home.md",
+        "key": "sections.2.provenance.lead",
+        "ids": [
+          "W-0387"
+        ],
+        "beforeSha256": "ec7fefef5b7ac986e331289f40dcce83462fc2529f97029b2d488ff1b7f154e4",
+        "afterSha256": "f387b0c4139118512271b28eba681d2691d09c3b0c37d0a6f0c5ae963d645452"
+      },
+      {
+        "file": "content/pages/home.md",
+        "key": "sections.2.provenance.items.1",
+        "ids": [
+          "W-0391",
+          "W-0392"
+        ],
+        "beforeSha256": "b1c75b55e487f095c26f1cb7c9cf2be1f824092df5c1fe75c66536df91d9d73c",
+        "afterSha256": "1a1633631ce70f2cce1157dc9063984483d79cc66bc980fedac859ff08a9e377"
+      },
+      {
+        "file": "content/pages/home.md",
+        "key": "sections.3.cards.3.summary",
+        "ids": [
+          "W-0409"
+        ],
+        "beforeSha256": "a25180f26931d09f3b9a09c72c504129a833c4e2a549c7225e189f84e9231cc3",
+        "afterSha256": "bce596f4eb1946af4bb1bf2789df1a8a18ab9b23cf5e1b28988926d7745867ed"
+      },
+      {
+        "file": "content/pages/how-it-works.md",
+        "key": "sections.0.lead",
+        "ids": [
+          "W-0443"
+        ],
+        "beforeSha256": "6dabdaf607f17600dd129c84355b709cdcdbf8deebd53f2177e2ae4d7f0c1354",
+        "afterSha256": "4b696fef61fd2eeb3f43ab5edda358a9629149205d945cfd74b3c283a024c8b6"
+      },
+      {
+        "file": "content/pages/how-it-works.md",
+        "key": "sections.1.heading",
+        "ids": [
+          "W-0446"
+        ],
+        "beforeSha256": "249e00ce331ab9a220df033f3fcbda6099cefdafed26fe2e0f56b42fa4315b53",
+        "afterSha256": "6e941bd905f731ab21a8dcab327e018a9ae61dc2030e50c30f6daba87c5b44ac"
+      },
+      {
+        "file": "content/pages/how-it-works.md",
+        "key": "sections.1.stages.0.paragraphs.0",
+        "ids": [
+          "W-0449",
+          "W-0450"
+        ],
+        "beforeSha256": "6c8d6d5c3096e924a5fa83737a5b37bc399c3f4ee5f2a6a8e72153e8a911b4c6",
+        "afterSha256": "1fdf10dc8cd8ec67ef3af7ab7d478473b073dbe696a10734d79a9b15e3fb1723"
+      },
+      {
+        "file": "content/pages/roadmap.md",
+        "key": "sections.2.rows.5.summary",
+        "ids": [
+          "W-0604"
+        ],
+        "beforeSha256": "58a8fb01bce3652b0b9ef6d76abc8e7eac1ca8f2feed00ce8720fe3a0b7c0adc",
+        "afterSha256": "e7db6372da0bd5b36af317483d153da41a94a3efde2166b56e4585be0fd3019a"
+      }
+    ],
+    "companion": [
+      {
+        "file": "src/data/facts.ts",
+        "field": "PLANNED_CAPABILITIES[0].summary",
+        "rendered_claim_id": null,
+        "reason": "Same blanket parity text as W-0214; compatibility data is not rendered or inventoried as a claim."
+      }
+    ]
+  },
+  "specEvidencePin": "a589a1bbb3d00009438376d2df40ae923317cacb"
+}

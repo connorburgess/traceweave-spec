@@ -1,0 +1,169 @@
+{
+  "format": "web5-original-artifact-identities-v1",
+  "note": "All identities hash original bytes. This package does not copy host-specific originals or claim they are publicly downloadable. Inventory and independent-review originals were not modified. Portable review dispositions and source locators are recorded in README.md and correction-dispositions.json.",
+  "artifacts": [
+    {
+      "role": "web5-claim-inventory/README.md",
+      "bytes": 19796,
+      "sha256": "fb412f3cd6ac2de502b117df2436e148ca5ef03e004c34da9a9fbea88309b590",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "web5-claim-inventory/shelf-map.md",
+      "bytes": 57185,
+      "sha256": "f56d1ca64a24ee06c2c6fa62b555572ec79d3a19d860779816bade5381348090",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "web5-claim-inventory/web-map.md",
+      "bytes": 124224,
+      "sha256": "a20490403bf86e9c90f09658e587e5d00dc533edebb1504bb29fcc5d69132f4c",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "web5-claim-inventory/claim-map.json",
+      "bytes": 618608,
+      "sha256": "01532072204aff379bb565e7115d0b9c97c0273920256c54def96066588743a8",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "web5-claim-inventory/source-manifest.json",
+      "bytes": 24012,
+      "sha256": "5cc3077b95df66da5b7fb30467dedfa4689326c03e322daf3639951636b75ac1",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "web5-claim-inventory/fact-values.json",
+      "bytes": 14582,
+      "sha256": "e660669507d40501ed985866eb14120c6a5774ef11e9dc97d1c6740e07b0b8fd",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "web5-claim-inventory/extract.cjs",
+      "bytes": 4508,
+      "sha256": "672442bc6a79fbbf3834e5b629dc13871c94702ba2f5cf3b6cbfd268a1a79902",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "web5-claim-inventory/map.cjs",
+      "bytes": 17968,
+      "sha256": "2fa1034bd8f44bd0818b8396eb3b1b8b6d8e7e1ec4c91432da07e6ec75fc2efb",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "web5-claim-inventory/candidates.json",
+      "bytes": 196092,
+      "sha256": "6e40bb2e1c4c58ed421b1dcb17cc318a4e147c7d2657cc9d0b3bee18e4577eed",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "web5-claim-inventory/extraction-log.txt",
+      "bytes": 10253,
+      "sha256": "784a97bcd9cd6b1eb571b28e663fa1208bf51f128a7c0019bd4c9ad0988f4317",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "web5-claim-inventory/mapping-log.txt",
+      "bytes": 4476,
+      "sha256": "9185515805d916b6a5a7514490955ba0461c56f9093a2443d7dc14a4a790812d",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "shelf-86036c4-review/report.md",
+      "bytes": 8614,
+      "sha256": "fd6c55ea46fbd5ef7ca6bc66794c78c2ca9c4eb8cbbdf139764ff1f1c3429f97",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "shelf-86036c4-review/static-review.cjs",
+      "bytes": 3099,
+      "sha256": "5be839d88800ee5989e149e1e47253c3620b87edbbf1ae2edaa3e9a35d8b1160",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "shelf-86036c4-review/static-results.json",
+      "bytes": 926,
+      "sha256": "ddca8220fd5c43d83b457ee78abc59623beff5f02c3812baf10d8c33e6b9b057",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "website-935ad2b-review/report.md",
+      "bytes": 8773,
+      "sha256": "34a919720ce4269e9e719e667192606e662655e3228f1bb1a623e7c8792a7c26",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "website-935ad2b-review/check.cjs",
+      "bytes": 3493,
+      "sha256": "fd653d3aae87007b7817eb5faa60d5992adb845a8747abd0a91adab54b6852f5",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "website-935ad2b-review/results.json",
+      "bytes": 848,
+      "sha256": "ef9aeb00b237002eb7362dfc61488e473e54e3b6f6ae81454f1e3e60c3683e75",
+      "retention": "Original outside this package; identity only, no public-access claim."
+    },
+    {
+      "role": "prior-web3-6-local-evidence-audit.md",
+      "bytes": 8071,
+      "sha256": "cd146a2326881ea1d4408c79f79fce8f425867e8df84d6739cc8b721dc3d8b6a",
+      "retention": "Original outside this package; identity only."
+    },
+    {
+      "role": "shelf-author/report.md",
+      "bytes": 2014,
+      "sha256": "599f41edfc5d6c1431d9ab258aabdb0dd7a4225a4c2e7333bf309f439df6c975",
+      "retention": "Original outside this package; identity only."
+    },
+    {
+      "role": "shelf-author/dispositions.json",
+      "bytes": 21215,
+      "sha256": "ceff2b00cdc7cb4e632c40647c63a52896216f5ded3d1774453d98265d30caae",
+      "retention": "Original outside this package; identity only."
+    },
+    {
+      "role": "shelf-author/patch.diff",
+      "bytes": 9744,
+      "sha256": "26fe558308183a82865eb8c98fabfc5ac61b627903d115514f38051b695367e0",
+      "retention": "Original outside this package; identity only."
+    },
+    {
+      "role": "shelf-author/commit.txt",
+      "bytes": 41,
+      "sha256": "22d67322c597fb4e07e9d68dc222ddd0cc7656df3bd0ee9c7a129986bc04e9b0",
+      "retention": "Original outside this package; identity only."
+    },
+    {
+      "role": "shelf-author/preexisting.json",
+      "bytes": 170,
+      "sha256": "8cd92268c34383b82fd68dcf8f58dfa6ca61e70002fac0e88d92bbf3bafec5f2",
+      "retention": "Original outside this package; identity only."
+    },
+    {
+      "role": "shelf-author/lint.log",
+      "bytes": 43,
+      "sha256": "7b2a9653f98b8fb295d2c32ce47c56178198b217911436679261d2f33fbf961e",
+      "retention": "Original outside this package; identity only."
+    },
+    {
+      "role": "shelf-author/typecheck.log",
+      "bytes": 52,
+      "sha256": "921a82c62f2591b6204ac76ccd7ab644cb454a289c399cde6409f86825a56114",
+      "retention": "Original outside this package; identity only."
+    },
+    {
+      "role": "shelf-author/build.log",
+      "bytes": 562,
+      "sha256": "c7bc80ed6d1d4271a60456b187b5339291d61c48795db058123a3caaff67227b",
+      "retention": "Original outside this package; identity only."
+    },
+    {
+      "role": "website-author/reviews/web5-website-claim-corrections.json",
+      "revision": "935ad2bf4028e628c5512489d091b274288e4d15",
+      "bytes": 16499,
+      "sha256": "0764d06a736f9c403fdcc603562fdc3fe7d5c20f404c121061c8d05df511a483",
+      "retention": "Committed source-repository locator; public access not asserted."
+    }
+  ]
+}
