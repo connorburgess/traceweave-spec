@@ -12,6 +12,8 @@ This replay uses publication-source lineage based at `ec2a4ddcfd0d4894ce369e6687
 
 Private `roadmap-v2` at `7a0fd5ac64a50eb5c3ef6d6f955c21e4f11cc41c` is intentionally not this replay's source. Its unpublished raw-bearing history, including original package `5e9eebdd2e365ed62911b25dc85c297f8b4ab5a1` and review `bab7b0f75353156daa0203b5c27fa66c88804d43`, is outside this map and has no translation claimed here. The raw object remains privately retained unchanged; it is omitted entirely from publication-source history. Historical private identifiers in the curated summary identify absent artifacts, not public proof. Published tree/subset consistency does not reproduce commit-to-root binding.
 
+The current published checkpoint for this preparation is `ea822ee3f96707de0ee806ac07a71c5aaea33b61`, preserved as an ancestor. This map also includes the queue reconciliation `d698811d743eef00de1121e4225ed2fad6cc4d1d`, accepted WEB retention `6bdca52ccd09b82b9ad956ab4639c00685888cdc` and independent review `296bfce1563da2852a7ef33385893b2d9b639858`. These add evidence only: WEB.5 remains uncertified and all counts, criteria and holds are unchanged.
+
 ## Reproducing
 
 `python3 tools/public_history_scrub.py rewrite --branch NAME --source <source commit>` with the private rules file. The rules are not in this repository in any form. Rules file SHA-256: `362950c0c62ec6549d270070b03d0b632b516423563163d1f44695d1c654ac2b`.
@@ -37,7 +39,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 
 ## Verification of the commits listed here
 
-`python3 tools/public_history_scrub.py scan` over the 242 commits and 3570 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
+`python3 tools/public_history_scrub.py scan` over the 246 commits and 3595 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
 
 | Category | Hits |
 | --- | --- |
@@ -112,6 +114,8 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `12a1459c62e3539e02ef174e0fbf6d909b199eb4` | `12a1459c62e3` | `3d3a5e7ed0f6` |
 | `11e975e34720235543ae9a22ff5a199e9be10d56` | `11e975e34720` | `a170a47b8d84` |
 | `0075c8f394b31a946d279a358e2c71a47a7f60d9` | `0075c8f394b3` | `639cb855bd1b` |
+| `0bd15f8e6cb3999045786c4977a67cbb9ed52849` | `0bd15f8e6cb3` | `2abda2c39334` |
+| `d6c09e05829ccd95159ea9e19ff7f71f8c239f4e` | `d6c09e05829c` | `3d89d451eb12` |
 | `afca82c` | `afca82c41d54` | `d66e4b942c8c` |
 | `41628be` | `41628be879a8` | `f396a4133b56` |
 | `a4ea8d4` | `a4ea8d46fa7c` | `d61f45c9c203` |
@@ -146,12 +150,15 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `0075c8f` | `0075c8f394b3` | `639cb855bd1b` |
 | `ec2a4ddcfd0d4894ce369e6687bed67f2e023f6f` | `ec2a4ddcfd0d` | `a589a1bbb3d0` |
 | `aba26b5797c82e53d7190db9f618f287afa8d280` | `aba26b5797c8` | `7e30cb703484` |
-| `d6c09e05829ccd95159ea9e19ff7f71f8c239f4e` | `d6c09e05829c` | `3d89d451eb12` |
 | `ec2a4dd` | `ec2a4ddcfd0d` | `a589a1bbb3d0` |
 | `d6c09e0` | `d6c09e05829c` | `3d89d451eb12` |
 | `6f39e50f33026c9f1d9526c2a566d6a447219667` | `6f39e50f3302` | `b47b8945b9d6` |
+| `6bdca52ccd09b82b9ad956ab4639c00685888cdc` | `6bdca52ccd09` | `48f3693542d0` |
+| `d698811d743eef00de1121e4225ed2fad6cc4d1d` | `d698811d743e` | `b3c57adf2820` |
+| `d698811` | `d698811d743e` | `b3c57adf2820` |
+| `6bdca52` | `6bdca52ccd09` | `48f3693542d0` |
 
-Ancestry was checked for all 4560 pairs of these 96 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
+Ancestry was checked for all 5050 pairs of these 101 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
 
 ## All commits, oldest first
 
@@ -413,3 +420,7 @@ Ancestry was checked for all 4560 pairs of these 96 ids in both directions: the 
 | 254 | `ec2a4ddcfd0d` | `a589a1bbb3d0` | kept | Update public history map for reviewed SK.3 design closure |
 | 255 | `d6c09e05829c` | `3d89d451eb12` | kept | Prepare curated PDQ publication source with explicit proof limits |
 | 256 | `0bd15f8e6cb3` | `2abda2c39334` | kept | Review curated PDQ publication source and proof boundary |
+| 257 | `f788e78ff09d` | `ea822ee3f967` | kept | Update public history map for reviewed curated PDQ source |
+| 258 | `d698811d743e` | `b3c57adf2820` | kept | Reconcile current queue with accepted curated PDQ review |
+| 259 | `6bdca52ccd09` | `48f3693542d0` | kept | Retain bounded WEB claim audit and correction evidence |
+| 260 | `296bfce1563d` | `e91cb937544e` | kept | Review retained WEB claim audit and correction evidence |
