@@ -1,10 +1,16 @@
 # Public history map
 
-This history was produced from the local branch `roadmap-v2` so that it can be published. The local branch keeps its original history, and the reviews and gate records in this repository cite its commit ids. Every commit between `origin/main` and the source tip was recreated with the same order, authors, author and committer dates, parents (mapped) and file modes. Only text content changed, by the fixed substitutions below, and the rewrite tool's own earlier versions were dropped (see below).
+This history was produced from the local branch `publication-source/pdq-curated-20261126-5a212f1c` so that it can be published. The local branch keeps its original history, and the reviews and gate records in this repository cite its commit ids. Every commit between `origin/main` and the source tip was recreated with the same order, authors, author and committer dates, parents (mapped) and file modes. Only text content changed, by the fixed substitutions below, and the rewrite tool's own earlier versions were dropped (see below).
 
 **The text of this repository, including its reviews and gate records, cites the old commit ids.** They do not exist in this history. Use the table below to translate an old id to the new id.
 
 **Scope of this map.** It is a file in the source history, so it can only list the commits that come before the commit that adds it; that commit and later ones are not listed, and their new ids follow from rerunning the rewrite. The rewrite is append-stable: new source commits never change the ids of earlier public commits, so each published tip is an ancestor of the next one. Regenerating the map is a new source commit, and the map is not an input to the ids it lists.
+
+## Curated publication-source boundary
+
+This replay uses publication-source lineage based at `ec2a4ddcfd0d4894ce369e6687bed67f2e023f6f`, mapped exactly to published `a589a1bbb3d00009438376d2df40ae923317cacb`. It includes curated package `d6c09e05829ccd95159ea9e19ff7f71f8c239f4e` and independent review `0bd15f8e6cb3999045786c4977a67cbb9ed52849`. See the [durable source workflow](../docs/publication-source-workflow.md) and [independent review](reviews/pdq-cpp-curated-source-review.md).
+
+Private `roadmap-v2` at `7a0fd5ac64a50eb5c3ef6d6f955c21e4f11cc41c` is intentionally not this replay's source. Its unpublished raw-bearing history, including original package `5e9eebdd2e365ed62911b25dc85c297f8b4ab5a1` and review `bab7b0f75353156daa0203b5c27fa66c88804d43`, is outside this map and has no translation claimed here. The raw object remains privately retained unchanged; it is omitted entirely from publication-source history. Historical private identifiers in the curated summary identify absent artifacts, not public proof. Published tree/subset consistency does not reproduce commit-to-root binding.
 
 ## Reproducing
 
@@ -31,7 +37,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 
 ## Verification of the commits listed here
 
-`python3 tools/public_history_scrub.py scan` over the 239 commits and 3535 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
+`python3 tools/public_history_scrub.py scan` over the 242 commits and 3570 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
 
 | Category | Hits |
 | --- | --- |
@@ -138,8 +144,14 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `09359ac` | `09359acc2dd5` | `25acdad361ef` |
 | `09359acc2dd53022963b1e2046368dff49cf7fe3` | `09359acc2dd5` | `25acdad361ef` |
 | `0075c8f` | `0075c8f394b3` | `639cb855bd1b` |
+| `ec2a4ddcfd0d4894ce369e6687bed67f2e023f6f` | `ec2a4ddcfd0d` | `a589a1bbb3d0` |
+| `aba26b5797c82e53d7190db9f618f287afa8d280` | `aba26b5797c8` | `7e30cb703484` |
+| `d6c09e05829ccd95159ea9e19ff7f71f8c239f4e` | `d6c09e05829c` | `3d89d451eb12` |
+| `ec2a4dd` | `ec2a4ddcfd0d` | `a589a1bbb3d0` |
+| `d6c09e0` | `d6c09e05829c` | `3d89d451eb12` |
+| `6f39e50f33026c9f1d9526c2a566d6a447219667` | `6f39e50f3302` | `b47b8945b9d6` |
 
-Ancestry was checked for all 4005 pairs of these 90 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
+Ancestry was checked for all 4560 pairs of these 96 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
 
 ## All commits, oldest first
 
@@ -398,3 +410,6 @@ Ancestry was checked for all 4005 pairs of these 90 ids in both directions: the 
 | 251 | `12a1459c62e3` | `3d3a5e7ed0f6` | kept | Review local-first agent registration design at 4fa00c7 |
 | 252 | `11e975e34720` | `a170a47b8d84` | kept | Record bounded SK.3 local-first design closure |
 | 253 | `18657390ee1c` | `30c80b24418e` | kept | Merge accepted SK.3 design closure and reconcile current queue |
+| 254 | `ec2a4ddcfd0d` | `a589a1bbb3d0` | kept | Update public history map for reviewed SK.3 design closure |
+| 255 | `d6c09e05829c` | `3d89d451eb12` | kept | Prepare curated PDQ publication source with explicit proof limits |
+| 256 | `0bd15f8e6cb3` | `2abda2c39334` | kept | Review curated PDQ publication source and proof boundary |
