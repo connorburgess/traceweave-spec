@@ -360,7 +360,7 @@ def main():
           f"{stats['external-verified']} unverified={stats['external-unverified']} (set TW_IMPL_REPO to verify)")
     print(f"PASS M5.1 requirement map: MUST occurrences={release['MUST']} unmapped={release['unmapped']} "
           f"testable={release['testable']} implementation-test={release['implementation-test']} "
-          f"untestable={release['untestable']} definitional={release['definitional']}; non-author spot-check pending")
+          f"untestable={release['untestable']} definitional={release['definitional']}; independent review recorded for 07c98ca (see ROADMAP.md for gate status)")
     print(f"PASS M1.2 derivationRule: {rules} files state the ROADMAP.md definition of hand-derived verbatim, the 5 vector files with its application")
     print(f"PASS M1.1 item map: {items} registration items and {constructs} named constructs, each answered for Go and Rust "
           f"with links to existing sections of spec/extraction.md")

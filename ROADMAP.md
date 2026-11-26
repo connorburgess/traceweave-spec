@@ -156,11 +156,11 @@ Owner column: **S** = spec repository; **I** = implementation repository (`trace
 
 | ID | Type | Verifiable criterion | Status | Owner |
 | --- | --- | --- | --- | --- |
-| M5.1 | E | M1.5 rules applied to every MUST in `spec/` and `profiles/`; unmapped 0 | open | S |
-| M5.2 | E | Claims are every sentence of the README outside a script-defined exclusion list (headings, link-only lines, code blocks). The non-author checker, not the author, approves the exclusion list. Each claim sentence maps to a fixture, benchmark row or review. Unmapped 0 (TW-07) | open | S |
+| M5.1 | E | M1.5 rules applied to every MUST in `spec/` and `profiles/`; unmapped 0 | **met** (non-author review of exact commit `07c98cad440e3797d0ddc0c4b8c2bfb06a36dbd7`: [re-review](research/reviews/m5-readiness-e7e7149-review.md) `1df04f9` and [final confirmation](research/reviews/m5-readiness-07c98ca-review.md) `6ded8a3`; [closure recount](research/reviews/m5-gate-closure-07c98ca.md), 2026-11-26) | S |
+| M5.2 | E | Claims are every sentence of the README outside a script-defined exclusion list (headings, link-only lines, code blocks). The non-author checker, not the author, approves the exclusion list. Each claim sentence maps to a fixture, benchmark row or review. Unmapped 0 (TW-07) | **met** (non-author review of exact commit `07c98cad440e3797d0ddc0c4b8c2bfb06a36dbd7`: [re-review](research/reviews/m5-readiness-e7e7149-review.md) `1df04f9` and [final confirmation](research/reviews/m5-readiness-07c98ca-review.md) `6ded8a3`; [closure recount](research/reviews/m5-gate-closure-07c98ca.md), 2026-11-26) | S |
 | M5.3 | E | A non-author reproduces the demo offline after dependency fetch: clean clone → pinned implementation | open | S+I |
-| M5.4 | E | Release notes list every unresolved limit and state (a) whether embedding is included, citing M2E.0 if omitted, and (b) whether signing is included. Claiming cryptographic verification requires all M4 E gates met; otherwise the release is labelled unsigned detector-only | open | S |
-| M5.5 | E | Versioned spec, migration notes and a conformance matrix (feature × level × implementation) | open | S |
+| M5.4 | E | Release notes list every unresolved limit and state (a) whether embedding is included, citing M2E.0 if omitted, and (b) whether signing is included. Claiming cryptographic verification requires all M4 E gates met; otherwise the release is labelled unsigned detector-only | **met** (non-author review of exact commit `07c98cad440e3797d0ddc0c4b8c2bfb06a36dbd7`: [re-review](research/reviews/m5-readiness-e7e7149-review.md) `1df04f9` and [final confirmation](research/reviews/m5-readiness-07c98ca-review.md) `6ded8a3`; [closure recount](research/reviews/m5-gate-closure-07c98ca.md), 2026-11-26) | S |
+| M5.5 | E | Versioned spec, migration notes and a conformance matrix (feature × level × implementation) | **met** (non-author review of exact commit `07c98cad440e3797d0ddc0c4b8c2bfb06a36dbd7`: [re-review](research/reviews/m5-readiness-e7e7149-review.md) `1df04f9` and [final confirmation](research/reviews/m5-readiness-07c98ca-review.md) `6ded8a3`; [closure recount](research/reviews/m5-gate-closure-07c98ca.md), 2026-11-26) | S |
 
 ## Owner-blocked gates
 
@@ -218,11 +218,11 @@ On 2026-11-25 the owner approved:
 
 ## Progress count
 
-Counted on 2026-11-25 from the status columns above. In the later-profile table, a row is open unless its criterion carries a **Status: met** or **Status: negative-result** note; TS.3, PY.1, PY.2, PY.3, IMGF.2–IMGF.4, IMG.0–IMG.4, TXT.3, TXT.7, RES.1, C2PA.3, SK.1, SK.2, WEB.0, WEB.1 and WEB.2 are met, and TXT.4 and TXT.8 are negative-result.
+Counted on 2026-11-26 from the status columns above after the four independently reviewed M5 closures; M5.3 remains open and M3.1–M3.6 remain open/held. In the later-profile table, a row is open unless its criterion carries a **Status: met** or **Status: negative-result** note; TS.3, PY.1, PY.2, PY.3, IMGF.2–IMGF.4, IMG.0–IMG.4, TXT.3, TXT.7, RES.1, C2PA.3, SK.1, SK.2, WEB.0, WEB.1 and WEB.2 are met, and TXT.4 and TXT.8 are negative-result.
 
 | Gates | Total | Met | Negative-result | Open |
 | --- | --- | --- | --- | --- |
-| Core M0–M5 | 47 | 29 (M0.1, M0.2, M0.3, M0.4, M1.1, M1.2, M1.3, M1.4, M1.5, M1.6, M2.1, M2.2, M2.3, M2.4, M2.5, M2.6, M2.7, M2.8, M2.9, M2.10, M2.11, M2E.0, M3.0, M4.1, M4.2, M4.3, M4.4, M4.5, M4.6) | 0 | 18 (M2E.1–M2E.7, M3.1–M3.6, M5.1–M5.5) |
+| Core M0–M5 | 47 | 33 (M0.1, M0.2, M0.3, M0.4, M1.1, M1.2, M1.3, M1.4, M1.5, M1.6, M2.1, M2.2, M2.3, M2.4, M2.5, M2.6, M2.7, M2.8, M2.9, M2.10, M2.11, M2E.0, M3.0, M4.1, M4.2, M4.3, M4.4, M4.5, M4.6, M5.1, M5.2, M5.4, M5.5) | 0 | 14 (M2E.1–M2E.7, M3.1–M3.6, M5.3) |
 | Later profiles, EXT and RC | 55 | 21 (TS.3, PY.1, PY.2, PY.3, IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4, TXT.3, TXT.7, RES.1, C2PA.3, SK.1, SK.2, WEB.0, WEB.1, WEB.2) | 2 (TXT.4, TXT.8) | 32 (WEB.3–WEB.6 and SK.3–SK.5 planned; PY.4 open) |
 
 M0.1 is met on the second non-author recount (`3a640b3`). M2.5 and M2.8 are met on the [I2 review](research/reviews/implementation-merge-i2-review.md) (`de9a5b7`) of implementation `82b02ab`. M1.4 (with A16 caveat on TEST-ONLY exclusion positives), M1.6, M2.2, M2.3, M2.7 (CLI + spec both met) and M2.9 are met on the round-three spot-check (`docs/reviews/core-gates-review.md` @ `12cf016` on `connorburgess/traceweave`, pinned to public spec `6437c26`).

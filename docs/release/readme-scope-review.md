@@ -2,6 +2,8 @@
 
 Author audit for M5.2, 2026-11-26; not the non-author exclusion approval or an independent implementation review. This review checks descriptive/navigation claims against repository contents. Runtime/detection claims need the separate fixtures and recorded reviews in the claim map.
 
+Historical snapshot: the counts and pending-review statements below describe the earlier author audit on 2026-11-26, before independent closure. Current status is M5.1/M5.2/M5.4/M5.5 met, core 33/47 met and 14 open, on review of exact commit `07c98cad440e3797d0ddc0c4b8c2bfb06a36dbd7` ([re-review](../../research/reviews/m5-readiness-e7e7149-review.md) `1df04f9`; [final confirmation](../../research/reviews/m5-readiness-07c98ca-review.md) `6ded8a3`; [closure recount](../../research/reviews/m5-gate-closure-07c98ca.md)). M5.3 remains open and M3.1–M3.6 remain open/held. The earlier audit's exact evidence quotations are retained below.
+
 ## Governance and scope
 
 The release label is `0.1.0-draft.1`. The project describes its operation as open and non-commercial; this is a project-scope statement, not an additional restriction on CC BY or Apache licensed reuse. [LICENSE.md](../../LICENSE.md) assigns Markdown prose to CC BY 4.0, schemas/examples/vectors/code/configuration to Apache 2.0, and the two Unicode-derived tables to Unicode License v3. It explicitly limits the licensing split to this repository, rather than content an implementation fingerprints. [CONTRIBUTING.md](../../CONTRIBUTING.md) welcomes independent implementations and evidence-based corrections; [SECURITY.md](../../SECURITY.md) gives the disclosure route. Proposed mechanisms, measured results and normative requirements remain distinct.

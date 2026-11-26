@@ -151,4 +151,4 @@ if __name__ == '__main__':
         mapped, excluded = check(json.loads(MAP.read_text(encoding='utf-8')))
     except (ValueError, KeyError, OSError) as exc:
         raise SystemExit(f'FAIL README claim map: {exc}')
-    print(f'PASS M5.2 README claims: {mapped} mapped, 0 unmapped; {excluded} excluded source lines; exclusion approval pending non-author review')
+    print(f'PASS M5.2 README claims: {mapped} mapped, 0 unmapped; {excluded} excluded source lines; current exclusions approved in the independent 07c98ca review (see ROADMAP.md)')
