@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Check the extraction requirement map (gate M1.5) and the registration item map (gate M1.1).
 
+M5.1 extends the same per-clause checks to every UTF-8 file in spec/ and
+profiles/, retaining the reviewed extraction map as its delegated inventory.
+New files and occurrences are scanned independently of the release map.
+
 Standard library only. Run from anywhere: python3 -I tools/check_requirement_map.py
 
 M1.5, test-vectors/extraction/requirement-map.json against spec/extraction.md:
@@ -90,6 +94,29 @@ def known_ids():
 
 def resolve(ident, ids):
     """Return 'negative' if the id is a negative fixture, 'positive' otherwise; raise if it does not exist."""
+    if ident.startswith("negative:"):
+        path = ROOT / ident.split(":", 1)[1]
+        require(path.resolve().is_relative_to(ROOT) and path.is_file(), f"unknown negative fixture {ident}")
+        require(path.parent == ROOT / "test-vectors/registration/negative", f"not a promoted negative fixture {ident}")
+        data = json.loads(path.read_text(encoding="utf-8"))
+        require(data["fixture"]["expect"]["code"], f"negative fixture lacks expected rejection {ident}")
+        return "negative"
+    if ident.startswith("rejection:"):
+        _, filename, key = ident.split(":", 2)
+        path = ROOT / filename
+        require(path.resolve().is_relative_to(ROOT) and path.is_file(), f"unknown rejection file {ident}")
+        matches = [v for v in json.loads(path.read_text(encoding="utf-8"))["rejections"] if v["id"] == key]
+        require(len(matches) == 1 and matches[0].get("mutation") and matches[0].get("layer"),
+                f"unknown rejection mutation {ident}")
+        return "negative"
+    if ident.startswith("vector:"):
+        _, filename, key = ident.split(":", 2)
+        path = ROOT / filename
+        require(path.resolve().is_relative_to(ROOT) and path.is_file(), f"unknown vector file {ident}")
+        vectors = json.loads(path.read_text(encoding="utf-8"))["vectors"]
+        matches = [v for v in vectors if v["id"] == key]
+        require(len(matches) == 1, f"unknown or ambiguous vector {ident}")
+        return "negative" if matches[0]["result"]["status"] == "error" else "positive"
     if ident.startswith("cfg:"):
         key = ident[4:]
         require(key in ids["negatives"] | ids["positives"], f"unknown configuration entry {ident}")
@@ -139,7 +166,7 @@ def check_derivation_rules():
     return len(VECTOR_FILES) + 1
 
 
-def check_must_map(doc, rmap, ids):
+def check_must_map(doc, rmap, ids, document="spec/extraction.md"):
     covered = [False] * len(doc)
     stats = {"MUST": 0, "testable": 0, "implementation-test": 0, "untestable": 0, "definitional": 0, "spot-check": 0,
              "unmapped": 0, "external-verified": 0, "external-unverified": 0}
@@ -148,7 +175,7 @@ def check_must_map(doc, rmap, ids):
         require(e["id"] not in seen, f"duplicate entry {e['id']}")
         seen.add(e["id"])
         sentence = e["sentence"]
-        require(sentence in doc, f"{e['id']}: sentence no longer occurs in {DOC.name}: {sentence[:60]!r}")
+        require(sentence in doc, f"{e['id']}: sentence no longer occurs in {document}: {sentence[:60]!r}")
         n = len(re.findall(r"\bMUST\b", sentence))
         require(n == len(e["clauses"]), f"{e['id']}: {n} MUST in the sentence, {len(e['clauses'])} clauses")
         for m in re.finditer(re.escape(sentence), doc):
@@ -192,7 +219,7 @@ def check_must_map(doc, rmap, ids):
         if not covered[m.start()]:
             stats["unmapped"] += 1
             line = doc.count("\n", 0, m.start()) + 1
-            raise MapError(f"unmapped MUST at {DOC.name} line {line}")
+            raise MapError(f"unmapped MUST at {document} line {line}")
     require(stats["spot-check"] >= min(10, stats["untestable"]), "fewer spot-check clauses than min(10, untestable)")
     return stats
 
@@ -254,6 +281,36 @@ def self_test(doc, rmap, ids):
     return len(cases)
 
 
+ALL_MAP = ROOT / "test-vectors/requirements/requirement-map.json"
+
+
+def check_release_map(rmap, ids, documents=None):
+    """Extend the reviewed M1.5 map without replacing it; scan new files too."""
+    if documents is None:
+        documents = {str(p.relative_to(ROOT)): p.read_text(encoding="utf-8")
+                     for directory in ("spec", "profiles")
+                     for p in sorted((ROOT / directory).rglob("*")) if p.is_file()}
+    require(all(e["document"] in documents and e["document"] != "spec/extraction.md"
+                for e in rmap["requirements"]), "release map names a missing or delegated document")
+    all_ids = [e["id"] for e in rmap["requirements"]]
+    require(len(all_ids) == len(set(all_ids)), "duplicate release requirement id")
+    totals = {}
+    for path, doc in documents.items():
+        if path == "spec/extraction.md":
+            mapped = json.loads(MAP.read_text(encoding="utf-8"))
+        else:
+            mapped = {"requirements": [e for e in rmap["requirements"] if e["document"] == path]}
+        try:
+            stats = check_must_map(doc, mapped, ids, document=path)
+            require(sum(len(e["clauses"]) for e in mapped["requirements"]) == stats["MUST"],
+                    "overlapping or duplicate MUST mappings")
+        except MapError as exc:
+            raise MapError(f"{path}: {exc}") from exc
+        for key, value in stats.items():
+            totals[key] = totals.get(key, 0) + value
+    return totals
+
+
 def main():
     doc = DOC.read_text(encoding="utf-8")
     rmap = json.loads(MAP.read_text(encoding="utf-8"))
@@ -262,6 +319,7 @@ def main():
         ids = known_ids()
         stats = check_must_map(doc, rmap, ids)
         corruptions = self_test(doc, rmap, ids)
+        release = check_release_map(json.loads(ALL_MAP.read_text(encoding="utf-8")), ids)
         items, constructs = check_item_map(CODE.read_text(encoding="utf-8"), doc)
         rules = check_derivation_rules()
     except (MapError, KeyError, ValueError) as exc:
@@ -272,6 +330,9 @@ def main():
           f"definitional={stats['definitional']} marked-for-spot-check={stats['spot-check']} "
           f"self-test-corruptions-rejected={corruptions}/{corruptions}; implementation tests verified="
           f"{stats['external-verified']} unverified={stats['external-unverified']} (set TW_IMPL_REPO to verify)")
+    print(f"PASS M5.1 requirement map: MUST occurrences={release['MUST']} unmapped={release['unmapped']} "
+          f"testable={release['testable']} implementation-test={release['implementation-test']} "
+          f"untestable={release['untestable']} definitional={release['definitional']}; non-author spot-check pending")
     print(f"PASS M1.2 derivationRule: {rules} files state the ROADMAP.md definition of hand-derived verbatim, the 5 vector files with its application")
     print(f"PASS M1.1 item map: {items} registration items and {constructs} named constructs, each answered for Go and Rust "
           f"with links to existing sections of spec/extraction.md")

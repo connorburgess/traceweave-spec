@@ -1,0 +1,1888 @@
+{
+  "description": "M5.1 extension of the M1.5 clause map. Extraction remains in its reviewed original map. Every uppercase MUST occurrence, including definitions and external quotations, is inventoried. Non-testable clauses require independent spot-check; no review is asserted here.",
+  "requirements": [
+    {
+      "id": "M5-001",
+      "document": "profiles/python.md",
+      "section": "line 7 (locator only; exact passage is authoritative)",
+      "sentence": "This document defines the Python profile that plugs into the [extraction contract](../spec/extraction.md) without changing any of its shared parts. It follows the shape of the [TypeScript profile](typescript.md). \"MUST\" describes what this profile specifies for an implementation claiming to follow it. The decisions recorded in \u00a712 were frozen for stage-1 implementation (`58c25a9`).",
+      "clauses": [
+        {
+          "kind": "definitional",
+          "reason": "Keyword definition, not an additional implementation obligation.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-002",
+      "document": "profiles/python.md",
+      "section": "line 45 (locator only; exact passage is authoritative)",
+      "sentence": "**Python 2.** No lexical rule can tell Python 2 from Python 3 without a parser: `print \"x\"` and `exec code` lex as a name followed by a string or name. A Python 2 file is therefore lexed by the Python 3.14 rules. Most lex and are fingerprinted with Python 3 token classes (`print` is `ident`). Some fail with an ordinary lexical error: backticks (`illegal-character`), `ur''` (`malformed-literal`), `0777` and `1L` (`malformed-literal`), and tab/space mixtures (`inconsistent-indentation`). This is the \"unavoidable\" case: the selecting tool SHOULD exclude a repository whose metadata declares Python 2 (for example `python_requires` below 3), and MUST NOT silently drop files that fail.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Silently dropping a file is a selection/pipeline behavior outside the extraction record; requires repository-level accounting.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-003",
+      "document": "profiles/python.md",
+      "section": "line 70 (locator only; exact passage is authoritative)",
+      "sentence": "**Unicode version.** The pinned tables are Unicode 17.0.0 (contract \u00a73a). CPython 3.14.6 uses Unicode 16.0.0. The sweep (\u00a711) finds that the profile accepts 4,647 name-start and 4,699 name-continue code points that CPython rejects, all of them characters new in 17.0.0, and that CPython accepts none that the profile rejects (D-8, `py-unicode-17` with U+A7CE). An implementation MUST NOT use its runtime's `str.isidentifier` or `unicodedata` unless shown identical to the pinned table (the contract's library rule). The wrong-lexer self-test includes exactly that variant (`WPythonUnicode`).",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/extraction-python/check_vectors.py:WPythonUnicode"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/extraction-python/check_vectors.py:WPythonUnicode"
+          ],
+          "violation": "using runtime Unicode instead of pinned tables",
+          "failsBecause": "The wrong-lexer self-test WPythonUnicode is rejected on the Unicode-17 vector."
+        }
+      ]
+    },
+    {
+      "id": "M5-004",
+      "document": "profiles/python.md",
+      "section": "line 87 (locator only; exact passage is authoritative)",
+      "sentence": "- **Explicit.** Outside literals and comments, `\\` MUST be immediately followed by a line terminator, and that line terminator MUST NOT be the last thing in the input. Then `\\` and the terminator are skipped and the next physical line continues the logical line; its leading white space is ordinary white space. Anything else is `illegal-character` at the `\\`: a stray backslash (`py-err-backslash-stray`), and a continuation that ends the input (`py-err-backslash-eof`; CPython: \"unexpected EOF\"). `\\` CR LF is one continuation (`py-crlf-continuation`). A backslash inside a comment is part of the comment and does not continue it.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "vector:test-vectors/extraction-python/py.json:py-err-backslash-stray"
+          ],
+          "negativeFixtures": [
+            "vector:test-vectors/extraction-python/py.json:py-err-backslash-stray"
+          ],
+          "violation": "accepting an invalid explicit continuation",
+          "failsBecause": "The promoted checker requires this vector to reject with its exact expected error; an accepted token stream differs and fails conformance."
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "vector:test-vectors/extraction-python/py.json:py-err-backslash-eof"
+          ],
+          "negativeFixtures": [
+            "vector:test-vectors/extraction-python/py.json:py-err-backslash-eof"
+          ],
+          "violation": "accepting an invalid explicit continuation",
+          "failsBecause": "The promoted checker requires this vector to reject with its exact expected error; an accepted token stream differs and fails conformance."
+        }
+      ]
+    },
+    {
+      "id": "M5-005",
+      "document": "profiles/python.md",
+      "section": "line 105 (locator only; exact passage is authoritative)",
+      "sentence": "**Backslash in the indentation.** If a `\\` continuation occurs in the leading white space, the indentation is `(col, alt)` **at the first backslash**; white space after the continuation does not count, and **later continuations in the same leading white space are skipped** (each still MUST be a valid continuation, \u00a74.2). This is the reference's sentence \"the whitespace up to the first backslash determines the indentation\" (`py-backslash-indent`, `py-continuation-twice-indent`). CPython 3.14.6 departs when the backslash is at column 0 (it then counts the following line's spaces) and copies `col` into `alt` (D-3, `py-backslash-col0`).",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "vector:test-vectors/extraction-python/py.json:py-err-backslash-eof"
+          ],
+          "negativeFixtures": [
+            "vector:test-vectors/extraction-python/py.json:py-err-backslash-eof"
+          ],
+          "violation": "accepting an invalid continuation at EOF",
+          "failsBecause": "The promoted checker requires this vector to reject with its exact expected error; an accepted token stream differs and fails conformance."
+        }
+      ]
+    },
+    {
+      "id": "M5-006",
+      "document": "profiles/python.md",
+      "section": "line 132 (locator only; exact passage is authoritative)",
+      "sentence": "**Layout-only k-grams and empty spans.** Because these tokens are zero-width, a k-gram made only of layout tokens can have an **empty span**. At the default k = 5 this happens whenever a file ends four or more blocks deep: the last k-gram is NEWLINE followed by four DEDENTs, all at the input length, so its span is `[n, n)`, and it can be selected as a fingerprint (`py-empty-span-fingerprint`: span `[35, 35)`; the checker requires an empty-span fingerprint there). Layout-only k-grams inside a file have non-empty spans that cover only white space and comments. Such k-grams are identical across unrelated files and will be common hashes. **What the catalogue contract must say:** an empty span is a valid fingerprint span for `py-tokens` at every k, not only at k = 1, so a catalogue MUST store and a report MUST carry `[n, n)` unchanged, and a consumer MUST NOT treat it as an error or drop it. How M2 localization and suppression should treat layout-only k-grams belongs to the matching contract.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:py-empty-catalogue-span-expanded"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:py-empty-catalogue-span-expanded"
+          ],
+          "violation": "expanding or dropping a valid empty Python span",
+          "failsBecause": "The mutation changes an empty catalogue/report span or drops the empty-span report region. Exact catalogue derivation or independent report comparison rejects it."
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:py-empty-report-span-expanded"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:py-empty-report-span-expanded"
+          ],
+          "violation": "expanding or dropping a valid empty Python span",
+          "failsBecause": "The mutation changes an empty catalogue/report span or drops the empty-span report region. Exact catalogue derivation or independent report comparison rejects it."
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:py-empty-report-region-dropped"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:py-empty-report-region-dropped"
+          ],
+          "violation": "expanding or dropping a valid empty Python span",
+          "failsBecause": "The mutation changes an empty catalogue/report span or drops the empty-span report region. Exact catalogue derivation or independent report comparison rejects it."
+        }
+      ]
+    },
+    {
+      "id": "M5-007",
+      "document": "profiles/python.md",
+      "section": "line 154 (locator only; exact passage is authoritative)",
+      "sentence": "**Prefix.** When a name (\u00a73.2) is immediately followed by `'` or `\"`, and its text, compared case-insensitively, consists only of the letters `b`, `r`, `u`, `f`, `t` with no letter repeated, it is a prefix. The letter set MUST be one of {b}, {r}, {u}, {f}, {t}, {b, r}, {f, r}, {t, r}, in any order and case; any other set (`ur`, `ub`, `bf`, `bt`, `ft`, three letters) is `malformed-literal` at the prefix start. CPython 3.14 made these combinations tokenizer errors (`py-err-prefix-ur`, `py-err-prefix-fb`). A name with any other letter, or a repeated letter, is an ordinary name followed by a separate string: `uu'x'`, `rr\"y\"`, `print'z'`, `bx'w'` (`py-prefix-ident`). Only ASCII letters count, so a fullwidth `\uff46` is a name.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "vector:test-vectors/extraction-python/py.json:py-err-prefix-ur"
+          ],
+          "negativeFixtures": [
+            "vector:test-vectors/extraction-python/py.json:py-err-prefix-ur"
+          ],
+          "violation": "accepting a disallowed string prefix",
+          "failsBecause": "The promoted checker requires this vector to reject with its exact expected error; an accepted token stream differs and fails conformance."
+        }
+      ]
+    },
+    {
+      "id": "M5-008",
+      "document": "profiles/python.md",
+      "section": "line 201 (locator only; exact passage is authoritative)",
+      "sentence": "Brackets, f/t-strings, replacement fields and nested format-spec fields nest without a depth limit (D-9), so the only bound is `maxInputBytes`: about 350,000 levels within 1 MiB, 2.8 million within the 8 MiB contract bound. **An implementation MUST track nesting with an explicit stack, in memory linear in the input size (contract \u00a710a). Recursion with one call per nesting level is non-conformant**, because it fails by stack overflow on inputs within `maxInputBytes`, which is a state the contract does not allow (contract \u00a72: no result for an undecided state). Indentation levels are a stack too and fall under the same rule. Vectors `py-deep-brackets` (1,000 levels) and `py-deep-fstrings` (200 nested f-strings) are inside every allowed size limit; the review ran both lexers to about 349,000 levels.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Asymptotic time/memory or stack strategy is not observable in finite fixture bytes. Deep-input vectors are related examples, not a proof of the required implementation strategy.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-009",
+      "document": "profiles/python.md",
+      "section": "line 411 (locator only; exact passage is authoritative)",
+      "sentence": "| PYOD-9 | No depth limits (D-9); nesting MUST use an explicit stack, not recursion (\u00a75.7) | Limits are implementation details; the stack rule keeps every input within `maxInputBytes` decidable |",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Asymptotic time/memory or stack strategy is not observable in finite fixture bytes. Deep-input vectors are related examples, not a proof of the required implementation strategy.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-010",
+      "document": "profiles/text.md",
+      "section": "line 9 (locator only; exact passage is authoritative)",
+      "sentence": "This document is normative for conformance of this draft version, as stated in its status line. \"MUST\" describes what this draft proposes for an implementation claiming to follow it. Nothing here is a registered algorithm. The vectors, checker, tables and cross-check are in [extraction-text/](../test-vectors/extraction-text/README.md).",
+      "clauses": [
+        {
+          "kind": "definitional",
+          "reason": "Keyword definition, not an additional implementation obligation.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-011",
+      "document": "profiles/text.md",
+      "section": "line 81 (locator only; exact passage is authoritative)",
+      "sentence": "An implementation MUST use tables generated from these files, or the committed derived table. **It MUST NOT use a runtime's or library's case folding or normalization unless that is shown to equal these tables.** The cross-check (\u00a714) found:",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Table provenance/equality requires the pinned-file derivation and full table audit, not finite vector bytes; wrong-lexer examples expose some differences without proving total identity.",
+          "spotCheck": true
+        },
+        {
+          "kind": "untestable",
+          "reason": "Table provenance/equality requires the pinned-file derivation and full table audit, not finite vector bytes; wrong-lexer examples expose some differences without proving total identity.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-012",
+      "document": "profiles/text.md",
+      "section": "line 294 (locator only; exact passage is authoritative)",
+      "sentence": "There is no `format` key: the front end is the profile. [`config-negative-text.json`](../test-vectors/extraction-text/config-negative-text.json) has 13 configurations that MUST be rejected, each with its `expectedResult`. They include the code channels, two channels, reordered channels, the code contract string, `text-html`, `text-plain`/`draft-2`, the superseded `text-markdown`/`draft-1`, k = 17, `window` = 0, the size bound plus 1, whitespace, a missing LF and an extra `format` key. It also has 2 boundary configurations that MUST be accepted.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/extraction-text/check_text_vectors.py:FAIL config"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/extraction-text/check_text_vectors.py:FAIL config"
+          ],
+          "violation": "accepting a negative configuration or rejecting a specified boundary configuration",
+          "failsBecause": "The text checker validates all negative and boundary configurations; FAIL config requires a negative fixture with valid configuration bytes to fail."
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/extraction-text/check_text_vectors.py:FAIL config"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/extraction-text/check_text_vectors.py:FAIL config"
+          ],
+          "violation": "accepting a negative configuration or rejecting a specified boundary configuration",
+          "failsBecause": "The text checker validates all negative and boundary configurations; FAIL config requires a negative fixture with valid configuration bytes to fail."
+        }
+      ]
+    },
+    {
+      "id": "M5-013",
+      "document": "profiles/text.md",
+      "section": "line 296 (locator only; exact passage is authoritative)",
+      "sentence": "**What \"accepted\" means for an implementation that does not implement `text-markdown`** (TXT.3 rulings T1, TX-Q1, TX-Q2). Validation steps 1\u20138 above define which configurations are *specified*. Both boundary configurations pass them, and an implementation MUST say so wherever it validates configurations. Contract \u00a710 step 7 also requires a pair \"the implementation implements\" before it extracts. `text-markdown` is not normative and not registered, so a stage-1 implementation that implements only `text-plain` reports an `unsupported-config` record when it is asked to *extract* with `cfg-text-bounds-max` or `config-text-markdown.json`. That is not a failure of the boundary check. For such an implementation, `text-markdown.json` and the 20 rejections of `md-*` vectors are not applicable.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/extraction-text/check_text_vectors.py:FAIL config"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/extraction-text/check_text_vectors.py:FAIL config"
+          ],
+          "violation": "accepting a negative configuration or rejecting a specified boundary configuration",
+          "failsBecause": "The text checker validates all negative and boundary configurations; FAIL config requires a negative fixture with valid configuration bytes to fail."
+        }
+      ]
+    },
+    {
+      "id": "M5-014",
+      "document": "profiles/text.md",
+      "section": "line 315 (locator only; exact passage is authoritative)",
+      "sentence": "For a fixed configuration, time and working memory MUST be O(N) in the input length (contract \u00a710a):",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Asymptotic time/memory or stack strategy is not observable in finite fixture bytes. Deep-input vectors are related examples, not a proof of the required implementation strategy.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-015",
+      "document": "profiles/text.md",
+      "section": "line 318 (locator only; exact passage is authoritative)",
+      "sentence": "- **Fold and skeleton:** per token. Canonical reordering (UAX #15 canonical ordering: a stable sort of each run of non-starters by combining class) MUST give that result and MUST take time linear in the input. Only the result and the linear bound are normative; the sorting algorithm is implementation-defined (TXT.3 ruling TX-Q7). A stable 256-bucket counting sort is linear. So is an insertion sort used only for runs up to a fixed length, with a linear sort beyond it. An unbounded insertion sort is not: the cross-check measured a quadratic sort at 126 s on 1 MiB. No time constant is normative; tests may choose their own bound (ruling T8).",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "rejection:test-vectors/extraction-text/rejections.json:rej-plain-combining-a"
+          ],
+          "negativeFixtures": [
+            "rejection:test-vectors/extraction-text/rejections.json:rej-plain-combining-a"
+          ],
+          "violation": "applying folding in non-canonical order",
+          "failsBecause": "rej-plain-combining-a changes the folded value after using mapping before NFD; run_rejections requires rejection at the fold layer."
+        },
+        {
+          "kind": "untestable",
+          "reason": "Asymptotic time/memory or stack strategy is not observable in finite fixture bytes. Deep-input vectors are related examples, not a proof of the required implementation strategy.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-016",
+      "document": "profiles/text.md",
+      "section": "line 548 (locator only; exact passage is authoritative)",
+      "sentence": "The two vector-file digests changed from the previous freeze (`3888ee6f\u2026`, `29ec0cc7\u2026`) only because their `result` objects now use the contract \u00a72a layout; no value or hash in them changed. The freeze now covers record bytes too: a stage-1 implementation MUST emit exactly the 60 records of `records-text-plain.json` for their configuration and input bytes. Any change to a `text-plain` channel's bytes for any input needs `draft-2` and a new configuration digest. `text-markdown` draft-2 is **not** frozen: the review's M1 and M2 and the previously unlisted CommonMark differences are fixed or listed here, but they await re-review.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/extraction-text/check_text_vectors.py:per-token-folded"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/extraction-text/check_text_vectors.py:per-token-folded"
+          ],
+          "violation": "changing frozen record bytes",
+          "failsBecause": "The record self-tests introduce an illegal per-token folded field and require rejection; all 60 expected records are compared byte-for-byte."
+        }
+      ]
+    },
+    {
+      "id": "M5-017",
+      "document": "profiles/typescript.md",
+      "section": "line 13 (locator only; exact passage is authoritative)",
+      "sentence": "This document is normative for conformance of this draft version, as stated in its status line. It plugs into the [extraction contract](../spec/extraction.md) and does not modify it. \"MUST\" describes what this draft proposes for an implementation claiming to follow it. Nothing here is a registered algorithm.",
+      "clauses": [
+        {
+          "kind": "definitional",
+          "reason": "Keyword definition, not an additional implementation obligation.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-018",
+      "document": "profiles/typescript.md",
+      "section": "line 46 (locator only; exact passage is authoritative)",
+      "sentence": "**JSX in a `.js` file under `ts-tokens` is not always rejected.** Any element with a closing tag or with text makes `</` start a regular expression that runs to the end of the line. That gives `unterminated-literal` unless the line happens to contain another `/` (`ts-err-jsx-in-js`). A text-free self-closing element such as `x = <br/>;` lexes as the punctuators `< br / > ;` and is fingerprinted (`ts-jsx-selfclosing-in-js`, D-16). **`.js` files containing JSX are deferred to stage 2** (decided in draft, pending owner confirmation). The selecting tool (TW-01/TW-03) MUST record each such file as **deferred to stage 2**, whether it detects the JSX before extraction or meets it as an extraction error. It MUST NOT drop such files silently, and MUST NOT count them as ordinary lexical rejections. Text-free self-closing elements are a **known stage-1 misread (D-16)**: they are fingerprinted as punctuators and cannot be told apart lexically from comparison and type syntax. A repository with JSX in `.js` should map those files to `tsx-tokens` once stage 2 exists.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "File-selection disposition (stage-2 deferral versus rejection or silent drop) is not part of an extraction result. Requires repository-selection audit; ts-jsx-selfclosing-in-js documents the lexical limitation.",
+          "spotCheck": true
+        },
+        {
+          "kind": "untestable",
+          "reason": "File-selection disposition (stage-2 deferral versus rejection or silent drop) is not part of an extraction result. Requires repository-selection audit; ts-jsx-selfclosing-in-js documents the lexical limitation.",
+          "spotCheck": true
+        },
+        {
+          "kind": "untestable",
+          "reason": "File-selection disposition (stage-2 deferral versus rejection or silent drop) is not part of an extraction result. Requires repository-selection audit; ts-jsx-selfclosing-in-js documents the lexical limitation.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-019",
+      "document": "profiles/typescript.md",
+      "section": "line 74 (locator only; exact passage is authoritative)",
+      "sentence": "These are exactly ID_Start \u2212 XID_Start and ID_Continue \u2212 XID_Continue in the digest-pinned UCD 17.0.0 `DerivedCoreProperties.txt`. In that file, XID \u2282 ID holds, U+200C/U+200D are in ID_Continue, and Zs is as listed in \u00a73.1. [harness/derive_deltas.py](../test-vectors/extraction-typescript/harness/derive_deltas.py) re-derives all of this and refuses other file digests. The library rule of contract \u00a73a applies: an implementation MUST NOT use a runtime's `\\p{ID_Start}` or the TypeScript scanner's tables unless they are shown identical. TypeScript 6.0.3's tables differ on 8,949 start and 9,132 part code points, all of them characters newer than its tables (\u00a711).",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Proving a runtime Unicode table identical to pinned UCD tables requires a full table sweep/source audit; finite lexical vectors cannot prove table identity.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-020",
+      "document": "profiles/typescript.md",
+      "section": "line 159 (locator only; exact passage is authoritative)",
+      "sentence": "1. **`0x`, `0X`, `0b`, `0B`, `0o` or `0O`:** consume the prefix, then the maximal run of IdentifierPartChars. The run MUST be one or more digits of the radix under the separator rules, optionally followed by `n` (class `bigint`; otherwise `number`).",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "vector:test-vectors/extraction-typescript/ts.json:ts-err-hex-empty"
+          ],
+          "negativeFixtures": [
+            "vector:test-vectors/extraction-typescript/ts.json:ts-err-hex-empty"
+          ],
+          "violation": "accepting malformed numeric literal syntax",
+          "failsBecause": "The promoted checker requires this vector to reject with its exact expected error; an accepted token stream differs and fails conformance."
+        }
+      ]
+    },
+    {
+      "id": "M5-021",
+      "document": "profiles/typescript.md",
+      "section": "line 168 (locator only; exact passage is authoritative)",
+      "sentence": "5. **After the literal,** the next character MUST NOT be an IdentifierStartChar, an ASCII digit or `\\` (\u00a712.9.3: \"must not be an IdentifierStart or DecimalDigit\").",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "vector:test-vectors/extraction-typescript/ts.json:ts-err-number-ident"
+          ],
+          "negativeFixtures": [
+            "vector:test-vectors/extraction-typescript/ts.json:ts-err-number-ident"
+          ],
+          "violation": "accepting malformed numeric literal syntax",
+          "failsBecause": "The promoted checker requires this vector to reject with its exact expected error; an accepted token stream differs and fails conformance."
+        }
+      ]
+    },
+    {
+      "id": "M5-022",
+      "document": "profiles/typescript.md",
+      "section": "line 303 (locator only; exact passage is authoritative)",
+      "sentence": "- **`/` as the first token after `<`** makes this a closing tag. The entry below `tag` MUST be `elem`; otherwise the result is `unbalanced-delimiter` at the tag's `<` (vector `tsx-err-stray-close`).",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "vector:test-vectors/extraction-typescript/tsx.json:tsx-err-stray-close"
+          ],
+          "negativeFixtures": [
+            "vector:test-vectors/extraction-typescript/tsx.json:tsx-err-stray-close"
+          ],
+          "violation": "accepting malformed JSX tag syntax",
+          "failsBecause": "The promoted checker requires this vector to reject with its exact expected error; an accepted token stream differs and fails conformance."
+        }
+      ]
+    },
+    {
+      "id": "M5-023",
+      "document": "profiles/typescript.md",
+      "section": "line 304 (locator only; exact passage is authoritative)",
+      "sentence": "- **`/` later in an opening tag** marks it self-closing. The next non-trivia character MUST be `>`, otherwise `illegal-character` at that character (vector `tsx-err-self-closing`).",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "vector:test-vectors/extraction-typescript/tsx.json:tsx-err-self-closing"
+          ],
+          "negativeFixtures": [
+            "vector:test-vectors/extraction-typescript/tsx.json:tsx-err-self-closing"
+          ],
+          "violation": "accepting malformed JSX tag syntax",
+          "failsBecause": "The promoted checker requires this vector to reject with its exact expected error; an accepted token stream differs and fails conformance."
+        }
+      ]
+    },
+    {
+      "id": "M5-024",
+      "document": "spec/attestations.md",
+      "section": "line 20 (locator only; exact passage is authoritative)",
+      "sentence": "Lengths count bytes, encoded as ASCII decimal without leading zeroes. `SP` is the ASCII space byte. The payload's base64 text is not the signing input (verifiers MUST accept both standard and URL-safe base64). Retain the verified byte sequence through parsing. Reject ambiguous JSON (including duplicate keys and non-finite constants) under the strict parsing policy ([trust-policy.md](trust-policy.md) \u00a74.1). Key identifiers (`keyid`) are lookup hints, not proof of identity; full key identity is `SHA-256(raw 32-byte Ed25519 public key)`. [DSSE protocol](https://github.com/dsse-lf/dsse/blob/master/protocol.md), [in-toto statement](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md).",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/registration/check_registration.py:base64"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/registration/check_registration.py:base64"
+          ],
+          "violation": "rejecting a permitted base64 transport spelling",
+          "failsBecause": "The promoted bundle-url-safe fixture and adapter URL-safe accept fixture require acceptance of URL-safe base64; a changed outcome fails the checker."
+        }
+      ]
+    },
+    {
+      "id": "M5-025",
+      "document": "spec/attestations.md",
+      "section": "line 24 (locator only; exact passage is authoritative)",
+      "sentence": "**Side-channel boundary.** Comparing public commitment digests during `catalogueOpening` verification does not compare secret material (both `R` and `C` are supplied by the opener). By contrast, private Ed25519 signing and OS CSPRNG nonce generation operate on secret material and MUST use constant-time / side-channel-safe cryptographic primitives and OS CSPRNG APIs with no non-cryptographic fallback.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Constant-time primitives and independent OS CSPRNG sampling are internal properties, not observable from deterministic public fixtures. Requires source/API inspection; fixture nonce inequality tests only the observable part.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-026",
+      "document": "spec/attestations.md",
+      "section": "line 30 (locator only; exact passage is authoritative)",
+      "sentence": "Verifiers MUST evaluate signatures, signer trust, key events, and time evidence against an explicit local policy as specified in [trust-policy.md](trust-policy.md). Identity strings inside a signed payload are assertions, not independent identity authentication. Signing someone else's public content does not establish ownership.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-trust-by-hint.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-trust-by-hint.json"
+          ],
+          "violation": "trusting a producer key hint instead of verifier-local policy",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        }
+      ]
+    },
+    {
+      "id": "M5-027",
+      "document": "spec/catalogue-report.md",
+      "section": "line 15 (locator only; exact passage is authoritative)",
+      "sentence": "This document is normative for conformance of this draft version, as stated in its status line. \"MUST\" describes what this draft proposes for an implementation claiming to follow it. The draft schemas and vectors are in [matching/](../test-vectors/matching/README.md). Nothing here is a registered algorithm. No parameter is tuned or calibrated.",
+      "clauses": [
+        {
+          "kind": "definitional",
+          "reason": "Keyword definition, not an additional implementation obligation.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-028",
+      "document": "spec/catalogue-report.md",
+      "section": "line 50 (locator only; exact passage is authoritative)",
+      "sentence": "One extraction (configuration bytes + input bytes) produces one record. The record's canonical bytes are the **normative output of extraction** for conformance level 4: two implementations MUST emit identical record bytes for the same configuration and input bytes. Schema: [record.schema.json](../schemas/record.schema.json) (structure only). Vectors: [records.json](../test-vectors/matching/records.json).",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:record-digest-wrong"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:record-digest-wrong"
+          ],
+          "violation": "changing canonical record bytes",
+          "failsBecause": "The cited self-test introduces changing canonical record bytes; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-029",
+      "document": "spec/catalogue-report.md",
+      "section": "line 71 (locator only; exact passage is authoritative)",
+      "sentence": "  - `values` lists the normalized values of the **kept** tokens only, in stream order. `tokenIndices` lists the ascending indices of the kept tokens in `tokens`. A profile without exclusions MUST NOT emit `tokenIndices`; for Go and Rust it is always absent and `values` has one entry per token. Normalized k-gram positions, `windowSelections` and fingerprint positions index the normalized stream; spans stay original bytes.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:tokenIndices-on-go"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:tokenIndices-on-go"
+          ],
+          "violation": "adding tokenIndices to a non-exclusion profile",
+          "failsBecause": "The cited self-test introduces adding tokenIndices to a non-exclusion profile; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-030",
+      "document": "spec/catalogue-report.md",
+      "section": "line 92 (locator only; exact passage is authoritative)",
+      "sentence": "**Record streams and the CLI.** A sequence of records concatenated in input order is a valid JSON Lines stream, because each record is one line. That framing, the CLI's argument syntax, exit statuses and any `--pretty`/`--result-only` options are **not normative** (conformance: CLI names are optional interfaces). What is normative is (a) the bytes of each record and (b) the catalogue (\u00a73), which is the persisted, committed artifact. **Unknown option values are errors** (A5; \u00a76.8 B6): an implementation that offers options, environment settings or fault-injection hooks MUST reject an unknown value as a usage error (exit 2) rather than ignore it, so a typo can never silently disable a check. Records go to stdout only (\u00a76.8 B7).",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "CLI invocation/exit behavior is outside recorded JSON outputs; requires an implementation process probe, not a fixture-byte test.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-031",
+      "document": "spec/catalogue-report.md",
+      "section": "line 98 (locator only; exact passage is authoritative)",
+      "sentence": "**Rule.** Every profile declares an ordered, non-empty list of channel names (`[a-z]+`, at most 8), its **channel list**. The first channel is always `exact` (the token's original bytes); each other channel is named by the profile and defines one value per token. The extraction configuration's `channels` MUST equal the profile's list (that is how the list is bound into `configSha256`). Everything downstream is defined over that list:",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:config-channels-not-profile-list"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:config-channels-not-profile-list"
+          ],
+          "violation": "changing the configured channel list",
+          "failsBecause": "The cited self-test introduces changing the configured channel list; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-032",
+      "document": "spec/catalogue-report.md",
+      "section": "line 102 (locator only; exact passage is authoritative)",
+      "sentence": "- **Comparison (\u00a74, \u00a75):** `modes` MUST equal the channel list of a profile the implementation supports, so it is validated before any catalogue is read; after the catalogues pass, `modes` MUST equal the compared catalogues' `extractionConfig.channels`, otherwise `mode-mismatch` (\u00a75.1 step 8). Each mode runs on the channel of the same name (\u00a75.3).",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:three-channel-modes-echo-reordered"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:three-channel-modes-echo-reordered"
+          ],
+          "violation": "using unsupported or mismatched modes",
+          "failsBecause": "The changed expected mode list / mode-mismatch outcome fails comparison against the independently computed body."
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:mode-mismatch-compared"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:mode-mismatch-compared"
+          ],
+          "violation": "using unsupported or mismatched modes",
+          "failsBecause": "The changed expected mode list / mode-mismatch outcome fails comparison against the independently computed body."
+        }
+      ]
+    },
+    {
+      "id": "M5-033",
+      "document": "spec/catalogue-report.md",
+      "section": "line 119 (locator only; exact passage is authoritative)",
+      "sentence": "| `extractionConfig` | The eight parsed values of the extraction configuration. Re-serialized in extraction \u00a710 canonical form (fixed key order, final LF), they MUST hash to `profile.configSha256` |",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:config-digest"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:config-digest"
+          ],
+          "violation": "changing the configuration digest",
+          "failsBecause": "The cited self-test introduces changing the configuration digest; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-034",
+      "document": "spec/catalogue-report.md",
+      "section": "line 122 (locator only; exact passage is authoritative)",
+      "sentence": "**One configuration per catalogue (G3).** Every artifact in a catalogue was extracted under the same extraction configuration bytes. A builder given artifacts extracted under different configurations MUST NOT produce a single catalogue. It produces one catalogue per configuration, or none.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:build-rejection-that-is-valid"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:build-rejection-that-is-valid"
+          ],
+          "violation": "building one catalogue from mixed-configuration records",
+          "failsBecause": "records.json build-mixed-configurations requires rejection. The self-test removes the conflicting record, making the alleged rejection invalid; the checker catches it."
+        }
+      ]
+    },
+    {
+      "id": "M5-035",
+      "document": "spec/catalogue-report.md",
+      "section": "line 137 (locator only; exact passage is authoritative)",
+      "sentence": "- **`sha256`** is over the **original artifact bytes**. Two entries in one catalogue MUST NOT share a `sha256`.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:duplicate-artifact-digest"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:duplicate-artifact-digest"
+          ],
+          "violation": "duplicating an artifact digest",
+          "failsBecause": "The cited self-test introduces duplicating an artifact digest; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-036",
+      "document": "spec/catalogue-report.md",
+      "section": "line 192 (locator only; exact passage is authoritative)",
+      "sentence": "   **Zero-width tokens** (A14, OD-C64 revised) is a declared property of the profile, not a property of a catalogue: a profile declares it when its extraction can emit a token whose span is empty. Today only `py-tokens` declares it. Go's inserted `;` is not zero-width in this sense: it starts at the end of the token before it, so at k \u2265 2 its k-gram spans are non-empty and distinct positions have distinct starts. A future profile that can emit zero-width tokens MUST declare it in its row; without the declaration the strict rules of step 6 apply.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Future-profile registration metadata requires review of the new profile row; no fixture can enumerate future profiles.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-037",
+      "document": "spec/catalogue-report.md",
+      "section": "line 194 (locator only; exact passage is authoritative)",
+      "sentence": "   `tsx-tokens` and `text-markdown` are not registered: they are not frozen for stage 1. The TEST-ONLY profiles (`go-tokens-exclusion-test`, `go-tokens-three-channel-test`) are accepted only in vectors flagged as such and are never registered. Registering a profile adds lists to the set `modes` may name (\u00a74 step 4); it changes no existing byte. **\"Specified, not implemented\"** (A13) means the profile is registered for everything that needs no lexer: catalogue validation, comparison and building from records (\u00a73.8, K2) MUST accept it. Only extraction of that profile may be missing from an implementation, and the implementation documents that.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:extracted-profiles-only"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:extracted-profiles-only"
+          ],
+          "violation": "refusing a registered profile merely because extraction is unavailable",
+          "failsBecause": "The cited self-test introduces refusing a registered profile merely because extraction is unavailable; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-038",
+      "document": "spec/catalogue-report.md",
+      "section": "line 197 (locator only; exact passage is authoritative)",
+      "sentence": "   - **Extraction bounds and profile row** (A5, K1). `extractionConfig` MUST be a configuration a conforming extractor accepts: `k` \u2264 16, `window` \u2264 128, `maxInputBytes` \u2264 8,388,608 (extraction \u00a710 step 5, \u00a710a), `contract` equal to the profile's contract (\u00a73.6 step 5 table) and `channels` equal to its channel list. A catalogue outside these is `malformed-catalogue` **even when its digest binding is correct**, because no conforming extractor could have produced it (`k1-extraction-bounds-k17` as reference, `k1-extraction-bounds-max-input` as candidate; `k1-extraction-bounds-at-bound` shows k 16, window 128 accepted).",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:K1-window-129"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:K1-window-129"
+          ],
+          "violation": "accepting an out-of-bounds extraction configuration",
+          "failsBecause": "The cited self-test introduces accepting an out-of-bounds extraction configuration; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-039",
+      "document": "spec/catalogue-report.md",
+      "section": "line 202 (locator only; exact passage is authoritative)",
+      "sentence": "     - **Profile with zero-width tokens** (`py-tokens`): **an empty span is valid at every k** (a k-gram made only of zero-width tokens has span `[n, n)`), and **span starts never decrease**: consecutive k-grams that start at zero-width tokens can share a start offset (`py-equal-starts`). A catalogue MUST store such a span unchanged, a report MUST carry any region span derived from it unchanged, and a consumer MUST NOT treat it as an error or drop it (`py-empty-span-self`, `rv-py-empty-span-region`).",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:py-empty-catalogue-span-expanded"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:py-empty-catalogue-span-expanded"
+          ],
+          "violation": "expanding or dropping a valid empty Python span",
+          "failsBecause": "The mutation changes an empty catalogue/report span or drops the empty-span report region. Exact catalogue derivation or independent report comparison rejects it."
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:py-empty-report-span-expanded"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:py-empty-report-span-expanded"
+          ],
+          "violation": "expanding or dropping a valid empty Python span",
+          "failsBecause": "The mutation changes an empty catalogue/report span or drops the empty-span report region. Exact catalogue derivation or independent report comparison rejects it."
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:py-empty-report-region-dropped"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:py-empty-report-region-dropped"
+          ],
+          "violation": "expanding or dropping a valid empty Python span",
+          "failsBecause": "The mutation changes an empty catalogue/report span or drops the empty-span report region. Exact catalogue derivation or independent report comparison rejects it."
+        }
+      ]
+    },
+    {
+      "id": "M5-040",
+      "document": "spec/catalogue-report.md",
+      "section": "line 233 (locator only; exact passage is authoritative)",
+      "sentence": "**A side given as extraction-vector sources of a profile the implementation does not extract** (A16, OD-C70; CG-Q2 / E6; today the `py-tokens` sides `extraction-py.json#\u2026`). The runner builds each record by \u00a72a from the vector: `configSha256` is the SHA-256 of the vector file's `configFile` bytes, `inputSha256` and `inputLength` are taken from the decoded `inputBase64`, and `result` is the vector's `result` unchanged. It then builds the catalogue by this section. The catalogue MUST equal the side's catalogue bytes. Extracting such a profile is still `unsupported-config`.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:catalogue-from-records-digest-wrong"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:catalogue-from-records-digest-wrong"
+          ],
+          "violation": "changing the catalogue built from vector-derived records",
+          "failsBecause": "The cited self-test introduces changing the catalogue built from vector-derived records; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-041",
+      "document": "spec/catalogue-report.md",
+      "section": "line 255 (locator only; exact passage is authoritative)",
+      "sentence": "[comparison-config-negative.json](../test-vectors/matching/comparison-config-negative.json) lists 22 configurations that MUST be rejected.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:valid-config-listed-as-negative"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:valid-config-listed-as-negative"
+          ],
+          "violation": "accepting a configuration listed as negative",
+          "failsBecause": "check_all rejects every comparison configuration negative; its self-test replaces a negative with valid bytes and requires failure."
+        }
+      ]
+    },
+    {
+      "id": "M5-042",
+      "document": "spec/catalogue-report.md",
+      "section": "line 305 (locator only; exact passage is authoritative)",
+      "sentence": "**What vendor suppression does and does not do** (A14, OD-C66, decided in draft, pending owner confirmation). Suppression acts **per hash, on every pair** of the comparison. It does not know which files are vendored; it only knows which hashes occur in the suppression catalogue. Two effects follow, and a reader of a suppressed comparison MUST take both into account:",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Human-facing interpretation/rendering and implied claims are outside the closed JSON report. Inspect every rendering and claim surface; schema rejection alone does not establish compliance.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-043",
+      "document": "spec/catalogue-report.md",
+      "section": "line 373 (locator only; exact passage is authoritative)",
+      "sentence": "**Completeness.** For a valid configuration and catalogues that pass \u00a73.6, an implementation MUST emit a body. The work is bounded by `maxSeedsPerMode`. An implementation that cannot finish within those limits is non-conformant for that input. No conformance outcome is \"failed outside the report\".",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:missing-pair"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:missing-pair"
+          ],
+          "violation": "omitting output for a valid compared pair",
+          "failsBecause": "The cited self-test introduces omitting output for a valid compared pair; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-044",
+      "document": "spec/catalogue-report.md",
+      "section": "line 474 (locator only; exact passage is authoritative)",
+      "sentence": "**Dirty or unknown builds** (A5, M2.4; tightened by A6, B10). `implementation.commit` MUST describe the code that produced the body. It is **fixed at build time only**, from the version-control state of the tree being built. An implementation refuses to write a report document (exit 2) when its build had uncommitted changes, including documentation-only changes, or carries no build-time commit. Unstamped builds include an archive export, stamping disabled, and an interpreted or `go run` execution. Such builds MAY still write the body alone, which carries no provenance. **A commit supplied at run time is never accepted.** A5's allowance of an explicit commit for unstamped builds is withdrawn: the I2 behavioural run showed that an unstamped binary built from modified sources cannot tell itself from a clean archive build, so that allowance let provenance name a commit that does not describe the code. *Why refuse rather than add a `dirty` flag:* a flag would make provenance name a commit that does not describe the code, so M2.4's recheck could not pass, and it would add a field to a closed schema; refusing keeps every existing provenance byte and meaning.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Build provenance requires inspection of the build and repository state, which cannot be established from report bytes alone; independent build probes are required.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-045",
+      "document": "spec/catalogue-report.md",
+      "section": "line 478 (locator only; exact passage is authoritative)",
+      "sentence": "**Report document bytes are not normative.** Both implementations write RFC 8785 of `{\"body\", \"provenance\"}`; a consumer MUST NOT hash or compare the document bytes, only `bodySha256` and the provenance fields.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "A consumer hashing the wrong wrapper is an integration behavior outside fixture outputs. Inspect caller digest selection; body digest vectors only establish the correct hash.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-046",
+      "document": "spec/catalogue-report.md",
+      "section": "line 482 (locator only; exact passage is authoritative)",
+      "sentence": "**Private outputs** (A5, M2.8; made precise by A6, \u00a76.8 B1\u2013B7). The default private location for catalogues and reports is implementation-defined. An implementation MUST refuse (exit 2) to write private output to a directory inside a version-controlled working tree (B1), whether the directory was chosen by default, by environment variable or by option. The one exception is an explicit override naming exactly that directory (B2). Writes are atomic (temporary file then rename) with owner-only permissions. The refusal covers paths the implementation opens itself; stdout is the operator's destination (B7).",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Default filesystem location, permissions or cleanup is not observable in recorded fixture bytes; requires an implementation filesystem probe.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-047",
+      "document": "spec/catalogue-report.md",
+      "section": "line 526 (locator only; exact passage is authoritative)",
+      "sentence": "  - **Cleanup:** before its own rename, the next write to the same output path MUST delete every file in that directory that matches `.` + output name + `.tw-tmp-*` and is owned by the current user. It never reads them. Temporaries of other output names are left alone (items 47 and 48).",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Default filesystem location, permissions or cleanup is not observable in recorded fixture bytes; requires an implementation filesystem probe.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-048",
+      "document": "spec/catalogue-report.md",
+      "section": "line 554 (locator only; exact passage is authoritative)",
+      "sentence": "  **A toolchain-provided stamp that cannot prove (1) and (2) is treated as unstamped.** An example is Go's `vcs.revision` and `vcs.modified` build information, which records neither the repository root nor whether the compiled files belong to that repository. An implementation whose toolchain cannot verify the root MUST inject the commit through a **documented build step that performs both checks** (for example a build script that runs them and then passes the commit with `-ldflags -X`, or a `build.rs` that runs them). Every other build, including the toolchain's plain build command, writes bodies only. This closes the Go lane's D5 case: an archive export unpacked into an **ignored** folder of another repository gets that repository's HEAD as a clean toolchain stamp, yet it is unstamped under this rule. An archive export unpacked anywhere is unstamped, ignored or not, because it is not the root of a repository (items 55, 59 and 60).",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Build provenance requires inspection of the build and repository state, which cannot be established from report bytes alone; independent build probes are required.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-049",
+      "document": "spec/catalogue-report.md",
+      "section": "line 561 (locator only; exact passage is authoritative)",
+      "sentence": "- **B12 Error messages.** Messages (stderr, stdout, logs) MUST NOT echo strings taken from input content. That covers source or token text, record, catalogue, configuration or report values, and **key names**, including unknown keys. Messages may contain:",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Diagnostic non-disclosure needs process stdout/stderr/log inspection with secret-bearing inputs; recorded output fixtures do not observe all diagnostic channels.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-050",
+      "document": "spec/catalogue-report.md",
+      "section": "line 574 (locator only; exact passage is authoritative)",
+      "sentence": "- `region`: the region key of \u00a75.5, `{referenceId, candidateId, mode, firstSeed}`. It MUST name a **listed** region of that body: a compared pair, one of its modes, and a region whose first seed equals `firstSeed`. A region cut by the cap cannot be referenced (\u00a75.5). A key absent from the body is invalid (`region-key-absent`, `region-mode-absent`);",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_gates.py:packet-code-changed"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_gates.py:packet-code-changed"
+          ],
+          "violation": "accepting a packet with a non-first or absent seed",
+          "failsBecause": "check_gates validates review-packets.json invalid entries including non-first-seed-p2 and absent region/mode cases."
+        }
+      ]
+    },
+    {
+      "id": "M5-051",
+      "document": "spec/catalogue-report.md",
+      "section": "line 582 (locator only; exact passage is authoritative)",
+      "sentence": "- the named side's digest is bound: `own-origin` `artifactSha256`, `vendored-dependency` `vendoredArtifactSha256` and `historical-copy` `copyArtifactSha256` MUST each equal the body pair's `<side>.sha256`. A packet re-pointed at another region keeps its old digest and fails (`vendored-repointed-p1b`, `vendored-digest-mismatch`, `own-origin-digest-mismatch`, `own-origin-wrong-side`, `historical-copy-digest-mismatch`);",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_gates.py:packet-schema-code-changed"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_gates.py:packet-schema-code-changed"
+          ],
+          "violation": "accepting an unbound origin artifact digest",
+          "failsBecause": "The invalid review packets include own-origin, vendored and historical digest mismatches; each expected rejection is checked."
+        }
+      ]
+    },
+    {
+      "id": "M5-052",
+      "document": "spec/catalogue-report.md",
+      "section": "line 583 (locator only; exact passage is authoritative)",
+      "sentence": "- `historical-copy` `sourceArtifactSha256` MUST equal the digest of the **other** side of the pair: the packet asserts that the other side is the source of the copy, so the source is one of the compared artifacts (`historical-source-unbound`). Copying from a source outside the comparison is recorded by comparing against that source;",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_gates.py:packet-schema-code-changed"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_gates.py:packet-schema-code-changed"
+          ],
+          "violation": "accepting a historical source digest not bound to the other side",
+          "failsBecause": "historical-source-unbound in review-packets.json must be rejected."
+        }
+      ]
+    },
+    {
+      "id": "M5-053",
+      "document": "spec/catalogue-report.md",
+      "section": "line 613 (locator only; exact passage is authoritative)",
+      "sentence": "- `candidateCatalogueSha256`, which MUST equal the body's `inputs.candidateCatalogueSha256`;",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_gates.py:candgen-code-changed"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_gates.py:candgen-code-changed"
+          ],
+          "violation": "accepting a candidate catalogue digest mismatch",
+          "failsBecause": "The catalogue-mismatch invalid candidate-generation record must be rejected."
+        }
+      ]
+    },
+    {
+      "id": "M5-054",
+      "document": "spec/catalogue-report.md",
+      "section": "line 614 (locator only; exact passage is authoritative)",
+      "sentence": "- `generation`: either `{\"method\":\"exhaustive\"}`, or `{\"method\":\"selected\", \"selectedIdsSha256\", \"index\": {name, version}}`. `selectedIdsSha256` is the SHA-256 of the RFC 8785 array of the selected candidate ids sorted by bytes, and MUST equal that digest computed over the candidate catalogue's ids.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_gates.py:candgen-record-wrong-digest"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_gates.py:candgen-record-wrong-digest"
+          ],
+          "violation": "changing the selected-ids digest",
+          "failsBecause": "The cited self-test introduces changing the selected-ids digest; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-055",
+      "document": "spec/catalogue-report.md",
+      "section": "line 677 (locator only; exact passage is authoritative)",
+      "sentence": "An implementation's M2.3 report MUST give these numbers. At this revision they are:",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_gates.py:m23-candidate-count"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_gates.py:m23-candidate-count"
+          ],
+          "violation": "miscounting the M2.3 control-class report",
+          "failsBecause": "The cited self-test introduces miscounting the M2.3 control-class report; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-056",
+      "document": "spec/catalogue-report.md",
+      "section": "line 698 (locator only; exact passage is authoritative)",
+      "sentence": "Equal artifact digests are visible, but the body draws no conclusion from them. A signature over a report attests who produced it, not what the comparison means. A soft match MUST NOT be presented as an exact subject digest.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Human-facing interpretation/rendering and implied claims are outside the closed JSON report. Inspect every rendering and claim surface; schema rejection alone does not establish compliance.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-057",
+      "document": "spec/catalogue-report.md",
+      "section": "line 702 (locator only; exact passage is authoritative)",
+      "sentence": "A report, and any rendering of one, MUST NOT state or imply any of the following:",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Human-facing interpretation/rendering and implied claims are outside the closed JSON report. Inspect every rendering and claim surface; schema rejection alone does not establish compliance.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-058",
+      "document": "spec/catalogue-report.md",
+      "section": "line 712 (locator only; exact passage is authoritative)",
+      "sentence": "A rendering of a `match` MUST show, for each reportable region, its `evidence` beside `minRegionDistinctHashes`. A region whose evidence equals the minimum MUST be described as **at the minimum**, so results at a margin of one are visible as such.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Human-facing interpretation/rendering and implied claims are outside the closed JSON report. Inspect every rendering and claim surface; schema rejection alone does not establish compliance.",
+          "spotCheck": true
+        },
+        {
+          "kind": "untestable",
+          "reason": "Human-facing interpretation/rendering and implied claims are outside the closed JSON report. Inspect every rendering and claim surface; schema rejection alone does not establish compliance.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-059",
+      "document": "spec/conformance.md",
+      "section": "line 11 (locator only; exact passage is authoritative)",
+      "sentence": "The repository checks levels 1\u20132 for synthetic fixtures and DSSE framing only. It has no complete DSSE signer/verifier, token extractor, resolver, or benchmark corpus; the vector checkers validate recorded outputs: the extraction and matching checkers validate recorded token streams, fingerprints and reports without lexing; the TypeScript and text checkers also re-lex every input with reference lexers written from the profile; none is a production extractor, matcher or verifier. Claiming conformance MUST name the draft version, level, profile versions, and tested implementation.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "A conformance claim must identify version, level, profiles and implementation; requires inspection of the claimant publication, not a fixture.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-060",
+      "document": "spec/core.md",
+      "section": "line 3 (locator only; exact passage is authoritative)",
+      "sentence": "Status: proposed normative requirements for this draft only. MUST, MUST NOT, SHOULD and MAY express requirement levels; they are not evidence that an implementation exists. This draft is not a stable standard.",
+      "clauses": [
+        {
+          "kind": "definitional",
+          "reason": "Keyword definition, not an additional implementation obligation.",
+          "spotCheck": true
+        },
+        {
+          "kind": "definitional",
+          "reason": "Keyword definition, not an additional implementation obligation.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-061",
+      "document": "spec/core.md",
+      "section": "line 15 (locator only; exact passage is authoritative)",
+      "sentence": "Extraction is specified in the [extraction contract](extraction.md) and catalogues, comparison and reports in the [catalogue and report contract](catalogue-report.md); both are experimental drafts. The profile includes `id`, `version`, and `configSha256`. The configuration digest binds exact configuration bytes; parameter order or whitespace changes those bytes. An implementation MUST retain them. A matching implementation MUST reject unknown profile/version combinations rather than silently apply another algorithm.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Producer retention of original bytes is a lifecycle obligation beyond the fixture output. Changed-opening rejection does not prove retention; inspect storage behavior.",
+          "spotCheck": true
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:unknown-profile-version"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:unknown-profile-version"
+          ],
+          "violation": "accepting an unknown profile version",
+          "failsBecause": "The cited self-test introduces accepting an unknown profile version; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-062",
+      "document": "spec/core.md",
+      "section": "line 24 (locator only; exact passage is authoritative)",
+      "sentence": "- `R` be a 32-byte nonce generated with an operating-system cryptographic random source (no non-cryptographic fallback), never all-zero, and kept private with the opening. When paired with a registration statement's `predicate.nonce`, `R` MUST be drawn independently and MUST NOT equal `predicate.nonce` (`nonce-reused`).",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Constant-time primitives and independent OS CSPRNG sampling are internal properties, not observable from deterministic public fixtures. Requires source/API inspection; fixture nonce inequality tests only the observable part.",
+          "spotCheck": true
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-opening-nonce-reused-predicate.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-opening-nonce-reused-predicate.json"
+          ],
+          "violation": "reusing the statement nonce for the catalogue opening",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        }
+      ]
+    },
+    {
+      "id": "M5-063",
+      "document": "spec/core.md",
+      "section": "line 30 (locator only; exact passage is authoritative)",
+      "sentence": "The public record contains the scheme identifier `sha256-salted-catalogue-v1` and the digest only. It MUST NOT include `R` or `C`. Use fresh nonces per commitment; never reuse the synthetic vectors' nonce in production. Opening a commitment discloses the entire catalogue `C` and nonce `R`. Selective disclosure is not specified in `v1`; registrants requiring per-file selective disclosure SHOULD register one work/catalogue per statement rather than batching unrelated works.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:tools/check_release_boundaries.py:private-nonce-disclosed"
+          ],
+          "negativeFixtures": [
+            "checker:tools/check_release_boundaries.py:private-nonce-disclosed"
+          ],
+          "violation": "including the private nonce or catalogue in the public record",
+          "failsBecause": "The negative probes insert nonceHex or catalogue into predicate.catalogue; the registration checker rejects both extra fields."
+        }
+      ]
+    },
+    {
+      "id": "M5-064",
+      "document": "spec/core.md",
+      "section": "line 32 (locator only; exact passage is authoritative)",
+      "sentence": "The catalogue MUST bind the extraction profile, configuration digest, exact reference artifact digests, feature representations, and source coordinates or media ranges. Merely committing a list of hashes without their interpretation is insufficient for reproduction.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/matching/check_matching.py:catalogue-config-digest"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/matching/check_matching.py:catalogue-config-digest"
+          ],
+          "violation": "breaking the catalogue profile/configuration binding",
+          "failsBecause": "The cited self-test introduces breaking the catalogue profile/configuration binding; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-065",
+      "document": "spec/core.md",
+      "section": "line 34 (locator only; exact passage is authoritative)",
+      "sentence": "Re-serializing a catalogue creates different bytes and normally a different commitment. Producers MUST retain `C` as exact raw bytes (never re-serialized before opening). Verifiers MUST enforce a bounded size cap when checking `C` (`1 MiB` / `1,048,576` bytes in the M4 policy/harness) and stream/bound artifact hashing for `A`. A commitment supports later consistency checks; timestamping it can support prior existence. Neither establishes who created or owns the content.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Producer retention of original bytes is a lifecycle obligation beyond the fixture output. Changed-opening rejection does not prove retention; inspect storage behavior.",
+          "spotCheck": true
+        },
+        {
+          "kind": "untestable",
+          "reason": "Bounded/streaming hashing is resource behavior not observable in output fixtures; inspect implementation allocations and caps (M4 harness uses 1 MiB for C).",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-066",
+      "document": "spec/core.md",
+      "section": "line 51 (locator only; exact passage is authoritative)",
+      "sentence": "When verifying a `catalogueOpening` (`{catalogue, nonceHex}`, [registration-record.md](registration-record.md) \u00a79), a verifier MUST enforce all of the following:",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-opening-nonce-reused-predicate.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-opening-nonce-reused-predicate.json"
+          ],
+          "violation": "accepting an opening violating the listed checks",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        }
+      ]
+    },
+    {
+      "id": "M5-067",
+      "document": "spec/core.md",
+      "section": "line 53 (locator only; exact passage is authoritative)",
+      "sentence": "1. `nonceHex` MUST be exact 64 lowercase hexadecimal characters (`HEX64`, 32 bytes) and MUST NOT be all zeros (`nonce-invalid`).",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-opening-nonce-short.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-opening-nonce-short.json"
+          ],
+          "violation": "using a short nonce",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-opening-nonce-all-zero.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-opening-nonce-all-zero.json"
+          ],
+          "violation": "using an all-zero nonce",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        }
+      ]
+    },
+    {
+      "id": "M5-068",
+      "document": "spec/core.md",
+      "section": "line 54 (locator only; exact passage is authoritative)",
+      "sentence": "2. `nonceHex` MUST NOT equal the statement's `predicate.nonce` (`nonce-reused`).",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-opening-nonce-reused-predicate.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-opening-nonce-reused-predicate.json"
+          ],
+          "violation": "reusing the predicate nonce",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        }
+      ]
+    },
+    {
+      "id": "M5-069",
+      "document": "spec/core.md",
+      "section": "line 55 (locator only; exact passage is authoritative)",
+      "sentence": "3. `SHA256(\"Traceweave-Catalogue-v0.1\\x00\" || bytes.fromhex(nonceHex) || uint64be(len(C)) || C)` MUST equal `predicate.catalogue.sha256` (`catalogue-does-not-open`).",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-catalogue-does-not-open.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-catalogue-does-not-open.json"
+          ],
+          "violation": "opening with different catalogue bytes",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        }
+      ]
+    },
+    {
+      "id": "M5-070",
+      "document": "spec/core.md",
+      "section": "line 56 (locator only; exact passage is authoritative)",
+      "sentence": "4. When linking to a comparison report (`report-link`), `C` MUST be retained as exact raw bytes (bounded to the verifier's maximum catalogue size), `SHA256(C)` MUST equal the report's `referenceCatalogueSha256` (or `candidateCatalogueSha256` when every linked entry has `role: \"candidate\"`, `catalogue-not-report-input`), and `predicate.catalogue.profile` MUST equal the report's `profile` (`profile-mismatch`).",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Producer retention of original bytes is a lifecycle obligation beyond the fixture output. Changed-opening rejection does not prove retention; inspect storage behavior.",
+          "spotCheck": true
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-catalogue-not-report-input.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-catalogue-not-report-input.json"
+          ],
+          "violation": "linking a catalogue not used by the report",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-profile-mismatch.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-profile-mismatch.json"
+          ],
+          "violation": "linking a different profile",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        }
+      ]
+    },
+    {
+      "id": "M5-071",
+      "document": "spec/core.md",
+      "section": "line 60 (locator only; exact passage is authoritative)",
+      "sentence": "Local extraction and comparison MUST be available without public network registration. Keys, private catalogues, and real evidence MUST NOT be placed in source trees by default. Publishing a record, subject digest, signature identity, or log event is a separate disclosure action; it can reveal use of Traceweave or permit correlation even when the catalogue stays private.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Network-free availability is a runtime/deployment property; recorded fixtures cannot observe network calls. Requires an offline implementation run.",
+          "spotCheck": true
+        },
+        {
+          "kind": "untestable",
+          "reason": "Default filesystem location, permissions or cleanup is not observable in recorded fixture bytes; requires an implementation filesystem probe.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-072",
+      "document": "spec/core.md",
+      "section": "line 66 (locator only; exact passage is authoritative)",
+      "sentence": "Implementations MUST keep exact-digest verification, signature verification, signer trust, timestamp verification, fingerprint comparison, and rights assessment as separate results. A soft match MUST NOT be reported as a valid exact subject digest. A failed comparison means insufficient matching evidence, not proof that reuse did not occur.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-authorship-claim-0.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-authorship-claim-0.json"
+          ],
+          "violation": "collapsing technical outcomes into an authorship claim",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        },
+        {
+          "kind": "untestable",
+          "reason": "Human-facing interpretation/rendering and implied claims are outside the closed JSON report. Inspect every rendering and claim surface; schema rejection alone does not establish compliance.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-073",
+      "document": "spec/core.md",
+      "section": "line 68 (locator only; exact passage is authoritative)",
+      "sentence": "Rights metadata MUST be treated as claims with supporting references. Retain historical licenses and mixed-origin regions. A technical ancestry match can be real even when reuse is permitted. Neither a permissive-era label nor a post-transition commit alone settles permitted conduct.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Human-facing interpretation/rendering and implied claims are outside the closed JSON report. Inspect every rendering and claim surface; schema rejection alone does not establish compliance.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-074",
+      "document": "spec/registration-record.md",
+      "section": "line 148 (locator only; exact passage is authoritative)",
+      "sentence": "`catalogue` commits to the private catalogue with the existing salted scheme `sha256-salted-catalogue-v1` ([core](core.md#private-catalogue-commitment)), plus the profile triple. It lets a later comparison report be tied to the registered catalogue (\u00a79) without revealing fingerprints now. A plain catalogue digest is rejected (`catalogue-unsalted`; \u00a75 explains why). The catalogue bytes committed to and later opened MUST be retained as exact raw bytes (never re-serialized before opening), which for the fixtures are the RFC 8785 bytes of the catalogue object (contract \u00a73.3). Verifiers MUST enforce a bounded memory/byte-length cap when checking `C` (`1 MiB` / `1,048,576` bytes in the M4 policy/harness) and stream/bound artifact hashing for `A`.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Producer retention of original bytes is a lifecycle obligation beyond the fixture output. Changed-opening rejection does not prove retention; inspect storage behavior.",
+          "spotCheck": true
+        },
+        {
+          "kind": "untestable",
+          "reason": "Bounded/streaming hashing is resource behavior not observable in output fixtures; inspect implementation allocations and caps (M4 harness uses 1 MiB for C).",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-075",
+      "document": "spec/registration-record.md",
+      "section": "line 261 (locator only; exact passage is authoritative)",
+      "sentence": "3. **Signing certificate.** The SigningCertificate attribute, ESSCertIDv2 (RFC 5816 \u00a72, \"MUST be included\") or ESSCertID, identifies the certificate named by the SignerInfo; otherwise `tsa-signing-cert-mismatch`.",
+      "clauses": [
+        {
+          "kind": "definitional",
+          "reason": "Quoted RFC 5816 requirement in the authority discussion; the applicable local signing-certificate rule is exercised by neg-tsa-signing-cert-mismatch.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-076",
+      "document": "spec/registration-record.md",
+      "section": "line 539 (locator only; exact passage is authoritative)",
+      "sentence": "1. **Parse** strictly: no duplicate keys (`duplicate-key`); size limits as in the signing harness. Base64 fields may be standard or URL-safe, because DSSE says verifiers \"MUST accept either\" (S7; `bundle-url-safe`). Outcome `envelope`: `ok` | `malformed` (`envelope-shape`, which also covers one key signing twice: `neg-duplicate-signer`).",
+      "clauses": [
+        {
+          "kind": "definitional",
+          "reason": "Quoted DSSE transport requirement, also mapped as a local requirement in spec/attestations.md.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-077",
+      "document": "spec/registration-record.md",
+      "section": "line 580 (locator only; exact passage is authoritative)",
+      "sentence": "**Side-channel boundary (`CD-A5`).** Comparing public commitment digests during `catalogueOpening` verification operates on values supplied by the opener (`R` and `C`) rather than secret material, whereas private Ed25519 signing and OS CSPRNG nonce generation operate on secret material and MUST use constant-time / side-channel-safe primitives and OS CSPRNG APIs.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Constant-time primitives and independent OS CSPRNG sampling are internal properties, not observable from deterministic public fixtures. Requires source/API inspection; fixture nonce inequality tests only the observable part.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-078",
+      "document": "spec/registration-record.md",
+      "section": "line 760 (locator only; exact passage is authoritative)",
+      "sentence": "| Agent Card | \"A2A Servers **MUST** make an Agent Card available\"; discovery at `https://{server_domain}/.well-known/agent-card.json` (\u00a78.1, \u00a78.2). Required fields in the proto: `name`, `description`, `supportedInterfaces`, `version`, `capabilities`, `defaultInputModes`, `defaultOutputModes`, `skills` | A card describes a service. It is not evidence about content |",
+      "clauses": [
+        {
+          "kind": "definitional",
+          "reason": "Quotation of an external service protocol in the proposed hosted-witness research design; no hosted service is included. Review source attribution and applicability; not a new local offline-verifier obligation.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-079",
+      "document": "spec/registration-record.md",
+      "section": "line 763 (locator only; exact passage is authoritative)",
+      "sentence": "| Messages and artifacts | \"Results SHOULD BE returned using Artifacts\"; \"Messages MUST NOT be considered a reliable delivery mechanism for critical information\" (\u00a73.7) | The witness statement is returned as an artifact, never only as a message |",
+      "clauses": [
+        {
+          "kind": "definitional",
+          "reason": "Quotation of an external service protocol in the proposed hosted-witness research design; no hosted service is included. Review source attribution and applicability; not a new local offline-verifier obligation.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-080",
+      "document": "spec/registration-record.md",
+      "section": "line 765 (locator only; exact passage is authoritative)",
+      "sentence": "| Transports | `protocolBinding` values `JSONRPC`, `GRPC`, `HTTP+JSON` (proto); \"Production deployments **MUST** use encrypted communication\" (\u00a77.1) | A hosted witness is HTTPS only |",
+      "clauses": [
+        {
+          "kind": "definitional",
+          "reason": "Quotation of an external service protocol in the proposed hosted-witness research design; no hosted service is included. Review source attribution and applicability; not a new local offline-verifier obligation.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-081",
+      "document": "spec/registration-record.md",
+      "section": "line 766 (locator only; exact passage is authoritative)",
+      "sentence": "| Authentication | \"Identity information is handled at the protocol layer, not within A2A semantics\" (\u00a77); credentials are obtained \"out-of-band\" (\u00a77.3); the server \"**MUST** authenticate every incoming request\" (\u00a77.4). Schemes: API key, HTTP, OAuth 2.0, OpenID Connect, mutual TLS (proto `SecurityScheme`) | The witness can say which authenticated caller presented a digest. That caller identity is whatever the identity provider asserts |",
+      "clauses": [
+        {
+          "kind": "definitional",
+          "reason": "Quotation of an external service protocol in the proposed hosted-witness research design; no hosted service is included. Review source attribution and applicability; not a new local offline-verifier obligation.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-082",
+      "document": "spec/registration-record.md",
+      "section": "line 774 (locator only; exact passage is authoritative)",
+      "sentence": "| MCP tools (M1) | Tools are \"model-controlled\"; \"there **SHOULD** always be a human in the loop with the ability to deny tool invocations\"; clients \"**MUST** consider tool annotations to be untrusted unless they come from trusted servers\"; servers \"**MUST** \u2026 Rate limit tool invocations\" (tools.mdx). Annotations: `readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint` (schema.ts) | The local route is an MCP tool whose annotations say it writes and reaches the network |",
+      "clauses": [
+        {
+          "kind": "definitional",
+          "reason": "Quotation of an external service protocol in the proposed hosted-witness research design; no hosted service is included. Review source attribution and applicability; not a new local offline-verifier obligation.",
+          "spotCheck": true
+        },
+        {
+          "kind": "definitional",
+          "reason": "Quotation of an external service protocol in the proposed hosted-witness research design; no hosted service is included. Review source attribution and applicability; not a new local offline-verifier obligation.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-083",
+      "document": "spec/registration-record.md",
+      "section": "line 862 (locator only; exact passage is authoritative)",
+      "sentence": "| Flooding the hosted witness | Authentication on every request; per-caller rate limits and quotas (MCP servers \"**MUST** \u2026 Rate limit tool invocations\"); one 64-hex digest per request; refusal as `REJECTED` | Cost to the operator, which is why SK.5 must decide |",
+      "clauses": [
+        {
+          "kind": "definitional",
+          "reason": "Quotation of an external service protocol in the proposed hosted-witness research design; no hosted service is included. Review source attribution and applicability; not a new local offline-verifier obligation.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-084",
+      "document": "spec/trust-policy.md",
+      "section": "line 10 (locator only; exact passage is authoritative)",
+      "sentence": "- Cryptographic signature validity, signer trust, subject digest matching, possession verification, time-bound quorum, and claimed fields MUST be evaluated and reported as **separate outcomes**.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-authorship-claim-0.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-authorship-claim-0.json"
+          ],
+          "violation": "merging independent outcomes into authorship",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        }
+      ]
+    },
+    {
+      "id": "M5-085",
+      "document": "spec/trust-policy.md",
+      "section": "line 71 (locator only; exact passage is authoritative)",
+      "sentence": "A verifier MUST refuse the policy and abort verification before inspecting evidence if any of the following hold:",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-policy-negative-lookback.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-policy-negative-lookback.json"
+          ],
+          "violation": "accepting a negative revocation lookback",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        }
+      ]
+    },
+    {
+      "id": "M5-086",
+      "document": "spec/trust-policy.md",
+      "section": "line 82 (locator only; exact passage is authoritative)",
+      "sentence": "Verifiers MUST NOT treat producer-supplied metadata or envelope hints as authoritative:",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-trust-by-hint.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-trust-by-hint.json"
+          ],
+          "violation": "using producer hints as authority",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        }
+      ]
+    },
+    {
+      "id": "M5-087",
+      "document": "spec/trust-policy.md",
+      "section": "line 87 (locator only; exact passage is authoritative)",
+      "sentence": "| Key-event `predicate.keyid` | Consistency check only: MUST equal the first 16 lowercase hex chars of `subject[0].digest.sha256` (`key-event-shape`) | Never used as event target or signer identity. |",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-key-event-shape.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-key-event-shape.json"
+          ],
+          "violation": "accepting an inconsistent key event identifier",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        }
+      ]
+    },
+    {
+      "id": "M5-088",
+      "document": "spec/trust-policy.md",
+      "section": "line 88 (locator only; exact passage is authoritative)",
+      "sentence": "| Evidence `root.anchorSha256` and producer labels | Lookup key only; MUST be recomputed by the verifier from local pinned material (`rootCertificate` DER bytes, local header chain first header, or raw witness/log key) | Producer-written names, URLs, or claimed anchor hashes are never trusted (`root-not-anchored`). |",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-root-not-anchored.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-root-not-anchored.json"
+          ],
+          "violation": "trusting a producer anchor label",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        }
+      ]
+    },
+    {
+      "id": "M5-089",
+      "document": "spec/trust-policy.md",
+      "section": "line 92 (locator only; exact passage is authoritative)",
+      "sentence": "| DSSE `payload` base64 text | Transport encoding only (standard or URL-safe base64 MUST be accepted) | Never hashed or signed directly; PAE signs exact decoded payload bytes (`signature-invalid`). |",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:test-vectors/registration/check_registration.py:base64"
+          ],
+          "negativeFixtures": [
+            "checker:test-vectors/registration/check_registration.py:base64"
+          ],
+          "violation": "rejecting a permitted base64 transport spelling",
+          "failsBecause": "The promoted bundle-url-safe fixture and adapter URL-safe accept fixture require acceptance of URL-safe base64; a changed outcome fails the checker."
+        }
+      ]
+    },
+    {
+      "id": "M5-090",
+      "document": "spec/trust-policy.md",
+      "section": "line 105 (locator only; exact passage is authoritative)",
+      "sentence": "1. **No quorum bound:** If any applied or disputed key event targets `D` or names `D` as successor, and signature `i` has no quorum bound (`below-quorum` or `none-valid`), signer trust MUST be `disputed` (never `trusted`). Single-source time cannot resolve key-event ordering.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-key-event-ignored.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-key-event-ignored.json"
+          ],
+          "violation": "ignoring disputed key events",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        }
+      ]
+    },
+    {
+      "id": "M5-091",
+      "document": "spec/trust-policy.md",
+      "section": "line 108 (locator only; exact passage is authoritative)",
+      "sentence": "   - Each key-event envelope MUST carry **exactly one** signature (`key-event-signatures`), is identified by `SHA-256(payload || signature)`, and requires its own quorum time bound `E` (otherwise `ignored-no-proved-time`).",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-key-event-two-signatures.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-key-event-two-signatures.json"
+          ],
+          "violation": "accepting a two-signature key event",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        }
+      ]
+    },
+    {
+      "id": "M5-092",
+      "document": "spec/trust-policy.md",
+      "section": "line 118 (locator only; exact passage is authoritative)",
+      "sentence": "- **Anchor-keyed roots:** Every accepted time source MUST be listed in `timeRoots` by its verifier-computed `anchorSha256` and `kind`:",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:tools/check_release_boundaries.py:unlisted-root"
+          ],
+          "negativeFixtures": [
+            "checker:tools/check_release_boundaries.py:unlisted-root"
+          ],
+          "violation": "counting evidence from an unlisted root",
+          "failsBecause": "The cited self-test introduces counting evidence from an unlisted root; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-093",
+      "document": "spec/trust-policy.md",
+      "section": "line 132 (locator only; exact passage is authoritative)",
+      "sentence": "A verifier MUST refuse (never count toward `distinctRoots` or bounds):",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:tools/check_release_boundaries.py:unlisted-root"
+          ],
+          "negativeFixtures": [
+            "checker:tools/check_release_boundaries.py:unlisted-root"
+          ],
+          "violation": "counting evidence from an unlisted root",
+          "failsBecause": "The cited self-test introduces counting evidence from an unlisted root; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-094",
+      "document": "spec/trust-policy.md",
+      "section": "line 133 (locator only; exact passage is authoritative)",
+      "sentence": "1. **Unlisted or unpinned roots:** Any evidence whose computed `anchorSha256` is absent from `timeRoots` for its `kind` MUST receive outcome `untrusted-root`.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:tools/check_release_boundaries.py:unlisted-root"
+          ],
+          "negativeFixtures": [
+            "checker:tools/check_release_boundaries.py:unlisted-root"
+          ],
+          "violation": "counting evidence from an unlisted root",
+          "failsBecause": "The cited self-test introduces counting evidence from an unlisted root; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-095",
+      "document": "spec/trust-policy.md",
+      "section": "line 134 (locator only; exact passage is authoritative)",
+      "sentence": "2. **Test-only / synthetic anchors:** Public fixture roots (such as `test-vectors/registration/real-format/`) MUST NEVER be placed in a production trust policy.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Whether public test roots are put in a production policy depends on deployment configuration; fixtures deliberately use synthetic roots. Requires production policy inspection.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-096",
+      "document": "spec/trust-policy.md",
+      "section": "line 135 (locator only; exact passage is authoritative)",
+      "sentence": "3. **Unpinned OpenTimestamps chains:** An `opentimestamps` proof without a local header source and pinned `checkpoint` (`minConfirmations >= 1`) MUST receive `unsupported`; a proof whose attested height fails `height <= checkpoint.height - minConfirmations` or does not link back from `checkpoint` through `prevBlockHash` MUST receive `insufficient-confirmations`. Pending proofs MUST receive `pending` and never count (`pending-counted`).",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:tools/check_release_boundaries.py:unpinned-ots"
+          ],
+          "negativeFixtures": [
+            "checker:tools/check_release_boundaries.py:unpinned-ots"
+          ],
+          "violation": "accepting OTS without a pinned checkpoint",
+          "failsBecause": "The cited self-test introduces accepting OTS without a pinned checkpoint; the promoted checker rejects the changed output."
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:tools/check_release_boundaries.py:insufficient-confirmations"
+          ],
+          "negativeFixtures": [
+            "checker:tools/check_release_boundaries.py:insufficient-confirmations"
+          ],
+          "violation": "accepting evidence at the checkpoint with insufficient confirmations",
+          "failsBecause": "The cited self-test introduces accepting evidence at the checkpoint with insufficient confirmations; the promoted checker rejects the changed output."
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-pending-counted.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-pending-counted.json"
+          ],
+          "violation": "counting pending evidence",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        }
+      ]
+    },
+    {
+      "id": "M5-097",
+      "document": "spec/trust-policy.md",
+      "section": "line 136 (locator only; exact passage is authoritative)",
+      "sentence": "4. **Invalid RFC 3161 paths or disallowed policy OIDs:** Tokens failing RFC 5280 validation at `genTime` (non-CA issuer, expired intermediate, non-critical or missing `id-kp-timeStamping` EKU, mismatched `ESSCertID`/`ESSCertIDv2`, bad signature/imprint) MUST be refused (`path-invalid`, `tsa-*`), and tokens whose policy OID is absent from `timeRoots[].policyOids` MUST receive `wrong-policy`. Unsupported cryptographic algorithms (such as ECDSA or RSA-PSS where only RSA PKCS #1 v1.5 + SHA-256 is supported) MUST be reported as `unsupported`, never accepted.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-tsa-signature-invalid.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-tsa-signature-invalid.json"
+          ],
+          "violation": "accepting an invalid TSA signature",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "negative:test-vectors/registration/negative/neg-wrong-policy-accepted.json"
+          ],
+          "negativeFixtures": [
+            "negative:test-vectors/registration/negative/neg-wrong-policy-accepted.json"
+          ],
+          "violation": "accepting a disallowed policy OID",
+          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:tools/check_release_boundaries.py:verification-result-real-ecdsa"
+          ],
+          "negativeFixtures": [
+            "checker:tools/check_release_boundaries.py:verification-result-real-ecdsa"
+          ],
+          "violation": "reporting an unsupported algorithm as valid",
+          "failsBecause": "The cited self-test introduces reporting an unsupported algorithm as valid; the promoted checker rejects the changed output."
+        }
+      ]
+    },
+    {
+      "id": "M5-098",
+      "document": "spec/trust-policy.md",
+      "section": "line 137 (locator only; exact passage is authoritative)",
+      "sentence": "5. **Placeholder evidence:** Any evidence with `placeholder: true` or `PLACEHOLDER` token prefix MUST be refused in production verification.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Production rejection of placeholder evidence is a deployment-mode boundary: fixtures deliberately permit test-only evidence. Inspect production mode selection and policy.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-099",
+      "document": "spec/trust-policy.md",
+      "section": "line 141 (locator only; exact passage is authoritative)",
+      "sentence": "- **Offline-first execution:** Verification MUST execute with zero network access against locally retained material: the bundle, pinned `rootCertificate` files, token-embedded intermediate certificates, retained `revocationData`, and the verifier's local Bitcoin header file + `checkpoint`.",
+      "clauses": [
+        {
+          "kind": "untestable",
+          "reason": "Zero network access requires an execution sandbox or runtime tracing; recorded fixture bytes cannot show whether a verifier contacted a network.",
+          "spotCheck": true
+        }
+      ]
+    },
+    {
+      "id": "M5-100",
+      "document": "spec/trust-policy.md",
+      "section": "line 142 (locator only; exact passage is authoritative)",
+      "sentence": "- **Mandatory revocation data for RFC 3161:** Every `tsa-certificate-chain` root MUST have a `revocationData` entry specifying `source` and `asOf`. If revocation data is missing for a token's anchor, the token MUST receive `no-revocation-data` and MUST NOT count toward quorum.",
+      "clauses": [
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:tools/check_release_boundaries.py:verification-result-no-revocation-data"
+          ],
+          "negativeFixtures": [
+            "checker:tools/check_release_boundaries.py:verification-result-no-revocation-data"
+          ],
+          "violation": "counting a token without revocation data",
+          "failsBecause": "The cited self-test introduces counting a token without revocation data; the promoted checker rejects the changed output."
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:tools/check_release_boundaries.py:verification-result-no-revocation-data"
+          ],
+          "negativeFixtures": [
+            "checker:tools/check_release_boundaries.py:verification-result-no-revocation-data"
+          ],
+          "violation": "counting a token without revocation data",
+          "failsBecause": "The cited self-test introduces counting a token without revocation data; the promoted checker rejects the changed output."
+        },
+        {
+          "kind": "testable",
+          "failsOn": [
+            "checker:tools/check_release_boundaries.py:verification-result-no-revocation-data"
+          ],
+          "negativeFixtures": [
+            "checker:tools/check_release_boundaries.py:verification-result-no-revocation-data"
+          ],
+          "violation": "counting a token without revocation data",
+          "failsBecause": "The cited self-test introduces counting a token without revocation data; the promoted checker rejects the changed output."
+        }
+      ]
+    }
+  ]
+}

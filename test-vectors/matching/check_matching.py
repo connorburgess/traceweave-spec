@@ -1451,6 +1451,13 @@ def corruptions(doc, negatives, example):
     good_cc = (HERE / doc["comparisonConfigFile"]).read_bytes()
     yield make("wrong-span", "go-function-in-host",
                lambda v: mode(v, "exact")["regions"][0]["candidateSpan"].__setitem__(1, mode(v, "exact")["regions"][0]["candidateSpan"][1] + 1))
+    yield make("py-empty-report-span-expanded", "rv-py-empty-span-region",
+               lambda v: mode(v, "exact")["regions"][0]["candidateSpan"].__setitem__(1, 21))
+    yield make("py-empty-report-region-dropped", "rv-py-empty-span-region",
+               lambda v: mode(v, "exact")["regions"].clear())
+    yield make("py-empty-catalogue-span-expanded", "py-empty-span-self",
+               lambda v: next(f for f in v["reference"]["canonical"]["artifacts"][0]["channels"]["exact"]["fingerprints"]
+                              if f["span"][0] == f["span"][1])["span"].__setitem__(1, 36))
     yield make("wrong-outcome-code", "go-renamed", setp(lambda v: mode(v, "normalized"), "outcome", {"class": "abstain", "code": "ambiguous"}))
     yield make("wrong-outcome-class", "go-no-overlap", setp(lambda v: mode(v, "exact")["outcome"], "class", "abstain"))
     yield make("exact-match-claimed-for-rename", "go-renamed", setp(lambda v: mode(v, "exact"), "outcome", {"class": "match", "code": "match"}))

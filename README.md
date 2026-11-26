@@ -6,7 +6,7 @@
 
 # Traceweave
 
-Traceweave is an open, non-commercial specification for recognising your own work when it turns up somewhere else, and for producing evidence of the match that anyone can re-run and check. One shared evidence format sits underneath, with versioned extraction profiles for each medium (source code, writing, and planned image/audio profiles). Your content never leaves your machine; only fingerprints are compared.
+Traceweave is an open, non-commercial specification for recognising your own work when it turns up somewhere else, and for producing evidence of the match that anyone can re-run and check. One shared evidence format sits underneath, with versioned extraction profiles for each medium (source code, writing, and planned image/audio profiles). The default comparison workflow keeps content on your machine and compares fingerprints locally.
 
 [Website (traceweave.org)](https://traceweave.org) · [Documentation (docs.traceweave.org)](https://docs.traceweave.org) · [Roadmap](ROADMAP.md) · [Use cases](docs/use-cases.md) · [License](LICENSE.md)
 
@@ -26,7 +26,7 @@ Traceweave is an open, non-commercial specification for recognising your own wor
 
 - **Core M0–M5:** **29 of 47** gates met — including all M0–M2 extraction, catalogue, and report contracts, `M2E.0` (source-code embedding omitted from the next release), the M3.0 false-alarm budget, and all 6/6 M4 offline-first registration gates (`traceweave-registration-draft-5`, promoted vectors + independent Rust/Go parity, commitment/disclosure review, verifier-local trust policy, and in-toto adapter fixtures).
 - **Profiles & extensions:** **21 of 55** gates met, plus **2 recorded negative results** (`TXT.4` repeated-structure prose ambiguity in Stage 1; `TXT.8` Unicode text marks erased by standard folding).
-- **Frozen Stage-1 profiles:** `go-tokens`, `rs-tokens`, `ts-tokens`, `py-tokens`, and `text-plain` all have published hand-derived test vectors. Two independent reference implementations (Go and Rust, in a separate repository) plus a zero-import WebAssembly build reproduce every published vector byte-for-byte.
+- **Frozen Stage-1 profiles:** `go-tokens`, `rust2024-tokens`, `ts-tokens`, `py-tokens`, and `text-plain` all have published hand-derived test vectors. Two independent reference implementations (Go and Rust, in a separate repository) plus a zero-import WebAssembly build reproduce the applicable frozen Stage-1 extraction and matching vectors byte-for-byte.
 
 **Epistemic boundaries (read first):**
 
@@ -79,7 +79,7 @@ For full scenarios and architecture trade-offs, read the [use cases](docs/use-ca
 | Medium / Profile | Identifier | Stage | Notes |
 | :--- | :--- | :--- | :--- |
 | Go source code | `go-tokens` | Frozen Stage-1 | Published vectors; Go, Rust & WASM parity (`M1`–`M2` met) |
-| Rust source code | `rs-tokens` | Frozen Stage-1 | Published vectors; Go, Rust & WASM parity (`M1`–`M2` met) |
+| Rust source code | `rust2024-tokens` | Frozen Stage-1 | Published vectors; Go, Rust & WASM parity (`M1`–`M2` met) |
 | TypeScript / JS | `ts-tokens` | Frozen Stage-1 | Published vectors; Go & Rust parity (`TS.3` met); `tsx-tokens` deferred draft |
 | Python | `py-tokens` | Frozen Stage-1 | Promoted `draft-1`; Go & Rust parity (`PY.1`–`PY.3` met); `PY.4` awaits M3 |
 | Plain text | `text-plain` | Frozen Stage-1 | Published vectors; Go & Rust parity (`TXT.3` met); `text-markdown` draft; `TXT.4` & `TXT.8` negative results recorded |
@@ -144,7 +144,7 @@ python3 -m venv .venv
 .venv/bin/python -m unittest discover -s tests -v
 ```
 
-The validator checks JSON Schema structure, synthetic examples, exact fixture digests, commitment openings, DSSE framing vectors, promoted schemas, all promoted vector checkers (extraction, matching, TypeScript, Python, text, registration, in-toto adapter, image-mark finding aid, C2PA fixtures, and the requirement map), and local Markdown links. It does **not** authenticate a signer, validate a timestamp authority, measure clone detection, or establish a false-positive rate.
+The validator checks JSON Schema structure, synthetic examples, exact fixture digests, commitment openings, DSSE framing vectors, promoted schemas, all promoted vector checkers (extraction, matching, TypeScript, Python, text, registration, in-toto adapter, image-mark finding aid, C2PA fixtures, and the requirement map), and local Markdown links. These fixture checks do **not** authenticate a production signer, establish trust in a production timestamp authority, measure clone detection, or establish a false-positive rate.
 
 ## License and contributing
 

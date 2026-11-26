@@ -125,7 +125,9 @@ VECTOR_CHECKERS = (
     ("c2pa mapping fixtures (C2PA.1/C2PA.3)", ("research/drafts/c2pa-fixtures/check_fixtures.py",)),
     ("in-toto adapter fixtures (M4.5)", ("test-vectors/intoto-adapter/check_intoto_adapter.py",)),
     ("registration (M4.3/M4.6)", ("test-vectors/registration/check_registration.py",)),
-    ("requirement map (M1.5) and registration item map (M1.1)", ("tools/check_requirement_map.py",)),
+    ("release time-policy negative boundaries", ("tools/check_release_boundaries.py",)),
+    ("README claim map (M5.2 / TW-07)", ("tools/check_readme_claims.py",)),
+    ("requirement maps (M1.5 / M5.1) and registration item map (M1.1)", ("tools/check_requirement_map.py",)),
 )
 PROMOTED_SCHEMAS = ("catalogue", "report", "record", "review-packet", "candidate-generation")
 

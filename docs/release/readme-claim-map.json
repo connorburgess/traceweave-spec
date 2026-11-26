@@ -1,0 +1,1416 @@
+{
+  "description": "TW-07 complete sentence and fragment inventory. Table data rows are conservatively one compound claim each. Author mapping only; non-author exclusion approval remains pending.",
+  "exclusionRules": [
+    "heading",
+    "link-only",
+    "code-block",
+    "picture",
+    "table-header"
+  ],
+  "approval": "pending non-author review",
+  "excluded": [
+    {
+      "line": 1,
+      "reason": "picture",
+      "text": "<picture>"
+    },
+    {
+      "line": 2,
+      "reason": "picture",
+      "text": "  <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/assets/traceweave-banner-dark.svg\">"
+    },
+    {
+      "line": 3,
+      "reason": "picture",
+      "text": "  <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/assets/traceweave-banner-light.svg\">"
+    },
+    {
+      "line": 4,
+      "reason": "picture",
+      "text": "  <img alt=\"Traceweave — Open specification for local-first content fingerprinting and verifiable cryptographic provenance\" src=\"docs/assets/traceweave-banner-light.svg\" width=\"1200\">"
+    },
+    {
+      "line": 5,
+      "reason": "picture",
+      "text": "</picture>"
+    },
+    {
+      "line": 7,
+      "reason": "heading",
+      "text": "# Traceweave"
+    },
+    {
+      "line": 11,
+      "reason": "link-only",
+      "text": "[Website (traceweave.org)](https://traceweave.org) · [Documentation (docs.traceweave.org)](https://docs.traceweave.org) · [Roadmap](ROADMAP.md) · [Use cases](docs/use-cases.md) · [License](LICENSE.md)"
+    },
+    {
+      "line": 13,
+      "reason": "heading",
+      "text": "## Contents"
+    },
+    {
+      "line": 15,
+      "reason": "link-only",
+      "text": "- [Status and scope](#status-and-scope)"
+    },
+    {
+      "line": 16,
+      "reason": "link-only",
+      "text": "- [How it works](#how-it-works)"
+    },
+    {
+      "line": 17,
+      "reason": "link-only",
+      "text": "- [Three questions and two tracks](#three-questions-and-two-tracks)"
+    },
+    {
+      "line": 18,
+      "reason": "link-only",
+      "text": "- [Profiles and maturity](#profiles-and-maturity)"
+    },
+    {
+      "line": 19,
+      "reason": "link-only",
+      "text": "- [Specification index](#specification-index)"
+    },
+    {
+      "line": 20,
+      "reason": "link-only",
+      "text": "- [Verify this repository locally](#verify-this-repository-locally)"
+    },
+    {
+      "line": 21,
+      "reason": "link-only",
+      "text": "- [License and contributing](#license-and-contributing)"
+    },
+    {
+      "line": 23,
+      "reason": "heading",
+      "text": "## Status and scope"
+    },
+    {
+      "line": 38,
+      "reason": "heading",
+      "text": "## How it works"
+    },
+    {
+      "line": 42,
+      "reason": "picture",
+      "text": "<picture>"
+    },
+    {
+      "line": 43,
+      "reason": "picture",
+      "text": "  <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/assets/traceweave-pipeline-dark.svg\">"
+    },
+    {
+      "line": 44,
+      "reason": "picture",
+      "text": "  <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/assets/traceweave-pipeline-light.svg\">"
+    },
+    {
+      "line": 45,
+      "reason": "picture",
+      "text": "  <img alt=\"Diagram: four local steps run inside a local boundary on your machine — 01 Your Content, 02 Extract fingerprints with pinned configSha256, 03 Catalogue private hash index, and 04 Local Match with containment, similarity, and boilerplate suppression. An arrow leaves the boundary to 05 Reproducible Evidence Report containing a canonical bodySha256 and exact UTF-8 spans for offline re-verification.\" src=\"docs/assets/traceweave-pipeline-light.svg\" width=\"960\">"
+    },
+    {
+      "line": 46,
+      "reason": "picture",
+      "text": "</picture>"
+    },
+    {
+      "line": 53,
+      "reason": "heading",
+      "text": "## Three questions and two tracks"
+    },
+    {
+      "line": 57,
+      "reason": "picture",
+      "text": "<picture>"
+    },
+    {
+      "line": 58,
+      "reason": "picture",
+      "text": "  <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/assets/traceweave-two-tracks-dark.svg\">"
+    },
+    {
+      "line": 59,
+      "reason": "picture",
+      "text": "  <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/assets/traceweave-two-tracks-light.svg\">"
+    },
+    {
+      "line": 60,
+      "reason": "picture",
+      "text": "  <img alt=\"Diagram comparing two tracks. Track A (Candidate Similarity, non-authoritative): deterministic profile extraction, local catalogue and boilerplate suppression, localized byte spans and review packets, and proposed embedded-mark research. Track B (Cryptographic Registration, draft-5): offline-first DSSE/in-toto statements and tw1- references, salted private catalogue commitments, verifier-local trust policy, and optional RFC 3161 or OpenTimestamps evidence. A bottom bar states that neither track proves ownership, infringement, or model training.\" src=\"docs/assets/traceweave-two-tracks-light.svg\" width=\"960\">"
+    },
+    {
+      "line": 61,
+      "reason": "picture",
+      "text": "</picture>"
+    },
+    {
+      "line": 63,
+      "reason": "heading",
+      "text": "### Proposed embedded-mark workflow (research track)"
+    },
+    {
+      "line": 67,
+      "reason": "picture",
+      "text": "<picture>"
+    },
+    {
+      "line": 68,
+      "reason": "picture",
+      "text": "  <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/assets/traceweave-embedded-mark-dark.svg\">"
+    },
+    {
+      "line": 69,
+      "reason": "picture",
+      "text": "  <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/assets/traceweave-embedded-mark-light.svg\">"
+    },
+    {
+      "line": 70,
+      "reason": "picture",
+      "text": "  <img alt=\"Two-stage proposed embedded-mark workflow: Stage A prepares for distribution (Original content plus mark and embedding configuration feed Embed mark to produce Marked content with quality validation); Stage B examines possible reuse (Candidate content plus profile-required verification material feed Detect mark to produce Evidence for review, which may return insufficient evidence).\" src=\"docs/assets/traceweave-embedded-mark-light.svg\" width=\"960\">"
+    },
+    {
+      "line": 71,
+      "reason": "picture",
+      "text": "</picture>"
+    },
+    {
+      "line": 77,
+      "reason": "heading",
+      "text": "## Profiles and maturity"
+    },
+    {
+      "line": 79,
+      "reason": "table-header",
+      "text": "| Medium / Profile | Identifier | Stage | Notes |"
+    },
+    {
+      "line": 80,
+      "reason": "table-header",
+      "text": "| :--- | :--- | :--- | :--- |"
+    },
+    {
+      "line": 90,
+      "reason": "heading",
+      "text": "## Specification index"
+    },
+    {
+      "line": 92,
+      "reason": "heading",
+      "text": "### Core & registration"
+    },
+    {
+      "line": 94,
+      "reason": "table-header",
+      "text": "| Document | Purpose |"
+    },
+    {
+      "line": 95,
+      "reason": "table-header",
+      "text": "| :--- | :--- |"
+    },
+    {
+      "line": 104,
+      "reason": "heading",
+      "text": "### Extraction & profiles"
+    },
+    {
+      "line": 106,
+      "reason": "table-header",
+      "text": "| Document | Purpose |"
+    },
+    {
+      "line": 107,
+      "reason": "table-header",
+      "text": "| :--- | :--- |"
+    },
+    {
+      "line": 116,
+      "reason": "heading",
+      "text": "### Schemas, vectors & examples"
+    },
+    {
+      "line": 118,
+      "reason": "table-header",
+      "text": "| Document | Purpose |"
+    },
+    {
+      "line": 119,
+      "reason": "table-header",
+      "text": "| :--- | :--- |"
+    },
+    {
+      "line": 124,
+      "reason": "heading",
+      "text": "### Evaluation, use cases & governance"
+    },
+    {
+      "line": 126,
+      "reason": "table-header",
+      "text": "| Document | Purpose |"
+    },
+    {
+      "line": 127,
+      "reason": "table-header",
+      "text": "| :--- | :--- |"
+    },
+    {
+      "line": 135,
+      "reason": "heading",
+      "text": "## Verify this repository locally"
+    },
+    {
+      "line": 139,
+      "reason": "code-block",
+      "text": "```sh"
+    },
+    {
+      "line": 140,
+      "reason": "code-block",
+      "text": "python3 -m venv .venv"
+    },
+    {
+      "line": 141,
+      "reason": "code-block",
+      "text": ".venv/bin/python -m pip install -r requirements-dev.txt"
+    },
+    {
+      "line": 142,
+      "reason": "code-block",
+      "text": ".venv/bin/python tools/validate.py"
+    },
+    {
+      "line": 143,
+      "reason": "code-block",
+      "text": ".venv/bin/python tools/validate.py --links-all"
+    },
+    {
+      "line": 144,
+      "reason": "code-block",
+      "text": ".venv/bin/python -m unittest discover -s tests -v"
+    },
+    {
+      "line": 145,
+      "reason": "code-block",
+      "text": "```"
+    },
+    {
+      "line": 149,
+      "reason": "heading",
+      "text": "## License and contributing"
+    }
+  ],
+  "claims": [
+    {
+      "id": "README-001",
+      "sentence": "Traceweave is an open, non-commercial specification for recognising your own work when it turns up somewhere else, and for producing evidence of the match that anyone can re-run and check.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "Keep the layered concept: shared evidence records, exact digests, optional standard signing, content-specific fingerprint profiles, and explicit abstention. Replace the supplied 1.0 draft with a small 0.1 design scaffold. Start locally with a code baseline; leave a resolver, broader modality algorithms, production skill, and claims of transformation resilience gated on evidence.\n"
+        },
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The release label is `0.1.0-draft.1`. The project describes its operation as open and non-commercial; this is a project-scope statement, not an additional restriction on CC BY or Apache licensed reuse. [LICENSE.md](../../LICENSE.md) assigns Markdown prose to CC BY 4.0, schemas/examples/vectors/code/configuration to Apache 2.0, and the two Unicode-derived tables to Unicode License v3. It explicitly limits the licensing split to this repository, rather than content an implementation fingerprints. [CONTRIBUTING.md](../../CONTRIBUTING.md) welcomes independent implementations and evidence-based corrections; [SECURITY.md](../../SECURITY.md) gives the disclosure route. Proposed mechanisms, measured results and normative requirements remain distinct."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-002",
+      "sentence": "One shared evidence format sits underneath, with versioned extraction profiles for each medium (source code, writing, and planned image/audio profiles).",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "Keep the layered concept: shared evidence records, exact digests, optional standard signing, content-specific fingerprint profiles, and explicit abstention. Replace the supplied 1.0 draft with a small 0.1 design scaffold. Start locally with a code baseline; leave a resolver, broader modality algorithms, production skill, and claims of transformation resilience gated on evidence.\n"
+        },
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "[ROADMAP.md](../../ROADMAP.md) is the gate/owner decision ledger, not a detection benchmark. At this audit its progress table records core 29/47 and profiles/extensions 21/55 with two negative results. M5 remains open pending non-author review. The [M2E.0 decision](../decisions/code-embedding-decision.md) includes local fingerprinting and offline-first registration and omits source-code embedding. The specification is a reproducible-evidence proposal, with planned image/audio profiles; successful recognition of arbitrary transformed work is not established."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-003",
+      "sentence": "The default comparison workflow keeps content on your machine and compares fingerprints locally.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "1. **Private-by-default conflicts with required public signing and resolution (§§2.4, 3, 8).** Mandatory Rekor publication, full returned feature vectors, and in-repository key storage can expose participation and private evidence. Make public disclosure optional, keep catalogues outside the source tree, and defer network resolution until its leakage model is specified.\n2. **Prefix bucketing is not a demonstrated k-anonymity guarantee (§3.2).** A 16–24-bit prefix does not guarantee a minimum anonymity set. Multiple prefixes, rare features and adaptive queries can identify a target. Shared-key HMAC does not make this zero knowledge; authorized consortium participants can compute dictionary candidates. Remove the guarantee and benchmark leakage before proposing a resolver.\n3. **The false-positive formula and numerical guarantees are unsupported (§6).** Normalized token dependencies, same-spec code, multiple comparisons and corpus selection invalidate the proposed independent-token shortcut. The rule of three is conditional on sampling assumptions, not a license to tune against 300,000 files and declare a universal bound. Replace with held-out whole-pipeline evaluation.\n4. **Wire formats are not interoperable as written (§2).** The in-toto v1 type is `https://in-toto.io/Statement/v1`, not the draft URN. DSSE PAE requires explicit space separators and decimal byte lengths. An RFC 3161 token is signed verification material, not an ISO date string. See [in-toto](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md), [DSSE](https://github.com/dsse-lf/dsse/blob/master/protocol.md), and [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161).\n5. **Signatures are used to overstate ancestry and replay resistance (§5).** An attacker can sign copied public material or transplant marked fragments. A valid signature authenticates the statement under a trust policy; it does not establish authorship. Preserve exact verification, similarity evidence and rights review as separate results.\n6. **Commit cutoffs overstate rights (§7).** Older permissive expression can persist after the transition, and permissive redistribution has conditions. Post-transition code is not automatically proprietary original expression. A permitted copy is still a technical reuse match. Use region-level histories and actual licenses. [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)."
+        },
+        {
+          "kind": "decision",
+          "path": "docs/decisions/timestamp-adapter-decision.md",
+          "quote": "Traceweave separates cryptographic signing from trusted time:\n- A bare DSSE-signed statement authenticates exact payload bytes under a key, but a key holder can backdate `claims.createdAt` or `recordedAt` at will (`lane 13` T7).\n- By contrast, obtaining live external timestamps introduces network dependencies, provider terms, IP/timing metadata exposure, and (for public logs or blockchains) permanent metadata commitments (`registration-record.md` §5, §17).\n- Verification must remain strictly **offline-first** (`spec/core.md` privacy defaults; `trust-policy.md` §7), never requiring live contact with external services during verification or specification CI."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-004",
+      "sentence": "**Experimental draft `0.1.0-draft.1`**, open and non-commercial.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The release label is `0.1.0-draft.1`. The project describes its operation as open and non-commercial; this is a project-scope statement, not an additional restriction on CC BY or Apache licensed reuse. [LICENSE.md](../../LICENSE.md) assigns Markdown prose to CC BY 4.0, schemas/examples/vectors/code/configuration to Apache 2.0, and the two Unicode-derived tables to Unicode License v3. It explicitly limits the licensing split to this repository, rather than content an implementation fingerprints. [CONTRIBUTING.md](../../CONTRIBUTING.md) welcomes independent implementations and evidence-based corrections; [SECURITY.md](../../SECURITY.md) gives the disclosure route. Proposed mechanisms, measured results and normative requirements remain distinct."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-005",
+      "sentence": "Progress is tracked against verifiable gates in [ROADMAP.md](ROADMAP.md):",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "[ROADMAP.md](../../ROADMAP.md) is the gate/owner decision ledger, not a detection benchmark. At this audit its progress table records core 29/47 and profiles/extensions 21/55 with two negative results. M5 remains open pending non-author review. The [M2E.0 decision](../decisions/code-embedding-decision.md) includes local fingerprinting and offline-first registration and omits source-code embedding. The specification is a reproducible-evidence proposal, with planned image/audio profiles; successful recognition of arbitrary transformed work is not established."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-006",
+      "sentence": "**Core M0–M5:** **29 of 47** gates met — including all M0–M2 extraction, catalogue, and report contracts, `M2E.0` (source-code embedding omitted from the next release), the M3.0 false-alarm budget, and all 6/6 M4 offline-first registration gates (`traceweave-registration-draft-5`, promoted vectors + independent Rust/Go parity, commitment/disclosure review, verifier-local trust policy, and in-toto adapter fixtures).",
+      "evidence": [
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| Core M0–M5 | 47 | 29 (M0.1, M0.2, M0.3, M0.4, M1.1, M1.2, M1.3, M1.4, M1.5, M1.6, M2.1, M2.2, M2.3, M2.4, M2.5, M2.6, M2.7, M2.8, M2.9, M2.10, M2.11, M2E.0, M3.0, M4.1, M4.2, M4.3, M4.4, M4.5, M4.6) | 0 | 18 (M2E.1–M2E.7, M3.1–M3.6, M5.1–M5.5) |"
+        },
+        {
+          "kind": "decision",
+          "path": "docs/decisions/code-embedding-decision.md",
+          "quote": "Traceweave **omits source-code embedded marking** from the next release. The next release covers:"
+        },
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| M4.4 | E | Two implementations, each with its own strict parser and key-hint policy, produce identical bytes and reason codes on every M4.3 vector | **met** (`connorburgess/traceweave` `main` @ `5b9a881`, pinned to published spec `9cf78ee` with `356/356` vendored files verified by `scripts/check-spec-pin --strict`, independent Rust + Go offline-first `traceweave-registration-draft-5` + §4.7 `claims.aiUse` + §9.1 `tw1-`, passing 86/86 positive and 147/147 negative promoted `test-vectors/registration/` fixtures + cross-CLI interop + `tw1-` + fuzz + WASM parity with 0 divergences and 0 new external dependencies; confirmed by non-author spot-check) | I |"
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/promotion-m4-py-review.md",
+          "quote": "**Verdict: `accept` (0 blocking defects).**\nCore gates **M4.3** and **M4.6**, and later-profile gates **PY.1** and **PY.2**, all meet their `ROADMAP.md` criteria and may be marked **met**."
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/m4-5-intoto-review.md",
+          "quote": "| `tools/validate.py` | **PASS** (exit 0) | Includes `in-toto adapter fixtures (M4.5)` in `VECTOR_CHECKERS` |"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-007",
+      "sentence": "**Profiles & extensions:** **21 of 55** gates met, plus **2 recorded negative results** (`TXT.4` repeated-structure prose ambiguity in Stage 1; `TXT.8` Unicode text marks erased by standard folding).",
+      "evidence": [
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| Later profiles, EXT and RC | 55 | 21 (TS.3, PY.1, PY.2, PY.3, IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4, TXT.3, TXT.7, RES.1, C2PA.3, SK.1, SK.2, WEB.0, WEB.1, WEB.2) | 2 (TXT.4, TXT.8) | 32 (WEB.3–WEB.6 and SK.3–SK.5 planned; PY.4 open) |"
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/txt8-unicode-mark-review.md",
+          "quote": "**Verdict: `negative-result` confirmed for Unicode carriers.** Lane 09's reading that homoglyph and zero-width Unicode carriers are erased by the declared deterministic fold (`NFKC` + UTS #39 `skeleton` + delete `Default_Ignorable_Code_Point`) and that AWT post-hoc lexical rewriting is rightly rejected is independently confirmed. Any new text-mark experiment remains owner-blocked."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-008",
+      "sentence": "**Frozen Stage-1 profiles:** `go-tokens`, `rust2024-tokens`, `ts-tokens`, `py-tokens`, and `text-plain` all have published hand-derived test vectors.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/core-gates-m1-m2-review.md",
+          "quote": "My script compares every file of `test-vectors/`, `schemas/`, `spec/` and `profiles/` at `437d619` with HEAD. JSON files are compared vector by vector, with only the new metadata keys stripped.\n- Unchanged: **every one of the 123 earlier extraction vectors** (34 Go, 78 Rust, 3 + 3 limits, 5 exclusion-rule) and the 28 config negatives.\n- Unchanged: **all 76 earlier matching vectors**.\n- 79 other files are byte-identical.\n- Changed: the documents, the harness and checker code, and `matching.json`'s `requiredTags`, which gained `vendor`, `empty-span`, `equal-starts` and `py-tokens`.\n- The author's `compare_outputs.py 437d619` also passes (123 compared, 60 added)."
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/promotion-m4-py-review.md",
+          "quote": "- Diff in `5facdd4`:\n  1. Updated `description` from `\"union of both profiles\"` to `\"union across registered token profiles\"`.\n  2. Updated `$defs.token.properties.class.pattern` from `\"^[a-z]+$\"` to `\"^[a-z]+(?:-[a-z]+)*$\"`.\n  3. Added `\"inconsistent-indentation\"` and `\"unmatched-dedent\"` to `$defs.lexicalErrorResult.properties.error.properties.code.enum`.\n- **No weakening of existing checks:** `^[a-z]+(?:-[a-z]+)*$` accepts all existing single-word lowercase classes (`^[a-z]+$`) and hyphenated Python classes (`fstring-start`, `fstring-middle`, `fstring-end`, `tstring-start`, `tstring-middle`, `tstring-end`), while continuing to reject empty strings, leading/trailing hyphens (`-start`, `start-`), consecutive hyphens (`fstring--start`), uppercase, digits, and underscores. Per-profile closed token-class and error-code lists remain enforced by `test-vectors/matching/check_matching.py`.\n- **Validation:** Validating all **107** vectors in `test-vectors/extraction-python/py.json` and all **3** vectors in `limits-py.json` (wrapped as `traceweave-extraction-record-draft-1` records) against `schemas/record.schema.json` passes **110/110**, and `ContractTests.test_record_schema_accepts_python_token_classes_and_error_codes` passes in `unittest`."
+        },
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| TS.3 | E | Two implementations without a shared lexer match the TS.2 expected bytes **Status: met** (`connorburgess/traceweave` `main` @ `8011b6d`; non-author review `docs/reviews/text-ts-review.md`). Independent Rust + Go implementations match `ts-tokens` 132/132 vendored vectors and 3,684 integrator + 768 reviewer + 102 adversarial differential cases with 0 divergences; `tsx-tokens` is rejected as `unsupported-config`. | I |"
+        },
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| TXT.3 | E | Two implementations, each using its own Unicode normalization and case-folding code pinned to the profile's Unicode version, equal the TXT.2 expected bytes on every vector **Status: met** (`connorburgess/traceweave` `main` @ `8011b6d`; non-author review `docs/reviews/text-ts-review.md`). Independent Rust + Go implementations match `text-plain` 154/154 vendored vectors and 3,684 integrator + 768 reviewer + 102 adversarial differential cases with 0 divergences; `text-markdown` is rejected as `unsupported-config`. | I |"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-009",
+      "sentence": "Two independent reference implementations (Go and Rust, in a separate repository) plus a zero-import WebAssembly build reproduce the applicable frozen Stage-1 extraction and matching vectors byte-for-byte.",
+      "evidence": [
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| WEB.1 | E | The Rust implementation compiles to WebAssembly. For every vendored extraction, record, catalogue and matching vector of the profiles it implements, the in-browser build's output is byte-identical to the command-line build's, k/k, run headless in CI. **Status: met** (`connorburgess/traceweave` `main` @ `51f29d7`: `crates/tw-wasm`, `web/tw-wasm.js`, `web/test_wasm.mjs`, non-author review `docs/reviews/web-wasm-review.md`: 1,128,365-byte pure-Rust `.wasm`, 0 WASM imports, 0 new external crates, 451/451 extraction + 76/76 record + 214 catalogue + 93/93 matching + M4 registration byte-identical to stamped CLI under `scripts/offline`; non-blocking note that `web/test_wasm.mjs` CI job wiring is a follow-up). | I |"
+        },
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| TS.3 | E | Two implementations without a shared lexer match the TS.2 expected bytes **Status: met** (`connorburgess/traceweave` `main` @ `8011b6d`; non-author review `docs/reviews/text-ts-review.md`). Independent Rust + Go implementations match `ts-tokens` 132/132 vendored vectors and 3,684 integrator + 768 reviewer + 102 adversarial differential cases with 0 divergences; `tsx-tokens` is rejected as `unsupported-config`. | I |"
+        },
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| PY.3 | E | Two implementations without a shared lexer match the PY.2 expected bytes **Status: met** (`connorburgess/traceweave` `main` @ `b5d981c`; non-author review `docs/reviews/py-review.md`). Independent Rust + Go implementations reproduce `py.json` 107/107, `limits-py.json` 3/3, `config-negative-python.json` 19/19, and `extraction-py.json` 3/3 byte-for-byte, plus 1,952 integrator + 753 reviewer + 45 adversarial differential cases with 0 divergences and 0 new external dependencies (`PY3`/`PY-Q4` `record.schema.json` caveat closed on promotion 2026-11-25). | I |"
+        },
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| TXT.3 | E | Two implementations, each using its own Unicode normalization and case-folding code pinned to the profile's Unicode version, equal the TXT.2 expected bytes on every vector **Status: met** (`connorburgess/traceweave` `main` @ `8011b6d`; non-author review `docs/reviews/text-ts-review.md`). Independent Rust + Go implementations match `text-plain` 154/154 vendored vectors and 3,684 integrator + 768 reviewer + 102 adversarial differential cases with 0 divergences; `text-markdown` is rejected as `unsupported-config`. | I |"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-010",
+      "sentence": "**Epistemic boundaries (read first):**",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "## Recommended disposition"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-011",
+      "sentence": "Nothing here is yet a production detector, signing client, resolver, or agent skill.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "Keep the layered concept: shared evidence records, exact digests, optional standard signing, content-specific fingerprint profiles, and explicit abstention. Replace the supplied 1.0 draft with a small 0.1 design scaffold. Start locally with a code baseline; leave a resolver, broader modality algorithms, production skill, and claims of transformation resilience gated on evidence.\n"
+        },
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The supported floor is Python 3.11, also the lowest version selected by [.github/workflows/validate.yml](../../.github/workflows/validate.yml). Dependency installation/fetch precedes offline checks. `tools/validate.py` uses a local schema registry without a retrieval callback, exact fixture digest checks, and isolated local checker subprocesses; `--links-all` checks local Markdown destinations. The commands check synthetic fixtures and recorded outputs, not production identities or a held-out detection corpus. Registration real-format fixtures deliberately use public test-only roots; successful fixture cryptography is not trust in a production timestamp authority. The release adds the complete requirement map, README map and boundary probes to this checker list."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-012",
+      "sentence": "No detection rate has been measured; resilience to transformations is a goal to measure per profile, not a guarantee.",
+      "evidence": [
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| M3.4 | E | Held-out report: recall by transformation × fragment-size bucket; false alarms per repository search; abstentions; candidate volume; runtime; peak memory. Every figure has a denominator | open | I |"
+        },
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "- **Winnowing is conflated with MinHash (§4.1).** The profile switches between rolling hashes and BLAKE3 without specifying the conversion. Tie-breaking, hash encodings, grammar versions, scope normalization and parser failure behavior are missing. Whole-file Jaccard hides extracted fragments in large hosts. Require a deterministic profile and local containment/alignment.\n- **Unvalidated robustness labels (§§1, 5).** Passive fingerprints do not generically survive refactoring or compression. Whitespace can be syntactic, and docstrings are not always comments. Exact AST hashes do not survive arbitrary loop inversion. Remove “100%,” categorical survival, and mathematical-impossibility claims without explicit assumptions and evaluations.\n- **Modality descriptions need correction (§4).** The image recipe excludes the DC coefficient from 64 coefficients but still calls the result 64 bits. Chromaprint is conflated with a peak-constellation design and assigned an unsupported universal BER. TLSH digest size/encoding and hard distance thresholds need a versioned definition and empirical support. Treat each as a separate research profile. [Chromaprint](https://github.com/acoustid/chromaprint), [TLSH](https://github.com/trendmicro/tlsh).\n- **Abstention rules conflict (§§5–6).** Thresholds of 20, 25/35, and 40 tokens serve different purposes without clear distinction. Requiring three independent subtrees can reject a distinctive single-function copy. Keep theoretical locality separate from empirical evidence sufficiency; calibrate rather than invent universal cutoffs.\n- **Sigstore requirements are overstated (§2.4).** The bundle format does not mandate all of keyless signing, transparency, and RFC 3161 together. Fulcio certifies a supplied public key; it does not supply the client's private key. Time evidence does not guarantee indefinite archival validity. [Bundle documentation](https://docs.sigstore.dev/about/bundle/).\n- **Schema gaps (§10).** Use the real JSON Schema 2020-12 dialect URI, reject unexpected fields where appropriate, constrain digest lengths and nonempty arrays, distinguish draft versions, and use real test fixtures rather than ellipsis placeholders. The example's supposed 64-bit values have only eight hex digits. Shape checks still cannot validate signatures or rights.\n- **A single verification cost is misleading (§1).** Hashing and parsing the signed message depend on its size; trust-chain and timestamp validation add work. A detached signature can still verify when a derivative changes, while the derivative's exact subject digest fails."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-013",
+      "sentence": "Cryptographic verification authenticates a record; it does **not** make a similarity claim true or establish ownership, copyright infringement, or model training.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "1. **Private-by-default conflicts with required public signing and resolution (§§2.4, 3, 8).** Mandatory Rekor publication, full returned feature vectors, and in-repository key storage can expose participation and private evidence. Make public disclosure optional, keep catalogues outside the source tree, and defer network resolution until its leakage model is specified.\n2. **Prefix bucketing is not a demonstrated k-anonymity guarantee (§3.2).** A 16–24-bit prefix does not guarantee a minimum anonymity set. Multiple prefixes, rare features and adaptive queries can identify a target. Shared-key HMAC does not make this zero knowledge; authorized consortium participants can compute dictionary candidates. Remove the guarantee and benchmark leakage before proposing a resolver.\n3. **The false-positive formula and numerical guarantees are unsupported (§6).** Normalized token dependencies, same-spec code, multiple comparisons and corpus selection invalidate the proposed independent-token shortcut. The rule of three is conditional on sampling assumptions, not a license to tune against 300,000 files and declare a universal bound. Replace with held-out whole-pipeline evaluation.\n4. **Wire formats are not interoperable as written (§2).** The in-toto v1 type is `https://in-toto.io/Statement/v1`, not the draft URN. DSSE PAE requires explicit space separators and decimal byte lengths. An RFC 3161 token is signed verification material, not an ISO date string. See [in-toto](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md), [DSSE](https://github.com/dsse-lf/dsse/blob/master/protocol.md), and [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161).\n5. **Signatures are used to overstate ancestry and replay resistance (§5).** An attacker can sign copied public material or transplant marked fragments. A valid signature authenticates the statement under a trust policy; it does not establish authorship. Preserve exact verification, similarity evidence and rights review as separate results.\n6. **Commit cutoffs overstate rights (§7).** Older permissive expression can persist after the transition, and permissive redistribution has conditions. Post-transition code is not automatically proprietary original expression. A permitted copy is still a technical reuse match. Use region-level histories and actual licenses. [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-014",
+      "sentence": "Synthetic carrier and signing interoperability runs ([experiment-checkpoint.md](research/experiment-checkpoint.md)) remain research records.",
+      "evidence": [
+        {
+          "kind": "benchmark",
+          "path": "research/experiment-checkpoint.md",
+          "quote": "| [Go carriers](lanes/go-carrier-results.md): declaration order and local names | 62/62 completed raw states recover and survive gofmt; 248 compiled return-value checks pass | Normalization resets all 55 nonzero states; direct-return rewriting removes all 62 carrier instances |"
+        },
+        {
+          "kind": "benchmark",
+          "path": "research/experiment-checkpoint.md",
+          "quote": "| [Rust carriers](lanes/rust-carrier-results.md): declaration order and literal spelling | 62/62 completed raw states recover after actual rustfmt rewrites; 372 compiled checks pass across debug/optimized builds | Normalization resets all 55 nonzero states; malformed syntax and unsupported inputs refuse unchanged |"
+        },
+        {
+          "kind": "benchmark",
+          "path": "research/experiment-checkpoint.md",
+          "quote": "| [Signing interoperability](lanes/signing-interop-results.md): pinned Go and Rust DSSE libraries | 66 expected outcomes pass across four producer/consumer combinations under OS network denial | Native duplicate-key and unsigned key-hint handling differ; strict application policy remains necessary |"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-015",
+      "sentence": "C2PA 2.5 mapping is a draft proposal with fixtures; no C2PA compatibility is claimed.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/media-c2pa-av-review.md",
+          "quote": "The three deliverables (`IMG.5` finding-aid schema/fixtures, `C2PA.1–C2PA.3` registration-link mapping/fixtures, and Lane 15 audio/video scoping) are well-structured and cleanly isolated from promoted `spec/` and `profiles/` contracts, and all existing checkers and tests pass. However, adversarial testing surfaced **two blocking items** that should be fixed before merging into `roadmap-v2`:"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-016",
+      "sentence": "The specification and algorithms are public, while owners keep their keys, reference catalogues, and investigation records private.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "1. **Private-by-default conflicts with required public signing and resolution (§§2.4, 3, 8).** Mandatory Rekor publication, full returned feature vectors, and in-repository key storage can expose participation and private evidence. Make public disclosure optional, keep catalogues outside the source tree, and defer network resolution until its leakage model is specified.\n2. **Prefix bucketing is not a demonstrated k-anonymity guarantee (§3.2).** A 16–24-bit prefix does not guarantee a minimum anonymity set. Multiple prefixes, rare features and adaptive queries can identify a target. Shared-key HMAC does not make this zero knowledge; authorized consortium participants can compute dictionary candidates. Remove the guarantee and benchmark leakage before proposing a resolver.\n3. **The false-positive formula and numerical guarantees are unsupported (§6).** Normalized token dependencies, same-spec code, multiple comparisons and corpus selection invalidate the proposed independent-token shortcut. The rule of three is conditional on sampling assumptions, not a license to tune against 300,000 files and declare a universal bound. Replace with held-out whole-pipeline evaluation.\n4. **Wire formats are not interoperable as written (§2).** The in-toto v1 type is `https://in-toto.io/Statement/v1`, not the draft URN. DSSE PAE requires explicit space separators and decimal byte lengths. An RFC 3161 token is signed verification material, not an ISO date string. See [in-toto](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md), [DSSE](https://github.com/dsse-lf/dsse/blob/master/protocol.md), and [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161).\n5. **Signatures are used to overstate ancestry and replay resistance (§5).** An attacker can sign copied public material or transplant marked fragments. A valid signature authenticates the statement under a trust policy; it does not establish authorship. Preserve exact verification, similarity evidence and rights review as separate results.\n6. **Commit cutoffs overstate rights (§7).** Older permissive expression can persist after the transition, and permissive redistribution has conditions. Post-transition code is not automatically proprietary original expression. A permitted copy is still a technical reuse match. Use region-level histories and actual licenses. [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)."
+        },
+        {
+          "kind": "decision",
+          "path": "docs/decisions/code-embedding-decision.md",
+          "quote": "Traceweave **omits source-code embedded marking** from the next release. The next release covers:"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-017",
+      "sentence": "The default workflow runs strictly offline on your own machine and does not require publishing an identity, fingerprint vector, or signing event.",
+      "evidence": [
+        {
+          "kind": "decision",
+          "path": "docs/decisions/timestamp-adapter-decision.md",
+          "quote": "Traceweave separates cryptographic signing from trusted time:\n- A bare DSSE-signed statement authenticates exact payload bytes under a key, but a key holder can backdate `claims.createdAt` or `recordedAt` at will (`lane 13` T7).\n- By contrast, obtaining live external timestamps introduces network dependencies, provider terms, IP/timing metadata exposure, and (for public logs or blockchains) permanent metadata commitments (`registration-record.md` §5, §17).\n- Verification must remain strictly **offline-first** (`spec/core.md` privacy defaults; `trust-policy.md` §7), never requiring live contact with external services during verification or specification CI."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-018",
+      "sentence": "**Extract locally:** A versioned profile tokenizes source bytes into deterministic k-gram fingerprints and original UTF-8 byte spans, pinned by `configSha256`.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/core-gates-m1-m2-review.md",
+          "quote": "## 3. M1.1: the registration item map"
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/core-gates-m1-m2-review.md",
+          "quote": "## 1. Byte identity (both sides, independent)"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-019",
+      "sentence": "**Index privately:** Fingerprints are stored in a local catalogue outside your working tree, with optional salted commitments so you can commit to a catalogue without revealing its contents.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "1. **Private-by-default conflicts with required public signing and resolution (§§2.4, 3, 8).** Mandatory Rekor publication, full returned feature vectors, and in-repository key storage can expose participation and private evidence. Make public disclosure optional, keep catalogues outside the source tree, and defer network resolution until its leakage model is specified.\n2. **Prefix bucketing is not a demonstrated k-anonymity guarantee (§3.2).** A 16–24-bit prefix does not guarantee a minimum anonymity set. Multiple prefixes, rare features and adaptive queries can identify a target. Shared-key HMAC does not make this zero knowledge; authorized consortium participants can compute dictionary candidates. Remove the guarantee and benchmark leakage before proposing a resolver.\n3. **The false-positive formula and numerical guarantees are unsupported (§6).** Normalized token dependencies, same-spec code, multiple comparisons and corpus selection invalidate the proposed independent-token shortcut. The rule of three is conditional on sampling assumptions, not a license to tune against 300,000 files and declare a universal bound. Replace with held-out whole-pipeline evaluation.\n4. **Wire formats are not interoperable as written (§2).** The in-toto v1 type is `https://in-toto.io/Statement/v1`, not the draft URN. DSSE PAE requires explicit space separators and decimal byte lengths. An RFC 3161 token is signed verification material, not an ISO date string. See [in-toto](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md), [DSSE](https://github.com/dsse-lf/dsse/blob/master/protocol.md), and [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161).\n5. **Signatures are used to overstate ancestry and replay resistance (§5).** An attacker can sign copied public material or transplant marked fragments. A valid signature authenticates the statement under a trust policy; it does not establish authorship. Preserve exact verification, similarity evidence and rights review as separate results.\n6. **Commit cutoffs overstate rights (§7).** Older permissive expression can persist after the transition, and permissive redistribution has conditions. Post-transition code is not automatically proprietary original expression. A permitted copy is still a technical reuse match. Use region-level histories and actual licenses. [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)."
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/promotion-m4-py-review.md",
+          "quote": "| `CD-B1` | **Implemented.** `spec/core.md` (`#salted-possession-digest`, `#catalogue-opening-verification`) and `spec/attestations.md` normatively specify `sha256-salted-possession-v1` (`Traceweave-Possession-v1\\x00`), independent OS CSPRNG nonce generation, and 4-step `catalogueOpening` verification, backed by promoted vectors in `test-vectors/registration/` and `test-vectors/intoto-adapter/` wired into `tools/validate.py`. |"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-020",
+      "sentence": "**Compare deterministically:** Candidate files are matched against the catalogue with fragment containment and whole-file similarity reported as separate fields, explicit boilerplate suppression, and a distinct-hash minimum floor.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/core-gates-m1-m2-review.md",
+          "quote": "- **What the design does.** Regions stay visible (`common-only`, with counts) and never count as evidence, and `vendor-unsuppressed` shows the alternative. The review-packet link works: the `common-only` vendored region is listed, so its key can be cited (`packet-vendored-common-only`).\n- **Hidden reuse.** Suppression is per hash, for *every* pair, so it can hide real reuse. Code copied from the vendored library into a project's **own** files also becomes `common-only`.\n- **Changed outcomes for unrelated pairs.** Any pair sharing an idiom with the vendor files loses evidence. The vendor and boilerplate lists are one catalogue per comparison (§5.2), so the report cannot say which suppressed hashes came from vendor files.\n- **Fix:** state these effects in §5.2 and §8. Recommend reporting suppressed regions per suppression-artifact class, or allowing a vendor-unsuppressed rerun as a standard companion.\n- **M2.3 is not met by the spec alone.** It requires each control class \"in the report with its candidate count and denominator\". The vendor class has vectors, but the report has no class field; the counts and denominators are an implementation report (owner I), which must now add the vendor class."
+        },
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "- **Winnowing is conflated with MinHash (§4.1).** The profile switches between rolling hashes and BLAKE3 without specifying the conversion. Tie-breaking, hash encodings, grammar versions, scope normalization and parser failure behavior are missing. Whole-file Jaccard hides extracted fragments in large hosts. Require a deterministic profile and local containment/alignment.\n- **Unvalidated robustness labels (§§1, 5).** Passive fingerprints do not generically survive refactoring or compression. Whitespace can be syntactic, and docstrings are not always comments. Exact AST hashes do not survive arbitrary loop inversion. Remove “100%,” categorical survival, and mathematical-impossibility claims without explicit assumptions and evaluations.\n- **Modality descriptions need correction (§4).** The image recipe excludes the DC coefficient from 64 coefficients but still calls the result 64 bits. Chromaprint is conflated with a peak-constellation design and assigned an unsupported universal BER. TLSH digest size/encoding and hard distance thresholds need a versioned definition and empirical support. Treat each as a separate research profile. [Chromaprint](https://github.com/acoustid/chromaprint), [TLSH](https://github.com/trendmicro/tlsh).\n- **Abstention rules conflict (§§5–6).** Thresholds of 20, 25/35, and 40 tokens serve different purposes without clear distinction. Requiring three independent subtrees can reject a distinctive single-function copy. Keep theoretical locality separate from empirical evidence sufficiency; calibrate rather than invent universal cutoffs.\n- **Sigstore requirements are overstated (§2.4).** The bundle format does not mandate all of keyless signing, transparency, and RFC 3161 together. Fulcio certifies a supplied public key; it does not supply the client's private key. Time evidence does not guarantee indefinite archival validity. [Bundle documentation](https://docs.sigstore.dev/about/bundle/).\n- **Schema gaps (§10).** Use the real JSON Schema 2020-12 dialect URI, reject unexpected fields where appropriate, constrain digest lengths and nonempty arrays, distinguish draft versions, and use real test fixtures rather than ellipsis placeholders. The example's supposed 64-bit values have only eight hex digits. Shape checks still cannot validate signatures or rights.\n- **A single verification cost is misleading (§1).** Hashing and parsing the signed message depend on its size; trust-chain and timestamp validation add work. A detached signature can still verify when a derivative changes, while the derivative's exact subject digest fails."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-021",
+      "sentence": "**Emit verifiable evidence:** Comparison outputs a canonical report body (`bodySha256`) that any second verifier can reproduce byte-for-byte offline.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/core-gates-m1-m2-review.md",
+          "quote": "- **My comparator.** I wrote it from §3.3, §4 and §5.3–§6.5 only. On the 7 new vectors, all **7 bodies and every catalogue digest match** byte for byte: `vendor-suppressed`, `vendor-unsuppressed`, `go-formatted-fragment-in-host`, `go-non-ascii-shift-2`, `py-empty-span-self`, `py-equal-starts` and `rv-py-empty-span-region`. It also matches all 56 compared-body vectors. The 27 rejected bodies are outside it.\n- **Guesses** (small): catalogue bytes are the JCS of the canonical object, and ambiguity is judged by shared seed positions, not span overlap (§5.7 says so).\n- **My record validators**, also from the text: 4/4 valid packets accepted and 55/55 invalid rejected; 4/4 retrievals and 7/7 invalid candidate-generation records behave as specified.\n- **Guesses for the records:** commit ids are 40 lowercase hex characters; `selectedIdsSha256` is taken over the candidate catalogue's ids. I could not rebuild the subset retrieval's body: it is not in `matching.json` and needs §3.8 building from records."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-022",
+      "sentence": "Origin and dependency notes live in a separate review-packet record, never inside the comparison report.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/core-gates-m1-m2-review.md",
+          "quote": "- **My comparator.** I wrote it from §3.3, §4 and §5.3–§6.5 only. On the 7 new vectors, all **7 bodies and every catalogue digest match** byte for byte: `vendor-suppressed`, `vendor-unsuppressed`, `go-formatted-fragment-in-host`, `go-non-ascii-shift-2`, `py-empty-span-self`, `py-equal-starts` and `rv-py-empty-span-region`. It also matches all 56 compared-body vectors. The 27 rejected bodies are outside it.\n- **Guesses** (small): catalogue bytes are the JCS of the canonical object, and ambiguity is judged by shared seed positions, not span overlap (§5.7 says so).\n- **My record validators**, also from the text: 4/4 valid packets accepted and 55/55 invalid rejected; 4/4 retrievals and 7/7 invalid candidate-generation records behave as specified.\n- **Guesses for the records:** commit ids are 40 lowercase hex characters; `selectedIdsSha256` is taken over the candidate catalogue's ids. I could not rebuild the subset retrieval's body: it is not in `matching.json` and needs §3.8 building from records."
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/core-gates-m1-m2-review.md",
+          "quote": "## 8. M2.7 and M2.9 records"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-023",
+      "sentence": "Traceweave separates three distinct questions: **which exact artifact** a record describes, **whether another artifact contains similar material**, and **what evidence supports that relationship**.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "1. **Private-by-default conflicts with required public signing and resolution (§§2.4, 3, 8).** Mandatory Rekor publication, full returned feature vectors, and in-repository key storage can expose participation and private evidence. Make public disclosure optional, keep catalogues outside the source tree, and defer network resolution until its leakage model is specified.\n2. **Prefix bucketing is not a demonstrated k-anonymity guarantee (§3.2).** A 16–24-bit prefix does not guarantee a minimum anonymity set. Multiple prefixes, rare features and adaptive queries can identify a target. Shared-key HMAC does not make this zero knowledge; authorized consortium participants can compute dictionary candidates. Remove the guarantee and benchmark leakage before proposing a resolver.\n3. **The false-positive formula and numerical guarantees are unsupported (§6).** Normalized token dependencies, same-spec code, multiple comparisons and corpus selection invalidate the proposed independent-token shortcut. The rule of three is conditional on sampling assumptions, not a license to tune against 300,000 files and declare a universal bound. Replace with held-out whole-pipeline evaluation.\n4. **Wire formats are not interoperable as written (§2).** The in-toto v1 type is `https://in-toto.io/Statement/v1`, not the draft URN. DSSE PAE requires explicit space separators and decimal byte lengths. An RFC 3161 token is signed verification material, not an ISO date string. See [in-toto](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md), [DSSE](https://github.com/dsse-lf/dsse/blob/master/protocol.md), and [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161).\n5. **Signatures are used to overstate ancestry and replay resistance (§5).** An attacker can sign copied public material or transplant marked fragments. A valid signature authenticates the statement under a trust policy; it does not establish authorship. Preserve exact verification, similarity evidence and rights review as separate results.\n6. **Commit cutoffs overstate rights (§7).** Older permissive expression can persist after the transition, and permissive redistribution has conditions. Post-transition code is not automatically proprietary original expression. A permitted copy is still a technical reuse match. Use region-level histories and actual licenses. [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-024",
+      "sentence": "Conflating similarity with provenance causes false claims, so the specification keeps them on two separate tracks:",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "1. **Private-by-default conflicts with required public signing and resolution (§§2.4, 3, 8).** Mandatory Rekor publication, full returned feature vectors, and in-repository key storage can expose participation and private evidence. Make public disclosure optional, keep catalogues outside the source tree, and defer network resolution until its leakage model is specified.\n2. **Prefix bucketing is not a demonstrated k-anonymity guarantee (§3.2).** A 16–24-bit prefix does not guarantee a minimum anonymity set. Multiple prefixes, rare features and adaptive queries can identify a target. Shared-key HMAC does not make this zero knowledge; authorized consortium participants can compute dictionary candidates. Remove the guarantee and benchmark leakage before proposing a resolver.\n3. **The false-positive formula and numerical guarantees are unsupported (§6).** Normalized token dependencies, same-spec code, multiple comparisons and corpus selection invalidate the proposed independent-token shortcut. The rule of three is conditional on sampling assumptions, not a license to tune against 300,000 files and declare a universal bound. Replace with held-out whole-pipeline evaluation.\n4. **Wire formats are not interoperable as written (§2).** The in-toto v1 type is `https://in-toto.io/Statement/v1`, not the draft URN. DSSE PAE requires explicit space separators and decimal byte lengths. An RFC 3161 token is signed verification material, not an ISO date string. See [in-toto](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md), [DSSE](https://github.com/dsse-lf/dsse/blob/master/protocol.md), and [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161).\n5. **Signatures are used to overstate ancestry and replay resistance (§5).** An attacker can sign copied public material or transplant marked fragments. A valid signature authenticates the statement under a trust policy; it does not establish authorship. Preserve exact verification, similarity evidence and rights review as separate results.\n6. **Commit cutoffs overstate rights (§7).** Older permissive expression can persist after the transition, and permissive redistribution has conditions. Post-transition code is not automatically proprietary original expression. A permitted copy is still a technical reuse match. Use region-level histories and actual licenses. [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-025",
+      "sentence": "Alongside extracted fingerprint matching and signed registration records, a research track explores embedding a mark into content before distribution and checking later content for that mark.",
+      "evidence": [
+        {
+          "kind": "decision",
+          "path": "docs/decisions/code-embedding-decision.md",
+          "quote": "Traceweave **omits source-code embedded marking** from the next release. The next release covers:"
+        },
+        {
+          "kind": "decision",
+          "path": "research/experiment-checkpoint.md",
+          "quote": "Keep these carriers as weak, reproducible baselines. They make the insertion/extraction mechanics and refusal boundaries testable, and expose inexpensive removal. Their successful clean recovery does not justify selecting them for adversarially robust marking."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-026",
+      "sentence": "No marking method is standardized yet, and synthetic image-mark results show marks can serve at most as a **finding aid**—never as proof of origin.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/media-c2pa-av-review.md",
+          "quote": "### 2.1 `IMG.5`: image-mark finding-aid record"
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/image-mark-protocol-review.md",
+          "quote": "**Earlier findings.** **B1 resolved.** **Exact tail:** P(Bin(61, ½) ≥ 49) = 2,271,115,189,673 / 2⁶¹ = 9.85×10⁻⁷ ≤ 10⁻⁶, and at 48 it is 3.83×10⁻⁶. So k = 49 is the smallest value, as §5 states. **Tested positions in code:** `tm` `tested()` = raw[:61]. Upstream `process_encode` puts the 61 data bits first, then ECC, then version, so these are the HMAC data bits; the test checks the trailing `0001`. `ps` uses `preds[0, 1:]` (256 bits; the detection bit is excluded). `dw` uses 32 bits. Every tested bit is direct keyed output. **100-bit agreement:** kept as the report-only `agree100True`. **B2 resolved.** **§1:** P2–P4 are labelled implementation checks, \"close to guaranteed by construction\"; removal and forgery counts are \"a lower bound on what an attacker can do\"; and the text says anyone can copy a mark without the key. **`reembed` (condition 20):** decodes the `clean` raw bits, takes `forge_bits` (TrustMark: BCH data bits when valid with version 1, else raw 0–60), embeds them into H with the public encoder, and uses no key. **Copied bits survive:** in my smoke run the forged images decode to exactly the copied bits, 3/3 for `tm` (61/61, `forgedFrom: bch`) and 3/3 for `ps` (256/256). Both are accepted for the donor's entry. `dw` agreed on 26/32, 32/32 and 32/32 bits, consistent with the control's weakness. **M1 resolved** (lane 12): \"This is trust on first use\", including the host-side substitution case. **M2 resolved.** The runtime pins are listed in §10 and checked in W1. In `compare`: exit 0 means identical; exit 5 means outputs differ while every recorded input (environment, runtime pins, versions, weights, sources, goldens, digest, HEAD) is equal; exit 1 means some recorded input differs. **It cannot be used to discard an inconvenient result.** The classification depends only on byte equality and recorded inputs, never on counts. Every invalid pair is kept and reported. At most two fresh pairs may be rerun; a third invalid pair goes to the owner, and any change is a new version. The rule is mechanical, so no one chooses when to rerun. **M3 not resolved, outside the frozen paths.** ROADMAP IMG.2 still says \"under `scripts/offline`\". Before IMG.2 is marked met, add \"(`sandbox-exec` deny-network with the harness probe failing first)\" as IMGF.4 does. This does not block the run."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-027",
+      "sentence": "*Figure 3. Proposed embedded-mark workflow.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The figures describe proposed local extraction/comparison and separate cryptographic registration, plus a research embedding workflow. Figure 3 permits insufficient evidence; it is not a standardized marking method or an origin claim. The caption is mapped; picture markup is a separately inventoried exclusion requiring non-author approval."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-028",
+      "sentence": "Detection may return insufficient evidence.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The figures describe proposed local extraction/comparison and separate cryptographic registration, plus a research embedding workflow. Figure 3 permits insufficient evidence; it is not a standardized marking method or an origin claim. The caption is mapped; picture markup is a separately inventoried exclusion requiring non-author approval."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-029",
+      "sentence": "Extracted fingerprint matching and provenance verification are separate supporting processes; detecting a mark does not establish ownership.*",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "1. **Private-by-default conflicts with required public signing and resolution (§§2.4, 3, 8).** Mandatory Rekor publication, full returned feature vectors, and in-repository key storage can expose participation and private evidence. Make public disclosure optional, keep catalogues outside the source tree, and defer network resolution until its leakage model is specified.\n2. **Prefix bucketing is not a demonstrated k-anonymity guarantee (§3.2).** A 16–24-bit prefix does not guarantee a minimum anonymity set. Multiple prefixes, rare features and adaptive queries can identify a target. Shared-key HMAC does not make this zero knowledge; authorized consortium participants can compute dictionary candidates. Remove the guarantee and benchmark leakage before proposing a resolver.\n3. **The false-positive formula and numerical guarantees are unsupported (§6).** Normalized token dependencies, same-spec code, multiple comparisons and corpus selection invalidate the proposed independent-token shortcut. The rule of three is conditional on sampling assumptions, not a license to tune against 300,000 files and declare a universal bound. Replace with held-out whole-pipeline evaluation.\n4. **Wire formats are not interoperable as written (§2).** The in-toto v1 type is `https://in-toto.io/Statement/v1`, not the draft URN. DSSE PAE requires explicit space separators and decimal byte lengths. An RFC 3161 token is signed verification material, not an ISO date string. See [in-toto](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md), [DSSE](https://github.com/dsse-lf/dsse/blob/master/protocol.md), and [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161).\n5. **Signatures are used to overstate ancestry and replay resistance (§5).** An attacker can sign copied public material or transplant marked fragments. A valid signature authenticates the statement under a trust policy; it does not establish authorship. Preserve exact verification, similarity evidence and rights review as separate results.\n6. **Commit cutoffs overstate rights (§7).** Older permissive expression can persist after the transition, and permissive redistribution has conditions. Post-transition code is not automatically proprietary original expression. A permitted copy is still a technical reuse match. Use region-level histories and actual licenses. [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)."
+        },
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The figures describe proposed local extraction/comparison and separate cryptographic registration, plus a research embedding workflow. Figure 3 permits insufficient evidence; it is not a standardized marking method or an origin claim. The caption is mapped; picture markup is a separately inventoried exclusion requiring non-author approval."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-030",
+      "sentence": "For full scenarios and architecture trade-offs, read the [use cases](docs/use-cases.md), [delivery roadmap](ROADMAP.md), [implementation patterns and example matrix](docs/implementation-patterns.md), and [source register](docs/sources.md).",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Use cases / implementation patterns | UC-1–UC-7 plus proposed UC-8, walkthroughs, architecture alternatives and an assertion/example matrix. These describe workflows, not successful production deployments. |"
+        },
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Evaluation / sources | Transformation attack matrix and planned false-positive calibration; a primary technical source register. Neither is a measured detection-rate report. |"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-031",
+      "sentence": "| Go source code | `go-tokens` | Frozen Stage-1 | Published vectors; Go, Rust & WASM parity (`M1`–`M2` met) |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/core-gates-m1-m2-review.md",
+          "quote": "My script compares every file of `test-vectors/`, `schemas/`, `spec/` and `profiles/` at `437d619` with HEAD. JSON files are compared vector by vector, with only the new metadata keys stripped.\n- Unchanged: **every one of the 123 earlier extraction vectors** (34 Go, 78 Rust, 3 + 3 limits, 5 exclusion-rule) and the 28 config negatives.\n- Unchanged: **all 76 earlier matching vectors**.\n- 79 other files are byte-identical.\n- Changed: the documents, the harness and checker code, and `matching.json`'s `requiredTags`, which gained `vendor`, `empty-span`, `equal-starts` and `py-tokens`.\n- The author's `compare_outputs.py 437d619` also passes (123 compared, 60 added)."
+        },
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| WEB.1 | E | The Rust implementation compiles to WebAssembly. For every vendored extraction, record, catalogue and matching vector of the profiles it implements, the in-browser build's output is byte-identical to the command-line build's, k/k, run headless in CI. **Status: met** (`connorburgess/traceweave` `main` @ `51f29d7`: `crates/tw-wasm`, `web/tw-wasm.js`, `web/test_wasm.mjs`, non-author review `docs/reviews/web-wasm-review.md`: 1,128,365-byte pure-Rust `.wasm`, 0 WASM imports, 0 new external crates, 451/451 extraction + 76/76 record + 214 catalogue + 93/93 matching + M4 registration byte-identical to stamped CLI under `scripts/offline`; non-blocking note that `web/test_wasm.mjs` CI job wiring is a follow-up). | I |"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-032",
+      "sentence": "| Rust source code | `rust2024-tokens` | Frozen Stage-1 | Published vectors; Go, Rust & WASM parity (`M1`–`M2` met) |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/core-gates-m1-m2-review.md",
+          "quote": "My script compares every file of `test-vectors/`, `schemas/`, `spec/` and `profiles/` at `437d619` with HEAD. JSON files are compared vector by vector, with only the new metadata keys stripped.\n- Unchanged: **every one of the 123 earlier extraction vectors** (34 Go, 78 Rust, 3 + 3 limits, 5 exclusion-rule) and the 28 config negatives.\n- Unchanged: **all 76 earlier matching vectors**.\n- 79 other files are byte-identical.\n- Changed: the documents, the harness and checker code, and `matching.json`'s `requiredTags`, which gained `vendor`, `empty-span`, `equal-starts` and `py-tokens`.\n- The author's `compare_outputs.py 437d619` also passes (123 compared, 60 added)."
+        },
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| WEB.1 | E | The Rust implementation compiles to WebAssembly. For every vendored extraction, record, catalogue and matching vector of the profiles it implements, the in-browser build's output is byte-identical to the command-line build's, k/k, run headless in CI. **Status: met** (`connorburgess/traceweave` `main` @ `51f29d7`: `crates/tw-wasm`, `web/tw-wasm.js`, `web/test_wasm.mjs`, non-author review `docs/reviews/web-wasm-review.md`: 1,128,365-byte pure-Rust `.wasm`, 0 WASM imports, 0 new external crates, 451/451 extraction + 76/76 record + 214 catalogue + 93/93 matching + M4 registration byte-identical to stamped CLI under `scripts/offline`; non-blocking note that `web/test_wasm.mjs` CI job wiring is a follow-up). | I |"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-033",
+      "sentence": "| TypeScript / JS | `ts-tokens` | Frozen Stage-1 | Published vectors; Go & Rust parity (`TS.3` met); `tsx-tokens` deferred draft |",
+      "evidence": [
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| TS.3 | E | Two implementations without a shared lexer match the TS.2 expected bytes **Status: met** (`connorburgess/traceweave` `main` @ `8011b6d`; non-author review `docs/reviews/text-ts-review.md`). Independent Rust + Go implementations match `ts-tokens` 132/132 vendored vectors and 3,684 integrator + 768 reviewer + 102 adversarial differential cases with 0 divergences; `tsx-tokens` is rejected as `unsupported-config`. | I |"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-034",
+      "sentence": "| Python | `py-tokens` | Frozen Stage-1 | Promoted `draft-1`; Go & Rust parity (`PY.1`–`PY.3` met); `PY.4` awaits M3 |",
+      "evidence": [
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| PY.3 | E | Two implementations without a shared lexer match the PY.2 expected bytes **Status: met** (`connorburgess/traceweave` `main` @ `b5d981c`; non-author review `docs/reviews/py-review.md`). Independent Rust + Go implementations reproduce `py.json` 107/107, `limits-py.json` 3/3, `config-negative-python.json` 19/19, and `extraction-py.json` 3/3 byte-for-byte, plus 1,952 integrator + 753 reviewer + 45 adversarial differential cases with 0 divergences and 0 new external dependencies (`PY3`/`PY-Q4` `record.schema.json` caveat closed on promotion 2026-11-25). | I |"
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/promotion-m4-py-review.md",
+          "quote": "### 2.3 `PY.1` — **met**"
+        },
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| PY.4 | E | Own M3 split, reported separately and not pooled. **Status: open** | I |"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-035",
+      "sentence": "| Plain text | `text-plain` | Frozen Stage-1 | Published vectors; Go & Rust parity (`TXT.3` met); `text-markdown` draft; `TXT.4` & `TXT.8` negative results recorded |",
+      "evidence": [
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| TXT.3 | E | Two implementations, each using its own Unicode normalization and case-folding code pinned to the profile's Unicode version, equal the TXT.2 expected bytes on every vector **Status: met** (`connorburgess/traceweave` `main` @ `8011b6d`; non-author review `docs/reviews/text-ts-review.md`). Independent Rust + Go implementations match `text-plain` 154/154 vendored vectors and 3,684 integrator + 768 reviewer + 102 adversarial differential cases with 0 divergences; `text-markdown` is rejected as `unsupported-config`. | I |"
+        },
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| TXT.4 | R | Stage 1, no download. Input: the repository's own CC BY 4.0 prose (the 11 files under `docs/`, `spec/` and `profiles/` at a pinned commit) plus TXT.2. Lane 09's transformations are applied to every file. Negatives: all 110 ordered file pairs and the boilerplate set. Protocol frozen as an ancestor commit; run under `scripts/offline`; a non-author rechecks the counts. Negative-result if any lane 09 failure criterion holds: (i) the implementations differ on any vector; (ii) any reported span does not equal the original bytes of the matched tokens; (iii) any transformed positive keeps an unchanged folded run of at least `k+w-1` tokens yet shares 0 fingerprints. Negatives are reported as matches/110 **Status: negative-result** (`e-txt-1` frozen `c708b20`, protocol digest `642bb221…`, results `76afd60`, non-author recheck `62b81eb` in [research/reviews/text-stage1-protocol-review.md](research/reviews/text-stage1-protocol-review.md#results-recheck-e-txt-1)). Under OS network denial on stamped Rust & Go at `a6066d3` (`run-1` == `run-2`, `summary.json` SHA-256 `eeef3f21…`): criterion (i) 0 errors (154/154 TXT.2 + all Stage 1 outputs identical), criterion (ii) 0 errors, criterion (iii) 35 misses (all 35 shared 49–1,169 fingerprints but returned `outcome = \"ambiguous\"` on repeated-structure prose under `minRegionDistinctHashes = 1, mergeGap = 8`); negatives `/ 110`: `2/4/4` (`min=1`), `2/0/0` (`min=2`); boilerplate `/ 66`: `0/0/0`. Closes R gate TXT.4 as `negative-result`. | S/I |"
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/txt8-unicode-mark-review.md",
+          "quote": "**Verdict: `negative-result` confirmed for Unicode carriers.** Lane 09's reading that homoglyph and zero-width Unicode carriers are erased by the declared deterministic fold (`NFKC` + UTS #39 `skeleton` + delete `Default_Ignorable_Code_Point`) and that AWT post-hoc lexical rewriting is rightly rejected is independently confirmed. Any new text-mark experiment remains owner-blocked."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-036",
+      "sentence": "| Still images | `IMGF` / `IMG` | Research only | Synthetic PDQ/ISCC contract check (`IMGF.2`–`IMGF.4`); image marks are finding-aid only (`IMG.0`–`IMG.4`) |",
+      "evidence": [
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| IMGF.4 | R | On 200 seeded synthetic images with the 12 defined edits, under network denial (`sandbox-exec` deny-network or `scripts/offline`, with the harness network probe failing first), met when all of these hold: (a) the reference-vector checks pass with the IMGF.2 exact and tolerance counts, k/k; (b) two full runs are byte-identical; (c) every result validates against the shared record/catalogue form, with 0 invalid. Negative-result if any of (a)–(c) fails. False-match and missed-match counts are reported with their denominators and **no pass line**. Cross-host agreement is recorded as not tested. False-match rates at scale, and crop and screenshot failure, come from the external benchmark preprint X1 cited in the [lane 10 report audit](research/lanes/10-report-audit.md). That preprint is unreplicated, and its results are not our measurement. A non-author rechecks the counts **Status: met** (results `0c7523c`, [results recheck](research/reviews/image-profile-protocol-review.md#results-recheck-e-img-f-2) `dbd109b`). (a) vector checks 7/7 k/k; (b) `full-1` and `full-2` byte-identical; (c) 0 invalid catalogue and query records; the network probe was refused first under `sandbox-exec`. **Headline counts, synthetic-image contract check only, no pass line.** Enrolment: PDQ 98/100 (2 `low-quality`), ISCC 100/100. Negatives within threshold: 0/100 for each extractor. PDQ correct per edit (out of 100): flip, jpeg50, jpeg75, jpeg90, png, resize25 and resize50 98 each; jpeg30 98; crop90 2; crop75 0; crop50 0; screenshot 0. ISCC correct per edit (out of 100): crop90 69; crop75 5; crop50 0; the other 9 edits (screenshot included) 100 each. Wrong-entry matches 0/1,200 for each extractor. Cross-host: not tested. These counts are not a false-match rate, and they say nothing about natural images. | I |"
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/media-c2pa-av-review.md",
+          "quote": "### 2.1 `IMG.5`: image-mark finding-aid record"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-037",
+      "sentence": "| C2PA 2.5 mapping | `org.traceweave.*` | Draft proposal | Mapping & fixtures checked (`C2PA.1` draft); no compatibility claimed (`C2PA.3`) |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/media-c2pa-av-review.md",
+          "quote": "The three deliverables (`IMG.5` finding-aid schema/fixtures, `C2PA.1–C2PA.3` registration-link mapping/fixtures, and Lane 15 audio/video scoping) are well-structured and cleanly isolated from promoted `spec/` and `profiles/` contracts, and all existing checkers and tests pass. However, adversarial testing surfaced **two blocking items** that should be fixed before merging into `roadmap-v2`:"
+        },
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| C2PA.3 | E | README makes no compatibility claim until C2PA.2 passes **Status: met (2026-11-25, re-check on README changes).** `README.md`, `spec/attestations.md`, and `docs/sources.md` make no compatibility claim by inspection; `check_fixtures.py` also enforces `claimWordsPattern` on the C2PA JSON fixtures inside `tools/validate.py`. | S |"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-038",
+      "sentence": "| Audio, video & binary | — | Scoping / research | [Audio/video scoping](research/lanes/15-audio-video-scoping.md); [other content profiles](profiles/README.md) |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/media-c2pa-av-review.md",
+          "quote": "### 2.3 Lane 15: audio and video scoping"
+        },
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Other content profiles | Still-image, audio, video and binary research scope, not registered perceptual algorithms for all media. |"
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-039",
+      "sentence": "| [Core](spec/core.md) | Record semantics, exact subjects, private commitments, and salted possession |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/promotion-m4-py-review.md",
+          "quote": "| `CD-B1` | **Implemented.** `spec/core.md` (`#salted-possession-digest`, `#catalogue-opening-verification`) and `spec/attestations.md` normatively specify `sha256-salted-possession-v1` (`Traceweave-Possession-v1\\x00`), independent OS CSPRNG nonce generation, and 4-step `catalogueOpening` verification, backed by promoted vectors in `test-vectors/registration/` and `test-vectors/intoto-adapter/` wired into `tools/validate.py`. |"
+        },
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Core / attestations / registration / trust policy | Exact subjects, salted private commitments and possession; DSSE/in-toto forms; draft-5 registrations, key events, time evidence, `tw1-`; verifier-local groups and revocation policy. The M4 promotion and adapter reviews supply substantive review evidence. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-040",
+      "sentence": "| [Attestations](spec/attestations.md) | DSSE/in-toto integration, commitment/disclosure verification, and trust/time boundaries |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/promotion-m4-py-review.md",
+          "quote": "| `CD-A1` | **Implemented.** `spec/attestations.md` reconciles both restricted in-toto Statement v1 / DSSE adapter forms side-by-side (`0.1.0-draft.1` minimal commitment via `schemas/statement.schema.json` + `schemas/evidence.schema.json` vs `traceweave-registration-draft-5` via `spec/registration-record.md` §4), both verified by `test-vectors/intoto-adapter/check_intoto_adapter.py`. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-041",
+      "sentence": "| [Registration record](spec/registration-record.md) | Offline-first DSSE registration statements, key events, time evidence, `tw1-` references, and verification (`traceweave-registration-draft-5`) |",
+      "evidence": [
+        {
+          "kind": "decision",
+          "path": "ROADMAP.md",
+          "quote": "| M4.4 | E | Two implementations, each with its own strict parser and key-hint policy, produce identical bytes and reason codes on every M4.3 vector | **met** (`connorburgess/traceweave` `main` @ `5b9a881`, pinned to published spec `9cf78ee` with `356/356` vendored files verified by `scripts/check-spec-pin --strict`, independent Rust + Go offline-first `traceweave-registration-draft-5` + §4.7 `claims.aiUse` + §9.1 `tw1-`, passing 86/86 positive and 147/147 negative promoted `test-vectors/registration/` fixtures + cross-CLI interop + `tw1-` + fuzz + WASM parity with 0 divergences and 0 new external dependencies; confirmed by non-author spot-check) | I |"
+        },
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Core / attestations / registration / trust policy | Exact subjects, salted private commitments and possession; DSSE/in-toto forms; draft-5 registrations, key events, time evidence, `tw1-`; verifier-local groups and revocation policy. The M4 promotion and adapter reviews supply substantive review evidence. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-042",
+      "sentence": "| [Trust policy](spec/trust-policy.md) | Verifier-local policy, key-event trust propagation, independence groups, and revocation freshness |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/m4-5-intoto-review.md",
+          "quote": "> Path note: the deliverables reviewed here were promoted on 2026-11-25 to [spec/trust-policy.md](../../spec/trust-policy.md), [docs/decisions/timestamp-adapter-decision.md](../../docs/decisions/timestamp-adapter-decision.md), and [test-vectors/intoto-adapter/](../../test-vectors/intoto-adapter/README.md); link targets below point to the promoted locations. See the [promotion map](../promotion-map.md)."
+        },
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Core / attestations / registration / trust policy | Exact subjects, salted private commitments and possession; DSSE/in-toto forms; draft-5 registrations, key events, time evidence, `tw1-`; verifier-local groups and revocation policy. The M4 promotion and adapter reviews supply substantive review evidence. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-043",
+      "sentence": "| [Timestamp adapter decision](docs/decisions/timestamp-adapter-decision.md) | Architectural decision record on optional RFC 3161 and OpenTimestamps verification |",
+      "evidence": [
+        {
+          "kind": "decision",
+          "path": "docs/decisions/timestamp-adapter-decision.md",
+          "quote": "2. **Offline-first verification of RFC 3161 and OpenTimestamps against local retained material is supported.**\n   - **RFC 3161 (`rfc3161`):** Verifiers evaluate RFC 3161 `TimeStampResp` tokens offline against retained DER root certificates, token-carried intermediate chains (RFC 5280 path validation at `genTime`), and retained CRL/OCSP `revocationData` (with explicit `revocationDataAsOf` reporting and RFC 4998-style token renewal support).\n   - **OpenTimestamps (`opentimestamps`):** Verifiers evaluate upgraded OpenTimestamps proofs offline against the verifier's own retained Bitcoin block header source and a verifier-pinned `checkpoint` (`minConfirmations >= 1`), deriving `notAfter = blockTime + 7200s` under the stated honest-majority assumption. Pending proofs (`PendingAttestation`) receive outcome `pending` and never contribute a time bound.\n   - **Recommended multi-source baseline:** Two unrelated RFC 3161 TSAs plus OpenTimestamps (`quorum = 2` over verifier-assigned `independenceGroup` labels), so one retroactive TSA revocation still preserves a quorum. Both `notAfterAnyRoot` and `notAfterQuorum` are always reported separately per signature.\n   - **Target binding:** Time evidence countersigns **only** the SHA-256 of raw decoded DSSE signature bytes (or an earlier evidence token's raw bytes for renewal), never base64 envelope text, statement bytes, or artifact bytes directly."
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-044",
+      "sentence": "| [Threat model](spec/threat-model.md) | Adversaries, privacy, false claims, and failure cases |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "1. **Private-by-default conflicts with required public signing and resolution (§§2.4, 3, 8).** Mandatory Rekor publication, full returned feature vectors, and in-repository key storage can expose participation and private evidence. Make public disclosure optional, keep catalogues outside the source tree, and defer network resolution until its leakage model is specified.\n2. **Prefix bucketing is not a demonstrated k-anonymity guarantee (§3.2).** A 16–24-bit prefix does not guarantee a minimum anonymity set. Multiple prefixes, rare features and adaptive queries can identify a target. Shared-key HMAC does not make this zero knowledge; authorized consortium participants can compute dictionary candidates. Remove the guarantee and benchmark leakage before proposing a resolver.\n3. **The false-positive formula and numerical guarantees are unsupported (§6).** Normalized token dependencies, same-spec code, multiple comparisons and corpus selection invalidate the proposed independent-token shortcut. The rule of three is conditional on sampling assumptions, not a license to tune against 300,000 files and declare a universal bound. Replace with held-out whole-pipeline evaluation.\n4. **Wire formats are not interoperable as written (§2).** The in-toto v1 type is `https://in-toto.io/Statement/v1`, not the draft URN. DSSE PAE requires explicit space separators and decimal byte lengths. An RFC 3161 token is signed verification material, not an ISO date string. See [in-toto](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md), [DSSE](https://github.com/dsse-lf/dsse/blob/master/protocol.md), and [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161).\n5. **Signatures are used to overstate ancestry and replay resistance (§5).** An attacker can sign copied public material or transplant marked fragments. A valid signature authenticates the statement under a trust policy; it does not establish authorship. Preserve exact verification, similarity evidence and rights review as separate results.\n6. **Commit cutoffs overstate rights (§7).** Older permissive expression can persist after the transition, and permissive redistribution has conditions. Post-transition code is not automatically proprietary original expression. A permitted copy is still a technical reuse match. Use region-level histories and actual licenses. [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)."
+        },
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Threat model / conformance | Adversaries, false claims and privacy boundaries; levels 1–5, with level 5 planned and fixture checks distinct from implementation conformance. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-045",
+      "sentence": "| [Conformance](spec/conformance.md) | What the checks establish and what remains unimplemented |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Threat model / conformance | Adversaries, false claims and privacy boundaries; levels 1–5, with level 5 planned and fixture checks distinct from implementation conformance. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-046",
+      "sentence": "| [Extraction contract](spec/extraction.md) | Token-fingerprint extraction, including the Go and Rust token profiles (experimental draft, normative for this draft version) |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/core-gates-m1-m2-review.md",
+          "quote": "## 3. M1.1: the registration item map"
+        },
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Extraction / catalogue-report / code profile | Deterministic tokens, k-grams, original spans and configuration binding; catalogues, suppression and reports; profile registration/reproducibility checklist. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-047",
+      "sentence": "| [Catalogue and report contract](spec/catalogue-report.md) | Catalogues, comparison, boilerplate suppression, and reports (experimental draft, normative for this draft version) |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/core-gates-m1-m2-review.md",
+          "quote": "## 5. Catalogue/report: clean room"
+        },
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Extraction / catalogue-report / code profile | Deterministic tokens, k-grams, original spans and configuration binding; catalogues, suppression and reports; profile registration/reproducibility checklist. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-048",
+      "sentence": "| [Code profile](profiles/code.md) | First fingerprinting experiment and reproducibility requirements |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/core-gates-m1-m2-review.md",
+          "quote": "## 3. M1.1: the registration item map"
+        },
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Extraction / catalogue-report / code profile | Deterministic tokens, k-grams, original spans and configuration binding; catalogues, suppression and reports; profile registration/reproducibility checklist. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-049",
+      "sentence": "| [TypeScript / JavaScript profile](profiles/typescript.md) | Stage-1 `ts-tokens` (frozen) and `tsx-tokens` (deferred draft) |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/extraction-profile-typescript-review.md",
+          "quote": "# Independent review: TypeScript/JavaScript token profile (`ts-tokens`, `tsx-tokens`)"
+        },
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| TypeScript / Python / text profiles | Stage-1 `ts-tokens`, `py-tokens` and `text-plain`; deferred TSX and draft Markdown. These are separate from transformation-recall evidence. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-050",
+      "sentence": "| [Python profile](profiles/python.md) | Stage-1 `py-tokens` (`draft-1`, frozen) |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/promotion-m4-py-review.md",
+          "quote": "### 2.3 `PY.1` — **met**"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-051",
+      "sentence": "| [Text profile](profiles/text.md) | Stage-1 `text-plain` (frozen) and `text-markdown` (draft) |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/extraction-profile-text-review.md",
+          "quote": "# Review: text extraction profile (`text-plain`, `text-markdown`, draft-1)"
+        },
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| TypeScript / Python / text profiles | Stage-1 `ts-tokens`, `py-tokens` and `text-plain`; deferred TSX and draft Markdown. These are separate from transformation-recall evidence. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-052",
+      "sentence": "| [Other content profiles](profiles/README.md) | Image, audio, video, and binary research scope |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Other content profiles | Still-image, audio, video and binary research scope, not registered perceptual algorithms for all media. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-053",
+      "sentence": "| [Schemas](schemas/README.md) | Machine-readable JSON Schema (Draft 2020-12) formats |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Schemas / vectors / examples | JSON Schema Draft 2020-12 formats; commitment, DSSE, adapter, registration and per-profile/matching vectors; synthetic unsigned examples with known artifact bytes. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-054",
+      "sentence": "| [Test vectors](test-vectors/README.md) | Commitment, DSSE, in-toto adapter, registration, extraction, matching, TypeScript, Python, and text vectors with independent checkers |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/promotion-m4-py-review.md",
+          "quote": "All required categories are present with distinct reason codes and verified by `tools/validate.py`:"
+        },
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Schemas / vectors / examples | JSON Schema Draft 2020-12 formats; commitment, DSSE, adapter, registration and per-profile/matching vectors; synthetic unsigned examples with known artifact bytes. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-055",
+      "sentence": "| [Examples](examples/README.md) | Synthetic, unsigned records with known artifact bytes |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Schemas / vectors / examples | JSON Schema Draft 2020-12 formats; commitment, DSSE, adapter, registration and per-profile/matching vectors; synthetic unsigned examples with known artifact bytes. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-056",
+      "sentence": "| [Use cases](docs/use-cases.md) | Concrete workflows (`UC-1`–`UC-7`, proposed `UC-8`) and walkthroughs |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Use cases / implementation patterns | UC-1–UC-7 plus proposed UC-8, walkthroughs, architecture alternatives and an assertion/example matrix. These describe workflows, not successful production deployments. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-057",
+      "sentence": "| [Implementation patterns](docs/implementation-patterns.md) | Architecture patterns and example assertion matrix |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Use cases / implementation patterns | UC-1–UC-7 plus proposed UC-8, walkthroughs, architecture alternatives and an assertion/example matrix. These describe workflows, not successful production deployments. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-058",
+      "sentence": "| [Evaluation](docs/evaluation.md) | Attack matrix and false-positive calibration |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Evaluation / sources | Transformation attack matrix and planned false-positive calibration; a primary technical source register. Neither is a measured detection-rate report. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-059",
+      "sentence": "| [Source register](docs/sources.md) | Primary technical sources and references |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Evaluation / sources | Transformation attack matrix and planned false-positive calibration; a primary technical source register. Neither is a measured detection-rate report. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-060",
+      "sentence": "| [Roadmap](ROADMAP.md) | Gate definitions, progress counts, and owner decisions |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "| Roadmap / initial draft review | Verifiable gates, counts and owner decisions; blocking and major corrections to the original supplied design. |"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-061",
+      "sentence": "| [Draft review](docs/reviews/initial-draft-review.md) | Corrections to the initial design |",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "## Blocking findings"
+        }
+      ],
+      "rationale": "Navigation/scope audit inspects the linked documents; no implementation or measurement claim is inferred."
+    },
+    {
+      "id": "README-062",
+      "sentence": "Python 3.11 or newer is required.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The supported floor is Python 3.11, also the lowest version selected by [.github/workflows/validate.yml](../../.github/workflows/validate.yml). Dependency installation/fetch precedes offline checks. `tools/validate.py` uses a local schema registry without a retrieval callback, exact fixture digest checks, and isolated local checker subprocesses; `--links-all` checks local Markdown destinations. The commands check synthetic fixtures and recorded outputs, not production identities or a held-out detection corpus. Registration real-format fixtures deliberately use public test-only roots; successful fixture cryptography is not trust in a production timestamp authority. The release adds the complete requirement map, README map and boundary probes to this checker list."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-063",
+      "sentence": "All checks run strictly offline with zero network requests:",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The supported floor is Python 3.11, also the lowest version selected by [.github/workflows/validate.yml](../../.github/workflows/validate.yml). Dependency installation/fetch precedes offline checks. `tools/validate.py` uses a local schema registry without a retrieval callback, exact fixture digest checks, and isolated local checker subprocesses; `--links-all` checks local Markdown destinations. The commands check synthetic fixtures and recorded outputs, not production identities or a held-out detection corpus. Registration real-format fixtures deliberately use public test-only roots; successful fixture cryptography is not trust in a production timestamp authority. The release adds the complete requirement map, README map and boundary probes to this checker list."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-064",
+      "sentence": "The validator checks JSON Schema structure, synthetic examples, exact fixture digests, commitment openings, DSSE framing vectors, promoted schemas, all promoted vector checkers (extraction, matching, TypeScript, Python, text, registration, in-toto adapter, image-mark finding aid, C2PA fixtures, and the requirement map), and local Markdown links.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The supported floor is Python 3.11, also the lowest version selected by [.github/workflows/validate.yml](../../.github/workflows/validate.yml). Dependency installation/fetch precedes offline checks. `tools/validate.py` uses a local schema registry without a retrieval callback, exact fixture digest checks, and isolated local checker subprocesses; `--links-all` checks local Markdown destinations. The commands check synthetic fixtures and recorded outputs, not production identities or a held-out detection corpus. Registration real-format fixtures deliberately use public test-only roots; successful fixture cryptography is not trust in a production timestamp authority. The release adds the complete requirement map, README map and boundary probes to this checker list."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-065",
+      "sentence": "These fixture checks do **not** authenticate a production signer, establish trust in a production timestamp authority, measure clone detection, or establish a false-positive rate.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The supported floor is Python 3.11, also the lowest version selected by [.github/workflows/validate.yml](../../.github/workflows/validate.yml). Dependency installation/fetch precedes offline checks. `tools/validate.py` uses a local schema registry without a retrieval callback, exact fixture digest checks, and isolated local checker subprocesses; `--links-all` checks local Markdown destinations. The commands check synthetic fixtures and recorded outputs, not production identities or a held-out detection corpus. Registration real-format fixtures deliberately use public test-only roots; successful fixture cryptography is not trust in a production timestamp authority. The release adds the complete requirement map, README map and boundary probes to this checker list."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-066",
+      "sentence": "Traceweave is open and non-commercial.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The release label is `0.1.0-draft.1`. The project describes its operation as open and non-commercial; this is a project-scope statement, not an additional restriction on CC BY or Apache licensed reuse. [LICENSE.md](../../LICENSE.md) assigns Markdown prose to CC BY 4.0, schemas/examples/vectors/code/configuration to Apache 2.0, and the two Unicode-derived tables to Unicode License v3. It explicitly limits the licensing split to this repository, rather than content an implementation fingerprints. [CONTRIBUTING.md](../../CONTRIBUTING.md) welcomes independent implementations and evidence-based corrections; [SECURITY.md](../../SECURITY.md) gives the disclosure route. Proposed mechanisms, measured results and normative requirements remain distinct."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-067",
+      "sentence": "Contributions and independent implementations are welcome—see [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The release label is `0.1.0-draft.1`. The project describes its operation as open and non-commercial; this is a project-scope statement, not an additional restriction on CC BY or Apache licensed reuse. [LICENSE.md](../../LICENSE.md) assigns Markdown prose to CC BY 4.0, schemas/examples/vectors/code/configuration to Apache 2.0, and the two Unicode-derived tables to Unicode License v3. It explicitly limits the licensing split to this repository, rather than content an implementation fingerprints. [CONTRIBUTING.md](../../CONTRIBUTING.md) welcomes independent implementations and evidence-based corrections; [SECURITY.md](../../SECURITY.md) gives the disclosure route. Proposed mechanisms, measured results and normative requirements remain distinct."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-068",
+      "sentence": "Discussion should distinguish proposed mechanisms, measured results, and normative requirements.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The release label is `0.1.0-draft.1`. The project describes its operation as open and non-commercial; this is a project-scope statement, not an additional restriction on CC BY or Apache licensed reuse. [LICENSE.md](../../LICENSE.md) assigns Markdown prose to CC BY 4.0, schemas/examples/vectors/code/configuration to Apache 2.0, and the two Unicode-derived tables to Unicode License v3. It explicitly limits the licensing split to this repository, rather than content an implementation fingerprints. [CONTRIBUTING.md](../../CONTRIBUTING.md) welcomes independent implementations and evidence-based corrections; [SECURITY.md](../../SECURITY.md) gives the disclosure route. Proposed mechanisms, measured results and normative requirements remain distinct."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-069",
+      "sentence": "**Specification prose and Markdown documentation:** [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSES/CC-BY-4.0.txt)",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The release label is `0.1.0-draft.1`. The project describes its operation as open and non-commercial; this is a project-scope statement, not an additional restriction on CC BY or Apache licensed reuse. [LICENSE.md](../../LICENSE.md) assigns Markdown prose to CC BY 4.0, schemas/examples/vectors/code/configuration to Apache 2.0, and the two Unicode-derived tables to Unicode License v3. It explicitly limits the licensing split to this repository, rather than content an implementation fingerprints. [CONTRIBUTING.md](../../CONTRIBUTING.md) welcomes independent implementations and evidence-based corrections; [SECURITY.md](../../SECURITY.md) gives the disclosure route. Proposed mechanisms, measured results and normative requirements remain distinct."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-070",
+      "sentence": "**Schemas, examples, test vectors, source code, and configuration:** [Apache License, Version 2.0 (Apache-2.0)](LICENSES/Apache-2.0.txt)",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The release label is `0.1.0-draft.1`. The project describes its operation as open and non-commercial; this is a project-scope statement, not an additional restriction on CC BY or Apache licensed reuse. [LICENSE.md](../../LICENSE.md) assigns Markdown prose to CC BY 4.0, schemas/examples/vectors/code/configuration to Apache 2.0, and the two Unicode-derived tables to Unicode License v3. It explicitly limits the licensing split to this repository, rather than content an implementation fingerprints. [CONTRIBUTING.md](../../CONTRIBUTING.md) welcomes independent implementations and evidence-based corrections; [SECURITY.md](../../SECURITY.md) gives the disclosure route. Proposed mechanisms, measured results and normative requirements remain distinct."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-071",
+      "sentence": "**Unicode-derived vector data tables:** [Unicode License v3](LICENSES/Unicode-3.0.txt)",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The release label is `0.1.0-draft.1`. The project describes its operation as open and non-commercial; this is a project-scope statement, not an additional restriction on CC BY or Apache licensed reuse. [LICENSE.md](../../LICENSE.md) assigns Markdown prose to CC BY 4.0, schemas/examples/vectors/code/configuration to Apache 2.0, and the two Unicode-derived tables to Unicode License v3. It explicitly limits the licensing split to this repository, rather than content an implementation fingerprints. [CONTRIBUTING.md](../../CONTRIBUTING.md) welcomes independent implementations and evidence-based corrections; [SECURITY.md](../../SECURITY.md) gives the disclosure route. Proposed mechanisms, measured results and normative requirements remain distinct."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-072",
+      "sentence": "See [LICENSE.md](LICENSE.md) for the full licensing notice.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The release label is `0.1.0-draft.1`. The project describes its operation as open and non-commercial; this is a project-scope statement, not an additional restriction on CC BY or Apache licensed reuse. [LICENSE.md](../../LICENSE.md) assigns Markdown prose to CC BY 4.0, schemas/examples/vectors/code/configuration to Apache 2.0, and the two Unicode-derived tables to Unicode License v3. It explicitly limits the licensing split to this repository, rather than content an implementation fingerprints. [CONTRIBUTING.md](../../CONTRIBUTING.md) welcomes independent implementations and evidence-based corrections; [SECURITY.md](../../SECURITY.md) gives the disclosure route. Proposed mechanisms, measured results and normative requirements remain distinct."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    },
+    {
+      "id": "README-073",
+      "sentence": "These licenses cover this repository only and do not change the rights in content processed by an implementation.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/release/readme-scope-review.md",
+          "quote": "The release label is `0.1.0-draft.1`. The project describes its operation as open and non-commercial; this is a project-scope statement, not an additional restriction on CC BY or Apache licensed reuse. [LICENSE.md](../../LICENSE.md) assigns Markdown prose to CC BY 4.0, schemas/examples/vectors/code/configuration to Apache 2.0, and the two Unicode-derived tables to Unicode License v3. It explicitly limits the licensing split to this repository, rather than content an implementation fingerprints. [CONTRIBUTING.md](../../CONTRIBUTING.md) welcomes independent implementations and evidence-based corrections; [SECURITY.md](../../SECURITY.md) gives the disclosure route. Proposed mechanisms, measured results and normative requirements remain distinct."
+        }
+      ],
+      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+    }
+  ]
+}

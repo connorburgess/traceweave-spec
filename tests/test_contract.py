@@ -47,6 +47,86 @@ class ContractTests(unittest.TestCase):
             code, _ = run_checker([str(copy / "check_vectors.py")], cwd=copy)
             self.assertNotEqual(code, 0)
 
+    def test_release_map_rejects_unmapped_musts_in_each_document_and_new_file(self):
+        from tools.check_requirement_map import ALL_MAP, MapError, check_release_map, known_ids
+        data = read_json(ALL_MAP)
+        ids = known_ids()
+        documents = {str(p.relative_to(ROOT)): p.read_text(encoding="utf-8")
+                     for directory in ("spec", "profiles") for p in (ROOT / directory).rglob("*") if p.is_file()}
+        # New normative requirements fail even in a previously empty/new document.
+        for path in list(documents) + ["profiles/new-profile.md", "spec/new-contract.md", "spec/new-contract.txt"]:
+            with self.subTest(document=path):
+                changed = dict(documents)
+                changed[path] = changed.get(path, "") + "\nA new implementation MUST reject this unmapped input.\n"
+                with self.assertRaisesRegex(MapError, "unmapped MUST"):
+                    check_release_map(data, ids, changed)
+
+    def test_release_requirement_evidence_corruptions_fail_cleanly(self):
+        from tools.check_requirement_map import ALL_MAP, MapError, check_release_map, known_ids
+        data = read_json(ALL_MAP)
+        ids = known_ids()
+        cases = []
+        changed = copy.deepcopy(data)
+        changed["requirements"].pop(0)
+        cases.append(changed)
+        changed = copy.deepcopy(data)
+        clause = next(c for e in changed["requirements"] for c in e["clauses"] if c["kind"] == "testable")
+        clause["negativeFixtures"] = []
+        cases.append(changed)
+        changed = copy.deepcopy(data)
+        clause = next(c for e in changed["requirements"] for c in e["clauses"] if c["kind"] == "testable")
+        clause["failsOn"] = ["checker:missing.py:no-test"]
+        cases.append(changed)
+        changed = copy.deepcopy(data)
+        clause = next(c for e in changed["requirements"] for c in e["clauses"] if c["kind"] == "untestable")
+        clause.pop("spotCheck")
+        cases.append(changed)
+        changed = copy.deepcopy(data)
+        changed["requirements"].append(copy.deepcopy(changed["requirements"][0]))
+        cases.append(changed)
+        for number, changed in enumerate(cases):
+            with self.subTest(corruption=number), self.assertRaises(MapError):
+                check_release_map(changed, ids)
+
+    def test_readme_claim_map_rejects_drift_and_missing_evidence(self):
+        from tools.check_readme_claims import MAP, check
+        data = read_json(MAP)
+        check(data)
+        changed = copy.deepcopy(data)
+        changed["claims"].pop()
+        with self.assertRaisesRegex(ValueError, "unmapped"):
+            check(changed)
+        changed = copy.deepcopy(data)
+        changed["claims"][0]["evidence"] = []
+        with self.assertRaisesRegex(ValueError, "no evidence"):
+            check(changed)
+        changed = copy.deepcopy(data)
+        changed["claims"][0]["evidence"][0]["quote"] = "This quote does not exist in that source."
+        with self.assertRaisesRegex(ValueError, "stale"):
+            check(changed)
+        for addition in ("\nNew unsupported claim.\n", "\n## New excluded heading\n", "\n<picture>Changed alt text</picture>\n"):
+            with self.subTest(addition=addition), self.assertRaises(ValueError):
+                check(data, (ROOT / "README.md").read_text() + addition)
+
+    def test_readme_extractor_keeps_substantive_prose_and_table_rows(self):
+        from tools.check_readme_claims import extract
+        text = ("# Heading\n[Navigation](x.md)\n\n"
+                "First claim with `v0.1`. lowercase second claim.\n\n"
+                "1. Numbered claim. Another sentence!\n\n"
+                "**Bold fragment:**\n\n"
+                "| Feature | Status |\n| --- | --- |\n| Local links | Still a claim |\n\n"
+                "```sh\nexample command\n```\n"
+                "<picture>\n<img alt=\"Not prose\">\n</picture>\n")
+        claims, excluded = extract(text)
+        self.assertEqual([c["sentence"] for c in claims], [
+            "First claim with `v0.1`.", "lowercase second claim.", "Numbered claim.",
+            "Another sentence!", "**Bold fragment:**", "| Local links | Still a claim |"])
+        self.assertEqual({e["reason"] for e in excluded},
+                         {"heading", "link-only", "table-header", "code-block", "picture"})
+        for bad in ("```sh\nunclosed", "<picture>\nunclosed"):
+            with self.subTest(bad=bad), self.assertRaises(ValueError):
+                extract(bad)
+
     def test_invalid_statement_contracts(self):
         cases = []
         for field, value in (("_type", "urn:in-toto:Statement:v1"), ("subject", []), ("extra", True)):
