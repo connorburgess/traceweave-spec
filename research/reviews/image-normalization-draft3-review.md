@@ -146,3 +146,37 @@ The existing repository Python 3.12 environment also passed local Markdown links
 The new evidence covers synthetic post-trim RGB-to-grey/resize arithmetic only. It does not cover decoding, correctness/reachability of trim boxes, ISCC DCT/digest, variants, matching, PDQ, SDK parity, cross-host/compiler agreement, all allowed dimensions or historical universal output equivalence. Small arrays are post-trim inputs and do not expand accepted decoded-image formats. The original proposal's suggested resulting ISCC digests are outside this narrower checker, explicitly disclosed rather than represented as tested.
 
 IMGF.1 specification eligibility is distinct from IMGF.5 independent implementation evidence and IMGF.6 natural-image work. Neither is supplied here. No normative promotion, acquisition, full image study, natural-image performance claim, M3 work, gate/count edit, push, service or subagent was performed. Only this new review record is committed.
+
+## Follow-up review: exact grey half-tie fixture
+
+Independently reviewed exact **`db2848c1e8ec7c8465c066f5bff26863a803d440`** on 2026-11-26, initially clean in the same isolated worktree. This is an addendum to the exact-commit review above; it does not reinterpret the original fourteen-case evidence.
+
+**Disposition: the nonblocking exact-grey-half-tie coverage gap is resolved by `db2848c1e8ec7c8465c066f5bff26863a803d440`. No new blocking or nonblocking defect was found in this narrow follow-up.** Draft-3 and the two reviews remain eligible evidence for coordinator acceptance of the research IMGF.1 specification criterion. No gate/count or normative status is changed here. The upstream C-source verification limitation in finding 2 remains in full.
+
+Independent evidence:
+
+- Direct integer calculation gives `19595*1 + 38470*53 + 7471*185 = 3440640 = 52*65536+32768`. Exact `Fraction(3440640,65536)` is `105/2`, so half-up is **53** and ties-to-even is **52**. This expectation does not come from either supplied arithmetic program or Pillow.
+- The new `grey-half-tie` fixture is exactly 32×32, order `xy`, with RGB bytes `[1,53,185]` repeated 1,024 times. Each of `greyHex`, `firstHex` and `outputHex` is exactly 1,024 copies of `0x35`. Both axes are unchanged, isolating grey rounding from resampling. Both supplied arithmetic implementations agree with that independently derived expectation.
+- A separate scratch mutation replaced `arithmetic.grey` with `round(Fraction(19595*r+38470*g+7471*b,65536))` per pixel. This uses Python's exact-rational ties-to-even operation rather than copying the author's quotient/remainder mutation. Every new-fixture grey byte becomes `0x34`. The checker rejects it with the single failure `grey-half-tie: fixture/arithmetic mismatch`; that fixture has **1,024/1,024 first-pass and final-byte differences**. This verifies rejection through ordinary output comparisons, beyond merely reporting that a mutant differs.
+- The author's new quotient/remainder ties-to-even branch correctly handles both sides of a tie and odd/even quotients. Its witness list contains only `grey-half-tie`, with **1,024 grey-byte differences**. The dedicated fourth self-test injects the wrong grey implementation and asserts checker failure and 1,024 final-byte differences. Its integer anchor is separate from the oracle's expected-output calculation.
+- Parsing old and new fixture JSON confirms that all fourteen prior cases are exactly unchanged, with no removals; only the new case is added. The aggregate coefficient digest is unchanged. Updated fixture SHA-256 is **`05797a1a742d9b53b5b57d4130bbc15216713f7eb8a5b3a06a1ed1e0413517ec`**. Fixture regeneration remains byte-identical in memory; no expected file was rewritten during review.
+
+Reproduced the original bounded checker commands above using the same already provisioned CPython 3.14.6 / Darwin arm64 environment and pinned Pillow wheel, under `sandbox-exec` network denial. The target identity checks passed. All **15/15** cases agree on grey, first-pass and final bytes; coefficient checks pass; both resize mutations retain their original five witnesses each. The fresh report matches every committed summary field after removing the extra successful `pillowOutputHex` fields, and all four checker self-tests pass. Both commands exit 0.
+
+Git preservation checks also exit 0 with empty diffs:
+
+```sh
+git diff --exit-code fce7893 db2848c -- \
+  research/experiments/image-normalization-draft3/arithmetic.py \
+  research/experiments/image-normalization-draft3/oracle.py \
+  research/experiments/image-normalization-draft3/extraction-config.json \
+  research/experiments/image-normalization-draft3/frozen-pins.json \
+  research/experiments/image-normalization-draft3/primary-source-pins.json
+git diff --exit-code 24bb4b8 db2848c -- \
+  research/drafts/extraction-profile-image.md research/drafts/image-experiment-protocol.md \
+  research/experiments/image-fingerprint
+```
+
+The draft-3 extraction digest stays **`38b2dc7c534cc93e321160a9bba1f885e0106f8212760559d0c744f4ddb8654d`**; draft-2 extraction, matching and frozen study identities remain as recorded above. The follow-up changes seven author files, limited to fixture generation, checker/self-test, comparison evidence and explanatory documentation. It changes no arithmetic contract, implementation, source pin or configuration. The twelve-item recount and original arithmetic assessment stand.
+
+Local Markdown link validation, tree hygiene and the staged whitespace check passed for this addendum. This narrow review did not rerun unrelated repository tests or the full image experiment. No upstream source acquisition, new source-hash verification, natural-image evidence, SDK/end-to-end/cross-host equivalence, normative promotion, gate/count change, push, service or sublane is included. The 48-repository M3 evaluation remains held; M5 publication and separate TypeScript fixture repairs remain outside scope. Only this review addendum is committed.
