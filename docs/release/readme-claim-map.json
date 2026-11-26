@@ -7,7 +7,7 @@
     "picture",
     "table-header"
   ],
-  "approval": "Non-author approval of the 77-unit inventory and current exclusions recorded for exact commit 07c98cad440e3797d0ddc0c4b8c2bfb06a36dbd7 in research/reviews/m5-readiness-e7e7149-review.md (1df04f9) and research/reviews/m5-readiness-07c98ca-review.md (6ded8a3); status/count-only update independently checked in research/reviews/m5-gate-closure-07c98ca.md. M5.3 count/status-only closure independently reconciled in research/reviews/m5-3-gate-closure-24bb4b8.md, based on recipe commit 24bb4b8483dc86966cb7c8277130bb816b0c6b3f and independent review 284ce4e.",
+  "approval": "Non-author approval of the 77-unit inventory and current exclusions recorded for exact commit 07c98cad440e3797d0ddc0c4b8c2bfb06a36dbd7 in research/reviews/m5-readiness-e7e7149-review.md (1df04f9) and research/reviews/m5-readiness-07c98ca-review.md (6ded8a3); status/count-only update independently checked in research/reviews/m5-gate-closure-07c98ca.md. M5.3 count/status-only closure independently reconciled in research/reviews/m5-3-gate-closure-24bb4b8.md, based on recipe commit 24bb4b8483dc86966cb7c8277130bb816b0c6b3f and independent review 284ce4e. Five scoped profile count/status closures are reconciled in research/reviews/img-ts-txt-five-gate-closure-73b6d5c.md, based on exact evidence 73b6d5cfd116a1d13a2463638e4e2448280db958 and independent review ca8fb4f51df75250cd82ea4e6a86b0f3e48aa9ae; inventory and exclusions are unchanged. Combined integration of the IMGF.1 and five profile closures is independently reconciled in research/reviews/profile-integration-631e71e.md; the inventory and exclusions remain unchanged.",
   "excluded": [
     {
       "line": 1,
@@ -442,12 +442,12 @@
     },
     {
       "id": "README-007",
-      "sentence": "**Profiles & extensions:** **22 of 55** gates met, plus **2 recorded negative results** (`TXT.4` repeated-structure prose ambiguity in Stage 1; `TXT.8` Unicode text marks erased by standard folding).",
+      "sentence": "**Profiles & extensions:** **27 of 55** gates met, plus **2 recorded negative results** (`TXT.4` repeated-structure prose ambiguity in Stage 1; `TXT.8` Unicode text marks erased by standard folding).",
       "evidence": [
         {
           "kind": "decision",
           "path": "ROADMAP.md",
-          "quote": "| Later profiles, EXT and RC | 55 | 22 (TS.3, PY.1, PY.2, PY.3, IMGF.1, IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4, TXT.3, TXT.7, RES.1, C2PA.3, SK.1, SK.2, WEB.0, WEB.1, WEB.2) | 2 (TXT.4, TXT.8) | 31 (WEB.3–WEB.6 and SK.3–SK.5 planned; PY.4 open) |"
+          "quote": "| Later profiles, EXT and RC | 55 | 27 (TS.1, TS.2, TS.3, PY.1, PY.2, PY.3, IMGF.1, IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4, IMG.5, TXT.1, TXT.2, TXT.3, TXT.7, RES.1, C2PA.3, SK.1, SK.2, WEB.0, WEB.1, WEB.2) | 2 (TXT.4, TXT.8) | 26 (WEB.3–WEB.6 and SK.3–SK.5 planned; PY.4 open) |"
         },
         {
           "kind": "review",
@@ -456,11 +456,21 @@
         },
         {
           "kind": "review",
+          "path": "research/reviews/ts2-73b6d5c-independent-review.md",
+          "quote": "**Verdict: no blocking findings. Recommend lifting the previous TS.2 evidence hold for frozen stage-1 `ts-tokens` draft-2.** The missing selection classes and the stronger within-stage input-rejection pairing requirement now have evidence. This is a scoped recommendation, not a gate/status/count edit, implementation agreement result, or approval of deferred profiles."
+        },
+        {
+          "kind": "review",
           "path": "research/reviews/imgf1-gate-closure-db2848c.md",
           "quote": "The sole added met ID is **IMGF.1**."
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/img-ts-txt-five-gate-closure-73b6d5c.md",
+          "quote": "Exactly the five authorized rows change from open to met."
         }
       ],
-      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+      "rationale": "The integrated recount combines the scoped IMGF.1 closure with IMG.5, TS.1/TS.2 and TXT.1/TXT.2: 27 of 55 met, TXT.4/TXT.8 negative-result and 26 open. IMG.5 uses the reviewed draft-schema route; TS and TXT closures cover only frozen stage-1 ts-tokens and text-plain, with documented text result-rejection pairing. TSX/Markdown remain deferred. IMGF.1 adopts research arithmetic without normative promotion or universal equivalence."
     },
     {
       "id": "README-008",

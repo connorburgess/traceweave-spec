@@ -1,0 +1,53 @@
+{
+  "revision": "24bb4b8483dc86966cb7c8277130bb816b0c6b3f",
+  "files": {
+    "test-vectors/extraction-typescript/ts.json": {
+      "vectors": 77,
+      "positive": 46,
+      "stage1_rejected_input_pairs": 44,
+      "fingerprints": 292,
+      "token_spans": 648,
+      "kgrams": 880,
+      "errors": 31,
+      "cross_scope_pairs": [
+        [
+          "ts-html-comment",
+          "tsx-err-html-comment"
+        ],
+        [
+          "ts-type-assertion",
+          "tsx-err-ts-type-assertion"
+        ]
+      ]
+    },
+    "test-vectors/extraction-typescript/limits-ts.json": {
+      "vectors": 3,
+      "positive": 1,
+      "stage1_rejected_input_pairs": 1,
+      "token_spans": 7,
+      "kgrams": 5,
+      "fingerprints": 2,
+      "errors": 2,
+      "cross_scope_pairs": []
+    },
+    "test-vectors/extraction-text/text-plain.json": {
+      "vectors": 55,
+      "positive": 46,
+      "mutated_result_pairs": 46,
+      "fingerprints": 227,
+      "token_spans": 625,
+      "kgrams": 1023,
+      "errors": 9,
+      "cross_scope_pairs": []
+    },
+    "test-vectors/extraction-text/limits-text.json": {
+      "vectors": 3,
+      "positive": 1,
+      "mutated_result_pairs": 1,
+      "token_spans": 3,
+      "fingerprints": 0,
+      "errors": 2,
+      "cross_scope_pairs": []
+    }
+  }
+}

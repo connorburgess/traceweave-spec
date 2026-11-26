@@ -160,3 +160,17 @@ python3 -I harness/derive_deltas.py UCD_DIR  # UCD 17.0.0 UnicodeData.txt and De
 ```
 
 The builder is deterministic. Edit token streams only in `harness/vector_sources.py`, then re-run the checker and the cross-check.
+
+## Supplemental TS.2 selection and stage-1 pairing evidence
+
+[selection-decisions.json](selection-decisions.json) contains 55 hand-written selection judgments under [profile §2](../../profiles/typescript.md#2-inputs-in-scope-and-why-two-profiles): declaration suffixes/wildcards, generated markers within the first 2048 **bytes**, minified suffixes, and lines longer than 4096 **bytes**, split at LF/CR/LS/PS. Cases include exact boundaries, incomplete/out-of-window markers, Unicode byte lengths, near suffixes, and explicit stage-2 deferral. Input parts are concatenated UTF-8 strings; an object `{text, repeat}` repeats a literal to make a stated boundary. Expected decisions are hand-authored, not emitted by the adapter.
+
+[check_selection.py](check_selection.py) checks these judgments and requires 24 deliberately wrong selector variants to fail. It is a test-only adapter, not a shipped selector or JSX detector. `jsxKnown` is a hand-declared input fact: it tests how a known JSX file is recorded, including D-16; it does not claim a way to detect JSX. Fixtures avoid unspecified directory policies and overlap between exclusion and deferral, so they define no new precedence. An `extract` selection decision means eligible for extraction, not that arbitrary content is lexically valid.
+
+[stage1-rejection-pairs.json](stage1-rejection-pairs.json) repairs the two stage-1 pairing gaps **in a supplemental map**. Frozen `ts-html-comment` and `ts-type-assertion` retain their historical cross-profile pointers byte for byte. Their supplemental partners append respectively an unterminated block comment and an unmatched closing delimiter to the original input; the expected stage-1 error code/UTF-8 offset is hand-written and re-lexed by the existing checker. The adapter requires all 47 positives in `ts.json` + `limits-ts.json` to have an in-scope error partner, using these two explicit overrides. No `tsx-tokens` behavior is imported into that check. These are conformance evidence additions, not output/configuration changes or new TSX support.
+
+Both supplemental files pin the unchanged profile and frozen input files by SHA-256 and record source revision `1c8f09a`. The checker runs in `tools/validate.py` and the contract tests corrupt decisions, boundaries, source identities and pairing evidence to require clean failures. The [author resolution](../../research/reviews/ts2-exclusion-pairing-resolution.md) lists validation and limitations. Gate status and counts remain unchanged pending independent review.
+
+```
+python3 -I test-vectors/extraction-typescript/check_selection.py
+```

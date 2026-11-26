@@ -1,0 +1,744 @@
+{
+  "specification": "profiles/typescript.md section 2, ts-tokens draft-2",
+  "scope": "Test-only selection-decision adapter. JSX knowledge is hand-declared, not detected. No directory policy or overlapping exclusion/defer precedence is defined here.",
+  "vectors": [
+    {
+      "id": "ordinary.ts",
+      "derivation": "hand",
+      "name": "module.ts",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Stage-1 extension, no exclusion predicate."
+    },
+    {
+      "id": "ordinary.mts",
+      "derivation": "hand",
+      "name": "module.mts",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Stage-1 extension, no exclusion predicate."
+    },
+    {
+      "id": "ordinary.cts",
+      "derivation": "hand",
+      "name": "module.cts",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Stage-1 extension, no exclusion predicate."
+    },
+    {
+      "id": "ordinary.js",
+      "derivation": "hand",
+      "name": "module.js",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Stage-1 extension, no exclusion predicate."
+    },
+    {
+      "id": "ordinary.mjs",
+      "derivation": "hand",
+      "name": "module.mjs",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Stage-1 extension, no exclusion predicate."
+    },
+    {
+      "id": "ordinary.cjs",
+      "derivation": "hand",
+      "name": "module.cjs",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Stage-1 extension, no exclusion predicate."
+    },
+    {
+      "id": "declaration.d.ts",
+      "derivation": "hand",
+      "name": "module.d.ts",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "Declaration filename per profile section 2."
+    },
+    {
+      "id": "declaration.d.mts",
+      "derivation": "hand",
+      "name": "module.d.mts",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "Declaration filename per profile section 2."
+    },
+    {
+      "id": "declaration.d.cts",
+      "derivation": "hand",
+      "name": "module.d.cts",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "Declaration filename per profile section 2."
+    },
+    {
+      "id": "declaration.d.css.ts",
+      "derivation": "hand",
+      "name": "module.d.css.ts",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "Declaration filename per profile section 2."
+    },
+    {
+      "id": "near-module.d.tsx",
+      "derivation": "hand",
+      "name": "module.d.tsx",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "defer",
+      "rationale": "Not a declaration exclusion, but .tsx is explicitly deferred."
+    },
+    {
+      "id": "near-module.D.ts",
+      "derivation": "hand",
+      "name": "module.D.ts",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Near declaration pattern; no specified declaration suffix or *.d.*.ts match."
+    },
+    {
+      "id": "near-module.d.ts.bak.ts",
+      "derivation": "hand",
+      "name": "module.d.ts.bak.ts",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "The *.d.*.ts wildcard also covers multiple intermediate dot components."
+    },
+    {
+      "id": "near-module.d.css.mts",
+      "derivation": "hand",
+      "name": "module.d.css.mts",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Near declaration pattern; no specified declaration suffix or *.d.*.ts match."
+    },
+    {
+      "id": "near-module.dts.ts",
+      "derivation": "hand",
+      "name": "module.dts.ts",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Near declaration pattern; no specified declaration suffix or *.d.*.ts match."
+    },
+    {
+      "id": "generated-start",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        "@generated"
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "Complete marker is inside first 2048 bytes."
+    },
+    {
+      "id": "generated-end2048",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "x",
+          "repeat": 2038
+        },
+        "@generated"
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "Marker ends exactly at byte 2048."
+    },
+    {
+      "id": "generated-end2049",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "x",
+          "repeat": 2039
+        },
+        "@generated"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Marker crosses the 2048-byte slice boundary."
+    },
+    {
+      "id": "generated-after2048",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "x",
+          "repeat": 2048
+        },
+        "@generated"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Marker starts outside first 2048 bytes."
+    },
+    {
+      "id": "generated-unicode-boundary",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "é",
+          "repeat": 1024
+        },
+        "@generated"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "1024 characters occupy 2048 bytes; marker is outside slice."
+    },
+    {
+      "id": "do-not-edit-start",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        "DO NOT EDIT"
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "Complete marker is inside first 2048 bytes."
+    },
+    {
+      "id": "do-not-edit-end2048",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "x",
+          "repeat": 2037
+        },
+        "DO NOT EDIT"
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "Marker ends exactly at byte 2048."
+    },
+    {
+      "id": "do-not-edit-end2049",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "x",
+          "repeat": 2038
+        },
+        "DO NOT EDIT"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Marker crosses the 2048-byte slice boundary."
+    },
+    {
+      "id": "do-not-edit-after2048",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "x",
+          "repeat": 2048
+        },
+        "DO NOT EDIT"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Marker starts outside first 2048 bytes."
+    },
+    {
+      "id": "do-not-edit-unicode-boundary",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "é",
+          "repeat": 1024
+        },
+        "DO NOT EDIT"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "1024 characters occupy 2048 bytes; marker is outside slice."
+    },
+    {
+      "id": "near-marker-@Generated",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        "@Generated"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Only exact case-sensitive complete markers are specified."
+    },
+    {
+      "id": "near-marker-do not edit",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        "do not edit"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Only exact case-sensitive complete markers are specified."
+    },
+    {
+      "id": "near-marker-@generate",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        "@generate"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Only exact case-sensitive complete markers are specified."
+    },
+    {
+      "id": "near-marker-DO NOT EDI",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        "DO NOT EDI"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Only exact case-sensitive complete markers are specified."
+    },
+    {
+      "id": "minified.min.js",
+      "derivation": "hand",
+      "name": "m.min.js",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "Exact minified filename suffix."
+    },
+    {
+      "id": "minified.min.mjs",
+      "derivation": "hand",
+      "name": "m.min.mjs",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "Exact minified filename suffix."
+    },
+    {
+      "id": "minified.min.cjs",
+      "derivation": "hand",
+      "name": "m.min.cjs",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "Exact minified filename suffix."
+    },
+    {
+      "id": "near-minified-m.min.ts",
+      "derivation": "hand",
+      "name": "m.min.ts",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Not a specified minified filename suffix."
+    },
+    {
+      "id": "near-minified-m.MIN.js",
+      "derivation": "hand",
+      "name": "m.MIN.js",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Not a specified minified filename suffix."
+    },
+    {
+      "id": "near-minified-m.min.js.map.js",
+      "derivation": "hand",
+      "name": "m.min.js.map.js",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Not a specified minified filename suffix."
+    },
+    {
+      "id": "near-minified-m.minimum.js",
+      "derivation": "hand",
+      "name": "m.minimum.js",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Not a specified minified filename suffix."
+    },
+    {
+      "id": "line4096",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "a",
+          "repeat": 4096
+        }
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "4096-byte line is at, not above, the bound."
+    },
+    {
+      "id": "line4097",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "a",
+          "repeat": 4097
+        }
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "4097-byte line exceeds bound."
+    },
+    {
+      "id": "utf8-line4096",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "é",
+          "repeat": 2048
+        }
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "UTF-8 byte length is exactly 4096."
+    },
+    {
+      "id": "utf8-line4097",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "é",
+          "repeat": 2048
+        },
+        "a"
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "UTF-8 byte length, not character count, is 4097."
+    },
+    {
+      "id": "split-lf",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "a",
+          "repeat": 4096
+        },
+        "\n",
+        {
+          "text": "b",
+          "repeat": 4096
+        }
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Specified line terminator separates two at-limit byte lines."
+    },
+    {
+      "id": "split-lf-over",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "a",
+          "repeat": 4096
+        },
+        "\n",
+        {
+          "text": "b",
+          "repeat": 4097
+        }
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "Second line exceeds bound even after a recognized separator."
+    },
+    {
+      "id": "split-cr",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "a",
+          "repeat": 4096
+        },
+        "\r",
+        {
+          "text": "b",
+          "repeat": 4096
+        }
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Specified line terminator separates two at-limit byte lines."
+    },
+    {
+      "id": "split-cr-over",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "a",
+          "repeat": 4096
+        },
+        "\r",
+        {
+          "text": "b",
+          "repeat": 4097
+        }
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "Second line exceeds bound even after a recognized separator."
+    },
+    {
+      "id": "split-crlf",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "a",
+          "repeat": 4096
+        },
+        "\r\n",
+        {
+          "text": "b",
+          "repeat": 4096
+        }
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Specified line terminator separates two at-limit byte lines."
+    },
+    {
+      "id": "split-crlf-over",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "a",
+          "repeat": 4096
+        },
+        "\r\n",
+        {
+          "text": "b",
+          "repeat": 4097
+        }
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "Second line exceeds bound even after a recognized separator."
+    },
+    {
+      "id": "split-ls",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "a",
+          "repeat": 4096
+        },
+        " ",
+        {
+          "text": "b",
+          "repeat": 4096
+        }
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Specified line terminator separates two at-limit byte lines."
+    },
+    {
+      "id": "split-ls-over",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "a",
+          "repeat": 4096
+        },
+        " ",
+        {
+          "text": "b",
+          "repeat": 4097
+        }
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "Second line exceeds bound even after a recognized separator."
+    },
+    {
+      "id": "split-ps",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "a",
+          "repeat": 4096
+        },
+        " ",
+        {
+          "text": "b",
+          "repeat": 4096
+        }
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "Specified line terminator separates two at-limit byte lines."
+    },
+    {
+      "id": "split-ps-over",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        {
+          "text": "a",
+          "repeat": 4096
+        },
+        " ",
+        {
+          "text": "b",
+          "repeat": 4097
+        }
+      ],
+      "jsxKnown": false,
+      "expected": "exclude",
+      "rationale": "Second line exceeds bound even after a recognized separator."
+    },
+    {
+      "id": "defer.tsx",
+      "derivation": "hand",
+      "name": "m.tsx",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "defer",
+      "rationale": "Deferred profile; no stage-1 extraction claim."
+    },
+    {
+      "id": "defer.jsx",
+      "derivation": "hand",
+      "name": "m.jsx",
+      "inputParts": [
+        "let x = 1;\n"
+      ],
+      "jsxKnown": false,
+      "expected": "defer",
+      "rationale": "Deferred profile; no stage-1 extraction claim."
+    },
+    {
+      "id": "closed-jsx",
+      "derivation": "hand",
+      "name": "m.js",
+      "inputParts": [
+        "const x = <a>text</a>;"
+      ],
+      "jsxKnown": true,
+      "expected": "defer",
+      "rationale": "Fixture declares JSX known; stage 2 even for D-16 lexical misread."
+    },
+    {
+      "id": "self-closing-jsx",
+      "derivation": "hand",
+      "name": "m.js",
+      "inputParts": [
+        "const x = <br/>;"
+      ],
+      "jsxKnown": true,
+      "expected": "defer",
+      "rationale": "Fixture declares JSX known; stage 2 even for D-16 lexical misread."
+    },
+    {
+      "id": "type-assertion-not-jsx",
+      "derivation": "hand",
+      "name": "m.ts",
+      "inputParts": [
+        "let x = <T>y;"
+      ],
+      "jsxKnown": false,
+      "expected": "extract",
+      "rationale": "No JSX declaration; do not guess JSX from angle brackets."
+    }
+  ],
+  "sourceRevision": "1c8f09a62faabfa2304b14315ee80d1b324304d7",
+  "sourceSha256": {
+    "profiles/typescript.md": "e675e3e139412728e49dffc7db867baab83b4fdf86911593fa819bc1c298f0e5",
+    "test-vectors/extraction-typescript/ts.json": "be290174a694e3124c510518203220ab6675ac5d44081f89980c08b594f4dc81",
+    "test-vectors/extraction-typescript/limits-ts.json": "b9db6d79758873db321cee28b7b5161465337666b4c3db18e1efd390f018eb9f",
+    "test-vectors/extraction-typescript/config-ts.json": "aeeed14177cd3be8fea69e453c825e74f2fd301d03babbf49329bde0cc4754de",
+    "test-vectors/extraction-typescript/config-ts-limit16.json": "94403dd3e71a8105a9dcec894fc0d05d09cb771efaada28802dcf43ecd08f8d6"
+  }
+}
