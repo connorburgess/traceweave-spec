@@ -7,7 +7,7 @@
     "picture",
     "table-header"
   ],
-  "approval": "Non-author approval of the 77-unit inventory and current exclusions recorded for exact commit 07c98cad440e3797d0ddc0c4b8c2bfb06a36dbd7 in research/reviews/m5-readiness-e7e7149-review.md (1df04f9) and research/reviews/m5-readiness-07c98ca-review.md (6ded8a3); status/count-only update independently checked in research/reviews/m5-gate-closure-07c98ca.md.",
+  "approval": "Non-author approval of the 77-unit inventory and current exclusions recorded for exact commit 07c98cad440e3797d0ddc0c4b8c2bfb06a36dbd7 in research/reviews/m5-readiness-e7e7149-review.md (1df04f9) and research/reviews/m5-readiness-07c98ca-review.md (6ded8a3); status/count-only update independently checked in research/reviews/m5-gate-closure-07c98ca.md. M5.3 count/status-only closure independently reconciled in research/reviews/m5-3-gate-closure-24bb4b8.md, based on recipe commit 24bb4b8483dc86966cb7c8277130bb816b0c6b3f and independent review 284ce4e.",
   "excluded": [
     {
       "line": 1,
@@ -400,12 +400,12 @@
     },
     {
       "id": "README-006",
-      "sentence": "**Core M0–M5:** **33 of 47** gates met — including all M0–M2 extraction, catalogue, and report contracts, `M2E.0` (source-code embedding omitted from the next release), the M3.0 false-alarm budget, and all 6/6 M4 offline-first registration gates (`traceweave-registration-draft-5`, promoted vectors + independent Rust/Go parity, commitment/disclosure review, verifier-local trust policy, and in-toto adapter fixtures).",
+      "sentence": "**Core M0–M5:** **34 of 47** gates met — including all M0–M2 extraction, catalogue, and report contracts, `M2E.0` (source-code embedding omitted from the next release), the M3.0 false-alarm budget, and all 6/6 M4 offline-first registration gates (`traceweave-registration-draft-5`, promoted vectors + independent Rust/Go parity, commitment/disclosure review, verifier-local trust policy, and in-toto adapter fixtures).",
       "evidence": [
         {
           "kind": "decision",
           "path": "ROADMAP.md",
-          "quote": "| Core M0–M5 | 47 | 33 (M0.1, M0.2, M0.3, M0.4, M1.1, M1.2, M1.3, M1.4, M1.5, M1.6, M2.1, M2.2, M2.3, M2.4, M2.5, M2.6, M2.7, M2.8, M2.9, M2.10, M2.11, M2E.0, M3.0, M4.1, M4.2, M4.3, M4.4, M4.5, M4.6, M5.1, M5.2, M5.4, M5.5) | 0 | 14 (M2E.1–M2E.7, M3.1–M3.6, M5.3) |"
+          "quote": "| Core M0–M5 | 47 | 34 (M0.1, M0.2, M0.3, M0.4, M1.1, M1.2, M1.3, M1.4, M1.5, M1.6, M2.1, M2.2, M2.3, M2.4, M2.5, M2.6, M2.7, M2.8, M2.9, M2.10, M2.11, M2E.0, M3.0, M4.1, M4.2, M4.3, M4.4, M4.5, M4.6, M5.1, M5.2, M5.3, M5.4, M5.5) | 0 | 13 (M2E.1–M2E.7, M3.1–M3.6) |"
         },
         {
           "kind": "decision",
@@ -431,9 +431,14 @@
           "kind": "review",
           "path": "research/reviews/m5-readiness-07c98ca-review.md",
           "quote": "**Disposition: R1 and residual F4 closed. No remaining blocking findings demonstrated. M5.1, M5.2, M5.4 and M5.5 are eligible on this exact commit.** This recommendation does not mark gates met, authorize a push or establish complete candidate-release readiness; M5.3 remains separate."
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/m5-3-recipe-24bb4b8-review.md",
+          "quote": "**Disposition: M5.3 eligible on this exact commit, with no blocking findings.** ROADMAP's actual criterion is “A non-author reproduces the demo offline after dependency fetch: clean clone → pinned implementation.” The committed recipe now designates the existing synthetic native walkthrough, supplies its executable entry points and exact pins, distinguishes dependency preparation from enforced offline execution, and states the limits. Independent execution below establishes more than agreement with the author's reported success. It does not approve a release or imply held-out usefulness."
         }
       ],
-      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+      "rationale": "The independently recounted ROADMAP gate rows and committed closure reviews support this 34/47 status count. M5.3 records the bounded native reproduction at its pinned recipe commit; no held-out measurement or release approval is implied."
     },
     {
       "id": "README-007",

@@ -2,7 +2,9 @@
 
 Author audit for M5.2, 2026-11-26; not the non-author exclusion approval or an independent implementation review. This review checks descriptive/navigation claims against repository contents. Runtime/detection claims need the separate fixtures and recorded reviews in the claim map.
 
-Historical snapshot: the counts and pending-review statements below describe the earlier author audit on 2026-11-26, before independent closure. Current status is M5.1/M5.2/M5.4/M5.5 met, core 33/47 met and 14 open, on review of exact commit `07c98cad440e3797d0ddc0c4b8c2bfb06a36dbd7` ([re-review](../../research/reviews/m5-readiness-e7e7149-review.md) `1df04f9`; [final confirmation](../../research/reviews/m5-readiness-07c98ca-review.md) `6ded8a3`; [closure recount](../../research/reviews/m5-gate-closure-07c98ca.md)). M5.3 remains open and M3.1–M3.6 remain open/held. The earlier audit's exact evidence quotations are retained below.
+Historical snapshot: the counts and pending-review statements below describe the earlier author audit on 2026-11-26, before independent closure. At the earlier four-gate closure, status was M5.1/M5.2/M5.4/M5.5 met, core 33/47 met and 14 open, on review of exact commit `07c98cad440e3797d0ddc0c4b8c2bfb06a36dbd7` ([re-review](../../research/reviews/m5-readiness-e7e7149-review.md) `1df04f9`; [final confirmation](../../research/reviews/m5-readiness-07c98ca-review.md) `6ded8a3`; [closure recount](../../research/reviews/m5-gate-closure-07c98ca.md)). M5.3 was then open; M3.1–M3.6 remained open/held. The earlier audit's exact evidence quotations are retained below.
+
+Current status after independent M5.3 recipe review: M5.1–M5.5 met, core **34/47 met and 13 open**. M5.3 cites exact recipe commit `24bb4b8483dc86966cb7c8277130bb816b0c6b3f` and [independent review](../../research/reviews/m5-3-recipe-24bb4b8-review.md) `284ce4e`; see the [M5.3 closure recount](../../research/reviews/m5-3-gate-closure-24bb4b8.md). M3.1–M3.6 remain open/held, and no release approval is implied.
 
 ## Governance and scope
 

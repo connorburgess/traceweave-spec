@@ -1,6 +1,6 @@
 # Pinned offline synthetic demo — 0.1.0-draft.1
 
-This is the designated native release demo: the existing Go and Rust `go-function-in-host` walkthroughs run extraction, catalogue building, comparison, stamped report emission and validation. The [independent reproduction record](../../research/reviews/m5-3-offline-demo-review.md) records the tested revisions and results. This recipe does not change M5.3 status in the [roadmap](../../ROADMAP.md).
+This is the designated native release demo: the existing Go and Rust `go-function-in-host` walkthroughs run extraction, catalogue building, comparison, stamped report emission and validation. The [original reproduction record](../../research/reviews/m5-3-offline-demo-review.md) records the tested revisions and results. M5.3 is now recorded met in the [roadmap](../../ROADMAP.md), following non-author review of this exact recipe at `24bb4b8483dc86966cb7c8277130bb816b0c6b3f` ([independent recipe review](../../research/reviews/m5-3-recipe-24bb4b8-review.md) `284ce4e`; [closure recount](../../research/reviews/m5-3-gate-closure-24bb4b8.md)). The executable recipe and its limitations are unchanged by closure; this is not release approval.
 
 ## Prerequisites and pins
 
