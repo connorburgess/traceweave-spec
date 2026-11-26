@@ -7,7 +7,7 @@
     "picture",
     "table-header"
   ],
-  "approval": "Non-author approval of the 77-unit inventory and current exclusions recorded for exact commit 07c98cad440e3797d0ddc0c4b8c2bfb06a36dbd7 in research/reviews/m5-readiness-e7e7149-review.md (1df04f9) and research/reviews/m5-readiness-07c98ca-review.md (6ded8a3); status/count-only update independently checked in research/reviews/m5-gate-closure-07c98ca.md. M5.3 count/status-only closure independently reconciled in research/reviews/m5-3-gate-closure-24bb4b8.md, based on recipe commit 24bb4b8483dc86966cb7c8277130bb816b0c6b3f and independent review 284ce4e.",
+  "approval": "Non-author approval of the 77-unit inventory and current exclusions recorded for exact commit 07c98cad440e3797d0ddc0c4b8c2bfb06a36dbd7 in research/reviews/m5-readiness-e7e7149-review.md (1df04f9) and research/reviews/m5-readiness-07c98ca-review.md (6ded8a3); status/count-only update independently checked in research/reviews/m5-gate-closure-07c98ca.md. M5.3 count/status-only closure independently reconciled in research/reviews/m5-3-gate-closure-24bb4b8.md, based on recipe commit 24bb4b8483dc86966cb7c8277130bb816b0c6b3f and independent review 284ce4e. Five scoped profile count/status closures are reconciled in research/reviews/img-ts-txt-five-gate-closure-73b6d5c.md, based on exact evidence 73b6d5cfd116a1d13a2463638e4e2448280db958 and independent review ca8fb4f51df75250cd82ea4e6a86b0f3e48aa9ae; inventory and exclusions are unchanged.",
   "excluded": [
     {
       "line": 1,
@@ -442,20 +442,25 @@
     },
     {
       "id": "README-007",
-      "sentence": "**Profiles & extensions:** **21 of 55** gates met, plus **2 recorded negative results** (`TXT.4` repeated-structure prose ambiguity in Stage 1; `TXT.8` Unicode text marks erased by standard folding).",
+      "sentence": "**Profiles & extensions:** **26 of 55** gates met, plus **2 recorded negative results** (`TXT.4` repeated-structure prose ambiguity in Stage 1; `TXT.8` Unicode text marks erased by standard folding).",
       "evidence": [
         {
           "kind": "decision",
           "path": "ROADMAP.md",
-          "quote": "| Later profiles, EXT and RC | 55 | 21 (TS.3, PY.1, PY.2, PY.3, IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4, TXT.3, TXT.7, RES.1, C2PA.3, SK.1, SK.2, WEB.0, WEB.1, WEB.2) | 2 (TXT.4, TXT.8) | 32 (WEB.3–WEB.6 and SK.3–SK.5 planned; PY.4 open) |"
+          "quote": "| Later profiles, EXT and RC | 55 | 26 (TS.1, TS.2, TS.3, PY.1, PY.2, PY.3, IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4, IMG.5, TXT.1, TXT.2, TXT.3, TXT.7, RES.1, C2PA.3, SK.1, SK.2, WEB.0, WEB.1, WEB.2) | 2 (TXT.4, TXT.8) | 27 (WEB.3–WEB.6 and SK.3–SK.5 planned; PY.4 open) |"
         },
         {
           "kind": "review",
           "path": "research/reviews/txt8-unicode-mark-review.md",
           "quote": "**Verdict: `negative-result` confirmed for Unicode carriers.** Lane 09's reading that homoglyph and zero-width Unicode carriers are erased by the declared deterministic fold (`NFKC` + UTS #39 `skeleton` + delete `Default_Ignorable_Code_Point`) and that AWT post-hoc lexical rewriting is rightly rejected is independently confirmed. Any new text-mark experiment remains owner-blocked."
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/ts2-73b6d5c-independent-review.md",
+          "quote": "**Verdict: no blocking findings. Recommend lifting the previous TS.2 evidence hold for frozen stage-1 `ts-tokens` draft-2.** The missing selection classes and the stronger within-stage input-rejection pairing requirement now have evidence. This is a scoped recommendation, not a gate/status/count edit, implementation agreement result, or approval of deferred profiles."
         }
       ],
-      "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
+      "rationale": "The five scoped closures and independent gate-row recount raise later-profile met gates from 21 to 26 of 55; TXT.4/TXT.8 remain negative-result and 27 remain open. IMG.5 closes the reviewed draft-schema route; TS.1/TS.2 cover frozen stage-1 ts-tokens; TXT.1/TXT.2 cover frozen stage-1 text-plain with documented result-rejection pairing. TSX/Markdown remain deferred; IMGF.1 remains open in this branch. See research/reviews/img-ts-txt-five-gate-closure-73b6d5c.md."
     },
     {
       "id": "README-008",
