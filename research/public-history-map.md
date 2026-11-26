@@ -31,7 +31,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 
 ## Verification of the commits listed here
 
-`python3 tools/public_history_scrub.py scan` over the 220 commits and 3370 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
+`python3 tools/public_history_scrub.py scan` over the 232 commits and 3490 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
 
 | Category | Hits |
 | --- | --- |
@@ -79,8 +79,15 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `24bb4b8` | `24bb4b8483dc` | `f024316078fd` |
 | `284ce4e` | `284ce4e1f3b2` | `8c703bbcff24` |
 | `409d486` | `409d486cc02c` | `dec460e84334` |
+| `73b6d5c` | `73b6d5cfd116` | `a68bfd46ad0f` |
+| `ca8fb4f` | `ca8fb4f51df7` | `a8445ef0d431` |
+| `db2848c` | `db2848c1e8ec` | `b210a142d331` |
 | `0db8b44` | `0db8b44097b6` | `c87655a88151` |
 | `3b5f24e` | `3b5f24ecd756` | `548394878bff` |
+| `73b6d5cfd116a1d13a2463638e4e2448280db958` | `73b6d5cfd116` | `a68bfd46ad0f` |
+| `db2848c1e8ec7c8465c066f5bff26863a803d440` | `db2848c1e8ec` | `b210a142d331` |
+| `b3a3a2c` | `b3a3a2c99b52` | `1a4cbea6c987` |
+| `5d0a863` | `5d0a8630d4a5` | `6476a51e6de2` |
 | `6f39e50` | `6f39e50f3302` | `b47b8945b9d6` |
 | `0c7523c` | `0c7523c23613` | `52049a8a0591` |
 | `dbd109b` | `dbd109bce3cf` | `44179c47fe77` |
@@ -99,12 +106,27 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `7dccedd` | `7dccedd63897` | `a8f6c47798af` |
 | `4d4e98d` | `4d4e98d68bef` | `6883ebe512be` |
 | `67f7b5d` | `67f7b5dbcec0` | `3a29ca30f228` |
+| `631e71e` | `631e71e22994` | `4d9c9173dfde` |
 | `284ce4e1f3b2daf9eabd7700cabdc4b10865310d` | `284ce4e1f3b2` | `8c703bbcff24` |
 | `6ded8a3d6923b310f6b0abfab2a4037abfc3e467` | `6ded8a3d6923` | `4cb75f5f3c56` |
 | `e7e714987aced74569294bfe6aa11a072ed43372` | `e7e714987ace` | `037aa20d6fb6` |
 | `7dccedd6389762ea038b4b132a8479436a30f23d` | `7dccedd63897` | `a8f6c47798af` |
+| `fce78938e9fd7d80a7ddd2d06686a857bfc458d5` | `fce78938e9fd` | `726b333a2ee0` |
+| `fce7893` | `fce78938e9fd` | `726b333a2ee0` |
+| `5d0a8630d4a5cd55b1e7501766ab902c66d90c8f` | `5d0a8630d4a5` | `6476a51e6de2` |
+| `b3a3a2c99b52f7313a3e6b6a4ae10e5e96846755` | `b3a3a2c99b52` | `1a4cbea6c987` |
+| `303b966fe20f03e346b00732f0fd05ed17ede4b9` | `303b966fe20f` | `8517c53c2284` |
+| `4c7c61bab7c2faf250401b9ccc3c3d7000021d34` | `4c7c61bab7c2` | `ece5f3bd4e05` |
+| `a4ea8d4` | `a4ea8d46fa7c` | `d61f45c9c203` |
+| `1c8f09a62faabfa2304b14315ee80d1b324304d7` | `1c8f09a62faa` | `e2863bd5a657` |
+| `9eab88fe34eb36606c9d958446fda26eb8649b3f` | `9eab88fe34eb` | `182dba97718a` |
+| `ca8fb4f51df75250cd82ea4e6a86b0f3e48aa9ae` | `ca8fb4f51df7` | `a8445ef0d431` |
+| `631e71e22994dc5a8e16f2f6eee73ed94b1e54cd` | `631e71e22994` | `4d9c9173dfde` |
+| `c402191166e9224d54d819433112b8ff68bc579d` | `c402191166e9` | `f9ced808fa54` |
+| `303b966` | `303b966fe20f` | `8517c53c2284` |
+| `1c8f09a` | `1c8f09a62faa` | `e2863bd5a657` |
 
-Ancestry was checked for all 1485 pairs of these 55 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
+Ancestry was checked for all 2926 pairs of these 77 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
 
 ## All commits, oldest first
 
@@ -344,3 +366,15 @@ Ancestry was checked for all 1485 pairs of these 55 ids in both directions: the 
 | 232 | `24bb4b8483dc` | `f024316078fd` | kept | Document pinned offline synthetic release demo |
 | 233 | `284ce4e1f3b2` | `8c703bbcff24` | kept | Review pinned M5.3 offline demo recipe at 24bb4b8 |
 | 234 | `1c8f09a62faa` | `e2863bd5a657` | kept | Record independently reviewed M5.3 closure |
+| 235 | `4c7c61bab7c2` | `ece5f3bd4e05` | kept | Update public history map for reviewed M5 closure |
+| 236 | `fce78938e9fd` | `726b333a2ee0` | kept | Propose explicit image normalization draft with synthetic conformance |
+| 237 | `b3a3a2c99b52` | `1a4cbea6c987` | kept | Record independent review of image normalization draft-3 |
+| 238 | `db2848c1e8ec` | `b210a142d331` | kept | Add exact grey half-tie normalization fixture |
+| 239 | `5d0a8630d4a5` | `6476a51e6de2` | kept | Review exact grey half-tie fixture follow-up |
+| 240 | `303b966fe20f` | `8517c53c2284` | kept | Record scoped IMGF.1 research contract closure |
+| 241 | `c402191166e9` | `f9ced808fa54` | kept | Merge reviewed IMGF.1 contract closure into roadmap-v2 |
+| 242 | `9eab88fe34eb` | `182dba97718a` | kept | Record scoped IMG TS and text criterion recount |
+| 243 | `73b6d5cfd116` | `a68bfd46ad0f` | kept | Add TS exclusion decisions and stage-one rejection partners |
+| 244 | `ca8fb4f51df7` | `a8445ef0d431` | kept | Record independent review of TS selection and rejection evidence |
+| 245 | `631e71e22994` | `4d9c9173dfde` | kept | Record five scoped IMG TS and text gate closures |
+| 246 | `0823f1d91143` | `cae4883ee992` | kept | Merge reviewed TS and text evidence with scoped profile closures |
