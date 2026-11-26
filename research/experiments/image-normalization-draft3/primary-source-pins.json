@@ -1,0 +1,17 @@
+{
+  "commit": "293218ad059d994baf1777d882911bed6a49704a",
+  "files": {
+    "src/libImaging/Resample.c": {
+      "url": "https://raw.githubusercontent.com/python-pillow/Pillow/293218ad059d994baf1777d882911bed6a49704a/src/libImaging/Resample.c",
+      "sha256": "880ea65963006a99e758f994673c7d51b51c26e3164be770f8299856563e9f20"
+    },
+    "src/libImaging/Convert.c": {
+      "url": "https://raw.githubusercontent.com/python-pillow/Pillow/293218ad059d994baf1777d882911bed6a49704a/src/libImaging/Convert.c",
+      "sha256": "9bfdb3fbcd69935282cf4214f97f8d37c4f6e8d708920cb5b87b82b67d27969b"
+    },
+    "src/PIL/Image.py": {
+      "url": "https://raw.githubusercontent.com/python-pillow/Pillow/293218ad059d994baf1777d882911bed6a49704a/src/PIL/Image.py",
+      "sha256": "04050c2d4dd67931ce8c3cfdbc49ac4a6944d379d037c8f1d5eeeb67fba29a10"
+    }
+  }
+}
