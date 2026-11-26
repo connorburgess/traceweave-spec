@@ -1,0 +1,48 @@
+{
+  "scope": "PDQ common-integer-luma core feasibility, no decoded images or study rerun",
+  "inputConvention": "row-major integer luminance in [0,255]; serialized IEEE-754 binary32 little-endian, exactly representable in binary64 too",
+  "cases": [
+    {
+      "id": "black",
+      "width": 64,
+      "height": 64,
+      "rule": "0"
+    },
+    {
+      "id": "constant127",
+      "width": 64,
+      "height": 64,
+      "rule": "127"
+    },
+    {
+      "id": "low-contrast",
+      "width": 64,
+      "height": 64,
+      "rule": "126+(17*x+31*y+7*x*y)%4"
+    },
+    {
+      "id": "asymmetric",
+      "width": 64,
+      "height": 64,
+      "rule": "(17*x+31*y+7*x*y)%256"
+    },
+    {
+      "id": "wide",
+      "width": 96,
+      "height": 64,
+      "rule": "(17*x+31*y+7*x*y)%256"
+    },
+    {
+      "id": "tall",
+      "width": 64,
+      "height": 96,
+      "rule": "(17*x+31*y+7*x*y)%256"
+    }
+  ],
+  "comparisons": [
+    "all 8 dihedral hashes",
+    "quality integer"
+  ],
+  "thresholds": "no matching thresholds; retain raw hashes at every quality, including <=49",
+  "fullGate": "not attempted; no 30 vendor vectors or 1400 extraction inputs"
+}

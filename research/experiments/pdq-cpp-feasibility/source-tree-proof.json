@@ -1,0 +1,321 @@
+{
+  "root": "dbd86e307c396ab13c3d261126732be72163295e",
+  "trees": [
+    {
+      "path": "",
+      "oid": "dbd86e307c396ab13c3d261126732be72163295e",
+      "entries": [
+        {
+          "name": ".devcontainer",
+          "mode": "040000",
+          "oid": "7c75d059feb5e465aeb0379b9c1ed1c002c606f1"
+        },
+        {
+          "name": ".github",
+          "mode": "040000",
+          "oid": "787024a473a052a10e8aec8906a91cba2dd1227f"
+        },
+        {
+          "name": ".gitignore",
+          "mode": "100644",
+          "oid": "e34da674291f3e42da4bf11058c7a6568d6f8b56"
+        },
+        {
+          "name": ".pre-commit-config.yaml",
+          "mode": "100644",
+          "oid": "1c7a8cb611b41cb8c0eaf50d0873154562813322"
+        },
+        {
+          "name": "CODE_OF_CONDUCT.md",
+          "mode": "100644",
+          "oid": "ac27d8a51bcddc928a57cae0ee5c585d5c9dc149"
+        },
+        {
+          "name": "CONTRIBUTING.md",
+          "mode": "100644",
+          "oid": "93ccff3702c65c2bffe7fd43bc846fe12dc95db2"
+        },
+        {
+          "name": "Dockerfile.vpdq",
+          "mode": "100644",
+          "oid": "0b0b49949bb53c0f5a49ac44086457260124f7da"
+        },
+        {
+          "name": "LICENSE",
+          "mode": "100644",
+          "oid": "9406c626400cf7167750c03101f628a31bfe478d"
+        },
+        {
+          "name": "README.md",
+          "mode": "100644",
+          "oid": "c69a5992a10f963d39d07d7187c6511d864d8a3c"
+        },
+        {
+          "name": "ThreatExchange.iml",
+          "mode": "100644",
+          "oid": "c90834f2d607afe55e6104d8aa2cdfffb713f688"
+        },
+        {
+          "name": "api-reference-examples",
+          "mode": "040000",
+          "oid": "d52ad7c8c63adc773ab427a91eaf4dda4c43917a"
+        },
+        {
+          "name": "hasher-matcher-actioner",
+          "mode": "040000",
+          "oid": "986a0acbaf3f98abe9a4ccfa454bd656f3f9e79a"
+        },
+        {
+          "name": "hashing",
+          "mode": "040000",
+          "oid": "500c98653b63e8cdba4a495a6130e6f391ec24c6"
+        },
+        {
+          "name": "open-media-match",
+          "mode": "040000",
+          "oid": "e817398bd05872f8ad543eefa5c224634fded91c"
+        },
+        {
+          "name": "pdq",
+          "mode": "040000",
+          "oid": "a4df59e0cbf7bb44f4c1f07992787122346e343f"
+        },
+        {
+          "name": "python-threatexchange",
+          "mode": "040000",
+          "oid": "75b34dafbf64fea01270b02377eacb4d30d5701f"
+        },
+        {
+          "name": "tmk",
+          "mode": "040000",
+          "oid": "0096073cbcfb459d25486fc60a0c63efa8a69e8c"
+        },
+        {
+          "name": "vpdq",
+          "mode": "040000",
+          "oid": "00fa79ca819f5cf9e47cf5a5b53fbd5505426024"
+        },
+        {
+          "name": "website",
+          "mode": "040000",
+          "oid": "14698046a59af503c5a141ca3d1fb3f548b055f0"
+        }
+      ]
+    },
+    {
+      "path": "pdq",
+      "oid": "a4df59e0cbf7bb44f4c1f07992787122346e343f",
+      "entries": [
+        {
+          "name": ".gitignore",
+          "mode": "100644",
+          "oid": "ca7ca174e5e88516bd5bb5063608ac370d33d30b"
+        },
+        {
+          "name": "README-MIH.md",
+          "mode": "100644",
+          "oid": "c192125e827806a76e35164c71fed0dfb1bd20f0"
+        },
+        {
+          "name": "README.md",
+          "mode": "100644",
+          "oid": "ce0f3a9b03f304c8549d77af6db20a5d9402a3cf"
+        },
+        {
+          "name": "cpp",
+          "mode": "040000",
+          "oid": "1622a0b8338796aeb2ca90735dfcc1b9da8d535d"
+        },
+        {
+          "name": "data",
+          "mode": "040000",
+          "oid": "6048c7719fdb083242b8b95819f563fe24caa5ff"
+        },
+        {
+          "name": "java",
+          "mode": "040000",
+          "oid": "477bf88d0513955b08274c088867a17b1cbe0011"
+        },
+        {
+          "name": "pdq_blue_transparent.png",
+          "mode": "100644",
+          "oid": "52ebd8d3c1db05f356c19d997b7c87c7042d188b"
+        },
+        {
+          "name": "php",
+          "mode": "040000",
+          "oid": "6a12a9b0508611cfa85725aeee360e7371ca42cf"
+        },
+        {
+          "name": "python",
+          "mode": "040000",
+          "oid": "c2900df21aaee663cf15c62c8ffe6218e3eeddd8"
+        },
+        {
+          "name": "sql",
+          "mode": "040000",
+          "oid": "1e5bda0ef8492e5bfc55e699e6e7fe8c8420ec20"
+        },
+        {
+          "name": "wasm",
+          "mode": "040000",
+          "oid": "2b107e8eff6c6fb6511a9104c37cc5e7ebfad9a1"
+        }
+      ]
+    },
+    {
+      "path": "pdq/cpp",
+      "oid": "1622a0b8338796aeb2ca90735dfcc1b9da8d535d",
+      "entries": [
+        {
+          "name": ".clang-format",
+          "mode": "100644",
+          "oid": "71ec5bf8ed4dbadebcc54a7f8500d88f5ecdc196"
+        },
+        {
+          "name": "CImg.h",
+          "mode": "100644",
+          "oid": "b3112ed6e7b0c465c4ff589502bd0570a241a726"
+        },
+        {
+          "name": "Makefile",
+          "mode": "100644",
+          "oid": "de0c647aeef1a6a3f85a2beb782fd049a7cc2a78"
+        },
+        {
+          "name": "README.md",
+          "mode": "100644",
+          "oid": "6812c945ee6fec1ee4954cf6fa9675ca216efe92"
+        },
+        {
+          "name": "bin",
+          "mode": "040000",
+          "oid": "9f108192977b6a5d0f987e0b63af1d28d7836699"
+        },
+        {
+          "name": "common",
+          "mode": "040000",
+          "oid": "c19c3cfd1e4463ae472be0f7128a995bbb473619"
+        },
+        {
+          "name": "downscaling",
+          "mode": "040000",
+          "oid": "7270bf18a75a9c8db3c9cda262f81b17374e2549"
+        },
+        {
+          "name": "hashing",
+          "mode": "040000",
+          "oid": "c4b1850d0e8c6d4ec28e592d3aa75c65e5f31399"
+        },
+        {
+          "name": "index",
+          "mode": "040000",
+          "oid": "826dec87c001434cdac51e4e47425d0791bbbd61"
+        },
+        {
+          "name": "io",
+          "mode": "040000",
+          "oid": "1554368777a492f905c039bb5a31d490e996c9aa"
+        },
+        {
+          "name": "output-regtest",
+          "mode": "040000",
+          "oid": "f6761d159304967e2574cd05571bc24d187b846d"
+        },
+        {
+          "name": "reg_test",
+          "mode": "040000",
+          "oid": "5b8ad37094607e5a1a5e18098d7e6119484da747"
+        }
+      ]
+    },
+    {
+      "path": "pdq/cpp/common",
+      "oid": "c19c3cfd1e4463ae472be0f7128a995bbb473619",
+      "entries": [
+        {
+          "name": "pdqbasetypes.h",
+          "mode": "100644",
+          "oid": "c6d3a3e685cc2333503ee3ebeeee159bc6b6bc91"
+        },
+        {
+          "name": "pdqhamming.cpp",
+          "mode": "100644",
+          "oid": "a59911fdb396976edee70b669e558e246a208a7e"
+        },
+        {
+          "name": "pdqhamming.h",
+          "mode": "100644",
+          "oid": "9d91670dce0a369e196b8bf67e6fa4a6ea10e8ff"
+        },
+        {
+          "name": "pdqhashtypes.cpp",
+          "mode": "100644",
+          "oid": "7e6114c709f78f14829645edee429e8495483ed4"
+        },
+        {
+          "name": "pdqhashtypes.h",
+          "mode": "100644",
+          "oid": "02051b96eb2d5f38be282a1d97c5acb1a9d48cae"
+        },
+        {
+          "name": "pdqutils.cpp",
+          "mode": "100644",
+          "oid": "f23272959639ca1f8303595af2a760a8f8c83904"
+        },
+        {
+          "name": "pdqutils.h",
+          "mode": "100644",
+          "oid": "ece9d5a46ef9c0a26ea381cfb3b326f71d281df6"
+        }
+      ]
+    },
+    {
+      "path": "pdq/cpp/downscaling",
+      "oid": "7270bf18a75a9c8db3c9cda262f81b17374e2549",
+      "entries": [
+        {
+          "name": "downscaling.cpp",
+          "mode": "100644",
+          "oid": "03a62e3bbc8a1b4d53bfa0a9616e4a117c11a7ab"
+        },
+        {
+          "name": "downscaling.h",
+          "mode": "100644",
+          "oid": "e3eb14b3322171c6080b753a4daab6858ec34715"
+        }
+      ]
+    },
+    {
+      "path": "pdq/cpp/hashing",
+      "oid": "c4b1850d0e8c6d4ec28e592d3aa75c65e5f31399",
+      "entries": [
+        {
+          "name": "README.md",
+          "mode": "100644",
+          "oid": "6b9dfec26eac10415791a85aaed67c34feb038c6"
+        },
+        {
+          "name": "pdqhashing.cpp",
+          "mode": "100644",
+          "oid": "82c5e7132c51ae6c7bb73ac645b3903f88b155e1"
+        },
+        {
+          "name": "pdqhashing.h",
+          "mode": "100644",
+          "oid": "edb64172f6038ed8b166288aaca450d16ee3e70a"
+        },
+        {
+          "name": "torben.cpp",
+          "mode": "100644",
+          "oid": "ae1d059596b9b6f367f647fe1899ee8bd9ae1142"
+        },
+        {
+          "name": "torben.h",
+          "mode": "100644",
+          "oid": "acb06097f2aa48259b8f7fc86043ee034c1c59a3"
+        }
+      ]
+    }
+  ]
+}

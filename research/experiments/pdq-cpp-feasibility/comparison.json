@@ -1,0 +1,403 @@
+{
+  "scope": "PDQ common-integer-luma core feasibility, no decoded images or study rerun",
+  "networkDenialProbe": {
+    "operation": "loopback bind",
+    "errno": 1,
+    "error": "[Errno 1] Operation not permitted"
+  },
+  "environment": {
+    "python": "3.14.6",
+    "numpy": "2.5.5",
+    "pillow": "13.0.0",
+    "os": "macOS-26.4-arm64-arm-64bit-Mach-O",
+    "machine": "arm64"
+  },
+  "cases": [
+    {
+      "id": "black",
+      "width": 64,
+      "height": 64,
+      "inputSha256": "5d29a50570d88a71da68e6671e19f67073a42e225beed9cc23f576cb970efd41",
+      "inputBytes": 16400,
+      "port": {
+        "hashes": {
+          "orig": "0000000000000000000000000000000000000000000000000000000000000000",
+          "rot90": "0000000000000000000000000000000000000000000000000000000000000000",
+          "rot180": "0000000000000000000000000000000000000000000000000000000000000000",
+          "rot270": "0000000000000000000000000000000000000000000000000000000000000000",
+          "flipx": "0000000000000000000000000000000000000000000000000000000000000000",
+          "flipy": "0000000000000000000000000000000000000000000000000000000000000000",
+          "flipp": "0000000000000000000000000000000000000000000000000000000000000000",
+          "flipm": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "quality": 0
+      },
+      "pythonVendor": {
+        "hashes": {
+          "orig": "0000000000000000000000000000000000000000000000000000000000000000",
+          "rot90": "0000000000000000000000000000000000000000000000000000000000000000",
+          "rot180": "0000000000000000000000000000000000000000000000000000000000000000",
+          "rot270": "0000000000000000000000000000000000000000000000000000000000000000",
+          "flipx": "0000000000000000000000000000000000000000000000000000000000000000",
+          "flipy": "0000000000000000000000000000000000000000000000000000000000000000",
+          "flipp": "0000000000000000000000000000000000000000000000000000000000000000",
+          "flipm": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "quality": 0
+      },
+      "cpp": {
+        "quality": 0,
+        "hashes": {
+          "orig": "0000000000000000000000000000000000000000000000000000000000000000",
+          "rot90": "0000000000000000000000000000000000000000000000000000000000000000",
+          "rot180": "0000000000000000000000000000000000000000000000000000000000000000",
+          "rot270": "0000000000000000000000000000000000000000000000000000000000000000",
+          "flipx": "0000000000000000000000000000000000000000000000000000000000000000",
+          "flipy": "0000000000000000000000000000000000000000000000000000000000000000",
+          "flipp": "0000000000000000000000000000000000000000000000000000000000000000",
+          "flipm": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "floatDigits": 24,
+        "doubleDigits": 53,
+        "roundNearest": true
+      },
+      "pythonExact": true,
+      "cppHashExactCount": 8,
+      "cppHammingByVariant": {
+        "orig": 0,
+        "rot90": 0,
+        "rot180": 0,
+        "rot270": 0,
+        "flipx": 0,
+        "flipy": 0,
+        "flipp": 0,
+        "flipm": 0
+      },
+      "cppQualityExact": true,
+      "belowProfileQualityFloor": true
+    },
+    {
+      "id": "constant127",
+      "width": 64,
+      "height": 64,
+      "inputSha256": "ed70aa701408911d954cd55eb367c57799b5c0736caf9296a0dfee485d565452",
+      "inputBytes": 16400,
+      "port": {
+        "hashes": {
+          "orig": "b3ba4c46b39ab3ab4c414c45b3bab3bab3b84c65b39ab3b8b39a4c444c654c47",
+          "rot90": "b3b8b3b8b3b84c474c47b3b8b3b84c47b3b8b39891104c41b3b8bbb8b309e3bc",
+          "rot180": "e6efe6ace6cf19011900e6efe68f1910e6cde68d84001912e6cfe6ce1100e6ad",
+          "rot270": "e6ed1912e6ede6ed19121912e6ede6ede6ed1910c405c6c9e6ed1112a65c4916",
+          "flipx": "b3bab3b9b38a4c444c41b3bab39a4c45b398b39ab3884c47b39ab3ab4c05b3b8",
+          "flipy": "e6ef1911e6cfe6ee19141910e6cfe6efe6cd1910e68de6ede6cf190119001912",
+          "flipp": "b3b84c47b3b8b3b84c474c47b3b8b3b8b3b84c4793d2a3b8b3b84447f3291c43",
+          "flipm": "e6ede6cde6cd19121910e6ede6cd1912e6cda48cc4010110e6cde6cda61cb6c9"
+        },
+        "quality": 0
+      },
+      "pythonVendor": {
+        "hashes": {
+          "orig": "b3ba4c46b39ab3ab4c414c45b3bab3bab3b84c65b39ab3b8b39a4c444c654c47",
+          "rot90": "b3b8b3b8b3b84c474c47b3b8b3b84c47b3b8b39891104c41b3b8bbb8b309e3bc",
+          "rot180": "e6efe6ace6cf19011900e6efe68f1910e6cde68d84001912e6cfe6ce1100e6ad",
+          "rot270": "e6ed1912e6ede6ed19121912e6ede6ede6ed1910c405c6c9e6ed1112a65c4916",
+          "flipx": "b3bab3b9b38a4c444c41b3bab39a4c45b398b39ab3884c47b39ab3ab4c05b3b8",
+          "flipy": "e6ef1911e6cfe6ee19141910e6cfe6efe6cd1910e68de6ede6cf190119001912",
+          "flipp": "b3b84c47b3b8b3b84c474c47b3b8b3b8b3b84c4793d2a3b8b3b84447f3291c43",
+          "flipm": "e6ede6cde6cd19121910e6ede6cd1912e6cda48cc4010110e6cde6cda61cb6c9"
+        },
+        "quality": 0
+      },
+      "cpp": {
+        "quality": 0,
+        "hashes": {
+          "orig": "0000113400002c4b8200554b113400002c4b554b1134cc5313a01134585e1134",
+          "rot90": "081008081080189010924a2f0808189200084a2d422d108814c2108014d24a2f",
+          "rot180": "0000391e00000461d741d74104610000391ed741046146f146f1391e0d0b391e",
+          "rot270": "0c4000024085123a408740850c58123800184087123812224087122240874085",
+          "flipx": "00002c4b0000113482008200113400002c4b8200113413a013a02c4b585e2c4b",
+          "flipy": "000004610000391ed741000a04610000391e000a0461990246f104610d0b0461",
+          "flipp": "081004521080466f109214d00808466d000814d2422d423714c2422714d214d0",
+          "flipm": "0c400c5840854cc540871e7a0c584cc700181e781238409d4087408540871e7a"
+        },
+        "floatDigits": 24,
+        "doubleDigits": 53,
+        "roundNearest": true
+      },
+      "pythonExact": true,
+      "cppHashExactCount": 0,
+      "cppHammingByVariant": {
+        "orig": 138,
+        "rot90": 145,
+        "rot180": 138,
+        "rot270": 138,
+        "flipx": 138,
+        "flipy": 145,
+        "flipp": 138,
+        "flipm": 138
+      },
+      "cppQualityExact": true,
+      "belowProfileQualityFloor": true
+    },
+    {
+      "id": "low-contrast",
+      "width": 64,
+      "height": 64,
+      "inputSha256": "7e61cbe4ee2d1c896c0b45c313124d5dab931ca45d5aad893ca82ef173939178",
+      "inputBytes": 16400,
+      "port": {
+        "hashes": {
+          "orig": "aaaa0aaaaaaa0aaaffff0aaaaaaa0aaaffff0aaaaaaa0aaaaaaa0aaaaaaa0aaa",
+          "rot90": "0000f77f0000f77f0000f77f5555f77f0000f77f5555f77f0000f77f0000f77f",
+          "rot180": "f7ffa88af7dda88a0800a88af7ffa88aa200a88af755a88ad5dfa88ad755a88a",
+          "rot270": "55555dd555555dd555555dd500005dd555555dd500005dd555555dd555555dd5",
+          "flipx": "0000fddf0000fddf5555fddf0000fddf5555fddf0000fddf0000fddf0000fddf",
+          "flipy": "5555577555555775000057755555577500005775555557755555577555555775",
+          "flipp": "aaaa0880aaaa0880ffff0880ffff0880ffff0880ffff0880ffff0880ffff0880",
+          "flipm": "f7ffa22af7f5a22a5d55a22aa2a2a22af75da22a8200a22af75da22ad75da22a"
+        },
+        "quality": 11
+      },
+      "pythonVendor": {
+        "hashes": {
+          "orig": "aaaa0aaaaaaa0aaaffff0aaaaaaa0aaaffff0aaaaaaa0aaaaaaa0aaaaaaa0aaa",
+          "rot90": "0000f77f0000f77f0000f77f5555f77f0000f77f5555f77f0000f77f0000f77f",
+          "rot180": "f7ffa88af7dda88a0800a88af7ffa88aa200a88af755a88ad5dfa88ad755a88a",
+          "rot270": "55555dd555555dd555555dd500005dd555555dd500005dd555555dd555555dd5",
+          "flipx": "0000fddf0000fddf5555fddf0000fddf5555fddf0000fddf0000fddf0000fddf",
+          "flipy": "5555577555555775000057755555577500005775555557755555577555555775",
+          "flipp": "aaaa0880aaaa0880ffff0880ffff0880ffff0880ffff0880ffff0880ffff0880",
+          "flipm": "f7ffa22af7f5a22a5d55a22aa2a2a22af75da22a8200a22af75da22ad75da22a"
+        },
+        "quality": 11
+      },
+      "cpp": {
+        "quality": 11,
+        "hashes": {
+          "orig": "aaaa8a80fffd2202fffd2aaaaaaa8a28ffff802aaaa28288aa8a8aa0ffff8882",
+          "rot90": "0155d77d1400d77d0505d77d1514d77d0415d77d0544d77d0550d77d1441d77d",
+          "rot180": "fffdaaaaa82888a888a88000dfff2082fbff2a80fff52822ff5f200aa2aa2228",
+          "rot270": "14087d57615d7d5738507d57004b7d5711407d5770137d5758057d57411e7d57",
+          "flipx": "0000757f7d75ddfd5d5dd555000075d700007fd500007d77a202755f5777777d",
+          "flipy": "555555550000775700007fff5555df7d0000d57f5555d7dd5555dff50000ddd7",
+          "flipp": "ebff2882beaa2882efaf2882ffbe2882eebf2882afe62882afda288296eb2882",
+          "flipm": "feaa82a8e1ff82a8faf88228c2eb82a8dbe282a8fab382a8fa8f82a8439e82a8"
+        },
+        "floatDigits": 24,
+        "doubleDigits": 53,
+        "roundNearest": true
+      },
+      "pythonExact": true,
+      "cppHashExactCount": 0,
+      "cppHammingByVariant": {
+        "orig": 48,
+        "rot90": 46,
+        "rot180": 82,
+        "rot270": 68,
+        "flipx": 68,
+        "flipy": 46,
+        "flipp": 48,
+        "flipm": 82
+      },
+      "cppQualityExact": true,
+      "belowProfileQualityFloor": true
+    },
+    {
+      "id": "asymmetric",
+      "width": 64,
+      "height": 64,
+      "inputSha256": "a03e3877fd2f9a36e590449bfe294b8413ae806cb64d2f2b2b8f73c5bd25b587",
+      "inputBytes": 16400,
+      "port": {
+        "hashes": {
+          "orig": "ef67750e191053036464d3d4b9b9a1f3666e191d1b296e795b5699dc930b3322",
+          "rot90": "860673678b91c990a07c377f94b94990070477f78ba1d9bb40f23b3bd1836ecd",
+          "rot180": "ba32afa64c45b9a9313179bee4e58a993373b3b64e74c0a30e15333ec45e9988",
+          "rot270": "d351d9cddec4633af5219dd5c1eca23a5251dd5ddef472111505919184d6c467",
+          "flipx": "ef67faf11910ecfc64602c6bb1b0de4c6626e6e31b2195f65340666b1103ccdd",
+          "flipy": "ba32515b4c454656313586c1e4e575f6337b4c494e7c3f5c0e15ccc1c45e6677",
+          "flipp": "8706dc98cb91766fa27cc89094bbf76f07048d9c8bb1275c42f6ccccd18b9372",
+          "flipm": "d3532632dec49cc5f529622ac1ec5cc5575122a2def48dee1507666ec4d63b98"
+        },
+        "quality": 100
+      },
+      "pythonVendor": {
+        "hashes": {
+          "orig": "ef67750e191053036464d3d4b9b9a1f3666e191d1b296e795b5699dc930b3322",
+          "rot90": "860673678b91c990a07c377f94b94990070477f78ba1d9bb40f23b3bd1836ecd",
+          "rot180": "ba32afa64c45b9a9313179bee4e58a993373b3b64e74c0a30e15333ec45e9988",
+          "rot270": "d351d9cddec4633af5219dd5c1eca23a5251dd5ddef472111505919184d6c467",
+          "flipx": "ef67faf11910ecfc64602c6bb1b0de4c6626e6e31b2195f65340666b1103ccdd",
+          "flipy": "ba32515b4c454656313586c1e4e575f6337b4c494e7c3f5c0e15ccc1c45e6677",
+          "flipp": "8706dc98cb91766fa27cc89094bbf76f07048d9c8bb1275c42f6ccccd18b9372",
+          "flipm": "d3532632dec49cc5f529622ac1ec5cc5575122a2def48dee1507666ec4d63b98"
+        },
+        "quality": 100
+      },
+      "cpp": {
+        "quality": 100,
+        "hashes": {
+          "orig": "ef67750e191053036464d3d4b9b9a1f3666e191d1b296e795b5699dc930b3322",
+          "rot90": "860673678b91c990a07c377f94b94990070477f78ba1d9bb40f23b3bd1836ecd",
+          "rot180": "ba32afa64c45b9a9313179bee4e58a993373b3b64e74c0a30e15333ec45e9988",
+          "rot270": "d351d9cddec4633af5219dd5c1eca23a5251dd5ddef472111505919184d6c467",
+          "flipx": "ef67faf11910ecfc64602c6bb1b0de4c6626e6e31b2195f65340666b1103ccdd",
+          "flipy": "ba32515b4c454656313586c1e4e575f6337b4c494e7c3f5c0e15ccc1c45e6677",
+          "flipp": "8706dc98cb91766fa27cc89094bbf76f07048d9c8bb1275c42f6ccccd18b9372",
+          "flipm": "d3532632dec49cc5f529622ac1ec5cc5575122a2def48dee1507666ec4d63b98"
+        },
+        "floatDigits": 24,
+        "doubleDigits": 53,
+        "roundNearest": true
+      },
+      "pythonExact": true,
+      "cppHashExactCount": 8,
+      "cppHammingByVariant": {
+        "orig": 0,
+        "rot90": 0,
+        "rot180": 0,
+        "rot270": 0,
+        "flipx": 0,
+        "flipy": 0,
+        "flipp": 0,
+        "flipm": 0
+      },
+      "cppQualityExact": true,
+      "belowProfileQualityFloor": false
+    },
+    {
+      "id": "wide",
+      "width": 96,
+      "height": 64,
+      "inputSha256": "7a44f0f0b68a23218abf3fb084e080bb7df1f492814eb71fbd5c7a161168f1f4",
+      "inputBytes": 24592,
+      "port": {
+        "hashes": {
+          "orig": "7f7f82301906f04b9794b53031e69b4bb51490791a73a4f27e4935947a4bf38e",
+          "rot90": "1dd17ff4969d4818a12a7363c90b51fa0a157e95c670332b904b5d7ab3136ed5",
+          "rot180": "2a2aa89a4c535ae9d2c53f9a64f331e9e1413adb4f340e583b1c9f3e0f1e5926",
+          "rot270": "4884d55ec348e2b2d475d9c99c56fa505f40d43f93259981d51ef7d0e646c43f",
+          "flipx": "7f7ffdcf11064ffc87904acf31a664bc94146f8618615b4d6449ca6b524b0c71",
+          "flipy": "2a2a57654c53e55ed2c5e06564f3cf16e141c52d4d34f1e73b1c60c10f1ea6db",
+          "flipp": "5dd1900b969fbfefa12a8c9cc92baf850a15937ac670ccf4914baa85b333916a",
+          "flipm": "48843aa1c7c81d4df47f26369c7e05af5f403bd09325667ed55e082fe6473bc0"
+        },
+        "quality": 100
+      },
+      "pythonVendor": {
+        "hashes": {
+          "orig": "7f7f82301906f04b9794b53031e69b4bb51490791a73a4f27e4935947a4bf38e",
+          "rot90": "1dd17ff4969d4818a12a7363c90b51fa0a157e95c670332b904b5d7ab3136ed5",
+          "rot180": "2a2aa89a4c535ae9d2c53f9a64f331e9e1413adb4f340e583b1c9f3e0f1e5926",
+          "rot270": "4884d55ec348e2b2d475d9c99c56fa505f40d43f93259981d51ef7d0e646c43f",
+          "flipx": "7f7ffdcf11064ffc87904acf31a664bc94146f8618615b4d6449ca6b524b0c71",
+          "flipy": "2a2a57654c53e55ed2c5e06564f3cf16e141c52d4d34f1e73b1c60c10f1ea6db",
+          "flipp": "5dd1900b969fbfefa12a8c9cc92baf850a15937ac670ccf4914baa85b333916a",
+          "flipm": "48843aa1c7c81d4df47f26369c7e05af5f403bd09325667ed55e082fe6473bc0"
+        },
+        "quality": 100
+      },
+      "cpp": {
+        "quality": 100,
+        "hashes": {
+          "orig": "7f7f82301906f04b9794b53031e69b4bb51490791a73a4f27e4935947a4bf38e",
+          "rot90": "1dd17ff4969d4818a12a7363c90b51fa0a157e95c670332b904b5d7ab3136ed5",
+          "rot180": "2a2aa89a4c535ae9d2c53f9a64f331e9e1413adb4f340e583b1c9f3e0f1e5926",
+          "rot270": "4884d55ec348e2b2d475d9c99c56fa505f40d43f93259981d51ef7d0e646c43f",
+          "flipx": "7f7ffdcf11064ffc87904acf31a664bc94146f8618615b4d6449ca6b524b0c71",
+          "flipy": "2a2a57654c53e55ed2c5e06564f3cf16e141c52d4d34f1e73b1c60c10f1ea6db",
+          "flipp": "5dd1900b969fbfefa12a8c9cc92baf850a15937ac670ccf4914baa85b333916a",
+          "flipm": "48843aa1c7c81d4df47f26369c7e05af5f403bd09325667ed55e082fe6473bc0"
+        },
+        "floatDigits": 24,
+        "doubleDigits": 53,
+        "roundNearest": true
+      },
+      "pythonExact": true,
+      "cppHashExactCount": 8,
+      "cppHammingByVariant": {
+        "orig": 0,
+        "rot90": 0,
+        "rot180": 0,
+        "rot270": 0,
+        "flipx": 0,
+        "flipy": 0,
+        "flipp": 0,
+        "flipm": 0
+      },
+      "cppQualityExact": true,
+      "belowProfileQualityFloor": false
+    },
+    {
+      "id": "tall",
+      "width": 64,
+      "height": 96,
+      "inputSha256": "f551523b9afc150f95061b5c5fd1ba4084bbc920394ecda0d5c437302ce5c4e9",
+      "inputBytes": 24592,
+      "port": {
+        "hashes": {
+          "orig": "13999fba25a0e1e067661ccd9b9b17a62ccc6b6a7f55999d8f968d0827622332",
+          "rot90": "521ce7df386338cf06f49253cb630480a018efdd59413dc786d4fa474a4a7bcf",
+          "rot180": "46dc3d9870d54bca3277b6a7ce4fbd8e595d81802a103337dac727a27617898a",
+          "rot270": "07495d756d36926513a938f99e3eae2ab54d45770c14176dd381516d1e1ed165",
+          "flipx": "1389604d25805e9f6722e3f29b1ae8dd0c08d4d57f5566628f9672f72342dcdd",
+          "flipy": "46ccc26770d5b43532774958ce4f427159597e7f2a00ccc8d0c3d85d76177675",
+          "flipp": "521c186038e3c73046fc6daecb6bfb7ff7981ce27943c239c6d40db84b4b8630",
+          "flipm": "0749b28a6d366d9a53a9c7069e3e51d5f54dba880c14e8b2d381af9a1f1f2e9a"
+        },
+        "quality": 100
+      },
+      "pythonVendor": {
+        "hashes": {
+          "orig": "13999fba25a0e1e067661ccd9b9b17a62ccc6b6a7f55999d8f968d0827622332",
+          "rot90": "521ce7df386338cf06f49253cb630480a018efdd59413dc786d4fa474a4a7bcf",
+          "rot180": "46dc3d9870d54bca3277b6a7ce4fbd8e595d81802a103337dac727a27617898a",
+          "rot270": "07495d756d36926513a938f99e3eae2ab54d45770c14176dd381516d1e1ed165",
+          "flipx": "1389604d25805e9f6722e3f29b1ae8dd0c08d4d57f5566628f9672f72342dcdd",
+          "flipy": "46ccc26770d5b43532774958ce4f427159597e7f2a00ccc8d0c3d85d76177675",
+          "flipp": "521c186038e3c73046fc6daecb6bfb7ff7981ce27943c239c6d40db84b4b8630",
+          "flipm": "0749b28a6d366d9a53a9c7069e3e51d5f54dba880c14e8b2d381af9a1f1f2e9a"
+        },
+        "quality": 100
+      },
+      "cpp": {
+        "quality": 100,
+        "hashes": {
+          "orig": "13999fba25a0e1e067661ccd9b9b17a62ccc6b6a7f55999d8f968d0827622332",
+          "rot90": "521ce7df386338cf06f49253cb630480a018efdd59413dc786d4fa474a4a7bcf",
+          "rot180": "46dc3d9870d54bca3277b6a7ce4fbd8e595d81802a103337dac727a27617898a",
+          "rot270": "07495d756d36926513a938f99e3eae2ab54d45770c14176dd381516d1e1ed165",
+          "flipx": "1389604d25805e9f6722e3f29b1ae8dd0c08d4d57f5566628f9672f72342dcdd",
+          "flipy": "46ccc26770d5b43532774958ce4f427159597e7f2a00ccc8d0c3d85d76177675",
+          "flipp": "521c186038e3c73046fc6daecb6bfb7ff7981ce27943c239c6d40db84b4b8630",
+          "flipm": "0749b28a6d366d9a53a9c7069e3e51d5f54dba880c14e8b2d381af9a1f1f2e9a"
+        },
+        "floatDigits": 24,
+        "doubleDigits": 53,
+        "roundNearest": true
+      },
+      "pythonExact": true,
+      "cppHashExactCount": 8,
+      "cppHammingByVariant": {
+        "orig": 0,
+        "rot90": 0,
+        "rot180": 0,
+        "rot270": 0,
+        "flipx": 0,
+        "flipy": 0,
+        "flipp": 0,
+        "flipm": 0
+      },
+      "cppQualityExact": true,
+      "belowProfileQualityFloor": false
+    }
+  ],
+  "summary": {
+    "inputs": 6,
+    "variantComparisons": 48,
+    "cppHashesExact": 32,
+    "cppQualityExact": 6,
+    "pythonPortVendorExact": 6,
+    "completeCppExactInputs": 4
+  }
+}

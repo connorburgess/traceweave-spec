@@ -1,0 +1,57 @@
+{
+  "specCommit": "6f39e50f33026c9f1d9526c2a566d6a447219667",
+  "files": [
+    {
+      "path": "twimg/pdq_np.py",
+      "sha256": "f2a36ceb8832c351e80ceb3c8c10e1bc7ad9e67b96652de54be523e403603636"
+    },
+    {
+      "path": "vendor/threatexchange_pdq/LICENSE",
+      "sha256": "68ecc6aafbd2a205a1077f86127030898f03091b7dae9d9017325a8702d8668f"
+    },
+    {
+      "path": "vendor/threatexchange_pdq/PROVENANCE.md",
+      "sha256": "e47877ed70fc54c6e75e19043a3b4deb4999961be8edc83be8fd66b8f85149a5"
+    },
+    {
+      "path": "vendor/threatexchange_pdq/README.md",
+      "sha256": "5405be18264d90fa290b078b3437c2f40a8516f0f53f2c243cd31bd31e156323"
+    },
+    {
+      "path": "vendor/threatexchange_pdq/pdqhashing/__init__.py",
+      "sha256": "8191cf2c04d117d7fc401c3042d123411b5732ca8e26c50adac6d430b8e21395"
+    },
+    {
+      "path": "vendor/threatexchange_pdq/pdqhashing/hasher/__init__.py",
+      "sha256": "8191cf2c04d117d7fc401c3042d123411b5732ca8e26c50adac6d430b8e21395"
+    },
+    {
+      "path": "vendor/threatexchange_pdq/pdqhashing/hasher/pdq_hasher.py",
+      "sha256": "cfc698e5847f9c62baca55a89a7d0f020dfbd85b2c869defcacbb54d58ee0781"
+    },
+    {
+      "path": "vendor/threatexchange_pdq/pdqhashing/types/__init__.py",
+      "sha256": "8191cf2c04d117d7fc401c3042d123411b5732ca8e26c50adac6d430b8e21395"
+    },
+    {
+      "path": "vendor/threatexchange_pdq/pdqhashing/types/containers.py",
+      "sha256": "ae73ee81c6bb1e1045dc23e8ea736642072d2ebb2dce3d9e47c2ebaf52bfc5e9"
+    },
+    {
+      "path": "vendor/threatexchange_pdq/pdqhashing/types/exceptions.py",
+      "sha256": "50a232b4166141af6dd3ab4fcd0658eb70fa76eefc87584b9818110621c6f52c"
+    },
+    {
+      "path": "vendor/threatexchange_pdq/pdqhashing/types/hash256.py",
+      "sha256": "2b97af7f61a24fa7e316d6b1a0ab82d53a7df66161ddd47fbaf1f8bf092da37d"
+    },
+    {
+      "path": "vendor/threatexchange_pdq/pdqhashing/utils/__init__.py",
+      "sha256": "8191cf2c04d117d7fc401c3042d123411b5732ca8e26c50adac6d430b8e21395"
+    },
+    {
+      "path": "vendor/threatexchange_pdq/pdqhashing/utils/matrix.py",
+      "sha256": "50596f47b4e7457b46e903ee41f924c7fe6629870e489b232cb23adc15d04e80"
+    }
+  ]
+}

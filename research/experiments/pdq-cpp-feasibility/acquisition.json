@@ -1,0 +1,127 @@
+{
+  "commit": "9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2",
+  "retrievedUtc": "2026-11-26T04:50:23Z",
+  "treeUrl": "https://api.github.com/repos/meta/ThreatExchange/git/trees/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2?recursive=1",
+  "treeSha256": "d380f8f8899851fee2c0ba78b95a3ee0c96b397618a1e77196eaed810579702b",
+  "files": [
+    {
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/LICENSE",
+      "gitBlobSha1": "9406c626400cf7167750c03101f628a31bfe478d",
+      "sha256": "68ecc6aafbd2a205a1077f86127030898f03091b7dae9d9017325a8702d8668f",
+      "bytes": 1522
+    },
+    {
+      "path": "pdq/cpp/Makefile",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/pdq/cpp/Makefile",
+      "gitBlobSha1": "de0c647aeef1a6a3f85a2beb782fd049a7cc2a78",
+      "sha256": "8ee0dad421e9161d73e5b67bd7dfb3e2192c51c46d6299fdc7b2e1359c801479",
+      "bytes": 6436
+    },
+    {
+      "path": "pdq/cpp/README.md",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/pdq/cpp/README.md",
+      "gitBlobSha1": "6812c945ee6fec1ee4954cf6fa9675ca216efe92",
+      "sha256": "5abac6db235f4a2189d84feee3a705051d742ffc215bad53980b1e0520c28782",
+      "bytes": 807
+    },
+    {
+      "path": "pdq/cpp/common/pdqbasetypes.h",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/pdq/cpp/common/pdqbasetypes.h",
+      "gitBlobSha1": "c6d3a3e685cc2333503ee3ebeeee159bc6b6bc91",
+      "sha256": "2f047049969b07351c935e41da1b4c7000af19a354929a3df28d9c4f22b99b4b",
+      "bytes": 495
+    },
+    {
+      "path": "pdq/cpp/common/pdqhamming.cpp",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/pdq/cpp/common/pdqhamming.cpp",
+      "gitBlobSha1": "a59911fdb396976edee70b669e558e246a208a7e",
+      "sha256": "91864deda101e7e0b4405b6ce050cb8a945f644c3fe9815bcf08474cd89ef1af",
+      "bytes": 898932
+    },
+    {
+      "path": "pdq/cpp/common/pdqhamming.h",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/pdq/cpp/common/pdqhamming.h",
+      "gitBlobSha1": "9d91670dce0a369e196b8bf67e6fa4a6ea10e8ff",
+      "sha256": "c3314937e3edc01a7d20531e9baf4007049d6ea06a93ec25b6457025aaa84c62",
+      "bytes": 2068
+    },
+    {
+      "path": "pdq/cpp/common/pdqhashtypes.cpp",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/pdq/cpp/common/pdqhashtypes.cpp",
+      "gitBlobSha1": "7e6114c709f78f14829645edee429e8495483ed4",
+      "sha256": "8c5712de136d2fdcde15d165c2bca982015ffd5bc089393c010662f690ae48a3",
+      "bytes": 4861
+    },
+    {
+      "path": "pdq/cpp/common/pdqhashtypes.h",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/pdq/cpp/common/pdqhashtypes.h",
+      "gitBlobSha1": "02051b96eb2d5f38be282a1d97c5acb1a9d48cae",
+      "sha256": "06ae688a78cdb17fc0aeb88fec2abdf1cb35d73a38ed49a629af03bf07ae8d72",
+      "bytes": 5199
+    },
+    {
+      "path": "pdq/cpp/common/pdqutils.cpp",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/pdq/cpp/common/pdqutils.cpp",
+      "gitBlobSha1": "f23272959639ca1f8303595af2a760a8f8c83904",
+      "sha256": "c2637b0eae3bdbc95d8932629f16030981a31b5ac0119d686440e1c4519c70f0",
+      "bytes": 1658
+    },
+    {
+      "path": "pdq/cpp/common/pdqutils.h",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/pdq/cpp/common/pdqutils.h",
+      "gitBlobSha1": "ece9d5a46ef9c0a26ea381cfb3b326f71d281df6",
+      "sha256": "3503bf60570341464932d18ebc46e0b1ea4a9f0e516fdb4ab44a6ffd57828cfb",
+      "bytes": 896
+    },
+    {
+      "path": "pdq/cpp/downscaling/downscaling.cpp",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/pdq/cpp/downscaling/downscaling.cpp",
+      "gitBlobSha1": "03a62e3bbc8a1b4d53bfa0a9616e4a117c11a7ab",
+      "sha256": "4f7cc18baaebf27650166b4c1569ef8b3faf615abc861d18250573995ba91688",
+      "bytes": 15855
+    },
+    {
+      "path": "pdq/cpp/downscaling/downscaling.h",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/pdq/cpp/downscaling/downscaling.h",
+      "gitBlobSha1": "e3eb14b3322171c6080b753a4daab6858ec34715",
+      "sha256": "1238e00188a29035b3440d4405f64fdbe933c5a042cdfef572e8a5ef07e5923a",
+      "bytes": 5399
+    },
+    {
+      "path": "pdq/cpp/hashing/README.md",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/pdq/cpp/hashing/README.md",
+      "gitBlobSha1": "6b9dfec26eac10415791a85aaed67c34feb038c6",
+      "sha256": "dd432b9f9ea7800dbf8bcef619d5ffae609f50a9af492b2c20dfb67b6923bef1",
+      "bytes": 2050
+    },
+    {
+      "path": "pdq/cpp/hashing/pdqhashing.cpp",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/pdq/cpp/hashing/pdqhashing.cpp",
+      "gitBlobSha1": "82c5e7132c51ae6c7bb73ac645b3903f88b155e1",
+      "sha256": "2013379e258d8d0eb19c46049498aa72705db7a79014d3312b1f11b247fc0c51",
+      "bytes": 15546
+    },
+    {
+      "path": "pdq/cpp/hashing/pdqhashing.h",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/pdq/cpp/hashing/pdqhashing.h",
+      "gitBlobSha1": "edb64172f6038ed8b166288aaca450d16ee3e70a",
+      "sha256": "2c9abab5bb03119d3c17410570d13ab0a3e496118a28849196a8c079dac3e6c4",
+      "bytes": 5078
+    },
+    {
+      "path": "pdq/cpp/hashing/torben.cpp",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/pdq/cpp/hashing/torben.cpp",
+      "gitBlobSha1": "ae1d059596b9b6f367f647fe1899ee8bd9ae1142",
+      "sha256": "64f1e95edb168a2e07216fae2f7da2f64b3246f6d8c752657eead3142353f09e",
+      "bytes": 1388
+    },
+    {
+      "path": "pdq/cpp/hashing/torben.h",
+      "url": "https://raw.githubusercontent.com/meta/ThreatExchange/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2/pdq/cpp/hashing/torben.h",
+      "gitBlobSha1": "acb06097f2aa48259b8f7fc86043ee034c1c59a3",
+      "sha256": "d58b25e10d30de4137e53ea869008f911687851a19b5d25c091e56ec5030acf3",
+      "bytes": 626
+    }
+  ]
+}

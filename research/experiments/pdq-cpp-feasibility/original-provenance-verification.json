@@ -1,0 +1,105 @@
+{
+  "pin": "9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2",
+  "apiUrl": "https://api.github.com/repos/meta/ThreatExchange/git/commits/9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2",
+  "apiSha256": "7d17372b3d092246a824a162af74b1eb2ce490b0593aec7b31a39e4cd20e8746",
+  "rawCommitBytes": 1135,
+  "rawCommitSha256": "7882c170759184eddf668891bb1311f65f7a214e00816b9a78e1e787eaf48079",
+  "rawCommitGitSha1": "9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2",
+  "gitHashObjectResult": "9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2",
+  "treeHeader": "dbd86e307c396ab13c3d261126732be72163295e",
+  "reconstructedRootTree": "dbd86e307c396ab13c3d261126732be72163295e",
+  "subtreesChecked": 207,
+  "subtreeMismatches": [],
+  "rootTreeRawSha256": "74f080287b5ffc4a19ab277b729ccf04890e21107b3ff332c23474cb892d10d4",
+  "apiReportsSignatureVerified": true,
+  "localSignatureAuthentication": "not performed",
+  "originalArtifactsUnchanged": true,
+  "reviewArtifactsUnchanged": true,
+  "sourceFiles": [
+    {
+      "path": "LICENSE",
+      "blob": "9406c626400cf7167750c03101f628a31bfe478d",
+      "verified": true
+    },
+    {
+      "path": "pdq/cpp/Makefile",
+      "blob": "de0c647aeef1a6a3f85a2beb782fd049a7cc2a78",
+      "verified": true
+    },
+    {
+      "path": "pdq/cpp/README.md",
+      "blob": "6812c945ee6fec1ee4954cf6fa9675ca216efe92",
+      "verified": true
+    },
+    {
+      "path": "pdq/cpp/common/pdqbasetypes.h",
+      "blob": "c6d3a3e685cc2333503ee3ebeeee159bc6b6bc91",
+      "verified": true
+    },
+    {
+      "path": "pdq/cpp/common/pdqhamming.cpp",
+      "blob": "a59911fdb396976edee70b669e558e246a208a7e",
+      "verified": true
+    },
+    {
+      "path": "pdq/cpp/common/pdqhamming.h",
+      "blob": "9d91670dce0a369e196b8bf67e6fa4a6ea10e8ff",
+      "verified": true
+    },
+    {
+      "path": "pdq/cpp/common/pdqhashtypes.cpp",
+      "blob": "7e6114c709f78f14829645edee429e8495483ed4",
+      "verified": true
+    },
+    {
+      "path": "pdq/cpp/common/pdqhashtypes.h",
+      "blob": "02051b96eb2d5f38be282a1d97c5acb1a9d48cae",
+      "verified": true
+    },
+    {
+      "path": "pdq/cpp/common/pdqutils.cpp",
+      "blob": "f23272959639ca1f8303595af2a760a8f8c83904",
+      "verified": true
+    },
+    {
+      "path": "pdq/cpp/common/pdqutils.h",
+      "blob": "ece9d5a46ef9c0a26ea381cfb3b326f71d281df6",
+      "verified": true
+    },
+    {
+      "path": "pdq/cpp/downscaling/downscaling.cpp",
+      "blob": "03a62e3bbc8a1b4d53bfa0a9616e4a117c11a7ab",
+      "verified": true
+    },
+    {
+      "path": "pdq/cpp/downscaling/downscaling.h",
+      "blob": "e3eb14b3322171c6080b753a4daab6858ec34715",
+      "verified": true
+    },
+    {
+      "path": "pdq/cpp/hashing/README.md",
+      "blob": "6b9dfec26eac10415791a85aaed67c34feb038c6",
+      "verified": true
+    },
+    {
+      "path": "pdq/cpp/hashing/pdqhashing.cpp",
+      "blob": "82c5e7132c51ae6c7bb73ac645b3903f88b155e1",
+      "verified": true
+    },
+    {
+      "path": "pdq/cpp/hashing/pdqhashing.h",
+      "blob": "edb64172f6038ed8b166288aaca450d16ee3e70a",
+      "verified": true
+    },
+    {
+      "path": "pdq/cpp/hashing/torben.cpp",
+      "blob": "ae1d059596b9b6f367f647fe1899ee8bd9ae1142",
+      "verified": true
+    },
+    {
+      "path": "pdq/cpp/hashing/torben.h",
+      "blob": "acb06097f2aa48259b8f7fc86043ee034c1c59a3",
+      "verified": true
+    }
+  ]
+}

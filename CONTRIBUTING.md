@@ -33,3 +33,5 @@ The vector checkers validate recorded outputs. Passing CI is not an interoperabi
 ## Publishing history
 
 `tools/public_history_scrub.py` rewrites a local branch into a publishable one. It contains no rules: they are in a private file outside every working tree (`$TRACEWEAVE_EVAL_DIR/private/public-history-rules.json`, mode 0600, or the path in `TRACEWEAVE_SCRUB_RULES`), and the tool refuses to run without it. `tools/hooks/pre-push` is a pre-push hook that refuses refs whose history contains a rule-bearing version of that tool (the blob ids are read from the private file); install it with `install -m 755 tools/hooks/pre-push .git/hooks/pre-push`. Only the rewritten branch is pushed.
+
+Future preparations must follow the [publication-source divergence workflow](docs/publication-source-workflow.md). The curated publication-source lineage, rather than raw-bearing private `roadmap-v2`, is the source for subsequent replay; its independent review and publication authorization remain separate.

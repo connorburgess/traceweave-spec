@@ -1,0 +1,21 @@
+{
+  "packageVersion": "pdq-curated-public-evidence-1",
+  "scope": "Published-file integrity, internal tree/subset proof and retained accounting; no public commit-to-root binding proof",
+  "files": {
+    "README.md": "746ccec3511dd063e4b7e929f4fd50c114caf566a787ac997f0236a609fb10fe",
+    "ThreatExchange-LICENSE.txt": "68ecc6aafbd2a205a1077f86127030898f03091b7dae9d9017325a8702d8668f",
+    "acquisition.json": "61d77fac8ba5fc7808e77027d7f33288c8235ed574694020ab47ab62c599d8f6",
+    "bridge.cpp": "e2e3b5927e0e4bbfb7f2bf550ac00e11caa32e69ac67891eb033f3e26d71b127",
+    "comparison.json": "a1cf1f2c738bf678f6b232621bda0ba92e6438f09ac9c51895106da2ac763a24",
+    "declared-inputs.json": "51b0fbf896d7bc8aa8fc5a6f3ecb041e1ecdb938426059eaf41d6c8053958ccb",
+    "inspect_evidence.py": "6710782fa309f3004c3893a133fb5a7387e98c4d7f91cce4f09cd939618aa94e",
+    "original-artifact-identities.json": "a03f867cb706dd330b6a5882c6d8b706a9a59a5d61059fd59227df7999b803bd",
+    "original-provenance-verification.json": "d5b2eeb5bc32f41849b8284708789f95ad23adfc5d1b735a8ce1c6b08ff8551c",
+    "provenance.md": "7432b6f0679be653a54c11ccbd33f6339db0983fa6330dbab9ce1cabdb989653",
+    "python-source.json": "e09c3787e15864edfc6bd62585b23edd73a4b689af9b02f842972193d63b09f3",
+    "reproduce.py": "5fd3876daae8d9c81741cd765e0f89f6bbc2e16e3b76840f9f49ad45c4ce738a",
+    "source-tree-proof.json": "9f85f2244f4c9e4ea219ca79ee33fd7e4de60c9423397af29c1a1c235258c0e8",
+    "test_inspector.py": "a2bafe780e5b55a9147f3c33bc72fd6ee98176db2e676f1adaf3a96a5c23e92c",
+    "validation.md": "3e328cff90295404421ded22f1516719adec4fe27f8b1bb7b3d59272a0f0cfda"
+  }
+}

@@ -1,0 +1,9 @@
+# Historical PDQ review scope and curated publication boundary
+
+This is a packaging-author summary, not an independent review of the new curated package. Independent review of this package is pending.
+
+Historical author revision `5e9eebdd2e365ed62911b25dc85c297f8b4ab5a1` contained a 16-file portable evidence package. Historical independent review `bab7b0f75353156daa0203b5c27fa66c88804d43` assessed that original package, including its raw upstream commit and original manifest, and found no blockers for evidence-only use. The review record's SHA-256 is `410d5551f1a75aece548d77fd32765c40f6f179dbff69eb7f6e1944cc12ae7f3`. The earlier independent numeric reproduction record has SHA-256 `f04e74f84dbabc129c972f1c727c7d3b66bd62f3614db263ec6698d5cc286e2d`. These are historical private revision/artifact identifiers, not promises of publicly resolvable commits or bundled records.
+
+That review verified historical source binding with the original artifacts and distinguished the independently reproduced original experiment from the statically checked, unexecuted adapted runner. Neither result constitutes independent review of the rewritten public inspector, new manifest or new prose here. This package deliberately omits the raw commit and cannot independently reproduce commit-to-root binding. Its [provenance summary](../experiments/pdq-cpp-feasibility/provenance.md) states the resulting public proof limit.
+
+The retained six-input result is 32/48 exact C++ hashes and 6/6 quality matches; two low-quality inputs retain all eight hash mismatches each. Numeric cause remains unlocalized. IMGF.5 stays OPEN, without negative-result status. No full frozen-study or 30-vector interoperability result, portable runner execution, release approval or gate closure follows from these historical reviews.
