@@ -14,7 +14,7 @@ def flat(a):
 def make():
     cases = []
     shapes = [('black',32,32), ('white',32,32), ('swatches',32,32),
-              ('identity',32,32), ('width-only',47,32), ('height-only',32,47),
+              ('grey-half-tie',32,32), ('identity',32,32), ('width-only',47,32), ('height-only',32,47),
               ('noninteger',37,41), ('order-equality',48,64),
               ('vertical-first',48,65), ('wide',65,48), ('edge',9,7),
               ('single-column',1,9), ('single-row',9,1), ('single-pixel',1,1)]
@@ -25,6 +25,7 @@ def make():
             for x in range(w):
                 if name == 'black': p = (0,0,0)
                 elif name == 'white': p = (255,255,255)
+                elif name == 'grey-half-tie': p = (1,53,185)
                 elif name == 'swatches':
                     p = [(255,0,0),(0,255,0),(0,0,255),(1,0,0),(0,1,0),
                          (0,0,1),(128,128,128),(255,255,255)][x % 8]

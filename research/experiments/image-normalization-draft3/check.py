@@ -80,7 +80,7 @@ def check(wheel=None):
     for n in sizes:
         if arithmetic.coefficients(n) != oracle.weights(n):
             report['failures'].append('coefficient oracle mismatch '+str(n))
-    witnesses = {'wrong-order':[], 'final-only':[]}
+    witnesses = {'wrong-order':[], 'final-only':[], 'grey-ties-even':[]}
     for c in fixture['cases']:
         w,h = c['width'],c['height']
         raw=bytes.fromhex(c['rgbHex'])
@@ -101,12 +101,26 @@ def check(wheel=None):
                 or flat(math_first)!=expected_first or order!=c['order'] or math_order!=order
                 or any(row[k] for k in ['ordinaryDifferentBytes','oracleDifferentBytes','firstDifferentBytes'])):
             report['failures'].append(c['id']+': fixture/arithmetic mismatch')
-        for mutation in witnesses:
+        for mutation in ('wrong-order','final-only'):
             mutated,_,_ = arithmetic.resize(g, mutation)
             different = mismatch(flat(mutated),expected)
             row[mutation+'DifferentBytes']=different
             if different:
                 witnesses[mutation].append(c['id'])
+        # Independent anchor: 19595*1+38470*53+7471*185 = 3440640
+        # = 52*65536+32768. Half-up is 53, whereas ties-even is 52.
+        even = []
+        for pixels in rgb:
+            line = []
+            for red, green, blue in pixels:
+                q, rem = divmod(19595*red+38470*green+7471*blue,65536)
+                line.append(q + (rem > 32768 or (rem == 32768 and q % 2 == 1)))
+            even.append(line)
+        row['grey-ties-evenDifferentBytes']=mismatch(flat(even),expected_g)
+        if row['grey-ties-evenDifferentBytes']:
+            witnesses['grey-ties-even'].append(c['id'])
+        if c['id']=='grey-half-tie' and (raw!=bytes([1,53,185])*1024 or expected_g!=bytes([53])*1024):
+            report['failures'].append('exact grey half-tie anchor differs from independent derivation')
         if Image:
             im = Image.frombytes('RGB',(w,h),raw).convert('L')
             got = im.resize((32,32),Image.Resampling.BICUBIC,reducing_gap=None).tobytes()
@@ -119,6 +133,8 @@ def check(wheel=None):
                 row.update(pillowGreyHex=im.tobytes().hex(),pillowFirstHex=pf.hex())
                 report['failures'].append(c['id']+': pinned Pillow mismatch (retained)')
         report['cases'].append(row)
+    if not any(c['id']=='grey-half-tie' for c in fixture['cases']):
+        report['failures'].append('missing exact grey half-tie fixture')
     report['mutationWitnesses']=witnesses
     for mutation, ids in witnesses.items():
         if not ids:
