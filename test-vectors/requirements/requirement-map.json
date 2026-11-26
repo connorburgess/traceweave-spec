@@ -1151,7 +1151,7 @@
             "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_rendered_region_floor"
           ],
           "violation": "omitting evidence/floor adjacency, reporting raw rather than unsuppressed evidence, or omitting at-the-minimum labeling",
-          "failsBecause": "The explicit rendering fixture adapter checks every reportable region line. Five negative outputs remove a region, split its values, alter evidence/floor or omit the equality label. This tests the requirement oracle, not a production renderer or Shelf UI."
+          "failsBecause": "The explicit rendering fixture adapter fully parses canonical region/evidence/floor fields and the exact equality label, then compares the complete region map with the report. Negative cases cover wrong numeric prefixes, negated/contradicted labels, missing/duplicate/extra regions, incorrect values and trailing material; valid equality, non-equality, multi-digit and reordered outputs remain accepted. This tests the requirement oracle, not a production renderer or Shelf UI."
         },
         {
           "kind": "testable",
@@ -1162,7 +1162,7 @@
             "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_rendered_region_floor"
           ],
           "violation": "omitting evidence/floor adjacency, reporting raw rather than unsuppressed evidence, or omitting at-the-minimum labeling",
-          "failsBecause": "The explicit rendering fixture adapter checks every reportable region line. Five negative outputs remove a region, split its values, alter evidence/floor or omit the equality label. This tests the requirement oracle, not a production renderer or Shelf UI."
+          "failsBecause": "The explicit rendering fixture adapter fully parses canonical region/evidence/floor fields and the exact equality label, then compares the complete region map with the report. Negative cases cover wrong numeric prefixes, negated/contradicted labels, missing/duplicate/extra regions, incorrect values and trailing material; valid equality, non-equality, multi-digit and reordered outputs remain accepted. This tests the requirement oracle, not a production renderer or Shelf UI."
         }
       ]
     },

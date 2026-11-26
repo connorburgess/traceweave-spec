@@ -11,6 +11,7 @@ import importlib.util
 import inspect
 import io
 import json
+import re
 from pathlib import Path
 import textwrap
 import unittest
@@ -60,16 +61,27 @@ def validate_display(body, lines):
     The chosen text syntax is test-only, not a new normative rendering format.
     The output must show evidence and floor together; equality needs its label.
     """
+    # Every line is one complete record in this test-only grammar. Canonical
+    # ASCII integers and an exact optional label prevent prefix/negation matches.
+    displayed = {}
+    for line in lines:
+        match = re.fullmatch(
+            r'region (0|[1-9][0-9]*): evidence (0|[1-9][0-9]*); '
+            r'minimum (0|[1-9][0-9]*)(; at the minimum)?', line)
+        if match is None:
+            raise ValueError('invalid display record')
+        region_id, evidence, floor = map(int, match.group(1, 2, 3))
+        if region_id in displayed:
+            raise ValueError('duplicate display region')
+        displayed[region_id] = (evidence, floor, match.group(4) is not None)
+    expected = {}
+    floor = body['minRegionDistinctHashes']
     for i, region in enumerate(body['regions']):
-        if region['status'] != 'reportable':
-            continue
-        evidence = region['distinctHashes'] - region['distinctCommonHashes']
-        wanted = f'region {i}: evidence {evidence}; minimum {body["minRegionDistinctHashes"]}'
-        matches = [line for line in lines if line.startswith(wanted)]
-        if len(matches) != 1:
-            raise ValueError('region evidence and minimum must appear together')
-        if evidence == body['minRegionDistinctHashes'] and 'at the minimum' not in matches[0]:
-            raise ValueError('missing at the minimum label')
+        if region['status'] == 'reportable':
+            evidence = region['distinctHashes'] - region['distinctCommonHashes']
+            expected[i] = (evidence, floor, evidence == floor)
+    if displayed != expected:
+        raise ValueError('displayed regions, evidence, floor or minimum label disagree with report')
 
 
 def validate_selection(inputs, records):
@@ -208,11 +220,50 @@ class ReleaseRequirementTests(unittest.TestCase):
             {'status': 'reportable', 'distinctHashes': 4, 'distinctCommonHashes': 0}]}
         good = ['region 0: evidence 2; minimum 2; at the minimum', 'region 1: evidence 4; minimum 2']
         validate_display(body, good)
-        for bad in [good[1:], ['region 0: evidence 2', 'minimum 2; at the minimum', good[1]],
-                    ['region 0: evidence 3; minimum 2', good[1]],
-                    ['region 0: evidence 2; minimum 2', good[1]],
-                    [good[0], 'region 1: evidence 4; minimum 3']]:
-            with self.subTest(rendering=bad), self.assertRaises(ValueError):
+        validate_display(body, list(reversed(good)))  # Line order is not semantic.
+        # Multi-digit values remain valid when they are the actual report values.
+        large = {'minRegionDistinctHashes': 20, 'regions': [
+            {'status': 'reportable', 'distinctHashes': 21, 'distinctCommonHashes': 1},
+            {'status': 'reportable', 'distinctHashes': 24, 'distinctCommonHashes': 0}]}
+        validate_display(large, ['region 0: evidence 20; minimum 20; at the minimum',
+                                 'region 1: evidence 24; minimum 20'])
+        validate_display({'minRegionDistinctHashes': 2, 'regions': [
+            {'status': 'below-minimum-evidence', 'distinctHashes': 1, 'distinctCommonHashes': 0}]}, [])
+        bad_cases = {
+            # Original five negatives remain required.
+            'missing region': good[1:],
+            'separated evidence and floor': ['region 0: evidence 2', 'minimum 2; at the minimum', good[1]],
+            'raw rather than unsuppressed evidence': ['region 0: evidence 3; minimum 2', good[1]],
+            'missing equality label': ['region 0: evidence 2; minimum 2', good[1]],
+            'incorrect nonminimum floor': [good[0], 'region 1: evidence 4; minimum 3'],
+            # Both independently demonstrated R1 bypasses.
+            'floor 20 accepted as prefix 2': ['region 0: evidence 2; minimum 20; at the minimum', good[1]],
+            'negated equality label': ['region 0: evidence 2; minimum 2; NOT at the minimum', good[1]],
+            # Audit all fields and the non-equality branch for the same defect.
+            'nonminimum floor prefix': [good[0], 'region 1: evidence 4; minimum 20'],
+            'nonminimum falsely labelled equal': [good[0], good[1] + '; at the minimum'],
+            'incorrect evidence prefix': ['region 0: evidence 20; minimum 2; at the minimum', good[1]],
+            'wrong region id': [good[0], 'region 10: evidence 4; minimum 2'],
+            'duplicate region': good + [good[0]],
+            'contradictory duplicate': good + ['region 0: evidence 999; minimum 2'],
+            'unlisted region': good + ['region 2: evidence 4; minimum 2'],
+            'nonrecord commentary': good + ['NOT at the minimum'],
+        }
+        for floor in ('02', '+2', '-2', '2.0', '2e0', '２'):
+            bad_cases['noncanonical floor ' + floor] = [
+                f'region 0: evidence 2; minimum {floor}; at the minimum', good[1]]
+        for label in ('not at the minimum', 'never at the minimum', 'at the minimum NOT',
+                      'at the minimum; actually above it', 'at the minimum-ish'):
+            bad_cases['inexact or contradicted label ' + label] = [
+                'region 0: evidence 2; minimum 2; ' + label, good[1]]
+        for suffix in ('0', ' trailing text', '\n', '\x00'):
+            bad_cases['trailing material ' + repr(suffix)] = [good[0], good[1] + suffix]
+        for bad_field in ('region 00: evidence 2', 'region 0: evidence 02',
+                          'region 0: evidence -2', 'region 0: evidence 2.0'):
+            bad_cases['invalid region/evidence field ' + bad_field] = [
+                bad_field + '; minimum 2; at the minimum', good[1]]
+        for name, bad in bad_cases.items():
+            with self.subTest(rendering=name), self.assertRaises(ValueError):
                 validate_display(body, bad)
 
     def test_selection_accounting(self):
