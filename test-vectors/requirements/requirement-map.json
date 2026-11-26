@@ -1,5 +1,5 @@
 {
-  "description": "M5.1 extension of the M1.5 clause map. Extraction remains in its reviewed original map. Every uppercase MUST occurrence, including definitions and external quotations, is inventoried. Non-testable clauses require independent spot-check; no review is asserted here.",
+  "description": "M5.1 clause inventory. Executable fixture, selector/render-adapter, resource and process obligations have failing tests; historical retention, asymptotic/internal properties and open-ended human semantic judgement retain explicit inspection reasons. Extraction uses its reviewed original map.",
   "requirements": [
     {
       "id": "M5-001",
@@ -21,9 +21,15 @@
       "sentence": "**Python 2.** No lexical rule can tell Python 2 from Python 3 without a parser: `print \"x\"` and `exec code` lex as a name followed by a string or name. A Python 2 file is therefore lexed by the Python 3.14 rules. Most lex and are fingerprinted with Python 3 token classes (`print` is `ident`). Some fail with an ordinary lexical error: backticks (`illegal-character`), `ur''` (`malformed-literal`), `0777` and `1L` (`malformed-literal`), and tab/space mixtures (`inconsistent-indentation`). This is the \"unavoidable\" case: the selecting tool SHOULD exclude a repository whose metadata declares Python 2 (for example `python_requires` below 3), and MUST NOT silently drop files that fail.",
       "clauses": [
         {
-          "kind": "untestable",
-          "reason": "Silently dropping a file is a selection/pipeline behavior outside the extraction record; requires repository-level accounting.",
-          "spotCheck": true
+          "kind": "testable",
+          "failsOn": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_selection_accounting"
+          ],
+          "negativeFixtures": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_selection_accounting"
+          ],
+          "violation": "dropping a failed Python-2 input or dropping/counting JSX-in-JS as an ordinary rejection",
+          "failsBecause": "The explicit selector-output fixture adapter requires one disposition per input and stage-2 JSX deferral; missing/duplicate dispositions and ordinary JSX rejection are negative cases. No product selector conformance is claimed."
         }
       ]
     },
@@ -36,10 +42,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/extraction-python/check_vectors.py:WPythonUnicode"
+            "registered:CHK-001"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/extraction-python/check_vectors.py:WPythonUnicode"
+            "registered:CHK-001"
           ],
           "violation": "using runtime Unicode instead of pinned tables",
           "failsBecause": "The wrong-lexer self-test WPythonUnicode is rejected on the Unicode-17 vector."
@@ -104,10 +110,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:py-empty-catalogue-span-expanded"
+            "registered:CHK-002"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:py-empty-catalogue-span-expanded"
+            "registered:CHK-002"
           ],
           "violation": "expanding or dropping a valid empty Python span",
           "failsBecause": "The mutation changes an empty catalogue/report span or drops the empty-span report region. Exact catalogue derivation or independent report comparison rejects it."
@@ -115,10 +121,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:py-empty-report-span-expanded"
+            "registered:CHK-003"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:py-empty-report-span-expanded"
+            "registered:CHK-003"
           ],
           "violation": "expanding or dropping a valid empty Python span",
           "failsBecause": "The mutation changes an empty catalogue/report span or drops the empty-span report region. Exact catalogue derivation or independent report comparison rejects it."
@@ -126,10 +132,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:py-empty-report-region-dropped"
+            "registered:CHK-004"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:py-empty-report-region-dropped"
+            "registered:CHK-004"
           ],
           "violation": "expanding or dropping a valid empty Python span",
           "failsBecause": "The mutation changes an empty catalogue/report span or drops the empty-span report region. Exact catalogue derivation or independent report comparison rejects it."
@@ -221,10 +227,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/extraction-text/check_text_vectors.py:FAIL config"
+            "registered:CHK-005"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/extraction-text/check_text_vectors.py:FAIL config"
+            "registered:CHK-005"
           ],
           "violation": "accepting a negative configuration or rejecting a specified boundary configuration",
           "failsBecause": "The text checker validates all negative and boundary configurations; FAIL config requires a negative fixture with valid configuration bytes to fail."
@@ -232,10 +238,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/extraction-text/check_text_vectors.py:FAIL config"
+            "registered:CHK-005"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/extraction-text/check_text_vectors.py:FAIL config"
+            "registered:CHK-005"
           ],
           "violation": "accepting a negative configuration or rejecting a specified boundary configuration",
           "failsBecause": "The text checker validates all negative and boundary configurations; FAIL config requires a negative fixture with valid configuration bytes to fail."
@@ -251,10 +257,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/extraction-text/check_text_vectors.py:FAIL config"
+            "registered:CHK-005"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/extraction-text/check_text_vectors.py:FAIL config"
+            "registered:CHK-005"
           ],
           "violation": "accepting a negative configuration or rejecting a specified boundary configuration",
           "failsBecause": "The text checker validates all negative and boundary configurations; FAIL config requires a negative fixture with valid configuration bytes to fail."
@@ -307,10 +313,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/extraction-text/check_text_vectors.py:per-token-folded"
+            "registered:CHK-006"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/extraction-text/check_text_vectors.py:per-token-folded"
+            "registered:CHK-006"
           ],
           "violation": "changing frozen record bytes",
           "failsBecause": "The record self-tests introduce an illegal per-token folded field and require rejection; all 60 expected records are compared byte-for-byte."
@@ -337,19 +343,37 @@
       "sentence": "**JSX in a `.js` file under `ts-tokens` is not always rejected.** Any element with a closing tag or with text makes `</` start a regular expression that runs to the end of the line. That gives `unterminated-literal` unless the line happens to contain another `/` (`ts-err-jsx-in-js`). A text-free self-closing element such as `x = <br/>;` lexes as the punctuators `< br / > ;` and is fingerprinted (`ts-jsx-selfclosing-in-js`, D-16). **`.js` files containing JSX are deferred to stage 2** (decided in draft, pending owner confirmation). The selecting tool (TW-01/TW-03) MUST record each such file as **deferred to stage 2**, whether it detects the JSX before extraction or meets it as an extraction error. It MUST NOT drop such files silently, and MUST NOT count them as ordinary lexical rejections. Text-free self-closing elements are a **known stage-1 misread (D-16)**: they are fingerprinted as punctuators and cannot be told apart lexically from comparison and type syntax. A repository with JSX in `.js` should map those files to `tsx-tokens` once stage 2 exists.",
       "clauses": [
         {
-          "kind": "untestable",
-          "reason": "File-selection disposition (stage-2 deferral versus rejection or silent drop) is not part of an extraction result. Requires repository-selection audit; ts-jsx-selfclosing-in-js documents the lexical limitation.",
-          "spotCheck": true
+          "kind": "testable",
+          "failsOn": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_selection_accounting"
+          ],
+          "negativeFixtures": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_selection_accounting"
+          ],
+          "violation": "dropping a failed Python-2 input or dropping/counting JSX-in-JS as an ordinary rejection",
+          "failsBecause": "The explicit selector-output fixture adapter requires one disposition per input and stage-2 JSX deferral; missing/duplicate dispositions and ordinary JSX rejection are negative cases. No product selector conformance is claimed."
         },
         {
-          "kind": "untestable",
-          "reason": "File-selection disposition (stage-2 deferral versus rejection or silent drop) is not part of an extraction result. Requires repository-selection audit; ts-jsx-selfclosing-in-js documents the lexical limitation.",
-          "spotCheck": true
+          "kind": "testable",
+          "failsOn": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_selection_accounting"
+          ],
+          "negativeFixtures": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_selection_accounting"
+          ],
+          "violation": "dropping a failed Python-2 input or dropping/counting JSX-in-JS as an ordinary rejection",
+          "failsBecause": "The explicit selector-output fixture adapter requires one disposition per input and stage-2 JSX deferral; missing/duplicate dispositions and ordinary JSX rejection are negative cases. No product selector conformance is claimed."
         },
         {
-          "kind": "untestable",
-          "reason": "File-selection disposition (stage-2 deferral versus rejection or silent drop) is not part of an extraction result. Requires repository-selection audit; ts-jsx-selfclosing-in-js documents the lexical limitation.",
-          "spotCheck": true
+          "kind": "testable",
+          "failsOn": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_selection_accounting"
+          ],
+          "negativeFixtures": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_selection_accounting"
+          ],
+          "violation": "dropping a failed Python-2 input or dropping/counting JSX-in-JS as an ordinary rejection",
+          "failsBecause": "The explicit selector-output fixture adapter requires one disposition per input and stage-2 JSX deferral; missing/duplicate dispositions and ordinary JSX rejection are negative cases. No product selector conformance is claimed."
         }
       ]
     },
@@ -375,13 +399,13 @@
         {
           "kind": "testable",
           "failsOn": [
-            "vector:test-vectors/extraction-typescript/ts.json:ts-err-hex-empty"
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_radix_literals"
           ],
           "negativeFixtures": [
-            "vector:test-vectors/extraction-typescript/ts.json:ts-err-hex-empty"
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_radix_literals"
           ],
-          "violation": "accepting malformed numeric literal syntax",
-          "failsBecause": "The promoted checker requires this vector to reject with its exact expected error; an accepted token stream differs and fails conformance."
+          "violation": "accepting non-radix digits, empty bodies, misplaced separators or bad n suffixes, or misclassifying bigint",
+          "failsBecause": "The 48 malformed cases and 12 valid prefix/separator/suffix cases assert exact errors or token classes; test_radix_mutants_are_killed independently kills seven one-rule mutants, including the reviewer\u2019s radix-membership mutant."
         }
       ]
     },
@@ -451,10 +475,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/registration/check_registration.py:base64"
+            "registered:CHK-007"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/registration/check_registration.py:base64"
+            "registered:CHK-007"
           ],
           "violation": "rejecting a permitted base64 transport spelling",
           "failsBecause": "The promoted bundle-url-safe fixture and adapter URL-safe accept fixture require acceptance of URL-safe base64; a changed outcome fails the checker."
@@ -515,10 +539,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:record-digest-wrong"
+            "registered:CHK-008"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:record-digest-wrong"
+            "registered:CHK-008"
           ],
           "violation": "changing canonical record bytes",
           "failsBecause": "The cited self-test introduces changing canonical record bytes; the promoted checker rejects the changed output."
@@ -534,10 +558,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:tokenIndices-on-go"
+            "registered:CHK-009"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:tokenIndices-on-go"
+            "registered:CHK-009"
           ],
           "violation": "adding tokenIndices to a non-exclusion profile",
           "failsBecause": "The cited self-test introduces adding tokenIndices to a non-exclusion profile; the promoted checker rejects the changed output."
@@ -551,8 +575,17 @@
       "sentence": "**Record streams and the CLI.** A sequence of records concatenated in input order is a valid JSON Lines stream, because each record is one line. That framing, the CLI's argument syntax, exit statuses and any `--pretty`/`--result-only` options are **not normative** (conformance: CLI names are optional interfaces). What is normative is (a) the bytes of each record and (b) the catalogue (\u00a73), which is the persisted, committed artifact. **Unknown option values are errors** (A5; \u00a76.8 B6): an implementation that offers options, environment settings or fault-injection hooks MUST reject an unknown value as a usage error (exit 2) rather than ignore it, so a typo can never silently disable a check. Records go to stdout only (\u00a76.8 B7).",
       "clauses": [
         {
-          "kind": "untestable",
-          "reason": "CLI invocation/exit behavior is outside recorded JSON outputs; requires an implementation process probe, not a fixture-byte test.",
+          "kind": "implementation-test",
+          "tests": [
+            "impl:5b9a881:go/cmd/traceweave-go/i2_test.go:TestFaultInjection",
+            "impl:5b9a881:go/cmd/traceweave-go/i2_test.go:TestBodyOnlyAndCommitRequired",
+            "impl:5b9a881:conformance/behaviour/checklist.py:r.item(42,"
+          ],
+          "negativeCases": [
+            "Unknown -impl-commit option exits 2 with no document.",
+            "bogus and retired fault names exit 2 and leave the old catalogue unchanged."
+          ],
+          "reason": "Executable usage-error requirement: the pinned Go tests and Rust checklist assert exit status and absence/unchanged outputs, not just JSON fixture bytes.",
           "spotCheck": true
         }
       ]
@@ -566,10 +599,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:config-channels-not-profile-list"
+            "registered:CHK-010"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:config-channels-not-profile-list"
+            "registered:CHK-010"
           ],
           "violation": "changing the configured channel list",
           "failsBecause": "The cited self-test introduces changing the configured channel list; the promoted checker rejects the changed output."
@@ -585,10 +618,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:three-channel-modes-echo-reordered"
+            "registered:CHK-011"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:three-channel-modes-echo-reordered"
+            "registered:CHK-011"
           ],
           "violation": "using unsupported or mismatched modes",
           "failsBecause": "The changed expected mode list / mode-mismatch outcome fails comparison against the independently computed body."
@@ -596,10 +629,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:mode-mismatch-compared"
+            "registered:CHK-012"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:mode-mismatch-compared"
+            "registered:CHK-012"
           ],
           "violation": "using unsupported or mismatched modes",
           "failsBecause": "The changed expected mode list / mode-mismatch outcome fails comparison against the independently computed body."
@@ -615,10 +648,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:config-digest"
+            "registered:CHK-013"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:config-digest"
+            "registered:CHK-013"
           ],
           "violation": "changing the configuration digest",
           "failsBecause": "The cited self-test introduces changing the configuration digest; the promoted checker rejects the changed output."
@@ -634,10 +667,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:build-rejection-that-is-valid"
+            "registered:CHK-014"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:build-rejection-that-is-valid"
+            "registered:CHK-014"
           ],
           "violation": "building one catalogue from mixed-configuration records",
           "failsBecause": "records.json build-mixed-configurations requires rejection. The self-test removes the conflicting record, making the alleged rejection invalid; the checker catches it."
@@ -653,10 +686,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:duplicate-artifact-digest"
+            "registered:CHK-015"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:duplicate-artifact-digest"
+            "registered:CHK-015"
           ],
           "violation": "duplicating an artifact digest",
           "failsBecause": "The cited self-test introduces duplicating an artifact digest; the promoted checker rejects the changed output."
@@ -685,10 +718,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:extracted-profiles-only"
+            "registered:CHK-016"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:extracted-profiles-only"
+            "registered:CHK-016"
           ],
           "violation": "refusing a registered profile merely because extraction is unavailable",
           "failsBecause": "The cited self-test introduces refusing a registered profile merely because extraction is unavailable; the promoted checker rejects the changed output."
@@ -704,10 +737,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:K1-window-129"
+            "registered:CHK-017"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:K1-window-129"
+            "registered:CHK-017"
           ],
           "violation": "accepting an out-of-bounds extraction configuration",
           "failsBecause": "The cited self-test introduces accepting an out-of-bounds extraction configuration; the promoted checker rejects the changed output."
@@ -723,10 +756,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:py-empty-catalogue-span-expanded"
+            "registered:CHK-002"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:py-empty-catalogue-span-expanded"
+            "registered:CHK-002"
           ],
           "violation": "expanding or dropping a valid empty Python span",
           "failsBecause": "The mutation changes an empty catalogue/report span or drops the empty-span report region. Exact catalogue derivation or independent report comparison rejects it."
@@ -734,10 +767,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:py-empty-report-span-expanded"
+            "registered:CHK-003"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:py-empty-report-span-expanded"
+            "registered:CHK-003"
           ],
           "violation": "expanding or dropping a valid empty Python span",
           "failsBecause": "The mutation changes an empty catalogue/report span or drops the empty-span report region. Exact catalogue derivation or independent report comparison rejects it."
@@ -745,10 +778,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:py-empty-report-region-dropped"
+            "registered:CHK-004"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:py-empty-report-region-dropped"
+            "registered:CHK-004"
           ],
           "violation": "expanding or dropping a valid empty Python span",
           "failsBecause": "The mutation changes an empty catalogue/report span or drops the empty-span report region. Exact catalogue derivation or independent report comparison rejects it."
@@ -764,10 +797,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:catalogue-from-records-digest-wrong"
+            "registered:CHK-018"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:catalogue-from-records-digest-wrong"
+            "registered:CHK-018"
           ],
           "violation": "changing the catalogue built from vector-derived records",
           "failsBecause": "The cited self-test introduces changing the catalogue built from vector-derived records; the promoted checker rejects the changed output."
@@ -783,10 +816,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:valid-config-listed-as-negative"
+            "registered:CHK-019"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:valid-config-listed-as-negative"
+            "registered:CHK-019"
           ],
           "violation": "accepting a configuration listed as negative",
           "failsBecause": "check_all rejects every comparison configuration negative; its self-test replaces a negative with valid bytes and requires failure."
@@ -815,10 +848,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:missing-pair"
+            "registered:CHK-020"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:missing-pair"
+            "registered:CHK-020"
           ],
           "violation": "omitting output for a valid compared pair",
           "failsBecause": "The cited self-test introduces omitting output for a valid compared pair; the promoted checker rejects the changed output."
@@ -832,8 +865,21 @@
       "sentence": "**Dirty or unknown builds** (A5, M2.4; tightened by A6, B10). `implementation.commit` MUST describe the code that produced the body. It is **fixed at build time only**, from the version-control state of the tree being built. An implementation refuses to write a report document (exit 2) when its build had uncommitted changes, including documentation-only changes, or carries no build-time commit. Unstamped builds include an archive export, stamping disabled, and an interpreted or `go run` execution. Such builds MAY still write the body alone, which carries no provenance. **A commit supplied at run time is never accepted.** A5's allowance of an explicit commit for unstamped builds is withdrawn: the I2 behavioural run showed that an unstamped binary built from modified sources cannot tell itself from a clean archive build, so that allowance let provenance name a commit that does not describe the code. *Why refuse rather than add a `dirty` flag:* a flag would make provenance name a commit that does not describe the code, so M2.4's recheck could not pass, and it would add a field to a closed schema; refusing keeps every existing provenance byte and meaning.",
       "clauses": [
         {
-          "kind": "untestable",
-          "reason": "Build provenance requires inspection of the build and repository state, which cannot be established from report bytes alone; independent build probes are required.",
+          "kind": "implementation-test",
+          "tests": [
+            "impl:5b9a881:go/cmd/traceweave-go/i2_test.go:TestProvenanceCommitRule",
+            "impl:5b9a881:go/cmd/traceweave-go/i2_test.go:TestBodyOnlyAndCommitRequired",
+            "impl:5b9a881:go/cmd/traceweave-go/version_test.go:TestVersion",
+            "impl:5b9a881:conformance/behaviour/checklist.py:r.item(44,",
+            "impl:5b9a881:conformance/behaviour/checklist.py:r.item(55,",
+            "impl:5b9a881:conformance/behaviour/checklist.py:r.item(59,",
+            "impl:5b9a881:conformance/behaviour/checklist.py:r.item(60,"
+          ],
+          "negativeCases": [
+            "Malformed/absent stamps and runtime commit options refuse documents.",
+            "Dirty and nested/archive/plain builds refuse stamping or documents; clean stamp must equal the built commit."
+          ],
+          "reason": "Executable build/provenance requirement. Pinned tests include negative build and process variants; the new rerun covers Go stamp/unstamped/runtime-option tests and Rust archive-build provenance, not every build-forgery route.",
           "spotCheck": true
         }
       ]
@@ -845,9 +891,15 @@
       "sentence": "**Report document bytes are not normative.** Both implementations write RFC 8785 of `{\"body\", \"provenance\"}`; a consumer MUST NOT hash or compare the document bytes, only `bodySha256` and the provenance fields.",
       "clauses": [
         {
-          "kind": "untestable",
-          "reason": "A consumer hashing the wrong wrapper is an integration behavior outside fixture outputs. Inspect caller digest selection; body digest vectors only establish the correct hash.",
-          "spotCheck": true
+          "kind": "testable",
+          "failsOn": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_report_identity_uses_body_not_wrapper"
+          ],
+          "negativeFixtures": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_report_identity_uses_body_not_wrapper"
+          ],
+          "violation": "using serialized report-wrapper bytes as report identity",
+          "failsBecause": "The actual registration link checker accepts a differently serialized wrapper with unchanged body/provenance and rejects the same link when its body hash is replaced by the wrapper hash."
         }
       ]
     },
@@ -858,8 +910,17 @@
       "sentence": "**Private outputs** (A5, M2.8; made precise by A6, \u00a76.8 B1\u2013B7). The default private location for catalogues and reports is implementation-defined. An implementation MUST refuse (exit 2) to write private output to a directory inside a version-controlled working tree (B1), whether the directory was chosen by default, by environment variable or by option. The one exception is an explicit override naming exactly that directory (B2). Writes are atomic (temporary file then rename) with owner-only permissions. The refusal covers paths the implementation opens itself; stdout is the operator's destination (B7).",
       "clauses": [
         {
-          "kind": "untestable",
-          "reason": "Default filesystem location, permissions or cleanup is not observable in recorded fixture bytes; requires an implementation filesystem probe.",
+          "kind": "implementation-test",
+          "tests": [
+            "impl:5b9a881:go/cmd/traceweave-go/i2_test.go:TestCheckoutDestinationRefused",
+            "impl:5b9a881:go/cmd/traceweave-go/i2_test.go:TestPrivateDefault",
+            "impl:5b9a881:crates/traceweave/tests/storage.rs:no_files_under_checkout_and_expected_digest_at_private_default"
+          ],
+          "negativeCases": [
+            "Default/explicit output inside a working tree exits 2 with no file.",
+            "Wrong-directory override refuses; exact directory override succeeds."
+          ],
+          "reason": "Executable private-path refusal: native process tests inspect exit status and the filesystem. The targeted Go and Rust tests were rerun from the pinned archive.",
           "spotCheck": true
         }
       ]
@@ -871,8 +932,15 @@
       "sentence": "  - **Cleanup:** before its own rename, the next write to the same output path MUST delete every file in that directory that matches `.` + output name + `.tw-tmp-*` and is owned by the current user. It never reads them. Temporaries of other output names are left alone (items 47 and 48).",
       "clauses": [
         {
-          "kind": "untestable",
-          "reason": "Default filesystem location, permissions or cleanup is not observable in recorded fixture bytes; requires an implementation filesystem probe.",
+          "kind": "implementation-test",
+          "tests": [
+            "impl:5b9a881:go/internal/store/store_test.go:TestTemporaries",
+            "impl:5b9a881:conformance/behaviour/checklist.py:r.item(48,"
+          ],
+          "negativeCases": [
+            "Stale temporary with the same output name must be deleted; another output\u2019s temporary must remain."
+          ],
+          "reason": "Executable cleanup requirement: pinned Go storage test checks actual file existence and content; Rust checklist item 48 independently observes the next process write. Go test rerun passed.",
           "spotCheck": true
         }
       ]
@@ -884,8 +952,21 @@
       "sentence": "  **A toolchain-provided stamp that cannot prove (1) and (2) is treated as unstamped.** An example is Go's `vcs.revision` and `vcs.modified` build information, which records neither the repository root nor whether the compiled files belong to that repository. An implementation whose toolchain cannot verify the root MUST inject the commit through a **documented build step that performs both checks** (for example a build script that runs them and then passes the commit with `-ldflags -X`, or a `build.rs` that runs them). Every other build, including the toolchain's plain build command, writes bodies only. This closes the Go lane's D5 case: an archive export unpacked into an **ignored** folder of another repository gets that repository's HEAD as a clean toolchain stamp, yet it is unstamped under this rule. An archive export unpacked anywhere is unstamped, ignored or not, because it is not the root of a repository (items 55, 59 and 60).",
       "clauses": [
         {
-          "kind": "untestable",
-          "reason": "Build provenance requires inspection of the build and repository state, which cannot be established from report bytes alone; independent build probes are required.",
+          "kind": "implementation-test",
+          "tests": [
+            "impl:5b9a881:go/cmd/traceweave-go/i2_test.go:TestProvenanceCommitRule",
+            "impl:5b9a881:go/cmd/traceweave-go/i2_test.go:TestBodyOnlyAndCommitRequired",
+            "impl:5b9a881:go/cmd/traceweave-go/version_test.go:TestVersion",
+            "impl:5b9a881:conformance/behaviour/checklist.py:r.item(44,",
+            "impl:5b9a881:conformance/behaviour/checklist.py:r.item(55,",
+            "impl:5b9a881:conformance/behaviour/checklist.py:r.item(59,",
+            "impl:5b9a881:conformance/behaviour/checklist.py:r.item(60,"
+          ],
+          "negativeCases": [
+            "Malformed/absent stamps and runtime commit options refuse documents.",
+            "Dirty and nested/archive/plain builds refuse stamping or documents; clean stamp must equal the built commit."
+          ],
+          "reason": "Executable build/provenance requirement. Pinned tests include negative build and process variants; the new rerun covers Go stamp/unstamped/runtime-option tests and Rust archive-build provenance, not every build-forgery route.",
           "spotCheck": true
         }
       ]
@@ -897,8 +978,20 @@
       "sentence": "- **B12 Error messages.** Messages (stderr, stdout, logs) MUST NOT echo strings taken from input content. That covers source or token text, record, catalogue, configuration or report values, and **key names**, including unknown keys. Messages may contain:",
       "clauses": [
         {
-          "kind": "untestable",
-          "reason": "Diagnostic non-disclosure needs process stdout/stderr/log inspection with secret-bearing inputs; recorded output fixtures do not observe all diagnostic channels.",
+          "kind": "implementation-test",
+          "tests": [
+            "impl:5b9a881:go/internal/schema/schema_test.go:TestErrorsDoNotEchoKeys",
+            "impl:5b9a881:crates/tw-records/tests/records.rs:packet_messages_do_not_echo_key_names",
+            "impl:5b9a881:conformance/behaviour/checklist.py:r.item(57,",
+            "impl:5b9a881:conformance/behaviour/checklist.py:r.item(58,",
+            "impl:5b9a881:skill/test_skill.py:test_zero_canary_leaks_across_all_flows_both_clis"
+          ],
+          "negativeCases": [
+            "Unknown zzCanaryKey7 in record validation/build refuses without echo in stdout/stderr.",
+            "Unterminated zzCanaryText8 is an error record without source text.",
+            "The seeded transcript suite asserts no raw or case-folded canary in process output."
+          ],
+          "reason": "Executable canary rejection requirement. Go schema test rerun; complete Rust process/transcript tests are pinned and source-verified, not represented as a new complete rerun.",
           "spotCheck": true
         }
       ]
@@ -912,10 +1005,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_gates.py:packet-code-changed"
+            "registered:CHK-021"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_gates.py:packet-code-changed"
+            "registered:CHK-021"
           ],
           "violation": "accepting a packet with a non-first or absent seed",
           "failsBecause": "check_gates validates review-packets.json invalid entries including non-first-seed-p2 and absent region/mode cases."
@@ -931,10 +1024,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_gates.py:packet-schema-code-changed"
+            "registered:CHK-022"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_gates.py:packet-schema-code-changed"
+            "registered:CHK-022"
           ],
           "violation": "accepting an unbound origin artifact digest",
           "failsBecause": "The invalid review packets include own-origin, vendored and historical digest mismatches; each expected rejection is checked."
@@ -950,10 +1043,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_gates.py:packet-schema-code-changed"
+            "registered:CHK-022"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_gates.py:packet-schema-code-changed"
+            "registered:CHK-022"
           ],
           "violation": "accepting a historical source digest not bound to the other side",
           "failsBecause": "historical-source-unbound in review-packets.json must be rejected."
@@ -969,10 +1062,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_gates.py:candgen-code-changed"
+            "registered:CHK-023"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_gates.py:candgen-code-changed"
+            "registered:CHK-023"
           ],
           "violation": "accepting a candidate catalogue digest mismatch",
           "failsBecause": "The catalogue-mismatch invalid candidate-generation record must be rejected."
@@ -988,10 +1081,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_gates.py:candgen-record-wrong-digest"
+            "registered:CHK-024"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_gates.py:candgen-record-wrong-digest"
+            "registered:CHK-024"
           ],
           "violation": "changing the selected-ids digest",
           "failsBecause": "The cited self-test introduces changing the selected-ids digest; the promoted checker rejects the changed output."
@@ -1007,10 +1100,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_gates.py:m23-candidate-count"
+            "registered:CHK-025"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_gates.py:m23-candidate-count"
+            "registered:CHK-025"
           ],
           "violation": "miscounting the M2.3 control-class report",
           "failsBecause": "The cited self-test introduces miscounting the M2.3 control-class report; the promoted checker rejects the changed output."
@@ -1050,14 +1143,26 @@
       "sentence": "A rendering of a `match` MUST show, for each reportable region, its `evidence` beside `minRegionDistinctHashes`. A region whose evidence equals the minimum MUST be described as **at the minimum**, so results at a margin of one are visible as such.",
       "clauses": [
         {
-          "kind": "untestable",
-          "reason": "Human-facing interpretation/rendering and implied claims are outside the closed JSON report. Inspect every rendering and claim surface; schema rejection alone does not establish compliance.",
-          "spotCheck": true
+          "kind": "testable",
+          "failsOn": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_rendered_region_floor"
+          ],
+          "negativeFixtures": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_rendered_region_floor"
+          ],
+          "violation": "omitting evidence/floor adjacency, reporting raw rather than unsuppressed evidence, or omitting at-the-minimum labeling",
+          "failsBecause": "The explicit rendering fixture adapter checks every reportable region line. Five negative outputs remove a region, split its values, alter evidence/floor or omit the equality label. This tests the requirement oracle, not a production renderer or Shelf UI."
         },
         {
-          "kind": "untestable",
-          "reason": "Human-facing interpretation/rendering and implied claims are outside the closed JSON report. Inspect every rendering and claim surface; schema rejection alone does not establish compliance.",
-          "spotCheck": true
+          "kind": "testable",
+          "failsOn": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_rendered_region_floor"
+          ],
+          "negativeFixtures": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_rendered_region_floor"
+          ],
+          "violation": "omitting evidence/floor adjacency, reporting raw rather than unsuppressed evidence, or omitting at-the-minimum labeling",
+          "failsBecause": "The explicit rendering fixture adapter checks every reportable region line. Five negative outputs remove a region, split its values, alter evidence/floor or omit the equality label. This tests the requirement oracle, not a production renderer or Shelf UI."
         }
       ]
     },
@@ -1106,10 +1211,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:unknown-profile-version"
+            "registered:CHK-026"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:unknown-profile-version"
+            "registered:CHK-026"
           ],
           "violation": "accepting an unknown profile version",
           "failsBecause": "The cited self-test introduces accepting an unknown profile version; the promoted checker rejects the changed output."
@@ -1149,10 +1254,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:tools/check_release_boundaries.py:private-nonce-disclosed"
+            "registered:CHK-027"
           ],
           "negativeFixtures": [
-            "checker:tools/check_release_boundaries.py:private-nonce-disclosed"
+            "registered:CHK-027"
           ],
           "violation": "including the private nonce or catalogue in the public record",
           "failsBecause": "The negative probes insert nonceHex or catalogue into predicate.catalogue; the registration checker rejects both extra fields."
@@ -1168,10 +1273,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/matching/check_matching.py:catalogue-config-digest"
+            "registered:CHK-028"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/matching/check_matching.py:catalogue-config-digest"
+            "registered:CHK-028"
           ],
           "violation": "breaking the catalogue profile/configuration binding",
           "failsBecause": "The cited self-test introduces breaking the catalogue profile/configuration binding; the promoted checker rejects the changed output."
@@ -1190,9 +1295,17 @@
           "spotCheck": true
         },
         {
-          "kind": "untestable",
-          "reason": "Bounded/streaming hashing is resource behavior not observable in output fixtures; inspect implementation allocations and caps (M4 harness uses 1 MiB for C).",
-          "spotCheck": true
+          "kind": "testable",
+          "failsOn": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_catalogue_cap",
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_artifact_hash_is_streamed"
+          ],
+          "negativeFixtures": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_catalogue_cap",
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_artifact_hash_is_streamed"
+          ],
+          "violation": "accepting a catalogue above the local 1 MiB cap or using unbounded artifact-hash reads",
+          "failsBecause": "The actual registration checker now refuses catalogue commitment above 1,048,576 bytes; equality is accepted. test_artifact_hash_is_streamed guards read size at 65,536 bytes and kills an unbounded-read mutant; production memory conformance is not inferred."
         }
       ]
     },
@@ -1205,13 +1318,23 @@
         {
           "kind": "testable",
           "failsOn": [
-            "negative:test-vectors/registration/negative/neg-opening-nonce-reused-predicate.json"
+            "negative:test-vectors/registration/negative/neg-opening-nonce-short.json",
+            "negative:test-vectors/registration/negative/neg-opening-nonce-all-zero.json",
+            "negative:test-vectors/registration/negative/neg-opening-nonce-reused-predicate.json",
+            "negative:test-vectors/registration/negative/neg-catalogue-does-not-open.json",
+            "negative:test-vectors/registration/negative/neg-catalogue-not-report-input.json",
+            "negative:test-vectors/registration/negative/neg-profile-mismatch.json"
           ],
           "negativeFixtures": [
-            "negative:test-vectors/registration/negative/neg-opening-nonce-reused-predicate.json"
+            "negative:test-vectors/registration/negative/neg-opening-nonce-short.json",
+            "negative:test-vectors/registration/negative/neg-opening-nonce-all-zero.json",
+            "negative:test-vectors/registration/negative/neg-opening-nonce-reused-predicate.json",
+            "negative:test-vectors/registration/negative/neg-catalogue-does-not-open.json",
+            "negative:test-vectors/registration/negative/neg-catalogue-not-report-input.json",
+            "negative:test-vectors/registration/negative/neg-profile-mismatch.json"
           ],
-          "violation": "accepting an opening violating the listed checks",
-          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+          "violation": "violating any executable constituent of the following enumerated checks",
+          "failsBecause": "The following subrequirement tests exercise each executable constituent, rather than relying on one representative negative. Deployment-only test-root policy still requires production-policy inspection."
         }
       ]
     },
@@ -1325,13 +1448,28 @@
       "sentence": "Local extraction and comparison MUST be available without public network registration. Keys, private catalogues, and real evidence MUST NOT be placed in source trees by default. Publishing a record, subject digest, signature identity, or log event is a separate disclosure action; it can reveal use of Traceweave or permit correlation even when the catalogue stays private.",
       "clauses": [
         {
-          "kind": "untestable",
-          "reason": "Network-free availability is a runtime/deployment property; recorded fixtures cannot observe network calls. Requires an offline implementation run.",
+          "kind": "implementation-test",
+          "tests": [
+            "impl:5b9a881:scripts/offline:Only then is COMMAND run inside the same confinement",
+            "impl:5b9a881:go/cmd/traceweave-go/i2_test.go:TestWalkthrough"
+          ],
+          "negativeCases": [
+            "Offline wrapper exits 2 and never runs the command if a confined loopback/public connection succeeds or no confinement is available.",
+            "The local walkthrough extracts/builds/compares without public registration."
+          ],
+          "reason": "Executable offline-availability requirement. The network guard and synthetic walkthrough are pinned tests; this is separate from M5.3 clean-clone reproduction.",
           "spotCheck": true
         },
         {
-          "kind": "untestable",
-          "reason": "Default filesystem location, permissions or cleanup is not observable in recorded fixture bytes; requires an implementation filesystem probe.",
+          "kind": "implementation-test",
+          "tests": [
+            "impl:5b9a881:go/cmd/traceweave-go/i2_test.go:TestPrivateDefault",
+            "impl:5b9a881:crates/traceweave/tests/storage.rs:no_files_under_checkout_and_expected_digest_at_private_default"
+          ],
+          "negativeCases": [
+            "Running in a checkout creates no private files under it; a forced private default inside it is refused."
+          ],
+          "reason": "Executable private-storage default requirement; both native filesystem tests rerun on the pinned archive.",
           "spotCheck": true
         }
       ]
@@ -1385,9 +1523,17 @@
           "spotCheck": true
         },
         {
-          "kind": "untestable",
-          "reason": "Bounded/streaming hashing is resource behavior not observable in output fixtures; inspect implementation allocations and caps (M4 harness uses 1 MiB for C).",
-          "spotCheck": true
+          "kind": "testable",
+          "failsOn": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_catalogue_cap",
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_artifact_hash_is_streamed"
+          ],
+          "negativeFixtures": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_catalogue_cap",
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_artifact_hash_is_streamed"
+          ],
+          "violation": "accepting a catalogue above the local 1 MiB cap or using unbounded artifact-hash reads",
+          "failsBecause": "The actual registration checker now refuses catalogue commitment above 1,048,576 bytes; equality is accepted. test_artifact_hash_is_streamed guards read size at 65,536 bytes and kills an unbounded-read mutant; production memory conformance is not inferred."
         }
       ]
     },
@@ -1541,13 +1687,13 @@
         {
           "kind": "testable",
           "failsOn": [
-            "negative:test-vectors/registration/negative/neg-policy-negative-lookback.json"
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_policy_conditions_abort_before_evidence"
           ],
           "negativeFixtures": [
-            "negative:test-vectors/registration/negative/neg-policy-negative-lookback.json"
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_policy_conditions_abort_before_evidence"
           ],
-          "violation": "accepting a negative revocation lookback",
-          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+          "violation": "accepting any of the seven invalid-policy categories or inspecting evidence before refusal",
+          "failsBecause": "Strict parsing rejects duplicate/escaped-collision keys and nonfinite constants. Thirty-five policy variants cover quorum, lookback, hint lists, recovery fields, root/checkpoint fields and valid UTC time; a guarded Path.read_text fails on any evidence access before refusal. Calendar-invalid times now fail the actual checker."
         }
       ]
     },
@@ -1560,13 +1706,17 @@
         {
           "kind": "testable",
           "failsOn": [
-            "negative:test-vectors/registration/negative/neg-trust-by-hint.json"
+            "negative:test-vectors/registration/negative/neg-key-event-shape.json",
+            "negative:test-vectors/registration/negative/neg-root-not-anchored.json",
+            "registered:CHK-007"
           ],
           "negativeFixtures": [
-            "negative:test-vectors/registration/negative/neg-trust-by-hint.json"
+            "negative:test-vectors/registration/negative/neg-key-event-shape.json",
+            "negative:test-vectors/registration/negative/neg-root-not-anchored.json",
+            "registered:CHK-007"
           ],
-          "violation": "using producer hints as authority",
-          "failsBecause": "The negative fixture violates this constraint and check_registration.py requires its exact fixture.expect rejection code."
+          "violation": "violating any executable constituent of the following enumerated checks",
+          "failsBecause": "The following subrequirement tests exercise each executable constituent, rather than relying on one representative negative. Deployment-only test-root policy still requires production-policy inspection."
         }
       ]
     },
@@ -1617,10 +1767,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:test-vectors/registration/check_registration.py:base64"
+            "registered:CHK-007"
           ],
           "negativeFixtures": [
-            "checker:test-vectors/registration/check_registration.py:base64"
+            "registered:CHK-007"
           ],
           "violation": "rejecting a permitted base64 transport spelling",
           "failsBecause": "The promoted bundle-url-safe fixture and adapter URL-safe accept fixture require acceptance of URL-safe base64; a changed outcome fails the checker."
@@ -1674,10 +1824,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:tools/check_release_boundaries.py:unlisted-root"
+            "registered:CHK-029"
           ],
           "negativeFixtures": [
-            "checker:tools/check_release_boundaries.py:unlisted-root"
+            "registered:CHK-029"
           ],
           "violation": "counting evidence from an unlisted root",
           "failsBecause": "The cited self-test introduces counting evidence from an unlisted root; the promoted checker rejects the changed output."
@@ -1693,13 +1843,27 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:tools/check_release_boundaries.py:unlisted-root"
+            "registered:CHK-029",
+            "registered:CHK-030",
+            "registered:CHK-031",
+            "negative:test-vectors/registration/negative/neg-pending-counted.json",
+            "negative:test-vectors/registration/negative/neg-tsa-signature-invalid.json",
+            "negative:test-vectors/registration/negative/neg-wrong-policy-accepted.json",
+            "registered:CHK-032",
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_production_placeholder_refusal"
           ],
           "negativeFixtures": [
-            "checker:tools/check_release_boundaries.py:unlisted-root"
+            "registered:CHK-029",
+            "registered:CHK-030",
+            "registered:CHK-031",
+            "negative:test-vectors/registration/negative/neg-pending-counted.json",
+            "negative:test-vectors/registration/negative/neg-tsa-signature-invalid.json",
+            "negative:test-vectors/registration/negative/neg-wrong-policy-accepted.json",
+            "registered:CHK-032",
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_production_placeholder_refusal"
           ],
-          "violation": "counting evidence from an unlisted root",
-          "failsBecause": "The cited self-test introduces counting evidence from an unlisted root; the promoted checker rejects the changed output."
+          "violation": "violating any executable constituent of the following enumerated checks",
+          "failsBecause": "The following subrequirement tests exercise each executable constituent, rather than relying on one representative negative. Deployment-only test-root policy still requires production-policy inspection."
         }
       ]
     },
@@ -1712,10 +1876,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:tools/check_release_boundaries.py:unlisted-root"
+            "registered:CHK-029"
           ],
           "negativeFixtures": [
-            "checker:tools/check_release_boundaries.py:unlisted-root"
+            "registered:CHK-029"
           ],
           "violation": "counting evidence from an unlisted root",
           "failsBecause": "The cited self-test introduces counting evidence from an unlisted root; the promoted checker rejects the changed output."
@@ -1744,10 +1908,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:tools/check_release_boundaries.py:unpinned-ots"
+            "registered:CHK-030"
           ],
           "negativeFixtures": [
-            "checker:tools/check_release_boundaries.py:unpinned-ots"
+            "registered:CHK-030"
           ],
           "violation": "accepting OTS without a pinned checkpoint",
           "failsBecause": "The cited self-test introduces accepting OTS without a pinned checkpoint; the promoted checker rejects the changed output."
@@ -1755,10 +1919,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:tools/check_release_boundaries.py:insufficient-confirmations"
+            "registered:CHK-031"
           ],
           "negativeFixtures": [
-            "checker:tools/check_release_boundaries.py:insufficient-confirmations"
+            "registered:CHK-031"
           ],
           "violation": "accepting evidence at the checkpoint with insufficient confirmations",
           "failsBecause": "The cited self-test introduces accepting evidence at the checkpoint with insufficient confirmations; the promoted checker rejects the changed output."
@@ -1807,10 +1971,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:tools/check_release_boundaries.py:verification-result-real-ecdsa"
+            "registered:CHK-032"
           ],
           "negativeFixtures": [
-            "checker:tools/check_release_boundaries.py:verification-result-real-ecdsa"
+            "registered:CHK-032"
           ],
           "violation": "reporting an unsupported algorithm as valid",
           "failsBecause": "The cited self-test introduces reporting an unsupported algorithm as valid; the promoted checker rejects the changed output."
@@ -1824,9 +1988,15 @@
       "sentence": "5. **Placeholder evidence:** Any evidence with `placeholder: true` or `PLACEHOLDER` token prefix MUST be refused in production verification.",
       "clauses": [
         {
-          "kind": "untestable",
-          "reason": "Production rejection of placeholder evidence is a deployment-mode boundary: fixtures deliberately permit test-only evidence. Inspect production mode selection and policy.",
-          "spotCheck": true
+          "kind": "testable",
+          "failsOn": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_production_placeholder_refusal"
+          ],
+          "negativeFixtures": [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.test_production_placeholder_refusal"
+          ],
+          "violation": "counting placeholder time in non-simulated verification",
+          "failsBecause": "The actual policy outcome helper returns placeholder with no bound in production; only explicitly simulated mode returns placeholder-assumed-valid. The test rejects a valid/time-bearing production outcome."
         }
       ]
     },
@@ -1837,8 +2007,16 @@
       "sentence": "- **Offline-first execution:** Verification MUST execute with zero network access against locally retained material: the bundle, pinned `rootCertificate` files, token-embedded intermediate certificates, retained `revocationData`, and the verifier's local Bitcoin header file + `checkpoint`.",
       "clauses": [
         {
-          "kind": "untestable",
-          "reason": "Zero network access requires an execution sandbox or runtime tracing; recorded fixture bytes cannot show whether a verifier contacted a network.",
+          "kind": "implementation-test",
+          "tests": [
+            "impl:5b9a881:scripts/offline:Only then is COMMAND run inside the same confinement",
+            "impl:5b9a881:web/test_wasm.mjs:verifyRegistration"
+          ],
+          "negativeCases": [
+            "The offline guard proves denied loopback/public connections before executing the verifier test; if proof fails it refuses execution.",
+            "WASM verifier tests execute with in-memory retained auxiliary files, not live evidence retrieval."
+          ],
+          "reason": "Executable zero-network requirement: pinned network-denial harness plus verifier invocation. The recorded WEB.2 run was OS-confined; a new full offline demo remains M5.3 work, not claimed here.",
           "spotCheck": true
         }
       ]
@@ -1852,10 +2030,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:tools/check_release_boundaries.py:verification-result-no-revocation-data"
+            "registered:CHK-033"
           ],
           "negativeFixtures": [
-            "checker:tools/check_release_boundaries.py:verification-result-no-revocation-data"
+            "registered:CHK-033"
           ],
           "violation": "counting a token without revocation data",
           "failsBecause": "The cited self-test introduces counting a token without revocation data; the promoted checker rejects the changed output."
@@ -1863,10 +2041,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:tools/check_release_boundaries.py:verification-result-no-revocation-data"
+            "registered:CHK-033"
           ],
           "negativeFixtures": [
-            "checker:tools/check_release_boundaries.py:verification-result-no-revocation-data"
+            "registered:CHK-033"
           ],
           "violation": "counting a token without revocation data",
           "failsBecause": "The cited self-test introduces counting a token without revocation data; the promoted checker rejects the changed output."
@@ -1874,10 +2052,10 @@
         {
           "kind": "testable",
           "failsOn": [
-            "checker:tools/check_release_boundaries.py:verification-result-no-revocation-data"
+            "registered:CHK-033"
           ],
           "negativeFixtures": [
-            "checker:tools/check_release_boundaries.py:verification-result-no-revocation-data"
+            "registered:CHK-033"
           ],
           "violation": "counting a token without revocation data",
           "failsBecause": "The cited self-test introduces counting a token without revocation data; the promoted checker rejects the changed output."

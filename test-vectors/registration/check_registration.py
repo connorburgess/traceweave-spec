@@ -27,6 +27,7 @@ import binascii
 import copy
 import hashlib
 import importlib.util
+import io
 import json
 import re
 import sys
@@ -432,7 +433,18 @@ def possession_digest(nonce_hex, artifact):
     nonce = bytes.fromhex(nonce_hex)
     if len(nonce) != 32:
         raise ValueError("Nonce must be exactly 32 bytes")
-    return sha(POSSESSION_DOMAIN + nonce + len(artifact).to_bytes(8, "big") + artifact)
+    return artifact_sha256(io.BytesIO(artifact), POSSESSION_DOMAIN + nonce + len(artifact).to_bytes(8, "big"))
+
+
+MAX_CATALOGUE_BYTES = 1048576  # M4 local harness policy, not a universal wire maximum
+
+
+def artifact_sha256(stream, prefix=b""):
+    """Hash retained artifact bytes in bounded chunks (M5 resource probe)."""
+    digest = hashlib.sha256(prefix)
+    while chunk := stream.read(65536):
+        digest.update(chunk)
+    return digest.hexdigest()
 
 
 def catalogue_commitment(nonce, catalogue):
@@ -440,6 +452,8 @@ def catalogue_commitment(nonce, catalogue):
         raise ValueError("Nonce must be exactly 32 bytes")
     if not isinstance(catalogue, bytes):
         raise TypeError("Catalogue must be bytes")
+    if len(catalogue) > MAX_CATALOGUE_BYTES:
+        raise ValueError("catalogue size exceeds local verification cap")
     return sha(CATALOGUE_DOMAIN + nonce + len(catalogue).to_bytes(8, "big") + catalogue)
 
 
@@ -559,7 +573,7 @@ def check_statement(st, artifacts, out):
         elif "aiUse" in claims:
             check_ai_use(claims["aiUse"], out)
     for i, s in enumerate(subjects):
-        if artifacts.get(i) is not None and sha(artifacts[i]) != s["digest"]["sha256"]:
+        if artifacts.get(i) is not None and artifact_sha256(io.BytesIO(artifacts[i])) != s["digest"]["sha256"]:
             out.add("subject-mismatch")
 
 
@@ -1146,7 +1160,7 @@ def expected_result(ctx, artifacts, policy, simulated, bundle_sha, event_paths, 
     return {
         "resultVersion": RESULT_VERSION,
         "simulated": simulated,
-        "inputs": {"bundleSha256": bundle_sha, "artifacts": [{"subjectIndex": i, "sha256": sha(a)} for i, a in sorted(artifacts.items())],
+        "inputs": {"bundleSha256": bundle_sha, "artifacts": [{"subjectIndex": i, "sha256": artifact_sha256(io.BytesIO(a))} for i, a in sorted(artifacts.items())],
                    "keyEvents": sorted(sha((HERE / p).read_bytes()) for p in event_paths)},
         "policy": policy,
         "outcomes": {
@@ -1172,7 +1186,16 @@ POLICY_KEYS = {"quorum", "timeRoots", "trustedKeys", "recoveryKeys", "revocation
 ROOT_KEYS = {"anchorSha256", "kind", "independenceGroup", "accuracySeconds", "policyOids", "rootCertificate", "headerFile", "minConfirmations", "checkpoint"}
 
 
-def check_policy(policy, out):
+def check_policy(policy, out, simulated=False):
+    def valid_time(value):
+        if not isinstance(value, str) or not TIME.fullmatch(value):
+            return False
+        try:
+            parse_time(value)
+            return True
+        except ValueError:
+            return False
+
     if not isinstance(policy, dict):
         out.add("result-mismatch")
         return False
@@ -1181,11 +1204,11 @@ def check_policy(policy, out):
         return False
     lb = policy.get("compromiseLookbackSeconds")
     if set(policy) != POLICY_KEYS or not isinstance(policy["quorum"], int) or isinstance(policy["quorum"], bool) or policy["quorum"] < 1 \
-            or not all(HEX64.match(str(k)) for k in policy["trustedKeys"]) or not TIME.match(str(policy["verificationTime"])) \
+            or not all(HEX64.match(str(k)) for k in policy["trustedKeys"]) or not valid_time(policy["verificationTime"]) \
             or not isinstance(lb, int) or isinstance(lb, bool) or lb < 0 \
             or not isinstance(policy["recoveryKeys"], list) \
             or any(not isinstance(rk, dict) or set(rk) != {"keySha256", "recovers", "notBefore"} or not HEX64.match(str(rk["keySha256"]))
-                   or not HEX64.match(str(rk["recovers"])) or not TIME.match(str(rk["notBefore"])) for rk in policy["recoveryKeys"]):
+                   or not HEX64.match(str(rk["recovers"])) or not valid_time(rk["notBefore"]) for rk in policy["recoveryKeys"]):
         out.add("result-mismatch")
         return False
     for r in policy["timeRoots"]:
@@ -1195,7 +1218,9 @@ def check_policy(policy, out):
         if not HEX64.match(str(r["anchorSha256"])):
             out.add("root-not-anchored")
             return False
-        if r["kind"] == "bitcoin-proof-of-work" and "headerFile" in r:
+        # Historical explicitly simulated fixtures omit real chain material;
+        # a production policy must validate checkpoint/confirmations even without headerFile.
+        if r["kind"] == "bitcoin-proof-of-work" and (not simulated or "headerFile" in r):
             mc, cp = r.get("minConfirmations"), r.get("checkpoint")
             if not isinstance(mc, int) or isinstance(mc, bool) or mc < 1 or not isinstance(cp, dict) or set(cp) != {"height", "headerSha256"} \
                     or not isinstance(cp["height"], int) or isinstance(cp["height"], bool) or cp["height"] < 0 or not HEX64.match(str(cp["headerSha256"])):
@@ -1219,7 +1244,7 @@ def check_result(res, meta, out):
             out.add("authorship-claim")
     if not isinstance(res, dict) or res.get("notShown") != NOT_SHOWN:
         out.add("notice-missing")
-    if not check_policy(res.get("policy"), out):
+    if not check_policy(res.get("policy"), out, simulated=res.get("simulated") is True):
         return
     bundle_path = HERE / meta["bundle"]
     bundle = strict_loads(bundle_path.read_text(encoding="utf-8"))["object"]
@@ -1298,6 +1323,9 @@ def check_link(link, meta, out):
             out.add("fixture-shape")
             return
         catalogue = load_source(opening["catalogue"])
+        if len(catalogue) > MAX_CATALOGUE_BYTES:
+            out.add("catalogue-does-not-open")
+            return
         nonce_hex = opening["nonceHex"]
         if not isinstance(nonce_hex, str) or not HEX64.fullmatch(nonce_hex) or nonce_hex == "0" * 64:
             out.add("nonce-invalid")

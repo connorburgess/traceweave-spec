@@ -1,33 +1,36 @@
 # README claim map — TW-07 / M5.2
 
-Status: author mapping for independent review; exclusion approval is **pending**. No M5 gate is marked met. The machine-readable [map](readme-claim-map.json) stores every exact claim, its rationale and verbatim evidence quotations. [Scope/navigation audit](readme-scope-review.md) is explicitly an author audit, not an independent implementation review.
+Status: revised author mapping responding to [independent F5](../../research/reviews/m5-readiness-7dccedd-review.md#f5--medium-picture-exclusions-remove-substantive-accessible-claim-sentences); new non-author approval remains **pending**. No M5 gate is marked met. The [machine-readable map](readme-claim-map.json) stores exact claims, rationales and evidence quotations. The [scope/navigation audit](readme-scope-review.md) is an author audit, not independent runtime evidence.
 
 ## Extraction and exclusions
 
-[tools/check_readme_claims.py](../../tools/check_readme_claims.py) joins prose paragraphs, ignores unordered/numbered list formatting prefixes, protects inline code and Markdown link destinations from sentence splitting, and splits at terminal `.`, `!` or `?` followed by whitespace. `Figure 3.` is a caption label, not a sentence terminator. Fragments without terminal punctuation still count; each table data row is one compound claim, including every cell. Blank lines are formatting. Every other nonexcluded word is retained.
+[tools/check_readme_claims.py](../../tools/check_readme_claims.py) joins paragraphs, ignores list formatting prefixes, protects inline code/link destinations and splits prose on terminal punctuation followed by whitespace. `Figure 3.` remains a caption label. Fragments count; each table data row is a compound claim including every cell. The HTML parser separately extracts **every complete picture img alt description as a compound claim**, with entities decoded. Alt content is mapped before inert picture markup is excluded. Blank lines are formatting.
 
-Exactly five exclusions are allowed, each recorded line-for-line in JSON:
+Only these five categories are excluded; each source line is inventoried in JSON. Four picture markup lines also supply separately mapped alt claims, so their descriptive content is not excluded.
 
-| Category | Definition | Excluded source lines |
+| Category | Rule | Source lines |
 | --- | --- | --- |
-| heading | ATX heading lines only (not bold standalone labels). | 14 |
-| link-only | Whole lines containing only Markdown links and navigation separators/list markers. Link-bearing prose is included. | 8 |
-| code-block | Opening/closing fenced-code delimiters and their contents. Commands are illustrative; surrounding dependency/offline claims remain mapped. | 7 |
-| picture | Complete HTML picture elements, including source/img/alt markup. Captions remain mapped. Reviewer must explicitly approve exclusion of alt-text descriptions. | 20 |
-| table-header | Column-name and alignment/separator rows only; all data rows remain mapped. | 10 |
+| heading | ATX headings only. | 14 |
+| link-only | Whole navigation lines consisting only of links/separators/list markers; link-bearing prose remains mapped. | 8 |
+| code-block | Fenced illustrative commands and delimiters; surrounding dependency and offline claims remain mapped. | 7 |
+| picture | Inert picture/source/img markup only; all accessible alt descriptions are mapped separately. | 20 |
+| table-header | Column-name and separator rows; every data row remains mapped. | 10 |
 
-Current inventory: **73 mapped claim units, 0 unmapped; 59 excluded source lines**. Of the mapped units, 31 are table data rows; 42 are prose sentences or fragments. Exclusions are counted as source lines because headings, markup and code are not claim sentences. The JSON records exact excluded text and line numbers so an exclusion change cannot pass silently.
+Inventory: **77 mapped units, 0 unmapped**: 42 prose sentences/fragments, 31 table data rows, 4 complete alt descriptions. The scanner excludes formatting/markup on **59 source lines** (55 whole-line exclusions and 4 markup lines whose alt content is mapped). Exclusions are source-line spans rather than claim-sentence counts.
 
-## Reviewer procedure
+## Independent approval and re-review
 
-Run `python tools/check_readme_claims.py` (also invoked by `tools/validate.py`). A missing/new/edited/reordered claim, changed exclusion inventory/rules, missing evidence, stale quotation or duplicate ID fails. The checker validates coverage and evidence locators; the non-author reviewer judges whether evidence supports every conjunct and approves or rejects the exclusion list. Recorded implementation parity is not a new implementation run. Check negative results, conditional scope and unmeasured boundaries explicitly. Record reviewer, revision, exclusions disposition, sampled claim IDs and findings in a separate review; only that reviewer may close M5.2.
+The non-author [review](../../research/reviews/m5-readiness-7dccedd-review.md) approved the existing 14 headings, 8 link-only lines, 7 fenced-code lines and 10 table header/separator lines for `7dccedd`, and rejected alt exclusion. This approval does not cover future substantive headings, commands or table headers. The revision maps alt text, keeps the other categories minimal, and requests approval of the new exact inventory.
+
+Run `python tools/check_readme_claims.py` (also part of `tools/validate.py`). Missing/edited/reordered claims, exclusion drift, missing evidence, stale quotes and duplicate IDs fail. The regression test repeats the original alt-text bypass while updating only the excluded inventory; it now fails. The reviewer must still judge every assertion against the substantive source section, not merely quotation existence, and record revision, reviewer and dispositions. Only the reviewer may close M5.2.
 
 ## Complete claim index
 
-Exact quotations and per-entry rationale are in the JSON under each ID. Sources below link directly to repository evidence.
+The JSON preserves exact README destinations and quotations. Local links in this readable index are rebased for its directory.
 
-| ID | Claim sentence or compound row (links rebased) | Evidence |
+| ID | Claim sentence, table row or complete alt description | Evidence |
 | --- | --- | --- |
+| README-ALT-001 | Traceweave — Open specification for local-first content fingerprinting and verifiable cryptographic provenance | [initial-draft-review.md](../../docs/reviews/initial-draft-review.md); [code-embedding-decision.md](../../docs/decisions/code-embedding-decision.md) |
 | README-001 | Traceweave is an open, non-commercial specification for recognising your own work when it turns up somewhere else, and for producing evidence of the match that anyone can re-run and check. | [initial-draft-review.md](../../docs/reviews/initial-draft-review.md); [readme-scope-review.md](../../docs/release/readme-scope-review.md) |
 | README-002 | One shared evidence format sits underneath, with versioned extraction profiles for each medium (source code, writing, and planned image/audio profiles). | [initial-draft-review.md](../../docs/reviews/initial-draft-review.md); [readme-scope-review.md](../../docs/release/readme-scope-review.md) |
 | README-003 | The default comparison workflow keeps content on your machine and compares fingerprints locally. | [initial-draft-review.md](../../docs/reviews/initial-draft-review.md); [timestamp-adapter-decision.md](../../docs/decisions/timestamp-adapter-decision.md) |
@@ -45,6 +48,7 @@ Exact quotations and per-entry rationale are in the JSON under each ID. Sources 
 | README-015 | C2PA 2.5 mapping is a draft proposal with fixtures; no C2PA compatibility is claimed. | [media-c2pa-av-review.md](../../research/reviews/media-c2pa-av-review.md) |
 | README-016 | The specification and algorithms are public, while owners keep their keys, reference catalogues, and investigation records private. | [initial-draft-review.md](../../docs/reviews/initial-draft-review.md); [code-embedding-decision.md](../../docs/decisions/code-embedding-decision.md) |
 | README-017 | The default workflow runs strictly offline on your own machine and does not require publishing an identity, fingerprint vector, or signing event. | [timestamp-adapter-decision.md](../../docs/decisions/timestamp-adapter-decision.md) |
+| README-ALT-002 | Diagram: four local steps run inside a local boundary on your machine — 01 Your Content, 02 Extract fingerprints with pinned configSha256, 03 Catalogue private hash index, and 04 Local Match with containment, similarity, and boilerplate suppression. An arrow leaves the boundary to 05 Reproducible Evidence Report containing a canonical bodySha256 and exact UTF-8 spans for offline re-verification. | [core-gates-m1-m2-review.md](../../research/reviews/core-gates-m1-m2-review.md); [core-gates-m1-m2-review.md](../../research/reviews/core-gates-m1-m2-review.md); [initial-draft-review.md](../../docs/reviews/initial-draft-review.md) |
 | README-018 | **Extract locally:** A versioned profile tokenizes source bytes into deterministic k-gram fingerprints and original UTF-8 byte spans, pinned by `configSha256`. | [core-gates-m1-m2-review.md](../../research/reviews/core-gates-m1-m2-review.md); [core-gates-m1-m2-review.md](../../research/reviews/core-gates-m1-m2-review.md) |
 | README-019 | **Index privately:** Fingerprints are stored in a local catalogue outside your working tree, with optional salted commitments so you can commit to a catalogue without revealing its contents. | [initial-draft-review.md](../../docs/reviews/initial-draft-review.md); [promotion-m4-py-review.md](../../research/reviews/promotion-m4-py-review.md) |
 | README-020 | **Compare deterministically:** Candidate files are matched against the catalogue with fragment containment and whole-file similarity reported as separate fields, explicit boilerplate suppression, and a distinct-hash minimum floor. | [core-gates-m1-m2-review.md](../../research/reviews/core-gates-m1-m2-review.md); [initial-draft-review.md](../../docs/reviews/initial-draft-review.md) |
@@ -52,8 +56,10 @@ Exact quotations and per-entry rationale are in the JSON under each ID. Sources 
 | README-022 | Origin and dependency notes live in a separate review-packet record, never inside the comparison report. | [core-gates-m1-m2-review.md](../../research/reviews/core-gates-m1-m2-review.md); [core-gates-m1-m2-review.md](../../research/reviews/core-gates-m1-m2-review.md) |
 | README-023 | Traceweave separates three distinct questions: **which exact artifact** a record describes, **whether another artifact contains similar material**, and **what evidence supports that relationship**. | [initial-draft-review.md](../../docs/reviews/initial-draft-review.md) |
 | README-024 | Conflating similarity with provenance causes false claims, so the specification keeps them on two separate tracks: | [initial-draft-review.md](../../docs/reviews/initial-draft-review.md) |
+| README-ALT-003 | Diagram comparing two tracks. Track A (Candidate Similarity, non-authoritative): deterministic profile extraction, local catalogue and boilerplate suppression, localized byte spans and review packets, and proposed embedded-mark research. Track B (Cryptographic Registration, draft-5): offline-first DSSE/in-toto statements and tw1- references, salted private catalogue commitments, verifier-local trust policy, and optional RFC 3161 or OpenTimestamps evidence. A bottom bar states that neither track proves ownership, infringement, or model training. | [initial-draft-review.md](../../docs/reviews/initial-draft-review.md); [timestamp-adapter-decision.md](../../docs/decisions/timestamp-adapter-decision.md); [code-embedding-decision.md](../../docs/decisions/code-embedding-decision.md) |
 | README-025 | Alongside extracted fingerprint matching and signed registration records, a research track explores embedding a mark into content before distribution and checking later content for that mark. | [code-embedding-decision.md](../../docs/decisions/code-embedding-decision.md); [experiment-checkpoint.md](../../research/experiment-checkpoint.md) |
 | README-026 | No marking method is standardized yet, and synthetic image-mark results show marks can serve at most as a **finding aid**—never as proof of origin. | [media-c2pa-av-review.md](../../research/reviews/media-c2pa-av-review.md); [image-mark-protocol-review.md](../../research/reviews/image-mark-protocol-review.md) |
+| README-ALT-004 | Two-stage proposed embedded-mark workflow: Stage A prepares for distribution (Original content plus mark and embedding configuration feed Embed mark to produce Marked content with quality validation); Stage B examines possible reuse (Candidate content plus profile-required verification material feed Detect mark to produce Evidence for review, which may return insufficient evidence). | [experiment-checkpoint.md](../../research/experiment-checkpoint.md); [media-c2pa-av-review.md](../../research/reviews/media-c2pa-av-review.md); [initial-draft-review.md](../../docs/reviews/initial-draft-review.md) |
 | README-027 | *Figure 3. Proposed embedded-mark workflow. | [readme-scope-review.md](../../docs/release/readme-scope-review.md) |
 | README-028 | Detection may return insufficient evidence. | [readme-scope-review.md](../../docs/release/readme-scope-review.md) |
 | README-029 | Extracted fingerprint matching and provenance verification are separate supporting processes; detecting a mark does not establish ownership.* | [initial-draft-review.md](../../docs/reviews/initial-draft-review.md); [readme-scope-review.md](../../docs/release/readme-scope-review.md) |
@@ -90,7 +96,7 @@ Exact quotations and per-entry rationale are in the JSON under each ID. Sources 
 | README-060 | \| [Roadmap](../../ROADMAP.md) \| Gate definitions, progress counts, and owner decisions \| | [readme-scope-review.md](../../docs/release/readme-scope-review.md) |
 | README-061 | \| [Draft review](../../docs/reviews/initial-draft-review.md) \| Corrections to the initial design \| | [initial-draft-review.md](../../docs/reviews/initial-draft-review.md) |
 | README-062 | Python 3.11 or newer is required. | [readme-scope-review.md](../../docs/release/readme-scope-review.md) |
-| README-063 | All checks run strictly offline with zero network requests: | [readme-scope-review.md](../../docs/release/readme-scope-review.md) |
+| README-063 | After fetching the pinned development dependencies below, the validation commands run strictly offline with zero network requests: | [readme-scope-review.md](../../docs/release/readme-scope-review.md) |
 | README-064 | The validator checks JSON Schema structure, synthetic examples, exact fixture digests, commitment openings, DSSE framing vectors, promoted schemas, all promoted vector checkers (extraction, matching, TypeScript, Python, text, registration, in-toto adapter, image-mark finding aid, C2PA fixtures, and the requirement map), and local Markdown links. | [readme-scope-review.md](../../docs/release/readme-scope-review.md) |
 | README-065 | These fixture checks do **not** authenticate a production signer, establish trust in a production timestamp authority, measure clone detection, or establish a false-positive rate. | [readme-scope-review.md](../../docs/release/readme-scope-review.md) |
 | README-066 | Traceweave is open and non-commercial. | [readme-scope-review.md](../../docs/release/readme-scope-review.md) |

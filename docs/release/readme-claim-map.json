@@ -1,5 +1,5 @@
 {
-  "description": "TW-07 complete sentence and fragment inventory. Table data rows are conservatively one compound claim each. Author mapping only; non-author exclusion approval remains pending.",
+  "description": "TW-07 complete prose, fragment, table-row and accessible alt-description inventory. Alt text is never excluded. Non-author approval of four categories is recorded in the 7dccedd review; new content requires re-review.",
   "exclusionRules": [
     "heading",
     "link-only",
@@ -307,6 +307,23 @@
   ],
   "claims": [
     {
+      "id": "README-ALT-001",
+      "sentence": "Traceweave — Open specification for local-first content fingerprinting and verifiable cryptographic provenance",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "Keep the layered concept: shared evidence records, exact digests, optional standard signing, content-specific fingerprint profiles, and explicit abstention. Replace the supplied 1.0 draft with a small 0.1 design scaffold. Start locally with a code baseline; leave a resolver, broader modality algorithms, production skill, and claims of transformation resilience gated on evidence.\n"
+        },
+        {
+          "kind": "decision",
+          "path": "docs/decisions/code-embedding-decision.md",
+          "quote": "1. **Deterministic local fingerprinting and comparison** (`spec/extraction.md`, `spec/catalogue-report.md`, frozen Stage-1 profiles `go-tokens`, `rs-tokens`, `ts-tokens`, `py-tokens`, and `text-plain`).\n2. **Offline-first cryptographic registration and verification** (`spec/registration-record.md` `traceweave-registration-draft-5`, `spec/trust-policy.md`, `spec/attestations.md`)."
+        }
+      ],
+      "rationale": "Complete accessible diagram description is a compound claim; each assertion is reviewed against the cited local-workflow, comparison, policy and research boundary evidence. No independent runtime conformance is inferred."
+    },
+    {
       "id": "README-001",
       "sentence": "Traceweave is an open, non-commercial specification for recognising your own work when it turns up somewhere else, and for producing evidence of the match that anyone can re-run and check.",
       "evidence": [
@@ -606,6 +623,28 @@
       "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
     },
     {
+      "id": "README-ALT-002",
+      "sentence": "Diagram: four local steps run inside a local boundary on your machine — 01 Your Content, 02 Extract fingerprints with pinned configSha256, 03 Catalogue private hash index, and 04 Local Match with containment, similarity, and boilerplate suppression. An arrow leaves the boundary to 05 Reproducible Evidence Report containing a canonical bodySha256 and exact UTF-8 spans for offline re-verification.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "research/reviews/core-gates-m1-m2-review.md",
+          "quote": "- **My comparator.** I wrote it from §3.3, §4 and §5.3–§6.5 only. On the 7 new vectors, all **7 bodies and every catalogue digest match** byte for byte: `vendor-suppressed`, `vendor-unsuppressed`, `go-formatted-fragment-in-host`, `go-non-ascii-shift-2`, `py-empty-span-self`, `py-equal-starts` and `rv-py-empty-span-region`. It also matches all 56 compared-body vectors. The 27 rejected bodies are outside it.\n- **Guesses** (small): catalogue bytes are the JCS of the canonical object, and ambiguity is judged by shared seed positions, not span overlap (§5.7 says so).\n- **My record validators**, also from the text: 4/4 valid packets accepted and 55/55 invalid rejected; 4/4 retrievals and 7/7 invalid candidate-generation records behave as specified.\n- **Guesses for the records:** commit ids are 40 lowercase hex characters; `selectedIdsSha256` is taken over the candidate catalogue's ids. I could not rebuild the subset retrieval's body: it is not in `matching.json` and needs §3.8 building from records."
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/core-gates-m1-m2-review.md",
+          "quote": "- **What the design does.** Regions stay visible (`common-only`, with counts) and never count as evidence, and `vendor-unsuppressed` shows the alternative. The review-packet link works: the `common-only` vendored region is listed, so its key can be cited (`packet-vendored-common-only`).\n- **Hidden reuse.** Suppression is per hash, for *every* pair, so it can hide real reuse. Code copied from the vendored library into a project's **own** files also becomes `common-only`.\n- **Changed outcomes for unrelated pairs.** Any pair sharing an idiom with the vendor files loses evidence. The vendor and boilerplate lists are one catalogue per comparison (§5.2), so the report cannot say which suppressed hashes came from vendor files.\n- **Fix:** state these effects in §5.2 and §8. Recommend reporting suppressed regions per suppression-artifact class, or allowing a vendor-unsuppressed rerun as a standard companion.\n- **M2.3 is not met by the spec alone.** It requires each control class \"in the report with its candidate count and denominator\". The vendor class has vectors, but the report has no class field; the counts and denominators are an implementation report (owner I), which must now add the vendor class."
+        },
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "1. **Private-by-default conflicts with required public signing and resolution (§§2.4, 3, 8).** Mandatory Rekor publication, full returned feature vectors, and in-repository key storage can expose participation and private evidence. Make public disclosure optional, keep catalogues outside the source tree, and defer network resolution until its leakage model is specified.\n2. **Prefix bucketing is not a demonstrated k-anonymity guarantee (§3.2).** A 16–24-bit prefix does not guarantee a minimum anonymity set. Multiple prefixes, rare features and adaptive queries can identify a target. Shared-key HMAC does not make this zero knowledge; authorized consortium participants can compute dictionary candidates. Remove the guarantee and benchmark leakage before proposing a resolver.\n3. **The false-positive formula and numerical guarantees are unsupported (§6).** Normalized token dependencies, same-spec code, multiple comparisons and corpus selection invalidate the proposed independent-token shortcut. The rule of three is conditional on sampling assumptions, not a license to tune against 300,000 files and declare a universal bound. Replace with held-out whole-pipeline evaluation.\n4. **Wire formats are not interoperable as written (§2).** The in-toto v1 type is `https://in-toto.io/Statement/v1`, not the draft URN. DSSE PAE requires explicit space separators and decimal byte lengths. An RFC 3161 token is signed verification material, not an ISO date string. See [in-toto](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md), [DSSE](https://github.com/dsse-lf/dsse/blob/master/protocol.md), and [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161).\n5. **Signatures are used to overstate ancestry and replay resistance (§5).** An attacker can sign copied public material or transplant marked fragments. A valid signature authenticates the statement under a trust policy; it does not establish authorship. Preserve exact verification, similarity evidence and rights review as separate results.\n6. **Commit cutoffs overstate rights (§7).** Older permissive expression can persist after the transition, and permissive redistribution has conditions. Post-transition code is not automatically proprietary original expression. A permitted copy is still a technical reuse match. Use region-level histories and actual licenses. [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)."
+        }
+      ],
+      "rationale": "Complete accessible diagram description is a compound claim; each assertion is reviewed against the cited local-workflow, comparison, policy and research boundary evidence. No independent runtime conformance is inferred."
+    },
+    {
       "id": "README-018",
       "sentence": "**Extract locally:** A versioned profile tokenizes source bytes into deterministic k-gram fingerprints and original UTF-8 byte spans, pinned by `configSha256`.",
       "evidence": [
@@ -710,6 +749,28 @@
       "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
     },
     {
+      "id": "README-ALT-003",
+      "sentence": "Diagram comparing two tracks. Track A (Candidate Similarity, non-authoritative): deterministic profile extraction, local catalogue and boilerplate suppression, localized byte spans and review packets, and proposed embedded-mark research. Track B (Cryptographic Registration, draft-5): offline-first DSSE/in-toto statements and tw1- references, salted private catalogue commitments, verifier-local trust policy, and optional RFC 3161 or OpenTimestamps evidence. A bottom bar states that neither track proves ownership, infringement, or model training.",
+      "evidence": [
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "1. **Private-by-default conflicts with required public signing and resolution (§§2.4, 3, 8).** Mandatory Rekor publication, full returned feature vectors, and in-repository key storage can expose participation and private evidence. Make public disclosure optional, keep catalogues outside the source tree, and defer network resolution until its leakage model is specified.\n2. **Prefix bucketing is not a demonstrated k-anonymity guarantee (§3.2).** A 16–24-bit prefix does not guarantee a minimum anonymity set. Multiple prefixes, rare features and adaptive queries can identify a target. Shared-key HMAC does not make this zero knowledge; authorized consortium participants can compute dictionary candidates. Remove the guarantee and benchmark leakage before proposing a resolver.\n3. **The false-positive formula and numerical guarantees are unsupported (§6).** Normalized token dependencies, same-spec code, multiple comparisons and corpus selection invalidate the proposed independent-token shortcut. The rule of three is conditional on sampling assumptions, not a license to tune against 300,000 files and declare a universal bound. Replace with held-out whole-pipeline evaluation.\n4. **Wire formats are not interoperable as written (§2).** The in-toto v1 type is `https://in-toto.io/Statement/v1`, not the draft URN. DSSE PAE requires explicit space separators and decimal byte lengths. An RFC 3161 token is signed verification material, not an ISO date string. See [in-toto](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md), [DSSE](https://github.com/dsse-lf/dsse/blob/master/protocol.md), and [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161).\n5. **Signatures are used to overstate ancestry and replay resistance (§5).** An attacker can sign copied public material or transplant marked fragments. A valid signature authenticates the statement under a trust policy; it does not establish authorship. Preserve exact verification, similarity evidence and rights review as separate results.\n6. **Commit cutoffs overstate rights (§7).** Older permissive expression can persist after the transition, and permissive redistribution has conditions. Post-transition code is not automatically proprietary original expression. A permitted copy is still a technical reuse match. Use region-level histories and actual licenses. [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)."
+        },
+        {
+          "kind": "decision",
+          "path": "docs/decisions/timestamp-adapter-decision.md",
+          "quote": "2. **Offline-first verification of RFC 3161 and OpenTimestamps against local retained material is supported.**\n   - **RFC 3161 (`rfc3161`):** Verifiers evaluate RFC 3161 `TimeStampResp` tokens offline against retained DER root certificates, token-carried intermediate chains (RFC 5280 path validation at `genTime`), and retained CRL/OCSP `revocationData` (with explicit `revocationDataAsOf` reporting and RFC 4998-style token renewal support).\n   - **OpenTimestamps (`opentimestamps`):** Verifiers evaluate upgraded OpenTimestamps proofs offline against the verifier's own retained Bitcoin block header source and a verifier-pinned `checkpoint` (`minConfirmations >= 1`), deriving `notAfter = blockTime + 7200s` under the stated honest-majority assumption. Pending proofs (`PendingAttestation`) receive outcome `pending` and never contribute a time bound.\n   - **Recommended multi-source baseline:** Two unrelated RFC 3161 TSAs plus OpenTimestamps (`quorum = 2` over verifier-assigned `independenceGroup` labels), so one retroactive TSA revocation still preserves a quorum. Both `notAfterAnyRoot` and `notAfterQuorum` are always reported separately per signature.\n   - **Target binding:** Time evidence countersigns **only** the SHA-256 of raw decoded DSSE signature bytes (or an earlier evidence token's raw bytes for renewal), never base64 envelope text, statement bytes, or artifact bytes directly."
+        },
+        {
+          "kind": "decision",
+          "path": "docs/decisions/code-embedding-decision.md",
+          "quote": "Traceweave **omits source-code embedded marking** from the next release. The next release covers:"
+        }
+      ],
+      "rationale": "Complete accessible diagram description is a compound claim; each assertion is reviewed against the cited local-workflow, comparison, policy and research boundary evidence. No independent runtime conformance is inferred."
+    },
+    {
       "id": "README-025",
       "sentence": "Alongside extracted fingerprint matching and signed registration records, a research track explores embedding a mark into content before distribution and checking later content for that mark.",
       "evidence": [
@@ -744,13 +805,35 @@
       "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
     },
     {
+      "id": "README-ALT-004",
+      "sentence": "Two-stage proposed embedded-mark workflow: Stage A prepares for distribution (Original content plus mark and embedding configuration feed Embed mark to produce Marked content with quality validation); Stage B examines possible reuse (Candidate content plus profile-required verification material feed Detect mark to produce Evidence for review, which may return insufficient evidence).",
+      "evidence": [
+        {
+          "kind": "decision",
+          "path": "research/experiment-checkpoint.md",
+          "quote": "Keep these carriers as weak, reproducible baselines. They make the insertion/extraction mechanics and refusal boundaries testable, and expose inexpensive removal. Their successful clean recovery does not justify selecting them for adversarially robust marking."
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/media-c2pa-av-review.md",
+          "quote": "### 2.1 `IMG.5`: image-mark finding-aid record"
+        },
+        {
+          "kind": "review",
+          "path": "docs/reviews/initial-draft-review.md",
+          "quote": "1. **Private-by-default conflicts with required public signing and resolution (§§2.4, 3, 8).** Mandatory Rekor publication, full returned feature vectors, and in-repository key storage can expose participation and private evidence. Make public disclosure optional, keep catalogues outside the source tree, and defer network resolution until its leakage model is specified.\n2. **Prefix bucketing is not a demonstrated k-anonymity guarantee (§3.2).** A 16–24-bit prefix does not guarantee a minimum anonymity set. Multiple prefixes, rare features and adaptive queries can identify a target. Shared-key HMAC does not make this zero knowledge; authorized consortium participants can compute dictionary candidates. Remove the guarantee and benchmark leakage before proposing a resolver.\n3. **The false-positive formula and numerical guarantees are unsupported (§6).** Normalized token dependencies, same-spec code, multiple comparisons and corpus selection invalidate the proposed independent-token shortcut. The rule of three is conditional on sampling assumptions, not a license to tune against 300,000 files and declare a universal bound. Replace with held-out whole-pipeline evaluation.\n4. **Wire formats are not interoperable as written (§2).** The in-toto v1 type is `https://in-toto.io/Statement/v1`, not the draft URN. DSSE PAE requires explicit space separators and decimal byte lengths. An RFC 3161 token is signed verification material, not an ISO date string. See [in-toto](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md), [DSSE](https://github.com/dsse-lf/dsse/blob/master/protocol.md), and [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161).\n5. **Signatures are used to overstate ancestry and replay resistance (§5).** An attacker can sign copied public material or transplant marked fragments. A valid signature authenticates the statement under a trust policy; it does not establish authorship. Preserve exact verification, similarity evidence and rights review as separate results.\n6. **Commit cutoffs overstate rights (§7).** Older permissive expression can persist after the transition, and permissive redistribution has conditions. Post-transition code is not automatically proprietary original expression. A permitted copy is still a technical reuse match. Use region-level histories and actual licenses. [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)."
+        }
+      ],
+      "rationale": "Complete accessible diagram description is a compound claim; each assertion is reviewed against the cited local-workflow, comparison, policy and research boundary evidence. No independent runtime conformance is inferred."
+    },
+    {
       "id": "README-027",
       "sentence": "*Figure 3. Proposed embedded-mark workflow.",
       "evidence": [
         {
           "kind": "review",
           "path": "docs/release/readme-scope-review.md",
-          "quote": "The figures describe proposed local extraction/comparison and separate cryptographic registration, plus a research embedding workflow. Figure 3 permits insufficient evidence; it is not a standardized marking method or an origin claim. The caption is mapped; picture markup is a separately inventoried exclusion requiring non-author approval."
+          "quote": "The figures describe proposed local extraction/comparison and separate cryptographic registration, plus a research embedding workflow. Figure 3 permits insufficient evidence; it is not a standardized marking method or an origin claim. All four complete accessible alt descriptions and the Figure 3 caption are mapped; only inert picture/source markup is excluded."
         }
       ],
       "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
@@ -762,7 +845,7 @@
         {
           "kind": "review",
           "path": "docs/release/readme-scope-review.md",
-          "quote": "The figures describe proposed local extraction/comparison and separate cryptographic registration, plus a research embedding workflow. Figure 3 permits insufficient evidence; it is not a standardized marking method or an origin claim. The caption is mapped; picture markup is a separately inventoried exclusion requiring non-author approval."
+          "quote": "The figures describe proposed local extraction/comparison and separate cryptographic registration, plus a research embedding workflow. Figure 3 permits insufficient evidence; it is not a standardized marking method or an origin claim. All four complete accessible alt descriptions and the Figure 3 caption are mapped; only inert picture/source markup is excluded."
         }
       ],
       "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
@@ -779,7 +862,7 @@
         {
           "kind": "review",
           "path": "docs/release/readme-scope-review.md",
-          "quote": "The figures describe proposed local extraction/comparison and separate cryptographic registration, plus a research embedding workflow. Figure 3 permits insufficient evidence; it is not a standardized marking method or an origin claim. The caption is mapped; picture markup is a separately inventoried exclusion requiring non-author approval."
+          "quote": "The figures describe proposed local extraction/comparison and separate cryptographic registration, plus a research embedding workflow. Figure 3 permits insufficient evidence; it is not a standardized marking method or an origin claim. All four complete accessible alt descriptions and the Figure 3 caption are mapped; only inert picture/source markup is excluded."
         }
       ],
       "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
@@ -1282,7 +1365,7 @@
     },
     {
       "id": "README-063",
-      "sentence": "All checks run strictly offline with zero network requests:",
+      "sentence": "After fetching the pinned development dependencies below, the validation commands run strictly offline with zero network requests:",
       "evidence": [
         {
           "kind": "review",

@@ -42,6 +42,7 @@ to be rejected.
 from __future__ import annotations
 
 import copy
+import ast
 import json
 import os
 import re
@@ -94,6 +95,26 @@ def known_ids():
 
 def resolve(ident, ids):
     """Return 'negative' if the id is a negative fixture, 'positive' otherwise; raise if it does not exist."""
+    if ident.startswith("unittest:"):
+        _, filename, test_id = ident.split(":", 2)
+        path = ROOT / filename
+        require(path.resolve().is_relative_to(ROOT) and path.is_file(), f"unknown test file {ident}")
+        cls, method = test_id.split(".", 1)
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        tests = [node for node in tree.body if isinstance(node, ast.ClassDef) and node.name == cls
+                 for node in node.body if isinstance(node, ast.FunctionDef) and node.name == method]
+        require(len(tests) == 1 and method.startswith("test_"), f"unknown unittest method {ident}")
+        require(any(isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                    and node.func.attr.startswith("assert") for node in ast.walk(tests[0])),
+                f"test has no assertion {ident}")
+        return "negative"
+    if ident.startswith("registered:"):
+        registry = json.loads((ROOT / "test-vectors/requirements/checker-tests.json").read_text(encoding="utf-8"))
+        key = ident.split(":", 1)[1]
+        require(key in registry, f"unknown registered checker test {ident}")
+        test = registry[key]
+        require(test.get("description"), f"checker test lacks failure description {ident}")
+        return resolve("checker:" + test["checker"] + ":" + test["locator"], ids)
     if ident.startswith("negative:"):
         path = ROOT / ident.split(":", 1)[1]
         require(path.resolve().is_relative_to(ROOT) and path.is_file(), f"unknown negative fixture {ident}")
@@ -292,6 +313,13 @@ def check_release_map(rmap, ids, documents=None):
                      for p in sorted((ROOT / directory).rglob("*")) if p.is_file()}
     require(all(e["document"] in documents and e["document"] != "spec/extraction.md"
                 for e in rmap["requirements"]), "release map names a missing or delegated document")
+    for entry in rmap["requirements"]:
+        for clause in entry["clauses"]:
+            for field in ("failsOn", "negativeFixtures", "related"):
+                require(not any(ref.startswith("checker:") for ref in clause.get(field, [])),
+                        f"{entry['id']}: use a registered test ID, not arbitrary checker source text")
+            if clause["kind"] == "implementation-test":
+                require(clause.get("negativeCases"), f"{entry['id']}: implementation test needs explicit negative cases")
     all_ids = [e["id"] for e in rmap["requirements"]]
     require(len(all_ids) == len(set(all_ids)), "duplicate release requirement id")
     totals = {}

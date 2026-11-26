@@ -1,0 +1,167 @@
+{
+  "CHK-001": {
+    "checker": "test-vectors/extraction-python/check_vectors.py",
+    "locator": "WPythonUnicode",
+    "description": "The wrong-lexer self-test WPythonUnicode is rejected on the Unicode-17 vector."
+  },
+  "CHK-002": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "py-empty-catalogue-span-expanded",
+    "description": "The mutation changes an empty catalogue/report span or drops the empty-span report region. Exact catalogue derivation or independent report comparison rejects it."
+  },
+  "CHK-003": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "py-empty-report-span-expanded",
+    "description": "The mutation changes an empty catalogue/report span or drops the empty-span report region. Exact catalogue derivation or independent report comparison rejects it."
+  },
+  "CHK-004": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "py-empty-report-region-dropped",
+    "description": "The mutation changes an empty catalogue/report span or drops the empty-span report region. Exact catalogue derivation or independent report comparison rejects it."
+  },
+  "CHK-005": {
+    "checker": "test-vectors/extraction-text/check_text_vectors.py",
+    "locator": "FAIL config",
+    "description": "The text checker validates all negative and boundary configurations; FAIL config requires a negative fixture with valid configuration bytes to fail."
+  },
+  "CHK-006": {
+    "checker": "test-vectors/extraction-text/check_text_vectors.py",
+    "locator": "per-token-folded",
+    "description": "The record self-tests introduce an illegal per-token folded field and require rejection; all 60 expected records are compared byte-for-byte."
+  },
+  "CHK-007": {
+    "checker": "test-vectors/registration/check_registration.py",
+    "locator": "standard-only base64 rejects a URL-safe envelope (S7)",
+    "description": "The promoted bundle-url-safe fixture and adapter URL-safe accept fixture require acceptance of URL-safe base64; a changed outcome fails the checker."
+  },
+  "CHK-008": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "record-digest-wrong",
+    "description": "The cited self-test introduces changing canonical record bytes; the promoted checker rejects the changed output."
+  },
+  "CHK-009": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "tokenIndices-on-go",
+    "description": "The cited self-test introduces adding tokenIndices to a non-exclusion profile; the promoted checker rejects the changed output."
+  },
+  "CHK-010": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "config-channels-not-profile-list",
+    "description": "The cited self-test introduces changing the configured channel list; the promoted checker rejects the changed output."
+  },
+  "CHK-011": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "three-channel-modes-echo-reordered",
+    "description": "The changed expected mode list / mode-mismatch outcome fails comparison against the independently computed body."
+  },
+  "CHK-012": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "mode-mismatch-compared",
+    "description": "The changed expected mode list / mode-mismatch outcome fails comparison against the independently computed body."
+  },
+  "CHK-013": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "config-digest",
+    "description": "The cited self-test introduces changing the configuration digest; the promoted checker rejects the changed output."
+  },
+  "CHK-014": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "build-rejection-that-is-valid",
+    "description": "records.json build-mixed-configurations requires rejection. The self-test removes the conflicting record, making the alleged rejection invalid; the checker catches it."
+  },
+  "CHK-015": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "duplicate-artifact-digest",
+    "description": "The cited self-test introduces duplicating an artifact digest; the promoted checker rejects the changed output."
+  },
+  "CHK-016": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "extracted-profiles-only",
+    "description": "The cited self-test introduces refusing a registered profile merely because extraction is unavailable; the promoted checker rejects the changed output."
+  },
+  "CHK-017": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "K1-window-129",
+    "description": "The cited self-test introduces accepting an out-of-bounds extraction configuration; the promoted checker rejects the changed output."
+  },
+  "CHK-018": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "catalogue-from-records-digest-wrong",
+    "description": "The cited self-test introduces changing the catalogue built from vector-derived records; the promoted checker rejects the changed output."
+  },
+  "CHK-019": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "valid-config-listed-as-negative",
+    "description": "check_all rejects every comparison configuration negative; its self-test replaces a negative with valid bytes and requires failure."
+  },
+  "CHK-020": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "missing-pair",
+    "description": "The cited self-test introduces omitting output for a valid compared pair; the promoted checker rejects the changed output."
+  },
+  "CHK-021": {
+    "checker": "test-vectors/matching/check_gates.py",
+    "locator": "packet-code-changed",
+    "description": "check_gates validates review-packets.json invalid entries including non-first-seed-p2 and absent region/mode cases."
+  },
+  "CHK-022": {
+    "checker": "test-vectors/matching/check_gates.py",
+    "locator": "packet-schema-code-changed",
+    "description": "The invalid review packets include own-origin, vendored and historical digest mismatches; each expected rejection is checked."
+  },
+  "CHK-023": {
+    "checker": "test-vectors/matching/check_gates.py",
+    "locator": "candgen-code-changed",
+    "description": "The catalogue-mismatch invalid candidate-generation record must be rejected."
+  },
+  "CHK-024": {
+    "checker": "test-vectors/matching/check_gates.py",
+    "locator": "candgen-record-wrong-digest",
+    "description": "The cited self-test introduces changing the selected-ids digest; the promoted checker rejects the changed output."
+  },
+  "CHK-025": {
+    "checker": "test-vectors/matching/check_gates.py",
+    "locator": "m23-candidate-count",
+    "description": "The cited self-test introduces miscounting the M2.3 control-class report; the promoted checker rejects the changed output."
+  },
+  "CHK-026": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "unknown-profile-version",
+    "description": "The cited self-test introduces accepting an unknown profile version; the promoted checker rejects the changed output."
+  },
+  "CHK-027": {
+    "checker": "tools/check_release_boundaries.py",
+    "locator": "private-nonce-disclosed",
+    "description": "The negative probes insert nonceHex or catalogue into predicate.catalogue; the registration checker rejects both extra fields."
+  },
+  "CHK-028": {
+    "checker": "test-vectors/matching/check_matching.py",
+    "locator": "catalogue-config-digest",
+    "description": "The cited self-test introduces breaking the catalogue profile/configuration binding; the promoted checker rejects the changed output."
+  },
+  "CHK-029": {
+    "checker": "tools/check_release_boundaries.py",
+    "locator": "unlisted-root",
+    "description": "The cited self-test introduces counting evidence from an unlisted root; the promoted checker rejects the changed output."
+  },
+  "CHK-030": {
+    "checker": "tools/check_release_boundaries.py",
+    "locator": "unpinned-ots",
+    "description": "The following subrequirement tests exercise each executable constituent, rather than relying on one representative negative. Deployment-only test-root policy still requires production-policy inspection."
+  },
+  "CHK-031": {
+    "checker": "tools/check_release_boundaries.py",
+    "locator": "insufficient-confirmations",
+    "description": "The following subrequirement tests exercise each executable constituent, rather than relying on one representative negative. Deployment-only test-root policy still requires production-policy inspection."
+  },
+  "CHK-032": {
+    "checker": "tools/check_release_boundaries.py",
+    "locator": "verification-result-real-ecdsa",
+    "description": "The following subrequirement tests exercise each executable constituent, rather than relying on one representative negative. Deployment-only test-root policy still requires production-policy inspection."
+  },
+  "CHK-033": {
+    "checker": "tools/check_release_boundaries.py",
+    "locator": "verification-result-no-revocation-data",
+    "description": "The cited self-test introduces counting a token without revocation data; the promoted checker rejects the changed output."
+  }
+}

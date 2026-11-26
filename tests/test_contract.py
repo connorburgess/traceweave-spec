@@ -108,6 +108,29 @@ class ContractTests(unittest.TestCase):
             with self.subTest(addition=addition), self.assertRaises(ValueError):
                 check(data, (ROOT / "README.md").read_text() + addition)
 
+    def test_readme_alt_claim_cannot_be_hidden_by_updating_exclusions(self):
+        from tools.check_readme_claims import MAP, check, extract
+        data = read_json(MAP)
+        changed_readme = (ROOT / "README.md").read_text().replace(
+            "four local steps", "cryptographically proven ownership after four local steps")
+        _, exclusions = extract(changed_readme)
+        data["excluded"] = exclusions  # The original review's adversarial bypass.
+        with self.assertRaisesRegex(ValueError, "claim sentences unmapped"):
+            check(data, changed_readme)
+
+    def test_release_map_rejects_arbitrary_source_as_negative_test(self):
+        from tools.check_requirement_map import ALL_MAP, MapError, check_release_map, known_ids
+        data = read_json(ALL_MAP)
+        clause = next(c for e in data["requirements"] for c in e["clauses"] if c["kind"] == "testable")
+        clause["failsOn"] = clause["negativeFixtures"] = [
+            "checker:test-vectors/registration/check_registration.py:import json"]
+        with self.assertRaisesRegex(MapError, "registered test ID"):
+            check_release_map(data, known_ids())
+        clause["failsOn"] = clause["negativeFixtures"] = [
+            "unittest:tests/test_release_requirements.py:ReleaseRequirementTests.import_json"]
+        with self.assertRaisesRegex(MapError, "unknown unittest method"):
+            check_release_map(data, known_ids())
+
     def test_readme_extractor_keeps_substantive_prose_and_table_rows(self):
         from tools.check_readme_claims import extract
         text = ("# Heading\n[Navigation](x.md)\n\n"
@@ -120,7 +143,7 @@ class ContractTests(unittest.TestCase):
         claims, excluded = extract(text)
         self.assertEqual([c["sentence"] for c in claims], [
             "First claim with `v0.1`.", "lowercase second claim.", "Numbered claim.",
-            "Another sentence!", "**Bold fragment:**", "| Local links | Still a claim |"])
+            "Another sentence!", "**Bold fragment:**", "| Local links | Still a claim |", "Not prose"])
         self.assertEqual({e["reason"] for e in excluded},
                          {"heading", "link-only", "table-header", "code-block", "picture"})
         for bad in ("```sh\nunclosed", "<picture>\nunclosed"):

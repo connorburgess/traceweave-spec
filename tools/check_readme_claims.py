@@ -2,7 +2,7 @@
 """TW-07: deterministic README sentence inventory and exact evidence references.
 
 Only five exclusions: ATX headings; whole link-only lines; fenced code; HTML
-picture elements; table column headings and their separator rows. Everything
+picture markup (alt descriptions are mapped); table column headings and their separator rows. Everything
 else, including fragments, table data cells, captions and link-bearing prose,
 is a claim. Exclusions are inventoried with source lines and text, not dropped
 silently. Non-author approval of these rules remains a release-review action.
@@ -10,6 +10,7 @@ silently. Non-author approval of these rules remains a release-review action.
 from __future__ import annotations
 
 import json
+from html.parser import HTMLParser
 import re
 from pathlib import Path
 
@@ -38,10 +39,32 @@ def sentences(text):
     return result
 
 
+class PictureDescriptions(HTMLParser):
+    """Collect accessible assertions separately from inert HTML markup."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.depth = 0
+        self.descriptions = {}
+
+    def handle_starttag(self, tag, attrs):
+        if tag == 'picture':
+            self.depth += 1
+        if tag == 'img' and self.depth:
+            alt = dict(attrs).get('alt')
+            if alt:
+                self.descriptions.setdefault(self.getpos()[0], []).append(alt)
+
+    def handle_endtag(self, tag):
+        if tag == 'picture':
+            self.depth -= 1
+
+
 def extract(readme):
     claims, excluded, paragraph = [], [], []
     fence = None
     picture = False
+    parser = PictureDescriptions()
+    parser.feed(readme)
     lines = readme.splitlines()
     def flush():
         if paragraph:
@@ -50,6 +73,10 @@ def extract(readme):
                 claims.append({'line': line, 'sentence': text})
             paragraph.clear()
     for i, line in enumerate(lines, 1):
+        if i in parser.descriptions:
+            flush()
+            for description in parser.descriptions[i]:
+                claims.append({"line": i, "sentence": description})
         stripped = line.strip()
         reason = None
         mark = re.match(r'^(`{3,}|~{3,})', stripped)

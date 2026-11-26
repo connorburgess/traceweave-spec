@@ -134,7 +134,7 @@ For full scenarios and architecture trade-offs, read the [use cases](docs/use-ca
 
 ## Verify this repository locally
 
-Python 3.11 or newer is required. All checks run strictly offline with zero network requests:
+Python 3.11 or newer is required. After fetching the pinned development dependencies below, the validation commands run strictly offline with zero network requests:
 
 ```sh
 python3 -m venv .venv
