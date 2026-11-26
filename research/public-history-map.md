@@ -31,7 +31,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 
 ## Verification of the commits listed here
 
-`python3 tools/public_history_scrub.py scan` over the 232 commits and 3490 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
+`python3 tools/public_history_scrub.py scan` over the 239 commits and 3535 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
 
 | Category | Hits |
 | --- | --- |
@@ -79,6 +79,8 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `24bb4b8` | `24bb4b8483dc` | `f024316078fd` |
 | `284ce4e` | `284ce4e1f3b2` | `8c703bbcff24` |
 | `409d486` | `409d486cc02c` | `dec460e84334` |
+| `4fa00c7` | `4fa00c7d00eb` | `f4bd1095b048` |
+| `12a1459` | `12a1459c62e3` | `3d3a5e7ed0f6` |
 | `73b6d5c` | `73b6d5cfd116` | `a68bfd46ad0f` |
 | `ca8fb4f` | `ca8fb4f51df7` | `a8445ef0d431` |
 | `db2848c` | `db2848c1e8ec` | `b210a142d331` |
@@ -100,13 +102,20 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `76afd60` | `76afd6006786` | `89ad40c9c310` |
 | `62b81eb` | `62b81ebf6621` | `3ea5aa2980b0` |
 | `9f50798` | `9f50798d8de8` | `f68bacfb8b64` |
-| `ec0cf67` | `ec0cf67ca3c8` | `ee083b345a31` |
-| `c4848c1` | `c4848c16bf39` | `e290f735b5ac` |
-| `5c3d9c5` | `5c3d9c545d5f` | `dfe65e31dc7b` |
+| `4fa00c7d00eb24c5a39866b05e8b6aeca27174b2` | `4fa00c7d00eb` | `f4bd1095b048` |
+| `12a1459c62e3539e02ef174e0fbf6d909b199eb4` | `12a1459c62e3` | `3d3a5e7ed0f6` |
+| `11e975e34720235543ae9a22ff5a199e9be10d56` | `11e975e34720` | `a170a47b8d84` |
+| `0075c8f394b31a946d279a358e2c71a47a7f60d9` | `0075c8f394b3` | `639cb855bd1b` |
+| `afca82c` | `afca82c41d54` | `d66e4b942c8c` |
+| `41628be` | `41628be879a8` | `f396a4133b56` |
+| `a4ea8d4` | `a4ea8d46fa7c` | `d61f45c9c203` |
+| `0823f1d` | `0823f1d91143` | `cae4883ee992` |
+| `c402191` | `c402191166e9` | `f9ced808fa54` |
+| `11e975e` | `11e975e34720` | `a170a47b8d84` |
+| `631e71e` | `631e71e22994` | `4d9c9173dfde` |
 | `7dccedd` | `7dccedd63897` | `a8f6c47798af` |
 | `4d4e98d` | `4d4e98d68bef` | `6883ebe512be` |
 | `67f7b5d` | `67f7b5dbcec0` | `3a29ca30f228` |
-| `631e71e` | `631e71e22994` | `4d9c9173dfde` |
 | `284ce4e1f3b2daf9eabd7700cabdc4b10865310d` | `284ce4e1f3b2` | `8c703bbcff24` |
 | `6ded8a3d6923b310f6b0abfab2a4037abfc3e467` | `6ded8a3d6923` | `4cb75f5f3c56` |
 | `e7e714987aced74569294bfe6aa11a072ed43372` | `e7e714987ace` | `037aa20d6fb6` |
@@ -117,7 +126,6 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `b3a3a2c99b52f7313a3e6b6a4ae10e5e96846755` | `b3a3a2c99b52` | `1a4cbea6c987` |
 | `303b966fe20f03e346b00732f0fd05ed17ede4b9` | `303b966fe20f` | `8517c53c2284` |
 | `4c7c61bab7c2faf250401b9ccc3c3d7000021d34` | `4c7c61bab7c2` | `ece5f3bd4e05` |
-| `a4ea8d4` | `a4ea8d46fa7c` | `d61f45c9c203` |
 | `1c8f09a62faabfa2304b14315ee80d1b324304d7` | `1c8f09a62faa` | `e2863bd5a657` |
 | `9eab88fe34eb36606c9d958446fda26eb8649b3f` | `9eab88fe34eb` | `182dba97718a` |
 | `ca8fb4f51df75250cd82ea4e6a86b0f3e48aa9ae` | `ca8fb4f51df7` | `a8445ef0d431` |
@@ -125,8 +133,13 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `c402191166e9224d54d819433112b8ff68bc579d` | `c402191166e9` | `f9ced808fa54` |
 | `303b966` | `303b966fe20f` | `8517c53c2284` |
 | `1c8f09a` | `1c8f09a62faa` | `e2863bd5a657` |
+| `afca82c41d54d363c28a49fff76a99718e7bb996` | `afca82c41d54` | `d66e4b942c8c` |
+| `0823f1d91143` | `0823f1d91143` | `cae4883ee992` |
+| `09359ac` | `09359acc2dd5` | `25acdad361ef` |
+| `09359acc2dd53022963b1e2046368dff49cf7fe3` | `09359acc2dd5` | `25acdad361ef` |
+| `0075c8f` | `0075c8f394b3` | `639cb855bd1b` |
 
-Ancestry was checked for all 2926 pairs of these 77 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
+Ancestry was checked for all 4005 pairs of these 90 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
 
 ## All commits, oldest first
 
@@ -378,3 +391,10 @@ Ancestry was checked for all 2926 pairs of these 77 ids in both directions: the 
 | 244 | `ca8fb4f51df7` | `a8445ef0d431` | kept | Record independent review of TS selection and rejection evidence |
 | 245 | `631e71e22994` | `4d9c9173dfde` | kept | Record five scoped IMG TS and text gate closures |
 | 246 | `0823f1d91143` | `cae4883ee992` | kept | Merge reviewed TS and text evidence with scoped profile closures |
+| 247 | `afca82c41d54` | `d66e4b942c8c` | kept | Update public history map for reviewed profile closures |
+| 248 | `09359acc2dd5` | `25acdad361ef` | kept | Reconcile research queue with reviewed closures and current holds |
+| 249 | `0075c8f394b3` | `639cb855bd1b` | kept | Review queue reconciliation against current gates and holds |
+| 250 | `4fa00c7d00eb` | `f4bd1095b048` | kept | Propose local-first agent registration design for review |
+| 251 | `12a1459c62e3` | `3d3a5e7ed0f6` | kept | Review local-first agent registration design at 4fa00c7 |
+| 252 | `11e975e34720` | `a170a47b8d84` | kept | Record bounded SK.3 local-first design closure |
+| 253 | `18657390ee1c` | `30c80b24418e` | kept | Merge accepted SK.3 design closure and reconcile current queue |
