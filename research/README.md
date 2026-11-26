@@ -49,3 +49,5 @@ Follow the [research work queue](work-queue.md): it lists open gate IDs from the
 ## Follow-up deep research — 2026-11-22
 
 [Prompt pack and NotebookLM workflow](prompts/README.md): practical carriers first, then fragment/transplant recovery and concrete cross-media architecture. Each includes an independent full brief, a top-left research query and a center-chat synthesis instruction.
+
+The separate [image normalization draft-3 proposal](drafts/extraction-profile-image-draft3.md) specifies ISCC grey/resize arithmetic and supplies bounded synthetic conformance checks. It preserves the frozen draft-2 study and changes no gate status.

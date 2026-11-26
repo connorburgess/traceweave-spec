@@ -1,0 +1,9 @@
+{
+  "baseCommit": "24bb4b8483dc86966cb7c8277130bb816b0c6b3f",
+  "files": {
+    "research/drafts/extraction-profile-image.md": "570d2608791ff2afc9f0b87d7604bde9370c15811a90df4b38be630b240fb00f",
+    "research/drafts/image-experiment-protocol.md": "fef12e043426f1a797e3007f09e210ca8e79f93d41dd2b7b16dc530123f333d2",
+    "research/experiments/image-fingerprint/twimg/profile.py": "00b6f40b635e17772751e1ab76fe0f8d97245c28b5949e22c4260891eca93c8d"
+  },
+  "experimentTree": "ff397613374a0c7487338be373c4fc0e91a4ab74"
+}

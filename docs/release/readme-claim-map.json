@@ -442,17 +442,22 @@
     },
     {
       "id": "README-007",
-      "sentence": "**Profiles & extensions:** **21 of 55** gates met, plus **2 recorded negative results** (`TXT.4` repeated-structure prose ambiguity in Stage 1; `TXT.8` Unicode text marks erased by standard folding).",
+      "sentence": "**Profiles & extensions:** **22 of 55** gates met, plus **2 recorded negative results** (`TXT.4` repeated-structure prose ambiguity in Stage 1; `TXT.8` Unicode text marks erased by standard folding).",
       "evidence": [
         {
           "kind": "decision",
           "path": "ROADMAP.md",
-          "quote": "| Later profiles, EXT and RC | 55 | 21 (TS.3, PY.1, PY.2, PY.3, IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4, TXT.3, TXT.7, RES.1, C2PA.3, SK.1, SK.2, WEB.0, WEB.1, WEB.2) | 2 (TXT.4, TXT.8) | 32 (WEB.3–WEB.6 and SK.3–SK.5 planned; PY.4 open) |"
+          "quote": "| Later profiles, EXT and RC | 55 | 22 (TS.3, PY.1, PY.2, PY.3, IMGF.1, IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4, TXT.3, TXT.7, RES.1, C2PA.3, SK.1, SK.2, WEB.0, WEB.1, WEB.2) | 2 (TXT.4, TXT.8) | 31 (WEB.3–WEB.6 and SK.3–SK.5 planned; PY.4 open) |"
         },
         {
           "kind": "review",
           "path": "research/reviews/txt8-unicode-mark-review.md",
           "quote": "**Verdict: `negative-result` confirmed for Unicode carriers.** Lane 09's reading that homoglyph and zero-width Unicode carriers are erased by the declared deterministic fold (`NFKC` + UTS #39 `skeleton` + delete `Default_Ignorable_Code_Point`) and that AWT post-hoc lexical rewriting is rightly rejected is independently confirmed. Any new text-mark experiment remains owner-blocked."
+        },
+        {
+          "kind": "review",
+          "path": "research/reviews/imgf1-gate-closure-db2848c.md",
+          "quote": "The sole added met ID is **IMGF.1**."
         }
       ],
       "rationale": "The exact cited review, decision or recorded benchmark supports this scope statement; implementation evidence is recorded, not rerun in this lane."
