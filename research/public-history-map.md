@@ -8,7 +8,7 @@ This history was produced from the local branch `roadmap-v2` so that it can be p
 
 ## Reproducing
 
-`python3 tools/public_history_scrub.py rewrite --branch NAME --source <source commit>` with the private rules file. The rules are not in this repository in any form. Rules file SHA-256: `39288af211d86f7a36623e420b958936e06030f148234e75ad0f5b3ff1a0a750`.
+`python3 tools/public_history_scrub.py rewrite --branch NAME --source <source commit>` with the private rules file. The rules are not in this repository in any form. Rules file SHA-256: `362950c0c62ec6549d270070b03d0b632b516423563163d1f44695d1c654ac2b`.
 
 ## What was substituted, by category
 
@@ -31,7 +31,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 
 ## Verification of the commits listed here
 
-`python3 tools/public_history_scrub.py scan` over the 167 commits and 2400 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
+`python3 tools/public_history_scrub.py scan` over the 220 commits and 3370 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
 
 | Category | Hits |
 | --- | --- |
@@ -67,10 +67,20 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `4d0288f` | `4d0288ffe05a` | `5e29802eb91f` |
 | `95fb157` | `95fb157ec5bb` | `aebb49f51946` |
 | `0bc4e23` | `0bc4e23432ac` | `0766f3a39235` |
+| `5facdd4` | `5facdd4e9274` | `54d49bf9843c` |
+| `51033c9` | `51033c911163` | `688e37093883` |
+| `1b51807` | `1b51807301f0` | `9696d4569eba` |
+| `07c98cad440e3797d0ddc0c4b8c2bfb06a36dbd7` | `07c98cad440e` | `185aaf367a92` |
+| `e7e7149` | `e7e714987ace` | `037aa20d6fb6` |
+| `1df04f9` | `1df04f922161` | `856016afeb17` |
+| `07c98ca` | `07c98cad440e` | `185aaf367a92` |
+| `6ded8a3` | `6ded8a3d6923` | `4cb75f5f3c56` |
+| `24bb4b8483dc86966cb7c8277130bb816b0c6b3f` | `24bb4b8483dc` | `f024316078fd` |
+| `24bb4b8` | `24bb4b8483dc` | `f024316078fd` |
+| `284ce4e` | `284ce4e1f3b2` | `8c703bbcff24` |
 | `409d486` | `409d486cc02c` | `dec460e84334` |
 | `0db8b44` | `0db8b44097b6` | `c87655a88151` |
-| `c4848c1` | `c4848c16bf39` | `e290f735b5ac` |
-| `5c3d9c5` | `5c3d9c545d5f` | `dfe65e31dc7b` |
+| `3b5f24e` | `3b5f24ecd756` | `548394878bff` |
 | `6f39e50` | `6f39e50f3302` | `b47b8945b9d6` |
 | `0c7523c` | `0c7523c23613` | `52049a8a0591` |
 | `dbd109b` | `dbd109bce3cf` | `44179c47fe77` |
@@ -79,10 +89,22 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `a78aace` | `a78aace574a6` | `d9c4efa5a883` |
 | `d3d4788` | `d3d4788ffe83` | `e95339bc4e48` |
 | `d3af1ee` | `d3af1ee07595` | `b91606abb533` |
+| `c708b20` | `c708b203165f` | `5de16269a9bf` |
+| `76afd60` | `76afd6006786` | `89ad40c9c310` |
+| `62b81eb` | `62b81ebf6621` | `3ea5aa2980b0` |
+| `9f50798` | `9f50798d8de8` | `f68bacfb8b64` |
 | `ec0cf67` | `ec0cf67ca3c8` | `ee083b345a31` |
-| `6f39e50f33026c9f1d9526c2a566d6a447219667` | `6f39e50f3302` | `b47b8945b9d6` |
+| `c4848c1` | `c4848c16bf39` | `e290f735b5ac` |
+| `5c3d9c5` | `5c3d9c545d5f` | `dfe65e31dc7b` |
+| `7dccedd` | `7dccedd63897` | `a8f6c47798af` |
+| `4d4e98d` | `4d4e98d68bef` | `6883ebe512be` |
+| `67f7b5d` | `67f7b5dbcec0` | `3a29ca30f228` |
+| `284ce4e1f3b2daf9eabd7700cabdc4b10865310d` | `284ce4e1f3b2` | `8c703bbcff24` |
+| `6ded8a3d6923b310f6b0abfab2a4037abfc3e467` | `6ded8a3d6923` | `4cb75f5f3c56` |
+| `e7e714987aced74569294bfe6aa11a072ed43372` | `e7e714987ace` | `037aa20d6fb6` |
+| `7dccedd6389762ea038b4b132a8479436a30f23d` | `7dccedd63897` | `a8f6c47798af` |
 
-Ancestry was checked for all 528 pairs of these 33 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
+Ancestry was checked for all 1485 pairs of these 55 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
 
 ## All commits, oldest first
 
@@ -269,3 +291,56 @@ Ancestry was checked for all 528 pairs of these 33 ids in both directions: the r
 | 179 | `d74d0eb0bdad` | `1a6a7ae55810` | kept | Registration record draft-5 follow-up: resolve F1 and F2 of the draft-5 confirmation (8b4a019) |
 | 180 | `545c51668d58` | `101a037efa32` | kept | Restore the M1.4 criterion and keep the M1.4, M2.4 and IMG.4 rows on one line each |
 | 181 | `3e9cf189b5d1` | `ae1a7f76d813` | kept | Rule on candidate-generation records over any body |
+| 182 | `21ae62b01007` | `6437c26528ff` | kept | Update the public history map |
+| 183 | `db3263fffd48` | `99db4617d71b` | kept | Lane 14: AI-origin signals in text, evidence review and design note |
+| 184 | `c29841fab57e` | `a3a56008d98f` | kept | Registration record: next-increment proposal (reference for pasted text, self-declared AI use, C2PA export, provider-signal import, adoption and non-adoption list) |
+| 185 | `a726ab2d61c4` | `a9c302d8f739` | kept | Registration record: freeze the text reference format as normative design 9.1 |
+| 186 | `e6444c9c9458` | `e47e49938e18` | kept | Registration record: add the optional self-declared AI-use claim (design 4.7, owner decision 2026-11-24) |
+| 187 | `5852c3d5002b` | `c06e2650a55e` | kept | Addendum review of registration design 4.7 (AI-use claim) and 9.1 (text reference) |
+| 188 | `d0bf632ae5cf` | `ec03eddcdf06` | kept | Address addendum review of registration design 4.7 and 9.1 |
+| 189 | `3b5f24ecd756` | `548394878bff` | kept | Confirmation pass on addendum fixes (d0bf632) |
+| 190 | `b376f591ab3f` | `0ca309175470` | kept | ROADMAP: mark M1/M2 implementation gates met, update M4 registration & planned CI catalogue |
+| 191 | `7941c473d9a2` | `ca1347bdfd01` | kept | ROADMAP: mark TS.3 and TXT.3 implementation gates met |
+| 192 | `c708b203165f` | `5de16269a9bf` | kept | Freeze TXT.4 Stage 1 prose evaluation protocol (e-txt-1) and dry-run harness |
+| 193 | `acebacb59c19` | `ae7efac313b3` | kept | Review frozen TXT.4 Stage 1 prose evaluation protocol (e-txt-1) |
+| 194 | `76afd6006786` | `89ad40c9c310` | kept | Record TXT.4 Stage 1 prose evaluation results (e-txt-1, negative-result) |
+| 195 | `62b81ebf6621` | `3ea5aa2980b0` | kept | Recheck e-txt-1 Stage 1 prose evaluation results (76afd60) |
+| 196 | `96698e332409` | `8a1150bec529` | kept | ROADMAP: mark PY.3 met, TXT.4 negative-result, record M4 REG.1/REG.2 |
+| 197 | `5a224bdd3693` | `3371480e653a` | kept | Media tracks: IMG.5 finding-aid schema, C2PA registration link, AV scoping |
+| 198 | `9d346b617d4f` | `de114a39cc47` | kept | Review media-c2pa-av (5a224bd): IMG.5, C2PA.1-3, Lane 15 |
+| 199 | `a4ea8d46fa7c` | `d61f45c9c203` | kept | Address review blocking items B1 and B2 on media-c2pa-av |
+| 200 | `66d276b47cd5` | `2e637b09cb53` | kept | Confirmation pass on media-c2pa-av (a4ea8d4) |
+| 201 | `52b0702644b3` | `a72e4a3f8e65` | kept | Merge branch 'media-c2pa-av' into roadmap-v2 |
+| 202 | `b193376b9835` | `a8f1d0857c37` | kept | TXT.7/TXT.8: cite e-txt-1 and Lane 09 limits in profiles/text.md; close TXT.8 Unicode-carrier review |
+| 203 | `5a8ece2d269d` | `c1d566e9fa26` | kept | Add TXT.7 non-author recount and M4.6 commitment/disclosure review |
+| 204 | `bd2f7031b452` | `3f75f3b2e4f4` | kept | Fix M4.6 CD-B2 catalogue opening nonce validation and record review dispositions |
+| 205 | `1b51807301f0` | `9696d4569eba` | kept | Confirm M4.6 CD-B2 fix in commitment-disclosure review |
+| 206 | `0476cec34ac4` | `44b88cf69d0f` | kept | Draft M4.5 trust policy, in-toto adapter fixtures, and timestamp decision |
+| 207 | `c2bd946fcc16` | `3f6779697e4c` | kept | Review M4.5 deliverables on m4-5-intoto (0476cec) |
+| 208 | `290530087574` | `5ef7ff302f42` | kept | Address M4.5 review B1/B2 findings and add regression fixtures |
+| 209 | `51033c911163` | `688e37093883` | kept | Confirmation pass on m4-5-intoto (2905300) |
+| 210 | `c8d8f5150642` | `d527c70e0d31` | kept | Merge branch 'm4-5-intoto' into roadmap-v2 |
+| 211 | `50c5641ae498` | `aae74d66f203` | kept | ROADMAP: mark M4.5 met from m4-5-intoto (51033c9) |
+| 212 | `19cc1cae9d75` | `d144bd0cd73d` | kept | RES.1: draft resolver threat model and link from ROADMAP |
+| 213 | `eb4da68b9c96` | `49b4383f4914` | kept | RES.3: independent review of resolver-threat-model (19cc1ca) |
+| 214 | `9f50798d8de8` | `f68bacfb8b64` | kept | RES.1: address review B1-B3 and A1-A5 in resolver threat model |
+| 215 | `f6fa840d5935` | `cd91c1d0c089` | kept | RES.1: confirm resolver threat model (9f50798) and mark met |
+| 216 | `81a47e1f33a2` | `6add4cef6a5d` | kept | ROADMAP: mark SK.1 and SK.2 met, update main to c3c17a8 |
+| 217 | `5facdd4e9274` | `54d49bf9843c` | kept | Promote M4 registration, in-toto adapter, and py-tokens profile |
+| 218 | `550a7b5e5fc9` | `5561ae3b00dd` | kept | Review promotion 5facdd4 and mark M4.3, M4.6, PY.1, PY.2 met |
+| 219 | `ff1c8c4edd82` | `9cf78eec72d8` | kept | ROADMAP: mark WEB.1 and WEB.2 met, update main to 51f29d7 |
+| 220 | `85a673c30484` | `5b9dbb519181` | kept | README: refresh layout with Evidence Ledger light/dark SVG visuals and section index |
+| 221 | `c52ea2362eda` | `2354d5d6d77b` | kept | ROADMAP & README: mark M4.4 met (6/6 M4, 28/47 core) and clarify site/docs links |
+| 222 | `abcbfad3827c` | `0869ebd792b9` | kept | README: restyle Figure 3 embedded-mark workflow in Evidence Ledger light/dark SVG |
+| 223 | `aba26b5797c8` | `7e30cb703484` | kept | M2E.0: record decision to omit source-code embedding from next release |
+| 224 | `7dccedd63897` | `a8f6c47798af` | kept | Add candidate release requirement and claim inventories |
+| 225 | `4d4e98d68bef` | `6883ebe512be` | kept | Record independent M5 readiness review of 7dccedd |
+| 226 | `67f7b5dbcec0` | `3a29ca30f228` | kept | Defer CI signing integration until existing research is supported |
+| 227 | `e7e714987ace` | `037aa20d6fb6` | kept | Resolve M5 review findings with executable evidence |
+| 228 | `1df04f922161` | `856016afeb17` | kept | Record independent M5 re-review of e7e7149 |
+| 229 | `07c98cad440e` | `185aaf367a92` | kept | Reject ambiguous display evidence and minimum labels |
+| 230 | `6ded8a3d6923` | `4cb75f5f3c56` | kept | Confirm M5 display oracle fix at 07c98ca |
+| 231 | `70f70d43ae1a` | `44852c4d9ae1` | kept | Record independently reviewed M5 gate closures |
+| 232 | `24bb4b8483dc` | `f024316078fd` | kept | Document pinned offline synthetic release demo |
+| 233 | `284ce4e1f3b2` | `8c703bbcff24` | kept | Review pinned M5.3 offline demo recipe at 24bb4b8 |
+| 234 | `1c8f09a62faa` | `e2863bd5a657` | kept | Record independently reviewed M5.3 closure |
