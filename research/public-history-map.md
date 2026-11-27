@@ -20,7 +20,9 @@ The preceding published checkpoint was `184b74b072a7fdc4f79d385d512f542e8c32ab8a
 
 The preceding published checkpoint was `b1177b6623ebcc218b5430ae35074ee9499b3c07`, mapped from curated source `5c5ffcf4781359863dd515bebb60bc5beca8b759` and preserved as an ancestor. That WEB.4 preparation retained bounded WEB.4 closure `f6e1eb37ba4896370ac790dfcf0b68543d8477dc` on exact Shelf `c0c34cc407e39b80b293ccec6e255db0207acd4a`, its portable page/P1/G1/integration/publication evidence and labelled independent retention disposition with original identity. Only WEB.4 is newly met: core34/47; extensions30/55met2negative23open. Six demos/three both-mode misses/two controls, eight body/sixteen catalogue comparisons, six operation outputs/thirty refusals and seven browser steps remain distinct. Bounded Go lexical/structural refusals, finite/shared-ancestry oracle and no universal semantic/compiler/evasion/unrelatedness or AT/privacy/WEB.6 certification remain. WEB.5/6 open, M3 HOLD; no runtime authority or release approval.
 
-The current published checkpoint is `170cf5df3150874dc8f11ad9903e485285ccec97`, mapped from curated source `18e57db1376aaaeb20acf951956c0e2e500bea64` and preserved as an ancestor. This preparation retains accepted WEB.5 closure proposal `a2a7c9fff730867cc040e2a17934dbda6af6ee87`, exact Shelf `4e092c8116ebf1ee635489ad38866ce5708e2959` and labelled independent retention/scope acceptance. The unchanged criterion covers the browser-tool page, not whole-domain certification. The 2345 included current records are supported within static source scope; 1815 exclusions and historical website evidence remain distinct. Only WEB.5 is newly met: core34/47; extensions31/55met2negative22open. WEB.6 planned, M3 HOLD; no runtime/privacy/performance certification, release approval or execution authority.
+The preceding published checkpoint was `170cf5df3150874dc8f11ad9903e485285ccec97`, mapped from curated source `18e57db1376aaaeb20acf951956c0e2e500bea64` and preserved as an ancestor. That WEB.5 preparation retained accepted WEB.5 closure proposal `a2a7c9fff730867cc040e2a17934dbda6af6ee87`, exact Shelf `4e092c8116ebf1ee635489ad38866ce5708e2959` and labelled independent retention/scope acceptance. The unchanged criterion covers the browser-tool page, not whole-domain certification. The 2345 included current records are supported within static source scope; 1815 exclusions and historical website evidence remain distinct. Only WEB.5 is newly met: core34/47; extensions31/55met2negative22open. WEB.6 planned, M3 HOLD; no runtime/privacy/performance certification, release approval or execution authority.
+
+The current published checkpoint is `84e30dc99bc219fdd81080831b6017b5d3383af5`, mapped from curated source `d4ab8e270923e178b6cf175af8fb0a21607f2dbf` and preserved as an ancestor. This preparation retains accepted queue-only reconciliation `5f208b24977e87d10bc5f22fd9046d0e291c8625` and its labelled independent disposition. Current queue wording reflects published bounded WEB.5 browser-tool closure and distinguishes later local experimental verification preparation from deferred CI/CD signing activation. Historical evidence, criteria/counts and all holds remain unchanged: core34/47; extensions31/55met2negative22open, WEB.6 planned/open and M3 HOLD. No runtime, CI activation, production authority or release approval follows.
 
 ## Reproducing
 
@@ -47,7 +49,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 
 ## Verification of the commits listed here
 
-`python3 tools/public_history_scrub.py scan` over the 272 commits and 3929 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
+`python3 tools/public_history_scrub.py scan` over the 275 commits and 3943 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
 
 | Category | Hits |
 | --- | --- |
@@ -125,6 +127,8 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `0bd15f8e6cb3999045786c4977a67cbb9ed52849` | `0bd15f8e6cb3` | `2abda2c39334` |
 | `d6c09e05829ccd95159ea9e19ff7f71f8c239f4e` | `d6c09e05829c` | `3d89d451eb12` |
 | `afca82c` | `afca82c41d54` | `d66e4b942c8c` |
+| `a2a7c9f` | `a2a7c9fff730` | `b4e22fe138c3` |
+| `a2a7c9fff730867cc040e2a17934dbda6af6ee87` | `a2a7c9fff730` | `b4e22fe138c3` |
 | `41628be` | `41628be879a8` | `f396a4133b56` |
 | `a4ea8d4` | `a4ea8d46fa7c` | `d61f45c9c203` |
 | `d2dd3df` | `d2dd3dfdffab` | `d0cbf79610b7` |
@@ -198,10 +202,11 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `cc4fc4d5b3ade41ed754828b418c0f0d027f5e16` | `cc4fc4d5b3ad` | `39d237d58536` |
 | `f6e1eb37ba4896370ac790dfcf0b68543d8477dc` | `f6e1eb37ba48` | `3f9544f0d469` |
 | `18e57db1376aaaeb20acf951956c0e2e500bea64` | `18e57db1376a` | `170cf5df3150` |
-| `a2a7c9fff730867cc040e2a17934dbda6af6ee87` | `a2a7c9fff730` | `b4e22fe138c3` |
-| `a2a7c9f` | `a2a7c9fff730` | `b4e22fe138c3` |
+| `5f208b24977e87d10bc5f22fd9046d0e291c8625` | `5f208b24977e` | `d6b8929b26bf` |
+| `5f208b2` | `5f208b24977e` | `d6b8929b26bf` |
+| `d4ab8e270923e178b6cf175af8fb0a21607f2dbf` | `d4ab8e270923` | `84e30dc99bc2` |
 
-Ancestry was checked for all 9180 pairs of these 136 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
+Ancestry was checked for all 9591 pairs of these 139 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
 
 ## All commits, oldest first
 
@@ -493,3 +498,6 @@ Ancestry was checked for all 9180 pairs of these 136 ids in both directions: the
 | 284 | `18e57db1376a` | `170cf5df3150` | kept | Update public history map for bounded WEB4 closure and retained review |
 | 285 | `a2a7c9fff730` | `b4e22fe138c3` | kept | Propose source-level WEB5 closure with portable reviewed mapping |
 | 286 | `65169f3dafc9` | `7d071f37ca3f` | kept | Retain independent WEB5 page-scope closure disposition |
+| 287 | `d4ab8e270923` | `84e30dc99bc2` | kept | Update public history map for bounded WEB5 closure and retained review |
+| 288 | `5f208b24977e` | `d6b8929b26bf` | kept | Reconcile current queue with accepted WEB5 closure |
+| 289 | `c6a653ad15bf` | `6770c1d3bc61` | kept | Retain independent WEB5 queue reconciliation disposition |
