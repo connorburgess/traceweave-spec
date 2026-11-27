@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -10,6 +11,86 @@ def sha(data): return hashlib.sha256(data).hexdigest()
 def read(p): return json.loads(p.read_bytes())
 def require(ok, message):
     if not ok: raise ValueError(message)
+
+# Exact measured binaries reviewed at d2dd3df. This validates recorded metadata;
+# static metadata is not proof that a process actually executed those bytes.
+CLI_IDENTITIES = {
+    'rust': ('traceweave', '0.0.1', '5d22a4d37d6403c595f8ccab04172a496ca74368a52d5ee89a3b7e1b918308a3'),
+    'go': ('traceweave-go', '0.2.0-dev', '0219f19b4222ff71733d3709a57116aae0756f2fd0bba0d6f1e9251e025052b1'),
+}
+
+
+def check_cli_metadata(cli, recipe):
+    require(recipe['implementationCommit'] == 'dcaa0d42e9de63d23aa113d9306134de9b28942c' and
+            recipe['implementationSpecPin'] == '9cf78eec72d89c4a5383dc0ebf0fa98a4693d191', 'reviewed source pins')
+    require(isinstance(cli, dict) and set(cli) == set(CLI_IDENTITIES), 'CLI identity coverage')
+    for label, (name, version, digest) in CLI_IDENTITIES.items():
+        entry = cli[label]
+        require(isinstance(entry, dict) and set(entry) == {'version', 'sha256'}, 'CLI metadata fields')
+        require(entry['sha256'] == digest, 'measured binary identity')
+        require(entry['version'] == {
+            'implementation': {'commit': recipe['implementationCommit'], 'name': name, 'version': version},
+            'specCommit': recipe['implementationSpecPin'], 'stamp': 'stamped'}, 'CLI stamped identity')
+
+
+def command_plan(recipe, run):
+    """Derive ordered operations from cases, configs, inputs and artifact hashes.
+
+    Slots are case / native CLI / operation. Repeated argv across cases is valid;
+    each slot still binds its own expected stdin and generated artifact stdout.
+    """
+    cfg = '${PACKAGE}/' + recipe['extractionConfig']
+    cmp_cfg = '${PACKAGE}/' + recipe['comparisonConfig']
+    plan = []
+    for case, measured in zip(recipe['cases'], run['cases']):
+        for label in ('rust', 'go'):
+            artifacts = measured['artifacts'][label]
+            def add(argv, artifact=None, stdin=None):
+                plan.append((case['id'], label, argv, artifacts[artifact] if artifact else None, stdin))
+            for side in ('sample', 'transformed'):
+                source = '${WORK}/' + side + '.go'
+                record = '${WORK}/' + side + '.record.json'
+                catalogue = '${WORK}/' + side + '.catalogue.json'
+                if label == 'rust':
+                    add(['extract', '--config', cfg, '--input', source], side+'.record.json')
+                    add(['validate', 'record', record])
+                    add(['build-catalogue', '--config', cfg, '--source', side+'.go='+source,
+                         '--out', '-'], side+'.catalogue.json')
+                    add(['validate', 'catalogue', catalogue])
+                else:
+                    add(['extract', '--config', cfg], side+'.record.json', case[side+'Sha256'])
+                    add(['validate', '-record', record, '-config', cfg])
+                    add(['build-catalogue', '-config', cfg, '-out', '-', side+'.go='+source],
+                        side+'.catalogue.json')
+                    add(['validate', '-catalogue', catalogue])
+            if label == 'rust':
+                add(['compare', '--config', cmp_cfg, '--reference', '${WORK}/sample.catalogue.json',
+                     '--candidate', '${WORK}/transformed.catalogue.json', '--body-only', '--out', '-'], 'body.json')
+                add(['validate', 'body', '${WORK}/body.json'])
+            else:
+                add(['compare', '-comparison-config', cmp_cfg, '-reference', '${WORK}/sample.catalogue.json',
+                     '-candidate', '${WORK}/transformed.catalogue.json', '-body-only', '-out', '-'], 'body.json')
+                add(['validate', '-body', '${WORK}/body.json'])
+    return plan
+
+
+def check_commands(run, recipe):
+    plan = command_plan(recipe, run)
+    commands = run.get('commands')
+    require(isinstance(commands, list) and len(plan) == 160 and len(commands) == len(plan), 'command count coverage')
+    fields = {'cli', 'argv', 'exit', 'stdoutSha256', 'stderrSha256', 'stdinSha256'}
+    for index, (actual, (case, label, argv, output, stdin)) in enumerate(zip(commands, plan)):
+        where = f'command {index} ({case}/{label})'
+        require(isinstance(actual, dict) and set(actual) == fields, where + ': metadata fields')
+        require(actual['cli'] == label and actual['argv'] == argv, where + ': identity coverage')
+        require(type(actual['exit']) is int and actual['exit'] == 0, where + ': success')
+        require(actual['stdinSha256'] == stdin, where + ': input binding')
+        for field in ('stdoutSha256', 'stderrSha256'):
+            require(isinstance(actual[field], str) and re.fullmatch('[0-9a-f]{64}', actual[field]),
+                    where + ': output digest shape')
+        if output is not None:
+            require(actual['stdoutSha256'] == output, where + ': artifact output binding')
+
 
 def check(root=HERE):
     recipe, expected, run = (read(root / n) for n in ['recipes.json', 'expected.json', 'evidence/run.json'])
@@ -25,12 +106,8 @@ def check(root=HERE):
         require(sha((root / path).read_bytes()) == expected[kind+'ConfigSha256'], 'config identity')
         pinned = next(v for k,v in recipe['sources'].items() if k.endswith(Path(path).name))
         require(pinned['sha256'] == expected[kind+'ConfigSha256'], 'config source pin')
-    require(len(run['commands']) == 160 and all(c['exit'] == 0 for c in run['commands']), 'successful command accounting')
-    for v in run['cli'].values():
-        require(v['version']['stamp'] == 'stamped' and
-                v['version']['implementation']['commit'] == recipe['implementationCommit'] and
-                v['version']['specCommit'] == recipe['implementationSpecPin'], 'CLI pin')
-        require(len(v['sha256']) == 64, 'binary digest')
+    check_cli_metadata(run.get('cli'), recipe)
+    check_commands(run, recipe)
     negative = 0
     for case, want, measured in zip(recipe['cases'], expected['cases'], run['cases']):
         for side in ['sample','transformed']:
@@ -96,9 +173,9 @@ def verify_replay(path):
         for label,artifacts in case['artifacts'].items():
             for name,digest in artifacts.items():
                 require(sha((path/case['id']/label/name).read_bytes())==digest,'replay bytes')
-    require(all(c['exit']==0 for c in replay['commands']) and len(replay['commands'])==160,'replay commands')
-    for label,v in replay['cli'].items():
-        require(v['version']==baseline['cli'][label]['version'],'replay stamped identity')
+    recipe=read(HERE/'recipes.json')
+    check_cli_metadata(replay.get('cli'), recipe)
+    check_commands(replay, recipe)
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
