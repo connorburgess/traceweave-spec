@@ -1,0 +1,113 @@
+{
+  "format": "web5-pinned-current-readme-bridge-v1",
+  "mappingSpecPin": "b1177b6623ebcc218b5430ae35074ee9499b3c07",
+  "curatedBase": "18e57db1376aaaeb20acf951956c0e2e500bea64",
+  "claims": 77,
+  "exclusions": 59,
+  "allOtherClaimsAndPolicyUnchanged": true,
+  "changes": [
+    {
+      "id": "README-007",
+      "pinned": {
+        "id": "README-007",
+        "sentence": "**Profiles & extensions:** **29 of 55** gates met, plus **2 recorded negative results** (`TXT.4` repeated-structure prose ambiguity in Stage 1; `TXT.8` Unicode text marks erased by standard folding).",
+        "evidence": [
+          {
+            "kind": "decision",
+            "path": "ROADMAP.md",
+            "quote": "| Later profiles, EXT and RC | 55 | 29 (TS.1, TS.2, TS.3, PY.1, PY.2, PY.3, IMGF.1, IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4, IMG.5, TXT.1, TXT.2, TXT.3, TXT.7, RES.1, C2PA.3, SK.1, SK.2, SK.3, WEB.0, WEB.1, WEB.2, WEB.3) | 2 (TXT.4, TXT.8) | 24 (WEB.4–WEB.6 and SK.4–SK.5 planned; PY.4 open) |"
+          },
+          {
+            "kind": "review",
+            "path": "research/reviews/txt8-unicode-mark-review.md",
+            "quote": "**Verdict: `negative-result` confirmed for Unicode carriers.** Lane 09's reading that homoglyph and zero-width Unicode carriers are erased by the declared deterministic fold (`NFKC` + UTS #39 `skeleton` + delete `Default_Ignorable_Code_Point`) and that AWT post-hoc lexical rewriting is rightly rejected is independently confirmed. Any new text-mark experiment remains owner-blocked."
+          },
+          {
+            "kind": "review",
+            "path": "research/reviews/ts2-73b6d5c-independent-review.md",
+            "quote": "**Verdict: no blocking findings. Recommend lifting the previous TS.2 evidence hold for frozen stage-1 `ts-tokens` draft-2.** The missing selection classes and the stronger within-stage input-rejection pairing requirement now have evidence. This is a scoped recommendation, not a gate/status/count edit, implementation agreement result, or approval of deferred profiles."
+          },
+          {
+            "kind": "review",
+            "path": "research/reviews/imgf1-gate-closure-db2848c.md",
+            "quote": "The sole added met ID is **IMGF.1**."
+          },
+          {
+            "kind": "review",
+            "path": "research/reviews/img-ts-txt-five-gate-closure-73b6d5c.md",
+            "quote": "Exactly the five authorized rows change from open to met."
+          },
+          {
+            "kind": "review",
+            "path": "research/reviews/agent-registration-local-first-4fa00c7-review.md",
+            "quote": "**Verdict: eligible as SK.3 design evidence, with the precise boundaries and dispositions below.**"
+          },
+          {
+            "kind": "decision",
+            "path": "research/reviews/sk3-design-gate-closure-4fa00c7.md",
+            "quote": "The sole new met gate is **SK.3**, as a design/review/citation gate."
+          },
+          {
+            "kind": "decision",
+            "path": "research/reviews/web3-bounded-gate-closure-99a1a8b.md",
+            "quote": "The sole new met gate is **WEB.3**, on its unchanged literal fixed-fixture catalogue/body/replay criterion."
+          }
+        ],
+        "rationale": "The integrated recount combines the scoped IMGF.1 closure with IMG.5, TS.1/TS.2 and TXT.1/TXT.2: 29 of 55 met, TXT.4/TXT.8 negative-result and 24 open. IMG.5 uses the reviewed draft-schema route; TS and TXT closures cover only frozen stage-1 ts-tokens and text-plain, with documented text result-rejection pairing. TSX/Markdown remain deferred. IMGF.1 adopts research arithmetic without normative promotion or universal equivalence. SK.3 adds reviewed local-first design evidence only; I1–I4 are unresolved and C1 remains a nonblocking clarification. It grants no SK.4 conformance, SK.5 hosting, owner defaults or namespace publication. WEB.3 adds only accepted bounded catalogue/body/replay fixture evidence at Shelf 99a1a8b; the independent final addendum closes the synthetic drop/download gap. Fingerprint9/9 core plus1/1 drop, Compare17/17 and Replay20 expected checks (13 reproduced/seven correct mismatches) plusnine invalid refusals remain distinct. WEB.4/5/6 and broader native chooser/AT/privacy/performance claims remain open."
+      },
+      "current": {
+        "id": "README-007",
+        "sentence": "**Profiles & extensions:** **30 of 55** gates met, plus **2 recorded negative results** (`TXT.4` repeated-structure prose ambiguity in Stage 1; `TXT.8` Unicode text marks erased by standard folding).",
+        "evidence": [
+          {
+            "kind": "decision",
+            "path": "ROADMAP.md",
+            "quote": "| Later profiles, EXT and RC | 55 | 30 (TS.1, TS.2, TS.3, PY.1, PY.2, PY.3, IMGF.1, IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4, IMG.5, TXT.1, TXT.2, TXT.3, TXT.7, RES.1, C2PA.3, SK.1, SK.2, SK.3, WEB.0, WEB.1, WEB.2, WEB.3, WEB.4) | 2 (TXT.4, TXT.8) | 23 (WEB.5–WEB.6 and SK.4–SK.5 planned; PY.4 open) |"
+          },
+          {
+            "kind": "review",
+            "path": "research/reviews/txt8-unicode-mark-review.md",
+            "quote": "**Verdict: `negative-result` confirmed for Unicode carriers.** Lane 09's reading that homoglyph and zero-width Unicode carriers are erased by the declared deterministic fold (`NFKC` + UTS #39 `skeleton` + delete `Default_Ignorable_Code_Point`) and that AWT post-hoc lexical rewriting is rightly rejected is independently confirmed. Any new text-mark experiment remains owner-blocked."
+          },
+          {
+            "kind": "review",
+            "path": "research/reviews/ts2-73b6d5c-independent-review.md",
+            "quote": "**Verdict: no blocking findings. Recommend lifting the previous TS.2 evidence hold for frozen stage-1 `ts-tokens` draft-2.** The missing selection classes and the stronger within-stage input-rejection pairing requirement now have evidence. This is a scoped recommendation, not a gate/status/count edit, implementation agreement result, or approval of deferred profiles."
+          },
+          {
+            "kind": "review",
+            "path": "research/reviews/imgf1-gate-closure-db2848c.md",
+            "quote": "The sole added met ID is **IMGF.1**."
+          },
+          {
+            "kind": "review",
+            "path": "research/reviews/img-ts-txt-five-gate-closure-73b6d5c.md",
+            "quote": "Exactly the five authorized rows change from open to met."
+          },
+          {
+            "kind": "review",
+            "path": "research/reviews/agent-registration-local-first-4fa00c7-review.md",
+            "quote": "**Verdict: eligible as SK.3 design evidence, with the precise boundaries and dispositions below.**"
+          },
+          {
+            "kind": "decision",
+            "path": "research/reviews/sk3-design-gate-closure-4fa00c7.md",
+            "quote": "The sole new met gate is **SK.3**, as a design/review/citation gate."
+          },
+          {
+            "kind": "decision",
+            "path": "research/reviews/web3-bounded-gate-closure-99a1a8b.md",
+            "quote": "The sole new met gate is **WEB.3**, on its unchanged literal fixed-fixture catalogue/body/replay criterion."
+          },
+          {
+            "kind": "decision",
+            "path": "research/reviews/web4-bounded-gate-closure-c0c34cc.md",
+            "quote": "The sole new met gate is **WEB.4**, under its unchanged literal testing-page criterion."
+          }
+        ],
+        "rationale": "The integrated recount combines the scoped IMGF.1 closure with IMG.5, TS.1/TS.2 and TXT.1/TXT.2: 30 of 55 met, TXT.4/TXT.8 negative-result and 23 open. IMG.5 uses the reviewed draft-schema route; TS and TXT closures cover only frozen stage-1 ts-tokens and text-plain, with documented text result-rejection pairing. TSX/Markdown remain deferred. IMGF.1 adopts research arithmetic without normative promotion or universal equivalence. SK.3 adds reviewed local-first design evidence only; I1–I4 are unresolved and C1 remains a nonblocking clarification. It grants no SK.4 conformance, SK.5 hosting, owner defaults or namespace publication. WEB.3 adds only accepted bounded catalogue/body/replay fixture evidence at Shelf 99a1a8b; the independent final addendum closes the synthetic drop/download gap. Fingerprint9/9 core plus1/1 drop, Compare17/17 and Replay20 expected checks (13 reproduced/seven correct mismatches) plusnine invalid refusals remain distinct. WEB.4 adds bounded accepted testing-page/current-input operation evidence at Shelf c0c34cc: six demos/three both-mode misses/two controls; eight body/sixteen catalogue comparisons; six operation outputs/thirty refusals; seven browser steps are distinct. Lexical/structural refusals and no universal semantic/compiler/evasion/unrelatedness guarantee remain. WEB.5/6 and broader native chooser/AT/privacy/performance claims remain open."
+      }
+    }
+  ],
+  "scope": "Only WEB4 status/count evidence differs; current31-count proposal not adopted in this bridge; not a new semantic audit"
+}

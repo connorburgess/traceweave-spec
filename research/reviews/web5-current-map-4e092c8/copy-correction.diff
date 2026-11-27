@@ -1,0 +1,13 @@
+diff --git a/src/components/ShelfTab.tsx b/src/components/ShelfTab.tsx
+index f96ee79..e9210c6 100644
+--- a/src/components/ShelfTab.tsx
++++ b/src/components/ShelfTab.tsx
+@@ -138,7 +138,7 @@ export function ShelfTab({
+                 maxWidth: "52ch",
+               }}
+             >
+-              Your files never leave your browser. Register code, writing, still images, or audio
++              Registration processes your selected files locally; downloads and backups are separate copies. Register code, writing, still images, or audio
+               to produce a cast-concrete registration card, a verifiable{" "}
+               <span className="mono">.bundle.json</span> file, and a zero-JS HTML embed.
+             </p>

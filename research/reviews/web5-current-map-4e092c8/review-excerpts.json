@@ -1,0 +1,57 @@
+[
+  {
+    "key": "G1",
+    "sourceAlias": "R:web4-page-independent/g1-review/report.md",
+    "sha256": "27a19bbfda48bac69061848bed2e6614a2374440143fdc4746d1d614df8dba4a",
+    "excerpts": [
+      {
+        "line": 3,
+        "quote": "2026-11-27. **Accept exact `c0c34cc407e39b80b293ccec6e255db0207acd4a`; no blocking finding. WEB4-G1 is resolved for the explicitly advertised bounded Go operations.** Parent is independently accepted P1 fix `58452ca38d9af21708e899a3c15d1be53f797ce5`. The combined accepted page/fixture/lifecycle evidence now supports **eligibility for the coordinator's WEB.4 criterion disposition**; this report does not edit or automatically close a gate. M3 HOLD."
+      },
+      {
+        "line": 30,
+        "quote": "| Committed operation suite | Six exact deterministic operation outputs, six repeats and six repeated actual-WASM comparison-body cases; **30/30 refusal cases**. [Log](operations.log) |"
+      },
+      {
+        "line": 31,
+        "quote": "| Existing immutable page suite | **8/8 full retained-native body byte/digest cases, 16/16 catalogue byte comparisons, eight repeats**. [Log](core.log) |"
+      },
+      {
+        "line": 35,
+        "quote": "| Additional independent browser mapping | **7/7 operation/chaining steps** bind actual source/copy bytes, downloaded body and rendered normalized-channel text/marks; direct operation-to-operation supersession ignores old success/error callbacks. [Results](independent-browser-evidence/independent-operation-mapping.json), [script](independent-browser.mjs), [log](independent-browser.log) |"
+      },
+      {
+        "line": 39,
+        "quote": "The new browser scenario drops a distinct two-function synthetic source, then applies reformat, rename, copy-editor reformat chaining, reorder, copy fragment, embed and evasion insertion. Each completed body download's reference/candidate SHA-256 is checked against the actual editor text, and literal editor output assertions are independent of the operation implementation. The custom sample SHA-256 is `4e6becb2fa9b4fd67f5d25ba82df15eca2551b6eecf9a70fb7a6ee01acb60672`. This is **one current-input scenario with seven steps, representing six actions**; it is not seven new immutable demonstrations or a native-oracle expansion."
+      },
+      {
+        "line": 51,
+        "quote": "All **46 files under public/testing-fixtures/** remain byte-identical to the accepted parent: 44 copied evidence files plus provenance/license. Accepted source is still spec `cc4fc4d5b3ade41ed754828b418c0f0d027f5e16`; no config, recipe, expectation or outcome was regenerated. Same **six demonstrations, three both-mode misses, two separate controls**. D2's exact-only miss is not added to the 3/6 count; D3 remains abstain/ambiguous; D6 remains no-shared-fingerprints. Both controls still pass. New operation observations are separate from that immutable denominator."
+      },
+      {
+        "line": 61,
+        "quote": "**Full WEB.4 criterion recommendation:** the combined accepted page + immutable six-demo/three-miss/two-control evidence + these actual current-input actions now supports eligibility under the unchanged wording, within the disclosed Go subset. No remaining G1 functional completion is requested. This is a review recommendation for coordinator disposition, **not a gate/status edit, new deployment acceptance or universal robustness guarantee**."
+      }
+    ],
+    "limit": "Read retained independent review; not rerun. Original source/path identity held by coordinator, no host/provider metadata packaged."
+  },
+  {
+    "key": "P1",
+    "sourceAlias": "R:web4-page-independent/p1-rereview/report.md",
+    "sha256": "3918ced6a9e36930b31a9dfbee14693c4c4344bf5c2fee03db851dfae28cef3b",
+    "excerpts": [
+      {
+        "line": 3,
+        "quote": "2026-11-27. **WEB4-P1 closed at exact `58452ca38d9af21708e899a3c15d1be53f797ce5`; bounded implementation accepted with no remaining P1 blocker.** This reviews the final fix, not preliminary `879ad85`. Parent is `f934efeed7f6bd4db930ca22a5e3fa9247f50ac0`. **WEB4-G1 remains separate and unresolved; full WEB.4 eligibility is not established. M3 HOLD.**"
+      }
+    ],
+    "limit": "Read retained independent review; not rerun. Original source/path identity held by coordinator, no host/provider metadata packaged."
+  },
+  {
+    "key": "BASE",
+    "sourceAlias": "R:web4-page-independent/report.md",
+    "sha256": "8305145d89c91a714641bfc1c6f1a4447f7fe3674d58c2e537ba0fce7497e081",
+    "excerpts": [],
+    "limit": "Read retained independent review; not rerun. Original source/path identity held by coordinator, no host/provider metadata packaged."
+  }
+]

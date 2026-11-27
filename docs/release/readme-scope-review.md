@@ -12,7 +12,9 @@ Dated later-profile snapshot after the [SK.3 design-only closure](../../research
 
 Dated status after the 2026-11-27 [bounded WEB.3 closure](../../research/reviews/web3-bounded-gate-closure-99a1a8b.md): **29/55 met, 2 negative-result, 24 open**; core remains **34/47 met, 13 open**. Only WEB.3 is newly met, on exact Shelf `99a1a8b` and the retained independent review chain. WEB.4/5/6, privacy/native chooser/AT and WEB.6 performance limits remain open; claim inventory/exclusions and all other holds are unchanged.
 
-Current status after the [bounded WEB.4 closure](../../research/reviews/web4-bounded-gate-closure-c0c34cc.md): **30/55 met, 2 negative-result, 23 open**; core **34/47 met,13open**. Only WEB.4 is newly met at Shelf `c0c34cc`, within retained Go/refusal/fixture limits. WEB.5/6 and all other holds remain; inventory/exclusions unchanged.
+Dated status after the [bounded WEB.4 closure](../../research/reviews/web4-bounded-gate-closure-c0c34cc.md): **30/55 met, 2 negative-result, 23 open**; core **34/47 met,13open**. Only WEB.4 is newly met at Shelf `c0c34cc`, within retained Go/refusal/fixture limits. WEB.5/6 and all other holds remain; inventory/exclusions unchanged.
+
+Proposed status after [WEB.5 source-level review](../../research/reviews/web5-source-gate-closure-proposal-4e092c8.md): **31/55met,2negative-result,22open**; core34/47 unchanged. Subject to independent retention/criterion-scope review, before shared adoption; browser-tool page scope only, broader website/runtime/WEB.6 certification not claimed. Inventory/exclusions unchanged.
 
 ## Governance and scope
 

@@ -1,0 +1,65 @@
+{
+  "kind": "Mechanical source/coverage integrity only; semantic adequacy/non-author zero-unmapped verdict remains open",
+  "censusCount": 4160,
+  "dispositions": {
+    "mapped-bounded": 2184,
+    "excluded": 1815,
+    "mapped-existing": 161
+  },
+  "allSourceFilesAccounted": 110,
+  "historicalRowsPreserved": 299,
+  "readmeClaimsPreserved": 77,
+  "readmeExclusionsPreserved": 59,
+  "requiredNewFlowNoticeLeads": 4,
+  "requiredSentenceOccurrences": 12,
+  "negativeCases": [
+    {
+      "case": "delete mandatory sentence occurrence",
+      "rejected": true,
+      "reason": "row count differs from fresh-census set"
+    },
+    {
+      "case": "clear README bridge on factual occurrence",
+      "rejected": true,
+      "reason": "missing README bridge C-2b59dea72f8e28ba"
+    },
+    {
+      "case": "invent evidence key",
+      "rejected": true,
+      "reason": "unresolved evidence key C-2b59dea72f8e28ba"
+    },
+    {
+      "case": "exclude visible notice and update exclusion ledger together",
+      "rejected": true,
+      "reason": "exclusion bypass C-2b59dea72f8e28ba"
+    },
+    {
+      "case": "hide rendered recipe semantics as sample data",
+      "rejected": true,
+      "reason": "exclusion bypass C-94d7545e5a4e5be2"
+    },
+    {
+      "case": "hide accessible description as nontext attribute",
+      "rejected": true,
+      "reason": "exclusion bypass C-38e21c37b24d6dff"
+    },
+    {
+      "case": "hide R1 qualified sentence as nontext code",
+      "rejected": true,
+      "reason": "exclusion bypass C-a7d5604f97b7f465"
+    },
+    {
+      "case": "rewrite current source text in inventory",
+      "rejected": true,
+      "reason": "source text/span/kind/context changed C-2b59dea72f8e28ba"
+    },
+    {
+      "case": "remove explicit original exclusion",
+      "rejected": true,
+      "reason": "exclusion ledger missing/extra IDs"
+    }
+  ],
+  "unsupportedRecordIds": [],
+  "unsupportedDistinctSentences": [],
+  "newProductExecutions": 0
+}

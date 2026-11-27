@@ -1,0 +1,184 @@
+{
+  "format": "web5-current-retention-v1",
+  "acceptedShelfCommit": "4e092c8116ebf1ee635489ad38866ce5708e2959",
+  "acceptedShelfTree": "68961ec23696d550d9edcc04b336fc67b0528602",
+  "originalSuccessorManifestSha256": "dbb84b2fc0b92ec4bf89b7bc3a29a180facbfb44cad10d8a7ac4467dafdee42b",
+  "records": [
+    {
+      "retainedPath": "source-manifest.json",
+      "originalSha256": "bf1ae9f73615cd4519a9dc349ffab4a60e4bec8b1263f19ba6cb0c54a5695a86",
+      "originalBytes": 29089,
+      "retainedSha256": "bf1ae9f73615cd4519a9dc349ffab4a60e4bec8b1263f19ba6cb0c54a5695a86",
+      "retainedBytes": 29089,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "coverage-ledger.json",
+      "originalSha256": "ad3a7cab454c163d99f457b9dedfcfda3e612810222af90766c3c98fa254d367",
+      "originalBytes": 5330,
+      "retainedSha256": "ad3a7cab454c163d99f457b9dedfcfda3e612810222af90766c3c98fa254d367",
+      "retainedBytes": 5330,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "fixture-display-bindings.json",
+      "originalSha256": "13fac6e81243bcbfe8acff98fd7c1486f08351ac5e8c3ab5583e9b9a93adfd53",
+      "originalBytes": 6228,
+      "retainedSha256": "13fac6e81243bcbfe8acff98fd7c1486f08351ac5e8c3ab5583e9b9a93adfd53",
+      "retainedBytes": 6228,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "review-excerpts.json",
+      "originalSha256": "40b03e6c669766f3b6395edc7192cbbcfa7eee5cc8df82a44de4ef07b98f7d4c",
+      "originalBytes": 4654,
+      "retainedSha256": "40b03e6c669766f3b6395edc7192cbbcfa7eee5cc8df82a44de4ef07b98f7d4c",
+      "retainedBytes": 4654,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "validation-results.json",
+      "originalSha256": "601330d2e4ece42a62baeb5bacdf47ed1cfb4911d2a56cd251f84a2a50e83218",
+      "originalBytes": 1957,
+      "retainedSha256": "601330d2e4ece42a62baeb5bacdf47ed1cfb4911d2a56cd251f84a2a50e83218",
+      "retainedBytes": 1957,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "successor-reconciliation.json",
+      "originalSha256": "093c0918c38016003a88cc1b7a4d20fdf9e6bc89f7829a4814103145858d0941",
+      "originalBytes": 26181,
+      "retainedSha256": "093c0918c38016003a88cc1b7a4d20fdf9e6bc89f7829a4814103145858d0941",
+      "retainedBytes": 26181,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "review-responses.json",
+      "originalSha256": "ab847321941e3af0284ebd908c456aaef926aa07e5f2f1b8df9a5661cc8782b2",
+      "originalBytes": 1438,
+      "retainedSha256": "ab847321941e3af0284ebd908c456aaef926aa07e5f2f1b8df9a5661cc8782b2",
+      "retainedBytes": 1438,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "copy-correction.diff",
+      "originalSha256": "1dd786cce3e3323dd201004e5d5e17f7ee5373a7d5e33325a2c3ab4dc9ea4b40",
+      "originalBytes": 727,
+      "retainedSha256": "1dd786cce3e3323dd201004e5d5e17f7ee5373a7d5e33325a2c3ab4dc9ea4b40",
+      "retainedBytes": 727,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "artifact-sha256.json",
+      "originalSha256": "dbb84b2fc0b92ec4bf89b7bc3a29a180facbfb44cad10d8a7ac4467dafdee42b",
+      "originalBytes": 7467,
+      "retainedSha256": "dbb84b2fc0b92ec4bf89b7bc3a29a180facbfb44cad10d8a7ac4467dafdee42b",
+      "retainedBytes": 7467,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "current-map-metadata.json",
+      "originalSha256": "626dc49ca9aaee3351ffecf61b4ec4329d6ce5bbadee9280d355d30b6dd798b3",
+      "originalBytes": 5264662,
+      "retainedSha256": "a6710a40888d71c98d3ae201f4a1696bcc5efaba1420a3b013e3c73994687f12",
+      "retainedBytes": 3480305,
+      "adaptation": "All 4160 rows preserve metadata; raw/text/context/rationale omitted and hashed individually; compact key-sorted original-row hashes recorded; no text encoded; JSON formatted with one compact record per line"
+    },
+    {
+      "retainedPath": "evidence-metadata.json",
+      "originalSha256": "1971e9a181bd2dc848c4279e0ce324b422319fc7eb614edbc4fbe8d61e93c8be",
+      "originalBytes": 259438,
+      "retainedSha256": "786941b0696a9d9b5bc419b410a645bc671d1f12fbbc02696960803ae7168723",
+      "retainedBytes": 17430,
+      "adaptation": "Only verbatim quote fields omitted/replaced by UTF-8 hashes; exact original entry hashes recorded; remaining evidence metadata unchanged"
+    },
+    {
+      "retainedPath": "historical-current-links.json",
+      "originalSha256": "dc1c75ae494d934f4705cd771e86de78c5c4fcf7a1e7c298c6d98385fd303a25",
+      "originalBytes": 377395,
+      "retainedSha256": "d4e0395aac97ea8a2868c7c804128c49df7a0686d67f64642a05c4d02a1e282f",
+      "retainedBytes": 140383,
+      "adaptation": "Original S rows reuse accepted prior ledger via matching original-row hashes; current locators/IDs/dispositions retained; other original notes/correction objects omitted, original full crosswalk rows hashed"
+    },
+    {
+      "retainedPath": null,
+      "originalSha256": "6793b5c9f251a6734a4086acdfcee6e320a97263200910e2d01f2c34f2fbb7a9",
+      "originalBytes": 2861648,
+      "adaptation": "identity only; original private/full source-bearing artifact not copied; subset accounting derives from retained current metadata and prior accepted evidence"
+    },
+    {
+      "retainedPath": null,
+      "originalSha256": "065e80733c3fb09e055846fc1c91bac06fab616e25261368552c51ed505a9143",
+      "originalBytes": 649575,
+      "adaptation": "identity only; original private/full source-bearing artifact not copied; subset accounting derives from retained current metadata and prior accepted evidence"
+    },
+    {
+      "retainedPath": null,
+      "originalSha256": "f7284fca00d4e581916a8c53e6e28d457e0858c92ba72cf4d6f696cd2b83f0e8",
+      "originalBytes": 118399,
+      "adaptation": "identity only; original private/full source-bearing artifact not copied; subset accounting derives from retained current metadata and prior accepted evidence"
+    },
+    {
+      "retainedPath": null,
+      "originalSha256": "69b00b657275772533ae8798643bc9bce687f205e62a6b88926bbd4d83cd752c",
+      "originalBytes": 797,
+      "adaptation": "identity only; original private/full source-bearing artifact not copied; subset accounting derives from retained current metadata and prior accepted evidence"
+    },
+    {
+      "retainedPath": null,
+      "originalSha256": "76e5d93b9797ce091cfe2e5d3690e7c3d97623e321d2fc13d2b20e0ceba39fff",
+      "originalBytes": 863,
+      "adaptation": "identity only; original private/full source-bearing artifact not copied; subset accounting derives from retained current metadata and prior accepted evidence"
+    },
+    {
+      "retainedPath": null,
+      "originalSha256": "f3b264a03c245b06c0b2951aa01bb6ab04377c1ed340783c99a7d4d22cf6bbec",
+      "originalBytes": 6714,
+      "adaptation": "identity only; original private/full source-bearing artifact not copied; subset accounting derives from retained current metadata and prior accepted evidence"
+    },
+    {
+      "retainedPath": null,
+      "originalSha256": "2c574010d72349c35afdebeb46578240b2bd27b90b50daf879e83bb274acb602",
+      "originalBytes": 1443,
+      "adaptation": "identity only; original private/full source-bearing artifact not copied; subset accounting derives from retained current metadata and prior accepted evidence"
+    },
+    {
+      "retainedPath": "reports/author-handoff.md",
+      "originalSha256": "069ddcf88b8aca6d4eb88948a6915b5a712471ad59d5679af5c766a8111dee29",
+      "originalBytes": 6742,
+      "retainedSha256": "2ff42343344cd353fb2f81682ac381f2d8b8eba22e526ebc7a9287311b922bf0",
+      "retainedBytes": 7468,
+      "adaptation": "Header added; role-specific citations rebased with derivative labels; unretained references inert; private/provider locations/identifiers and selected checkout metadata omitted; historical results/verdicts unchanged"
+    },
+    {
+      "retainedPath": "reports/original-independent-review.md",
+      "originalSha256": "1ed37da689107d4761472eca898a4f60cd2022503b3d6ba9a2e5a42934796bdb",
+      "originalBytes": 17277,
+      "retainedSha256": "aa4d93e56580c1614fe701cffe89c6021fd83ad694d9dcb0be3eb80b5f43a3c9",
+      "retainedBytes": 17847,
+      "adaptation": "Header added; role-specific citations rebased with derivative labels; unretained references inert; private/provider locations/identifiers and selected checkout metadata omitted; historical results/verdicts unchanged"
+    },
+    {
+      "retainedPath": "reports/focused-independent-addendum.md",
+      "originalSha256": "9eca4862491f7aad93f55a12db3a11d9c0e96d50146b3eb07c078b8bbdfcee48",
+      "originalBytes": 10054,
+      "retainedSha256": "5a31648b59d52c211eb1a8b0f0f940ec7ae38ea922dbddf7a3f1b5828b9cf019",
+      "retainedBytes": 10657,
+      "adaptation": "Header added; role-specific citations rebased with derivative labels; unretained references inert; private/provider locations/identifiers and selected checkout metadata omitted; historical results/verdicts unchanged"
+    },
+    {
+      "retainedPath": "reports/publication-record.md",
+      "originalSha256": "55b614c5465c458bdf959b256f9ac00e8547be6300a6271f9e84e779cb272e12",
+      "originalBytes": 4801,
+      "retainedSha256": "baa6a53c1c945ac44748df492b29544e853128741f5fec243ade50c09df2502e",
+      "retainedBytes": 5195,
+      "adaptation": "Header added; role-specific citations rebased with derivative labels; unretained references inert; private/provider locations/identifiers and selected checkout metadata omitted; historical results/verdicts unchanged"
+    }
+  ],
+  "omissions": [
+    "Original source text/templates/context/rationales/quotes and raw protocols not reconstructed by hashes",
+    "No browser cache/profile/private metadata/provider locators or large binaries",
+    "Original successor scripts/extractor not republished or executed; no semantic acceptance implied by metadata checker"
+  ],
+  "status": "prepared for independent retention/scope/closure-proposal review"
+}

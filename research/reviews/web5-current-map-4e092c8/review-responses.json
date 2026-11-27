@@ -1,0 +1,27 @@
+{
+  "reviewReportAlias": "INDEPENDENT_REVIEW:report.md",
+  "reviewReportSha256": "1ed37da689107d4761472eca898a4f60cd2022503b3d6ba9a2e5a42934796bdb",
+  "reviewExcerpts": [
+    {
+      "line": 21,
+      "quote": "> Registration processes your selected files locally; downloads and backups are separate copies."
+    },
+    {
+      "line": 27,
+      "quote": "**Minor package wording correction.** README’s “full 273-scalar census” conflates sentence segmentation with JSON values. Independent recursive JSON traversal finds **271 unique scalar pointers**, represented by **273 `fixture-scalar` records**. Two recipe strings each produce two sentence records:"
+    }
+  ],
+  "R1": {
+    "finding": "Unqualified whole-browser never-leave promise unsupported at that strength",
+    "change": "Exact reviewed local-processing/export-copy replacement, only first empty-state sentence",
+    "commit": "4e092c8116ebf1ee635489ad38866ce5708e2959",
+    "historicalS0165Unmodified": true,
+    "semanticReviewPending": true
+  },
+  "R2": {
+    "finding": "273 scalar label conflates values and sentence records",
+    "change": "271 scalar values represented by273 sentence/fragment records, independently counted from pointers",
+    "scope": "successor package only; fixtures and source behavior unchanged"
+  },
+  "mechanicalCeiling": "Resolving references and allowing mapped/unresolved dispositions is not implication/zero-unmapped acceptance."
+}

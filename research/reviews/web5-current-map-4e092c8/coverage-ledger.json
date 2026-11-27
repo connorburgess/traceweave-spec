@@ -1,0 +1,244 @@
+{
+  "censusRecords": 4160,
+  "dispositions": {
+    "mapped-bounded": 2184,
+    "excluded": 1815,
+    "mapped-existing": 161
+  },
+  "byFile": {
+    "S:public/brand/favicon.svg": {
+      "slots": 1,
+      "included": 1,
+      "excluded": 0,
+      "unsupported": 0
+    },
+    "S:public/brand/mark-dark.svg": {
+      "slots": 1,
+      "included": 1,
+      "excluded": 0,
+      "unsupported": 0
+    },
+    "S:public/brand/mark.svg": {
+      "slots": 1,
+      "included": 1,
+      "excluded": 0,
+      "unsupported": 0
+    },
+    "S:public/wasm/tw-wasm.js": {
+      "slots": 9,
+      "included": 9,
+      "excluded": 0,
+      "unsupported": 0
+    },
+    "S:src/app/layout.tsx": {
+      "slots": 21,
+      "included": 9,
+      "excluded": 12,
+      "unsupported": 0
+    },
+    "S:src/app/page.tsx": {
+      "slots": 1,
+      "included": 0,
+      "excluded": 1,
+      "unsupported": 0
+    },
+    "S:src/components/CatalogueCompareTab.tsx": {
+      "slots": 206,
+      "included": 133,
+      "excluded": 73,
+      "unsupported": 0
+    },
+    "S:src/components/CompareTab.tsx": {
+      "slots": 267,
+      "included": 96,
+      "excluded": 171,
+      "unsupported": 0
+    },
+    "S:src/components/ConcreteCard.tsx": {
+      "slots": 149,
+      "included": 57,
+      "excluded": 92,
+      "unsupported": 0
+    },
+    "S:src/components/FingerprintTab.tsx": {
+      "slots": 163,
+      "included": 105,
+      "excluded": 58,
+      "unsupported": 0
+    },
+    "S:src/components/Icons.tsx": {
+      "slots": 82,
+      "included": 0,
+      "excluded": 82,
+      "unsupported": 0
+    },
+    "S:src/components/KeysBackupDrawer.tsx": {
+      "slots": 239,
+      "included": 70,
+      "excluded": 169,
+      "unsupported": 0
+    },
+    "S:src/components/LimitsBlock.tsx": {
+      "slots": 12,
+      "included": 9,
+      "excluded": 3,
+      "unsupported": 0
+    },
+    "S:src/components/RegisterTab.tsx": {
+      "slots": 356,
+      "included": 146,
+      "excluded": 210,
+      "unsupported": 0
+    },
+    "S:src/components/ReportReplayTab.tsx": {
+      "slots": 190,
+      "included": 129,
+      "excluded": 61,
+      "unsupported": 0
+    },
+    "S:src/components/ShelfApp.tsx": {
+      "slots": 231,
+      "included": 82,
+      "excluded": 149,
+      "unsupported": 0
+    },
+    "S:src/components/ShelfTab.tsx": {
+      "slots": 247,
+      "included": 97,
+      "excluded": 150,
+      "unsupported": 0
+    },
+    "S:src/components/TestingPageTab.module.css": {
+      "slots": 2,
+      "included": 2,
+      "excluded": 0,
+      "unsupported": 0
+    },
+    "S:src/components/TestingPageTab.tsx": {
+      "slots": 517,
+      "included": 344,
+      "excluded": 173,
+      "unsupported": 0
+    },
+    "S:src/components/VerifyTab.tsx": {
+      "slots": 293,
+      "included": 118,
+      "excluded": 175,
+      "unsupported": 0
+    },
+    "S:src/lib/catalogue-compare.ts": {
+      "slots": 49,
+      "included": 38,
+      "excluded": 11,
+      "unsupported": 0
+    },
+    "S:src/lib/crypto.ts": {
+      "slots": 34,
+      "included": 33,
+      "excluded": 1,
+      "unsupported": 0
+    },
+    "S:src/lib/embed.ts": {
+      "slots": 39,
+      "included": 35,
+      "excluded": 4,
+      "unsupported": 0
+    },
+    "S:src/lib/fingerprint.ts": {
+      "slots": 30,
+      "included": 22,
+      "excluded": 8,
+      "unsupported": 0
+    },
+    "S:src/lib/report-replay.ts": {
+      "slots": 34,
+      "included": 23,
+      "excluded": 11,
+      "unsupported": 0
+    },
+    "S:src/lib/storage.ts": {
+      "slots": 127,
+      "included": 121,
+      "excluded": 6,
+      "unsupported": 0
+    },
+    "S:src/lib/testing-operations.ts": {
+      "slots": 90,
+      "included": 70,
+      "excluded": 20,
+      "unsupported": 0
+    },
+    "S:src/lib/testing-page.ts": {
+      "slots": 16,
+      "included": 15,
+      "excluded": 1,
+      "unsupported": 0
+    },
+    "S:src/lib/types.ts": {
+      "slots": 25,
+      "included": 0,
+      "excluded": 25,
+      "unsupported": 0
+    },
+    "S:src/lib/wasm.ts": {
+      "slots": 85,
+      "included": 69,
+      "excluded": 16,
+      "unsupported": 0
+    },
+    "S:src/workers/catalogue-compare.worker.ts": {
+      "slots": 13,
+      "included": 10,
+      "excluded": 3,
+      "unsupported": 0
+    },
+    "S:src/workers/fingerprint.worker.ts": {
+      "slots": 9,
+      "included": 6,
+      "excluded": 3,
+      "unsupported": 0
+    },
+    "S:src/workers/report-replay.worker.ts": {
+      "slots": 10,
+      "included": 6,
+      "excluded": 4,
+      "unsupported": 0
+    },
+    "S:src/workers/testing-page.worker.ts": {
+      "slots": 8,
+      "included": 3,
+      "excluded": 5,
+      "unsupported": 0
+    },
+    "S:public/testing-fixtures/recipes.json": {
+      "slots": 99,
+      "included": 99,
+      "excluded": 0,
+      "unsupported": 0
+    },
+    "S:public/testing-fixtures/expected.json": {
+      "slots": 174,
+      "included": 174,
+      "excluded": 0,
+      "unsupported": 0
+    },
+    "I:crates/tw-reg/src/render.rs": {
+      "slots": 51,
+      "included": 51,
+      "excluded": 0,
+      "unsupported": 0
+    },
+    "P:README.md": {
+      "slots": 279,
+      "included": 161,
+      "excluded": 118,
+      "unsupported": 0
+    }
+  },
+  "historicalShelfRows": 299,
+  "historicalIncluded": 285,
+  "historicalExcluded": 14,
+  "readmeClaims": 77,
+  "readmeExistingExclusions": 59,
+  "unmappedOrUnsupportedIds": []
+}

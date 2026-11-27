@@ -1,0 +1,158 @@
+{
+  "kind": "Static read/hash/JSON field comparison of already retained evidence; no extraction/comparison/generator/native/browser execution",
+  "sixDemonstrationsThreeBothModeMissesTwoControlsUnchanged": true,
+  "cases": [
+    {
+      "id": "D1",
+      "kind": "demonstration",
+      "name": "Reformat",
+      "semantics": "Existing comment/spacing variants; token stream retained.",
+      "sampleSha256": "66b27e4b006c89b0f66411d35fd02d6159cdfae0eb1ea64093679757f7bdb57e",
+      "transformedSha256": "2040f8a6a89ffb19cf8679237c132caf505b0184bbce7dffdf7c988162e3df96",
+      "retainedBodySha256": "f4c5bbcf226b483f699a3a94151a746823361c64d295c524ab98946858c59b77",
+      "displayedAndRetainedOutcomes": {
+        "exact": {
+          "class": "match",
+          "code": "match"
+        },
+        "normalized": {
+          "class": "match",
+          "code": "match"
+        }
+      }
+    },
+    {
+      "id": "D2",
+      "kind": "demonstration",
+      "name": "Rename identifiers",
+      "semantics": "Existing systematic name substitutions; normalized channel can match, exact may not.",
+      "sampleSha256": "cca3c276657b738fcc5043029be8188ec921edb79fde89b12e2d0c285ccfa717",
+      "transformedSha256": "90443261423efc77765d029820f51b47973232214a8df0576ff873697bf160a2",
+      "retainedBodySha256": "2e03b27177b35c5b12ee8e1eb386329e8797ddf821042cb32f191af86ca4525f",
+      "displayedAndRetainedOutcomes": {
+        "exact": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+        },
+        "normalized": {
+          "class": "match",
+          "code": "match"
+        }
+      }
+    },
+    {
+      "id": "D3",
+      "kind": "demonstration",
+      "name": "Reorder declarations",
+      "semantics": "Swap two synthetic function declarations without changing either body; token adjacency across the boundary changes.",
+      "sampleSha256": "f39cdae406e729d73decc94b6a5eae2f8050fb2305e64b817b6ee9ce7b1e7895",
+      "transformedSha256": "6e699479eea3fe6ffc05212d2bc3c9b173738d0273bfeef841a50765974b9b08",
+      "retainedBodySha256": "2f1ed720442e1151e003f5a21a2e36b18e057911f2c61e62266df780892bcdc4",
+      "displayedAndRetainedOutcomes": {
+        "exact": {
+          "class": "abstain",
+          "code": "ambiguous"
+        },
+        "normalized": {
+          "class": "abstain",
+          "code": "ambiguous"
+        }
+      }
+    },
+    {
+      "id": "D4",
+      "kind": "demonstration",
+      "name": "Insert at evasion interval",
+      "semantics": "Serialize existing expected token texts with spaces and explicit semicolons, inserting break ; after every fourth original token. Lexical adversarial input, not a functionality-preserving Go program.",
+      "sampleSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+      "transformedSha256": "0a026c040362c8be6cf387277c4a4fe0f874dd260fb041d97b12bfaeb99c0547",
+      "retainedBodySha256": "ba428cfbbc3fed2c07e8c97ff5846a436b7888e95e12e64b22d0580f224e2cb5",
+      "displayedAndRetainedOutcomes": {
+        "exact": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+        },
+        "normalized": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+        }
+      }
+    },
+    {
+      "id": "D5",
+      "kind": "demonstration",
+      "name": "Unrelated replacement",
+      "semantics": "Replace function sample with unrelated synthetic type declaration.",
+      "sampleSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+      "transformedSha256": "48d57e1d56930357cb9407d9f9bc04d3aa822e88ef5d617525a925b3d82ed74a",
+      "retainedBodySha256": "43f7419d67ef8edeac09601c99386b1cea15baceff0d02b002224dbb4116e7eb",
+      "displayedAndRetainedOutcomes": {
+        "exact": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+        },
+        "normalized": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+        }
+      }
+    },
+    {
+      "id": "D6",
+      "kind": "demonstration",
+      "name": "Tiny fragment in unrelated host",
+      "semantics": "Append the first five original expected token texts to unrelated type host. Exactly k=5 copied tokens; syntactic completeness is not claimed.",
+      "sampleSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+      "transformedSha256": "22e1942e643c68a3033222c33a84d6c06a7fd5ec2c04b397eb8e250287ee061f",
+      "retainedBodySha256": "1412cb8bdcbb8f7a6ee237ebead6225503ab40dd84ac8ef93bf217d104954dbc",
+      "displayedAndRetainedOutcomes": {
+        "exact": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+        },
+        "normalized": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+        }
+      }
+    },
+    {
+      "id": "C-identical",
+      "kind": "control",
+      "name": "Identity control",
+      "semantics": "Distinct control: identical bytes in both sides.",
+      "sampleSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+      "transformedSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+      "retainedBodySha256": "d94725ed9da415be9baeb02a72bfd0c1e469f086e138e527fc39cf26e68d8cac",
+      "displayedAndRetainedOutcomes": {
+        "exact": {
+          "class": "match",
+          "code": "match"
+        },
+        "normalized": {
+          "class": "match",
+          "code": "match"
+        }
+      }
+    },
+    {
+      "id": "C-unrelated",
+      "kind": "control",
+      "name": "Unrelated control",
+      "semantics": "Distinct control pair independent of D5, using a smaller arithmetic function versus type declaration.",
+      "sampleSha256": "66b27e4b006c89b0f66411d35fd02d6159cdfae0eb1ea64093679757f7bdb57e",
+      "transformedSha256": "48d57e1d56930357cb9407d9f9bc04d3aa822e88ef5d617525a925b3d82ed74a",
+      "retainedBodySha256": "af4e3003ed360acb4608d4f5f0e1014a60402e8db348b678e2f1f55d72e027bb",
+      "displayedAndRetainedOutcomes": {
+        "exact": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+        },
+        "normalized": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+        }
+      }
+    }
+  ]
+}
