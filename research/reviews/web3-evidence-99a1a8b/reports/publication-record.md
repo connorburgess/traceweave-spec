@@ -10,11 +10,11 @@ Production: https://shelf.traceweave.org/
 
 Immutable deployment: [provider deployment URL omitted]
 
-[Deployment dashboard](https://vercel.com/connorburgess-projects/traceweave-shelf/D5tYHBkugKhfew95UGcBV3uxrRJm).
+Historical deployment dashboard reference (provider-specific target omitted).
 
 Vercel deployment ID `[provider deployment identifier omitted]` is **READY**, target **production**. Its GitHub source metadata names exact `99a1a8bce5382a0345fa7e19d9bfd44575f9c016`, repository connorburgess/traceweave-shelf, ref main. Production hostname `shelf.traceweave.org` resolves in the alias API to this same deployment ID, and deployment aliases list that hostname. Deployment metadata (original attachment not retained), alias binding (original attachment not retained), deployment list (original attachment not retained). This is provider-reported source/deployment binding plus live asset inspection, not independent rebuild/binary-source equivalence proof or signed build attestation.
 
-GitHub's exact-SHA commit status reports **Vercel success / Deployment has completed**, linked to the dashboard above (status record (original attachment not retained)). **No GitHub Actions runs or check-run jobs exist for this SHA** in the queried APIs (Actions (original attachment not retained), check runs (original attachment not retained)); no CI-job pass is claimed. Vercel readiness/success is deployment status, not a substitute CI test verdict. Prior local lint/typecheck/build evidence stays in the accepted integration report.
+GitHub's exact-SHA commit status reports **Vercel success / Deployment has completed**, linked in the original record to the omitted provider dashboard (status record (original attachment not retained)). **No GitHub Actions runs or check-run jobs exist for this SHA** in the queried APIs (Actions (original attachment not retained), check runs (original attachment not retained)); no CI-job pass is claimed. Vercel readiness/success is deployment status, not a substitute CI test verdict. Prior local lint/typecheck/build evidence stays in the accepted integration report.
 
 ## Static live checks
 

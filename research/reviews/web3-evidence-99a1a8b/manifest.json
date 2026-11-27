@@ -28,8 +28,8 @@
       "originalSha256": "e3f7e4698fa1123a54640ea34ac629a75c9dd750068b9969a670601f2123b98b",
       "originalBytes": 13125,
       "retainedPath": "reports/fingerprint-review.md",
-      "retainedSha256": "cea79675766a373b42ac239c02a96b1f899e6d257d232fcd8ff014349d0d1818",
-      "retainedBytes": 13591,
+      "retainedSha256": "f06ea347faf022f82ef3215abad926b7b5bd23f79c2f693cfa3a088076a7e97b",
+      "retainedBytes": 13588,
       "adaptation": "Markdown links rebased; unretained attachment links made inert; private locations/lane/deployment identifiers omitted; original narrative/status preserved"
     },
     {
@@ -37,8 +37,8 @@
       "originalSha256": "eedbde072e530785ccf38edf0c092b82eff0a0ab2d4dd94e5a709f03534fbd7f",
       "originalBytes": 14073,
       "retainedPath": "reports/compare-review.md",
-      "retainedSha256": "702ae3aa53a9a947db6cbc0c6cfc7c814001f8055b497695ebca41ba6bb7f948",
-      "retainedBytes": 14616,
+      "retainedSha256": "115c0f7cbb7e1e89717cb161f599499fbf2f95c2e15b1ef755bb57082e06b9be",
+      "retainedBytes": 14619,
       "adaptation": "Markdown links rebased; unretained attachment links made inert; private locations/lane/deployment identifiers omitted; original narrative/status preserved"
     },
     {
@@ -46,8 +46,8 @@
       "originalSha256": "2ec093fe30003b14d3694aacf994bb8a63eb63dae6513284666e6a4b7b95981b",
       "originalBytes": 11212,
       "retainedPath": "reports/replay-review.md",
-      "retainedSha256": "cb68d4778a96769b6ddfdfc8587921929ab4ce44d6792e0e746a061d75c18379",
-      "retainedBytes": 11782,
+      "retainedSha256": "0158b86b9b3dda1ec8f6cad74bb900c033da59e69e11bcd467ac70e462bcb910",
+      "retainedBytes": 11855,
       "adaptation": "Markdown links rebased; unretained attachment links made inert; private locations/lane/deployment identifiers omitted; original narrative/status preserved"
     },
     {
@@ -64,8 +64,8 @@
       "originalSha256": "10c29b1cea2399dd7bbfb2ffee8d69818d93c17c61124e586a05387b8ffb1b91",
       "originalBytes": 4692,
       "retainedPath": "reports/publication-record.md",
-      "retainedSha256": "24710d4bc4aa4b95ec86e943e4b1ed9a647df72984960a32b9edb262441d114d",
-      "retainedBytes": 5153,
+      "retainedSha256": "db98c8266f3d55c90d95dda5fd589c6d7bbf0f7cf7ae5a9235eb008c97ebb90a",
+      "retainedBytes": 5152,
       "adaptation": "Markdown links rebased; unretained attachment links made inert; private locations/lane/deployment identifiers omitted; original narrative/status preserved"
     },
     {
@@ -73,8 +73,8 @@
       "originalSha256": "ae5f52c1a4625cf0e9ff9274b0780f509eac57bbf06b3d02909b6120af38b2a8",
       "originalBytes": 9244,
       "retainedPath": "reports/drop-supplement.md",
-      "retainedSha256": "9fb80e0e7679a5ba6e0d0bd82ef04c6caaa941b1471e1fd1d9f2c2f1d18827d5",
-      "retainedBytes": 9650,
+      "retainedSha256": "b08cd69a9433d7a8e4254d4a3fb02dba03bba000cac1128f6590f353ce1f46cb",
+      "retainedBytes": 9812,
       "adaptation": "Markdown links rebased; unretained attachment links made inert; private locations/lane/deployment identifiers omitted; original narrative/status preserved"
     },
     {

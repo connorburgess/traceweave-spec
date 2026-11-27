@@ -21,7 +21,7 @@ Real browser recheck refuses the five original FP-1 name classes plus a literal-
 
 ## Compare byte and rejection evidence
 
-17-case reproduction (original attachment not retained) independently executes the committed runner against the retained stamped CLI. **17/17 full canonical body byte comparisons and SHA-256 comparisons, plus 17/17 deterministic repeats pass.** The expected case records in `tests/catalogue-compare/expected.json` match, including exact input/config/catalogue/body digests, status, rejection and native exit code.
+[17-case reproduction](../catalogue-compare-expected.json) independently executes the committed runner against the retained stamped CLI. **17/17 full canonical body byte comparisons and SHA-256 comparisons, plus 17/17 deterministic repeats pass.** The expected case records in `tests/catalogue-compare/expected.json` match, including exact input/config/catalogue/body digests, status, rejection and native exit code.
 
 - Ten cases cover both paths for all five existing profiles: Go, Rust, TypeScript, Python and plain text. Native source-built catalogue bytes agree; source-path candidate IDs remain exact. No profile/config inference, rewriting or promotion occurs.
 - Seven additional cases cover unrelated Go content, required-but-absent suppression, profile mismatch, malformed comparison config/reference, invalid UTF-8 candidate and a raw tampered HTML-like artifact ID. Canonical engine rejection bodies agree with native output rather than becoming fabricated successful matches. A completed rejected comparison remains explicitly labelled rejected and downloadable; application/read/asset failures offer no output.
