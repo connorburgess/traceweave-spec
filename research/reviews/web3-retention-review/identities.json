@@ -1,0 +1,27 @@
+{
+  "format": "web3-independent-review-retention-v1",
+  "reviewedClosure": "d7353166a9e8d4930c113c801ec629a9f82d1469",
+  "records": [
+    {
+      "retainedPath": "review-faba59b.md",
+      "originalSha256": "6d7b8e94d46ccb4a2bf8bad9bdf069f0409fbcc4e60e6324471b58c183e8c2bf",
+      "originalBytes": 10513,
+      "retainedSha256": "2bd8fad592210755ca90649a806f84021b4df3821164ba78ddab47cf9d7590ba",
+      "retainedBytes": 10968,
+      "adaptation": "Header added; private worktree paths omitted; local citations rebased; unretained review attachments made inert; historical narrative preserved"
+    },
+    {
+      "retainedPath": "addendum-d735316.md",
+      "originalSha256": "799be9d135dee89eacaeeaeb5b2fa49e95ee3b5ed6defada08b223065af139ed",
+      "originalBytes": 4086,
+      "retainedSha256": "8e8d15843b799c28b5775cd6c2607199041fe381ca913921c95f11128e4b6c22",
+      "retainedBytes": 4618,
+      "adaptation": "Header added; private worktree paths omitted; local citations rebased; unretained review attachments made inert; historical narrative preserved"
+    }
+  ],
+  "limits": [
+    "Original private attachments are not retained; original and retained review identities are separate",
+    "Reviewed WEB3 package bytes remain unchanged",
+    "Historical independent acceptance is not independent review of this adaptation or publication approval"
+  ]
+}
