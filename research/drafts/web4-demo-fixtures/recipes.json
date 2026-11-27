@@ -1,0 +1,127 @@
+{
+  "specBase": "7e329055d75a31f4bfd22e14480e0a46ea582cfa",
+  "implementationCommit": "dcaa0d42e9de63d23aa113d9306134de9b28942c",
+  "implementationSpecPin": "9cf78eec72d89c4a5383dc0ebf0fa98a4693d191",
+  "sources": {
+    "test-vectors/extraction/go.json": {
+      "sha256": "5eb7c2e24553196ca7725712d6b7df5d8e4125e71d284124f825da59ace03d55",
+      "specCommit": "9cf78eec72d89c4a5383dc0ebf0fa98a4693d191",
+      "gitBlob": "6b4781e09535fd096bdd08c6da1cb38ab0aeb75a"
+    },
+    "test-vectors/matching/extraction-go.json": {
+      "sha256": "405225d94e6d5535d528204999b9646e5c23ccdd429ec546a869282c257ee56c",
+      "specCommit": "9cf78eec72d89c4a5383dc0ebf0fa98a4693d191",
+      "gitBlob": "c24e416c173c7e6e18da27d7c1ab684a701ebdf7"
+    },
+    "test-vectors/extraction/config-go.json": {
+      "sha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "specCommit": "9cf78eec72d89c4a5383dc0ebf0fa98a4693d191",
+      "gitBlob": "1b96b71068519571e1b52e4b8a175e5a2678ec4c"
+    },
+    "test-vectors/matching/comparison-config.json": {
+      "sha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "specCommit": "9cf78eec72d89c4a5383dc0ebf0fa98a4693d191",
+      "gitBlob": "9f150a51c46da0cc40058b9be8dd98ebddc6ffb2"
+    }
+  },
+  "extractionConfig": "config/config-go.json",
+  "comparisonConfig": "config/comparison-config.json",
+  "cases": [
+    {
+      "id": "D1",
+      "name": "Reformat",
+      "kind": "demonstration",
+      "sampleSource": "go-format-a",
+      "transformedSource": "go-format-b",
+      "semantics": "Existing comment/spacing variants; token stream retained.",
+      "sample": "inputs/D1/sample.go",
+      "transformed": "inputs/D1/transformed.go",
+      "sampleSha256": "66b27e4b006c89b0f66411d35fd02d6159cdfae0eb1ea64093679757f7bdb57e",
+      "transformedSha256": "2040f8a6a89ffb19cf8679237c132caf505b0184bbce7dffdf7c988162e3df96"
+    },
+    {
+      "id": "D2",
+      "name": "Rename identifiers",
+      "kind": "demonstration",
+      "sampleSource": "go-rename-a",
+      "transformedSource": "go-rename-b",
+      "semantics": "Existing systematic name substitutions; normalized channel can match, exact may not.",
+      "sample": "inputs/D2/sample.go",
+      "transformed": "inputs/D2/transformed.go",
+      "sampleSha256": "cca3c276657b738fcc5043029be8188ec921edb79fde89b12e2d0c285ccfa717",
+      "transformedSha256": "90443261423efc77765d029820f51b47973232214a8df0576ff873697bf160a2"
+    },
+    {
+      "id": "D3",
+      "name": "Reorder declarations",
+      "kind": "demonstration",
+      "sampleSource": "mv-go-b1 + mv-go-b2",
+      "transformedSource": "mv-go-b2 + mv-go-b1",
+      "semantics": "Swap two synthetic function declarations without changing either body; token adjacency across the boundary changes.",
+      "sample": "inputs/D3/sample.go",
+      "transformed": "inputs/D3/transformed.go",
+      "sampleSha256": "f39cdae406e729d73decc94b6a5eae2f8050fb2305e64b817b6ee9ce7b1e7895",
+      "transformedSha256": "6e699479eea3fe6ffc05212d2bc3c9b173738d0273bfeef841a50765974b9b08"
+    },
+    {
+      "id": "D4",
+      "name": "Insert at evasion interval",
+      "kind": "demonstration",
+      "sampleSource": "mv-go-sum",
+      "transformedSource": "derived",
+      "semantics": "Serialize existing expected token texts with spaces and explicit semicolons, inserting break ; after every fourth original token. Lexical adversarial input, not a functionality-preserving Go program.",
+      "sample": "inputs/D4/sample.go",
+      "transformed": "inputs/D4/transformed.go",
+      "sampleSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+      "transformedSha256": "0a026c040362c8be6cf387277c4a4fe0f874dd260fb041d97b12bfaeb99c0547"
+    },
+    {
+      "id": "D5",
+      "name": "Unrelated replacement",
+      "kind": "demonstration",
+      "sampleSource": "mv-go-sum",
+      "transformedSource": "mv-go-pair",
+      "semantics": "Replace function sample with unrelated synthetic type declaration.",
+      "sample": "inputs/D5/sample.go",
+      "transformed": "inputs/D5/transformed.go",
+      "sampleSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+      "transformedSha256": "48d57e1d56930357cb9407d9f9bc04d3aa822e88ef5d617525a925b3d82ed74a"
+    },
+    {
+      "id": "D6",
+      "name": "Tiny fragment in unrelated host",
+      "kind": "demonstration",
+      "sampleSource": "mv-go-sum",
+      "transformedSource": "derived",
+      "semantics": "Append the first five original expected token texts to unrelated type host. Exactly k=5 copied tokens; syntactic completeness is not claimed.",
+      "sample": "inputs/D6/sample.go",
+      "transformed": "inputs/D6/transformed.go",
+      "sampleSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+      "transformedSha256": "22e1942e643c68a3033222c33a84d6c06a7fd5ec2c04b397eb8e250287ee061f"
+    },
+    {
+      "id": "C-identical",
+      "name": "Identity control",
+      "kind": "control",
+      "sampleSource": "mv-go-sum",
+      "transformedSource": "mv-go-sum",
+      "semantics": "Distinct control: identical bytes in both sides.",
+      "sample": "inputs/C-identical/sample.go",
+      "transformed": "inputs/C-identical/transformed.go",
+      "sampleSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+      "transformedSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"
+    },
+    {
+      "id": "C-unrelated",
+      "name": "Unrelated control",
+      "kind": "control",
+      "sampleSource": "go-format-a",
+      "transformedSource": "mv-go-pair",
+      "semantics": "Distinct control pair independent of D5, using a smaller arithmetic function versus type declaration.",
+      "sample": "inputs/C-unrelated/sample.go",
+      "transformed": "inputs/C-unrelated/transformed.go",
+      "sampleSha256": "66b27e4b006c89b0f66411d35fd02d6159cdfae0eb1ea64093679757f7bdb57e",
+      "transformedSha256": "48d57e1d56930357cb9407d9f9bc04d3aa822e88ef5d617525a925b3d82ed74a"
+    }
+  ]
+}

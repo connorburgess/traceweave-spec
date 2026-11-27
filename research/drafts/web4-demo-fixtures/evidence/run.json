@@ -1,0 +1,2395 @@
+{
+  "scope": "WEB.4 native synthetic preparation only",
+  "host": "macOS-26.4-arm64-arm-64bit",
+  "python": "3.12.14",
+  "cli": {
+    "rust": {
+      "sha256": "5d22a4d37d6403c595f8ccab04172a496ca74368a52d5ee89a3b7e1b918308a3",
+      "version": {
+        "implementation": {
+          "commit": "dcaa0d42e9de63d23aa113d9306134de9b28942c",
+          "name": "traceweave",
+          "version": "0.0.1"
+        },
+        "specCommit": "9cf78eec72d89c4a5383dc0ebf0fa98a4693d191",
+        "stamp": "stamped"
+      }
+    },
+    "go": {
+      "sha256": "0219f19b4222ff71733d3709a57116aae0756f2fd0bba0d6f1e9251e025052b1",
+      "version": {
+        "implementation": {
+          "commit": "dcaa0d42e9de63d23aa113d9306134de9b28942c",
+          "name": "traceweave-go",
+          "version": "0.2.0-dev"
+        },
+        "specCommit": "9cf78eec72d89c4a5383dc0ebf0fa98a4693d191",
+        "stamp": "stamped"
+      }
+    }
+  },
+  "commands": [
+    {
+      "cli": "rust",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--input",
+        "${WORK}/sample.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "14652fc3cc218808f7378b6a81065dcfaf010bfacd21ce812f2af8063784b030",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "record",
+        "${WORK}/sample.record.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "8ca3a6d9d876f33060a76270f8c6bd9d13acef0fc0c327a04581acd36a0412bd",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "build-catalogue",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--source",
+        "sample.go=${WORK}/sample.go",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "b1bba3c448c3b599de92f74906718e9d8c99687b4d09f7f17f3b4d0898d8eee6",
+      "stderrSha256": "7f06868ae7ddee89d6cc7b01bdf84ef3f2f2f8ced03d9b806cfc65fa05a75d71",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "catalogue",
+        "${WORK}/sample.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "32d3be9d88ecf5ba7c34907c1478935889420384406fb03d210e033f4f2b118b",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--input",
+        "${WORK}/transformed.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "1213adfb91a30a8b6161e6c9f55dd264743e4fbe22a576e49052b84a9913ef5d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "record",
+        "${WORK}/transformed.record.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "a3a35702972be88bbcc2a67a47f7aee896736f033d1ab619d4bf42e235c686ac",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "build-catalogue",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--source",
+        "transformed.go=${WORK}/transformed.go",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "cf7587bc977b9a2e5563a679cb212b21f892f3a7731f4e816f529c58208242fd",
+      "stderrSha256": "4a9b4652272cda91d4c2eec4d0e15868c71b3baa5eae418b6d49d1624e348bab",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "catalogue",
+        "${WORK}/transformed.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "07791c577c9bc5daab1eaf2fd0bd967fd4eff3af043d2bfaac6c54862a4a5ba2",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "compare",
+        "--config",
+        "${PACKAGE}/config/comparison-config.json",
+        "--reference",
+        "${WORK}/sample.catalogue.json",
+        "--candidate",
+        "${WORK}/transformed.catalogue.json",
+        "--body-only",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "f4c5bbcf226b483f699a3a94151a746823361c64d295c524ab98946858c59b77",
+      "stderrSha256": "bad3a26525eea9037a849dd09999d17674bf7f442b02fe722d0a5cb2250a5965",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "body",
+        "${WORK}/body.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "15a77762d1b51d531e4fcad67706b3698471f315e96b9bac81ecb4a955f3acfc",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "14652fc3cc218808f7378b6a81065dcfaf010bfacd21ce812f2af8063784b030",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": "66b27e4b006c89b0f66411d35fd02d6159cdfae0eb1ea64093679757f7bdb57e"
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-record",
+        "${WORK}/sample.record.json",
+        "-config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "build-catalogue",
+        "-config",
+        "${PACKAGE}/config/config-go.json",
+        "-out",
+        "-",
+        "sample.go=${WORK}/sample.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "b1bba3c448c3b599de92f74906718e9d8c99687b4d09f7f17f3b4d0898d8eee6",
+      "stderrSha256": "b1b3cb5a68eb5ef531fab0222c4974230de03d05a4ccb3ed853b0f76e13da5e0",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-catalogue",
+        "${WORK}/sample.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "1213adfb91a30a8b6161e6c9f55dd264743e4fbe22a576e49052b84a9913ef5d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": "2040f8a6a89ffb19cf8679237c132caf505b0184bbce7dffdf7c988162e3df96"
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-record",
+        "${WORK}/transformed.record.json",
+        "-config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "build-catalogue",
+        "-config",
+        "${PACKAGE}/config/config-go.json",
+        "-out",
+        "-",
+        "transformed.go=${WORK}/transformed.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "cf7587bc977b9a2e5563a679cb212b21f892f3a7731f4e816f529c58208242fd",
+      "stderrSha256": "1eb47ff15a9fb135371f2ff6dc518ef5c15de1ccf3dc49c6f4cda781ab5e688c",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-catalogue",
+        "${WORK}/transformed.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "compare",
+        "-comparison-config",
+        "${PACKAGE}/config/comparison-config.json",
+        "-reference",
+        "${WORK}/sample.catalogue.json",
+        "-candidate",
+        "${WORK}/transformed.catalogue.json",
+        "-body-only",
+        "-out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "f4c5bbcf226b483f699a3a94151a746823361c64d295c524ab98946858c59b77",
+      "stderrSha256": "23b5d3f091bc4a4e6c869368d5339d219e885529b870e8ea841c0b840932bd21",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-body",
+        "${WORK}/body.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--input",
+        "${WORK}/sample.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "0cb0665ce0557b6744301a4b51ee2a8a279fccb5530d7e98a9e3c563dcd4b347",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "record",
+        "${WORK}/sample.record.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "ec1092d79d65893af181a3ac35698bd6a66eed510a823c8e86d5a5b994d61b7d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "build-catalogue",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--source",
+        "sample.go=${WORK}/sample.go",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "2c6ed17f54603ed7e1c3b8459480ff4820be902edc7fbd84a024308ed30568ef",
+      "stderrSha256": "5ca4ac6b390c30eee8d21ee84bbb2f055821d7695cfdb4c96262fc83d4ce5ec3",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "catalogue",
+        "${WORK}/sample.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "6c0ff1ce51c4f671fb23391c9c2c59bbf9298731e9d7a44f19bcb0c6e9cdac77",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--input",
+        "${WORK}/transformed.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "dcef4e786fd6efb09b31db77764b50cf9c1c8b17b0da706c9688fa457910c1f0",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "record",
+        "${WORK}/transformed.record.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "d423414687056699996123f055d60cab896159e284fd515f3a160118c69a3953",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "build-catalogue",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--source",
+        "transformed.go=${WORK}/transformed.go",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "e1c6c2594db64865448493c7dda490441eef21f259bdd0a1138a0e9a4027a459",
+      "stderrSha256": "ac6644e03a41ddbc650a4fa7635b8fb9d417f68c976f8e64480f24334999214d",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "catalogue",
+        "${WORK}/transformed.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "5f727cfa07f5113804d3831dbf56190ca12af12e16d92610883d055552cc7d6d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "compare",
+        "--config",
+        "${PACKAGE}/config/comparison-config.json",
+        "--reference",
+        "${WORK}/sample.catalogue.json",
+        "--candidate",
+        "${WORK}/transformed.catalogue.json",
+        "--body-only",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "2e03b27177b35c5b12ee8e1eb386329e8797ddf821042cb32f191af86ca4525f",
+      "stderrSha256": "5dab62bab372f464c3948751d2f2383216120b4093d3aa8ffa2fae2375bc474b",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "body",
+        "${WORK}/body.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "12023c760ef567b4c6b35536c1c7bdad180e0fd3fa13c2233293fb4f64c9b166",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "0cb0665ce0557b6744301a4b51ee2a8a279fccb5530d7e98a9e3c563dcd4b347",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": "cca3c276657b738fcc5043029be8188ec921edb79fde89b12e2d0c285ccfa717"
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-record",
+        "${WORK}/sample.record.json",
+        "-config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "build-catalogue",
+        "-config",
+        "${PACKAGE}/config/config-go.json",
+        "-out",
+        "-",
+        "sample.go=${WORK}/sample.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "2c6ed17f54603ed7e1c3b8459480ff4820be902edc7fbd84a024308ed30568ef",
+      "stderrSha256": "31c08a63e2036f93afc3b27abd1487c6b6636196052b616320d0273ebc057f28",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-catalogue",
+        "${WORK}/sample.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "dcef4e786fd6efb09b31db77764b50cf9c1c8b17b0da706c9688fa457910c1f0",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": "90443261423efc77765d029820f51b47973232214a8df0576ff873697bf160a2"
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-record",
+        "${WORK}/transformed.record.json",
+        "-config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "build-catalogue",
+        "-config",
+        "${PACKAGE}/config/config-go.json",
+        "-out",
+        "-",
+        "transformed.go=${WORK}/transformed.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "e1c6c2594db64865448493c7dda490441eef21f259bdd0a1138a0e9a4027a459",
+      "stderrSha256": "6cfd20e7b15e2296f44dcc9a0d79a099e654b34901288c6bc858b0f70da74a83",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-catalogue",
+        "${WORK}/transformed.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "compare",
+        "-comparison-config",
+        "${PACKAGE}/config/comparison-config.json",
+        "-reference",
+        "${WORK}/sample.catalogue.json",
+        "-candidate",
+        "${WORK}/transformed.catalogue.json",
+        "-body-only",
+        "-out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "2e03b27177b35c5b12ee8e1eb386329e8797ddf821042cb32f191af86ca4525f",
+      "stderrSha256": "a503c0c92e5edfdec9d4b5cafa35ab2bd4f9410691479c4425da2fda5f0f1e61",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-body",
+        "${WORK}/body.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--input",
+        "${WORK}/sample.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "634bc5a4c9838de5ea719977e4fa749b9565570fd9bfba5e33b1c2008c4ce007",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "record",
+        "${WORK}/sample.record.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "4b8841d642c201b09c800566483d8710e6db966dcf3703c3825cb5083e7aff8e",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "build-catalogue",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--source",
+        "sample.go=${WORK}/sample.go",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "f6862e6aa05806745f71a5ec2efdcd6e069676b97af6b6cba58df2d27c1d18c8",
+      "stderrSha256": "5fb063a39dfff0f20498264e02e4c78c4eab94c8ed8b59204cb420166d89f45f",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "catalogue",
+        "${WORK}/sample.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "a89162da3d1ebaacb5047991a64fb16e6d466fb241d96bc253b7275ee53a75f4",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--input",
+        "${WORK}/transformed.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "cffac826f5096c7cf7e002018f054cfda000d009c8ef7362689a2ab7ecc17cd4",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "record",
+        "${WORK}/transformed.record.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "daf6d9d8258eb2cf58966cac65cbc07b08bbd67fef60f55118a8be1e7c0849ad",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "build-catalogue",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--source",
+        "transformed.go=${WORK}/transformed.go",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "5c0057d8c8c60f490f019c5f8c59b8193f0a760d97c600956b7c3a62bd1d739a",
+      "stderrSha256": "11ade113a3d4066730c668d721e27dbd26ba3f5d98814f9b0d5ca2e7ee7d2f15",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "catalogue",
+        "${WORK}/transformed.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "bba83560dbdc6c6c10beb1204fd028572906b97de2223a224555b5b9bfd4816f",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "compare",
+        "--config",
+        "${PACKAGE}/config/comparison-config.json",
+        "--reference",
+        "${WORK}/sample.catalogue.json",
+        "--candidate",
+        "${WORK}/transformed.catalogue.json",
+        "--body-only",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "2f1ed720442e1151e003f5a21a2e36b18e057911f2c61e62266df780892bcdc4",
+      "stderrSha256": "ff01292b17b5a64ab75a2330451f3fcf1925069a22eb15778cf73f9d5b624e8b",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "body",
+        "${WORK}/body.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "9c314576b463ad9382d88e362ce5c2c6e66ec0fd69664d056f08e085778dc228",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "634bc5a4c9838de5ea719977e4fa749b9565570fd9bfba5e33b1c2008c4ce007",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": "f39cdae406e729d73decc94b6a5eae2f8050fb2305e64b817b6ee9ce7b1e7895"
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-record",
+        "${WORK}/sample.record.json",
+        "-config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "build-catalogue",
+        "-config",
+        "${PACKAGE}/config/config-go.json",
+        "-out",
+        "-",
+        "sample.go=${WORK}/sample.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "f6862e6aa05806745f71a5ec2efdcd6e069676b97af6b6cba58df2d27c1d18c8",
+      "stderrSha256": "77dfa0c8d3b618921e508ea64d1cc9ad856f7a5488c0001e5d328ab66301396b",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-catalogue",
+        "${WORK}/sample.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "cffac826f5096c7cf7e002018f054cfda000d009c8ef7362689a2ab7ecc17cd4",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": "6e699479eea3fe6ffc05212d2bc3c9b173738d0273bfeef841a50765974b9b08"
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-record",
+        "${WORK}/transformed.record.json",
+        "-config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "build-catalogue",
+        "-config",
+        "${PACKAGE}/config/config-go.json",
+        "-out",
+        "-",
+        "transformed.go=${WORK}/transformed.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "5c0057d8c8c60f490f019c5f8c59b8193f0a760d97c600956b7c3a62bd1d739a",
+      "stderrSha256": "5ecc04093f701c4457702f245a882ece622597d5dca4b8df3615003b10f3fa99",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-catalogue",
+        "${WORK}/transformed.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "compare",
+        "-comparison-config",
+        "${PACKAGE}/config/comparison-config.json",
+        "-reference",
+        "${WORK}/sample.catalogue.json",
+        "-candidate",
+        "${WORK}/transformed.catalogue.json",
+        "-body-only",
+        "-out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "2f1ed720442e1151e003f5a21a2e36b18e057911f2c61e62266df780892bcdc4",
+      "stderrSha256": "95d04fdba07ee6667f74abb330448689bfebc174dac34572f65fa22049627333",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-body",
+        "${WORK}/body.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--input",
+        "${WORK}/sample.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "record",
+        "${WORK}/sample.record.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "c16996ff03d482543320e71d63a3fb9bfecc734d793c349c836ebd1b090191c7",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "build-catalogue",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--source",
+        "sample.go=${WORK}/sample.go",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "147c0e5d38ba09c181a5e641f2d299f3c89c873e6416dd10613bcf0e97efbb49",
+      "stderrSha256": "a870f151e4da58659e8367b1ae357e8206245f81c3a7d0e026ac21cd8225656d",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "catalogue",
+        "${WORK}/sample.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "eefdcee2b9ae2344af082b90277d18cc24b18b7d6bf29200062d1e779de3b153",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--input",
+        "${WORK}/transformed.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "973cf9e3442e2ddaea7c4a0a77f1b83b71956f64865390f3fb647d5b73de31e1",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "record",
+        "${WORK}/transformed.record.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "4f9a26269fba468795e4564a78193ea0f35bfc99ad7d14f3d2d2b1d70406d3c2",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "build-catalogue",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--source",
+        "transformed.go=${WORK}/transformed.go",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "f4b51cbfb72413e22e2f40564dc984c077de8e238c00cd0f9d9b8e90eb1c82f0",
+      "stderrSha256": "d592bf7aa3945d1dab0c1ee3aa8f9b4766a56104037c21b83efcd8dc8e4a763c",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "catalogue",
+        "${WORK}/transformed.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "b6032bb498560d4c67d91fb405b4d381756ee4ff4f6af5d415b847ba37cfb93e",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "compare",
+        "--config",
+        "${PACKAGE}/config/comparison-config.json",
+        "--reference",
+        "${WORK}/sample.catalogue.json",
+        "--candidate",
+        "${WORK}/transformed.catalogue.json",
+        "--body-only",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "ba428cfbbc3fed2c07e8c97ff5846a436b7888e95e12e64b22d0580f224e2cb5",
+      "stderrSha256": "2e1d479f4a3524c6658c0a78a6b2fb844b27ab8d7c28eb89d485e243ab0bda60",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "body",
+        "${WORK}/body.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "223bebe83646b3fd41292b9906892297167d467d10aed3b0c8d4c75784ae0a9e",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-record",
+        "${WORK}/sample.record.json",
+        "-config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "build-catalogue",
+        "-config",
+        "${PACKAGE}/config/config-go.json",
+        "-out",
+        "-",
+        "sample.go=${WORK}/sample.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "147c0e5d38ba09c181a5e641f2d299f3c89c873e6416dd10613bcf0e97efbb49",
+      "stderrSha256": "8c92b338c247070b6cc389046151f8ce452ad957c90654a155c784dcd7588d96",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-catalogue",
+        "${WORK}/sample.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "973cf9e3442e2ddaea7c4a0a77f1b83b71956f64865390f3fb647d5b73de31e1",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": "0a026c040362c8be6cf387277c4a4fe0f874dd260fb041d97b12bfaeb99c0547"
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-record",
+        "${WORK}/transformed.record.json",
+        "-config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "build-catalogue",
+        "-config",
+        "${PACKAGE}/config/config-go.json",
+        "-out",
+        "-",
+        "transformed.go=${WORK}/transformed.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "f4b51cbfb72413e22e2f40564dc984c077de8e238c00cd0f9d9b8e90eb1c82f0",
+      "stderrSha256": "c784de3dcb66afe885e3a7c83a80008681edc32bf7043224953120493893d5b1",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-catalogue",
+        "${WORK}/transformed.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "compare",
+        "-comparison-config",
+        "${PACKAGE}/config/comparison-config.json",
+        "-reference",
+        "${WORK}/sample.catalogue.json",
+        "-candidate",
+        "${WORK}/transformed.catalogue.json",
+        "-body-only",
+        "-out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "ba428cfbbc3fed2c07e8c97ff5846a436b7888e95e12e64b22d0580f224e2cb5",
+      "stderrSha256": "d68b0154a3e66fc449afdcc106b5d8b0951cae0a8cd5e5d4dc59b54c78416547",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-body",
+        "${WORK}/body.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--input",
+        "${WORK}/sample.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "record",
+        "${WORK}/sample.record.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "c16996ff03d482543320e71d63a3fb9bfecc734d793c349c836ebd1b090191c7",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "build-catalogue",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--source",
+        "sample.go=${WORK}/sample.go",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "147c0e5d38ba09c181a5e641f2d299f3c89c873e6416dd10613bcf0e97efbb49",
+      "stderrSha256": "a870f151e4da58659e8367b1ae357e8206245f81c3a7d0e026ac21cd8225656d",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "catalogue",
+        "${WORK}/sample.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "eefdcee2b9ae2344af082b90277d18cc24b18b7d6bf29200062d1e779de3b153",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--input",
+        "${WORK}/transformed.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "19cf1dc6261f9630eb25c620785fe69e91c813c9a18ff24a8c23e24b17c15f23",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "record",
+        "${WORK}/transformed.record.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "7e45c0eeb0f5307f7ca71017724539b896c6d02f5fbaefff53afc0d282a709e6",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "build-catalogue",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--source",
+        "transformed.go=${WORK}/transformed.go",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "4a36e44d6bbcf44012f1aba1849447dab3e856cb4408bc7647c6bea27e9e4f50",
+      "stderrSha256": "5d04b56ce7df0e5b5e74ad4235f35d7c383727560144d4d8b237b330ffe7a417",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "catalogue",
+        "${WORK}/transformed.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "c9e941094ad1f5ba6b6ad32cd7e7d6ccb261a5e477b0ebc2f181d0ee70fa6356",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "compare",
+        "--config",
+        "${PACKAGE}/config/comparison-config.json",
+        "--reference",
+        "${WORK}/sample.catalogue.json",
+        "--candidate",
+        "${WORK}/transformed.catalogue.json",
+        "--body-only",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "43f7419d67ef8edeac09601c99386b1cea15baceff0d02b002224dbb4116e7eb",
+      "stderrSha256": "de5d1503cce7b9ec26c19e713d16dd9d255bfc67f64b1d1cd43e33ffb7b3630f",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "body",
+        "${WORK}/body.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "445853fbc40855d45003cda44eea2a7baf77c0213ad148c7be3964fe494817f1",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-record",
+        "${WORK}/sample.record.json",
+        "-config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "build-catalogue",
+        "-config",
+        "${PACKAGE}/config/config-go.json",
+        "-out",
+        "-",
+        "sample.go=${WORK}/sample.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "147c0e5d38ba09c181a5e641f2d299f3c89c873e6416dd10613bcf0e97efbb49",
+      "stderrSha256": "8c92b338c247070b6cc389046151f8ce452ad957c90654a155c784dcd7588d96",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-catalogue",
+        "${WORK}/sample.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "19cf1dc6261f9630eb25c620785fe69e91c813c9a18ff24a8c23e24b17c15f23",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": "48d57e1d56930357cb9407d9f9bc04d3aa822e88ef5d617525a925b3d82ed74a"
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-record",
+        "${WORK}/transformed.record.json",
+        "-config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "build-catalogue",
+        "-config",
+        "${PACKAGE}/config/config-go.json",
+        "-out",
+        "-",
+        "transformed.go=${WORK}/transformed.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "4a36e44d6bbcf44012f1aba1849447dab3e856cb4408bc7647c6bea27e9e4f50",
+      "stderrSha256": "f964ecdd6635760e7c8f80ba58ace6d9cbf0762584dff49be2bad80aa9c8264b",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-catalogue",
+        "${WORK}/transformed.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "compare",
+        "-comparison-config",
+        "${PACKAGE}/config/comparison-config.json",
+        "-reference",
+        "${WORK}/sample.catalogue.json",
+        "-candidate",
+        "${WORK}/transformed.catalogue.json",
+        "-body-only",
+        "-out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "43f7419d67ef8edeac09601c99386b1cea15baceff0d02b002224dbb4116e7eb",
+      "stderrSha256": "6ffc4117d08c354b4942139c02ab948a88003bdb319108589d48e722d4a169be",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-body",
+        "${WORK}/body.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--input",
+        "${WORK}/sample.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "record",
+        "${WORK}/sample.record.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "c16996ff03d482543320e71d63a3fb9bfecc734d793c349c836ebd1b090191c7",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "build-catalogue",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--source",
+        "sample.go=${WORK}/sample.go",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "147c0e5d38ba09c181a5e641f2d299f3c89c873e6416dd10613bcf0e97efbb49",
+      "stderrSha256": "a870f151e4da58659e8367b1ae357e8206245f81c3a7d0e026ac21cd8225656d",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "catalogue",
+        "${WORK}/sample.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "eefdcee2b9ae2344af082b90277d18cc24b18b7d6bf29200062d1e779de3b153",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--input",
+        "${WORK}/transformed.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "6b4901a0b222c2d0b993274ff1111527c1fa1ab53bafb895de17b1c089185e83",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "record",
+        "${WORK}/transformed.record.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "5bc3a597eb9338a060c16a5f9e8e047891ba97f8135f51246f1175f56a9adcfd",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "build-catalogue",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--source",
+        "transformed.go=${WORK}/transformed.go",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "77dfdca5f0a627b896d05a30ae3ecf2b963a8b6f098426cf92b595664e5bed73",
+      "stderrSha256": "61187ea8c45c6d7a8959e09b6cc7faf77f469a95bc1e2a4fb913f04c2eb6d67a",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "catalogue",
+        "${WORK}/transformed.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "433ca92f21abe047a5e2600165572f38e51a8a0b60c425914192219bf0cc6c79",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "compare",
+        "--config",
+        "${PACKAGE}/config/comparison-config.json",
+        "--reference",
+        "${WORK}/sample.catalogue.json",
+        "--candidate",
+        "${WORK}/transformed.catalogue.json",
+        "--body-only",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "1412cb8bdcbb8f7a6ee237ebead6225503ab40dd84ac8ef93bf217d104954dbc",
+      "stderrSha256": "3bde6cc705fa6b35f44a5aebcaadd2096805327b1f6f50c7dc264ec46276d774",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "body",
+        "${WORK}/body.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "b88df48050b6adceef064cb4678aa189bfa9e6a3b3c570f92503d46787b83d6b",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-record",
+        "${WORK}/sample.record.json",
+        "-config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "build-catalogue",
+        "-config",
+        "${PACKAGE}/config/config-go.json",
+        "-out",
+        "-",
+        "sample.go=${WORK}/sample.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "147c0e5d38ba09c181a5e641f2d299f3c89c873e6416dd10613bcf0e97efbb49",
+      "stderrSha256": "8c92b338c247070b6cc389046151f8ce452ad957c90654a155c784dcd7588d96",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-catalogue",
+        "${WORK}/sample.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "6b4901a0b222c2d0b993274ff1111527c1fa1ab53bafb895de17b1c089185e83",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": "22e1942e643c68a3033222c33a84d6c06a7fd5ec2c04b397eb8e250287ee061f"
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-record",
+        "${WORK}/transformed.record.json",
+        "-config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "build-catalogue",
+        "-config",
+        "${PACKAGE}/config/config-go.json",
+        "-out",
+        "-",
+        "transformed.go=${WORK}/transformed.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "77dfdca5f0a627b896d05a30ae3ecf2b963a8b6f098426cf92b595664e5bed73",
+      "stderrSha256": "8f5ae2c77a176375c90b2d48d0f3e678b1d2a58a5ae55a58e1373c29528b3fd3",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-catalogue",
+        "${WORK}/transformed.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "compare",
+        "-comparison-config",
+        "${PACKAGE}/config/comparison-config.json",
+        "-reference",
+        "${WORK}/sample.catalogue.json",
+        "-candidate",
+        "${WORK}/transformed.catalogue.json",
+        "-body-only",
+        "-out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "1412cb8bdcbb8f7a6ee237ebead6225503ab40dd84ac8ef93bf217d104954dbc",
+      "stderrSha256": "79dfe094d68bd587f59be098eb166799d3e79be9d87a8280ae122e6a35babb2c",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-body",
+        "${WORK}/body.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--input",
+        "${WORK}/sample.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "record",
+        "${WORK}/sample.record.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "c16996ff03d482543320e71d63a3fb9bfecc734d793c349c836ebd1b090191c7",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "build-catalogue",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--source",
+        "sample.go=${WORK}/sample.go",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "147c0e5d38ba09c181a5e641f2d299f3c89c873e6416dd10613bcf0e97efbb49",
+      "stderrSha256": "a870f151e4da58659e8367b1ae357e8206245f81c3a7d0e026ac21cd8225656d",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "catalogue",
+        "${WORK}/sample.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "eefdcee2b9ae2344af082b90277d18cc24b18b7d6bf29200062d1e779de3b153",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--input",
+        "${WORK}/transformed.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "record",
+        "${WORK}/transformed.record.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "c16996ff03d482543320e71d63a3fb9bfecc734d793c349c836ebd1b090191c7",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "build-catalogue",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--source",
+        "transformed.go=${WORK}/transformed.go",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "74cd4f09a192cab9d4b1b55ec7d9d63831ebab36ed952356620bb6f3e2fe7ba1",
+      "stderrSha256": "f48db8c5ff2ca9fea9e6603f2a2fcbdde6ab4e24b792f02a1fd6b0fc060f11c1",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "catalogue",
+        "${WORK}/transformed.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "7cba0b6b630f40fc259a9ae5985add477582fddd81651cf43ff68b7db0094b5b",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "compare",
+        "--config",
+        "${PACKAGE}/config/comparison-config.json",
+        "--reference",
+        "${WORK}/sample.catalogue.json",
+        "--candidate",
+        "${WORK}/transformed.catalogue.json",
+        "--body-only",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "d94725ed9da415be9baeb02a72bfd0c1e469f086e138e527fc39cf26e68d8cac",
+      "stderrSha256": "ed3547ed0ceb3b5ab43149d5dfe97d05ccadf48fcca1eedc98e2180890e01ae6",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "body",
+        "${WORK}/body.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "49a6bd86c6b4f0fcb45761f7622c54cbf8d9d2938a7a45c2808ae079219a79f9",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-record",
+        "${WORK}/sample.record.json",
+        "-config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "build-catalogue",
+        "-config",
+        "${PACKAGE}/config/config-go.json",
+        "-out",
+        "-",
+        "sample.go=${WORK}/sample.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "147c0e5d38ba09c181a5e641f2d299f3c89c873e6416dd10613bcf0e97efbb49",
+      "stderrSha256": "8c92b338c247070b6cc389046151f8ce452ad957c90654a155c784dcd7588d96",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-catalogue",
+        "${WORK}/sample.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c"
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-record",
+        "${WORK}/transformed.record.json",
+        "-config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "build-catalogue",
+        "-config",
+        "${PACKAGE}/config/config-go.json",
+        "-out",
+        "-",
+        "transformed.go=${WORK}/transformed.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "74cd4f09a192cab9d4b1b55ec7d9d63831ebab36ed952356620bb6f3e2fe7ba1",
+      "stderrSha256": "ca2870e7ce10f729194a0b608c22f470735f6ececa8f581475ee2939867c045a",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-catalogue",
+        "${WORK}/transformed.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "compare",
+        "-comparison-config",
+        "${PACKAGE}/config/comparison-config.json",
+        "-reference",
+        "${WORK}/sample.catalogue.json",
+        "-candidate",
+        "${WORK}/transformed.catalogue.json",
+        "-body-only",
+        "-out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "d94725ed9da415be9baeb02a72bfd0c1e469f086e138e527fc39cf26e68d8cac",
+      "stderrSha256": "5b9452321c2e105be9a8b372e704ce2c859c90f1223cf8653ac6d4001a89b4dc",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-body",
+        "${WORK}/body.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--input",
+        "${WORK}/sample.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "14652fc3cc218808f7378b6a81065dcfaf010bfacd21ce812f2af8063784b030",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "record",
+        "${WORK}/sample.record.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "8ca3a6d9d876f33060a76270f8c6bd9d13acef0fc0c327a04581acd36a0412bd",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "build-catalogue",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--source",
+        "sample.go=${WORK}/sample.go",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "b1bba3c448c3b599de92f74906718e9d8c99687b4d09f7f17f3b4d0898d8eee6",
+      "stderrSha256": "7f06868ae7ddee89d6cc7b01bdf84ef3f2f2f8ced03d9b806cfc65fa05a75d71",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "catalogue",
+        "${WORK}/sample.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "32d3be9d88ecf5ba7c34907c1478935889420384406fb03d210e033f4f2b118b",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--input",
+        "${WORK}/transformed.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "19cf1dc6261f9630eb25c620785fe69e91c813c9a18ff24a8c23e24b17c15f23",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "record",
+        "${WORK}/transformed.record.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "7e45c0eeb0f5307f7ca71017724539b896c6d02f5fbaefff53afc0d282a709e6",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "build-catalogue",
+        "--config",
+        "${PACKAGE}/config/config-go.json",
+        "--source",
+        "transformed.go=${WORK}/transformed.go",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "4a36e44d6bbcf44012f1aba1849447dab3e856cb4408bc7647c6bea27e9e4f50",
+      "stderrSha256": "5d04b56ce7df0e5b5e74ad4235f35d7c383727560144d4d8b237b330ffe7a417",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "catalogue",
+        "${WORK}/transformed.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "c9e941094ad1f5ba6b6ad32cd7e7d6ccb261a5e477b0ebc2f181d0ee70fa6356",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "compare",
+        "--config",
+        "${PACKAGE}/config/comparison-config.json",
+        "--reference",
+        "${WORK}/sample.catalogue.json",
+        "--candidate",
+        "${WORK}/transformed.catalogue.json",
+        "--body-only",
+        "--out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "af4e3003ed360acb4608d4f5f0e1014a60402e8db348b678e2f1f55d72e027bb",
+      "stderrSha256": "376f70bd1e4e4354e62f9ab30c65d4722beccffd19fd9d236b4870684353d486",
+      "stdinSha256": null
+    },
+    {
+      "cli": "rust",
+      "argv": [
+        "validate",
+        "body",
+        "${WORK}/body.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "e4892fbd4c81993ebc1462266433b9bbf2878c231567951c210c36429d44121c",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "14652fc3cc218808f7378b6a81065dcfaf010bfacd21ce812f2af8063784b030",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": "66b27e4b006c89b0f66411d35fd02d6159cdfae0eb1ea64093679757f7bdb57e"
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-record",
+        "${WORK}/sample.record.json",
+        "-config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "build-catalogue",
+        "-config",
+        "${PACKAGE}/config/config-go.json",
+        "-out",
+        "-",
+        "sample.go=${WORK}/sample.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "b1bba3c448c3b599de92f74906718e9d8c99687b4d09f7f17f3b4d0898d8eee6",
+      "stderrSha256": "b1b3cb5a68eb5ef531fab0222c4974230de03d05a4ccb3ed853b0f76e13da5e0",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-catalogue",
+        "${WORK}/sample.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "extract",
+        "--config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "19cf1dc6261f9630eb25c620785fe69e91c813c9a18ff24a8c23e24b17c15f23",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": "48d57e1d56930357cb9407d9f9bc04d3aa822e88ef5d617525a925b3d82ed74a"
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-record",
+        "${WORK}/transformed.record.json",
+        "-config",
+        "${PACKAGE}/config/config-go.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "build-catalogue",
+        "-config",
+        "${PACKAGE}/config/config-go.json",
+        "-out",
+        "-",
+        "transformed.go=${WORK}/transformed.go"
+      ],
+      "exit": 0,
+      "stdoutSha256": "4a36e44d6bbcf44012f1aba1849447dab3e856cb4408bc7647c6bea27e9e4f50",
+      "stderrSha256": "f964ecdd6635760e7c8f80ba58ace6d9cbf0762584dff49be2bad80aa9c8264b",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-catalogue",
+        "${WORK}/transformed.catalogue.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "compare",
+        "-comparison-config",
+        "${PACKAGE}/config/comparison-config.json",
+        "-reference",
+        "${WORK}/sample.catalogue.json",
+        "-candidate",
+        "${WORK}/transformed.catalogue.json",
+        "-body-only",
+        "-out",
+        "-"
+      ],
+      "exit": 0,
+      "stdoutSha256": "af4e3003ed360acb4608d4f5f0e1014a60402e8db348b678e2f1f55d72e027bb",
+      "stderrSha256": "d9900c13cae851f83d17a3e6804828c8b719bd79c28884094f5f6517f29ada7d",
+      "stdinSha256": null
+    },
+    {
+      "cli": "go",
+      "argv": [
+        "validate",
+        "-body",
+        "${WORK}/body.json"
+      ],
+      "exit": 0,
+      "stdoutSha256": "009d962905920ad0e3ff46c6987fad36418982deb81796fd1f58e326d167c268",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdinSha256": null
+    }
+  ],
+  "cases": [
+    {
+      "id": "D1",
+      "artifacts": {
+        "rust": {
+          "body.json": "f4c5bbcf226b483f699a3a94151a746823361c64d295c524ab98946858c59b77",
+          "sample.catalogue.json": "b1bba3c448c3b599de92f74906718e9d8c99687b4d09f7f17f3b4d0898d8eee6",
+          "sample.record.json": "14652fc3cc218808f7378b6a81065dcfaf010bfacd21ce812f2af8063784b030",
+          "transformed.catalogue.json": "cf7587bc977b9a2e5563a679cb212b21f892f3a7731f4e816f529c58208242fd",
+          "transformed.record.json": "1213adfb91a30a8b6161e6c9f55dd264743e4fbe22a576e49052b84a9913ef5d"
+        },
+        "go": {
+          "body.json": "f4c5bbcf226b483f699a3a94151a746823361c64d295c524ab98946858c59b77",
+          "sample.catalogue.json": "b1bba3c448c3b599de92f74906718e9d8c99687b4d09f7f17f3b4d0898d8eee6",
+          "sample.record.json": "14652fc3cc218808f7378b6a81065dcfaf010bfacd21ce812f2af8063784b030",
+          "transformed.catalogue.json": "cf7587bc977b9a2e5563a679cb212b21f892f3a7731f4e816f529c58208242fd",
+          "transformed.record.json": "1213adfb91a30a8b6161e6c9f55dd264743e4fbe22a576e49052b84a9913ef5d"
+        }
+      }
+    },
+    {
+      "id": "D2",
+      "artifacts": {
+        "rust": {
+          "body.json": "2e03b27177b35c5b12ee8e1eb386329e8797ddf821042cb32f191af86ca4525f",
+          "sample.catalogue.json": "2c6ed17f54603ed7e1c3b8459480ff4820be902edc7fbd84a024308ed30568ef",
+          "sample.record.json": "0cb0665ce0557b6744301a4b51ee2a8a279fccb5530d7e98a9e3c563dcd4b347",
+          "transformed.catalogue.json": "e1c6c2594db64865448493c7dda490441eef21f259bdd0a1138a0e9a4027a459",
+          "transformed.record.json": "dcef4e786fd6efb09b31db77764b50cf9c1c8b17b0da706c9688fa457910c1f0"
+        },
+        "go": {
+          "body.json": "2e03b27177b35c5b12ee8e1eb386329e8797ddf821042cb32f191af86ca4525f",
+          "sample.catalogue.json": "2c6ed17f54603ed7e1c3b8459480ff4820be902edc7fbd84a024308ed30568ef",
+          "sample.record.json": "0cb0665ce0557b6744301a4b51ee2a8a279fccb5530d7e98a9e3c563dcd4b347",
+          "transformed.catalogue.json": "e1c6c2594db64865448493c7dda490441eef21f259bdd0a1138a0e9a4027a459",
+          "transformed.record.json": "dcef4e786fd6efb09b31db77764b50cf9c1c8b17b0da706c9688fa457910c1f0"
+        }
+      }
+    },
+    {
+      "id": "D3",
+      "artifacts": {
+        "rust": {
+          "body.json": "2f1ed720442e1151e003f5a21a2e36b18e057911f2c61e62266df780892bcdc4",
+          "sample.catalogue.json": "f6862e6aa05806745f71a5ec2efdcd6e069676b97af6b6cba58df2d27c1d18c8",
+          "sample.record.json": "634bc5a4c9838de5ea719977e4fa749b9565570fd9bfba5e33b1c2008c4ce007",
+          "transformed.catalogue.json": "5c0057d8c8c60f490f019c5f8c59b8193f0a760d97c600956b7c3a62bd1d739a",
+          "transformed.record.json": "cffac826f5096c7cf7e002018f054cfda000d009c8ef7362689a2ab7ecc17cd4"
+        },
+        "go": {
+          "body.json": "2f1ed720442e1151e003f5a21a2e36b18e057911f2c61e62266df780892bcdc4",
+          "sample.catalogue.json": "f6862e6aa05806745f71a5ec2efdcd6e069676b97af6b6cba58df2d27c1d18c8",
+          "sample.record.json": "634bc5a4c9838de5ea719977e4fa749b9565570fd9bfba5e33b1c2008c4ce007",
+          "transformed.catalogue.json": "5c0057d8c8c60f490f019c5f8c59b8193f0a760d97c600956b7c3a62bd1d739a",
+          "transformed.record.json": "cffac826f5096c7cf7e002018f054cfda000d009c8ef7362689a2ab7ecc17cd4"
+        }
+      }
+    },
+    {
+      "id": "D4",
+      "artifacts": {
+        "rust": {
+          "body.json": "ba428cfbbc3fed2c07e8c97ff5846a436b7888e95e12e64b22d0580f224e2cb5",
+          "sample.catalogue.json": "147c0e5d38ba09c181a5e641f2d299f3c89c873e6416dd10613bcf0e97efbb49",
+          "sample.record.json": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+          "transformed.catalogue.json": "f4b51cbfb72413e22e2f40564dc984c077de8e238c00cd0f9d9b8e90eb1c82f0",
+          "transformed.record.json": "973cf9e3442e2ddaea7c4a0a77f1b83b71956f64865390f3fb647d5b73de31e1"
+        },
+        "go": {
+          "body.json": "ba428cfbbc3fed2c07e8c97ff5846a436b7888e95e12e64b22d0580f224e2cb5",
+          "sample.catalogue.json": "147c0e5d38ba09c181a5e641f2d299f3c89c873e6416dd10613bcf0e97efbb49",
+          "sample.record.json": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+          "transformed.catalogue.json": "f4b51cbfb72413e22e2f40564dc984c077de8e238c00cd0f9d9b8e90eb1c82f0",
+          "transformed.record.json": "973cf9e3442e2ddaea7c4a0a77f1b83b71956f64865390f3fb647d5b73de31e1"
+        }
+      }
+    },
+    {
+      "id": "D5",
+      "artifacts": {
+        "rust": {
+          "body.json": "43f7419d67ef8edeac09601c99386b1cea15baceff0d02b002224dbb4116e7eb",
+          "sample.catalogue.json": "147c0e5d38ba09c181a5e641f2d299f3c89c873e6416dd10613bcf0e97efbb49",
+          "sample.record.json": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+          "transformed.catalogue.json": "4a36e44d6bbcf44012f1aba1849447dab3e856cb4408bc7647c6bea27e9e4f50",
+          "transformed.record.json": "19cf1dc6261f9630eb25c620785fe69e91c813c9a18ff24a8c23e24b17c15f23"
+        },
+        "go": {
+          "body.json": "43f7419d67ef8edeac09601c99386b1cea15baceff0d02b002224dbb4116e7eb",
+          "sample.catalogue.json": "147c0e5d38ba09c181a5e641f2d299f3c89c873e6416dd10613bcf0e97efbb49",
+          "sample.record.json": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+          "transformed.catalogue.json": "4a36e44d6bbcf44012f1aba1849447dab3e856cb4408bc7647c6bea27e9e4f50",
+          "transformed.record.json": "19cf1dc6261f9630eb25c620785fe69e91c813c9a18ff24a8c23e24b17c15f23"
+        }
+      }
+    },
+    {
+      "id": "D6",
+      "artifacts": {
+        "rust": {
+          "body.json": "1412cb8bdcbb8f7a6ee237ebead6225503ab40dd84ac8ef93bf217d104954dbc",
+          "sample.catalogue.json": "147c0e5d38ba09c181a5e641f2d299f3c89c873e6416dd10613bcf0e97efbb49",
+          "sample.record.json": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+          "transformed.catalogue.json": "77dfdca5f0a627b896d05a30ae3ecf2b963a8b6f098426cf92b595664e5bed73",
+          "transformed.record.json": "6b4901a0b222c2d0b993274ff1111527c1fa1ab53bafb895de17b1c089185e83"
+        },
+        "go": {
+          "body.json": "1412cb8bdcbb8f7a6ee237ebead6225503ab40dd84ac8ef93bf217d104954dbc",
+          "sample.catalogue.json": "147c0e5d38ba09c181a5e641f2d299f3c89c873e6416dd10613bcf0e97efbb49",
+          "sample.record.json": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+          "transformed.catalogue.json": "77dfdca5f0a627b896d05a30ae3ecf2b963a8b6f098426cf92b595664e5bed73",
+          "transformed.record.json": "6b4901a0b222c2d0b993274ff1111527c1fa1ab53bafb895de17b1c089185e83"
+        }
+      }
+    },
+    {
+      "id": "C-identical",
+      "artifacts": {
+        "rust": {
+          "body.json": "d94725ed9da415be9baeb02a72bfd0c1e469f086e138e527fc39cf26e68d8cac",
+          "sample.catalogue.json": "147c0e5d38ba09c181a5e641f2d299f3c89c873e6416dd10613bcf0e97efbb49",
+          "sample.record.json": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+          "transformed.catalogue.json": "74cd4f09a192cab9d4b1b55ec7d9d63831ebab36ed952356620bb6f3e2fe7ba1",
+          "transformed.record.json": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d"
+        },
+        "go": {
+          "body.json": "d94725ed9da415be9baeb02a72bfd0c1e469f086e138e527fc39cf26e68d8cac",
+          "sample.catalogue.json": "147c0e5d38ba09c181a5e641f2d299f3c89c873e6416dd10613bcf0e97efbb49",
+          "sample.record.json": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d",
+          "transformed.catalogue.json": "74cd4f09a192cab9d4b1b55ec7d9d63831ebab36ed952356620bb6f3e2fe7ba1",
+          "transformed.record.json": "3bd5389c19c2ed8c572ba34df9e26951420d4cf92da9806594cc2dce5f595e5d"
+        }
+      }
+    },
+    {
+      "id": "C-unrelated",
+      "artifacts": {
+        "rust": {
+          "body.json": "af4e3003ed360acb4608d4f5f0e1014a60402e8db348b678e2f1f55d72e027bb",
+          "sample.catalogue.json": "b1bba3c448c3b599de92f74906718e9d8c99687b4d09f7f17f3b4d0898d8eee6",
+          "sample.record.json": "14652fc3cc218808f7378b6a81065dcfaf010bfacd21ce812f2af8063784b030",
+          "transformed.catalogue.json": "4a36e44d6bbcf44012f1aba1849447dab3e856cb4408bc7647c6bea27e9e4f50",
+          "transformed.record.json": "19cf1dc6261f9630eb25c620785fe69e91c813c9a18ff24a8c23e24b17c15f23"
+        },
+        "go": {
+          "body.json": "af4e3003ed360acb4608d4f5f0e1014a60402e8db348b678e2f1f55d72e027bb",
+          "sample.catalogue.json": "b1bba3c448c3b599de92f74906718e9d8c99687b4d09f7f17f3b4d0898d8eee6",
+          "sample.record.json": "14652fc3cc218808f7378b6a81065dcfaf010bfacd21ce812f2af8063784b030",
+          "transformed.catalogue.json": "4a36e44d6bbcf44012f1aba1849447dab3e856cb4408bc7647c6bea27e9e4f50",
+          "transformed.record.json": "19cf1dc6261f9630eb25c620785fe69e91c813c9a18ff24a8c23e24b17c15f23"
+        }
+      }
+    }
+  ]
+}

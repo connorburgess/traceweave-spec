@@ -1,0 +1,404 @@
+{
+  "extractionConfigSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+  "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+  "cases": [
+    {
+      "id": "D1",
+      "bodyFileSha256": "f4c5bbcf226b483f699a3a94151a746823361c64d295c524ab98946858c59b77",
+      "bodySha256": "f4c5bbcf226b483f699a3a94151a746823361c64d295c524ab98946858c59b77",
+      "modes": {
+        "exact": {
+          "outcome": {
+            "class": "match",
+            "code": "match"
+          },
+          "containment": {
+            "candidateInReference": {
+              "denominator": 5,
+              "numerator": 5
+            },
+            "referenceInCandidate": {
+              "denominator": 5,
+              "numerator": 5
+            }
+          },
+          "regionCounts": {
+            "belowMinimumEvidence": 0,
+            "commonOnly": 0,
+            "reportable": 1
+          }
+        },
+        "normalized": {
+          "outcome": {
+            "class": "match",
+            "code": "match"
+          },
+          "containment": {
+            "candidateInReference": {
+              "denominator": 4,
+              "numerator": 4
+            },
+            "referenceInCandidate": {
+              "denominator": 4,
+              "numerator": 4
+            }
+          },
+          "regionCounts": {
+            "belowMinimumEvidence": 0,
+            "commonOnly": 0,
+            "reportable": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "D2",
+      "bodyFileSha256": "2e03b27177b35c5b12ee8e1eb386329e8797ddf821042cb32f191af86ca4525f",
+      "bodySha256": "2e03b27177b35c5b12ee8e1eb386329e8797ddf821042cb32f191af86ca4525f",
+      "modes": {
+        "exact": {
+          "outcome": {
+            "class": "no-match",
+            "code": "no-shared-fingerprints"
+          },
+          "containment": {
+            "candidateInReference": {
+              "denominator": 3,
+              "numerator": 0
+            },
+            "referenceInCandidate": {
+              "denominator": 4,
+              "numerator": 0
+            }
+          },
+          "regionCounts": {
+            "belowMinimumEvidence": 0,
+            "commonOnly": 0,
+            "reportable": 0
+          }
+        },
+        "normalized": {
+          "outcome": {
+            "class": "match",
+            "code": "match"
+          },
+          "containment": {
+            "candidateInReference": {
+              "denominator": 4,
+              "numerator": 4
+            },
+            "referenceInCandidate": {
+              "denominator": 4,
+              "numerator": 4
+            }
+          },
+          "regionCounts": {
+            "belowMinimumEvidence": 0,
+            "commonOnly": 0,
+            "reportable": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "D3",
+      "bodyFileSha256": "2f1ed720442e1151e003f5a21a2e36b18e057911f2c61e62266df780892bcdc4",
+      "bodySha256": "2f1ed720442e1151e003f5a21a2e36b18e057911f2c61e62266df780892bcdc4",
+      "modes": {
+        "exact": {
+          "outcome": {
+            "class": "abstain",
+            "code": "ambiguous"
+          },
+          "containment": {
+            "candidateInReference": {
+              "denominator": 26,
+              "numerator": 25
+            },
+            "referenceInCandidate": {
+              "denominator": 25,
+              "numerator": 25
+            }
+          },
+          "regionCounts": {
+            "belowMinimumEvidence": 1,
+            "commonOnly": 0,
+            "reportable": 5
+          }
+        },
+        "normalized": {
+          "outcome": {
+            "class": "abstain",
+            "code": "ambiguous"
+          },
+          "containment": {
+            "candidateInReference": {
+              "denominator": 19,
+              "numerator": 18
+            },
+            "referenceInCandidate": {
+              "denominator": 18,
+              "numerator": 18
+            }
+          },
+          "regionCounts": {
+            "belowMinimumEvidence": 6,
+            "commonOnly": 0,
+            "reportable": 5
+          }
+        }
+      }
+    },
+    {
+      "id": "D4",
+      "bodyFileSha256": "ba428cfbbc3fed2c07e8c97ff5846a436b7888e95e12e64b22d0580f224e2cb5",
+      "bodySha256": "ba428cfbbc3fed2c07e8c97ff5846a436b7888e95e12e64b22d0580f224e2cb5",
+      "modes": {
+        "exact": {
+          "outcome": {
+            "class": "no-match",
+            "code": "no-shared-fingerprints"
+          },
+          "containment": {
+            "candidateInReference": {
+              "denominator": 19,
+              "numerator": 0
+            },
+            "referenceInCandidate": {
+              "denominator": 14,
+              "numerator": 0
+            }
+          },
+          "regionCounts": {
+            "belowMinimumEvidence": 0,
+            "commonOnly": 0,
+            "reportable": 0
+          }
+        },
+        "normalized": {
+          "outcome": {
+            "class": "no-match",
+            "code": "no-shared-fingerprints"
+          },
+          "containment": {
+            "candidateInReference": {
+              "denominator": 20,
+              "numerator": 0
+            },
+            "referenceInCandidate": {
+              "denominator": 17,
+              "numerator": 0
+            }
+          },
+          "regionCounts": {
+            "belowMinimumEvidence": 0,
+            "commonOnly": 0,
+            "reportable": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "D5",
+      "bodyFileSha256": "43f7419d67ef8edeac09601c99386b1cea15baceff0d02b002224dbb4116e7eb",
+      "bodySha256": "43f7419d67ef8edeac09601c99386b1cea15baceff0d02b002224dbb4116e7eb",
+      "modes": {
+        "exact": {
+          "outcome": {
+            "class": "no-match",
+            "code": "no-shared-fingerprints"
+          },
+          "containment": {
+            "candidateInReference": {
+              "denominator": 3,
+              "numerator": 0
+            },
+            "referenceInCandidate": {
+              "denominator": 14,
+              "numerator": 0
+            }
+          },
+          "regionCounts": {
+            "belowMinimumEvidence": 0,
+            "commonOnly": 0,
+            "reportable": 0
+          }
+        },
+        "normalized": {
+          "outcome": {
+            "class": "no-match",
+            "code": "no-shared-fingerprints"
+          },
+          "containment": {
+            "candidateInReference": {
+              "denominator": 4,
+              "numerator": 0
+            },
+            "referenceInCandidate": {
+              "denominator": 17,
+              "numerator": 0
+            }
+          },
+          "regionCounts": {
+            "belowMinimumEvidence": 0,
+            "commonOnly": 0,
+            "reportable": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "D6",
+      "bodyFileSha256": "1412cb8bdcbb8f7a6ee237ebead6225503ab40dd84ac8ef93bf217d104954dbc",
+      "bodySha256": "1412cb8bdcbb8f7a6ee237ebead6225503ab40dd84ac8ef93bf217d104954dbc",
+      "modes": {
+        "exact": {
+          "outcome": {
+            "class": "no-match",
+            "code": "no-shared-fingerprints"
+          },
+          "containment": {
+            "candidateInReference": {
+              "denominator": 6,
+              "numerator": 0
+            },
+            "referenceInCandidate": {
+              "denominator": 14,
+              "numerator": 0
+            }
+          },
+          "regionCounts": {
+            "belowMinimumEvidence": 0,
+            "commonOnly": 0,
+            "reportable": 0
+          }
+        },
+        "normalized": {
+          "outcome": {
+            "class": "no-match",
+            "code": "no-shared-fingerprints"
+          },
+          "containment": {
+            "candidateInReference": {
+              "denominator": 5,
+              "numerator": 0
+            },
+            "referenceInCandidate": {
+              "denominator": 17,
+              "numerator": 0
+            }
+          },
+          "regionCounts": {
+            "belowMinimumEvidence": 0,
+            "commonOnly": 0,
+            "reportable": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "C-identical",
+      "bodyFileSha256": "d94725ed9da415be9baeb02a72bfd0c1e469f086e138e527fc39cf26e68d8cac",
+      "bodySha256": "d94725ed9da415be9baeb02a72bfd0c1e469f086e138e527fc39cf26e68d8cac",
+      "modes": {
+        "exact": {
+          "outcome": {
+            "class": "match",
+            "code": "match"
+          },
+          "containment": {
+            "candidateInReference": {
+              "denominator": 14,
+              "numerator": 14
+            },
+            "referenceInCandidate": {
+              "denominator": 14,
+              "numerator": 14
+            }
+          },
+          "regionCounts": {
+            "belowMinimumEvidence": 0,
+            "commonOnly": 0,
+            "reportable": 1
+          }
+        },
+        "normalized": {
+          "outcome": {
+            "class": "match",
+            "code": "match"
+          },
+          "containment": {
+            "candidateInReference": {
+              "denominator": 17,
+              "numerator": 17
+            },
+            "referenceInCandidate": {
+              "denominator": 17,
+              "numerator": 17
+            }
+          },
+          "regionCounts": {
+            "belowMinimumEvidence": 0,
+            "commonOnly": 0,
+            "reportable": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "C-unrelated",
+      "bodyFileSha256": "af4e3003ed360acb4608d4f5f0e1014a60402e8db348b678e2f1f55d72e027bb",
+      "bodySha256": "af4e3003ed360acb4608d4f5f0e1014a60402e8db348b678e2f1f55d72e027bb",
+      "modes": {
+        "exact": {
+          "outcome": {
+            "class": "no-match",
+            "code": "no-shared-fingerprints"
+          },
+          "containment": {
+            "candidateInReference": {
+              "denominator": 3,
+              "numerator": 0
+            },
+            "referenceInCandidate": {
+              "denominator": 5,
+              "numerator": 0
+            }
+          },
+          "regionCounts": {
+            "belowMinimumEvidence": 0,
+            "commonOnly": 0,
+            "reportable": 0
+          }
+        },
+        "normalized": {
+          "outcome": {
+            "class": "no-match",
+            "code": "no-shared-fingerprints"
+          },
+          "containment": {
+            "candidateInReference": {
+              "denominator": 4,
+              "numerator": 0
+            },
+            "referenceInCandidate": {
+              "denominator": 4,
+              "numerator": 0
+            }
+          },
+          "regionCounts": {
+            "belowMinimumEvidence": 0,
+            "commonOnly": 0,
+            "reportable": 0
+          }
+        }
+      }
+    }
+  ],
+  "repeat": {
+    "runs": 2,
+    "all80ArtifactFilesByteIdentical": true,
+    "commandRecordsEqual": true,
+    "commandCountPerRun": 160
+  }
+}

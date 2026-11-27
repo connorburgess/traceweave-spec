@@ -1,0 +1,37 @@
+[
+  {
+    "stage": "initial harness probe",
+    "case": "D1",
+    "cli": "rust",
+    "command": "build-catalogue without explicit --out",
+    "observed": "Exit 0 returned a status line and wrote synthetic sample catalogue to CLI default private storage. Subsequent validate catalogue on that status line exited 1: malformed-catalogue.",
+    "statusLineCatalogueSha256": "b1bba3c448c3b599de92f74906718e9d8c99687b4d09f7f17f3b4d0898d8eee6",
+    "correction": "Explicit --out - plus per-run temporary TRACEWEAVE_PRIVATE_DIR; no attempt made to infer or restore earlier default catalogue contents."
+  },
+  {
+    "stage": "second harness probe",
+    "case": "D1",
+    "cli": "rust",
+    "command": "compare --body-only without explicit --out",
+    "observed": "Exit 0 wrote body to isolated temporary private storage and returned status line; validate body exited 1: not strict JSON.",
+    "correction": "Explicit --out - on comparison as well."
+  },
+  {
+    "stage": "third harness probe",
+    "case": "D1",
+    "cli": "go",
+    "command": "extract --config CONFIG --input FILE",
+    "exit": 2,
+    "observed": "flag provided but not defined: -input",
+    "correction": "Pinned Go extract reads stdin; Rust extract accepts --input. Record Go stdin digest."
+  },
+  {
+    "stage": "fourth harness probe",
+    "case": "D1",
+    "cli": "go",
+    "command": "validate record FILE",
+    "exit": 2,
+    "observed": "validate takes no positional arguments",
+    "correction": "Use documented Go validate -record FILE -config CONFIG; adapt build/compare flag forms from pinned Go README, keeping stdout outputs explicit."
+  }
+]
