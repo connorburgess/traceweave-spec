@@ -16,7 +16,9 @@ The preceding published checkpoint was `098178f9a6a123a1b60f1fd63a05d4685df27fb1
 
 The then-current publication checkpoint is now `dd927025aee41bfa260570bf252a49a94160c961`, mapped from source `9c445db793f7f26325e95904ccc416b9c51bded2` and preserved as an ancestor. This evidence-only integration retains WEB.4 author `d2dd3dfdffabf70d47d1249c42c30b133af15daf`, independent review `8f21327635bafb1e1736fed65e79269c3c96ff3e`, checker repair `e10f33ecbe9381fa30cc709cc6e31ce9b73080e7` and focused review `cc4fc4d5b3ade41ed754828b418c0f0d027f5e16`. No live testing page is proved; WEB.4 remains open. The disclosed default-private synthetic catalogue write and unknown prior contents/loss are retained without inspection, recovery or cleanup. Gate counts, unfrozen budgets and holds remain unchanged.
 
-The current published checkpoint is `184b74b072a7fdc4f79d385d512f542e8c32ab8a`, mapped from curated source `15817b253fa801a568e4718e8f0e81a03a8201d7` and preserved as an ancestor. This preparation retains bounded WEB.3 closure `faba59b7643111a1eb506c8f008a4f17a8d778e8`, retention correction `d7353166a9e8d4930c113c801ec629a9f82d1469` and labelled portable independent review dispositions with original identities. Only WEB.3 is newly met on exact Shelf `99a1a8bce5382a0345fa7e19d9bfd44575f9c016`; core34/47, extensions29/55 met,2negative,24open. WEB.4/5/6 remain open, finite/synthetic-drop/privacy/AT/performance/provenance limits and M3 HOLD remain. This map is publication preparation, not release approval or runtime authority.
+The preceding published checkpoint was `184b74b072a7fdc4f79d385d512f542e8c32ab8a`, mapped from curated source `15817b253fa801a568e4718e8f0e81a03a8201d7` and preserved as an ancestor. That WEB.3 preparation retained bounded WEB.3 closure `faba59b7643111a1eb506c8f008a4f17a8d778e8`, retention correction `d7353166a9e8d4930c113c801ec629a9f82d1469` and labelled portable independent review dispositions with original identities. Only WEB.3 is newly met on exact Shelf `99a1a8bce5382a0345fa7e19d9bfd44575f9c016`; core34/47, extensions29/55 met,2negative,24open. WEB.4/5/6 remain open, finite/synthetic-drop/privacy/AT/performance/provenance limits and M3 HOLD remain. This map is publication preparation, not release approval or runtime authority.
+
+The current published checkpoint is `b1177b6623ebcc218b5430ae35074ee9499b3c07`, mapped from curated source `5c5ffcf4781359863dd515bebb60bc5beca8b759` and preserved as an ancestor. This preparation retains bounded WEB.4 closure `f6e1eb37ba4896370ac790dfcf0b68543d8477dc` on exact Shelf `c0c34cc407e39b80b293ccec6e255db0207acd4a`, its portable page/P1/G1/integration/publication evidence and labelled independent retention disposition with original identity. Only WEB.4 is newly met: core34/47; extensions30/55met2negative23open. Six demos/three both-mode misses/two controls, eight body/sixteen catalogue comparisons, six operation outputs/thirty refusals and seven browser steps remain distinct. Bounded Go lexical/structural refusals, finite/shared-ancestry oracle and no universal semantic/compiler/evasion/unrelatedness or AT/privacy/WEB.6 certification remain. WEB.5/6 open, M3 HOLD; no runtime authority or release approval.
 
 ## Reproducing
 
@@ -43,7 +45,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 
 ## Verification of the commits listed here
 
-`python3 tools/public_history_scrub.py scan` over the 266 commits and 3823 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
+`python3 tools/public_history_scrub.py scan` over the 269 commits and 3884 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
 
 | Category | Hits |
 | --- | --- |
@@ -190,8 +192,11 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `faba59b` | `faba59b76431` | `b59a0144d129` |
 | `d735316` | `d7353166a9e8` | `0778d014c277` |
 | `d7353166a9e8d4930c113c801ec629a9f82d1469` | `d7353166a9e8` | `0778d014c277` |
+| `5c5ffcf4781359863dd515bebb60bc5beca8b759` | `5c5ffcf47813` | `b1177b6623eb` |
+| `cc4fc4d5b3ade41ed754828b418c0f0d027f5e16` | `cc4fc4d5b3ad` | `39d237d58536` |
+| `f6e1eb37ba4896370ac790dfcf0b68543d8477dc` | `f6e1eb37ba48` | `3f9544f0d469` |
 
-Ancestry was checked for all 8385 pairs of these 130 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
+Ancestry was checked for all 8778 pairs of these 133 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
 
 ## All commits, oldest first
 
@@ -477,3 +482,6 @@ Ancestry was checked for all 8385 pairs of these 130 ids in both directions: the
 | 278 | `faba59b76431` | `b59a0144d129` | kept | Record bounded WEB3 closure and portable accepted evidence |
 | 279 | `d7353166a9e8` | `0778d014c277` | kept | Correct WEB3 retention metadata omission and artifact links |
 | 280 | `1b6ae9a8fb07` | `250923c884ea` | kept | Retain independent WEB3 closure review dispositions |
+| 281 | `5c5ffcf47813` | `b1177b6623eb` | kept | Update public history map for bounded WEB3 closure and retained reviews |
+| 282 | `f6e1eb37ba48` | `3f9544f0d469` | kept | Record bounded WEB4 closure and portable accepted evidence |
+| 283 | `fca6b50f1754` | `737817b604db` | kept | Retain independent WEB4 closure disposition |
