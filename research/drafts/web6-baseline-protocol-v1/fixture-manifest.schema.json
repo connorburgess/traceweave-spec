@@ -1,0 +1,737 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:traceweave:research:web6:baseline-preparation:v1",
+  "title": "WEB.6 unfrozen baseline preparation ledger; not execution authority",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "const": "web6-baseline-preparation-v1"
+    },
+    "protocolVersion": {
+      "const": "web6-baseline-v1-preparation-1"
+    },
+    "state": {
+      "const": "preparation-unfrozen"
+    },
+    "executionAuthorized": {
+      "const": false
+    },
+    "gateStatus": {
+      "const": "planned"
+    },
+    "approvedProposal": {
+      "const": "50237f26360290102f60ff293c81d91aaef774ad"
+    },
+    "independentConfirmation": {
+      "const": "36b7ee51de05f1973ca382ab59dc47967056538e"
+    },
+    "evidencePins": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "specCuratedBase": {
+          "type": "string",
+          "minLength": 1
+        },
+        "implementationRead": {
+          "type": "string",
+          "minLength": 1
+        },
+        "shelfRead": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "specCuratedBase",
+        "implementationRead",
+        "shelfRead"
+      ]
+    },
+    "candidatePins": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "implementationRevision": {
+          "type": "null"
+        },
+        "productRevision": {
+          "type": "null"
+        },
+        "deployedAssetManifestSha256": {
+          "type": "null"
+        },
+        "cliBinarySha256": {
+          "type": "null"
+        },
+        "fixtureGeneratorRevision": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "implementationRevision",
+        "productRevision",
+        "deployedAssetManifestSha256",
+        "cliBinarySha256",
+        "fixtureGeneratorRevision"
+      ]
+    },
+    "devices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "candidateClass": {
+            "type": "string",
+            "minLength": 1
+          },
+          "exactModel": {
+            "type": "null"
+          },
+          "cpu": {
+            "type": "null"
+          },
+          "ramBytes": {
+            "type": "null"
+          },
+          "osBuild": {
+            "type": "null"
+          },
+          "browserVersion": {
+            "type": "null"
+          },
+          "assistiveTechnologyVersion": {
+            "type": "null"
+          },
+          "physicalKeyboard": {
+            "type": "null"
+          },
+          "availability": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "candidateClass",
+          "exactModel",
+          "cpu",
+          "ramBytes",
+          "osBuild",
+          "browserVersion",
+          "assistiveTechnologyVersion",
+          "physicalKeyboard",
+          "availability"
+        ]
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "tools": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "traceToolVersion": {
+          "type": "null"
+        },
+        "observerEntryAvailability": {
+          "type": "null"
+        },
+        "timerPrecisionAndClockCalibration": {
+          "type": "null"
+        },
+        "memoryInstrumentAndScope": {
+          "type": "null"
+        },
+        "readAllocationInstrumentRevision": {
+          "type": "null"
+        },
+        "networkCaptureVersion": {
+          "type": "null"
+        },
+        "keyboardAtScriptRevision": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "traceToolVersion",
+        "observerEntryAvailability",
+        "timerPrecisionAndClockCalibration",
+        "memoryInstrumentAndScope",
+        "readAllocationInstrumentRevision",
+        "networkCaptureVersion",
+        "keyboardAtScriptRevision"
+      ]
+    },
+    "candidateTargets": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sourceBytes": {
+          "const": 1048576
+        },
+        "sourceConfigRule": {
+          "const": "min(sourceBytes, config.maxInputBytes)"
+        },
+        "sourceCount": {
+          "const": 32
+        },
+        "sourceAggregateBytes": {
+          "const": 8388608
+        },
+        "documentBytes": {
+          "const": 4194304
+        },
+        "catalogueEntries": {
+          "const": 1000
+        },
+        "coreAggregateBytes": {
+          "const": 8388608
+        },
+        "exportBytes": {
+          "const": 8388608
+        },
+        "concurrentJobsPerTab": {
+          "const": 1
+        },
+        "rArtifactBytes": {
+          "const": 1048576
+        },
+        "rBundleBytes": {
+          "const": 1048576
+        },
+        "rPolicyBytes": {
+          "const": 1048576
+        },
+        "rAggregateBytes": {
+          "const": 4194304
+        },
+        "criticalJsEncodedBytes": {
+          "const": 150000
+        },
+        "engineEncodedBytes": {
+          "const": 1200000
+        },
+        "coldLcpMs": {
+          "const": 2500
+        },
+        "warmLcpMs": {
+          "const": 1500
+        },
+        "coldControlsReadyMs": {
+          "const": 5000
+        },
+        "warmControlsReadyMs": {
+          "const": 1500
+        },
+        "engineReadyMs": {
+          "const": 10000
+        },
+        "interactionAcknowledgementMs": {
+          "const": 200
+        },
+        "mainThreadLongTaskBoundaryMs": {
+          "const": 50
+        },
+        "allowedAttributableLongTasks": {
+          "const": 0
+        },
+        "visibleStatusIntervalMs": {
+          "const": 1000
+        },
+        "visibleStatusMaxUpdatesPerSecond": {
+          "const": 4
+        },
+        "coreCancelCessationMs": {
+          "const": 1000
+        },
+        "coreRestartMs": {
+          "const": 2000
+        },
+        "jobDesktopMs": {
+          "const": 30000
+        },
+        "jobMobileMs": {
+          "const": 60000
+        },
+        "wasmLinearHighWaterBytes": {
+          "const": 134217728
+        },
+        "accountedTransferBufferBytes": {
+          "const": 33554432
+        },
+        "wholeContextIncrementalPeakCandidateBytes": {
+          "const": 268435456
+        },
+        "readChunkBytes": {
+          "const": 262144
+        },
+        "coarseSpeechMinIntervalMs": {
+          "const": 10000
+        },
+        "postReadyNetworkAttempts": {
+          "const": 0
+        },
+        "repeatEngineBodyDownloads": {
+          "const": 0
+        },
+        "candidateHashedAssetFreshnessSeconds": {
+          "const": 2592000
+        },
+        "rStopAcknowledgementMs": {
+          "const": 200
+        },
+        "rReconciledOrPendingStatusMs": {
+          "const": 1000
+        },
+        "rDesktopSettlementMs": {
+          "const": 30000
+        },
+        "rMobileSettlementMs": {
+          "const": 60000
+        }
+      },
+      "required": [
+        "sourceBytes",
+        "sourceConfigRule",
+        "sourceCount",
+        "sourceAggregateBytes",
+        "documentBytes",
+        "catalogueEntries",
+        "coreAggregateBytes",
+        "exportBytes",
+        "concurrentJobsPerTab",
+        "rArtifactBytes",
+        "rBundleBytes",
+        "rPolicyBytes",
+        "rAggregateBytes",
+        "criticalJsEncodedBytes",
+        "engineEncodedBytes",
+        "coldLcpMs",
+        "warmLcpMs",
+        "coldControlsReadyMs",
+        "warmControlsReadyMs",
+        "engineReadyMs",
+        "interactionAcknowledgementMs",
+        "mainThreadLongTaskBoundaryMs",
+        "allowedAttributableLongTasks",
+        "visibleStatusIntervalMs",
+        "visibleStatusMaxUpdatesPerSecond",
+        "coreCancelCessationMs",
+        "coreRestartMs",
+        "jobDesktopMs",
+        "jobMobileMs",
+        "wasmLinearHighWaterBytes",
+        "accountedTransferBufferBytes",
+        "wholeContextIncrementalPeakCandidateBytes",
+        "readChunkBytes",
+        "coarseSpeechMinIntervalMs",
+        "postReadyNetworkAttempts",
+        "repeatEngineBodyDownloads",
+        "candidateHashedAssetFreshnessSeconds",
+        "rStopAcknowledgementMs",
+        "rReconciledOrPendingStatusMs",
+        "rDesktopSettlementMs",
+        "rMobileSettlementMs"
+      ]
+    },
+    "fixtureSlots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "subpath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "recipe": {
+            "type": "string",
+            "minLength": 1
+          },
+          "plannedBoundaryBytes": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "profileTupleId": {
+            "type": "null"
+          },
+          "path": {
+            "type": "null"
+          },
+          "sha256": {
+            "type": "null"
+          },
+          "actualBytes": {
+            "type": "null"
+          },
+          "configSha256": {
+            "type": "null"
+          },
+          "observedOutcome": {
+            "type": "null"
+          },
+          "measured": {
+            "const": false
+          },
+          "expectedCliArtifactSha256": {
+            "type": "null"
+          },
+          "expectedReportBodySha256": {
+            "type": "null"
+          },
+          "expectedStatusReason": {
+            "type": "null"
+          }
+        },
+        "required": [
+          "id",
+          "scope",
+          "subpath",
+          "kind",
+          "recipe",
+          "plannedBoundaryBytes",
+          "profileTupleId",
+          "path",
+          "sha256",
+          "actualBytes",
+          "configSha256",
+          "observedOutcome",
+          "measured",
+          "expectedCliArtifactSha256",
+          "expectedReportBodySha256",
+          "expectedStatusReason"
+        ]
+      },
+      "minItems": 1
+    },
+    "coreCancellationBuckets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "subpath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "profileTupleId": {
+            "type": "null"
+          },
+          "device": {
+            "type": "string",
+            "minLength": 1
+          },
+          "phase": {
+            "type": "string",
+            "minLength": 1
+          },
+          "planned": {
+            "const": 10
+          },
+          "validMeasured": {
+            "const": 0
+          },
+          "passed": {
+            "const": 0
+          },
+          "invalidAttempts": {
+            "const": 0
+          },
+          "workloadFixtureId": {
+            "type": "null"
+          },
+          "triggerDefinition": {
+            "type": "null"
+          },
+          "phaseActivityEvidence": {
+            "type": "null"
+          },
+          "clockCalibration": {
+            "type": "null"
+          },
+          "availability": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "subpath",
+          "profileTupleId",
+          "device",
+          "phase",
+          "planned",
+          "validMeasured",
+          "passed",
+          "invalidAttempts",
+          "workloadFixtureId",
+          "triggerDefinition",
+          "phaseActivityEvidence",
+          "clockCalibration",
+          "availability"
+        ]
+      },
+      "minItems": 24,
+      "maxItems": 24
+    },
+    "coreCancellationAllocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "repetitionsPerBucket": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "requiredDevices": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "realPhases": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "coreSubpaths": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "minimumPlanned": {
+          "const": 240
+        },
+        "expandedPlanned": {
+          "type": "null"
+        },
+        "formula": {
+          "type": "string",
+          "minLength": 1
+        },
+        "profileTupleManifest": {
+          "type": "null"
+        },
+        "diagnosticD3MinimumSeparate": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "validMeasured": {
+          "const": 0
+        },
+        "passed": {
+          "const": 0
+        }
+      },
+      "required": [
+        "repetitionsPerBucket",
+        "requiredDevices",
+        "realPhases",
+        "coreSubpaths",
+        "minimumPlanned",
+        "expandedPlanned",
+        "formula",
+        "profileTupleManifest",
+        "diagnosticD3MinimumSeparate",
+        "validMeasured",
+        "passed"
+      ]
+    },
+    "registration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "shippedInCandidate": {
+          "type": "null"
+        },
+        "policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "scope": {
+                "type": "string",
+                "minLength": 1
+              },
+              "expectedBoundaryOutcome": {
+                "type": "string",
+                "minLength": 1
+              },
+              "plannedPerRequiredDevice": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "measured": {
+                "const": 0
+              },
+              "passed": {
+                "const": 0
+              },
+              "fixtureId": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "id",
+              "scope",
+              "expectedBoundaryOutcome",
+              "plannedPerRequiredDevice",
+              "measured",
+              "passed",
+              "fixtureId"
+            ]
+          }
+        },
+        "candidateConditionalPlanned": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "exactFrozenPlanned": {
+          "type": "null"
+        },
+        "keyboardTasksPerDevice": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "shippedInCandidate",
+        "policy",
+        "cases",
+        "candidateConditionalPlanned",
+        "exactFrozenPlanned",
+        "keyboardTasksPerDevice"
+      ]
+    },
+    "demonstrations": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "shippedInCandidate": {
+          "type": "null"
+        },
+        "cases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "recipe": {
+                "type": "string",
+                "minLength": 1
+              },
+              "expectedOutcomeClass": {
+                "type": "string",
+                "minLength": 1
+              },
+              "fixtureId": {
+                "type": "null"
+              },
+              "measured": {
+                "const": 0
+              },
+              "passed": {
+                "const": 0
+              }
+            },
+            "required": [
+              "id",
+              "recipe",
+              "expectedOutcomeClass",
+              "fixtureId",
+              "measured",
+              "passed"
+            ]
+          }
+        },
+        "minimumCases": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "minimumNoMatchOrBelowMinimum": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "identitySelfCheckFixture": {
+          "type": "null"
+        },
+        "unrelatedSelfCheckFixture": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "shippedInCandidate",
+        "cases",
+        "minimumCases",
+        "minimumNoMatchOrBelowMinimum",
+        "identitySelfCheckFixture",
+        "unrelatedSelfCheckFixture"
+      ]
+    },
+    "executionPrerequisites": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "observedRuns": {
+      "const": 0
+    }
+  },
+  "required": [
+    "format",
+    "protocolVersion",
+    "state",
+    "executionAuthorized",
+    "gateStatus",
+    "approvedProposal",
+    "independentConfirmation",
+    "evidencePins",
+    "candidatePins",
+    "devices",
+    "tools",
+    "candidateTargets",
+    "fixtureSlots",
+    "coreCancellationBuckets",
+    "coreCancellationAllocation",
+    "registration",
+    "demonstrations",
+    "executionPrerequisites",
+    "observedRuns"
+  ]
+}
