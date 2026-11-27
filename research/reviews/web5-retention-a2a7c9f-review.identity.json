@@ -1,0 +1,11 @@
+{
+  "reviewedCommit": "a2a7c9fff730867cc040e2a17934dbda6af6ee87",
+  "originalReviewSha256": "a532da13a7641f0ca3a677d61731b80c18cc84cfe4ce044d40d29773e95e163d",
+  "originalReviewBytes": 14973,
+  "originalRetention": "unchanged privately; private review attachments not retained",
+  "retainedPath": "web5-retention-a2a7c9f-review.md",
+  "retainedSha256": "9edfcae33c09f1f1bda925549a54734ae36f59ce393080152afd8c772f5dad0e",
+  "retainedBytes": 16046,
+  "adaptation": "added portable acceptance/scope header; made private attachment links inert; original review body otherwise unchanged",
+  "scope": "independent accepted-source retention and bounded browser-tool page closure, not whole-domain or later-candidate certification"
+}
