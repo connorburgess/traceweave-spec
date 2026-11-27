@@ -1,0 +1,14 @@
+{
+  "format": "web4-independent-disposition-retention-v1",
+  "reviewedClosure": "f6e1eb37ba4896370ac790dfcf0b68543d8477dc",
+  "retainedPath": "research/reviews/web4-retention-f6e1eb3-review.md",
+  "originalSha256": "577d32dfb09267f376169f699fb841905db39fd937cc3fdb7995dda35a9a7c3e",
+  "originalBytes": 12075,
+  "retainedSha256": "34bfe934fb6e968e99c004bdb22ed58446afe97a131ae261a66f9b2a779d7f4a",
+  "retainedBytes": 12796,
+  "adaptation": "Added labelled header and retained-package citations; private original review attachments made inert; historical narrative/verdict unchanged",
+  "limits": [
+    "Original private attachment scripts/logs/diffs not retained",
+    "Historical acceptance of closure does not review this adaptation or approve publication"
+  ]
+}
