@@ -12,7 +12,7 @@ This replay uses publication-source lineage based at `ec2a4ddcfd0d4894ce369e6687
 
 Private `roadmap-v2` at `7a0fd5ac64a50eb5c3ef6d6f955c21e4f11cc41c` is intentionally not this replay's source. Its unpublished raw-bearing history, including original package `5e9eebdd2e365ed62911b25dc85c297f8b4ab5a1` and review `bab7b0f75353156daa0203b5c27fa66c88804d43`, is outside this map and has no translation claimed here. The raw object remains privately retained unchanged; it is omitted entirely from publication-source history. Historical private identifiers in the curated summary identify absent artifacts, not public proof. Published tree/subset consistency does not reproduce commit-to-root binding.
 
-The current published checkpoint for this preparation is `ea822ee3f96707de0ee806ac07a71c5aaea33b61`, preserved as an ancestor. This map also includes the queue reconciliation `d698811d743eef00de1121e4225ed2fad6cc4d1d`, accepted WEB retention `6bdca52ccd09b82b9ad956ab4639c00685888cdc` and independent review `296bfce1563da2852a7ef33385893b2d9b639858`. These add evidence only: WEB.5 remains uncertified and all counts, criteria and holds are unchanged.
+The current published checkpoint is `098178f9a6a123a1b60f1fd63a05d4685df27fb1`, preserved as an ancestor and mapped from curated source `329c0b8d8642ff3c07d258f9a7944c70f9dd1d14`. This preparation includes reviewed WEB.6 proposal `50237f26360290102f60ff293c81d91aaef774ad`, confirmation `36b7ee51de05f1973ca382ab59dc47967056538e`, owner timing adoption `48d46ed8216e2c06d2daf97c99eb7dc28ab7141b`, unfrozen protocol `6213b39aa1a4fcac30b3403307abea8f6c456d7b` and independent review `7e329055d75a31f4bfd22e14480e0a46ea582cfa`. Only the approved temporal prerequisite replacement is adopted; the numerical targets and 42 recipe slots, 240 core cancellation minimum and 114 conditional registration observations remain preparation, not runtime authority or measured evidence. Schema validity does not establish semantic readiness. WEB.6 remains planned; counts and all holds remain unchanged.
 
 ## Reproducing
 
@@ -39,7 +39,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 
 ## Verification of the commits listed here
 
-`python3 tools/public_history_scrub.py scan` over the 246 commits and 3595 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
+`python3 tools/public_history_scrub.py scan` over the 255 commits and 3649 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
 
 | Category | Hits |
 | --- | --- |
@@ -157,8 +157,24 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `d698811d743eef00de1121e4225ed2fad6cc4d1d` | `d698811d743e` | `b3c57adf2820` |
 | `d698811` | `d698811d743e` | `b3c57adf2820` |
 | `6bdca52` | `6bdca52ccd09` | `48f3693542d0` |
+| `329c0b8d8642ff3c07d258f9a7944c70f9dd1d14` | `329c0b8d8642` | `098178f9a6a1` |
+| `82899da2554c16a7ff90c60d3ba0750fb9e69e2b` | `82899da2554c` | `f311d5abab05` |
+| `a2f867d` | `a2f867d52046` | `7d291c91c400` |
+| `a2f867d5204695b13c84b632d7a8b2d97cef1576` | `a2f867d52046` | `7d291c91c400` |
+| `ebaecbdcb2a73da6c0a9c8a35fa530739f4b0d34` | `ebaecbdcb2a7` | `b581bd5a11f7` |
+| `329c0b8` | `329c0b8d8642` | `098178f9a6a1` |
+| `ebaecbd` | `ebaecbdcb2a7` | `b581bd5a11f7` |
+| `50237f26360290102f60ff293c81d91aaef774ad` | `50237f263602` | `63a4b3824b66` |
+| `82899da` | `82899da2554c` | `f311d5abab05` |
+| `50237f2` | `50237f263602` | `63a4b3824b66` |
+| `36b7ee51de05f1973ca382ab59dc47967056538e` | `36b7ee51de05` | `a7b7a96177c4` |
+| `36b7ee5` | `36b7ee51de05` | `a7b7a96177c4` |
+| `6213b39aa1a4fcac30b3403307abea8f6c456d7b` | `6213b39aa1a4` | `c8986f4c5c6e` |
+| `48d46ed8216e2c06d2daf97c99eb7dc28ab7141b` | `48d46ed8216e` | `d7129b0bd23e` |
+| `6213b39` | `6213b39aa1a4` | `c8986f4c5c6e` |
+| `48d46ed` | `48d46ed8216e` | `d7129b0bd23e` |
 
-Ancestry was checked for all 5050 pairs of these 101 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
+Ancestry was checked for all 6786 pairs of these 117 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
 
 ## All commits, oldest first
 
@@ -424,3 +440,12 @@ Ancestry was checked for all 5050 pairs of these 101 ids in both directions: the
 | 258 | `d698811d743e` | `b3c57adf2820` | kept | Reconcile current queue with accepted curated PDQ review |
 | 259 | `6bdca52ccd09` | `48f3693542d0` | kept | Retain bounded WEB claim audit and correction evidence |
 | 260 | `296bfce1563d` | `e91cb937544e` | kept | Review retained WEB claim audit and correction evidence |
+| 261 | `329c0b8d8642` | `098178f9a6a1` | kept | Update public history map for reviewed WEB evidence retention |
+| 262 | `ebaecbdcb2a7` | `b581bd5a11f7` | kept | Propose prospective WEB.6 budgets and source validation |
+| 263 | `a2f867d52046` | `7d291c91c400` | kept | Clarify WEB.6 measurement fallbacks and unmeasured cells |
+| 264 | `82899da2554c` | `f311d5abab05` | kept | Review proposed WEB.6 budgets and cancellation boundaries |
+| 265 | `50237f263602` | `63a4b3824b66` | kept | Define registration cancellation boundaries and core probe counts |
+| 266 | `36b7ee51de05` | `a7b7a96177c4` | kept | Record focused WEB.6 cancellation proposal rereview |
+| 267 | `48d46ed8216e` | `d7129b0bd23e` | kept | Record approved prospective WEB.6 timing amendment |
+| 268 | `6213b39aa1a4` | `c8986f4c5c6e` | kept | Prepare unfrozen WEB.6 baseline protocol and fixture ledger |
+| 269 | `7e329055d75a` | `c9c8eb22f036` | kept | Review WEB.6 timing adoption and unfrozen baseline preparation |
