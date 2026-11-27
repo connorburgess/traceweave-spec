@@ -12,7 +12,9 @@ This replay uses publication-source lineage based at `ec2a4ddcfd0d4894ce369e6687
 
 Private `roadmap-v2` at `7a0fd5ac64a50eb5c3ef6d6f955c21e4f11cc41c` is intentionally not this replay's source. Its unpublished raw-bearing history, including original package `5e9eebdd2e365ed62911b25dc85c297f8b4ab5a1` and review `bab7b0f75353156daa0203b5c27fa66c88804d43`, is outside this map and has no translation claimed here. The raw object remains privately retained unchanged; it is omitted entirely from publication-source history. Historical private identifiers in the curated summary identify absent artifacts, not public proof. Published tree/subset consistency does not reproduce commit-to-root binding.
 
-The current published checkpoint is `098178f9a6a123a1b60f1fd63a05d4685df27fb1`, preserved as an ancestor and mapped from curated source `329c0b8d8642ff3c07d258f9a7944c70f9dd1d14`. This preparation includes reviewed WEB.6 proposal `50237f26360290102f60ff293c81d91aaef774ad`, confirmation `36b7ee51de05f1973ca382ab59dc47967056538e`, owner timing adoption `48d46ed8216e2c06d2daf97c99eb7dc28ab7141b`, unfrozen protocol `6213b39aa1a4fcac30b3403307abea8f6c456d7b` and independent review `7e329055d75a31f4bfd22e14480e0a46ea582cfa`. Only the approved temporal prerequisite replacement is adopted; the numerical targets and 42 recipe slots, 240 core cancellation minimum and 114 conditional registration observations remain preparation, not runtime authority or measured evidence. Schema validity does not establish semantic readiness. WEB.6 remains planned; counts and all holds remain unchanged.
+The preceding published checkpoint was `098178f9a6a123a1b60f1fd63a05d4685df27fb1`, preserved as an ancestor and mapped from curated source `329c0b8d8642ff3c07d258f9a7944c70f9dd1d14`. This preparation includes reviewed WEB.6 proposal `50237f26360290102f60ff293c81d91aaef774ad`, confirmation `36b7ee51de05f1973ca382ab59dc47967056538e`, owner timing adoption `48d46ed8216e2c06d2daf97c99eb7dc28ab7141b`, unfrozen protocol `6213b39aa1a4fcac30b3403307abea8f6c456d7b` and independent review `7e329055d75a31f4bfd22e14480e0a46ea582cfa`. Only the approved temporal prerequisite replacement is adopted; the numerical targets and 42 recipe slots, 240 core cancellation minimum and 114 conditional registration observations remain preparation, not runtime authority or measured evidence. Schema validity does not establish semantic readiness. WEB.6 remains planned; counts and all holds remain unchanged.
+
+The then-current publication checkpoint is now `dd927025aee41bfa260570bf252a49a94160c961`, mapped from source `9c445db793f7f26325e95904ccc416b9c51bded2` and preserved as an ancestor. This evidence-only integration retains WEB.4 author `d2dd3dfdffabf70d47d1249c42c30b133af15daf`, independent review `8f21327635bafb1e1736fed65e79269c3c96ff3e`, checker repair `e10f33ecbe9381fa30cc709cc6e31ce9b73080e7` and focused review `cc4fc4d5b3ade41ed754828b418c0f0d027f5e16`. No live testing page is proved; WEB.4 remains open. The disclosed default-private synthetic catalogue write and unknown prior contents/loss are retained without inspection, recovery or cleanup. Gate counts, unfrozen budgets and holds remain unchanged.
 
 ## Reproducing
 
@@ -39,7 +41,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 
 ## Verification of the commits listed here
 
-`python3 tools/public_history_scrub.py scan` over the 255 commits and 3649 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
+`python3 tools/public_history_scrub.py scan` over the 262 commits and 3760 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
 
 | Category | Hits |
 | --- | --- |
@@ -119,6 +121,9 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `afca82c` | `afca82c41d54` | `d66e4b942c8c` |
 | `41628be` | `41628be879a8` | `f396a4133b56` |
 | `a4ea8d4` | `a4ea8d46fa7c` | `d61f45c9c203` |
+| `d2dd3df` | `d2dd3dfdffab` | `d0cbf79610b7` |
+| `e10f33e` | `e10f33ecbe93` | `a06631610a8b` |
+| `6213b39` | `6213b39aa1a4` | `c8986f4c5c6e` |
 | `0823f1d` | `0823f1d91143` | `cae4883ee992` |
 | `c402191` | `c402191166e9` | `f9ced808fa54` |
 | `11e975e` | `11e975e34720` | `a170a47b8d84` |
@@ -171,10 +176,15 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `36b7ee5` | `36b7ee51de05` | `a7b7a96177c4` |
 | `6213b39aa1a4fcac30b3403307abea8f6c456d7b` | `6213b39aa1a4` | `c8986f4c5c6e` |
 | `48d46ed8216e2c06d2daf97c99eb7dc28ab7141b` | `48d46ed8216e` | `d7129b0bd23e` |
-| `6213b39` | `6213b39aa1a4` | `c8986f4c5c6e` |
 | `48d46ed` | `48d46ed8216e` | `d7129b0bd23e` |
+| `7e329055d75a31f4bfd22e14480e0a46ea582cfa` | `7e329055d75a` | `c9c8eb22f036` |
+| `d2dd3dfdffabf70d47d1249c42c30b133af15daf` | `d2dd3dfdffab` | `d0cbf79610b7` |
+| `7e329055` | `7e329055d75a` | `c9c8eb22f036` |
+| `8f21327` | `8f21327635ba` | `39ebbc0be0a4` |
+| `8f21327635bafb1e1736fed65e79269c3c96ff3e` | `8f21327635ba` | `39ebbc0be0a4` |
+| `e10f33ecbe9381fa30cc709cc6e31ce9b73080e7` | `e10f33ecbe93` | `a06631610a8b` |
 
-Ancestry was checked for all 6786 pairs of these 117 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
+Ancestry was checked for all 7750 pairs of these 125 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
 
 ## All commits, oldest first
 
@@ -449,3 +459,10 @@ Ancestry was checked for all 6786 pairs of these 117 ids in both directions: the
 | 267 | `48d46ed8216e` | `d7129b0bd23e` | kept | Record approved prospective WEB.6 timing amendment |
 | 268 | `6213b39aa1a4` | `c8986f4c5c6e` | kept | Prepare unfrozen WEB.6 baseline protocol and fixture ledger |
 | 269 | `7e329055d75a` | `c9c8eb22f036` | kept | Review WEB.6 timing adoption and unfrozen baseline preparation |
+| 270 | `9c445db793f7` | `dd927025aee4` | kept | Update public history map for reviewed WEB6 timing adoption and protocol preparation |
+| 271 | `d2dd3dfdffab` | `d0cbf79610b7` | kept | Record pinned synthetic WEB4 demonstration fixtures |
+| 272 | `8f21327635ba` | `39ebbc0be0a4` | kept | Review pinned WEB.4 fixtures, replay and storage incident |
+| 273 | `e10f33ecbe93` | `a06631610a8b` | kept | Require WEB4 CLI identities and complete command coverage |
+| 274 | `cc4fc4d5b3ad` | `39d237d58536` | kept | Confirm WEB.4 checker identity and command coverage fixes |
+| 275 | `732e66f32805` | `d07849d115fc` | kept | Integrate reviewed WEB4 synthetic demonstration evidence |
+| 276 | `21efcebdbe4a` | `f2213a17b896` | kept | Reconcile current queue with reviewed WEB4 evidence and WEB6 preparation |
