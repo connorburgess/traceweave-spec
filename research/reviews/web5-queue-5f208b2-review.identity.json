@@ -1,0 +1,11 @@
+{
+  "reviewedCommit": "5f208b24977e87d10bc5f22fd9046d0e291c8625",
+  "originalReviewSha256": "4404848c982b2e1f62ad5cb7b326a2966bd03591a5fc8c8158bfb4a7bba2ab62",
+  "originalReviewBytes": 5627,
+  "originalRetention": "unchanged privately; attachments not retained",
+  "retainedPath": "web5-queue-5f208b2-review.md",
+  "retainedSha256": "57ac898899d1a1d290996c51ab3fd360b6122a8bc7f7876a41577b75263d7164",
+  "retainedBytes": 6622,
+  "adaptation": "added portable header; omitted local worktree locator; made private attachment links inert; remaining original review body unchanged",
+  "scope": "independent acceptance of queue-only source correction, not later adaptation/candidate review"
+}
