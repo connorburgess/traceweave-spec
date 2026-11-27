@@ -1,0 +1,189 @@
+{
+  "scope": "ordinary synthetic implementation correctness, not WEB.6 baseline/conformance",
+  "cliStamp": {
+    "implementation": {
+      "commit": "dcaa0d42e9de63d23aa113d9306134de9b28942c",
+      "name": "traceweave",
+      "version": "0.0.1"
+    },
+    "specCommit": "9cf78eec72d89c4a5383dc0ebf0fa98a4693d191",
+    "stamp": "stamped"
+  },
+  "cliBinarySha256": "7fc12a524c454d8e5769cb397c64c4a65f237b3c8d207ce73fa78605afb66ec5",
+  "wasmSha256": "3001cdcd5f29412cdf32131b5755364c704ac54915cd1ab397817eb52c18d61c",
+  "equalBodies": 17,
+  "deterministicRepeats": 17,
+  "metadataRefusals": 6,
+  "cases": [
+    {
+      "label": "go-tokens:catalogues-identical",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceSha256": "7f52f15d597f8e2058da2654dd96ef0091ce691eccc3c088172e1f4b0d0865df",
+      "candidateSha256": "7f52f15d597f8e2058da2654dd96ef0091ce691eccc3c088172e1f4b0d0865df",
+      "bodySha256": "7341d903153a196d0ffff9f7df8ffc00cdcbf4e866734626d878135f7e5774b1",
+      "status": "compared",
+      "rejection": null,
+      "cliExit": 0
+    },
+    {
+      "label": "go-tokens:catalogue-sources",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceSha256": "7f52f15d597f8e2058da2654dd96ef0091ce691eccc3c088172e1f4b0d0865df",
+      "candidateSha256": "8e7fc2c31fe44ec68face43fd680f85cdee1289343a2673e609a3678c5a940b1",
+      "bodySha256": "b74f2df7b1e334c6ad9313e0332e298c4a7a21d8ea922d14adce2ad4ae7f2c6e",
+      "status": "compared",
+      "rejection": null,
+      "cliExit": 0
+    },
+    {
+      "label": "rs-tokens:catalogues-identical",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceSha256": "775c15633afb124076ea4fb801667aaaeb0d08bcbc380838a4c1444c50acf273",
+      "candidateSha256": "775c15633afb124076ea4fb801667aaaeb0d08bcbc380838a4c1444c50acf273",
+      "bodySha256": "511b4ca95ec888c5933bf130e3bdca0aa00bec019d9fbd2a32ab51c22bd0ab6a",
+      "status": "compared",
+      "rejection": null,
+      "cliExit": 0
+    },
+    {
+      "label": "rs-tokens:catalogue-sources",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceSha256": "775c15633afb124076ea4fb801667aaaeb0d08bcbc380838a4c1444c50acf273",
+      "candidateSha256": "3c6552d39b99a23d2fbaf7a5996c9538f6db83b60a1b5019fa4910b962ed7402",
+      "bodySha256": "b8ae15631b1002ce92e00adf63fd8bf0c9f1d75a2e9774e9e718bdcd856794e3",
+      "status": "compared",
+      "rejection": null,
+      "cliExit": 0
+    },
+    {
+      "label": "ts-tokens:catalogues-identical",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceSha256": "e5b37ded38595fde53767351c85ad5bcc7588270982b1fa25c09abc67bad6174",
+      "candidateSha256": "e5b37ded38595fde53767351c85ad5bcc7588270982b1fa25c09abc67bad6174",
+      "bodySha256": "a002c814cf4deb613d0bf7bbb6855e33af5c42baa094476cf683b266afee0317",
+      "status": "compared",
+      "rejection": null,
+      "cliExit": 0
+    },
+    {
+      "label": "ts-tokens:catalogue-sources",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceSha256": "e5b37ded38595fde53767351c85ad5bcc7588270982b1fa25c09abc67bad6174",
+      "candidateSha256": "55d2b5ef0b9e712b20f8d871153620cf244dd197e8967a2a28f69d67c6e77eae",
+      "bodySha256": "c0d8eeb8360d463119704cf7632d2db574a5b881138911e88a6548ea1e663c53",
+      "status": "compared",
+      "rejection": null,
+      "cliExit": 0
+    },
+    {
+      "label": "py-tokens:catalogues-identical",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceSha256": "71e3e896c698e95320acd0f4fe6a2f64099b8bebb876d371c4a62316d88ef915",
+      "candidateSha256": "71e3e896c698e95320acd0f4fe6a2f64099b8bebb876d371c4a62316d88ef915",
+      "bodySha256": "07d7a3f757093f352ee2224cc81574288eea9354a605f7729c8fbbf1c5c63aeb",
+      "status": "compared",
+      "rejection": null,
+      "cliExit": 0
+    },
+    {
+      "label": "py-tokens:catalogue-sources",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceSha256": "71e3e896c698e95320acd0f4fe6a2f64099b8bebb876d371c4a62316d88ef915",
+      "candidateSha256": "1901af229fcdbfb8e337f77baf8b7b39c5bdaa93381724355ab0d3015d9639ac",
+      "bodySha256": "b371601107fccecc9f5aca69759492fe0ac05a8085e0522666ee3cac3f11391b",
+      "status": "compared",
+      "rejection": null,
+      "cliExit": 0
+    },
+    {
+      "label": "text-plain:catalogues-identical",
+      "comparisonConfigSha256": "86cd4dbf073edd141110ea60408e0f7be67054b7870e0c27f10a7806b0677654",
+      "referenceSha256": "0c70598e94de9070442f2c0570fc249c859511144c504ef33acd3ecc74f7a017",
+      "candidateSha256": "0c70598e94de9070442f2c0570fc249c859511144c504ef33acd3ecc74f7a017",
+      "bodySha256": "dadb15e47fea897c2ed1a62fae56e79a5be3be9b1331ed903b9424491ff74b89",
+      "status": "compared",
+      "rejection": null,
+      "cliExit": 0
+    },
+    {
+      "label": "text-plain:catalogue-sources",
+      "comparisonConfigSha256": "86cd4dbf073edd141110ea60408e0f7be67054b7870e0c27f10a7806b0677654",
+      "referenceSha256": "0c70598e94de9070442f2c0570fc249c859511144c504ef33acd3ecc74f7a017",
+      "candidateSha256": "6b2587e61b060c62dc436ac4dcee071d323b62ef6f4d7243cc33b006a5f40140",
+      "bodySha256": "d20bfef0203c39ea7af417178775c89836941b56d99431a78da1e21f7d8b3522",
+      "status": "compared",
+      "rejection": null,
+      "cliExit": 0
+    },
+    {
+      "label": "go-unrelated",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceSha256": "7f52f15d597f8e2058da2654dd96ef0091ce691eccc3c088172e1f4b0d0865df",
+      "candidateSha256": "e9dd11bfe471d2981aaf0c25be5632c8f0db82382644ca4e5277e42f50037206",
+      "bodySha256": "e6c9b5581db562d85092a3901e533143cd64879014033485376696e395fb6634",
+      "status": "compared",
+      "rejection": null,
+      "cliExit": 0
+    },
+    {
+      "label": "missing-suppression",
+      "comparisonConfigSha256": "3368f41d3d56018324bad4aa37d0f3a3762c4a60a0e9f7a9022e1a6959a4e14f",
+      "referenceSha256": "7f52f15d597f8e2058da2654dd96ef0091ce691eccc3c088172e1f4b0d0865df",
+      "candidateSha256": "7f52f15d597f8e2058da2654dd96ef0091ce691eccc3c088172e1f4b0d0865df",
+      "bodySha256": "79321f585a6334680e3276c0c1acc8db2c0430c71ce91e0c82e5556d013323e9",
+      "status": "rejected",
+      "rejection": "suppression-catalogue-mismatch",
+      "cliExit": 0
+    },
+    {
+      "label": "profile-mismatch",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceSha256": "7f52f15d597f8e2058da2654dd96ef0091ce691eccc3c088172e1f4b0d0865df",
+      "candidateSha256": "775c15633afb124076ea4fb801667aaaeb0d08bcbc380838a4c1444c50acf273",
+      "bodySha256": "a529c9fba2888931b5572b7dd3838f6f197d91dbc5f984ee46d196e55d7c497e",
+      "status": "rejected",
+      "rejection": "profile-mismatch",
+      "cliExit": 0
+    },
+    {
+      "label": "malformed-config",
+      "comparisonConfigSha256": "021fb596db81e6d02bf3d2586ee3981fe519f275c0ac9ca76bbcf2ebb4097d96",
+      "referenceSha256": "7f52f15d597f8e2058da2654dd96ef0091ce691eccc3c088172e1f4b0d0865df",
+      "candidateSha256": "7f52f15d597f8e2058da2654dd96ef0091ce691eccc3c088172e1f4b0d0865df",
+      "bodySha256": "b3d66d32326b479c0f7b3e620ba071dceb3ea5609e66a3cdd683235df8f789ab",
+      "status": "rejected",
+      "rejection": "unsupported-comparison-config",
+      "cliExit": 0
+    },
+    {
+      "label": "malformed-reference",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceSha256": "22b3c8c2426e3b373b338fcc57e5b22adfbb06ab552a8be19a73a053949b31df",
+      "candidateSha256": "7f52f15d597f8e2058da2654dd96ef0091ce691eccc3c088172e1f4b0d0865df",
+      "bodySha256": "5cc7494ff6c0738606236e6183bb5e1041efd0d400cad06fca919857440ed719",
+      "status": "rejected",
+      "rejection": "malformed-catalogue",
+      "cliExit": 0
+    },
+    {
+      "label": "invalid-utf8-candidate",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceSha256": "7f52f15d597f8e2058da2654dd96ef0091ce691eccc3c088172e1f4b0d0865df",
+      "candidateSha256": "a8100ae6aa1940d0b663bb31cd466142ebbdbd5187131b92d93818987832eb89",
+      "bodySha256": "bba271b285d1b08b378d5caf59a7e283ca870c333bbb4b796b5db85b395e0d57",
+      "status": "rejected",
+      "rejection": "malformed-catalogue",
+      "cliExit": 0
+    },
+    {
+      "label": "untrusted-html-id",
+      "comparisonConfigSha256": "39345e9c8de2b566d19943563326062a46edd38e429a4a96f169307b15147333",
+      "referenceSha256": "c69e44673dd19f4ddbaefd2e4661d63ea3cd9d64d03949958142de34c75c2e53",
+      "candidateSha256": "7f52f15d597f8e2058da2654dd96ef0091ce691eccc3c088172e1f4b0d0865df",
+      "bodySha256": "fd6009405fae0e7b32c3244bd5c6918ef8d8d7ed9b717d40de972f572232da07",
+      "status": "rejected",
+      "rejection": "malformed-catalogue",
+      "cliExit": 0
+    }
+  ]
+}

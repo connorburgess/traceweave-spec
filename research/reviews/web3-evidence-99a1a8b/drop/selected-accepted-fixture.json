@@ -1,0 +1,28 @@
+{
+  "profile": "go-tokens",
+  "input": [
+    {
+      "name": "z.go",
+      "bytes": 50,
+      "sha256": "3be99f765d15f35569bf81b0ae75f01d215e3e11cbb235c4d5d074a28998159b"
+    },
+    {
+      "name": "a.go",
+      "bytes": 50,
+      "sha256": "5cc308e8ce4cb81a97110ab2dfdb6de93e1e93d615298639a88ae7cd1cb35e76"
+    }
+  ],
+  "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+  "catalogueSha256": "af2af05dc2f2ce0ae06b59dd14b825f42ac3415b93e7543d8c7098adda81daf2",
+  "bytes": 2052,
+  "outcomes": [
+    {
+      "id": "a.go",
+      "code": "ok"
+    },
+    {
+      "id": "z.go",
+      "code": "ok"
+    }
+  ]
+}

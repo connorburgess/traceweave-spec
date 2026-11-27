@@ -1,0 +1,478 @@
+{
+  "__next._tree.txt": {
+    "sha256": "1f9775f3c3d0964e5f1f651c42488374a405ad682720ee32045ae088888705f7",
+    "bytes": 176
+  },
+  "index.html": {
+    "sha256": "efbb24aed89348378cad38aae098f6716e58df275cad5a297d84ab9816930735",
+    "bytes": 14973
+  },
+  "__next._full.txt": {
+    "sha256": "e9bacdfbcd4c92cb11c00c1244e545b3f8ae756c0dd790ab0d994cfe1b1d14ad",
+    "bytes": 4627
+  },
+  "index.txt": {
+    "sha256": "e9bacdfbcd4c92cb11c00c1244e545b3f8ae756c0dd790ab0d994cfe1b1d14ad",
+    "bytes": 4627
+  },
+  "404.html": {
+    "sha256": "29882123bca65ca0bd9c158b5a8148a881dfc162e19cdabf4478123ba386c4c5",
+    "bytes": 9622
+  },
+  "__next.__PAGE__.txt": {
+    "sha256": "a06565aeafb1b4dedfa74867e3353778908ea3c0952e5b7eaced40993d182d04",
+    "bytes": 4057
+  },
+  "_not-found.html": {
+    "sha256": "29882123bca65ca0bd9c158b5a8148a881dfc162e19cdabf4478123ba386c4c5",
+    "bytes": 9622
+  },
+  "_not-found.txt": {
+    "sha256": "7335d23bcb179bdbde7a461cc29d161d733da4f97a745d7471c02c3baabe2856",
+    "bytes": 5822
+  },
+  "brand/favicon-180.png": {
+    "sha256": "87a3a95f8849387ef17453cdd07862451a1a61ff746087a02554337590edb072",
+    "bytes": 1643
+  },
+  "brand/mark.svg": {
+    "sha256": "56cc7ff012e9729929e78d20738868bd28443e2c049fe7c36c666ff5f27f0be2",
+    "bytes": 621
+  },
+  "brand/favicon-32.png": {
+    "sha256": "dc527e26632b331be996b3e065cb99d63af00609e6dee194760eb18fb26eee88",
+    "bytes": 513
+  },
+  "brand/mark-dark.svg": {
+    "sha256": "3cdf027598791de66b1f3368e166a5de6a5d5da5466f2c905690205003c07e6a",
+    "bytes": 644
+  },
+  "brand/favicon.svg": {
+    "sha256": "ab610f8bfe8f8017e525b5f90704b15f2fd2f9304c999b7acfa98fbdb4461b41",
+    "bytes": 754
+  },
+  "wasm/tw-wasm.js": {
+    "sha256": "6785a5e2fff23ca4722d419722b7e2f84a52dd9613b3152f7963729d3bc01f7b",
+    "bytes": 9655
+  },
+  "wasm/tw_wasm.wasm": {
+    "sha256": "3001cdcd5f29412cdf32131b5755364c704ac54915cd1ab397817eb52c18d61c",
+    "bytes": 1129029
+  },
+  "_not-found/__next._tree.txt": {
+    "sha256": "50a5a0707fa41012820b174a16bb8682798b6bff67b5e7033ff2d3ea5fe71e1b",
+    "bytes": 218
+  },
+  "_not-found/__next._full.txt": {
+    "sha256": "7335d23bcb179bdbde7a461cc29d161d733da4f97a745d7471c02c3baabe2856",
+    "bytes": 5822
+  },
+  "_not-found/__next._not-found.__PAGE__.txt": {
+    "sha256": "9946fb6e9064591f5300670af8ca318649a6116b3c72371b93ef42b7c2d8a7ce",
+    "bytes": 5107
+  },
+  "card-art/specimen-code.jpg": {
+    "sha256": "7d0d82348e602657b50fd3d815abbab253e1bb94aad309123792ed84e45cf71c",
+    "bytes": 74420
+  },
+  "card-art/specimen-image.jpg": {
+    "sha256": "52ad004a60eee835c0249b5fe239d9341596af9ae0b9a83f124a2fa6cb5e5c2e",
+    "bytes": 74162
+  },
+  "card-art/specimen-writing.jpg": {
+    "sha256": "1a28b23ed628e4aa0a55acf879e8a22c13e0249f47c41b03e71a7745367c2473",
+    "bytes": 72616
+  },
+  "card-art/specimen-audio.jpg": {
+    "sha256": "f2773bb304f6b1ff99c13257898b1ab5738489a9f64c3eb71624d70146c0b5c9",
+    "bytes": 82050
+  },
+  "_next/static/K4urS6RU5nYBuw2KSlB9_/_ssgManifest.js": {
+    "sha256": "678f6ce2cb80b1fe72fc67e7412be6e2ab6ada083111b64f7c40d35e3cba5e00",
+    "bytes": 80
+  },
+  "_next/static/K4urS6RU5nYBuw2KSlB9_/_clientMiddlewareManifest.js": {
+    "sha256": "5483e3295dc35dfe29ea932efc85341c916f10ff78ff5b0e965e003710893a4a",
+    "bytes": 96
+  },
+  "_next/static/K4urS6RU5nYBuw2KSlB9_/_buildManifest.js": {
+    "sha256": "9476e0afd3f9da68a64e6ec58631191fd3eaca62c9f5a377e7517fe9a89e59ea",
+    "bytes": 219
+  },
+  "_next/static/chunks/24x3jo3uvgfg5.css": {
+    "sha256": "4f5f05a0ae9210af422e3ebc09b9bd7c2af71cc6de139c8a16c0f248a4eac9ef",
+    "bytes": 29290
+  },
+  "_next/static/chunks/3qfy96eoyh-ek.js": {
+    "sha256": "0f13eecc75702fa059f047636cf8814acbb7acaf3702e75d5835ef85a49528b1",
+    "bytes": 13994
+  },
+  "_next/static/chunks/0j1we3cwg31qe.js": {
+    "sha256": "901a7cdca938bcf0603a59521da73b5ac26e57beb82cb657d2ef15f9b2e16c0e",
+    "bytes": 17026
+  },
+  "_next/static/chunks/turbopack-2u1d16houkiyo.js": {
+    "sha256": "439be7f075d69bbf510ceca09cbc0856956be6f1268f40948a2566148e13de07",
+    "bytes": 9974
+  },
+  "_next/static/chunks/39_j1bdzreq0m.js": {
+    "sha256": "a0cb7a4a53fbd01da1ea4c537d56e06ebcef9d3fdd6e79cb7b24809c70b41f82",
+    "bytes": 229288
+  },
+  "_next/static/chunks/24b18yoowr1pv.js": {
+    "sha256": "f512bfc9cf0c5be5adeda88936d2f488a7956785f7721792e0d53ecbb5a0b573",
+    "bytes": 84597
+  },
+  "_next/static/chunks/1cuyxw6v18rxx.js": {
+    "sha256": "d51f7ce3461435d65e2576a5d8608b6248f03b0d0ce62e0abba66659d111da1e",
+    "bytes": 187255
+  },
+  "_next/static/chunks/turbopack-3j85uudm8cv6j.js": {
+    "sha256": "43ea781dc09edfb2f1f91117eb491fb50dbba710b7188e1be856bfe49fd1d2fe",
+    "bytes": 188
+  },
+  "_next/static/chunks/33dvivq-qb5dt.js": {
+    "sha256": "992f11144e73ddce70f17a3e9a77af4ec2080b2cec750ed23fb6481014dd8251",
+    "bytes": 16301
+  },
+  "_next/static/chunks/2z3sh82dl8glu.js.map": {
+    "sha256": "a8ae20908e3aa88a005bf3b5cadedd7f1107cf28a6e4db9da80280fe9f54de95",
+    "bytes": 53
+  },
+  "_next/static/chunks/turbopack-3x44bn2r-_yv2.js": {
+    "sha256": "80409f1e50795380dcffc5bba1c90d7915edf233753f4c92ea6f73fb15bced91",
+    "bytes": 188
+  },
+  "_next/static/chunks/turbopack-2ih0v80r02_p4.js": {
+    "sha256": "73f825bc624e8d90123ef6c827a50f9f253c4fdef47dc3d70651abe8197d2f90",
+    "bytes": 188
+  },
+  "_next/static/chunks/2jyxwxxmj85z1.js": {
+    "sha256": "22ebe7680e621ebc7a47fd963d41595e3d76c7021c2bc2570af94777ceab16b2",
+    "bytes": 11798
+  },
+  "_next/static/chunks/2i9itd6enny7u.js": {
+    "sha256": "8073ab9cce14d1150dd9e2f19269c4088ba1640d12c923761c8e432e72bbad7d",
+    "bytes": 17820
+  },
+  "_next/static/chunks/0cz1d0mv5g_q7.js": {
+    "sha256": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683",
+    "bytes": 112594
+  },
+  "_next/static/chunks/turbopack-worker-1hrsqshz0gfey.js": {
+    "sha256": "cf3e52b25b4c37e2b5e8ddfe13b5cfda970faec44792881b195d518b691aa93d",
+    "bytes": 927
+  },
+  "_next/static/chunks/0yvv2nwufpokr.js": {
+    "sha256": "c346b7610afaff96f78f4a2065456e8a3c03a3b010f70101a3aa57a30fc148bd",
+    "bytes": 17278
+  },
+  "_next/static/media/ibm-plex-mono-latin-ext-400-normal.0nrwft7nlo5oa.woff": {
+    "sha256": "f8ddaa0ab9d3c052c9fe035751c8214b7e0d59e6e7b69b045f8659c2fe4dced2",
+    "bytes": 11768
+  },
+  "_next/static/media/ibm-plex-sans-cyrillic-400-normal.1ob51yn_zh4f3.woff2": {
+    "sha256": "69afad88a0740b6e5647f1104c9176a261f1ad9d60202f605456a983799752e9",
+    "bytes": 14800
+  },
+  "_next/static/media/ibm-plex-sans-cyrillic-ext-500-normal.42ydqmu-69p6e.woff": {
+    "sha256": "19928f2f784c679937745ed3949cd9ff4c3af792e2c6b26670e0741c68610400",
+    "bytes": 10592
+  },
+  "_next/static/media/ibm-plex-sans-latin-ext-500-normal.1zyjrbr0w_u4w.woff": {
+    "sha256": "6aa470ebf8dd5592084d0452b5c3a355d93b04e7eb0f5ca030d9d3a54a48fb5c",
+    "bytes": 14736
+  },
+  "_next/static/media/ibm-plex-sans-latin-700-normal.3cj1z__33gk9h.woff2": {
+    "sha256": "42e7b0c143c19df9d99fd896e76b48f846edf0902d200bc29796b34d12c33aa7",
+    "bytes": 22832
+  },
+  "_next/static/media/ibm-plex-mono-latin-500-normal.1fgk-kmy-32_a.woff": {
+    "sha256": "09f018c58556e5801ecc49d5b5275dcff4c73311c2af6b88e31c51d76d076a9d",
+    "bytes": 13156
+  },
+  "_next/static/media/ibm-plex-mono-latin-500-normal.11q3guvgd1r20.woff2": {
+    "sha256": "01d285447409c8a588692162439a038b8cbd7871309ee20267b0d2d91c6e8e22",
+    "bytes": 14888
+  },
+  "_next/static/media/ibm-plex-sans-latin-ext-700-normal.22pgwkr6js0ec.woff": {
+    "sha256": "2cf7d29e5008330d097869f893808c4a4a98210ce122416d54dcd9237f5c02cb",
+    "bytes": 14424
+  },
+  "_next/static/media/ibm-plex-sans-cyrillic-ext-700-normal.1dpp22a693y_f.woff2": {
+    "sha256": "d07dd536424800975fd408fbb8076857c1590121ef65a8885a7b5946a5812bdf",
+    "bytes": 12056
+  },
+  "_next/static/media/archivo-latin-ext-700-normal.1jqfiymonp3ox.woff": {
+    "sha256": "8675624710e4b763f2af76709282e89d4d825207ac437b38ec52d5fb8a0fa835",
+    "bytes": 18404
+  },
+  "_next/static/media/ibm-plex-mono-cyrillic-ext-500-normal.28wp48yubenc3.woff2": {
+    "sha256": "3febe5c7f22e4b07b4552738673c3dbe8bced2dc5f48b866edf7ccd9552d109a",
+    "bytes": 6972
+  },
+  "_next/static/media/ibm-plex-sans-latin-ext-400-normal.2wkl6p2bjtdkj.woff2": {
+    "sha256": "c93d2a12aaa280f68b9ab7b726ff8dfedda67c99ef9abed047c1847a1cc6d583",
+    "bytes": 15980
+  },
+  "_next/static/media/ibm-plex-sans-cyrillic-ext-400-normal.3-2s2qyqt5syo.woff": {
+    "sha256": "e60c70b37422d621549800db28c60764e16ccce7403a2d2957a8ac079818b28a",
+    "bytes": 10288
+  },
+  "_next/static/media/ibm-plex-sans-vietnamese-400-normal.41bcgzntq2c9e.woff2": {
+    "sha256": "771538f7f26551bd13ab97d585de6ce7ebe3b432837999d5b743391b48f4946a",
+    "bytes": 8204
+  },
+  "_next/static/media/ibm-plex-sans-vietnamese-400-normal.3nx5do2g1gg_d.woff": {
+    "sha256": "aa3bd4c4c493c3110ca5f5ac3f0cd688482982b40e4cf9cb601f931df2a8ccf5",
+    "bytes": 6392
+  },
+  "_next/static/media/ibm-plex-sans-latin-400-normal.19i24--p24z3r.woff": {
+    "sha256": "828907bfd14855c880789878bd2b38ffd284a6c27c8b80f6069900f70dae3901",
+    "bytes": 22104
+  },
+  "_next/static/media/ibm-plex-mono-latin-ext-500-normal.1tdw_l2v4yhc_.woff": {
+    "sha256": "ff5da89c3ee20d38359943b61a7aae9200d2a0f61cf95ca10a7cccef81da2ff5",
+    "bytes": 11768
+  },
+  "_next/static/media/ibm-plex-mono-vietnamese-500-normal.2g79xp9gzp1kn.woff": {
+    "sha256": "755f62b418df17518aa0ea16b4232e546ce949a4ab7acc577071fa9be9e3dc88",
+    "bytes": 5616
+  },
+  "_next/static/media/archivo-latin-ext-700-normal.0gpopa80-w53j.woff2": {
+    "sha256": "8affe3b4758ec03c7c1a8b40c119209cbb1815fd836160570f94935ce9a683ec",
+    "bytes": 13272
+  },
+  "_next/static/media/ibm-plex-sans-cyrillic-500-normal.2r3_h99a4p2o6.woff": {
+    "sha256": "b9d946b2b727115f06753e92054d272861a8265468bdb267bc279d1447fac20f",
+    "bytes": 13856
+  },
+  "_next/static/media/archivo-latin-700-normal.0xklgcivxid3p.woff2": {
+    "sha256": "abada6cd4c92a9a706f6d7ed3189f322ff43dd78b9402c7d1137465b861d2a04",
+    "bytes": 14508
+  },
+  "_next/static/media/ibm-plex-mono-latin-400-normal.2lhng2ntocry9.woff": {
+    "sha256": "328d50b6ece9ca25c46eea3e885ba497f6237f2fb84ef7b92f88e14a1a25e381",
+    "bytes": 13144
+  },
+  "_next/static/media/ibm-plex-mono-cyrillic-400-normal.0m1ahpdxrpokj.woff2": {
+    "sha256": "7635422bd10ddbbcb0e0caa1154b928298f5c8319b8c00b30978d4395f4783ce",
+    "bytes": 8356
+  },
+  "_next/static/media/ibm-plex-sans-cyrillic-500-normal.3j8b5jptl4nhr.woff2": {
+    "sha256": "200be3a2a6b1789fb8824a4a74c7cccb7137e83fde6200ea78d8829f99d43546",
+    "bytes": 15000
+  },
+  "_next/static/media/ibm-plex-sans-greek-600-normal.1mkps5wbbyo2a.woff": {
+    "sha256": "b080df76b8210429debab3f7fadf5975af7d9e43b1b0e51912ba4fde56e87865",
+    "bytes": 9220
+  },
+  "_next/static/media/ibm-plex-mono-vietnamese-400-normal.3a7fs2yw914a9.woff2": {
+    "sha256": "62632b6375305e70ddcafdd895218e6ae41a184fcd280a69c739460604ca00a9",
+    "bytes": 5868
+  },
+  "_next/static/media/ibm-plex-sans-cyrillic-600-normal.1bd0br_i69opa.woff2": {
+    "sha256": "730becc6f005c18c31440f14d34677f2704a85e6afffd4bee6a64d5c95f45a55",
+    "bytes": 15040
+  },
+  "_next/static/media/ibm-plex-mono-latin-400-normal.3xdfs0-p_zi4c.woff2": {
+    "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7",
+    "bytes": 14708
+  },
+  "_next/static/media/ibm-plex-sans-cyrillic-ext-500-normal.37y6j4asgn87a.woff2": {
+    "sha256": "08578d906af6d986d12d966d91bf9e76a00ebb74288d5c0eb6fe27dbebe1975a",
+    "bytes": 12308
+  },
+  "_next/static/media/archivo-vietnamese-700-normal.25a_8s5zwlnqg.woff2": {
+    "sha256": "bfa65d40f59e5c2a8b038be3c739ab2715c854d97b4c51312e40b4cb9e27f656",
+    "bytes": 5688
+  },
+  "_next/static/media/ibm-plex-mono-cyrillic-500-normal.1eaan1mch682e.woff": {
+    "sha256": "55a3af5e5ba0f565b4e66149cfe077ba88ac42cc3f68650a901d58eadbf9cd9b",
+    "bytes": 7208
+  },
+  "_next/static/media/archivo-latin-700-normal.1o9h0if12mn82.woff": {
+    "sha256": "7eb23fce17c3957646f50e7ef4936bf70cc93ce602123cbf34bf52be15b5f8f8",
+    "bytes": 18796
+  },
+  "_next/static/media/archivo-vietnamese-700-normal.3h6r4gj55h9zy.woff": {
+    "sha256": "1e20a5b946298a6fd59176ee88ea2289e32cc84f868c04852fb593ce9fecb004",
+    "bytes": 7672
+  },
+  "_next/static/media/ibm-plex-sans-latin-ext-700-normal.14ri_qndij_e8.woff2": {
+    "sha256": "92f0392bd74fa3955bfa92f6ec747e7246d3567b6f46b32ddbaf271104836ab8",
+    "bytes": 16188
+  },
+  "_next/static/media/ibm-plex-mono-vietnamese-400-normal.2kzc8ichkozg5.woff": {
+    "sha256": "bced561d991e3f81c150c08e71f7fa849fcbff523560f6059245f2edce19b600",
+    "bytes": 5620
+  },
+  "_next/static/media/ibm-plex-sans-cyrillic-ext-600-normal.33q0gwxfwkcq9.woff": {
+    "sha256": "d3fc6b34ef8f2968cf6b1b548e3d49e8ad3b26ebe60eb01172621b059b7133e5",
+    "bytes": 10616
+  },
+  "_next/static/media/ibm-plex-mono-cyrillic-ext-500-normal.41yczc5zdkwdh.woff": {
+    "sha256": "eadb2c427859b185761380143d1f42187fd7cbd94704b543e4c76c6368fbab52",
+    "bytes": 5772
+  },
+  "_next/static/media/ibm-plex-sans-vietnamese-600-normal.3hxpyk-en1__5.woff2": {
+    "sha256": "5d34b803637befe3714d55d383d9149692c39838c8deb45c8cbdd43b0fd09b98",
+    "bytes": 8460
+  },
+  "_next/static/media/report-replay.worker.1ypmczsylta65.ts": {
+    "sha256": "ec91a7434c47d647af83a84ca7d535bb964505efa1eb3614d5c404445866bdec",
+    "bytes": 1662
+  },
+  "_next/static/media/ibm-plex-sans-cyrillic-ext-700-normal.2j0n2wowgjqls.woff": {
+    "sha256": "1f73b4722839a2c937226e0093a27cb742e4e921a9499acd63834745b6f8ff83",
+    "bytes": 10160
+  },
+  "_next/static/media/ibm-plex-sans-greek-500-normal.0k99vu2yejv84.woff2": {
+    "sha256": "8cb6e20b4dbbaa5f7b479d4a68cc91d3d6b370eebcd888cae9ab01052e5483f2",
+    "bytes": 10376
+  },
+  "_next/static/media/ibm-plex-mono-cyrillic-ext-400-normal.2iaubq2jy0rx3.woff": {
+    "sha256": "0e4a2393e8ed3185ae300e4a202b6d9149d47d8a0e5bb8f1d1db33e76b86ecd1",
+    "bytes": 5820
+  },
+  "_next/static/media/ibm-plex-sans-vietnamese-600-normal.3i-6fz_bx7yta.woff": {
+    "sha256": "ae433d3b3cdfc7d2b2ecb4173442cca23b58448cf05c21f7f589cf67f67b2dde",
+    "bytes": 6584
+  },
+  "_next/static/media/ibm-plex-sans-cyrillic-ext-600-normal.0hanpnpn3ki-v.woff2": {
+    "sha256": "d60d3d0b182753d5640e372c57669f508b79172ac4ff6b460d987ddd34cac199",
+    "bytes": 12304
+  },
+  "_next/static/media/ibm-plex-sans-vietnamese-700-normal.1_rj7yg1pulj1.woff": {
+    "sha256": "bb307d06c782ffb721a1443e0bde0bac43e4dadef9ec11a70d38465cc160fcb6",
+    "bytes": 6424
+  },
+  "_next/static/media/ibm-plex-sans-greek-600-normal.17-3491c_tfac.woff2": {
+    "sha256": "0a9ebd9019415ee9f161b38fb24b5ee7736e2c8b85bf1e79e1e4c7c0010d55cb",
+    "bytes": 10368
+  },
+  "_next/static/media/ibm-plex-sans-vietnamese-500-normal.38exv3t7tju-g.woff2": {
+    "sha256": "85ba3d9c2488a813bbf1d60da3a848bce4a97ac8c8a539289d8524aef6c471f9",
+    "bytes": 8416
+  },
+  "_next/static/media/ibm-plex-sans-cyrillic-700-normal.2l5m2m6-3_1r7.woff": {
+    "sha256": "ecdff3a50fa1058d7a1887e5f5edcb4dd36a748df57c5d623ab1662aebc8f10b",
+    "bytes": 13328
+  },
+  "_next/static/media/ibm-plex-sans-greek-400-normal.1d6bt9ufqnym6.woff": {
+    "sha256": "8d899d62a1e18740c6f9d8c1a760be8e511ef222e54ab68d3bc88c94d0d104b0",
+    "bytes": 8760
+  },
+  "_next/static/media/ibm-plex-sans-cyrillic-400-normal.2c9g56gofrre8.woff": {
+    "sha256": "89b819d4fef67eda2ce2c12f2f2b3978141fb73faebeb23ec895a3d7f8e66964",
+    "bytes": 13512
+  },
+  "_next/static/media/ibm-plex-sans-latin-ext-600-normal.0a5-aslyj_wbq.woff2": {
+    "sha256": "b25dfd4f979e442ae1e25cd0894463434cf01ba21ac1a35d39f4a82bd4cc060e",
+    "bytes": 16448
+  },
+  "_next/static/media/ibm-plex-sans-latin-600-normal.2ovda_azncp9b.woff2": {
+    "sha256": "8960851d691c054ed38e259bdcf1a6190d157b4203ed5bb32c632a863fb8ec2f",
+    "bytes": 24252
+  },
+  "_next/static/media/ibm-plex-sans-latin-ext-600-normal.00ca59z0uilzq.woff": {
+    "sha256": "ba265b263be35814d27c13d42c6b9a36a0ec5b3a565d38011109bfa556a8d775",
+    "bytes": 14772
+  },
+  "_next/static/media/ibm-plex-mono-latin-ext-500-normal.1cuq9_67cn48n.woff2": {
+    "sha256": "6bb06407c97584b0867a959e05e8874693bfeb8c317de190811c51598f2d99ea",
+    "bytes": 13432
+  },
+  "_next/static/media/ibm-plex-sans-greek-400-normal.20ztly1_og8qv.woff2": {
+    "sha256": "02296067bc904d2ad19b49445bdaf6586cc44704e668e16e248f708e5005a290",
+    "bytes": 9940
+  },
+  "_next/static/media/ibm-plex-sans-greek-500-normal.2kq1zw7ns-90j.woff": {
+    "sha256": "38489276f6e67e4f00fbea894417af635dac8368ccdf14655dd71b5b3de269e0",
+    "bytes": 9148
+  },
+  "_next/static/media/ibm-plex-sans-cyrillic-700-normal.18feapymqwhbh.woff2": {
+    "sha256": "40540598b4c9eb2cd2562f1017e71f2697adb43e76f49079030dfd7f00b4b786",
+    "bytes": 14572
+  },
+  "_next/static/media/ibm-plex-mono-cyrillic-400-normal.2-z93d2j9-3s0.woff": {
+    "sha256": "42da81a28bbcddda6768a25a4b3105ee291e69d5fa6c74747bc51bbc6718c538",
+    "bytes": 7204
+  },
+  "_next/static/media/ibm-plex-sans-vietnamese-700-normal.18eestevoqzwv.woff2": {
+    "sha256": "b79d0c4b68b850071e071d7e496144a30d7f91651efdc1079ca9779079d648ba",
+    "bytes": 8220
+  },
+  "_next/static/media/ibm-plex-sans-cyrillic-600-normal.0h3aaz4315ad-.woff": {
+    "sha256": "dc111b4254f64561fe50a3645f75bb66e4daa6b026c40d9e55de27f2671b8de0",
+    "bytes": 13888
+  },
+  "_next/static/media/catalogue-compare.worker.2fcuduah1el3u.ts": {
+    "sha256": "12ebfce03678b65ba5dbb605a8cde21493e5c8780d71b9615b5787c00ccd3517",
+    "bytes": 2411
+  },
+  "_next/static/media/fingerprint.worker.1-9r2ypybrchc.ts": {
+    "sha256": "5a1947f67b3426f3f53f8d57a48bbd170af09691728ca23a4a6c2530d504f5be",
+    "bytes": 1369
+  },
+  "_next/static/media/ibm-plex-sans-latin-600-normal.2wn5p1s7u3utm.woff": {
+    "sha256": "7861a349af1e925a80d56547c2c9e0b1e9f6a9002a9a6867351da2f05122ad21",
+    "bytes": 23876
+  },
+  "_next/static/media/ibm-plex-sans-latin-500-normal.14sc3d7sk_zzh.woff": {
+    "sha256": "8d2c7b2eca91869d447851a9c8bd07edf629b26025eacb882291e03b384b4e35",
+    "bytes": 23916
+  },
+  "_next/static/media/ibm-plex-sans-vietnamese-500-normal.14rtxflq2gk6f.woff": {
+    "sha256": "156142eef15bc3ea0983949aa2ccc2c4fcb8c97e5507ca019c5b1a23046a3268",
+    "bytes": 6588
+  },
+  "_next/static/media/ibm-plex-sans-latin-700-normal.43_h0be0oa3u4.woff": {
+    "sha256": "973b42f17d4dbb83000847469e7777abe95c303f547d7503c934227e697a0516",
+    "bytes": 22280
+  },
+  "_next/static/media/ibm-plex-sans-cyrillic-ext-400-normal.39u3dp1q8vt28.woff2": {
+    "sha256": "e2580ad78906551e1f9ad621f608cd16ce4d5a992e53c651dd6b3504547576f2",
+    "bytes": 12148
+  },
+  "_next/static/media/ibm-plex-sans-latin-400-normal.1xf5nwxyfigak.woff2": {
+    "sha256": "3b646991d30055a93a4ecc499713d4347953a74a947ecab435ab72070cbdab0e",
+    "bytes": 22588
+  },
+  "_next/static/media/ibm-plex-sans-latin-ext-400-normal.1d956-ol9h5w9.woff": {
+    "sha256": "85db75b89e3c0bee23ea75ede70c73024f62516ccdb6be55eb0c5c7a7866433a",
+    "bytes": 14360
+  },
+  "_next/static/media/ibm-plex-mono-vietnamese-500-normal.0s1z3n-ysad7w.woff2": {
+    "sha256": "781633d95de88040fb77141d1e65d928c87c0144691fbc74da5a64d137a7e910",
+    "bytes": 6040
+  },
+  "_next/static/media/ibm-plex-mono-cyrillic-500-normal.26ox_itp_alxp.woff2": {
+    "sha256": "1d89462e86cb8e87e7e9d6f6635605bd7c3081baca6caaecee84916bf7b60edc",
+    "bytes": 8460
+  },
+  "_next/static/media/ibm-plex-mono-latin-ext-400-normal.1hjaitcyq2e2r.woff2": {
+    "sha256": "6bc0f226a5b7884a8170e3f62c63d7675609d4631bdc5931b5cdab81821f00eb",
+    "bytes": 13348
+  },
+  "_next/static/media/ibm-plex-sans-greek-700-normal.0y4gpqeqws6yv.woff2": {
+    "sha256": "c949641d10a3bebcb7073edd5b6a8f2e0eccb2147f27c875a03ac522f04c209e",
+    "bytes": 9928
+  },
+  "_next/static/media/ibm-plex-sans-latin-500-normal.2i4a1iuj6lbvw.woff2": {
+    "sha256": "0717336fb31fcdcde4b8deb3675bb4a0f7f6d484864afcd6751ac29975962203",
+    "bytes": 24184
+  },
+  "_next/static/media/ibm-plex-sans-latin-ext-500-normal.1h2_ral94l6aj.woff2": {
+    "sha256": "2846035d85100f84c79393f80f1442d4ee720129ab8b3ffa8969aae281db8c6c",
+    "bytes": 16456
+  },
+  "_next/static/media/ibm-plex-sans-greek-700-normal.2nhbs3yj9gl6i.woff": {
+    "sha256": "1f689ec0fa036813a9c1de6269f793530db71a9f817c51be0b4ae900e0fdf639",
+    "bytes": 8740
+  },
+  "_next/static/media/ibm-plex-mono-cyrillic-ext-400-normal.09jq5v9-1wf71.woff2": {
+    "sha256": "f8c22ec1804bd6966b70f43ac7c327025645b4c09597117fca2a5a6c750106fe",
+    "bytes": 6912
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "cliStamp": {
+    "implementation": {
+      "commit": "dcaa0d42e9de63d23aa113d9306134de9b28942c",
+      "name": "traceweave",
+      "version": "0.0.1"
+    },
+    "specCommit": "9cf78eec72d89c4a5383dc0ebf0fa98a4693d191",
+    "stamp": "stamped"
+  },
+  "cliSha256": "7fc12a524c454d8e5769cb397c64c4a65f237b3c8d207ce73fa78605afb66ec5",
+  "wasmSha256": "3001cdcd5f29412cdf32131b5755364c704ac54915cd1ab397817eb52c18d61c",
+  "loaderSha256": "6785a5e2fff23ca4722d419722b7e2f84a52dd9613b3152f7963729d3bc01f7b",
+  "equalCatalogues": 9,
+  "repeatEqual": 9,
+  "refusals": 9,
+  "results": [
+    {
+      "profile": "go-tokens",
+      "input": [
+        {
+          "name": "z.go",
+          "bytes": 50,
+          "sha256": "3be99f765d15f35569bf81b0ae75f01d215e3e11cbb235c4d5d074a28998159b"
+        },
+        {
+          "name": "a.go",
+          "bytes": 50,
+          "sha256": "5cc308e8ce4cb81a97110ab2dfdb6de93e1e93d615298639a88ae7cd1cb35e76"
+        }
+      ],
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "catalogueSha256": "af2af05dc2f2ce0ae06b59dd14b825f42ac3415b93e7543d8c7098adda81daf2",
+      "bytes": 2052,
+      "outcomes": [
+        {
+          "id": "a.go",
+          "code": "ok"
+        },
+        {
+          "id": "z.go",
+          "code": "ok"
+        }
+      ]
+    },
+    {
+      "profile": "rs-tokens",
+      "input": [
+        {
+          "name": "x.rs",
+          "bytes": 40,
+          "sha256": "72799a8c0784dac126a2c885621fa2daef1d82f5d2212152f3ebdb99990d0dc3"
+        }
+      ],
+      "configSha256": "64b34335e4a61383ada1403a2df97c2e45dba987bbf0c8ec21385e04104d1277",
+      "catalogueSha256": "aa52e08351b85047201f76e608f5a421f216d069b92aa96499e2540b249a1bff",
+      "bytes": 1328,
+      "outcomes": [
+        {
+          "id": "x.rs",
+          "code": "ok"
+        }
+      ]
+    },
+    {
+      "profile": "ts-tokens",
+      "input": [
+        {
+          "name": "x.ts",
+          "bytes": 68,
+          "sha256": "486ff9cf4a3b4d4ca82eda0bc5e06f356be8fd4f8775dfc7aeb33617e80309a9"
+        }
+      ],
+      "configSha256": "aeeed14177cd3be8fea69e453c825e74f2fd301d03babbf49329bde0cc4754de",
+      "catalogueSha256": "2f1b4069c1a21b5884ede3de5c077d84a2e3560240c5138209c4a560ac749fcc",
+      "bytes": 1431,
+      "outcomes": [
+        {
+          "id": "x.ts",
+          "code": "ok"
+        }
+      ]
+    },
+    {
+      "profile": "py-tokens",
+      "input": [
+        {
+          "name": "x.py",
+          "bytes": 39,
+          "sha256": "a3556971136d81b12967ea30043e028a9f506c94af78b5c0f0b94b7ce2f75edb"
+        }
+      ],
+      "configSha256": "365ba7be82646f6505cc339a15b3f5c50632244001eee2e08c558ce22c77b016",
+      "catalogueSha256": "61bc364f8bcfb5a4972b2ee002cc8bac20531ce8d0c32b8e1a0e58dc732da74c",
+      "bytes": 1092,
+      "outcomes": [
+        {
+          "id": "x.py",
+          "code": "ok"
+        }
+      ]
+    },
+    {
+      "profile": "text-plain",
+      "input": [
+        {
+          "name": "x.txt",
+          "bytes": 91,
+          "sha256": "d788bfdec84f44e2bd6b19dfa2415482c5eed8cddac697cce6662713a2eaad9d"
+        }
+      ],
+      "configSha256": "35c1f63cc2f669a54acb5f9792614721431943b2fd626ffb88982e53bd37323e",
+      "catalogueSha256": "e5b5705b26b7245261d45339503949d0b6578b667b459e9db093f091f455d9be",
+      "bytes": 933,
+      "outcomes": [
+        {
+          "id": "x.txt",
+          "code": "ok"
+        }
+      ]
+    },
+    {
+      "profile": "text-plain",
+      "input": [
+        {
+          "name": "empty.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "configSha256": "35c1f63cc2f669a54acb5f9792614721431943b2fd626ffb88982e53bd37323e",
+      "catalogueSha256": "140e60125378b5c557409b7c21391719909d8b1ffedc1e670a7cab30fd9c04e9",
+      "bytes": 791,
+      "outcomes": [
+        {
+          "id": "empty.txt",
+          "code": "insufficient-tokens"
+        }
+      ]
+    },
+    {
+      "profile": "text-plain",
+      "input": [
+        {
+          "name": "bad.txt",
+          "bytes": 2,
+          "sha256": "b3d510ef04275ca8e698e5b3cbb0ece3949ef9252f0cdc839e9ee347409a2209"
+        }
+      ],
+      "configSha256": "35c1f63cc2f669a54acb5f9792614721431943b2fd626ffb88982e53bd37323e",
+      "catalogueSha256": "3b7eefb0dffef719003ff96c0ffef55d22730eff7dfff094605ed554afd40356",
+      "bytes": 591,
+      "outcomes": [
+        {
+          "id": "bad.txt",
+          "code": "invalid-utf8"
+        }
+      ]
+    },
+    {
+      "profile": "go-tokens",
+      "input": [
+        {
+          "name": "bad.go",
+          "bytes": 26,
+          "sha256": "41ea5d32bc4512a55c9f46d10d44cc997a7e212103b330c8e7c11004cdc96ced"
+        }
+      ],
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "catalogueSha256": "0b12228395e537a27e82df2dce72be11ca49e898501062828f29aef3ca6b7860",
+      "bytes": 592,
+      "outcomes": [
+        {
+          "id": "bad.go",
+          "code": "unterminated-literal"
+        }
+      ]
+    },
+    {
+      "profile": "go-tokens",
+      "input": [
+        {
+          "name": "limit.go",
+          "bytes": 1048576,
+          "sha256": "93597516eb765a41cc7265a04277bb87005721c3f333b63b06d19a98065d5fc7"
+        }
+      ],
+      "configSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "catalogueSha256": "d6f2757856f80b33763ae3ecca60602fcd2ccb4566a6c49848a1d199bfe78ccc",
+      "bytes": 1371,
+      "outcomes": [
+        {
+          "id": "limit.go",
+          "code": "ok"
+        }
+      ]
+    }
+  ]
+}

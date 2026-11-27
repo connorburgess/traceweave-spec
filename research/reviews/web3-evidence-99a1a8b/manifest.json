@@ -1,0 +1,248 @@
+{
+  "format": "web3-portable-evidence-retention-v1",
+  "status": "prepared for independent retention/closure review",
+  "acceptedShelfCommit": "99a1a8bce5382a0345fa7e19d9bfd44575f9c016",
+  "acceptedShelfTree": "220d6436a1c6a8118ed6e91d5aaa6b1ba39985e3",
+  "scope": "Existing finite evidence only; no experiment rerun; original private records unchanged",
+  "records": [
+    {
+      "id": "criterion-assessment",
+      "originalSha256": "610510113ffe29d0576f191a37ccaa023163a5575b65353d1748dd7a578d5efd",
+      "originalBytes": 14812,
+      "retainedPath": "reports/criterion-assessment.md",
+      "retainedSha256": "5512a0143ad87837d2d1418ac6c1b84250c0c63f402f308818993ed208470729",
+      "retainedBytes": 14916,
+      "adaptation": "Markdown links rebased; unretained attachment links made inert; private locations/lane/deployment identifiers omitted; original narrative/status preserved"
+    },
+    {
+      "id": "final-eligibility",
+      "originalSha256": "30baf3cac8ee78efd90b63cc878898f723b6b78bda10c99221c13de65b73eab4",
+      "originalBytes": 9194,
+      "retainedPath": "reports/final-eligibility.md",
+      "retainedSha256": "2249b29a4e8e39778699ba25f8a213aa4df0951de5fec5db30de4ec07bca1b53",
+      "retainedBytes": 9155,
+      "adaptation": "Markdown links rebased; unretained attachment links made inert; private locations/lane/deployment identifiers omitted; original narrative/status preserved"
+    },
+    {
+      "id": "fingerprint-review",
+      "originalSha256": "e3f7e4698fa1123a54640ea34ac629a75c9dd750068b9969a670601f2123b98b",
+      "originalBytes": 13125,
+      "retainedPath": "reports/fingerprint-review.md",
+      "retainedSha256": "cea79675766a373b42ac239c02a96b1f899e6d257d232fcd8ff014349d0d1818",
+      "retainedBytes": 13591,
+      "adaptation": "Markdown links rebased; unretained attachment links made inert; private locations/lane/deployment identifiers omitted; original narrative/status preserved"
+    },
+    {
+      "id": "compare-review",
+      "originalSha256": "eedbde072e530785ccf38edf0c092b82eff0a0ab2d4dd94e5a709f03534fbd7f",
+      "originalBytes": 14073,
+      "retainedPath": "reports/compare-review.md",
+      "retainedSha256": "702ae3aa53a9a947db6cbc0c6cfc7c814001f8055b497695ebca41ba6bb7f948",
+      "retainedBytes": 14616,
+      "adaptation": "Markdown links rebased; unretained attachment links made inert; private locations/lane/deployment identifiers omitted; original narrative/status preserved"
+    },
+    {
+      "id": "replay-review",
+      "originalSha256": "2ec093fe30003b14d3694aacf994bb8a63eb63dae6513284666e6a4b7b95981b",
+      "originalBytes": 11212,
+      "retainedPath": "reports/replay-review.md",
+      "retainedSha256": "cb68d4778a96769b6ddfdfc8587921929ab4ce44d6792e0e746a061d75c18379",
+      "retainedBytes": 11782,
+      "adaptation": "Markdown links rebased; unretained attachment links made inert; private locations/lane/deployment identifiers omitted; original narrative/status preserved"
+    },
+    {
+      "id": "integration-record",
+      "originalSha256": "5f72e3535238ae68b8b8ee4e3962f22b4970fa16f36b5e9ecd7b4fd7cda889af",
+      "originalBytes": 6660,
+      "retainedPath": "reports/integration-record.md",
+      "retainedSha256": "6727875946893e9d0980f78d10c6be55e71de13d711ad18606ae144cef47a79f",
+      "retainedBytes": 6989,
+      "adaptation": "Markdown links rebased; unretained attachment links made inert; private locations/lane/deployment identifiers omitted; original narrative/status preserved"
+    },
+    {
+      "id": "publication-record",
+      "originalSha256": "10c29b1cea2399dd7bbfb2ffee8d69818d93c17c61124e586a05387b8ffb1b91",
+      "originalBytes": 4692,
+      "retainedPath": "reports/publication-record.md",
+      "retainedSha256": "24710d4bc4aa4b95ec86e943e4b1ed9a647df72984960a32b9edb262441d114d",
+      "retainedBytes": 5153,
+      "adaptation": "Markdown links rebased; unretained attachment links made inert; private locations/lane/deployment identifiers omitted; original narrative/status preserved"
+    },
+    {
+      "id": "drop-supplement",
+      "originalSha256": "ae5f52c1a4625cf0e9ff9274b0780f509eac57bbf06b3d02909b6120af38b2a8",
+      "originalBytes": 9244,
+      "retainedPath": "reports/drop-supplement.md",
+      "retainedSha256": "9fb80e0e7679a5ba6e0d0bd82ef04c6caaa941b1471e1fd1d9f2c2f1d18827d5",
+      "retainedBytes": 9650,
+      "adaptation": "Markdown links rebased; unretained attachment links made inert; private locations/lane/deployment identifiers omitted; original narrative/status preserved"
+    },
+    {
+      "id": "fingerprint-expected.json",
+      "originalSha256": "f6201bba537af8eccb3043f7e2983788f1225fb6a8d2b60a3af17bdad487fad3",
+      "originalBytes": 5604,
+      "retainedPath": "fingerprint-expected.json",
+      "retainedSha256": "f6201bba537af8eccb3043f7e2983788f1225fb6a8d2b60a3af17bdad487fad3",
+      "retainedBytes": 5604,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "id": "catalogue-compare-expected.json",
+      "originalSha256": "c1547204957003f6fb913a714ed1645fd5cd9de1f11e30f8c2b339a2fbb6517e",
+      "originalBytes": 9265,
+      "retainedPath": "catalogue-compare-expected.json",
+      "retainedSha256": "c1547204957003f6fb913a714ed1645fd5cd9de1f11e30f8c2b339a2fbb6517e",
+      "retainedBytes": 9265,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "id": "report-replay-expected.json",
+      "originalSha256": "aa074fb7bc38a46b76729e946b103e9e06b84b3d1ddc278b30919a74a2b9950c",
+      "originalBytes": 16592,
+      "retainedPath": "report-replay-expected.json",
+      "retainedSha256": "aa074fb7bc38a46b76729e946b103e9e06b84b3d1ddc278b30919a74a2b9950c",
+      "retainedBytes": 16592,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "id": "fixture-ledger",
+      "originalSha256": "a66b737825fc00fd91945e4b952c462e3d17383c44fe3ea9c3a6e7b9d5a76017",
+      "originalBytes": 56047,
+      "retainedPath": "fixture-ledger.json",
+      "retainedSha256": "88332720da64118a0d6c7fa7c7f9aa7ba72e2777f33db37442cbee0388905bcb",
+      "retainedBytes": 55807,
+      "adaptation": "Only private manifestChecks location keys replaced with descriptive review-directory names; all other JSON values unchanged; formatting normalized"
+    },
+    {
+      "id": "drop-downloaded.catalogue.json",
+      "originalSha256": "af2af05dc2f2ce0ae06b59dd14b825f42ac3415b93e7543d8c7098adda81daf2",
+      "originalBytes": 2052,
+      "retainedPath": "drop/downloaded.catalogue.json",
+      "retainedSha256": "af2af05dc2f2ce0ae06b59dd14b825f42ac3415b93e7543d8c7098adda81daf2",
+      "retainedBytes": 2052,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "id": "drop-downloaded.config.json",
+      "originalSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "originalBytes": 200,
+      "retainedPath": "drop/downloaded.config.json",
+      "retainedSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "retainedBytes": 200,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "id": "drop-expected-cli.catalogue.json",
+      "originalSha256": "af2af05dc2f2ce0ae06b59dd14b825f42ac3415b93e7543d8c7098adda81daf2",
+      "originalBytes": 2052,
+      "retainedPath": "drop/expected-cli.catalogue.json",
+      "retainedSha256": "af2af05dc2f2ce0ae06b59dd14b825f42ac3415b93e7543d8c7098adda81daf2",
+      "retainedBytes": 2052,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "id": "drop-worker-result.catalogue.json",
+      "originalSha256": "af2af05dc2f2ce0ae06b59dd14b825f42ac3415b93e7543d8c7098adda81daf2",
+      "originalBytes": 2052,
+      "retainedPath": "drop/worker-result.catalogue.json",
+      "retainedSha256": "af2af05dc2f2ce0ae06b59dd14b825f42ac3415b93e7543d8c7098adda81daf2",
+      "retainedBytes": 2052,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "id": "drop-selected-accepted-fixture.json",
+      "originalSha256": "c142b6237f7d2ec4974a439e3d78c7fb5e7dbb664a8b7b2bf78163718e5ba921",
+      "originalBytes": 636,
+      "retainedPath": "drop/selected-accepted-fixture.json",
+      "retainedSha256": "c142b6237f7d2ec4974a439e3d78c7fb5e7dbb664a8b7b2bf78163718e5ba921",
+      "retainedBytes": 636,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "id": "drop-fixture/a.go",
+      "originalSha256": "5cc308e8ce4cb81a97110ab2dfdb6de93e1e93d615298639a88ae7cd1cb35e76",
+      "originalBytes": 50,
+      "retainedPath": "drop/fixture/a.go",
+      "retainedSha256": "5cc308e8ce4cb81a97110ab2dfdb6de93e1e93d615298639a88ae7cd1cb35e76",
+      "retainedBytes": 50,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "id": "drop-fixture/z.go",
+      "originalSha256": "3be99f765d15f35569bf81b0ae75f01d215e3e11cbb235c4d5d074a28998159b",
+      "originalBytes": 50,
+      "retainedPath": "drop/fixture/z.go",
+      "retainedSha256": "3be99f765d15f35569bf81b0ae75f01d215e3e11cbb235c4d5d074a28998159b",
+      "retainedBytes": 50,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "id": "drop-fixture/config.json",
+      "originalSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "originalBytes": 200,
+      "retainedPath": "drop/fixture/config.json",
+      "retainedSha256": "dfbc5fe3517e9da65189cf2ef32c4655b5ec662441f2e71f508543a0a5c8f7b2",
+      "retainedBytes": 200,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "id": "drop-result-projection",
+      "originalSha256": "c7bcde6416f863637f56f0a18d415fbec2ef7c2defc409f0197ffd683e2ee8a9",
+      "originalBytes": 50416,
+      "retainedPath": "drop/result-projection.json",
+      "retainedSha256": "fbbd014cd7c73ffb99e16ada8f4ec97f0cb8ef06e011aa9759ef9d21a893df08",
+      "retainedBytes": 42030,
+      "adaptation": "Selected fixture/job/byte-equality/worker-phase/served-hash fields retained; download events reduced by original GUID join to filename/completed byte counts. Raw browser GUID/frame/path/URL/runtime metadata omitted; not an exact protocol transcript"
+    },
+    {
+      "id": "static-asset-identities",
+      "originalSha256": "6c7d69282c68659d78c6a4451e9370d4648f204d159e7dfa871e32cc539b5a6b",
+      "originalBytes": 20223,
+      "retainedPath": "drop/static-assets.json",
+      "retainedSha256": "6c7d69282c68659d78c6a4451e9370d4648f204d159e7dfa871e32cc539b5a6b",
+      "retainedBytes": 20223,
+      "adaptation": "none; exact path/hash/size inventory, no asset binaries"
+    },
+    {
+      "id": "criterion-citation-inventory",
+      "originalSha256": "ca2bd8972fecbf5e9f862c5ec7e3506d007e67efbdda165a35867c9f773099d7",
+      "originalBytes": 6332,
+      "retainedPath": null,
+      "adaptation": "identity only; original inventory includes private source locations; originals retained unchanged outside publication package"
+    },
+    {
+      "id": "drop-identity-assessment",
+      "originalSha256": "d0213c9de07974ab7c0973f3284502cf9ca9306b430c7715d6a6e73c5aa5a6aa",
+      "originalBytes": 3809,
+      "retainedPath": null,
+      "adaptation": "identity only; original inventory includes private source locations; originals retained unchanged outside publication package"
+    },
+    {
+      "id": "drop-original-manifest",
+      "originalSha256": "329cc3b52441fbb080c9cb8fc51352be3f4eb91954de1ba1b3783b675e3bcf17",
+      "originalBytes": 2156,
+      "retainedPath": null,
+      "adaptation": "identity only; original inventory includes private source locations; originals retained unchanged outside publication package"
+    },
+    {
+      "id": "final-addendum-identities",
+      "originalSha256": "39ae4256ee8cf583d1ee22f6e8f3299ee9c7d1f9cb5b00f26ae6fc7360699f29",
+      "originalBytes": 485,
+      "retainedPath": null,
+      "adaptation": "identity only; original inventory includes private source locations; originals retained unchanged outside publication package"
+    }
+  ],
+  "excluded": [
+    "browser profile/cache/cookies/authentication material",
+    "raw provider deployment/alias/account metadata",
+    "raw browser frame/GUID/path/loopback metadata",
+    "native executables and large WASM/static build assets",
+    "unrelated recordings, transcripts and private runtime storage"
+  ],
+  "limits": [
+    "Adapted reports/ledger/projection are not original-byte copies; original and retained hashes are separate",
+    "Exact expected manifests and selected drop artifacts are unchanged bytes",
+    "Original private browser protocol/deployment receipts are not fully reproducible from this curated package; criterion acceptance is retained as the independent review chain",
+    "No new independent acceptance of this retention package until requested review"
+  ]
+}
