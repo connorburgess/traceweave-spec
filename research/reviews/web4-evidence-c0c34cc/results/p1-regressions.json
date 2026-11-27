@@ -1,0 +1,10 @@
+{
+  "sameTurnSelectCancel": true,
+  "realFetchCancelLateSuccess": true,
+  "nonAbortableCancelLateSuccess": true,
+  "nonAbortableCancelLateFailure": true,
+  "explicitEditResumesLoadedConfig": true,
+  "newSelectionSupersedesLateSuccessAndFailure": true,
+  "unmountAndInitialLoadCancel": true,
+  "explicitRetryRecovers": true
+}

@@ -1,0 +1,436 @@
+{
+  "format": "web4-portable-evidence-retention-v1",
+  "status": "prepared for independent retention/closure review",
+  "acceptedShelfCommit": "c0c34cc407e39b80b293ccec6e255db0207acd4a",
+  "acceptedShelfTree": "859d01ab14e5342fb87535395a1be484e6984de6",
+  "records": [
+    {
+      "retainedPath": "results/page-expected.json",
+      "originalSha256": "e416ab1785d7c2555f3aa66a422a1fba8298e62262ce8410bc913de7936ace96",
+      "originalBytes": 10940,
+      "retainedSha256": "e416ab1785d7c2555f3aa66a422a1fba8298e62262ce8410bc913de7936ace96",
+      "retainedBytes": 10940,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "results/page-extra-core.json",
+      "originalSha256": "798353ccd2d41e580049fe7713fc9de05e669c2203814557f70a006cc6180cc9",
+      "originalBytes": 593,
+      "retainedSha256": "798353ccd2d41e580049fe7713fc9de05e669c2203814557f70a006cc6180cc9",
+      "retainedBytes": 593,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "results/page-cancel-race.json",
+      "originalSha256": "2213e83a4ba79019f4a12b293dfbbcb1b99275f673ec91ec86a29824bf7ecb16",
+      "originalBytes": 148,
+      "retainedSha256": "2213e83a4ba79019f4a12b293dfbbcb1b99275f673ec91ec86a29824bf7ecb16",
+      "retainedBytes": 148,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "results/page-highlight-mapping.json",
+      "originalSha256": "d0339ca50653b260a36b8800d0f1953427dd6685d17858b431c1015fea7eb9a6",
+      "originalBytes": 146,
+      "retainedSha256": "d0339ca50653b260a36b8800d0f1953427dd6685d17858b431c1015fea7eb9a6",
+      "retainedBytes": 146,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "results/p1-regressions.json",
+      "originalSha256": "67cca2ff83c3c995a17fb0759ca17a79120bfa9f103ff848e89cfa69b47a726c",
+      "originalBytes": 325,
+      "retainedSha256": "67cca2ff83c3c995a17fb0759ca17a79120bfa9f103ff848e89cfa69b47a726c",
+      "retainedBytes": 325,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "results/g1-operations.json",
+      "originalSha256": "eb85b696ca4e60b46e623d855cf50927dc97ca3962569a5fd4fbabda535d9cfa",
+      "originalBytes": 4519,
+      "retainedSha256": "eb85b696ca4e60b46e623d855cf50927dc97ca3962569a5fd4fbabda535d9cfa",
+      "retainedBytes": 4519,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "results/g1-adversarial.json",
+      "originalSha256": "57affd2746e7e6c2fe8e647ffec8124b9121d0290e19802fecc21dad704db216",
+      "originalBytes": 2955,
+      "retainedSha256": "57affd2746e7e6c2fe8e647ffec8124b9121d0290e19802fecc21dad704db216",
+      "retainedBytes": 2955,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "results/g1-named-browser-steps.json",
+      "originalSha256": "cff8c06125e5b6bdf8f31ebf21d4ce46c3a3277ba828758ce776a7e50d195bc5",
+      "originalBytes": 2418,
+      "retainedSha256": "cff8c06125e5b6bdf8f31ebf21d4ce46c3a3277ba828758ce776a7e50d195bc5",
+      "retainedBytes": 2418,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "results/g1-mapping.json",
+      "originalSha256": "d5c320499f55a399b18a8d37e2c9afbd9ecbe376606e630e024e24b869a7f3a5",
+      "originalBytes": 3306,
+      "retainedSha256": "d5c320499f55a399b18a8d37e2c9afbd9ecbe376606e630e024e24b869a7f3a5",
+      "retainedBytes": 3306,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "results/p1-regressions.json",
+      "originalSha256": "67cca2ff83c3c995a17fb0759ca17a79120bfa9f103ff848e89cfa69b47a726c",
+      "originalBytes": 325,
+      "retainedSha256": "67cca2ff83c3c995a17fb0759ca17a79120bfa9f103ff848e89cfa69b47a726c",
+      "retainedBytes": 325,
+      "adaptation": "none; exact bytes reused at the explicit same-content result target; original role retained in report link"
+    },
+    {
+      "retainedPath": "operations/chain-copy-reformat.body.json",
+      "originalSha256": "96539abba97ce1a57b6d1fbce8d981cb79908995af606ac70d729f70546a7478",
+      "originalBytes": 2344,
+      "retainedSha256": "96539abba97ce1a57b6d1fbce8d981cb79908995af606ac70d729f70546a7478",
+      "retainedBytes": 2344,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/chain-copy-reformat.copy.go",
+      "originalSha256": "2c4c64f2f61dda602e730c825f37925528830bbc6fd88e49bb21cd35c8feb75c",
+      "originalBytes": 96,
+      "retainedSha256": "2c4c64f2f61dda602e730c825f37925528830bbc6fd88e49bb21cd35c8feb75c",
+      "retainedBytes": 96,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/chain-copy-reformat.sample.go",
+      "originalSha256": "4e6becb2fa9b4fd67f5d25ba82df15eca2551b6eecf9a70fb7a6ee01acb60672",
+      "originalBytes": 96,
+      "retainedSha256": "4e6becb2fa9b4fd67f5d25ba82df15eca2551b6eecf9a70fb7a6ee01acb60672",
+      "retainedBytes": 96,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/embed.body.json",
+      "originalSha256": "9e57eaf01c36b56e50305f94c645a12d7dbcf608cf8e07f9370e8bffde5c5bb5",
+      "originalBytes": 2149,
+      "retainedSha256": "9e57eaf01c36b56e50305f94c645a12d7dbcf608cf8e07f9370e8bffde5c5bb5",
+      "retainedBytes": 2149,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/embed.copy.go",
+      "originalSha256": "a1c2850b19d49b0cfb3693a2d665a3b246df97bab03ca71f6cc8aa36683ea444",
+      "originalBytes": 70,
+      "retainedSha256": "a1c2850b19d49b0cfb3693a2d665a3b246df97bab03ca71f6cc8aa36683ea444",
+      "retainedBytes": 70,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/embed.sample.go",
+      "originalSha256": "4e6becb2fa9b4fd67f5d25ba82df15eca2551b6eecf9a70fb7a6ee01acb60672",
+      "originalBytes": 96,
+      "retainedSha256": "4e6becb2fa9b4fd67f5d25ba82df15eca2551b6eecf9a70fb7a6ee01acb60672",
+      "retainedBytes": 96,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/evasion.body.json",
+      "originalSha256": "c5bdd1e1091089c5dc290570bdbb718359c3810e31b38ab4c9fc0d576b4b8a1c",
+      "originalBytes": 1988,
+      "retainedSha256": "c5bdd1e1091089c5dc290570bdbb718359c3810e31b38ab4c9fc0d576b4b8a1c",
+      "retainedBytes": 1988,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/evasion.copy.go",
+      "originalSha256": "311be417066668a20d2d7e7d8ea2503607b0448fa601b51571713daa049d8c4f",
+      "originalBytes": 136,
+      "retainedSha256": "311be417066668a20d2d7e7d8ea2503607b0448fa601b51571713daa049d8c4f",
+      "retainedBytes": 136,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/evasion.sample.go",
+      "originalSha256": "4e6becb2fa9b4fd67f5d25ba82df15eca2551b6eecf9a70fb7a6ee01acb60672",
+      "originalBytes": 96,
+      "retainedSha256": "4e6becb2fa9b4fd67f5d25ba82df15eca2551b6eecf9a70fb7a6ee01acb60672",
+      "retainedBytes": 96,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/fragment.body.json",
+      "originalSha256": "f78520bcca909e700a333cabf14060b17cd5d8f4c708ba46c7c2355f96068605",
+      "originalBytes": 1985,
+      "retainedSha256": "f78520bcca909e700a333cabf14060b17cd5d8f4c708ba46c7c2355f96068605",
+      "retainedBytes": 1985,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/fragment.copy.go",
+      "originalSha256": "e01f783549e9f1b5d8472cdb83d38413d8f5a1a285430059f7792eb94958b84b",
+      "originalBytes": 16,
+      "retainedSha256": "e01f783549e9f1b5d8472cdb83d38413d8f5a1a285430059f7792eb94958b84b",
+      "retainedBytes": 16,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/fragment.sample.go",
+      "originalSha256": "4e6becb2fa9b4fd67f5d25ba82df15eca2551b6eecf9a70fb7a6ee01acb60672",
+      "originalBytes": 96,
+      "retainedSha256": "4e6becb2fa9b4fd67f5d25ba82df15eca2551b6eecf9a70fb7a6ee01acb60672",
+      "retainedBytes": 96,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/reformat.body.json",
+      "originalSha256": "6b05c336afe0a743bc4b021106f1aebb1c61e981dd0a5bf98f8d699cd32ef97c",
+      "originalBytes": 2344,
+      "retainedSha256": "6b05c336afe0a743bc4b021106f1aebb1c61e981dd0a5bf98f8d699cd32ef97c",
+      "retainedBytes": 2344,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/reformat.copy.go",
+      "originalSha256": "f7f4575509ff7904636ffe4df0efd3314b65c1e5b594b2590ff8cf4abc7f31e8",
+      "originalBytes": 96,
+      "retainedSha256": "f7f4575509ff7904636ffe4df0efd3314b65c1e5b594b2590ff8cf4abc7f31e8",
+      "retainedBytes": 96,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/reformat.sample.go",
+      "originalSha256": "4e6becb2fa9b4fd67f5d25ba82df15eca2551b6eecf9a70fb7a6ee01acb60672",
+      "originalBytes": 96,
+      "retainedSha256": "4e6becb2fa9b4fd67f5d25ba82df15eca2551b6eecf9a70fb7a6ee01acb60672",
+      "retainedBytes": 96,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/rename.body.json",
+      "originalSha256": "2b202ae11ae688fc6987787b55117e23f81a9a973ed82422e6ab20a4bd1d4647",
+      "originalBytes": 2344,
+      "retainedSha256": "2b202ae11ae688fc6987787b55117e23f81a9a973ed82422e6ab20a4bd1d4647",
+      "retainedBytes": 2344,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/rename.copy.go",
+      "originalSha256": "41e6f0b564316e1a4908536fac0ba64518148526c7031ecc04b90d5594c59951",
+      "originalBytes": 96,
+      "retainedSha256": "41e6f0b564316e1a4908536fac0ba64518148526c7031ecc04b90d5594c59951",
+      "retainedBytes": 96,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/rename.sample.go",
+      "originalSha256": "4e6becb2fa9b4fd67f5d25ba82df15eca2551b6eecf9a70fb7a6ee01acb60672",
+      "originalBytes": 96,
+      "retainedSha256": "4e6becb2fa9b4fd67f5d25ba82df15eca2551b6eecf9a70fb7a6ee01acb60672",
+      "retainedBytes": 96,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/reorder.body.json",
+      "originalSha256": "801f4579e416f3ce492faec6bbc1f6098f19d5f76e906c7218eefaa836394801",
+      "originalBytes": 2757,
+      "retainedSha256": "801f4579e416f3ce492faec6bbc1f6098f19d5f76e906c7218eefaa836394801",
+      "retainedBytes": 2757,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/reorder.copy.go",
+      "originalSha256": "ed3afd82e3a71a0c12a7cda1fbce2825e74d4c6c5f0e25234591cc71662c5f8e",
+      "originalBytes": 96,
+      "retainedSha256": "ed3afd82e3a71a0c12a7cda1fbce2825e74d4c6c5f0e25234591cc71662c5f8e",
+      "retainedBytes": 96,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "operations/reorder.sample.go",
+      "originalSha256": "4e6becb2fa9b4fd67f5d25ba82df15eca2551b6eecf9a70fb7a6ee01acb60672",
+      "originalBytes": 96,
+      "retainedSha256": "4e6becb2fa9b4fd67f5d25ba82df15eca2551b6eecf9a70fb7a6ee01acb60672",
+      "retainedBytes": 96,
+      "adaptation": "none; exact original bytes"
+    },
+    {
+      "retainedPath": "results/page-browser-projection.json",
+      "originalSha256": "c39a15c8a6aa9faaf1a8ec9aa4c572d54fbd291866feaadcafd835c0afb5decd",
+      "originalBytes": 8682,
+      "retainedSha256": "bea78f972dae7fdd06d7d64da5e337de0d1761a1fdce7914a74b6d6eece72178",
+      "retainedBytes": 2260,
+      "adaptation": "Top-level requests omitted and chrome reduced to product version; all other JSON result values unchanged; wrapped with explicit projection label/original identity"
+    },
+    {
+      "retainedPath": "results/p1-browser-projection.json",
+      "originalSha256": "f9ce8b3f09f1a1b10642e38f21f89b2751ff8c4a58ba10b01deaa1a0c27f6931",
+      "originalBytes": 10810,
+      "retainedSha256": "af792ec16117c2f12987578bf5275363839b3cf0a53dbaacb8da924eba22593d",
+      "retainedBytes": 2311,
+      "adaptation": "Top-level requests omitted and chrome reduced to product version; all other JSON result values unchanged; wrapped with explicit projection label/original identity"
+    },
+    {
+      "retainedPath": "results/g1-browser-projection.json",
+      "originalSha256": "ae3c29d82aea556df31f572dcd9bcd895c202fce934d4451d96f1f8c3bb5dedf",
+      "originalBytes": 13582,
+      "retainedSha256": "fc539f755d98fa99a265818caf839314112dfe8e5fa2589d13a789dce8a2638f",
+      "retainedBytes": 2352,
+      "adaptation": "Top-level requests omitted and chrome reduced to product version; all other JSON result values unchanged; wrapped with explicit projection label/original identity"
+    },
+    {
+      "retainedPath": "../../drafts/web4-demo-fixtures/evidence/C-identical/rust/body.json",
+      "originalSha256": "d94725ed9da415be9baeb02a72bfd0c1e469f086e138e527fc39cf26e68d8cac",
+      "originalBytes": 2476,
+      "retainedSha256": "d94725ed9da415be9baeb02a72bfd0c1e469f086e138e527fc39cf26e68d8cac",
+      "retainedBytes": 2476,
+      "adaptation": "none; complete browser-downloaded body equals already published native fixture body; reuse explicit case/role, no duplicate copy"
+    },
+    {
+      "retainedPath": "../../drafts/web4-demo-fixtures/evidence/C-unrelated/rust/body.json",
+      "originalSha256": "af4e3003ed360acb4608d4f5f0e1014a60402e8db348b678e2f1f55d72e027bb",
+      "originalBytes": 1984,
+      "retainedSha256": "af4e3003ed360acb4608d4f5f0e1014a60402e8db348b678e2f1f55d72e027bb",
+      "retainedBytes": 1984,
+      "adaptation": "none; complete browser-downloaded body equals already published native fixture body; reuse explicit case/role, no duplicate copy"
+    },
+    {
+      "retainedPath": "../../drafts/web4-demo-fixtures/evidence/D1/rust/body.json",
+      "originalSha256": "f4c5bbcf226b483f699a3a94151a746823361c64d295c524ab98946858c59b77",
+      "originalBytes": 2284,
+      "retainedSha256": "f4c5bbcf226b483f699a3a94151a746823361c64d295c524ab98946858c59b77",
+      "retainedBytes": 2284,
+      "adaptation": "none; complete browser-downloaded body equals already published native fixture body; reuse explicit case/role, no duplicate copy"
+    },
+    {
+      "retainedPath": "../../drafts/web4-demo-fixtures/evidence/D2/rust/body.json",
+      "originalSha256": "2e03b27177b35c5b12ee8e1eb386329e8797ddf821042cb32f191af86ca4525f",
+      "originalBytes": 2129,
+      "retainedSha256": "2e03b27177b35c5b12ee8e1eb386329e8797ddf821042cb32f191af86ca4525f",
+      "retainedBytes": 2129,
+      "adaptation": "none; complete browser-downloaded body equals already published native fixture body; reuse explicit case/role, no duplicate copy"
+    },
+    {
+      "retainedPath": "../../drafts/web4-demo-fixtures/evidence/D3/rust/body.json",
+      "originalSha256": "2f1ed720442e1151e003f5a21a2e36b18e057911f2c61e62266df780892bcdc4",
+      "originalBytes": 5270,
+      "retainedSha256": "2f1ed720442e1151e003f5a21a2e36b18e057911f2c61e62266df780892bcdc4",
+      "retainedBytes": 5270,
+      "adaptation": "none; complete browser-downloaded body equals already published native fixture body; reuse explicit case/role, no duplicate copy"
+    },
+    {
+      "retainedPath": "../../drafts/web4-demo-fixtures/evidence/D4/rust/body.json",
+      "originalSha256": "ba428cfbbc3fed2c07e8c97ff5846a436b7888e95e12e64b22d0580f224e2cb5",
+      "originalBytes": 1990,
+      "retainedSha256": "ba428cfbbc3fed2c07e8c97ff5846a436b7888e95e12e64b22d0580f224e2cb5",
+      "retainedBytes": 1990,
+      "adaptation": "none; complete browser-downloaded body equals already published native fixture body; reuse explicit case/role, no duplicate copy"
+    },
+    {
+      "retainedPath": "../../drafts/web4-demo-fixtures/evidence/D5/rust/body.json",
+      "originalSha256": "43f7419d67ef8edeac09601c99386b1cea15baceff0d02b002224dbb4116e7eb",
+      "originalBytes": 1988,
+      "retainedSha256": "43f7419d67ef8edeac09601c99386b1cea15baceff0d02b002224dbb4116e7eb",
+      "retainedBytes": 1988,
+      "adaptation": "none; complete browser-downloaded body equals already published native fixture body; reuse explicit case/role, no duplicate copy"
+    },
+    {
+      "retainedPath": "../../drafts/web4-demo-fixtures/evidence/D6/rust/body.json",
+      "originalSha256": "1412cb8bdcbb8f7a6ee237ebead6225503ab40dd84ac8ef93bf217d104954dbc",
+      "originalBytes": 1988,
+      "retainedSha256": "1412cb8bdcbb8f7a6ee237ebead6225503ab40dd84ac8ef93bf217d104954dbc",
+      "retainedBytes": 1988,
+      "adaptation": "none; complete browser-downloaded body equals already published native fixture body; reuse explicit case/role, no duplicate copy"
+    },
+    {
+      "retainedPath": null,
+      "originalSha256": "81ab53cd9101ba7b49f36a6c1919857816746ee8fb49e8443757caa01e8a745f",
+      "originalBytes": 714,
+      "adaptation": "identity only; original private protocol/receipt retained unchanged outside publication package"
+    },
+    {
+      "retainedPath": null,
+      "originalSha256": "13b8890f18e1414afd18b8824b44778abf993d43ab7cee80cb3c610c169585b1",
+      "originalBytes": 3832,
+      "adaptation": "identity only; original private protocol/receipt retained unchanged outside publication package"
+    },
+    {
+      "retainedPath": null,
+      "originalSha256": "950d0fca4c7e7d13db8029772776974bdeadae2c2ef20322aec54f4b45c6d2c6",
+      "originalBytes": 2125,
+      "adaptation": "identity only; original private protocol/receipt retained unchanged outside publication package"
+    },
+    {
+      "retainedPath": null,
+      "originalSha256": "5746c78cfd337838b6f628f4ab172601d358cdba2a44be409abd13c1705c6ddc",
+      "originalBytes": 6413,
+      "adaptation": "identity only; original private protocol/receipt retained unchanged outside publication package"
+    },
+    {
+      "retainedPath": null,
+      "originalSha256": "bf4a97833d838274d39162790026f319b5548e3e971b39bc84bd7eed5a3b84af",
+      "originalBytes": 1267,
+      "adaptation": "identity only; original private protocol/receipt retained unchanged outside publication package"
+    },
+    {
+      "retainedPath": null,
+      "originalSha256": "21b40bf6e5c5d7bcad89e161c4aa5e155e1022db0efdce4d82fd6e21c1a201b8",
+      "originalBytes": 535,
+      "adaptation": "identity only; original private protocol/receipt retained unchanged outside publication package"
+    },
+    {
+      "retainedPath": null,
+      "originalSha256": "50ebedc6f9046173ffe7cc15b38b94446e4afb6526e577ef3b4decd95f7dfc3d",
+      "originalBytes": 6627,
+      "adaptation": "identity only; original private protocol/receipt retained unchanged outside publication package"
+    },
+    {
+      "retainedPath": "reports/page-review.md",
+      "originalSha256": "8305145d89c91a714641bfc1c6f1a4447f7fe3674d58c2e537ba0fce7497e081",
+      "originalBytes": 14053,
+      "retainedSha256": "753a7bd23c873ac609e0f73ae7e5205b1511a550cb70670ae5ffcabecf8cde3e",
+      "retainedBytes": 14880,
+      "adaptation": "Header added; role-specific retained links rebased; other attachment links inert; private locations/provider identifiers and selected private-checkout preservation metadata omitted; historical result/verdict narrative preserved"
+    },
+    {
+      "retainedPath": "reports/p1-rereview.md",
+      "originalSha256": "3918ced6a9e36930b31a9dfbee14693c4c4344bf5c2fee03db851dfae28cef3b",
+      "originalBytes": 7842,
+      "retainedSha256": "e5265caa2e109598e5d8e7739e9941582f71066a0f836be980cfafe96fae193a",
+      "retainedBytes": 8646,
+      "adaptation": "Header added; role-specific retained links rebased; other attachment links inert; private locations/provider identifiers and selected private-checkout preservation metadata omitted; historical result/verdict narrative preserved"
+    },
+    {
+      "retainedPath": "reports/g1-review.md",
+      "originalSha256": "27a19bbfda48bac69061848bed2e6614a2374440143fdc4746d1d614df8dba4a",
+      "originalBytes": 13584,
+      "retainedSha256": "218bdbaa17a377e70cfea9227a379da093ad926f3a49ebcfd4ea345990de932e",
+      "retainedBytes": 14445,
+      "adaptation": "Header added; role-specific retained links rebased; other attachment links inert; private locations/provider identifiers and selected private-checkout preservation metadata omitted; historical result/verdict narrative preserved"
+    },
+    {
+      "retainedPath": "reports/integration-record.md",
+      "originalSha256": "ad815fdac0487649c2ac7515daf9c5e0183765680a965c586e2799c7b1ed7271",
+      "originalBytes": 6661,
+      "retainedSha256": "2123c0932aea1cee669baeaada36a51f08e67b106da52d06659cd6dc82185164",
+      "retainedBytes": 6835,
+      "adaptation": "Header added; role-specific retained links rebased; other attachment links inert; private locations/provider identifiers and selected private-checkout preservation metadata omitted; historical result/verdict narrative preserved"
+    },
+    {
+      "retainedPath": "reports/publication-record.md",
+      "originalSha256": "f873b481b9836177c108c0dfe4127b5b7b97336206369cb39e0407b9faf83337",
+      "originalBytes": 5791,
+      "retainedSha256": "6340f8d0729488bbe029a6994a404e4e1def1c6937e7e490248fdf7686a615c3",
+      "retainedBytes": 6226,
+      "adaptation": "Header added; role-specific retained links rebased; other attachment links inert; private locations/provider identifiers and selected private-checkout preservation metadata omitted; historical result/verdict narrative preserved"
+    }
+  ],
+  "excluded": [
+    "provider account/team/deployment locators and raw receipts",
+    "browser request records/profiles/caches/GUIDs and private paths",
+    "large binaries/WASM/static exports and unrelated attachments"
+  ],
+  "limits": [
+    "Adaptations/projections have separate original/retained identities; original private originals unchanged",
+    "Identity-only receipts do not reconstruct original private protocols",
+    "No new independent review of this retention package until requested review; no experiment rerun"
+  ]
+}

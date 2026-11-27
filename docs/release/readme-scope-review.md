@@ -10,7 +10,9 @@ Prior integrated later-profile snapshot after the [five scoped closures](../../r
 
 Dated later-profile snapshot after the [SK.3 design-only closure](../../research/reviews/sk3-design-gate-closure-4fa00c7.md): **28/55 met, 2 negative-result, 25 open**, based on exact design `4fa00c7` and independent review `12a1459`. This adds design evidence only, with I1–I4 unresolved and C1 a nonblocking next-design clarification. SK.4/SK.5, owner defaults/namespace decisions and all contact/acquisition/publication holds remain; M3 stays held. Core remains **34/47 met, 13 open**. Prior dated snapshots are retained.
 
-Current status after the 2026-11-27 [bounded WEB.3 closure](../../research/reviews/web3-bounded-gate-closure-99a1a8b.md): **29/55 met, 2 negative-result, 24 open**; core remains **34/47 met, 13 open**. Only WEB.3 is newly met, on exact Shelf `99a1a8b` and the retained independent review chain. WEB.4/5/6, privacy/native chooser/AT and WEB.6 performance limits remain open; claim inventory/exclusions and all other holds are unchanged.
+Dated status after the 2026-11-27 [bounded WEB.3 closure](../../research/reviews/web3-bounded-gate-closure-99a1a8b.md): **29/55 met, 2 negative-result, 24 open**; core remains **34/47 met, 13 open**. Only WEB.3 is newly met, on exact Shelf `99a1a8b` and the retained independent review chain. WEB.4/5/6, privacy/native chooser/AT and WEB.6 performance limits remain open; claim inventory/exclusions and all other holds are unchanged.
+
+Current status after the [bounded WEB.4 closure](../../research/reviews/web4-bounded-gate-closure-c0c34cc.md): **30/55 met, 2 negative-result, 23 open**; core **34/47 met,13open**. Only WEB.4 is newly met at Shelf `c0c34cc`, within retained Go/refusal/fixture limits. WEB.5/6 and all other holds remain; inventory/exclusions unchanged.
 
 ## Governance and scope
 

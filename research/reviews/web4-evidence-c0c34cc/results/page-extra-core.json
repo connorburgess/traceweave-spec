@@ -1,0 +1,20 @@
+{
+  "actualValidGo65536BytesComputedAnd65537Refused": true,
+  "unicodeCommentSpanMappingBothSidesBothModes": true,
+  "invalidGoPair": {
+    "candidate": {
+      "id": "transformed.go",
+      "sha256": "41ea5d32bc4512a55c9f46d10d44cc997a7e212103b330c8e7c11004cdc96ced"
+    },
+    "outcome": {
+      "class": "unsupported-input",
+      "code": "candidate-extraction-error"
+    },
+    "reference": {
+      "id": "sample.go",
+      "sha256": "66b27e4b006c89b0f66411d35fd02d6159cdfae0eb1ea64093679757f7bdb57e"
+    },
+    "status": "not-compared"
+  },
+  "injectedOutputCapRefusedAndCleared": true
+}

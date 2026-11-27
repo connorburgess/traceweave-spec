@@ -1,0 +1,141 @@
+{
+  "kind": "deterministic named-operation output assertions and actual pinned WASM recomputation; no native calls",
+  "deterministicOperationRepeats": 6,
+  "refusals": 30,
+  "refused": [
+    "lexical:/* open",
+    "lexical:\"unterminated",
+    "lexical:'ab'",
+    "lexical:\"\\q\"",
+    "lexical:var x = 0xZZ",
+    "reserved",
+    "builtin",
+    "type alias",
+    "constraint type",
+    "collision",
+    "absent",
+    "blank",
+    "Unicode rename",
+    "unsupported reorder:func a() {}",
+    "unsupported reorder:package main\nfunc a(){}\nfunc b(){}",
+    "unsupported reorder:// doc\nfunc a(){}\nfunc b(){}",
+    "unsupported reorder:func a(){ if true { }\nfunc b(){}",
+    "unsupported reorder:func (r R) a(){}\nfunc b(){}",
+    "unsupported reorder:func a[T any](){}\nfunc b(){}",
+    "unsupported reorder:func a() (int,error){return 1,nil}\nfunc b(){}",
+    "bad boundary:{\"first\":0,\"count\":1}",
+    "bad boundary:{\"first\":1.5,\"count\":1}",
+    "bad boundary:{\"first\":1,\"count\":9999}",
+    "bad boundary:{\"first\":1,\"count\":0}",
+    "implicit semicolon start",
+    "rename name cap",
+    "rename expanded output cap",
+    "source L+1",
+    "token cap",
+    "expanded output cap"
+  ],
+  "rows": [
+    {
+      "kind": "reformat",
+      "inputSha256": "21ccfc5f4171d746a2d1336da2e51da165858e79ce01c3d17141666a21e29963",
+      "outputSha256": "3656b8b150e6138de232683d9fd5b479a72f26a1c2182103b1860cd9ce5610ef",
+      "bodySha256": "760df61775b871cfe0f9d055d775ee203053500937015a62be8f0cb09ff716ef",
+      "status": "compared",
+      "modes": {
+        "exact": {
+          "class": "match",
+          "code": "match"
+        },
+        "normalized": {
+          "class": "match",
+          "code": "match"
+        }
+      }
+    },
+    {
+      "kind": "rename",
+      "inputSha256": "f43a624685ec0ca5ac91dca0af14d4abd2554a820c745f30493003e0d49f167a",
+      "outputSha256": "69fc83a490cc32ada47f176f5d45232e6cb2c8f14c02d24700ffdbf09e39b291",
+      "bodySha256": "c51397f84b2fa0c6af065e2e8e5fec89bc5c3d1316dddef5637ab9896be2957d",
+      "status": "compared",
+      "modes": {
+        "exact": {
+          "class": "match",
+          "code": "match"
+        },
+        "normalized": {
+          "class": "match",
+          "code": "match"
+        }
+      }
+    },
+    {
+      "kind": "reorder",
+      "inputSha256": "21ccfc5f4171d746a2d1336da2e51da165858e79ce01c3d17141666a21e29963",
+      "outputSha256": "01c9133a3bc14c37ec850946bb9299258c6ef4febbb55873ae58e3ddbbbc22cf",
+      "bodySha256": "3ee773444b83e7ed1843c0dc026d01899852899f3dbf545d2c15556fe8060c44",
+      "status": "compared",
+      "modes": {
+        "exact": {
+          "class": "match",
+          "code": "match"
+        },
+        "normalized": {
+          "class": "match",
+          "code": "match"
+        }
+      }
+    },
+    {
+      "kind": "fragment",
+      "inputSha256": "21ccfc5f4171d746a2d1336da2e51da165858e79ce01c3d17141666a21e29963",
+      "outputSha256": "e01f783549e9f1b5d8472cdb83d38413d8f5a1a285430059f7792eb94958b84b",
+      "bodySha256": "c77d53f50e520cb846a47bd2adbf7bd2eade6202dd24028fa514841e3b2e2787",
+      "status": "compared",
+      "modes": {
+        "exact": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+        },
+        "normalized": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+        }
+      }
+    },
+    {
+      "kind": "embed",
+      "inputSha256": "21ccfc5f4171d746a2d1336da2e51da165858e79ce01c3d17141666a21e29963",
+      "outputSha256": "a1c2850b19d49b0cfb3693a2d665a3b246df97bab03ca71f6cc8aa36683ea444",
+      "bodySha256": "824c8e9fca6f2bdbcb8384cc920908381fe0862eff2f905789bf749b3d289255",
+      "status": "compared",
+      "modes": {
+        "exact": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+        },
+        "normalized": {
+          "class": "no-match",
+          "code": "below-minimum-evidence"
+        }
+      }
+    },
+    {
+      "kind": "evasion",
+      "inputSha256": "974c8d0ad144c3c39e9f1ce410740f449f623bffd29c750e8ed3bd68640b697c",
+      "outputSha256": "0a026c040362c8be6cf387277c4a4fe0f874dd260fb041d97b12bfaeb99c0547",
+      "bodySha256": "ba428cfbbc3fed2c07e8c97ff5846a436b7888e95e12e64b22d0580f224e2cb5",
+      "status": "compared",
+      "modes": {
+        "exact": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+        },
+        "normalized": {
+          "class": "no-match",
+          "code": "no-shared-fingerprints"
+        }
+      }
+    }
+  ]
+}

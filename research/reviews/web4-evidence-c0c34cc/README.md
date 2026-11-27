@@ -1,0 +1,20 @@
+# WEB.4 portable evidence retention
+
+Prepared 2026-11-27 for independent retention/closure review, exact accepted Shelf **`c0c34cc407e39b80b293ccec6e255db0207acd4a`**, tree `859d01ab14e5342fb87535395a1be484e6984de6`. No experiment rerun. The [closure record](../web4-bounded-gate-closure-c0c34cc.md) records coordinator acceptance, not independent acceptance of this new retention.
+
+[Manifest](manifest.json) records original and retained SHA-256/bytes separately. Five reports are labelled adaptations: retained citations rebased, omitted attachments identified, private source locations/provider locators and selected checkout metadata omitted. Browser projections omit request records and browser-runtime metadata except product version; other result values are unchanged. Exact small JSON/output/source artifacts retain original bytes. Original private protocols remain private; hashes/projections do not reconstruct omitted transcripts. No provider dashboard/account/deployment locator, browser profile/cache, credential, native executable or large WASM/static build asset is retained.
+
+## Citation chain
+
+- [Original page review](reports/page-review.md): historical P1 cancellation and G1 operation blockers, positive fixed/live evidence and limits preserved.
+- [P1 re-review](reports/p1-rereview.md): exact58452ca cancellation fix accepted; G1 still historically open. [Original race observation](results/page-cancel-race.json) and [fixed regressions](results/p1-regressions.json) are exact copies. Old-version sensitivity log is identity-only, not a published transcript.
+- [G1 review](reports/g1-review.md): exactc0c34cc current-input operations accepted, G1 closed, unchanged criterion eligible for coordinator disposition. [Operation outputs/refusals](results/g1-operations.json), [adversarial results](results/g1-adversarial.json), [browser operation steps](results/g1-named-browser-steps.json), [independent mapping](results/g1-mapping.json), [actual source/copy/body bytes](operations/) retained exactly.
+- [Integration record](reports/integration-record.md), [publication association](reports/publication-record.md): historical source preservation/local build and static production association; no new runtime or CI proof.
+- [Page expected results](results/page-expected.json), [extra core probes](results/page-extra-core.json), [both-mode highlight mapping](results/page-highlight-mapping.json); labelled [base browser](results/page-browser-projection.json), [P1 browser](results/p1-browser-projection.json), [G1 browser](results/g1-browser-projection.json) projections.
+- Existing [native fixture package](../../drafts/web4-demo-fixtures/README.md), [fixture review](../web4-demo-fixture-review-d2dd3df.md), [checker review](../web4-checker-rereview-e10f33e.md). Eight complete browser-download bodies equal the corresponding already published Rust native body files, with role-specific paths and original identities in manifest; not duplicate numerical evidence.
+
+## Denominators and limits
+
+**6 demos / 3 both-mode misses / 2 separate controls**; **8 body / 16 catalogue** comparisons plus 8 repeats; independently **6 operation outputs / 6 repeats / 6 WASM body cases / 30 refusals**; **7 browser operation/chaining steps in 1 custom source scenario**, not seven new demonstrations. D2 exact-only miss and D3 ambiguity do not increase 3/6; D6 is no-shared-fingerprints. Captured fragment→embed stages and current editor/drop input are directly distinguished from preset recipe loading.
+
+The reports/closure retain bounded lexical/structural refusals, synthetic input, finite/shared-ancestry oracle, no universal semantic/compiler/evasion/unrelatedness guarantees, no AT/privacy/WEB.6 certification and no full provenance construction. WEB.5/6 remain open; M3 HOLD. Static production retrieval is not new live runtime interaction. Original review negative findings remain historical and later exact dispositions close only those findings. This package itself awaits independent retention/closure review.

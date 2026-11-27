@@ -1,0 +1,76 @@
+{
+  "checks": [
+    {
+      "label": "ASCII identifier and selector only around Unicode/comment/literal",
+      "pass": true,
+      "kind": "rename",
+      "inputSha256": "fd67735e250376d3f0a6285db74bdc57e2fb16225234ad7ad76f318b368f254f",
+      "outputSha256": "d9e27780cb00fe4a6d90594054a9db67ca79c3b3c4294674653ab5f1d2068ca9"
+    },
+    {
+      "label": "identifier prefix is not an identifier occurrence",
+      "pass": true,
+      "kind": "rename",
+      "inputSha256": "0e6560d7dcb89b182a64a70c482cc3873a3628bb82994c20fa7ca0cb6bb6e213",
+      "outputSha256": "300bb3cfaca1543becc0d2150b013c7d760565f362e2e5c1cb345df25d66f6a2"
+    },
+    {
+      "label": "horizontal gaps only; multiline comment/raw contents exact",
+      "pass": true,
+      "kind": "reformat",
+      "inputSha256": "9631491affc55285f8837a98f0d572d5782ac34d498497f1130c29b76a208687",
+      "outputSha256": "00284a5b3b460e42614557ebf7866bf68ffa00545f59244db4dc4fced7537f8c"
+    },
+    {
+      "label": "nested function/map/slice literals and quoted closing delimiters",
+      "pass": true,
+      "kind": "reorder",
+      "inputSha256": "e2eba4ba115cc27a8c8cb6ec36849de33c557fdf3b733b0ec3587490e6324443",
+      "outputSha256": "906ff494c5ebbeb92a3d7ea5147c6aacde47c80f1b8a7f317536d32e0ae25fbe"
+    },
+    {
+      "label": "comment delimiters do not close bodies",
+      "pass": true,
+      "kind": "reorder",
+      "inputSha256": "c4281887b7a5d2e686658354b3c22a97624e050164539b3265ddad9d1fa6a36a",
+      "outputSha256": "8b824de8d012883aa8c51d3d6a713cb8d414bd1af2a1b42cfd148e1939535e2c"
+    },
+    {
+      "label": "Unicode whole-token byte boundary",
+      "pass": true,
+      "kind": "fragment",
+      "inputSha256": "55be921f2f9fe7a58a62418fd95c20045f10f70000b8abe315d8dc93333cd448",
+      "outputSha256": "a943c5c1e41b527d4eb7c6445086ed59610d179cf837ffc3448233e93b25396c"
+    },
+    {
+      "label": "implicit semicolon range end",
+      "pass": true,
+      "kind": "fragment",
+      "inputSha256": "dd7a059971cd0d4112fc9c323645f769af7a505a9f4edc7f50b3eea879fe8541",
+      "outputSha256": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881"
+    },
+    {
+      "label": "Unicode captured snapshot embedding",
+      "pass": true,
+      "kind": "embed",
+      "inputSha256": "a943c5c1e41b527d4eb7c6445086ed59610d179cf837ffc3448233e93b25396c",
+      "outputSha256": "350b8a4e8d94a66fe1c2462b507e0c49c0c39f8e0c63879285e3cdade331ff49"
+    },
+    {
+      "label": "evasion preserves literal token text, removes comment",
+      "pass": true,
+      "kind": "evasion",
+      "inputSha256": "5673bfd30c6cc4a286b5c0cdb592d5caa8d2fee24500acfac91f32c7a2004ad5",
+      "outputSha256": "4df1e1236e924705e95e6d2305bc481b87f549b04f1fff32a9ed64e217fabef9"
+    },
+    {
+      "label": "4096 lexical tokens admitted",
+      "pass": true
+    },
+    {
+      "label": "actual exact-output-cap and one-byte-over embedding",
+      "pass": true
+    }
+  ],
+  "unpairedSurrogateRefused": true
+}

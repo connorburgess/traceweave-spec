@@ -1,0 +1,69 @@
+{
+  "retention": "Labelled reduced browser-result projection; requests and browser runtime metadata except product version omitted; not the original protocol",
+  "originalSha256": "c39a15c8a6aa9faaf1a8ec9aa4c572d54fbd291866feaadcafd835c0afb5decd",
+  "omittedTopLevelKeys": [
+    "requests"
+  ],
+  "results": {
+    "kind": "isolated headless browser synthetic correctness; no native CLI calls",
+    "chrome": {
+      "product": "Chrome/158.0.8127.89"
+    },
+    "downloadByteEqual": [
+      {
+        "id": "D1",
+        "bodySha256": "f4c5bbcf226b483f699a3a94151a746823361c64d295c524ab98946858c59b77"
+      },
+      {
+        "id": "D2",
+        "bodySha256": "2e03b27177b35c5b12ee8e1eb386329e8797ddf821042cb32f191af86ca4525f"
+      },
+      {
+        "id": "D3",
+        "bodySha256": "2f1ed720442e1151e003f5a21a2e36b18e057911f2c61e62266df780892bcdc4"
+      },
+      {
+        "id": "D4",
+        "bodySha256": "ba428cfbbc3fed2c07e8c97ff5846a436b7888e95e12e64b22d0580f224e2cb5"
+      },
+      {
+        "id": "D5",
+        "bodySha256": "43f7419d67ef8edeac09601c99386b1cea15baceff0d02b002224dbb4116e7eb"
+      },
+      {
+        "id": "D6",
+        "bodySha256": "1412cb8bdcbb8f7a6ee237ebead6225503ab40dd84ac8ef93bf217d104954dbc"
+      },
+      {
+        "id": "C-identical",
+        "bodySha256": "d94725ed9da415be9baeb02a72bfd0c1e469f086e138e527fc39cf26e68d8cac"
+      },
+      {
+        "id": "C-unrelated",
+        "bodySha256": "af4e3003ed360acb4608d4f5f0e1014a60402e8db348b678e2f1f55d72e027bb"
+      }
+    ],
+    "manualEditLive": true,
+    "dropLive": true,
+    "oversizeBeforeRead": true,
+    "invalidUtf8Refused": true,
+    "staleOutputRemoved": true,
+    "cancelAssetLoadAndLateCallbackIgnored": true,
+    "assetFailureRetry": true,
+    "mobileNoDocumentOverflow": true,
+    "keyboard": [
+      "Enter navigation",
+      "Enter recipe/control selection",
+      "Enter live download",
+      "Enter Cancel"
+    ],
+    "exceptions": [],
+    "limitations": [
+      "CDP replaces file chooser",
+      "No full AT/keyboard/physical-device acceptance",
+      "Asset-phase cancellation only",
+      "No OS network denial/privacy/baseline certification"
+    ]
+  },
+  "chromeAdaptation": "Only chrome.product retained; other browser-runtime fields omitted"
+}

@@ -25,7 +25,7 @@ Traceweave is an open, non-commercial specification for recognising your own wor
 **Experimental draft `0.1.0-draft.1`**, open and non-commercial. Progress is tracked against verifiable gates in [ROADMAP.md](ROADMAP.md):
 
 - **Core M0–M5:** **34 of 47** gates met — including all M0–M2 extraction, catalogue, and report contracts, `M2E.0` (source-code embedding omitted from the next release), the M3.0 false-alarm budget, and all 6/6 M4 offline-first registration gates (`traceweave-registration-draft-5`, promoted vectors + independent Rust/Go parity, commitment/disclosure review, verifier-local trust policy, and in-toto adapter fixtures).
-- **Profiles & extensions:** **29 of 55** gates met, plus **2 recorded negative results** (`TXT.4` repeated-structure prose ambiguity in Stage 1; `TXT.8` Unicode text marks erased by standard folding).
+- **Profiles & extensions:** **30 of 55** gates met, plus **2 recorded negative results** (`TXT.4` repeated-structure prose ambiguity in Stage 1; `TXT.8` Unicode text marks erased by standard folding).
 - **Frozen Stage-1 profiles:** `go-tokens`, `rust2024-tokens`, `ts-tokens`, `py-tokens`, and `text-plain` all have published hand-derived test vectors. Two independent reference implementations (Go and Rust, in a separate repository) plus a zero-import WebAssembly build reproduce the applicable frozen Stage-1 extraction and matching vectors byte-for-byte.
 
 **Epistemic boundaries (read first):**

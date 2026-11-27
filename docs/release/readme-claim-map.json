@@ -442,12 +442,12 @@
     },
     {
       "id": "README-007",
-      "sentence": "**Profiles & extensions:** **29 of 55** gates met, plus **2 recorded negative results** (`TXT.4` repeated-structure prose ambiguity in Stage 1; `TXT.8` Unicode text marks erased by standard folding).",
+      "sentence": "**Profiles & extensions:** **30 of 55** gates met, plus **2 recorded negative results** (`TXT.4` repeated-structure prose ambiguity in Stage 1; `TXT.8` Unicode text marks erased by standard folding).",
       "evidence": [
         {
           "kind": "decision",
           "path": "ROADMAP.md",
-          "quote": "| Later profiles, EXT and RC | 55 | 29 (TS.1, TS.2, TS.3, PY.1, PY.2, PY.3, IMGF.1, IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4, IMG.5, TXT.1, TXT.2, TXT.3, TXT.7, RES.1, C2PA.3, SK.1, SK.2, SK.3, WEB.0, WEB.1, WEB.2, WEB.3) | 2 (TXT.4, TXT.8) | 24 (WEB.4–WEB.6 and SK.4–SK.5 planned; PY.4 open) |"
+          "quote": "| Later profiles, EXT and RC | 55 | 30 (TS.1, TS.2, TS.3, PY.1, PY.2, PY.3, IMGF.1, IMGF.2, IMGF.3, IMGF.4, IMG.0, IMG.1, IMG.2, IMG.3, IMG.4, IMG.5, TXT.1, TXT.2, TXT.3, TXT.7, RES.1, C2PA.3, SK.1, SK.2, SK.3, WEB.0, WEB.1, WEB.2, WEB.3, WEB.4) | 2 (TXT.4, TXT.8) | 23 (WEB.5–WEB.6 and SK.4–SK.5 planned; PY.4 open) |"
         },
         {
           "kind": "review",
@@ -483,9 +483,14 @@
           "kind": "decision",
           "path": "research/reviews/web3-bounded-gate-closure-99a1a8b.md",
           "quote": "The sole new met gate is **WEB.3**, on its unchanged literal fixed-fixture catalogue/body/replay criterion."
+        },
+        {
+          "kind": "decision",
+          "path": "research/reviews/web4-bounded-gate-closure-c0c34cc.md",
+          "quote": "The sole new met gate is **WEB.4**, under its unchanged literal testing-page criterion."
         }
       ],
-      "rationale": "The integrated recount combines the scoped IMGF.1 closure with IMG.5, TS.1/TS.2 and TXT.1/TXT.2: 29 of 55 met, TXT.4/TXT.8 negative-result and 24 open. IMG.5 uses the reviewed draft-schema route; TS and TXT closures cover only frozen stage-1 ts-tokens and text-plain, with documented text result-rejection pairing. TSX/Markdown remain deferred. IMGF.1 adopts research arithmetic without normative promotion or universal equivalence. SK.3 adds reviewed local-first design evidence only; I1–I4 are unresolved and C1 remains a nonblocking clarification. It grants no SK.4 conformance, SK.5 hosting, owner defaults or namespace publication. WEB.3 adds only accepted bounded catalogue/body/replay fixture evidence at Shelf 99a1a8b; the independent final addendum closes the synthetic drop/download gap. Fingerprint9/9 core plus1/1 drop, Compare17/17 and Replay20 expected checks (13 reproduced/seven correct mismatches) plusnine invalid refusals remain distinct. WEB.4/5/6 and broader native chooser/AT/privacy/performance claims remain open."
+      "rationale": "The integrated recount combines the scoped IMGF.1 closure with IMG.5, TS.1/TS.2 and TXT.1/TXT.2: 30 of 55 met, TXT.4/TXT.8 negative-result and 23 open. IMG.5 uses the reviewed draft-schema route; TS and TXT closures cover only frozen stage-1 ts-tokens and text-plain, with documented text result-rejection pairing. TSX/Markdown remain deferred. IMGF.1 adopts research arithmetic without normative promotion or universal equivalence. SK.3 adds reviewed local-first design evidence only; I1–I4 are unresolved and C1 remains a nonblocking clarification. It grants no SK.4 conformance, SK.5 hosting, owner defaults or namespace publication. WEB.3 adds only accepted bounded catalogue/body/replay fixture evidence at Shelf 99a1a8b; the independent final addendum closes the synthetic drop/download gap. Fingerprint9/9 core plus1/1 drop, Compare17/17 and Replay20 expected checks (13 reproduced/seven correct mismatches) plusnine invalid refusals remain distinct. WEB.4 adds bounded accepted testing-page/current-input operation evidence at Shelf c0c34cc: six demos/three both-mode misses/two controls; eight body/sixteen catalogue comparisons; six operation outputs/thirty refusals; seven browser steps are distinct. Lexical/structural refusals and no universal semantic/compiler/evasion/unrelatedness guarantee remain. WEB.5/6 and broader native chooser/AT/privacy/performance claims remain open."
     },
     {
       "id": "README-008",

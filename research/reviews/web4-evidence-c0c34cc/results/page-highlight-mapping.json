@@ -1,0 +1,10 @@
+[
+  {
+    "mode": "exact",
+    "bothSidesTextAndMarksEqual": true
+  },
+  {
+    "mode": "normalized",
+    "bothSidesTextAndMarksEqual": true
+  }
+]
