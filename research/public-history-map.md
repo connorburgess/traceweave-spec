@@ -22,7 +22,9 @@ The preceding published checkpoint was `b1177b6623ebcc218b5430ae35074ee9499b3c07
 
 The preceding published checkpoint was `170cf5df3150874dc8f11ad9903e485285ccec97`, mapped from curated source `18e57db1376aaaeb20acf951956c0e2e500bea64` and preserved as an ancestor. That WEB.5 preparation retained accepted WEB.5 closure proposal `a2a7c9fff730867cc040e2a17934dbda6af6ee87`, exact Shelf `4e092c8116ebf1ee635489ad38866ce5708e2959` and labelled independent retention/scope acceptance. The unchanged criterion covers the browser-tool page, not whole-domain certification. The 2345 included current records are supported within static source scope; 1815 exclusions and historical website evidence remain distinct. Only WEB.5 is newly met: core34/47; extensions31/55met2negative22open. WEB.6 planned, M3 HOLD; no runtime/privacy/performance certification, release approval or execution authority.
 
-The current published checkpoint is `84e30dc99bc219fdd81080831b6017b5d3383af5`, mapped from curated source `d4ab8e270923e178b6cf175af8fb0a21607f2dbf` and preserved as an ancestor. This preparation retains accepted queue-only reconciliation `5f208b24977e87d10bc5f22fd9046d0e291c8625` and its labelled independent disposition. Current queue wording reflects published bounded WEB.5 browser-tool closure and distinguishes later local experimental verification preparation from deferred CI/CD signing activation. Historical evidence, criteria/counts and all holds remain unchanged: core34/47; extensions31/55met2negative22open, WEB.6 planned/open and M3 HOLD. No runtime, CI activation, production authority or release approval follows.
+The preceding published checkpoint was `84e30dc99bc219fdd81080831b6017b5d3383af5`, mapped from curated source `d4ab8e270923e178b6cf175af8fb0a21607f2dbf` and preserved as an ancestor. That queue preparation retained accepted queue-only reconciliation `5f208b24977e87d10bc5f22fd9046d0e291c8625` and its labelled independent disposition. Current queue wording reflects published bounded WEB.5 browser-tool closure and distinguishes later local experimental verification preparation from deferred CI/CD signing activation. Historical evidence, criteria/counts and all holds remain unchanged: core34/47; extensions31/55met2negative22open, WEB.6 planned/open and M3 HOLD. No runtime, CI activation, production authority or release approval follows.
+
+The current published checkpoint is `25959874d25704730c1e8ca008f65d93f3d3f5b1`, mapped from curated source `f9f166e1ad9ed5fe595fedafc7389e5d56cfee56` and preserved as an ancestor. This preparation retains independently accepted bounded PDQ diagnosis package `aafcfda055fb054f2a2f4b32d969e8ab1e22e16d`, its declared CSV/report adaptations and original PDQ-D1 correction history. The earlier six-input/one-host diagnosis accounts for1606 decisions and48 C++ diagnostic reconstructions; baseline32/48hash6/6quality is unchanged. Only current queue cause wording is clarified; no general parity, IMGF.5 closure or numerical run. Core34/47; extensions31/55met2negative22open, WEB.6 open and M3 HOLD remain. Raw-bearing private history and omitted upstream commit remain excluded.
 
 ## Reproducing
 
@@ -49,7 +51,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 
 ## Verification of the commits listed here
 
-`python3 tools/public_history_scrub.py scan` over the 275 commits and 3943 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
+`python3 tools/public_history_scrub.py scan` over the 279 commits and 3998 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
 
 | Category | Hits |
 | --- | --- |
@@ -205,8 +207,11 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `5f208b24977e87d10bc5f22fd9046d0e291c8625` | `5f208b24977e` | `d6b8929b26bf` |
 | `5f208b2` | `5f208b24977e` | `d6b8929b26bf` |
 | `d4ab8e270923e178b6cf175af8fb0a21607f2dbf` | `d4ab8e270923` | `84e30dc99bc2` |
+| `aafcfda055fb054f2a2f4b32d969e8ab1e22e16d` | `aafcfda055fb` | `d141e3f30b2b` |
+| `aafcfda` | `aafcfda055fb` | `d141e3f30b2b` |
+| `f9f166e1ad9ed5fe595fedafc7389e5d56cfee56` | `f9f166e1ad9e` | `25959874d257` |
 
-Ancestry was checked for all 9591 pairs of these 139 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
+Ancestry was checked for all 10011 pairs of these 142 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
 
 ## All commits, oldest first
 
@@ -501,3 +506,7 @@ Ancestry was checked for all 9591 pairs of these 139 ids in both directions: the
 | 287 | `d4ab8e270923` | `84e30dc99bc2` | kept | Update public history map for bounded WEB5 closure and retained review |
 | 288 | `5f208b24977e` | `d6b8929b26bf` | kept | Reconcile current queue with accepted WEB5 closure |
 | 289 | `c6a653ad15bf` | `6770c1d3bc61` | kept | Retain independent WEB5 queue reconciliation disposition |
+| 290 | `f9f166e1ad9e` | `25959874d257` | kept | Update public history map for reviewed WEB5 queue reconciliation |
+| 291 | `e00716571edd` | `e946ad794fc1` | kept | Retain bounded six-input PDQ mismatch diagnosis and review |
+| 292 | `aafcfda055fb` | `d141e3f30b2b` | kept | Label portable CSV newline adaptations and patch omission |
+| 293 | `667808bd6860` | `3b4da180e2ca` | kept | Retain independent bounded PDQ diagnosis package disposition |
