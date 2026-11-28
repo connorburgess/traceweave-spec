@@ -1,0 +1,37 @@
+# Portable independent PDQ diagnosis retention disposition
+
+Labelled adaptation of the independent acceptance of exact `aafcfda055fb054f2a2f4b32d969e8ab1e22e16d`. Original SHA-256 `745b347284553760e0c08f80d0755295ae03814f865c6d1e88575a31e18778ab`, 6408 bytes; original retained unchanged privately. Original Markdown attachment links are inert; remaining body is unchanged. This accepts the bounded source retention package, not this adaptation or a later sanitized candidate. See the [accepted package](pdq-six-input-diagnosis/README.md), [identity record](pdq-diagnosis-retention-aafcfda-review.identity.json) and [current queue](../work-queue.md). IMGF.5 remains OPEN; all counts and holds remain unchanged.
+
+---
+
+# Independent PDQ diagnosis retention review
+
+Accepted at the bounded evidence-retention scope; no findings requiring correction. Exact candidate `aafcfda055fb054f2a2f4b32d969e8ab1e22e16d`, branch `research/pdq-diagnosis-retention-3b748b1d`, tree `1d003c8559234dcd8ef5be0a03c1e0fa575ea8dd`, compared with curated base `f9f166e1ad9ed5fe595fedafc7389e5d56cfee56`. This reviews the new package independently; the earlier numeric review and D1 addendum do not themselves approve its retention.
+
+Package `research/reviews/pdq-six-input-diagnosis/retention-manifest.json` SHA-256: `de279899e4d9c1491302c118496708047651a7d8e4b5a5e6fbdeb227449d4978`. All 25 package files, including this manifest, are ordinary non-executable tracked files. The only other changed path is the current IMGF.5 dependency row in `research/work-queue.md`.
+
+## Evidence fidelity
+
+Independently verified all 412 entries of the original revised manifest against its 413-file package. Exact revised author report SHA-256 is `2816c35b4ce7ace508170bb6f55a515fe4df60cec7a20d0d3603f66e30ebac95`; original manifest SHA-256 is `5b2db7762a4e7949b9ebb70fb1d40397bfff25a85a8af968ba7ea31541976b8e`. The external D1 resolution identity record hashes to `b0065d78730cf07576fdd5a0ca069a48cebf7089b2a90fafd06e796222dd1257`.
+
+All 36 selected original records match their recorded size/hash: 12 exact copies/reused files, nine labelled adaptations and 15 identity-only omissions. The six CSV adaptations are byte-exact CRLF-to-LF replacements; their fields, order and decimal strings are preserved. Three report adaptations add an explicit header and replace original Markdown attachment/locator links with inert descriptions; their remaining bodies match the declared transform exactly. The original adverse review is retained, including PDQ-D1; the addendum supersedes only the report/generator correction condition. Original independent review SHA-256 is `1abe8a7a08cffd5dde65b4653455c7d7167f58b746f2cf0add511903377526eb`; addendum SHA-256 is `c39bd5d39cd166c9434be9622031340d9713a6631b03ae9a1cfb15c27a95b6cf`.
+
+The selected-fields ledger preserves all six input identities/dimensions and separates baseline 32/48 exact hashes and 6/6 exact qualities from the recorded 48 diagnostic reconstructions, 1,024 source-formula coefficients and 12 T/B byte comparisons. Constant127 and low-contrast retain all eight baseline mismatches each. Four CSVs remain header-only; constant127 has 1,118 decisions and low-contrast 488. Independently bound all 1,606 rows' displayed C++ and Python bits to the exact stored baseline hashes, in addition to the inspector's XOR/index/scalar-decision accounting.
+
+The revised author table preserves flipx +B on odd row i, −B on even row i, and flipy +B on odd column j, −B on even column j, without transpose. The prior D1 evidence retains 409 unchanged existing files, three changed existing files and one resolution addition; the package does not misrepresent a correction to numeric artifacts. Source-derived independent reconstruction remains distinguished from the author's observed-matrix probes, and coefficient/product/accumulator substitutions remain bounded to the six existing integer common-luma inputs and retained host/compiler/flags.
+
+## Static validation and authority
+
+Ran the inspected stdlib-only static inspector with `--self-test`: passed. Missing/duplicate decision, input identity drift, baseline relabelled as parity and wrong variant association were all rejected. Numerical source records were parsed only, never imported or executed. Independent checks and their executable source are retained in check.py (original independent review attachment; not retained) and checks.json (original independent review attachment; not retained).
+
+Repository all-Markdown local-link validation, README claims mapping (77 mapped, zero unmapped), tree/two-commit-message hygiene and final base-to-tip whitespace checks passed. Independently checked 105 local package/queue links. See links (original independent review attachment; not retained), claims (original independent review attachment; not retained), hygiene (original independent review attachment; not retained), whitespace (original independent review attachment; not retained). Inspected author retained validation and its disclosed initial whitespace failure; final LF-labelled CSV/identity-only patch treatment resolves that issue without claiming the earlier check passed. Author logs were not rerun or modified.
+
+The final diff changes 26 paths: 25 package additions and precisely one current queue dependency cell. IMGF.5's OPEN/status criterion cell is unchanged. ROADMAP, criteria, tools, historical packages and all other tracked paths are blob-identical to base. Independently recounted exact partitions in checks.json: core 34/47 met, 13 open; extensions 31/55 met, two negative, 22 open. IMGF.5 stays open; WEB.6 remains planned/open and M3 HOLD remains intact. No new run, waiver, negative-result status or authority is introduced.
+
+Public material contains no home paths/thread locators; repository hygiene passes, and the retained content/omission ledger contains no raw upstream object or encoded replacement. Original report links are explicitly inert rather than fabricated public evidence. Existing curated provenance retains the commit-to-root authentication limitation. Original compiler, binary, inputs, arrays, logs, manifest and independent checker are explicitly omitted or identity-only; public static inspection cannot replace numerical reproduction or authenticate execution. Reviewed author privacy-scan evidence is identified separately from the independently reproduced hygiene check.
+
+## Limits and preservation
+
+Acceptance permits faithful retention of the already accepted bounded finding. It establishes no generalized PDQ parity, full frozen-set agreement, natural-image behavior, threshold usefulness or IMGF.5 closure. No numerical reruns, builds, acquisition, native tool execution, raw-history inclusion, private native-storage inspection, integration or push occurred. Numerical reproduction requires omitted artifacts, provisioned dependencies and separate authorization. M3 remains HOLD.
+
+The author tree remained clean at the exact candidate. All 437 original author/reviewer files hashed at review start remained byte-identical at completion. No repository or author evidence was written. Exact inspected identities are in reviewed-identities.json (original independent review attachment; not retained); original preservation inventory is in original-identities.json (original independent review attachment; not retained), and package modes/blob identities in package-tree.txt (original independent review attachment; not retained).

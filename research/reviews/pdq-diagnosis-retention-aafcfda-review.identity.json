@@ -1,0 +1,11 @@
+{
+  "reviewedCommit": "aafcfda055fb054f2a2f4b32d969e8ab1e22e16d",
+  "originalReviewSha256": "745b347284553760e0c08f80d0755295ae03814f865c6d1e88575a31e18778ab",
+  "originalReviewBytes": 6408,
+  "originalRetention": "unchanged privately; independent review attachments omitted",
+  "retainedPath": "pdq-diagnosis-retention-aafcfda-review.md",
+  "retainedSha256": "69813a907eb5ddfd26bba1f7b4ab3076cee8ffa2b4ae2f073398845c8211dae5",
+  "retainedBytes": 7453,
+  "adaptation": "added labelled portable header; made all original Markdown attachment links inert; remaining body unchanged",
+  "scope": "bounded independent evidence-retention acceptance only; not later adaptation/candidate review"
+}
