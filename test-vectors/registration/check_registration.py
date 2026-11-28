@@ -1529,7 +1529,8 @@ def check_card(card, meta, out):
     for skill in card["skills"]:
         if not shape(skill, A2A_SKILL, "a2a-shape", out):
             continue
-        if SENTENCE_FIRST not in skill["description"]:
+        if not isinstance(skill["description"], str) or any(
+                sentence not in skill["description"] for sentence in [*REQUIRED_SENTENCES, AGENT_SENTENCE]):
             out.add("notice-missing")
         if wire == "digests-only" and set(skill.get("inputModes", card["defaultInputModes"])) - {"application/json"}:
             out.add("content-on-wire")
@@ -1558,15 +1559,30 @@ def check_request(req, meta, out):
     msg = req["message"]
     if msg["role"] != "ROLE_USER" or A2A_EXTENSION not in msg.get("extensions", []):
         out.add("a2a-shape")
-    check_wire_parts(msg["parts"], out)
-    datas = [p["data"] for p in msg["parts"] if isinstance(p, dict) and "data" in p]
-    if len(datas) != 1 or not isinstance(datas[0], dict):
+        return
+    # Hosted REQUEST only: structural one-of precedes unsupported content, then
+    # exact count/body, forbidden fields, payload shape, and signature target.
+    # Generic task parts keep their existing check_wire_parts behavior.
+    parts = msg["parts"]
+    if not isinstance(parts, list) or any(
+            not isinstance(part, dict) or len(set(part) & A2A_PART_CONTENT) != 1
+            or set(part) - A2A_PART_CONTENT - A2A_PART_OTHER for part in parts):
         out.add("a2a-shape")
         return
-    d = datas[0]
+    if any(set(part) & {"text", "raw", "url"} for part in parts):
+        out.add("content-on-wire")
+        return
+    if len(parts) != 1 or not isinstance(parts[0]["data"], dict):
+        out.add("a2a-shape")
+        return
+    d = parts[0]["data"]
+    check_wire_parts(parts, out)
+    if out:  # forbidden-field takes precedence over payload/digest faults
+        return
     if d.get("requestVersion") != WITNESS_REQUEST_VERSION or set(d) - {"requestVersion", "presented"} - FORBIDDEN_KEYS \
             or not isinstance(d.get("presented"), dict) or set(d["presented"]) != {"kind", "sha256"} \
-            or d["presented"]["kind"] != "dsse-signature-sha256" or not HEX64.match(str(d["presented"]["sha256"])):
+            or d["presented"]["kind"] != "dsse-signature-sha256" \
+            or not isinstance(d["presented"]["sha256"], str) or not HEX64.fullmatch(d["presented"]["sha256"]):
         out.add("a2a-shape")
         return
     if meta.get("bundle"):
@@ -1634,7 +1650,8 @@ def check_mcp_tool(tool, meta, out):
         return
     if not MCP_NAME.match(tool["name"]) or tool["inputSchema"].get("type") != "object":
         out.add("mcp-tool-shape")
-    if SENTENCE_FIRST not in tool.get("description", ""):
+    if not isinstance(tool.get("description"), str) or any(
+            sentence not in tool["description"] for sentence in [*REQUIRED_SENTENCES, AGENT_SENTENCE]):
         out.add("notice-missing")
     ann = tool.get("annotations", {})
     if ann.get("readOnlyHint", False) or ann.get("openWorldHint", True) is not True or ann.get("idempotentHint", False) \

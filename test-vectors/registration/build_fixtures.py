@@ -64,7 +64,7 @@ ZERO40 = "0" * 40
 DELETE = object()
 ART = [{"subjectIndex": 0, "source": ARTIFACT_SRC}]
 ART2 = [{"subjectIndex": 0, "source": ARTIFACT_2_SRC}]
-LIMIT = C.SENTENCE_FIRST
+LIMIT = " ".join([*C.REQUIRED_SENTENCES, C.AGENT_SENTENCE])
 B3 = "fixtures/bundle-three-roots.json"
 VT = "2026-11-24T00:00:00Z"
 
@@ -1118,7 +1118,41 @@ def build_agent(sig, result):
     neg("agent-authorship", fixture("rendering", "Rendering says the agent created the content.", dict(ren, lines=lines), "authorship-claim", ["rendering-unlisted-line"]))
 
 
+def build_agent_checker_negatives():
+    """Only illustrative SK description/request mutations; no signed vector rebuild."""
+    def source(name):
+        return json.loads((HERE / "fixtures" / (name + ".json")).read_text())
+
+    for name, base, skill, sentence in [
+            ("local-register-limit-notice", "a2a-card-local-registrar", 0, C.SENTENCE_LIMITS),
+            ("local-verify-order-notice", "a2a-card-local-registrar", 1, C.SENTENCE_ORDER),
+            ("local-register-agent-notice", "a2a-card-local-registrar", 0, C.AGENT_SENTENCE),
+            ("mcp-agent-notice", "mcp-tool-register", None, C.AGENT_SENTENCE)]:
+        doc = source(base)
+        obj = doc["object"] if skill is None else doc["object"]["skills"][skill]
+        obj["description"] = obj["description"].replace(sentence, "")
+        doc["fixture"]["description"] = "Illustrative description missing one complete required notice: " + name + "."
+        doc["fixture"]["expect"] = {"code": "notice-missing"}
+        write("negative", "neg-" + name, doc)
+
+    request = source("a2a-request-witness")
+    data = request["object"]["message"]["parts"][0]
+    for name, parts, code in [
+            ("witness-extra-text", [data, {"text": "content must not leave"}], "content-on-wire"),
+            ("witness-text-only", [{"text": "content must not leave"}], "content-on-wire"),
+            ("witness-extra-url", [data, {"url": "https://content.example.invalid/file"}], "content-on-wire"),
+            ("witness-mixed-part", [dict(data, text="two content variants")], "a2a-shape"),
+            ("witness-duplicate-data", [data, data], "a2a-shape"),
+            ("witness-empty-parts", [], "a2a-shape")]:
+        doc = copy.deepcopy(request)
+        doc["object"]["message"]["parts"] = copy.deepcopy(parts)
+        doc["fixture"]["description"] = "Hosted request part restriction: " + name + "."
+        doc["fixture"]["expect"] = {"code": code}
+        write("negative", "neg-" + name, doc)
+
+
 if __name__ == "__main__":
     build()
+    build_agent_checker_negatives()
     counts = {f: len(list((HERE / f).glob("*.json"))) for f in ("fixtures", "negative", "aux")}
     print("built", counts["fixtures"], "positive,", counts["negative"], "negative and", counts["aux"], "auxiliary fixtures")

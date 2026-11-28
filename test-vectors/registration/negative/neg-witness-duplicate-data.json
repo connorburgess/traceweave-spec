@@ -1,0 +1,42 @@
+{
+  "fixture": {
+    "kind": "a2a-request",
+    "description": "Hosted request part restriction: witness-duplicate-data.",
+    "notice": "Illustrative fixture for spec/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "bundle": "fixtures/bundle-three-roots.json",
+    "expect": {
+      "code": "a2a-shape"
+    }
+  },
+  "object": {
+    "message": {
+      "messageId": "0f6c2a8e-illustrative-0001",
+      "role": "ROLE_USER",
+      "parts": [
+        {
+          "data": {
+            "requestVersion": "traceweave-witness-request-draft-5",
+            "presented": {
+              "kind": "dsse-signature-sha256",
+              "sha256": "817289222896a1b8ff43396a8e2d955f14a9cfc903d9379684fb20c64a3a14c4"
+            }
+          },
+          "mediaType": "application/json"
+        },
+        {
+          "data": {
+            "requestVersion": "traceweave-witness-request-draft-5",
+            "presented": {
+              "kind": "dsse-signature-sha256",
+              "sha256": "817289222896a1b8ff43396a8e2d955f14a9cfc903d9379684fb20c64a3a14c4"
+            }
+          },
+          "mediaType": "application/json"
+        }
+      ],
+      "extensions": [
+        "https://traceweave.org/a2a/ext/registration/draft-1"
+      ]
+    }
+  }
+}
