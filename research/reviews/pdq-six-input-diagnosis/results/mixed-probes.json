@@ -1,0 +1,392 @@
+[
+  {
+    "id": "black",
+    "wide-sum": {
+      "TvsCpp": {
+        "different": 0,
+        "maxAbs": 0.0,
+        "firstFlatIndex": null,
+        "firstValues": null
+      },
+      "BvsCpp": {
+        "different": 0,
+        "maxAbs": 0.0,
+        "firstFlatIndex": null,
+        "firstValues": null
+      },
+      "cppExactVariants": 8,
+      "pythonExactVariants": 8,
+      "hashes": {
+        "orig": "0000000000000000000000000000000000000000000000000000000000000000",
+        "rot90": "0000000000000000000000000000000000000000000000000000000000000000",
+        "rot180": "0000000000000000000000000000000000000000000000000000000000000000",
+        "rot270": "0000000000000000000000000000000000000000000000000000000000000000",
+        "flipx": "0000000000000000000000000000000000000000000000000000000000000000",
+        "flipy": "0000000000000000000000000000000000000000000000000000000000000000",
+        "flipp": "0000000000000000000000000000000000000000000000000000000000000000",
+        "flipm": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    "wide-product": {
+      "TvsCpp": {
+        "different": 0,
+        "maxAbs": 0.0,
+        "firstFlatIndex": null,
+        "firstValues": null
+      },
+      "BvsCpp": {
+        "different": 0,
+        "maxAbs": 0.0,
+        "firstFlatIndex": null,
+        "firstValues": null
+      },
+      "cppExactVariants": 8,
+      "pythonExactVariants": 8,
+      "hashes": {
+        "orig": "0000000000000000000000000000000000000000000000000000000000000000",
+        "rot90": "0000000000000000000000000000000000000000000000000000000000000000",
+        "rot180": "0000000000000000000000000000000000000000000000000000000000000000",
+        "rot270": "0000000000000000000000000000000000000000000000000000000000000000",
+        "flipx": "0000000000000000000000000000000000000000000000000000000000000000",
+        "flipy": "0000000000000000000000000000000000000000000000000000000000000000",
+        "flipp": "0000000000000000000000000000000000000000000000000000000000000000",
+        "flipm": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    }
+  },
+  {
+    "id": "constant127",
+    "wide-sum": {
+      "TvsCpp": {
+        "different": 832,
+        "maxAbs": 1.71661376953125e-05,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          0.0,
+          7.62939453125e-06
+        ]
+      },
+      "BvsCpp": {
+        "different": 156,
+        "maxAbs": 6.59383658785373e-12,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          0.0,
+          -7.958078640513122e-13
+        ]
+      },
+      "cppExactVariants": 0,
+      "pythonExactVariants": 0,
+      "hashes": {
+        "orig": "0000000000000000000000000000000000000000000000000000000000000000",
+        "rot90": "0000000000000000000000000000000000000000000000000000000000000000",
+        "rot180": "0000000000000000000000000000000000000000000000000000000000000000",
+        "rot270": "0000000000000000000000000000000000000000000000000000000000000000",
+        "flipx": "0000000000000000000000000000000000000000000000000000000000000000",
+        "flipy": "0000000000000000000000000000000000000000000000000000000000000000",
+        "flipp": "0000000000000000000000000000000000000000000000000000000000000000",
+        "flipm": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    "wide-product": {
+      "TvsCpp": {
+        "different": 1024,
+        "maxAbs": 1.9565224647521973e-05,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          3.7848949432373047e-06,
+          7.62939453125e-06
+        ]
+      },
+      "BvsCpp": {
+        "different": 254,
+        "maxAbs": 6.778133609941506e-12,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          1.127986593019159e-13,
+          -7.958078640513122e-13
+        ]
+      },
+      "cppExactVariants": 0,
+      "pythonExactVariants": 0,
+      "hashes": {
+        "orig": "37f72b1dea8caa04b25a0ed57adf70207020f32ae8fa1508a69f465681318a65",
+        "rot90": "386bdc1b5be8742f76217be35a0d3fad062871da81e331d16a7009f28a6c39f4",
+        "rot180": "002201b7144900aee70fa47f2d8ada8a25751180bdafbfa2f3c2ecfcd46420cf",
+        "rot270": "0d3e50b10ebdde850334914909181507537dd970d4b61b733f250358df39935e",
+        "flipx": "146350e2000855fbb25ab12a389f8fdf702004d5e8faeaf7a687b9a98131759a",
+        "flipy": "40227e489d59ff51e70f59802f8a25752575a47fbdaf405df3c21303d464df30",
+        "flipp": "386b23e4fbe88bd07621841cfe4dc052a6288e2581e3ce2e6a78f60d8a6cc60b",
+        "flipm": "0d3e090e0ebd217a03342eb609184af8537d248fd4b644843f255ca7df396ca1"
+      }
+    }
+  },
+  {
+    "id": "low-contrast",
+    "wide-sum": {
+      "TvsCpp": {
+        "different": 848,
+        "maxAbs": 6.592273712158203e-05,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          -0.08841723203659058,
+          -0.08835411071777344
+        ]
+      },
+      "BvsCpp": {
+        "different": 221,
+        "maxAbs": 5.7406723499298096e-06,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          -0.03130673989653587,
+          -0.03130105137825012
+        ]
+      },
+      "cppExactVariants": 0,
+      "pythonExactVariants": 0,
+      "hashes": {
+        "orig": "0000000000000000000000000000000000000000000000000000000000000000",
+        "rot90": "0000555500005555000055550000555500005555000055550000555500005555",
+        "rot180": "0000000000000000000000000000000000000000000000000000000000000000",
+        "rot270": "0000555500005555000055550000555500005555000055550000555500005555",
+        "flipx": "0000555500005555000055550000555500005555000055550000555500005555",
+        "flipy": "0000555500005555000055550000555500005555000055550000555500005555",
+        "flipp": "0000000000000000000000000000000000000000000000000000000000000000",
+        "flipm": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    "wide-product": {
+      "TvsCpp": {
+        "different": 1024,
+        "maxAbs": 4.9561262130737305e-05,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          -0.0883045494556427,
+          -0.08835411071777344
+        ]
+      },
+      "BvsCpp": {
+        "different": 255,
+        "maxAbs": 5.81890344619751e-06,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          -0.031296342611312866,
+          -0.03130105137825012
+        ]
+      },
+      "cppExactVariants": 0,
+      "pythonExactVariants": 0,
+      "hashes": {
+        "orig": "ffff0a20ffffaa20f7ff8808aaaa0aa8f7ff2888aa02aa08ff7f8820a8aa008a",
+        "rot90": "1414577710525777555c57775310577721415777518457770753577700235777",
+        "rot180": "aaaaa88aaaaa00aaaaaaaaa2ffffa882aaaa8222ffff80a2aaaa228affffaa20",
+        "rot270": "4001fddd4405fddd0001fddd0405fddd0410fddd0451fddd5004fddd5114fddd",
+        "flipx": "5555f55f5555555f555577f50000555755555575000055f75555775f0000ff75",
+        "flipy": "00005f750080ff750000dd5d575d5ffd00207ddd5557ff5d0800dd75755f55df",
+        "flipp": "bebea888bafaa888f77ea888fbb8a888abc3a888fb8ea888afdba888aaaba888",
+        "flipm": "effb0222efaf0222efab0222aeef0222ffbe0222befb0222faae0222fffe0222"
+      }
+    }
+  },
+  {
+    "id": "asymmetric",
+    "wide-sum": {
+      "TvsCpp": {
+        "different": 925,
+        "maxAbs": 0.00017547607421875,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          -19.342309951782227,
+          -19.34227752685547
+        ]
+      },
+      "BvsCpp": {
+        "different": 240,
+        "maxAbs": 0.0001068115234375,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          -44.29769515991211,
+          -44.297760009765625
+        ]
+      },
+      "cppExactVariants": 8,
+      "pythonExactVariants": 8,
+      "hashes": {
+        "orig": "ef67750e191053036464d3d4b9b9a1f3666e191d1b296e795b5699dc930b3322",
+        "rot90": "860673678b91c990a07c377f94b94990070477f78ba1d9bb40f23b3bd1836ecd",
+        "rot180": "ba32afa64c45b9a9313179bee4e58a993373b3b64e74c0a30e15333ec45e9988",
+        "rot270": "d351d9cddec4633af5219dd5c1eca23a5251dd5ddef472111505919184d6c467",
+        "flipx": "ef67faf11910ecfc64602c6bb1b0de4c6626e6e31b2195f65340666b1103ccdd",
+        "flipy": "ba32515b4c454656313586c1e4e575f6337b4c494e7c3f5c0e15ccc1c45e6677",
+        "flipp": "8706dc98cb91766fa27cc89094bbf76f07048d9c8bb1275c42f6ccccd18b9372",
+        "flipm": "d3532632dec49cc5f529622ac1ec5cc5575122a2def48dee1507666ec4d63b98"
+      }
+    },
+    "wide-product": {
+      "TvsCpp": {
+        "different": 869,
+        "maxAbs": 7.534027099609375e-05,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          -19.342269897460938,
+          -19.34227752685547
+        ]
+      },
+      "BvsCpp": {
+        "different": 227,
+        "maxAbs": 6.103515625e-05,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          -44.29780197143555,
+          -44.297760009765625
+        ]
+      },
+      "cppExactVariants": 8,
+      "pythonExactVariants": 8,
+      "hashes": {
+        "orig": "ef67750e191053036464d3d4b9b9a1f3666e191d1b296e795b5699dc930b3322",
+        "rot90": "860673678b91c990a07c377f94b94990070477f78ba1d9bb40f23b3bd1836ecd",
+        "rot180": "ba32afa64c45b9a9313179bee4e58a993373b3b64e74c0a30e15333ec45e9988",
+        "rot270": "d351d9cddec4633af5219dd5c1eca23a5251dd5ddef472111505919184d6c467",
+        "flipx": "ef67faf11910ecfc64602c6bb1b0de4c6626e6e31b2195f65340666b1103ccdd",
+        "flipy": "ba32515b4c454656313586c1e4e575f6337b4c494e7c3f5c0e15ccc1c45e6677",
+        "flipp": "8706dc98cb91766fa27cc89094bbf76f07048d9c8bb1275c42f6ccccd18b9372",
+        "flipm": "d3532632dec49cc5f529622ac1ec5cc5575122a2def48dee1507666ec4d63b98"
+      }
+    }
+  },
+  {
+    "id": "wide",
+    "wide-sum": {
+      "TvsCpp": {
+        "different": 917,
+        "maxAbs": 0.00017547607421875,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          -19.342309951782227,
+          -19.34227752685547
+        ]
+      },
+      "BvsCpp": {
+        "different": 227,
+        "maxAbs": 9.1552734375e-05,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          -25.526533126831055,
+          -25.526546478271484
+        ]
+      },
+      "cppExactVariants": 8,
+      "pythonExactVariants": 8,
+      "hashes": {
+        "orig": "7f7f82301906f04b9794b53031e69b4bb51490791a73a4f27e4935947a4bf38e",
+        "rot90": "1dd17ff4969d4818a12a7363c90b51fa0a157e95c670332b904b5d7ab3136ed5",
+        "rot180": "2a2aa89a4c535ae9d2c53f9a64f331e9e1413adb4f340e583b1c9f3e0f1e5926",
+        "rot270": "4884d55ec348e2b2d475d9c99c56fa505f40d43f93259981d51ef7d0e646c43f",
+        "flipx": "7f7ffdcf11064ffc87904acf31a664bc94146f8618615b4d6449ca6b524b0c71",
+        "flipy": "2a2a57654c53e55ed2c5e06564f3cf16e141c52d4d34f1e73b1c60c10f1ea6db",
+        "flipp": "5dd1900b969fbfefa12a8c9cc92baf850a15937ac670ccf4914baa85b333916a",
+        "flipm": "48843aa1c7c81d4df47f26369c7e05af5f403bd09325667ed55e082fe6473bc0"
+      }
+    },
+    "wide-product": {
+      "TvsCpp": {
+        "different": 856,
+        "maxAbs": 7.534027099609375e-05,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          -19.342269897460938,
+          -19.34227752685547
+        ]
+      },
+      "BvsCpp": {
+        "different": 235,
+        "maxAbs": 6.866455078125e-05,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          -25.526607513427734,
+          -25.526546478271484
+        ]
+      },
+      "cppExactVariants": 8,
+      "pythonExactVariants": 8,
+      "hashes": {
+        "orig": "7f7f82301906f04b9794b53031e69b4bb51490791a73a4f27e4935947a4bf38e",
+        "rot90": "1dd17ff4969d4818a12a7363c90b51fa0a157e95c670332b904b5d7ab3136ed5",
+        "rot180": "2a2aa89a4c535ae9d2c53f9a64f331e9e1413adb4f340e583b1c9f3e0f1e5926",
+        "rot270": "4884d55ec348e2b2d475d9c99c56fa505f40d43f93259981d51ef7d0e646c43f",
+        "flipx": "7f7ffdcf11064ffc87904acf31a664bc94146f8618615b4d6449ca6b524b0c71",
+        "flipy": "2a2a57654c53e55ed2c5e06564f3cf16e141c52d4d34f1e73b1c60c10f1ea6db",
+        "flipp": "5dd1900b969fbfefa12a8c9cc92baf850a15937ac670ccf4914baa85b333916a",
+        "flipm": "48843aa1c7c81d4df47f26369c7e05af5f403bd09325667ed55e082fe6473bc0"
+      }
+    }
+  },
+  {
+    "id": "tall",
+    "wide-sum": {
+      "TvsCpp": {
+        "different": 928,
+        "maxAbs": 0.00015354156494140625,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          -16.933815002441406,
+          -16.933849334716797
+        ]
+      },
+      "BvsCpp": {
+        "different": 240,
+        "maxAbs": 0.00010776519775390625,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          -34.440303802490234,
+          -34.44027328491211
+        ]
+      },
+      "cppExactVariants": 8,
+      "pythonExactVariants": 8,
+      "hashes": {
+        "orig": "13999fba25a0e1e067661ccd9b9b17a62ccc6b6a7f55999d8f968d0827622332",
+        "rot90": "521ce7df386338cf06f49253cb630480a018efdd59413dc786d4fa474a4a7bcf",
+        "rot180": "46dc3d9870d54bca3277b6a7ce4fbd8e595d81802a103337dac727a27617898a",
+        "rot270": "07495d756d36926513a938f99e3eae2ab54d45770c14176dd381516d1e1ed165",
+        "flipx": "1389604d25805e9f6722e3f29b1ae8dd0c08d4d57f5566628f9672f72342dcdd",
+        "flipy": "46ccc26770d5b43532774958ce4f427159597e7f2a00ccc8d0c3d85d76177675",
+        "flipp": "521c186038e3c73046fc6daecb6bfb7ff7981ce27943c239c6d40db84b4b8630",
+        "flipm": "0749b28a6d366d9a53a9c7069e3e51d5f54dba880c14e8b2d381af9a1f1f2e9a"
+      }
+    },
+    "wide-product": {
+      "TvsCpp": {
+        "different": 880,
+        "maxAbs": 8.392333984375e-05,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          -16.93389320373535,
+          -16.933849334716797
+        ]
+      },
+      "BvsCpp": {
+        "different": 227,
+        "maxAbs": 6.4849853515625e-05,
+        "firstFlatIndex": 0,
+        "firstValues": [
+          -34.44029235839844,
+          -34.44027328491211
+        ]
+      },
+      "cppExactVariants": 8,
+      "pythonExactVariants": 8,
+      "hashes": {
+        "orig": "13999fba25a0e1e067661ccd9b9b17a62ccc6b6a7f55999d8f968d0827622332",
+        "rot90": "521ce7df386338cf06f49253cb630480a018efdd59413dc786d4fa474a4a7bcf",
+        "rot180": "46dc3d9870d54bca3277b6a7ce4fbd8e595d81802a103337dac727a27617898a",
+        "rot270": "07495d756d36926513a938f99e3eae2ab54d45770c14176dd381516d1e1ed165",
+        "flipx": "1389604d25805e9f6722e3f29b1ae8dd0c08d4d57f5566628f9672f72342dcdd",
+        "flipy": "46ccc26770d5b43532774958ce4f427159597e7f2a00ccc8d0c3d85d76177675",
+        "flipp": "521c186038e3c73046fc6daecb6bfb7ff7981ce27943c239c6d40db84b4b8630",
+        "flipm": "0749b28a6d366d9a53a9c7069e3e51d5f54dba880c14e8b2d381af9a1f1f2e9a"
+      }
+    }
+  }
+]

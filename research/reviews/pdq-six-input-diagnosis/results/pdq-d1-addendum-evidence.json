@@ -1,0 +1,23 @@
+{
+  "finding": "PDQ-D1",
+  "disposition": "resolved; revised bounded diagnosis report/package accepted",
+  "reportSha256": "2816c35b4ce7ace508170bb6f55a515fe4df60cec7a20d0d3603f66e30ebac95",
+  "packageManifestSha256": "5b2db7762a4e7949b9ebb70fb1d40397bfff25a85a8af968ba7ea31541976b8e",
+  "generatorSha256": "43c0f84721b88f23776949392a9ce1ed7f2d8f9990ec9cfccf7727b684fbd9e8",
+  "resolutionSha256": "9fa0b752a3aeeda824b060b4c33c3bdcdb3335be0f1c9d3da795e80637f28557",
+  "resolutionIdentitySha256": "b0065d78730cf07576fdd5a0ca069a48cebf7089b2a90fafd06e796222dd1257",
+  "previousReviewSha256": "1abe8a7a08cffd5dde65b4653455c7d7167f58b746f2cf0add511903377526eb",
+  "unchangedExistingFiles": 409,
+  "changedExistingFiles": [
+    "report.md",
+    "write-report.py",
+    "SHA256SUMS"
+  ],
+  "newFiles": [
+    "pdq-d1-resolution.md"
+  ],
+  "manifestEntriesVerified": 412,
+  "packageFiles": 413,
+  "generatorRerenderMatches": true,
+  "numericReruns": 0
+}

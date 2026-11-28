@@ -1,0 +1,494 @@
+{
+  "format": "pdq-six-input-retention-v1",
+  "scope": "static retention of previously accepted six-input/one-host diagnosis; no new numeric execution or implementation/parity/gate claim",
+  "originalAuthorPackage": {
+    "reportSha256": "2816c35b4ce7ace508170bb6f55a515fe4df60cec7a20d0d3603f66e30ebac95",
+    "manifestSha256": "5b2db7762a4e7949b9ebb70fb1d40397bfff25a85a8af968ba7ea31541976b8e",
+    "files": 413,
+    "manifestEntries": 412,
+    "verification": "all original entries rehashed before use; original manifest omitted because it describes a different, raw-bearing package"
+  },
+  "pins": {
+    "cppLabel": "9f627fb1d6d2a4a26c9b5ee1d6ca5e5ccc8e06a2",
+    "pythonExport": "6f39e50f33026c9f1d9526c2a566d6a447219667",
+    "sourceBinding": "published internal tree/subset consistency only; commit-to-root binding cannot be reproduced from the public package"
+  },
+  "omissions": "Nonexhaustive selected identity ledger. Hundreds of source/input/trace/binary/log artifacts and raw upstream metadata are not copied; no encoding/redaction of a raw object is supplied. See README and prior curated provenance. Original identities do not supply omitted bytes.",
+  "records": [
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "diagnosis.json",
+      "originalSha256": "1138003d21fed6ad86ff8e418e913157f97a7bb187c6ae233f62e8908757a153",
+      "originalBytes": 87809,
+      "retainedPath": "results/diagnosis.json",
+      "retainedSha256": "1138003d21fed6ad86ff8e418e913157f97a7bb187c6ae233f62e8908757a153",
+      "retainedBytes": 87809,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "mixed-probes.json",
+      "originalSha256": "27886d1715a7e3f2172cc3189d0fcf05bf55d0cb7e2d6f4f24e899594e59c744",
+      "originalBytes": 14576,
+      "retainedPath": "results/mixed-probes.json",
+      "retainedSha256": "27886d1715a7e3f2172cc3189d0fcf05bf55d0cb7e2d6f4f24e899594e59c744",
+      "retainedBytes": 14576,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "bitwise-checks.json",
+      "originalSha256": "5ee723b0ce6d14fc93a2ac16083ee35e840e002ab019006806bc91a9b0ba0fcc",
+      "originalBytes": 261,
+      "retainedPath": "results/bitwise-checks.json",
+      "retainedSha256": "5ee723b0ce6d14fc93a2ac16083ee35e840e002ab019006806bc91a9b0ba0fcc",
+      "retainedBytes": 261,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "independent-review",
+      "originalPath": "independent-results.json",
+      "originalSha256": "d8fe51d5e3e178a85caaea29411ed40d426677c0b2233f9b6d9f558d78b24e0e",
+      "originalBytes": 1484,
+      "retainedPath": "results/independent-results.json",
+      "retainedSha256": "d8fe51d5e3e178a85caaea29411ed40d426677c0b2233f9b6d9f558d78b24e0e",
+      "retainedBytes": 1484,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "independent-review",
+      "originalPath": "pdq-d1-addendum-evidence.json",
+      "originalSha256": "1b75a1c1debf5180efd5ad39b216e1078afdf60ecd2303e8c16ba1df277cfd2f",
+      "originalBytes": 944,
+      "retainedPath": "results/pdq-d1-addendum-evidence.json",
+      "retainedSha256": "1b75a1c1debf5180efd5ad39b216e1078afdf60ecd2303e8c16ba1df277cfd2f",
+      "retainedBytes": 944,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "traces/black/affected-bits.csv",
+      "originalSha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
+      "originalBytes": 122,
+      "retainedPath": "decisions/black.csv",
+      "retainedSha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
+      "retainedBytes": 122,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "traces/constant127/affected-bits.csv",
+      "originalSha256": "48e1d298e99c2ed24e5ff846e051a85c900bf1567bb6813d1e5e4f3299e3423e",
+      "originalBytes": 131442,
+      "retainedPath": "decisions/constant127.csv",
+      "retainedSha256": "48e1d298e99c2ed24e5ff846e051a85c900bf1567bb6813d1e5e4f3299e3423e",
+      "retainedBytes": 131442,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "traces/low-contrast/affected-bits.csv",
+      "originalSha256": "92598c001479536082831af3b335276d25334228965b4f6ec3e83a410b4d19f2",
+      "originalBytes": 75034,
+      "retainedPath": "decisions/low-contrast.csv",
+      "retainedSha256": "92598c001479536082831af3b335276d25334228965b4f6ec3e83a410b4d19f2",
+      "retainedBytes": 75034,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "traces/asymmetric/affected-bits.csv",
+      "originalSha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
+      "originalBytes": 122,
+      "retainedPath": "decisions/asymmetric.csv",
+      "retainedSha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
+      "retainedBytes": 122,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "traces/wide/affected-bits.csv",
+      "originalSha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
+      "originalBytes": 122,
+      "retainedPath": "decisions/wide.csv",
+      "retainedSha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
+      "retainedBytes": 122,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "traces/tall/affected-bits.csv",
+      "originalSha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
+      "originalBytes": 122,
+      "retainedPath": "decisions/tall.csv",
+      "retainedSha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
+      "retainedBytes": 122,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "instrumentation.patch",
+      "originalSha256": "a3569a2fd63fe3ee7c32351645a8ad0646c0b514b5cf05df72d57397db20c4fe",
+      "originalBytes": 2542,
+      "retainedPath": "source-records/instrumentation.patch",
+      "retainedSha256": "a3569a2fd63fe3ee7c32351645a8ad0646c0b514b5cf05df72d57397db20c4fe",
+      "retainedBytes": 2542,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "questions.md",
+      "originalSha256": "6dbd7cc083fe053ad4947df2e5218e68b2ce455c29c0d05bb8f0ab987bcd4972",
+      "originalBytes": 2979,
+      "retainedPath": "source-records/questions.md",
+      "retainedSha256": "6dbd7cc083fe053ad4947df2e5218e68b2ce455c29c0d05bb8f0ab987bcd4972",
+      "retainedBytes": 2979,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "pdq-d1-resolution.md",
+      "originalSha256": "9fa0b752a3aeeda824b060b4c33c3bdcdb3335be0f1c9d3da795e80637f28557",
+      "originalBytes": 2317,
+      "retainedPath": "source-records/pdq-d1-resolution.md",
+      "retainedSha256": "9fa0b752a3aeeda824b060b4c33c3bdcdb3335be0f1c9d3da795e80637f28557",
+      "retainedBytes": 2317,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "prepare.py",
+      "originalSha256": "2870a2ded05f60ccb5eebbbd685280d21f54fcbb7d758a5c2d06a92005670cab",
+      "originalBytes": 2154,
+      "retainedPath": "source-records/prepare.py",
+      "retainedSha256": "2870a2ded05f60ccb5eebbbd685280d21f54fcbb7d758a5c2d06a92005670cab",
+      "retainedBytes": 2154,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "diagnose.py",
+      "originalSha256": "569a5793d72f5185f7d009711b3321716972158c1bf2f32a8e1392744586bd1c",
+      "originalBytes": 5735,
+      "retainedPath": "source-records/diagnose.py",
+      "retainedSha256": "569a5793d72f5185f7d009711b3321716972158c1bf2f32a8e1392744586bd1c",
+      "retainedBytes": 5735,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "mixed-probes.py",
+      "originalSha256": "3c7b00ad81448854b11ddab35cf5073f9ed13518f6512e8a398ec9baa23a27af",
+      "originalBytes": 1556,
+      "retainedPath": "source-records/mixed-probes.py",
+      "retainedSha256": "3c7b00ad81448854b11ddab35cf5073f9ed13518f6512e8a398ec9baa23a27af",
+      "retainedBytes": 1556,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "check-diagnosis.py",
+      "originalSha256": "7a88311da8d7ca7feb2623b02504c72d464315aebc755d9e8566a158427bd14d",
+      "originalBytes": 2966,
+      "retainedPath": "source-records/check-diagnosis.py",
+      "retainedSha256": "7a88311da8d7ca7feb2623b02504c72d464315aebc755d9e8566a158427bd14d",
+      "retainedBytes": 2966,
+      "adaptation": "none; exact copy"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "report.md",
+      "originalSha256": "2816c35b4ce7ace508170bb6f55a515fe4df60cec7a20d0d3603f66e30ebac95",
+      "originalBytes": 15569,
+      "retainedPath": "reports/author-report.md",
+      "retainedSha256": "3fca772685dbd84e735bd8459fd29172081b5383bfb0d9d927b3744c238c0676",
+      "retainedBytes": 16279,
+      "adaptation": "labelled header; all original Markdown attachment/local-locator links made inert; remaining body unchanged"
+    },
+    {
+      "originalGroup": "independent-review",
+      "originalPath": "review.md",
+      "originalSha256": "1abe8a7a08cffd5dde65b4653455c7d7167f58b746f2cf0add511903377526eb",
+      "originalBytes": 13792,
+      "retainedPath": "reports/independent-review.md",
+      "retainedSha256": "2049fd29c469c29b3e8ec843e24740cacdabf66af8ec6403ee3e37919a77bacd",
+      "retainedBytes": 15003,
+      "adaptation": "labelled header; all original Markdown attachment/local-locator links made inert; remaining body unchanged"
+    },
+    {
+      "originalGroup": "independent-review",
+      "originalPath": "pdq-d1-addendum.md",
+      "originalSha256": "c39bd5d39cd166c9434be9622031340d9713a6631b03ae9a1cfb15c27a95b6cf",
+      "originalBytes": 3038,
+      "retainedPath": "reports/pdq-d1-addendum.md",
+      "retainedSha256": "c363ce8813d6681c5f475b20a35ae1791c3e01ca8a66f7449ffc3fad379fdc51",
+      "retainedBytes": 3822,
+      "adaptation": "labelled header; all original Markdown attachment/local-locator links made inert; remaining body unchanged"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "baseline-artifact/comparison.json",
+      "originalSha256": "a1cf1f2c738bf678f6b232621bda0ba92e6438f09ac9c51895106da2ac763a24",
+      "originalBytes": 18212,
+      "retainedPath": "../../experiments/pdq-cpp-feasibility/comparison.json",
+      "retainedSha256": "a1cf1f2c738bf678f6b232621bda0ba92e6438f09ac9c51895106da2ac763a24",
+      "retainedBytes": 18212,
+      "adaptation": "none; reuse existing exact curated file"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "SHA256SUMS",
+      "originalSha256": "5b2db7762a4e7949b9ebb70fb1d40397bfff25a85a8af968ba7ea31541976b8e",
+      "originalBytes": 41412,
+      "retainedPath": null,
+      "retainedSha256": null,
+      "retainedBytes": null,
+      "adaptation": "identity only; omitted original, not a retained public proof"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "reproduce.sh",
+      "originalSha256": "c8ce47bdee754f1af09f8237d2c1c9522decd7f5c69f082c78d8290808c8b62d",
+      "originalBytes": 908,
+      "retainedPath": null,
+      "retainedSha256": null,
+      "retainedBytes": null,
+      "adaptation": "identity only; omitted original, not a retained public proof"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "commands-run.json",
+      "originalSha256": "af512939ecf7dfca65b4f1e4bd876007294451c66be660634f044e621de509e3",
+      "originalBytes": 2231,
+      "retainedPath": null,
+      "retainedSha256": null,
+      "retainedBytes": null,
+      "adaptation": "identity only; omitted original, not a retained public proof"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "prebuild-identities.json",
+      "originalSha256": "e078864b778f27862eaa7c90bc0df5ba360c4f54013fac4a26ed8ce6484c00ae",
+      "originalBytes": 2218,
+      "retainedPath": null,
+      "retainedSha256": null,
+      "retainedBytes": null,
+      "adaptation": "identity only; omitted original, not a retained public proof"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "pre-mixed-identities.txt",
+      "originalSha256": "346886fdf8ff43ddaecb874eaa06d1a30bbdcceefcf31c82759a984efd7eb840",
+      "originalBytes": 303,
+      "retainedPath": null,
+      "retainedSha256": null,
+      "retainedBytes": null,
+      "adaptation": "identity only; omitted original, not a retained public proof"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "write-report.py",
+      "originalSha256": "43c0f84721b88f23776949392a9ce1ed7f2d8f9990ec9cfccf7727b684fbd9e8",
+      "originalBytes": 13824,
+      "retainedPath": null,
+      "retainedSha256": null,
+      "retainedBytes": null,
+      "adaptation": "identity only; omitted original, not a retained public proof"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "pdq-instrumented",
+      "originalSha256": "bcd50af99b5d6db87ae729988a9aaf2dad6cf51c38ec256c7606cec17572c262",
+      "originalBytes": 61088,
+      "retainedPath": null,
+      "retainedSha256": null,
+      "retainedBytes": null,
+      "adaptation": "identity only; omitted original, not a retained public proof"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "baseline-run-root/pdq-cpp",
+      "originalSha256": "ba757a0791cb4a6b5ab1d2493daddb325d04ba02bb52fb9b0a098441b42bcfeb",
+      "originalBytes": 59000,
+      "retainedPath": null,
+      "retainedSha256": null,
+      "retainedBytes": null,
+      "adaptation": "identity only; omitted original, not a retained public proof"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "compiler-version.txt",
+      "originalSha256": "0116743ea33d4d8681d57303187c06b382229da6ab61953b1cd57be6b72a3aa1",
+      "originalBytes": 159,
+      "retainedPath": null,
+      "retainedSha256": null,
+      "retainedBytes": null,
+      "adaptation": "identity only; omitted original, not a retained public proof"
+    },
+    {
+      "originalGroup": "author-revised",
+      "originalPath": "tests.log",
+      "originalSha256": "fbd3299a7c324a5751c4bc278d541437199b3a3b2f95a488f3c1ae1de3459ce4",
+      "originalBytes": 580,
+      "retainedPath": null,
+      "retainedSha256": null,
+      "retainedBytes": null,
+      "adaptation": "identity only; omitted original, not a retained public proof"
+    },
+    {
+      "originalGroup": "independent-review",
+      "originalPath": "independent-check.py",
+      "originalSha256": "e2fbe6d2be2fe4a0046150be7f0510f90e5d2b70f461ae432ae332a14f662806",
+      "originalBytes": 8590,
+      "retainedPath": null,
+      "retainedSha256": null,
+      "retainedBytes": null,
+      "adaptation": "identity only; omitted original, not a retained public proof"
+    },
+    {
+      "originalGroup": "independent-review",
+      "originalPath": "commands.json",
+      "originalSha256": "7b27245a00e69e574b2a2059def093e092a29f2ab7435333cb7ccc937c76fb43",
+      "originalBytes": 3505,
+      "retainedPath": null,
+      "retainedSha256": null,
+      "retainedBytes": null,
+      "adaptation": "identity only; omitted original, not a retained public proof"
+    },
+    {
+      "originalGroup": "independent-review",
+      "originalPath": "compiler-version.log",
+      "originalSha256": "0116743ea33d4d8681d57303187c06b382229da6ab61953b1cd57be6b72a3aa1",
+      "originalBytes": 159,
+      "retainedPath": null,
+      "retainedSha256": null,
+      "retainedBytes": null,
+      "adaptation": "identity only; omitted original, not a retained public proof"
+    },
+    {
+      "originalGroup": "independent-review",
+      "originalPath": "author-tests.log",
+      "originalSha256": "f9d420af431d42778ea3f5d6885aa7239bef3c7e84e914f166cb1483fa541b24",
+      "originalBytes": 580,
+      "retainedPath": null,
+      "retainedSha256": null,
+      "retainedBytes": null,
+      "adaptation": "identity only; omitted original, not a retained public proof"
+    }
+  ],
+  "derivedRecords": [
+    {
+      "retainedPath": "summary-ledger.json",
+      "retainedSha256": "5128ba0c13430762953a772f7422c821c07b8e43a0c6c02673562462da58d489",
+      "retainedBytes": 2392,
+      "adaptation": "new selected-fields projection of existing baseline, diagnosis and independent result records; no DCT/probe/core executed",
+      "sourceSha256": [
+        "a1cf1f2c738bf678f6b232621bda0ba92e6438f09ac9c51895106da2ac763a24",
+        "1138003d21fed6ad86ff8e418e913157f97a7bb187c6ae233f62e8908757a153",
+        "d8fe51d5e3e178a85caaea29411ed40d426677c0b2233f9b6d9f558d78b24e0e"
+      ]
+    }
+  ],
+  "packageFiles": {
+    "README.md": {
+      "sha256": "3a0be23d7761bd72374ecc4c1d29af502b780375cdb97325bb61cbebd291de19",
+      "bytes": 6631
+    },
+    "decisions/asymmetric.csv": {
+      "sha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
+      "bytes": 122
+    },
+    "decisions/black.csv": {
+      "sha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
+      "bytes": 122
+    },
+    "decisions/constant127.csv": {
+      "sha256": "48e1d298e99c2ed24e5ff846e051a85c900bf1567bb6813d1e5e4f3299e3423e",
+      "bytes": 131442
+    },
+    "decisions/low-contrast.csv": {
+      "sha256": "92598c001479536082831af3b335276d25334228965b4f6ec3e83a410b4d19f2",
+      "bytes": 75034
+    },
+    "decisions/tall.csv": {
+      "sha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
+      "bytes": 122
+    },
+    "decisions/wide.csv": {
+      "sha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
+      "bytes": 122
+    },
+    "inspect_retention.py": {
+      "sha256": "d50472ef846b60515f87f9c5c76710a73654f98a0c8252d9e7fa3cf5f8f8e19f",
+      "bytes": 7421
+    },
+    "reports/author-report.md": {
+      "sha256": "3fca772685dbd84e735bd8459fd29172081b5383bfb0d9d927b3744c238c0676",
+      "bytes": 16279
+    },
+    "reports/independent-review.md": {
+      "sha256": "2049fd29c469c29b3e8ec843e24740cacdabf66af8ec6403ee3e37919a77bacd",
+      "bytes": 15003
+    },
+    "reports/pdq-d1-addendum.md": {
+      "sha256": "c363ce8813d6681c5f475b20a35ae1791c3e01ca8a66f7449ffc3fad379fdc51",
+      "bytes": 3822
+    },
+    "reproduction.md": {
+      "sha256": "7720eb20271ce95ff75738146f4d31965e799bd55bb1a26d93e129f680bfd21e",
+      "bytes": 3739
+    },
+    "results/bitwise-checks.json": {
+      "sha256": "5ee723b0ce6d14fc93a2ac16083ee35e840e002ab019006806bc91a9b0ba0fcc",
+      "bytes": 261
+    },
+    "results/diagnosis.json": {
+      "sha256": "1138003d21fed6ad86ff8e418e913157f97a7bb187c6ae233f62e8908757a153",
+      "bytes": 87809
+    },
+    "results/independent-results.json": {
+      "sha256": "d8fe51d5e3e178a85caaea29411ed40d426677c0b2233f9b6d9f558d78b24e0e",
+      "bytes": 1484
+    },
+    "results/mixed-probes.json": {
+      "sha256": "27886d1715a7e3f2172cc3189d0fcf05bf55d0cb7e2d6f4f24e899594e59c744",
+      "bytes": 14576
+    },
+    "results/pdq-d1-addendum-evidence.json": {
+      "sha256": "1b75a1c1debf5180efd5ad39b216e1078afdf60ecd2303e8c16ba1df277cfd2f",
+      "bytes": 944
+    },
+    "source-records/check-diagnosis.py": {
+      "sha256": "7a88311da8d7ca7feb2623b02504c72d464315aebc755d9e8566a158427bd14d",
+      "bytes": 2966
+    },
+    "source-records/diagnose.py": {
+      "sha256": "569a5793d72f5185f7d009711b3321716972158c1bf2f32a8e1392744586bd1c",
+      "bytes": 5735
+    },
+    "source-records/instrumentation.patch": {
+      "sha256": "a3569a2fd63fe3ee7c32351645a8ad0646c0b514b5cf05df72d57397db20c4fe",
+      "bytes": 2542
+    },
+    "source-records/mixed-probes.py": {
+      "sha256": "3c7b00ad81448854b11ddab35cf5073f9ed13518f6512e8a398ec9baa23a27af",
+      "bytes": 1556
+    },
+    "source-records/pdq-d1-resolution.md": {
+      "sha256": "9fa0b752a3aeeda824b060b4c33c3bdcdb3335be0f1c9d3da795e80637f28557",
+      "bytes": 2317
+    },
+    "source-records/prepare.py": {
+      "sha256": "2870a2ded05f60ccb5eebbbd685280d21f54fcbb7d758a5c2d06a92005670cab",
+      "bytes": 2154
+    },
+    "source-records/questions.md": {
+      "sha256": "6dbd7cc083fe053ad4947df2e5218e68b2ce455c29c0d05bb8f0ab987bcd4972",
+      "bytes": 2979
+    },
+    "summary-ledger.json": {
+      "sha256": "5128ba0c13430762953a772f7422c821c07b8e43a0c6c02673562462da58d489",
+      "bytes": 2392
+    }
+  }
+}

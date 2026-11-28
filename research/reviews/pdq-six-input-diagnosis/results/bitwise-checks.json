@@ -1,0 +1,16 @@
+{
+  "softwareFloat32StageBytesIdentical": [
+    "black/T",
+    "black/B",
+    "constant127/T",
+    "constant127/B",
+    "low-contrast/T",
+    "low-contrast/B",
+    "asymmetric/T",
+    "asymmetric/B",
+    "wide/T",
+    "wide/B",
+    "tall/T",
+    "tall/B"
+  ]
+}

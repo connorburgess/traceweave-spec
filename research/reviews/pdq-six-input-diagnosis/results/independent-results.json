@@ -1,0 +1,56 @@
+{
+  "networkDenial": "loopback bind EPERM before scalar reconstruction",
+  "baselineHashesExact": 32,
+  "baselineQualitiesExact": 6,
+  "matrixPredictedFromSourceNotObserved": true,
+  "coefficientsReconstructed": 1024,
+  "coefficientFinalRoundingDifferences": 112,
+  "TandBBitwiseChecks": 12,
+  "hashesAndMappingsChecked": 48,
+  "changedBitDecisionsChecked": 1606,
+  "sixExistingArithmeticModelsPerCase": true,
+  "cases": [
+    {
+      "id": "black",
+      "differentBits": 0,
+      "allSixProbePathsBitwiseEqual": true,
+      "allEightMappingsMediansHashesEqual": true,
+      "firstT": null
+    },
+    {
+      "id": "constant127",
+      "differentBits": 1118,
+      "allSixProbePathsBitwiseEqual": true,
+      "allEightMappingsMediansHashesEqual": true,
+      "firstT": 0
+    },
+    {
+      "id": "low-contrast",
+      "differentBits": 488,
+      "allSixProbePathsBitwiseEqual": true,
+      "allEightMappingsMediansHashesEqual": true,
+      "firstT": 0
+    },
+    {
+      "id": "asymmetric",
+      "differentBits": 0,
+      "allSixProbePathsBitwiseEqual": true,
+      "allEightMappingsMediansHashesEqual": true,
+      "firstT": 0
+    },
+    {
+      "id": "wide",
+      "differentBits": 0,
+      "allSixProbePathsBitwiseEqual": true,
+      "allEightMappingsMediansHashesEqual": true,
+      "firstT": 0
+    },
+    {
+      "id": "tall",
+      "differentBits": 0,
+      "allSixProbePathsBitwiseEqual": true,
+      "allEightMappingsMediansHashesEqual": true,
+      "firstT": 0
+    }
+  ]
+}

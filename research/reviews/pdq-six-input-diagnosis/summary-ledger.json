@@ -1,0 +1,80 @@
+{
+  "kind": "selected-fields projection; not new numerical execution",
+  "sourceComparisonSha256": "a1cf1f2c738bf678f6b232621bda0ba92e6438f09ac9c51895106da2ac763a24",
+  "sourceDiagnosisSha256": "1138003d21fed6ad86ff8e418e913157f97a7bb187c6ae233f62e8908757a153",
+  "sourceIndependentResultsSha256": "d8fe51d5e3e178a85caaea29411ed40d426677c0b2233f9b6d9f558d78b24e0e",
+  "baseline": {
+    "inputs": 6,
+    "variantComparisons": 48,
+    "cppHashesExact": 32,
+    "cppQualityExact": 6,
+    "pythonPortVendorExact": 6,
+    "completeCppExactInputs": 4
+  },
+  "cases": [
+    {
+      "id": "black",
+      "width": 64,
+      "height": 64,
+      "inputSha256": "5d29a50570d88a71da68e6671e19f67073a42e225beed9cc23f576cb970efd41",
+      "inputBytes": 16400,
+      "cppHashExactCount": 8,
+      "cppQualityExact": true,
+      "affectedDecisions": 0
+    },
+    {
+      "id": "constant127",
+      "width": 64,
+      "height": 64,
+      "inputSha256": "ed70aa701408911d954cd55eb367c57799b5c0736caf9296a0dfee485d565452",
+      "inputBytes": 16400,
+      "cppHashExactCount": 0,
+      "cppQualityExact": true,
+      "affectedDecisions": 1118
+    },
+    {
+      "id": "low-contrast",
+      "width": 64,
+      "height": 64,
+      "inputSha256": "7e61cbe4ee2d1c896c0b45c313124d5dab931ca45d5aad893ca82ef173939178",
+      "inputBytes": 16400,
+      "cppHashExactCount": 0,
+      "cppQualityExact": true,
+      "affectedDecisions": 488
+    },
+    {
+      "id": "asymmetric",
+      "width": 64,
+      "height": 64,
+      "inputSha256": "a03e3877fd2f9a36e590449bfe294b8413ae806cb64d2f2b2b8f73c5bd25b587",
+      "inputBytes": 16400,
+      "cppHashExactCount": 8,
+      "cppQualityExact": true,
+      "affectedDecisions": 0
+    },
+    {
+      "id": "wide",
+      "width": 96,
+      "height": 64,
+      "inputSha256": "7a44f0f0b68a23218abf3fb084e080bb7df1f492814eb71fbd5c7a161168f1f4",
+      "inputBytes": 24592,
+      "cppHashExactCount": 8,
+      "cppQualityExact": true,
+      "affectedDecisions": 0
+    },
+    {
+      "id": "tall",
+      "width": 64,
+      "height": 96,
+      "inputSha256": "f551523b9afc150f95061b5c5fd1ba4084bbc920394ecda0d5c437302ce5c4e9",
+      "inputBytes": 24592,
+      "cppHashExactCount": 8,
+      "cppQualityExact": true,
+      "affectedDecisions": 0
+    }
+  ],
+  "diagnosticCppReconstructed": 48,
+  "affectedDecisions": 1606,
+  "matrixEntriesReconstructed": 1024,
+  "TandBStageChecks": 12
+}
