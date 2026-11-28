@@ -26,6 +26,8 @@ The preceding published checkpoint was `84e30dc99bc219fdd81080831b6017b5d3383af5
 
 The current published checkpoint is `25959874d25704730c1e8ca008f65d93f3d3f5b1`, mapped from curated source `f9f166e1ad9ed5fe595fedafc7389e5d56cfee56` and preserved as an ancestor. This preparation retains independently accepted bounded PDQ diagnosis package `aafcfda055fb054f2a2f4b32d969e8ab1e22e16d`, its declared CSV/report adaptations and original PDQ-D1 correction history. The earlier six-input/one-host diagnosis accounts for1606 decisions and48 C++ diagnostic reconstructions; baseline32/48hash6/6quality is unchanged. Only current queue cause wording is clarified; no general parity, IMGF.5 closure or numerical run. Core34/47; extensions31/55met2negative22open, WEB.6 open and M3 HOLD remain. Raw-bearing private history and omitted upstream commit remain excluded.
 
+The prior unpublished PDQ candidate `849d433583e43e56991d679abb88d525b61cea05`, mapped from curated `910fcd43ebef1884ad09bf9c0923daa463b35a6f`, is preserved as an ancestor and its mappings remain stable. This combined preparation also retains reviewed offline checker `ccb04f618be462dd26ee15ab83e1539f34510d4a`, bounded I2/I3 corrections and C1 clarification. I1 notice-count and I4 witness/request-version alignment remain unresolved proposed normative choices. Fixture86positive/157negative/46wrong-implementation checks are not native/client conformance, complete metadata/privacy enforcement, hosting or SK.4 closure. No gate/count changes; all existing holds remain.
+
 ## Reproducing
 
 `python3 tools/public_history_scrub.py rewrite --branch NAME --source <source commit>` with the private rules file. The rules are not in this repository in any form. Rules file SHA-256: `362950c0c62ec6549d270070b03d0b632b516423563163d1f44695d1c654ac2b`.
@@ -51,7 +53,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 
 ## Verification of the commits listed here
 
-`python3 tools/public_history_scrub.py scan` over the 279 commits and 3998 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
+`python3 tools/public_history_scrub.py scan` over the 283 commits and 4046 objects of the rewritten history before the map commit, in plain text, ROT13 and base64 decodings, over blobs, paths, messages and author and committer headers:
 
 | Category | Hits |
 | --- | --- |
@@ -133,6 +135,8 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `a2a7c9fff730867cc040e2a17934dbda6af6ee87` | `a2a7c9fff730` | `b4e22fe138c3` |
 | `41628be` | `41628be879a8` | `f396a4133b56` |
 | `a4ea8d4` | `a4ea8d46fa7c` | `d61f45c9c203` |
+| `ccb04f6` | `ccb04f618be4` | `b558df0774af` |
+| `ccb04f618be462dd26ee15ab83e1539f34510d4a` | `ccb04f618be4` | `b558df0774af` |
 | `d2dd3df` | `d2dd3dfdffab` | `d0cbf79610b7` |
 | `e10f33e` | `e10f33ecbe93` | `a06631610a8b` |
 | `6213b39` | `6213b39aa1a4` | `c8986f4c5c6e` |
@@ -211,7 +215,7 @@ Every version of `tools/public_history_scrub.py` that held the rules was removed
 | `aafcfda` | `aafcfda055fb` | `d141e3f30b2b` |
 | `f9f166e1ad9ed5fe595fedafc7389e5d56cfee56` | `f9f166e1ad9e` | `25959874d257` |
 
-Ancestry was checked for all 10011 pairs of these 142 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
+Ancestry was checked for all 10296 pairs of these 144 ids in both directions: the relation is the same before and after the rewrite (0 mismatches).
 
 ## All commits, oldest first
 
@@ -510,3 +514,7 @@ Ancestry was checked for all 10011 pairs of these 142 ids in both directions: th
 | 291 | `e00716571edd` | `e946ad794fc1` | kept | Retain bounded six-input PDQ mismatch diagnosis and review |
 | 292 | `aafcfda055fb` | `d141e3f30b2b` | kept | Label portable CSV newline adaptations and patch omission |
 | 293 | `667808bd6860` | `3b4da180e2ca` | kept | Retain independent bounded PDQ diagnosis package disposition |
+| 294 | `910fcd43ebef` | `849d433583e4` | kept | Update public history map for bounded PDQ diagnosis retention |
+| 295 | `ccb04f618be4` | `b558df0774af` | kept | spec tests: enforce agent notices and digest-only witness requests |
+| 296 | `0f0a0b35566c` | `ce729b1583ed` | kept | Merge reviewed bounded agent checker I2 I3 corrections |
+| 297 | `77db81ea0f48` | `418a047719da` | kept | Record bounded checker acceptance and current unresolved choices |
