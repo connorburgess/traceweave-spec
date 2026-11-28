@@ -71,9 +71,9 @@
       "originalSha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
       "originalBytes": 122,
       "retainedPath": "decisions/black.csv",
-      "retainedSha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
-      "retainedBytes": 122,
-      "adaptation": "none; exact copy"
+      "retainedSha256": "0fcda71cfdb13f4a426bf7cb80c434ca9968a521eee8852ddca956b9692bf6b2",
+      "retainedBytes": 121,
+      "adaptation": "labelled adaptation: CRLF to LF only; CSV fields, ordering and numeric text unchanged"
     },
     {
       "originalGroup": "author-revised",
@@ -81,9 +81,9 @@
       "originalSha256": "48e1d298e99c2ed24e5ff846e051a85c900bf1567bb6813d1e5e4f3299e3423e",
       "originalBytes": 131442,
       "retainedPath": "decisions/constant127.csv",
-      "retainedSha256": "48e1d298e99c2ed24e5ff846e051a85c900bf1567bb6813d1e5e4f3299e3423e",
-      "retainedBytes": 131442,
-      "adaptation": "none; exact copy"
+      "retainedSha256": "3ed4a80fdb9aa9de1cfae4155ee96dd8c8b782db6df76d2e70f087ef4a3b2938",
+      "retainedBytes": 130323,
+      "adaptation": "labelled adaptation: CRLF to LF only; CSV fields, ordering and numeric text unchanged"
     },
     {
       "originalGroup": "author-revised",
@@ -91,9 +91,9 @@
       "originalSha256": "92598c001479536082831af3b335276d25334228965b4f6ec3e83a410b4d19f2",
       "originalBytes": 75034,
       "retainedPath": "decisions/low-contrast.csv",
-      "retainedSha256": "92598c001479536082831af3b335276d25334228965b4f6ec3e83a410b4d19f2",
-      "retainedBytes": 75034,
-      "adaptation": "none; exact copy"
+      "retainedSha256": "6acb7a54446437d7415a1a9075d2c99351d8e0ee3e945540364aed5779078481",
+      "retainedBytes": 74545,
+      "adaptation": "labelled adaptation: CRLF to LF only; CSV fields, ordering and numeric text unchanged"
     },
     {
       "originalGroup": "author-revised",
@@ -101,9 +101,9 @@
       "originalSha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
       "originalBytes": 122,
       "retainedPath": "decisions/asymmetric.csv",
-      "retainedSha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
-      "retainedBytes": 122,
-      "adaptation": "none; exact copy"
+      "retainedSha256": "0fcda71cfdb13f4a426bf7cb80c434ca9968a521eee8852ddca956b9692bf6b2",
+      "retainedBytes": 121,
+      "adaptation": "labelled adaptation: CRLF to LF only; CSV fields, ordering and numeric text unchanged"
     },
     {
       "originalGroup": "author-revised",
@@ -111,9 +111,9 @@
       "originalSha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
       "originalBytes": 122,
       "retainedPath": "decisions/wide.csv",
-      "retainedSha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
-      "retainedBytes": 122,
-      "adaptation": "none; exact copy"
+      "retainedSha256": "0fcda71cfdb13f4a426bf7cb80c434ca9968a521eee8852ddca956b9692bf6b2",
+      "retainedBytes": 121,
+      "adaptation": "labelled adaptation: CRLF to LF only; CSV fields, ordering and numeric text unchanged"
     },
     {
       "originalGroup": "author-revised",
@@ -121,19 +121,19 @@
       "originalSha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
       "originalBytes": 122,
       "retainedPath": "decisions/tall.csv",
-      "retainedSha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
-      "retainedBytes": 122,
-      "adaptation": "none; exact copy"
+      "retainedSha256": "0fcda71cfdb13f4a426bf7cb80c434ca9968a521eee8852ddca956b9692bf6b2",
+      "retainedBytes": 121,
+      "adaptation": "labelled adaptation: CRLF to LF only; CSV fields, ordering and numeric text unchanged"
     },
     {
       "originalGroup": "author-revised",
       "originalPath": "instrumentation.patch",
       "originalSha256": "a3569a2fd63fe3ee7c32351645a8ad0646c0b514b5cf05df72d57397db20c4fe",
       "originalBytes": 2542,
-      "retainedPath": "source-records/instrumentation.patch",
-      "retainedSha256": "a3569a2fd63fe3ee7c32351645a8ad0646c0b514b5cf05df72d57397db20c4fe",
-      "retainedBytes": 2542,
-      "adaptation": "none; exact copy"
+      "retainedPath": null,
+      "retainedSha256": null,
+      "retainedBytes": null,
+      "adaptation": "identity only; original functional unified patch omitted rather than alter significant blank context lines; prepare.py remains exact source record"
     },
     {
       "originalGroup": "author-revised",
@@ -391,32 +391,32 @@
   ],
   "packageFiles": {
     "README.md": {
-      "sha256": "3a0be23d7761bd72374ecc4c1d29af502b780375cdb97325bb61cbebd291de19",
-      "bytes": 6631
+      "sha256": "5af56efc61db72a873a5a6e41f038cd9550c08139e6e244023216060090e4f9d",
+      "bytes": 6712
     },
     "decisions/asymmetric.csv": {
-      "sha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
-      "bytes": 122
+      "sha256": "0fcda71cfdb13f4a426bf7cb80c434ca9968a521eee8852ddca956b9692bf6b2",
+      "bytes": 121
     },
     "decisions/black.csv": {
-      "sha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
-      "bytes": 122
+      "sha256": "0fcda71cfdb13f4a426bf7cb80c434ca9968a521eee8852ddca956b9692bf6b2",
+      "bytes": 121
     },
     "decisions/constant127.csv": {
-      "sha256": "48e1d298e99c2ed24e5ff846e051a85c900bf1567bb6813d1e5e4f3299e3423e",
-      "bytes": 131442
+      "sha256": "3ed4a80fdb9aa9de1cfae4155ee96dd8c8b782db6df76d2e70f087ef4a3b2938",
+      "bytes": 130323
     },
     "decisions/low-contrast.csv": {
-      "sha256": "92598c001479536082831af3b335276d25334228965b4f6ec3e83a410b4d19f2",
-      "bytes": 75034
+      "sha256": "6acb7a54446437d7415a1a9075d2c99351d8e0ee3e945540364aed5779078481",
+      "bytes": 74545
     },
     "decisions/tall.csv": {
-      "sha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
-      "bytes": 122
+      "sha256": "0fcda71cfdb13f4a426bf7cb80c434ca9968a521eee8852ddca956b9692bf6b2",
+      "bytes": 121
     },
     "decisions/wide.csv": {
-      "sha256": "61024d08cf9e92ecf7a9cef2fcae086a77c2bf108a342e536e5267ba5367e3ac",
-      "bytes": 122
+      "sha256": "0fcda71cfdb13f4a426bf7cb80c434ca9968a521eee8852ddca956b9692bf6b2",
+      "bytes": 121
     },
     "inspect_retention.py": {
       "sha256": "d50472ef846b60515f87f9c5c76710a73654f98a0c8252d9e7fa3cf5f8f8e19f",
@@ -465,10 +465,6 @@
     "source-records/diagnose.py": {
       "sha256": "569a5793d72f5185f7d009711b3321716972158c1bf2f32a8e1392744586bd1c",
       "bytes": 5735
-    },
-    "source-records/instrumentation.patch": {
-      "sha256": "a3569a2fd63fe3ee7c32351645a8ad0646c0b514b5cf05df72d57397db20c4fe",
-      "bytes": 2542
     },
     "source-records/mixed-probes.py": {
       "sha256": "3c7b00ad81448854b11ddab35cf5073f9ed13518f6512e8a398ec9baa23a27af",
