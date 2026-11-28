@@ -1,0 +1,21 @@
+{
+  "fixture": {
+    "kind": "a2a-request",
+    "description": "Hosted request part restriction: witness-empty-parts.",
+    "notice": "Illustrative fixture for spec/registration-record.md. Synthetic data and a public test-only key; it registers nothing and proves nothing.",
+    "bundle": "fixtures/bundle-three-roots.json",
+    "expect": {
+      "code": "a2a-shape"
+    }
+  },
+  "object": {
+    "message": {
+      "messageId": "0f6c2a8e-illustrative-0001",
+      "role": "ROLE_USER",
+      "parts": [],
+      "extensions": [
+        "https://traceweave.org/a2a/ext/registration/draft-1"
+      ]
+    }
+  }
+}

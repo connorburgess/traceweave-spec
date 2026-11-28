@@ -6,7 +6,7 @@
   },
   "object": {
     "name": "Traceweave local registrar (illustrative)",
-    "description": "Illustrative only. Runs on the registrant's machine, on loopback. Signs with the registrant's own key and requests time evidence; only a signature digest leaves the machine. First to register is not first to create.",
+    "description": "Illustrative only. Runs on the registrant's machine, on loopback. Signs with the registrant's own key and requests time evidence; only a signature digest leaves the machine. It does not show who created the content, that it is original, that the registrant was first to create it, who owns it, or that its use is permitted. First to register is not first to create. Comparing the times of two registrations does not show which was made first. A registration made by or through an agent shows which key signed it and, for a hosted witness, which authenticated caller presented the digest; it does not show whether a person or an agent created the content, or on whose behalf.",
     "supportedInterfaces": [
       {
         "url": "http://127.0.0.1:8765/a2a/v1",
@@ -43,7 +43,7 @@
           "traceweave",
           "registration"
         ],
-        "description": "Registers local files by path: hashes them, signs a registration statement with the registrant key held by this tool, and requests time evidence. First to register is not first to create."
+        "description": "Registers local files by path: hashes them, signs a registration statement with the registrant key held by this tool, and requests time evidence. It does not show who created the content, that it is original, that the registrant was first to create it, who owns it, or that its use is permitted. First to register is not first to create. Comparing the times of two registrations does not show which was made first. A registration made by or through an agent shows which key signed it and, for a hosted witness, which authenticated caller presented the digest; it does not show whether a person or an agent created the content, or on whose behalf."
       },
       {
         "id": "verify",
@@ -52,7 +52,7 @@
           "traceweave",
           "verification"
         ],
-        "description": "Verifies a registration bundle against local files under the caller's policy and returns separate outcomes, never a single verdict. First to register is not first to create."
+        "description": "Verifies a registration bundle against local files under the caller's policy and returns separate outcomes, never a single verdict. It does not show who created the content, that it is original, that the registrant was first to create it, who owns it, or that its use is permitted. First to register is not first to create. Comparing the times of two registrations does not show which was made first. A registration made by or through an agent shows which key signed it and, for a hosted witness, which authenticated caller presented the digest; it does not show whether a person or an agent created the content, or on whose behalf."
       }
     ]
   }

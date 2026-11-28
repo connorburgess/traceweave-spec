@@ -147,7 +147,7 @@ A fixture registers nothing and proves nothing.
 | `aux/key-event-second-rotation-2028.json` | key-event | Eighteen months later, whoever obtained the old key rotates it again. |
 | `aux/verification-result-e1-flipped.json` | verification-result | Draft-4 behaviour with one extra rejected event (the flip), kept as input to the equivalence negative. |
 
-`negative/` holds 147 broken fixtures; each must produce exactly the codes listed below. `aux/` holds inputs that other fixtures refer to; they are not checked on their own.
+`negative/` holds 157 broken fixtures; each must produce exactly the codes listed below. `aux/` holds inputs that other fixtures refer to; they are not checked on their own.
 
 | Real-format file | SHA-256 (from `MANIFEST.json`) |
 | --- | --- |
@@ -267,14 +267,18 @@ The A2A fixtures are **not validated against a published A2A schema** (none is c
 | `neg-fixture-shape` | `fixture-shape` | Fixture notice removed. |
 | `neg-forbidden-field` | `forbidden-field` | Fingerprints in the statement. |
 | `neg-hosted-plain-http` | `content-on-wire` | Digests-only witness offered over plain HTTP. |
-| `neg-key-bound-misattributed-rendering` | `key-bound-misattributed` | The co-signer is given the first signature's bound (W8). |
 | `neg-key-bound-misattributed` | `key-bound-misattributed` | A later co-signature inherits the earlier signature's bound (W8). |
+| `neg-key-bound-misattributed-rendering` | `key-bound-misattributed` | The co-signer is given the first signature's bound (W8). |
 | `neg-key-event-ignored` | `key-event-ignored` | A compromise event covering the bound is ignored; signer still `trusted` (W10). |
 | `neg-key-event-shape` | `key-event-shape` | Compromise event without its claimed start. |
 | `neg-key-event-subject-mismatch` | `key-event-shape` | B3: the event's keyid hint names the creator key but its subject digest names another key. |
 | `neg-key-event-two-signatures` | `key-event-signatures` | F1 (review case): a foreign signature prepended to a valid K-signed rotation. |
 | `neg-late-rotation-erases-chain` | `key-event-ignored` | D2 (review case): a much later second rotation disputes the honest chain; the successor reported untrusted. |
+| `neg-local-register-agent-notice` | `notice-missing` | Illustrative description missing one complete required notice: local-register-agent-notice. |
+| `neg-local-register-limit-notice` | `notice-missing` | Illustrative description missing one complete required notice: local-register-limit-notice. |
+| `neg-local-verify-order-notice` | `notice-missing` | Illustrative description missing one complete required notice: local-verify-order-notice. |
 | `neg-log-time-claimed` | `log-time-claimed` | Rekor v2 placeholder that claims a time. |
+| `neg-mcp-agent-notice` | `notice-missing` | Illustrative description missing one complete required notice: mcp-agent-notice. |
 | `neg-mcp-tool-shape` | `mcp-tool-shape` | Registration tool declared closed-world and idempotent. |
 | `neg-nonce-invalid` | `nonce-invalid` | All-zero nonce. |
 | `neg-nonce-reused` | `nonce-reused` | Nonce reused across two registrations (W4). |
@@ -303,6 +307,7 @@ The A2A fixtures are **not validated against a published A2A schema** (none is c
 | `neg-real-ots-other-chain` | `quorum-miscount` | Header file that does not contain the attested block; the proof is reported valid anyway. |
 | `neg-real-ots-wrong-target` | `evidence-wrong-target` | A real-format proof for another digest. |
 | `neg-real-root-not-pinned` | `quorum-miscount` | Pinned root file does not hash to the anchor; the token is reported valid anyway. |
+| `neg-reference-jump-transposed` | `reference-mismatch` | Two characters two apart swapped: Luhn mod 32 gives them the same weight, so the check character misses it and only the bundle comparison catches it. |
 | `neg-reference-letter-U` | `reference-shape` | U is not in the alphabet. |
 | `neg-reference-look-alike-I` | `reference-shape` | Look-alike I is not in the alphabet. |
 | `neg-reference-look-alike-L` | `reference-shape` | Look-alike L is not in the alphabet. |
@@ -322,8 +327,8 @@ The A2A fixtures are **not validated against a published A2A schema** (none is c
 | `neg-report-digest` | `report-digest` | The link names a different report body. |
 | `neg-result-mismatch` | `result-mismatch` | An outcome value outside the closed list. |
 | `neg-result-with-foreign-signature` | `key-event-signatures` | F1: a result whose event files include the copy with a prepended foreign signature; the copy is a named rejection. |
-| `neg-retired-key-rotates-same-time` | `key-event-ignored` | D1 (review case): equal proved times; the thief's key reported trusted. |
 | `neg-retired-key-rotates` | `key-event-ignored` | D1 (review case): the thief's key reported trusted after a retired key's rotation. |
+| `neg-retired-key-rotates-same-time` | `key-event-ignored` | D1 (review case): equal proved times; the thief's key reported trusted. |
 | `neg-revocation-by-root` | `result-mismatch` | D5 (review case): one revoked TSA certificate invalidates every TSA under the same root. |
 | `neg-revocation-ignored` | `result-mismatch` | A key-compromise revocation ignored. |
 | `neg-root-not-anchored` | `root-not-anchored` | Root named by a producer-written label instead of a trust anchor (W3). |
@@ -346,10 +351,46 @@ The A2A fixtures are **not validated against a published A2A schema** (none is c
 | `neg-tsa-signature-invalid` | `tsa-signature-invalid` | genTime edited after signing: messageDigest no longer matches. |
 | `neg-tsa-signing-cert-mismatch` | `tsa-signing-cert-mismatch` | ESSCertIDv2 names another certificate (RFC 5816). |
 | `neg-witness-authorship` | `authorship-claim` | Witness statement asserts the caller is the author. |
+| `neg-witness-duplicate-data` | `a2a-shape` | Hosted request part restriction: witness-duplicate-data. |
+| `neg-witness-empty-parts` | `a2a-shape` | Hosted request part restriction: witness-empty-parts. |
+| `neg-witness-extra-text` | `content-on-wire` | Hosted request part restriction: witness-extra-text. |
+| `neg-witness-extra-url` | `content-on-wire` | Hosted request part restriction: witness-extra-url. |
+| `neg-witness-mixed-part` | `a2a-shape` | Hosted request part restriction: witness-mixed-part. |
 | `neg-witness-shape` | `witness-shape` | Witness statement without the caller it authenticated. |
 | `neg-witness-shared-tsa` | `quorum-miscount` | S4: a witness and the TSA its time comes from counted as two sources. |
+| `neg-witness-text-only` | `content-on-wire` | Hosted request part restriction: witness-text-only. |
 | `neg-witness-wrong-digest` | `evidence-wrong-target` | Presents the artifact digest instead of the signature digest. |
 | `neg-wrong-policy-accepted` | `result-mismatch` | A token whose policy OID the verifier does not accept, counted anyway. |
+
+## Bounded agent checker rules (I2/I3)
+
+The illustrative card skill descriptions and local MCP tool description carry all
+three fixed §11 sentences plus the §19.5 agent notice. Each description is checked
+separately for all four complete strings; a notice elsewhere in the card does not
+satisfy a skill description. This conservatively retains existing required language,
+without adopting a discovery-description exemption or editing the normative count.
+
+For **hosted witness requests only**, exactly one part is allowed and its sole
+content variant is `data`. Deterministic first-failure precedence is:
+
+1. Envelope/message keys, role/extension, parts-array and part allowed-key/one-of
+   structure: `a2a-shape`. A part holding both data and text is malformed one-of.
+2. Any structurally valid `text`, `raw` or `url` part: `content-on-wire`, including
+   when appended/prepended to a valid data part or combined with a count/body fault.
+3. Part count or non-object data body: `a2a-shape`.
+4. Forbidden data fields (including fingerprints): `forbidden-field`.
+5. Existing request-version/presented-object/kind/64-lowercase-hex-string shape:
+   `a2a-shape`; digest strings must match in full, without a trailing newline.
+6. Correctly shaped digest differing from the referenced DSSE signature digest:
+   `evidence-wrong-target`.
+
+These stages return before lower-priority checks. Generic A2A task/text handling is
+unchanged. This does not validate every protocol metadata field or prove runtime
+privacy. Current witness draft-5 checker/fixture identifiers are retained despite
+§19's draft-1 prose/examples; that mismatch still needs a separate normative choice.
+See the [finding dispositions](../../research/reviews/agent-registration-checker-i2-i3-dispositions.md).
+No published-schema validation, client interoperability, hosted operation or SK.4
+closure follows from these offline fixture checks.
 
 ## Run
 
