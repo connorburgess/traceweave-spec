@@ -1,0 +1,11 @@
+{
+  "reviewedCommit": "ccb04f618be462dd26ee15ab83e1539f34510d4a",
+  "originalReviewSha256": "332efc3ec26df82859ccb4d22fd8ff53874b20fe0fde97012b0b7b37ee410211",
+  "originalReviewBytes": 11097,
+  "originalRetention": "unchanged privately; attachments omitted",
+  "retainedPath": "agent-checker-ccb04f6-independent-review.md",
+  "retainedSha256": "bc5b44f58825f308ef0994ffd0d59a065f207b6588211b5163e3709d197e8279",
+  "retainedBytes": 12060,
+  "adaptation": "added labelled header; replaced three local interpreter/worktree/sandbox-policy locators with caller placeholders; made original Markdown attachment links inert; remaining body unchanged",
+  "scope": "offline illustrative-checker I2/I3 correction and C1 clarification; I1/I4 unresolved; no native/client/hosting/complete privacy validation"
+}
